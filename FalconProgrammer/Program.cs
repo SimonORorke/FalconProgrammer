@@ -2,4 +2,5 @@
 
 using FalconProgrammer;
 
-Utility.ConfigureScriptCcs();
+Utility.ConfigureCcs();
+Console.WriteLine("Finished");
