@@ -20,7 +20,7 @@ public class ProgramConfig {
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
-  public void ConfigureCcs(string programCategory) {
+  public virtual void ConfigureCcs(string programCategory) {
     Initialise();
     var programFilesToEdit = GetProgramFilesToEdit(programCategory);
     foreach (var programFileToEdit in programFilesToEdit) {

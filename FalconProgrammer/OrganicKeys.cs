@@ -2,11 +2,10 @@
 
 namespace FalconProgrammer;
 
-public class OrganicKeysConfig : ScriptConfig {
-  public OrganicKeysConfig() : base(
+public class OrganicKeys : ScriptConfig {
+  public OrganicKeys() : base(
     "Organic Keys", "Acoustic Mood",
-    "A Rhapsody", "EventProcessor0", 
-    "EventProcessor0") { }
+    "A Rhapsody", "EventProcessor0") { }
 
   protected override string GetScriptProcessorLineToWrite(string inputLine) {
     // Initialise Delay and Reverb to zero.

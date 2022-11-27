@@ -4,14 +4,14 @@ namespace FalconProgrammer;
 
 public class ScriptConfig : ProgramConfig {
   public ScriptConfig(string instrumentName, string templateProgramCategory,
-    string templateProgramName, string scriptProcessorName,
+    string templateProgramName,
     string templateScriptProcessorName) : base(
     instrumentName, templateProgramCategory, templateProgramName) {
-    ScriptProcessorName = scriptProcessorName;
+    ScriptProcessorName = templateScriptProcessorName;
     TemplateScriptProcessorName = templateScriptProcessorName;
   }
 
-  [PublicAPI] public string ScriptProcessorName { get; }
+  [PublicAPI] public string ScriptProcessorName { get; protected set; }
   [PublicAPI] public string TemplateScriptProcessorName { get; }
 
   protected override string GetTemplateCcConfig() {
@@ -36,7 +36,7 @@ public class ScriptConfig : ProgramConfig {
       writer.WriteLine(line);
     } else {
       Console.Error.WriteLine(
-        $"Cannot find start of node {ScriptProcessorName}.Connections " + 
+        $"Cannot find start of node {TemplateScriptProcessorName}.Connections " + 
         $"in file '{TemplateProgramPath}'.");
       Environment.Exit(1);
     }
@@ -70,7 +70,7 @@ public class ScriptConfig : ProgramConfig {
       }
       writer.WriteLine(line);
     }
-    if (!line.Contains(TemplateScriptProcessorName)) {
+    if (!line.Contains(ScriptProcessorName)) {
       Console.Error.WriteLine(
         $"Cannot find {ScriptProcessorName} in file '{programPath}'.");
       Environment.Exit(1);

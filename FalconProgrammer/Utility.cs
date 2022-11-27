@@ -5,7 +5,10 @@ public static class Utility {
   public const string SynthName = "UVI Falcon";
 
   public static void ConfigureCcs() {
-    var config = new OrganicKeysConfig();
-    config.ConfigureCcs("Lo-Fi");
+    var config = new Voklm();
+    config.ConfigureCcs("Synth Choirs");
+    config.ConfigureCcs("Vox Instruments");
+    // var config = new OrganicKeys();
+    // config.ConfigureCcs("Lo-Fi");
   }
 }
