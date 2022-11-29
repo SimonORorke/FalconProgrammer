@@ -14,7 +14,7 @@ public class ScriptConfig : ProgramConfig {
   [PublicAPI] public string ScriptProcessorName { get; protected set; }
   [PublicAPI] public string TemplateScriptProcessorName { get; }
 
-  protected override string GetTemplateCcConfig() {
+  protected override string GetMainCcTemplate() {
     using var reader = new StreamReader(TemplateProgramPath);
     string line = string.Empty;
     while (!reader.EndOfStream) {
@@ -88,7 +88,7 @@ public class ScriptConfig : ProgramConfig {
         }
       }
     }
-    writer.Write(TemplateCcConfig);
+    writer.Write(MainCcTemplate);
     writer.WriteLine(line); // Properties tag
     writer.Write(reader.ReadToEnd());
   }

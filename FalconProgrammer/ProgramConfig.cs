@@ -4,6 +4,15 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class ProgramConfig {
+  private const string ConnectionsStartTag = "<Connections>";
+  private const string ConstantModulationStartTag = "<ConstantModulation ";
+  private const string ControlSignalSourcesEndTag = "</ControlSignalSources>";
+  private const string EventProcessorsStartTag = "<EventProcessors>";
+  private const string PropertiesTag = "<Properties ";
+  // Sometimes there's an EventProcessor0 first. But CC numbers don't go there.
+  private const string ScriptProcessorStartTag = 
+    "<ScriptProcessor Name=\"EventProcessor9\" "; 
+  
   public ProgramConfig(
     string instrumentName, string templateProgramCategory, string templateProgramName) {
     InstrumentName = instrumentName;
@@ -11,11 +20,14 @@ public class ProgramConfig {
     TemplateProgramName = templateProgramName;
   }
 
+  private string ConnectionsEndLine{ get; set; } = null!;
+  private string ConnectionsStartLine{ get; set; } = null!;
   [PublicAPI] public string InstrumentName { get; }
   [PublicAPI] public DirectoryInfo InstrumentProgramsFolder { get; private set; } = null!;
+  [PublicAPI] public string MainCcTemplate { get; private set; } = null!;
+  [PublicAPI] public string SignalProcessorCcTemplate { get; private set; } = null!;
   [PublicAPI] public string TemplateProgramCategory { get; }
   [PublicAPI] public string TemplateProgramName { get; }
-  [PublicAPI] public string TemplateCcConfig { get; private set; } = null!;
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
 
   /// <summary>
@@ -50,6 +62,37 @@ public class ProgramConfig {
     return result;
   }
 
+  protected virtual string GetMainCcTemplate() {
+    using var reader = new StreamReader(TemplateProgramPath);
+    string line = string.Empty;
+    while (!line.Contains(ConnectionsStartTag) && !reader.EndOfStream) {
+      line = reader.ReadLine()!;
+    }
+    if (!line.Contains(ConnectionsStartTag)) {
+      Console.Error.WriteLine(
+        $"Cannot find '{ConnectionsStartTag}' in file '{TemplateProgramPath}'.");
+    }
+    // Start of first macro's Connections block
+    using var writer = new StringWriter();
+    writer.WriteLine(line);
+    line = reader.ReadLine()!; // SignalConnection tag line
+    // If the SignalConnection contains a non-default (< 1) Ratio,
+    // change the Ratio to the default, 1.
+    // E.g. replaces 
+    //    Ratio="0.36663184"
+    // with
+    //    Ratio="1"
+    const string pattern = "Ratio=\"0\\.\\d+\"";
+    const string replacement = "Ratio=\"1\"";
+    string signalConnectionLine = Regex.Replace(line, pattern, replacement);
+    writer.WriteLine(signalConnectionLine);
+    line = reader.ReadLine()!; // Connections end tag
+    writer.WriteLine(line);
+    // We have written all three lines of the first macro's Connections block,
+    // which contains the MIDI CC.
+    return writer.ToString();
+  }
+
   private IEnumerable<FileInfo> GetProgramFilesToEdit(string programCategory) {
     var folder = GetProgramsFolderToEdit(programCategory);
     var programFiles = folder.GetFiles("*" + Utility.ProgramExtension);
@@ -75,36 +118,14 @@ public class ProgramConfig {
     return result;
   }
 
-  protected virtual string GetTemplateCcConfig() {
-    const string connectionsStartTag = "<Connections>";
-    using var reader = new StreamReader(TemplateProgramPath);
-    string line = string.Empty;
-    while (!line.Contains(connectionsStartTag) && !reader.EndOfStream) {
-      line = reader.ReadLine()!;
-    }
-    if (!line.Contains(connectionsStartTag)) {
-      Console.Error.WriteLine(
-        $"Cannot find '{connectionsStartTag}' in file '{TemplateProgramPath}'.");
-    }
-    // Start of first macro's Connections block
-    using var writer = new StringWriter();
-    writer.WriteLine(line);
-    line = reader.ReadLine()!; // SignalConnection tag line
-    // If the SignalConnection contains a non-default (< 1) Ratio,
-    // change the Ratio to the default, 1.
-    // E.g. replaces 
-    //    Ratio="0.36663184"
-    // with
-    //    Ratio="1"
-    const string pattern = "Ratio=\"0\\.\\d+\"";
-    const string replacement = "Ratio=\"1\"";
-    string signalConnectionLine = Regex.Replace(line, pattern, replacement);
-    writer.WriteLine(signalConnectionLine);
-    line = reader.ReadLine()!; // Connections end tag
-    writer.WriteLine(line);
-    // We have written all three lines of the first macro's Connections block,
-    // which contains the MIDI CC.
-    return writer.ToString();
+  private string GetSignalProcessorCcTemplate() {
+    using var reader = new StringReader(MainCcTemplate);
+    ConnectionsStartLine = reader.ReadLine()!;
+    string inputSignalConnectionLine = reader.ReadLine()!;
+    string result = inputSignalConnectionLine.Replace(
+      "Destination=\"Value\"", "Destination=\"Macro1\"");
+    ConnectionsEndLine = reader.ReadLine()!;
+    return result;
   }
 
   private string GetTemplateProgramPath() {
@@ -118,10 +139,33 @@ public class ProgramConfig {
     return templateProgramFile.FullName;
   }
 
+  private static bool HasProgramScriptProcessor(string programPath) {
+    using var reader = new StreamReader(programPath);
+    string line = string.Empty;
+    while (!line.Contains(ControlSignalSourcesEndTag) && reader.Peek() >= 0) {
+      line = reader.ReadLine()!;
+    }
+    if (!line.Contains(ControlSignalSourcesEndTag)) {
+      Console.Error.WriteLine(
+        $"Cannot find '{ControlSignalSourcesEndTag}' in file '{programPath}'.");
+      Environment.Exit(1);
+      return false;
+    }
+    line = reader.ReadLine()!;
+    if (!line.Contains(EventProcessorsStartTag)) {
+      return false;
+    }
+    while (!line.Contains(ScriptProcessorStartTag) && reader.Peek() >= 0) {
+      line = reader.ReadLine()!;
+    }
+    return line.Contains(ScriptProcessorStartTag);
+  }
+
   private void Initialise() {
     InstrumentProgramsFolder = GetInstrumentProgramsFolder();
     TemplateProgramPath = GetTemplateProgramPath();
-    TemplateCcConfig = GetTemplateCcConfig();
+    MainCcTemplate = GetMainCcTemplate();
+    SignalProcessorCcTemplate = GetSignalProcessorCcTemplate();
   }
 
   /// <summary>
@@ -150,9 +194,12 @@ public class ProgramConfig {
     // macros out of order and some macros do not appear on the info page.
     // (I have not yet been able to work out how to make a macro not appear on the Info
     // page or how tell from the XML whether it is or is not on the Info page.)
-    const string connectionsStartTag = "<Connections>";
-    const string constantModulationStartTag = "<ConstantModulation ";
-    const string controlSignalSourcesEndTag = "</ControlSignalSources>";
+    bool hasProgramScriptProcessor = HasProgramScriptProcessor(programPath); 
+    if (hasProgramScriptProcessor) {
+      Console.WriteLine($"Program.ScriptProcessor in '{programPath}'.");
+      UpdateCCsInScriptProcessor(programPath);
+      return;
+    }
     string inputText;
     using (var fileReader = new StreamReader(programPath)) {
       inputText = fileReader.ReadToEnd();
@@ -160,13 +207,13 @@ public class ProgramConfig {
     using var reader = new StringReader(inputText);
     using var writer = new StreamWriter(programPath);
     string line = string.Empty;
-    while (!line.Contains(constantModulationStartTag) && reader.Peek() >= 0) {
+    while (!line.Contains(ConstantModulationStartTag) && reader.Peek() >= 0) {
       line = reader.ReadLine()!;
       writer.WriteLine(line);
     }
-    if (!line.Contains(constantModulationStartTag)) {
+    if (!line.Contains(ConstantModulationStartTag)) {
       Console.Error.WriteLine(
-        $"Cannot find '{constantModulationStartTag}' in file '{programPath}'.");
+        $"Cannot find '{ConstantModulationStartTag}' in file '{programPath}'.");
       Environment.Exit(1);
       return;
     }
@@ -174,7 +221,7 @@ public class ProgramConfig {
     // the first macro.
     int nextContinuousCcNo = 31;
     int nextSwitchCcNo = 112;
-    while (!line.Contains(controlSignalSourcesEndTag) && reader.Peek() >= 0) {
+    while (!line.Contains(ControlSignalSourcesEndTag) && reader.Peek() >= 0) {
       bool isContinuous;
       if (line.Contains("Style=\"0\"")) {
         isContinuous = true;
@@ -196,7 +243,7 @@ public class ProgramConfig {
       }
       line = reader.ReadLine()!; // Connections start tag, if any, otherwise Properties
                                  // tag. 
-      if (line.Contains(connectionsStartTag)) {
+      if (line.Contains(ConnectionsStartTag)) {
         // The macro already has a Connections block mapping to a CC.
         writer.WriteLine(line); // Write the Connections start tag.
         line = reader.ReadLine()!; // SignalConnection tag line
@@ -209,7 +256,7 @@ public class ProgramConfig {
         // The macro is not already mapped to a CC number.
         // So we can insert the template Connections block, which specifies the
         // default Ratio (1), substituting the required CC number.
-        string ccConfig = ReplaceMidiCcNo(TemplateCcConfig, ccNo);
+        string ccConfig = ReplaceMidiCcNo(MainCcTemplate, ccNo);
         writer.Write(ccConfig);
       }
       writer.WriteLine(line); // Properties tag line
@@ -218,8 +265,8 @@ public class ProgramConfig {
       // If the next block(s), if any, in the ControlSignalSources block is/are not 
       // ConstantModulation(), which configures a macro, (it/they could be LFO(s)
       // instead, for example), write the non-macro block(s) unaltered.
-      while (!line.Contains(constantModulationStartTag) 
-             && !line.Contains(controlSignalSourcesEndTag)) {
+      while (!line.Contains(ConstantModulationStartTag) 
+             && !line.Contains(ControlSignalSourcesEndTag)) {
         line = reader.ReadLine()!;
         writer.WriteLine(line);
       }
@@ -227,12 +274,56 @@ public class ProgramConfig {
       // of the next macro or the ControlSignalSources end tag line, in which case
       // there are no more macros.
     }
-    if (!line.Contains(controlSignalSourcesEndTag)) {
+    if (!line.Contains(ControlSignalSourcesEndTag)) {
       Console.Error.WriteLine(
-        $"Cannot find '{controlSignalSourcesEndTag}' in file '{programPath}'.");
+        $"Cannot find '{ControlSignalSourcesEndTag}' in file '{programPath}'.");
       Environment.Exit(1);
       return;
     }
+    writer.Write(reader.ReadToEnd());
+  }
+
+  private void UpdateCCsInScriptProcessor(string programPath) {
+    string inputText;
+    using (var fileReader = new StreamReader(programPath)) {
+      inputText = fileReader.ReadToEnd();
+    }
+    using var reader = new StringReader(inputText);
+    using var writer = new StreamWriter(programPath);
+    writer.AutoFlush = true;
+    string line = string.Empty;
+    int macroCount = 0;
+    while (!line.Contains(ScriptProcessorStartTag) && reader.Peek() >= 0) {
+      line = reader.ReadLine()!;
+      writer.WriteLine(line);
+      if (line.Contains(ConstantModulationStartTag)) {
+        macroCount++;
+      }
+    }
+    if (!line.Contains(ScriptProcessorStartTag)) {
+      Console.Error.WriteLine(
+        $"Cannot find '{ScriptProcessorStartTag}' in file '{programPath}'.");
+      Environment.Exit(1);
+      return;
+    }
+    writer.WriteLine(ConnectionsStartLine);
+    int nextContinuousCcNo = 31;
+    for (int macroNo = 1; macroNo <= macroCount; macroNo++) {
+      string signalConnectionLine =
+        ReplaceMidiCcNo(SignalProcessorCcTemplate, nextContinuousCcNo)
+          .Replace("Macro1", $"Macro{macroNo}");
+      writer.WriteLine(signalConnectionLine);
+      nextContinuousCcNo++;
+    }
+    writer.WriteLine(ConnectionsEndLine);
+    // Omit any existing Connections block.
+    line = reader.ReadLine()!;
+    if (line.Contains(ConnectionsStartTag)) {
+      while (!line.Contains(PropertiesTag) && reader.Peek() >= 0) {
+        line = reader.ReadLine()!;
+      }
+    }
+    writer.WriteLine(line); // Properties line
     writer.Write(reader.ReadToEnd());
   }
 }
