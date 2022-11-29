@@ -9,7 +9,8 @@ public class ProgramConfig {
   private const string ControlSignalSourcesEndTag = "</ControlSignalSources>";
   private const string EventProcessorsStartTag = "<EventProcessors>";
   private const string PropertiesTag = "<Properties ";
-  // Sometimes there's an EventProcessor0 first. But CC numbers don't go there.
+  // Sometimes there's an EventProcessor0 first, e.g. Factory/Keys/Smooth E-piano 2.1.
+  // But Info page CC numbers don't go there.
   private const string ScriptProcessorStartTag = 
     "<ScriptProcessor Name=\"EventProcessor9\" "; 
   
