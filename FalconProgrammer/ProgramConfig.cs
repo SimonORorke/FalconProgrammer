@@ -1,4 +1,6 @@
 ﻿using System.Text.RegularExpressions;
+using System.Xml.Serialization;
+using FalconProgrammer.XmlModels;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer;
@@ -7,7 +9,7 @@ public class ProgramConfig {
   private const string ConnectionsStartTag = "<Connections>";
   private const string ConstantModulationStartTag = "<ConstantModulation ";
   private const string ControlSignalSourcesEndTag = "</ControlSignalSources>";
-  private const string EventProcessorsStartTag = "<EventProcessors>";
+  // private const string EventProcessorsStartTag = "<EventProcessors>";
   private const string PropertiesTag = "<Properties ";
   // Sometimes there's an EventProcessor0 first, e.g. Factory/Keys/Smooth E-piano 2.1.
   // But Info page CC numbers don't go there.
@@ -23,9 +25,11 @@ public class ProgramConfig {
 
   private string ConnectionsEndLine{ get; set; } = null!;
   private string ConnectionsStartLine{ get; set; } = null!;
+  private List<ConstantModulation> ConstantModulations { get; set; } = null!;
   [PublicAPI] public string InstrumentName { get; }
   [PublicAPI] public DirectoryInfo InstrumentProgramsFolder { get; private set; } = null!;
   [PublicAPI] public string MainCcTemplate { get; private set; } = null!;
+  private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
   [PublicAPI] public string SignalProcessorCcTemplate { get; private set; } = null!;
   [PublicAPI] public string TemplateProgramCategory { get; }
   [PublicAPI] public string TemplateProgramName { get; }
@@ -41,6 +45,14 @@ public class ProgramConfig {
       Console.WriteLine($"Updating '{programFileToEdit.FullName}'.");
       UpdateCCs(programFileToEdit.FullName);
     }
+  }
+
+  private void DeserialiseProgramXml(string programPath) {
+    using var reader = new StreamReader(programPath);
+    var serializer = new XmlSerializer(typeof(UviRoot));
+    var root = (UviRoot)serializer.Deserialize(reader)!;
+    ConstantModulations = root.Program.ConstantModulations;
+    ScriptProcessors = root.Program.ScriptProcessors;
   }
 
   private DirectoryInfo GetInstrumentProgramsFolder() {
@@ -140,26 +152,13 @@ public class ProgramConfig {
     return templateProgramFile.FullName;
   }
 
-  private static bool HasProgramScriptProcessor(string programPath) {
-    using var reader = new StreamReader(programPath);
-    string line = string.Empty;
-    while (!line.Contains(ControlSignalSourcesEndTag) && reader.Peek() >= 0) {
-      line = reader.ReadLine()!;
-    }
-    if (!line.Contains(ControlSignalSourcesEndTag)) {
-      Console.Error.WriteLine(
-        $"Cannot find '{ControlSignalSourcesEndTag}' in file '{programPath}'.");
-      Environment.Exit(1);
-      return false;
-    }
-    line = reader.ReadLine()!;
-    if (!line.Contains(EventProcessorsStartTag)) {
-      return false;
-    }
-    while (!line.Contains(ScriptProcessorStartTag) && reader.Peek() >= 0) {
-      line = reader.ReadLine()!;
-    }
-    return line.Contains(ScriptProcessorStartTag);
+  private bool HasMacroCcsScriptProcessor() {
+    // Sometimes there's an EventProcessor0 first, e.g. Factory/Keys/Smooth E-piano 2.1.
+    // But Info page CC numbers don't go there.
+    return (
+      from scriptProcessor in ScriptProcessors
+      where scriptProcessor.Name == "EventProcessor9"
+      select scriptProcessor).Any();
   }
 
   private void Initialise() {
@@ -195,9 +194,10 @@ public class ProgramConfig {
     // macros out of order and some macros do not appear on the info page.
     // (I have not yet been able to work out how to make a macro not appear on the Info
     // page or how tell from the XML whether it is or is not on the Info page.)
-    bool hasProgramScriptProcessor = HasProgramScriptProcessor(programPath); 
-    if (hasProgramScriptProcessor) {
-      Console.WriteLine($"Program.ScriptProcessor in '{programPath}'.");
+    DeserialiseProgramXml(programPath);
+    bool hasMacroCcsScriptProcessor = HasMacroCcsScriptProcessor(); 
+    if (hasMacroCcsScriptProcessor) {
+      Console.WriteLine($"Macro CCs ScriptProcessor in '{programPath}'.");
       UpdateCCsInScriptProcessor(programPath);
       return;
     }
@@ -222,20 +222,12 @@ public class ProgramConfig {
     // the first macro.
     int nextContinuousCcNo = 31;
     int nextSwitchCcNo = 112;
+    int constantModulationIndex = -1;
     while (!line.Contains(ControlSignalSourcesEndTag) && reader.Peek() >= 0) {
-      bool isContinuous;
-      if (line.Contains("Style=\"0\"")) {
-        isContinuous = true;
-      } else if (line.Contains("Style=\"1\"")) {
-        isContinuous = false;
-      } else {
-        Console.Error.WriteLine(
-          $"Invalid ConstantModulation start tag line '{line}' in file '{programPath}'.");
-        Environment.Exit(1);
-        return;
-      }
+      // We have just have written a ConstantModulation start tag line.
+      constantModulationIndex++;
       int ccNo;
-      if (isContinuous) {
+      if (ConstantModulations[constantModulationIndex].IsContinuous) {
         ccNo = nextContinuousCcNo;
         nextContinuousCcNo++;
       } else {
@@ -291,7 +283,6 @@ public class ProgramConfig {
     }
     using var reader = new StringReader(inputText);
     using var writer = new StreamWriter(programPath);
-    writer.AutoFlush = true;
     string line = string.Empty;
     int macroCount = 0;
     while (!line.Contains(ScriptProcessorStartTag) && reader.Peek() >= 0) {
