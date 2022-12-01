@@ -9,12 +9,12 @@ public class ProgramConfig {
   private const string ConnectionsStartTag = "<Connections>";
   private const string ConstantModulationStartTag = "<ConstantModulation ";
   private const string ControlSignalSourcesEndTag = "</ControlSignalSources>";
-  // private const string EventProcessorsStartTag = "<EventProcessors>";
-  private const string PropertiesTag = "<Properties ";
-  // Sometimes there's an EventProcessor0 first, e.g. Factory/Keys/Smooth E-piano 2.1.
-  // But Info page CC numbers don't go there.
-  private const string ScriptProcessorStartTag = 
-    "<ScriptProcessor Name=\"EventProcessor9\" "; 
+  /// <summary>
+  /// Sometimes there's an EventProcessor0 first, e.g. in
+  /// Factory/Keys/Smooth E-piano 2.1.
+  /// But Info page CC numbers don't go there.
+  /// </summary>
+  public const string MacroCcsScriptProcessorName = "EventProcessor9";
   
   public ProgramConfig(
     string instrumentName, string templateProgramCategory, string templateProgramName) {
@@ -28,7 +28,9 @@ public class ProgramConfig {
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
   [PublicAPI] public string InstrumentName { get; }
   [PublicAPI] public DirectoryInfo InstrumentProgramsFolder { get; private set; } = null!;
+  private ScriptProcessor? MacroCcsScriptProcessor { get; set; }
   [PublicAPI] public string MainCcTemplate { get; private set; } = null!;
+  private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
   [PublicAPI] public string SignalProcessorCcTemplate { get; private set; } = null!;
   [PublicAPI] public string TemplateProgramCategory { get; }
@@ -53,6 +55,13 @@ public class ProgramConfig {
     var root = (UviRoot)serializer.Deserialize(reader)!;
     ConstantModulations = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
+  }
+
+  private ScriptProcessor? FindMacroCcsScriptProcessor() {
+    return (
+      from scriptProcessor in ScriptProcessors
+      where scriptProcessor.Name == MacroCcsScriptProcessorName
+      select scriptProcessor).FirstOrDefault();
   }
 
   private DirectoryInfo GetInstrumentProgramsFolder() {
@@ -152,15 +161,6 @@ public class ProgramConfig {
     return templateProgramFile.FullName;
   }
 
-  private bool HasMacroCcsScriptProcessor() {
-    // Sometimes there's an EventProcessor0 first, e.g. Factory/Keys/Smooth E-piano 2.1.
-    // But Info page CC numbers don't go there.
-    return (
-      from scriptProcessor in ScriptProcessors
-      where scriptProcessor.Name == "EventProcessor9"
-      select scriptProcessor).Any();
-  }
-
   private void Initialise() {
     InstrumentProgramsFolder = GetInstrumentProgramsFolder();
     TemplateProgramPath = GetTemplateProgramPath();
@@ -185,137 +185,84 @@ public class ProgramConfig {
   }
 
   protected virtual void UpdateCCs(string programPath) {
-    // Updates the macro CCs so that, left to right on the Info page,
-    // the macros are successively assigned standard CCs in ascending order,
-    // with different series of CCs for continuous and switch macros. 
-    // For this to work, the macros need to be listed in the XML in their left to right
-    // order on the Info page, and all macros need to be shown on the Info page.
-    // So it won't work with the Devinity sound bank, where the XML lists the
+    // Dual XML data load strategy:
+    // To maximise forward compatibility with possible future changes to the program XML
+    // data structure, we are deserialising only nodes we need, to the
+    // ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
+    // file from those lists. Instead, the program XML file must be updated via
+    // LINQ to XML in ProgramXml. 
+    DeserialiseProgramXml(programPath);
+    ProgramXml = new ProgramXml(TemplateProgramPath);
+    ProgramXml.LoadFromFile(programPath);
+    MacroCcsScriptProcessor = FindMacroCcsScriptProcessor(); 
+    if (MacroCcsScriptProcessor != null) {
+      Console.WriteLine($"Macro CCs ScriptProcessor in '{programPath}'.");
+      UpdateMacroCcsInScriptProcessor();
+    } else {
+      UpdateMacroCcsInConstantModulations();
+    }
+    ProgramXml.SaveToFile(programPath);
+  }
+
+  /// <summary>
+  /// Updates the macro CCs so that, top to bottom, left to right on the Info page,
+  /// the macros are successively assigned standard CCs in ascending order,
+  /// with different series of CCs for continuous and switch macros.
+  /// </summary>
+  private void UpdateMacroCcsInConstantModulations() {
+    // Most Factory programs list the ConstantModulation macro specifications in order
+    // top to bottom, left to right.  But a few, e.g. Keys/Days Of Old 1.4, do not.
+    // 
+    // In the Devinity sound bank, the XML lists the
     // macros out of order and some macros do not appear on the info page.
     // (I have not yet been able to work out how to make a macro not appear on the Info
     // page or how tell from the XML whether it is or is not on the Info page.)
-    DeserialiseProgramXml(programPath);
-    bool hasMacroCcsScriptProcessor = HasMacroCcsScriptProcessor(); 
-    if (hasMacroCcsScriptProcessor) {
-      Console.WriteLine($"Macro CCs ScriptProcessor in '{programPath}'.");
-      UpdateCCsInScriptProcessor(programPath);
-      return;
-    }
-    string inputText;
-    using (var fileReader = new StreamReader(programPath)) {
-      inputText = fileReader.ReadToEnd();
-    }
-    using var reader = new StringReader(inputText);
-    using var writer = new StreamWriter(programPath);
-    string line = string.Empty;
-    while (!line.Contains(ConstantModulationStartTag) && reader.Peek() >= 0) {
-      line = reader.ReadLine()!;
-      writer.WriteLine(line);
-    }
-    if (!line.Contains(ConstantModulationStartTag)) {
-      Console.Error.WriteLine(
-        $"Cannot find '{ConstantModulationStartTag}' in file '{programPath}'.");
-      Environment.Exit(1);
-      return;
-    }
-    // We have just written the first line of the ConstantModulation block that defines
-    // the first macro.
+    //
     int nextContinuousCcNo = 31;
     int nextSwitchCcNo = 112;
-    int constantModulationIndex = -1;
-    while (!line.Contains(ControlSignalSourcesEndTag) && reader.Peek() >= 0) {
-      // We have just have written a ConstantModulation start tag line.
-      constantModulationIndex++;
+    for (int index = 0; index < ConstantModulations.Count; index++) {
+      var constantModulation = ConstantModulations[index];
       int ccNo;
-      if (ConstantModulations[constantModulationIndex].IsContinuous) {
+      if (constantModulation.IsContinuous) {
         ccNo = nextContinuousCcNo;
         nextContinuousCcNo++;
       } else {
         ccNo = nextSwitchCcNo;
         nextSwitchCcNo++;
       }
-      line = reader.ReadLine()!; // Connections start tag, if any, otherwise Properties
-                                 // tag. 
-      if (line.Contains(ConnectionsStartTag)) {
+      if (constantModulation.SignalConnections.Count == 0) { // Will be 0 or 1
+        // The macro is not already mapped to a CC number.
+        var signalConnection = new SignalConnection {
+          CcNo = ccNo,
+          Destination = "Value"
+        };
+        ProgramXml.AddConstantModulationSignalConnection(signalConnection, index);
+      } else {
         // The macro already has a Connections block mapping to a CC.
-        writer.WriteLine(line); // Write the Connections start tag.
-        line = reader.ReadLine()!; // SignalConnection tag line
         // We need to conserve the SignalConnection tag, which might contain a custom
         // Ratio, and just replace the CC number.
-        string signalConnectionLine = ReplaceMidiCcNo(line, ccNo);
-        writer.WriteLine(signalConnectionLine);
-        line = reader.ReadLine()!; // Properties tag line
-      } else {
-        // The macro is not already mapped to a CC number.
-        // So we can insert the template Connections block, which specifies the
-        // default Ratio (1), substituting the required CC number.
-        string ccConfig = ReplaceMidiCcNo(MainCcTemplate, ccNo);
-        writer.Write(ccConfig);
+        var signalConnection = constantModulation.SignalConnections[0];
+        ProgramXml.UpdateConstantModulationSignalConnection(signalConnection, index);
       }
-      writer.WriteLine(line); // Properties tag line
-      line = reader.ReadLine()!; // ConstantModulation end tag line
-      writer.WriteLine(line);
-      // If the next block(s), if any, in the ControlSignalSources block is/are not 
-      // ConstantModulation(), which configures a macro, (it/they could be LFO(s)
-      // instead, for example), write the non-macro block(s) unaltered.
-      while (!line.Contains(ConstantModulationStartTag) 
-             && !line.Contains(ControlSignalSourcesEndTag)) {
-        line = reader.ReadLine()!;
-        writer.WriteLine(line);
-      }
-      // Now we should just have written either the ConstantModulation start tag line
-      // of the next macro or the ControlSignalSources end tag line, in which case
-      // there are no more macros.
     }
-    if (!line.Contains(ControlSignalSourcesEndTag)) {
-      Console.Error.WriteLine(
-        $"Cannot find '{ControlSignalSourcesEndTag}' in file '{programPath}'.");
-      Environment.Exit(1);
-      return;
-    }
-    writer.Write(reader.ReadToEnd());
   }
 
-  private void UpdateCCsInScriptProcessor(string programPath) {
-    string inputText;
-    using (var fileReader = new StreamReader(programPath)) {
-      inputText = fileReader.ReadToEnd();
-    }
-    using var reader = new StringReader(inputText);
-    using var writer = new StreamWriter(programPath);
-    string line = string.Empty;
-    int macroCount = 0;
-    while (!line.Contains(ScriptProcessorStartTag) && reader.Peek() >= 0) {
-      line = reader.ReadLine()!;
-      writer.WriteLine(line);
-      if (line.Contains(ConstantModulationStartTag)) {
-        macroCount++;
-      }
-    }
-    if (!line.Contains(ScriptProcessorStartTag)) {
-      Console.Error.WriteLine(
-        $"Cannot find '{ScriptProcessorStartTag}' in file '{programPath}'.");
-      Environment.Exit(1);
-      return;
-    }
-    writer.WriteLine(ConnectionsStartLine);
+  private void UpdateMacroCcsInScriptProcessor() {
+    int macroCount = ConstantModulations.Count;
+    // So far, all Factory programs with macro CCs specified in the
+    // ScriptProcessor have no switch macros and are listed in the ConstantModulations
+    // in top to bottom order.  But if this is made generic, it may work for many other
+    // sound banks.
     int nextContinuousCcNo = 31;
+    MacroCcsScriptProcessor!.SignalConnections.Clear();
     for (int macroNo = 1; macroNo <= macroCount; macroNo++) {
-      string signalConnectionLine =
-        ReplaceMidiCcNo(SignalProcessorCcTemplate, nextContinuousCcNo)
-          .Replace("Macro1", $"Macro{macroNo}");
-      writer.WriteLine(signalConnectionLine);
+      MacroCcsScriptProcessor.SignalConnections.Add(
+        new SignalConnection {
+          MacroNo = macroNo,
+          CcNo = nextContinuousCcNo
+        });
       nextContinuousCcNo++;
     }
-    writer.WriteLine(ConnectionsEndLine);
-    // Omit any existing Connections block.
-    line = reader.ReadLine()!;
-    if (line.Contains(ConnectionsStartTag)) {
-      while (!line.Contains(PropertiesTag) && reader.Peek() >= 0) {
-        line = reader.ReadLine()!;
-      }
-    }
-    writer.WriteLine(line); // Properties line
-    writer.Write(reader.ReadToEnd());
+    ProgramXml.UpdateMacroCcsScriptProcessor(MacroCcsScriptProcessor);
   }
 }

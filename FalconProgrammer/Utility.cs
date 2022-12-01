@@ -7,7 +7,8 @@ public static class Utility {
 
   public static void ConfigureCcs() {
     var config = new ProgramConfig(
-      "Factory", "Keys XML", "DX Mania");
+      "Factory", 
+      "Keys WITH TEMPLATE XML", "DX Mania");
     config.ConfigureCcs("Keys XML");
     // var config = new Voklm();
     // config.ConfigureCcs("Synth Choirs");
