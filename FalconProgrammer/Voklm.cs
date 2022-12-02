@@ -5,10 +5,10 @@ public class Voklm : ScriptConfig {
     "Voklm", "Synth Choirs",
     "Breath Five", "EventProcessor0") { }
 
-  public override void ConfigureCcs(string programCategory) {
+  public override void ConfigureMacroCcs(string programCategory) {
     ScriptProcessorName = programCategory == "Vox Instruments"
       ? "EventProcessor9"
       : TemplateScriptProcessorName;
-    base.ConfigureCcs(programCategory);
+    base.ConfigureMacroCcs(programCategory);
   }
 }

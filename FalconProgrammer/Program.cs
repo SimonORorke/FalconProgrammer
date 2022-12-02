@@ -2,5 +2,5 @@
 
 using FalconProgrammer;
 
-Utility.ConfigureCcs();
+Runner.ConfigureCcs();
 Console.WriteLine("Finished");

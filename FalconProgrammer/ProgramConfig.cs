@@ -6,9 +6,10 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class ProgramConfig {
+  //public const string ProgramExtension = ".uvip";
+  private const string ProgramExtension = ".xml";
+  private const string SynthName = "UVI Falcon";
   private const string ConnectionsStartTag = "<Connections>";
-  private const string ConstantModulationStartTag = "<ConstantModulation ";
-  private const string ControlSignalSourcesEndTag = "</ControlSignalSources>";
   /// <summary>
   /// Sometimes there's an EventProcessor0 first, e.g. in
   /// Factory/Keys/Smooth E-piano 2.1.
@@ -40,12 +41,12 @@ public class ProgramConfig {
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
-  public virtual void ConfigureCcs(string programCategory) {
+  public virtual void ConfigureMacroCcs(string programCategory) {
     Initialise();
     var programFilesToEdit = GetProgramFilesToEdit(programCategory);
     foreach (var programFileToEdit in programFilesToEdit) {
       Console.WriteLine($"Updating '{programFileToEdit.FullName}'.");
-      UpdateCCs(programFileToEdit.FullName);
+      UpdateMacroCcs(programFileToEdit.FullName);
     }
   }
 
@@ -68,7 +69,7 @@ public class ProgramConfig {
     var synthSoftwareFolder = new DirectoryInfo(
       Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-        "Music", "Software", Utility.SynthName));
+        "Music", "Software", SynthName));
     if (!synthSoftwareFolder.Exists) {
       Console.Error.WriteLine(
         $"Cannot find folder '{synthSoftwareFolder.FullName}'.");
@@ -117,7 +118,7 @@ public class ProgramConfig {
 
   private IEnumerable<FileInfo> GetProgramFilesToEdit(string programCategory) {
     var folder = GetProgramsFolderToEdit(programCategory);
-    var programFiles = folder.GetFiles("*" + Utility.ProgramExtension);
+    var programFiles = folder.GetFiles("*" + ProgramExtension);
     var result = (
       from programFile in programFiles
       where programFile.FullName != TemplateProgramPath
@@ -153,7 +154,7 @@ public class ProgramConfig {
   private string GetTemplateProgramPath() {
     var templateProgramFile = new FileInfo(
       Path.Combine(InstrumentProgramsFolder.FullName,
-        TemplateProgramCategory, TemplateProgramName + Utility.ProgramExtension));
+        TemplateProgramCategory, TemplateProgramName + ProgramExtension));
     if (!templateProgramFile.Exists) {
       Console.Error.WriteLine($"Cannot find file '{templateProgramFile.FullName}'.");
       Environment.Exit(1);
@@ -184,7 +185,7 @@ public class ProgramConfig {
 
   }
 
-  protected virtual void UpdateCCs(string programPath) {
+  protected virtual void UpdateMacroCcs(string programPath) {
     // Dual XML data load strategy:
     // To maximise forward compatibility with possible future changes to the program XML
     // data structure, we are deserialising only nodes we need, to the

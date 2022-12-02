@@ -54,7 +54,7 @@ public class ScriptConfig : ProgramConfig {
     return inputLine;
   }
 
-  protected override void UpdateCCs(string programPath) {
+  protected override void UpdateMacroCcs(string programPath) {
     string inputText;
     using (var fileReader = new StreamReader(programPath)) {
       inputText = fileReader.ReadToEnd();
