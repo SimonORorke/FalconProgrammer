@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace FalconProgrammer.XmlModels;
+namespace FalconProgrammer.XmlDeserialised;
 
 public class Properties {
   [XmlAttribute("x")] public int X { get; set; }

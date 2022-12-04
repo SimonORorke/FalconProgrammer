@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace FalconProgrammer.XmlModels;
+namespace FalconProgrammer.XmlDeserialised;
 
 public class SignalConnection {
   [XmlAttribute] public string Ratio { get; set; } = null!;

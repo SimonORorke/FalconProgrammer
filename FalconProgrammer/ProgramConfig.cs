@@ -1,6 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-using FalconProgrammer.XmlModels;
+using FalconProgrammer.XmlDeserialised;
+using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer;
@@ -9,14 +10,7 @@ public class ProgramConfig {
   //public const string ProgramExtension = ".uvip";
   private const string ProgramExtension = ".xml";
   private const string SynthName = "UVI Falcon";
-  private const string ConnectionsStartTag = "<Connections>";
-  /// <summary>
-  /// Sometimes there's an EventProcessor0 first, e.g. in
-  /// Factory/Keys/Smooth E-piano 2.1.
-  /// But Info page CC numbers don't go there.
-  /// </summary>
-  public const string MacroCcsScriptProcessorName = "EventProcessor9";
-  
+
   public ProgramConfig(
     string instrumentName, string templateProgramCategory, string templateProgramName) {
     InstrumentName = instrumentName;
@@ -24,16 +18,26 @@ public class ProgramConfig {
     TemplateProgramName = templateProgramName;
   }
 
-  private string ConnectionsEndLine{ get; set; } = null!;
-  private string ConnectionsStartLine{ get; set; } = null!;
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
   [PublicAPI] public string InstrumentName { get; }
   [PublicAPI] public DirectoryInfo InstrumentProgramsFolder { get; private set; } = null!;
-  private ScriptProcessor? MacroCcsScriptProcessor { get; set; }
-  [PublicAPI] public string MainCcTemplate { get; private set; } = null!;
-  private ProgramXml ProgramXml { get; set; } = null!;
+  public ScriptProcessor? MacroCcsScriptProcessor { get; private set; }
+
+  /// <summary>
+  ///   Name of ScriptProcessor, if any, that is to define the Info page macro CCs.
+  /// </summary>
+  /// <remarks>
+  ///   In the Factory sound bank, sometimes there's an EventProcessor0 first, e.g. in
+  ///   Factory/Keys/Smooth E-piano 2.1.
+  ///   But Info page CC numbers don't go there.
+  /// </remarks>
+  public string MacroCcsScriptProcessorName { get; protected set; } = "EventProcessor9";
+
+  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")] 
+  protected string ProgramPath { get; private set; } = null!;
+  
+  protected ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-  [PublicAPI] public string SignalProcessorCcTemplate { get; private set; } = null!;
   [PublicAPI] public string TemplateProgramCategory { get; }
   [PublicAPI] public string TemplateProgramName { get; }
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
@@ -45,17 +49,39 @@ public class ProgramConfig {
     Initialise();
     var programFilesToEdit = GetProgramFilesToEdit(programCategory);
     foreach (var programFileToEdit in programFilesToEdit) {
-      Console.WriteLine($"Updating '{programFileToEdit.FullName}'.");
-      UpdateMacroCcs(programFileToEdit.FullName);
+      ProgramPath = programFileToEdit.FullName;
+      Console.WriteLine($"Updating '{ProgramPath}'.");
+      // Dual XML data load strategy:
+      // To maximise forward compatibility with possible future changes to the program XML
+      // data structure, we are deserialising only nodes we need, to the
+      // ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
+      // file from those lists. Instead, the program XML file must be updated via
+      // LINQ to XML in ProgramXml. 
+      DeserialiseProgram();
+      ProgramXml.LoadFromFile(ProgramPath);
+      UpdateMacroCcs();
+      ProgramXml.SaveToFile(programFileToEdit.FullName);
     }
   }
 
-  private void DeserialiseProgramXml(string programPath) {
-    using var reader = new StreamReader(programPath);
+  /// <summary>
+  ///   Convert the fifth controller's CC number to 11 to map to the touch slider.
+  /// </summary>
+  private static int ConvertContinuousCcNo(int nextContinuousCcNo) {
+    return nextContinuousCcNo != 35 ? nextContinuousCcNo : 11;
+  }
+
+  protected virtual ProgramXml CreateProgramXml() {
+    return new ProgramXml(TemplateProgramPath, this);
+  }
+
+  private void DeserialiseProgram() {
+    using var reader = new StreamReader(ProgramPath);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
     ConstantModulations = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
+    MacroCcsScriptProcessor = FindMacroCcsScriptProcessor();
   }
 
   private ScriptProcessor? FindMacroCcsScriptProcessor() {
@@ -85,37 +111,6 @@ public class ProgramConfig {
     return result;
   }
 
-  protected virtual string GetMainCcTemplate() {
-    using var reader = new StreamReader(TemplateProgramPath);
-    string line = string.Empty;
-    while (!line.Contains(ConnectionsStartTag) && !reader.EndOfStream) {
-      line = reader.ReadLine()!;
-    }
-    if (!line.Contains(ConnectionsStartTag)) {
-      Console.Error.WriteLine(
-        $"Cannot find '{ConnectionsStartTag}' in file '{TemplateProgramPath}'.");
-    }
-    // Start of first macro's Connections block
-    using var writer = new StringWriter();
-    writer.WriteLine(line);
-    line = reader.ReadLine()!; // SignalConnection tag line
-    // If the SignalConnection contains a non-default (< 1) Ratio,
-    // change the Ratio to the default, 1.
-    // E.g. replaces 
-    //    Ratio="0.36663184"
-    // with
-    //    Ratio="1"
-    const string pattern = "Ratio=\"0\\.\\d+\"";
-    const string replacement = "Ratio=\"1\"";
-    string signalConnectionLine = Regex.Replace(line, pattern, replacement);
-    writer.WriteLine(signalConnectionLine);
-    line = reader.ReadLine()!; // Connections end tag
-    writer.WriteLine(line);
-    // We have written all three lines of the first macro's Connections block,
-    // which contains the MIDI CC.
-    return writer.ToString();
-  }
-
   private IEnumerable<FileInfo> GetProgramFilesToEdit(string programCategory) {
     var folder = GetProgramsFolderToEdit(programCategory);
     var programFiles = folder.GetFiles("*" + ProgramExtension);
@@ -141,16 +136,6 @@ public class ProgramConfig {
     return result;
   }
 
-  private string GetSignalProcessorCcTemplate() {
-    using var reader = new StringReader(MainCcTemplate);
-    ConnectionsStartLine = reader.ReadLine()!;
-    string inputSignalConnectionLine = reader.ReadLine()!;
-    string result = inputSignalConnectionLine.Replace(
-      "Destination=\"Value\"", "Destination=\"Macro1\"");
-    ConnectionsEndLine = reader.ReadLine()!;
-    return result;
-  }
-
   private string GetTemplateProgramPath() {
     var templateProgramFile = new FileInfo(
       Path.Combine(InstrumentProgramsFolder.FullName,
@@ -162,53 +147,25 @@ public class ProgramConfig {
     return templateProgramFile.FullName;
   }
 
-  private void Initialise() {
+  protected virtual void Initialise() {
     InstrumentProgramsFolder = GetInstrumentProgramsFolder();
     TemplateProgramPath = GetTemplateProgramPath();
-    MainCcTemplate = GetMainCcTemplate();
-    SignalProcessorCcTemplate = GetSignalProcessorCcTemplate();
+    ProgramXml = CreateProgramXml();
   }
 
-  /// <summary>
-  ///   Returns the specified text updated to replace the CC number in the
-  ///   SignalConnection tag with the specified CC number.
-  ///   E.g. replaces 
-  ///     Source="@MIDI CC 31"
-  ///   with
-  ///     Source="@MIDI CC 123"
-  /// </summary>
-  private static string ReplaceMidiCcNo(string oldText, int newCcNo) {
-    int ccNoToUse = newCcNo != 35 ? newCcNo : 11;
-    const string pattern = "Source=\"@MIDI CC \\d+\"";
-    string replacement = "Source=\"@MIDI CC " + ccNoToUse + "\"";
-    return Regex.Replace(oldText, pattern, replacement);
-
-  }
-
-  protected virtual void UpdateMacroCcs(string programPath) {
-    // Dual XML data load strategy:
-    // To maximise forward compatibility with possible future changes to the program XML
-    // data structure, we are deserialising only nodes we need, to the
-    // ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
-    // file from those lists. Instead, the program XML file must be updated via
-    // LINQ to XML in ProgramXml. 
-    DeserialiseProgramXml(programPath);
-    ProgramXml = new ProgramXml(TemplateProgramPath);
-    ProgramXml.LoadFromFile(programPath);
-    MacroCcsScriptProcessor = FindMacroCcsScriptProcessor(); 
+  protected virtual void UpdateMacroCcs() {
     if (MacroCcsScriptProcessor != null) {
-      Console.WriteLine($"Macro CCs ScriptProcessor in '{programPath}'.");
+      Console.WriteLine($"Macro CCs ScriptProcessor in '{ProgramPath}'.");
       UpdateMacroCcsInScriptProcessor();
     } else {
       UpdateMacroCcsInConstantModulations();
     }
-    ProgramXml.SaveToFile(programPath);
   }
 
   /// <summary>
-  /// Updates the macro CCs so that, top to bottom, left to right on the Info page,
-  /// the macros are successively assigned standard CCs in ascending order,
-  /// with different series of CCs for continuous and switch macros.
+  ///   Updates the macro CCs so that, top to bottom, left to right on the Info page,
+  ///   the macros are successively assigned standard CCs in ascending order,
+  ///   with different series of CCs for continuous and switch macros.
   /// </summary>
   private void UpdateMacroCcsInConstantModulations() {
     // Most Factory programs list the ConstantModulation macro specifications in order
@@ -225,7 +182,7 @@ public class ProgramConfig {
       var constantModulation = ConstantModulations[index];
       int ccNo;
       if (constantModulation.IsContinuous) {
-        ccNo = nextContinuousCcNo;
+        ccNo = ConvertContinuousCcNo(nextContinuousCcNo);
         nextContinuousCcNo++;
       } else {
         ccNo = nextSwitchCcNo;
@@ -260,10 +217,10 @@ public class ProgramConfig {
       MacroCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
           MacroNo = macroNo,
-          CcNo = nextContinuousCcNo
+          CcNo = ConvertContinuousCcNo(nextContinuousCcNo)
         });
       nextContinuousCcNo++;
     }
-    ProgramXml.UpdateMacroCcsScriptProcessor(MacroCcsScriptProcessor);
+    ProgramXml.UpdateMacroCcsScriptProcessor();
   }
 }

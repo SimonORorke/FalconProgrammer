@@ -1,20 +1,22 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
-using FalconProgrammer.XmlModels;
+using FalconProgrammer.XmlDeserialised;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
   private XElement? _templateSignalConnectionElement;
 
-  public ProgramXml(string templatePath) {
+  public ProgramXml(string templatePath, ProgramConfig programConfig) {
     TemplatePath = templatePath;
+    ProgramConfig = programConfig;
   }
 
   private List<XElement> ConstantModulationElements { get; set; } = null!;
   [PublicAPI] public string InputPath { get; set; } = null!;
-  private XElement? MacroCcsScriptProcessorElement { get; set; }
+  protected XElement? MacroCcsScriptProcessorElement { get; private set; }
+  private ProgramConfig ProgramConfig { get; }
   private XElement RootElement { get; set; } = null!;
   [PublicAPI] public string TemplatePath { get; }
 
@@ -59,7 +61,7 @@ public class ProgramXml {
           "ScriptProcessor");
         MacroCcsScriptProcessorElement = (
           from scriptProcessorElement in scriptProcessorElements
-          where scriptProcessorElement.Attribute("Name").Value ==
+          where scriptProcessorElement.Attribute("Name")!.Value ==
                 ProgramConfig.MacroCcsScriptProcessorName
           select scriptProcessorElement).FirstOrDefault();
       }
@@ -102,8 +104,7 @@ public class ProgramXml {
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }
 
-  public void UpdateMacroCcsScriptProcessor(
-    ScriptProcessor macroCcsScriptProcessor) {
+  public virtual void UpdateMacroCcsScriptProcessor() {
     var connectionsElement = MacroCcsScriptProcessorElement!.Element("Connections");
     if (connectionsElement != null) {
       connectionsElement.RemoveAll();
@@ -111,7 +112,7 @@ public class ProgramXml {
       connectionsElement = new XElement("Connections");
       MacroCcsScriptProcessorElement.Add(connectionsElement);
     }
-    foreach (var signalConnection in macroCcsScriptProcessor.SignalConnections) {
+    foreach (var signalConnection in ProgramConfig.MacroCcsScriptProcessor!.SignalConnections) {
       connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
     }
   }

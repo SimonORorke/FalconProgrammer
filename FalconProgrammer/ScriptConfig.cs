@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System.Xml.Serialization;
+using FalconProgrammer.XmlDeserialised;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
@@ -7,89 +9,35 @@ public class ScriptConfig : ProgramConfig {
     string templateProgramName,
     string templateScriptProcessorName) : base(
     instrumentName, templateProgramCategory, templateProgramName) {
-    ScriptProcessorName = templateScriptProcessorName;
+    MacroCcsScriptProcessorName = templateScriptProcessorName;
     TemplateScriptProcessorName = templateScriptProcessorName;
   }
 
-  [PublicAPI] public string ScriptProcessorName { get; protected set; }
+  private ScriptProcessor TemplateScriptProcessor { get; set; } = null!;
   [PublicAPI] public string TemplateScriptProcessorName { get; }
 
-  protected override string GetMainCcTemplate() {
+  private void DeserialiseTemplateProgram() {
     using var reader = new StreamReader(TemplateProgramPath);
-    string line = string.Empty;
-    while (!reader.EndOfStream) {
-      line = reader.ReadLine()!;
-      if (line.Contains(TemplateScriptProcessorName)) {
-        break;
-      }
-    }
-    if (!line.Contains(TemplateScriptProcessorName)) {
-      Console.Error.WriteLine(
+    var serializer = new XmlSerializer(typeof(UviRoot));
+    var root = (UviRoot)serializer.Deserialize(reader)!;
+    TemplateScriptProcessor =
+      (from scriptProcessor in root.Program.ScriptProcessors
+        where scriptProcessor.Name == TemplateScriptProcessorName
+        select scriptProcessor).FirstOrDefault() ??
+      throw new ApplicationException(
         $"Cannot find {TemplateScriptProcessorName} in file '{TemplateProgramPath}'.");
-      Environment.Exit(1);
-    }
-    if (!reader.EndOfStream) {
-      line = reader.ReadLine()!;
-    }
-    using var writer = new StringWriter();
-    if (line.Contains("<Connections>")) {
-      writer.WriteLine(line);
-    } else {
-      Console.Error.WriteLine(
-        $"Cannot find start of node {TemplateScriptProcessorName}.Connections " + 
-        $"in file '{TemplateProgramPath}'.");
-      Environment.Exit(1);
-    }
-    while (!reader.EndOfStream) {
-      line = reader.ReadLine()!;
-      writer.WriteLine(line);
-      if (line.Contains("</Connections>")) {
-        break;
-      }
-    }
-    return writer.ToString();
   }
 
-  protected virtual string GetScriptProcessorLineToWrite(string inputLine) {
-    return inputLine;
+  protected override void Initialise() {
+    base.Initialise();
+    DeserialiseTemplateProgram();
   }
 
-  protected override void UpdateMacroCcs(string programPath) {
-    string inputText;
-    using (var fileReader = new StreamReader(programPath)) {
-      inputText = fileReader.ReadToEnd();
+  protected override void UpdateMacroCcs() {
+    MacroCcsScriptProcessor!.SignalConnections.Clear();
+    foreach (var signalConnection in TemplateScriptProcessor.SignalConnections) {
+      MacroCcsScriptProcessor.SignalConnections.Add(signalConnection);
     }
-    using var reader = new StringReader(inputText);
-    using var writer = new StreamWriter(programPath);
-    string line = string.Empty;
-    while (reader.Peek() >= 0) {
-      line = reader.ReadLine()!;
-      if (line.Contains(ScriptProcessorName)) {
-        writer.WriteLine(GetScriptProcessorLineToWrite(line));
-        break;
-      }
-      writer.WriteLine(line);
-    }
-    if (!line.Contains(ScriptProcessorName)) {
-      Console.Error.WriteLine(
-        $"Cannot find {ScriptProcessorName} in file '{programPath}'.");
-      Environment.Exit(1);
-    }
-    if (reader.Peek() >= 0) {
-      line = reader.ReadLine()!;
-    }
-    if (line.Contains("<Connections>")) {
-      // Skip the existing CC configuration
-      while (reader.Peek() >= 0) {
-        line = reader.ReadLine()!;
-        if (line.Contains("</Connections>")) {
-          line = reader.ReadLine()!;
-          break;
-        }
-      }
-    }
-    writer.Write(MainCcTemplate);
-    writer.WriteLine(line); // Properties tag
-    writer.Write(reader.ReadToEnd());
+    ProgramXml.UpdateMacroCcsScriptProcessor();
   }
 }

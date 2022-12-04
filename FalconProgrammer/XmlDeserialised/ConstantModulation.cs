@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
 
-namespace FalconProgrammer.XmlModels;
+namespace FalconProgrammer.XmlDeserialised;
 
 public class ConstantModulation {
   [XmlAttribute] public string Name { get; set; } = null!;

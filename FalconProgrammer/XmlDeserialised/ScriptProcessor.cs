@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace FalconProgrammer.XmlModels; 
+namespace FalconProgrammer.XmlDeserialised; 
 
 public class ScriptProcessor {
   [XmlAttribute] public string Name { get; set; } = null!;

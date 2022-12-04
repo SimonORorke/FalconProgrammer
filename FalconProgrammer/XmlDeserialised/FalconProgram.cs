@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace FalconProgrammer.XmlModels; 
+namespace FalconProgrammer.XmlDeserialised; 
 
 public class FalconProgram {
   [XmlAttribute] public string DisplayName { get; set; } = null!;
