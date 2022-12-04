@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
+using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer;
@@ -15,6 +16,10 @@ public class ScriptConfig : ProgramConfig {
 
   private ScriptProcessor TemplateScriptProcessor { get; set; } = null!;
   [PublicAPI] public string TemplateScriptProcessorName { get; }
+
+  protected override ProgramXml CreateProgramXml() {
+    return new ScriptProgramXml(TemplateProgramPath, this);
+  }
 
   private void DeserialiseTemplateProgram() {
     using var reader = new StreamReader(TemplateProgramPath);

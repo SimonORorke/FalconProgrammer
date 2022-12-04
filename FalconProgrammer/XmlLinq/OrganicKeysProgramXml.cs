@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.XmlLinq;
 
-public class OrganicKeysProgramXml : ProgramXml {
+public class OrganicKeysProgramXml : ScriptProgramXml {
   public OrganicKeysProgramXml(string templatePath, ProgramConfig programConfig) : base(
     templatePath, programConfig) { }
 

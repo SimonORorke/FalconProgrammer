@@ -71,10 +71,10 @@ public class ProgramXml {
     }
   }
 
-  private XElement GetTemplateSignalConnectionElement() {
-    var root = XElement.Load(TemplatePath);
+  protected virtual XElement GetTemplateSignalConnectionElement() {
+    var rootElement = XElement.Load(TemplatePath);
     var result =
-      root.Descendants("SignalConnection").FirstOrDefault() ??
+      rootElement.Descendants("SignalConnection").FirstOrDefault() ??
       throw new ApplicationException(
         $"Cannot find SignalConnection element in '{TemplatePath}'.");
     return result;
