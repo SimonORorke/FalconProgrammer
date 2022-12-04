@@ -3,9 +3,15 @@
 namespace FalconProgrammer.XmlDeserialised;
 
 public class SignalConnection {
-  [XmlAttribute] public string Ratio { get; set; } = null!;
-  [XmlAttribute] public string Source { get; set; } = null!;
-  [XmlAttribute] public string Destination { get; set; } = null!;
+  public SignalConnection() {
+    Ratio = "1";
+    Source = string.Empty;
+    Destination = "Value";
+  }
+  
+  [XmlAttribute] public string Ratio { get; set; }
+  [XmlAttribute] public string Source { get; set; }
+  [XmlAttribute] public string Destination { get; set; }
 
   public int CcNo {
     get =>

@@ -17,6 +17,8 @@ public class ConstantModulation {
 
   [XmlElement] public Properties Properties { get; set; } = null!;
 
+  public int Index { get; set; }
+
   public bool IsContinuous =>
     Style == 0 || (Style == 1
       ? false

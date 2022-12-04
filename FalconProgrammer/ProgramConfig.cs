@@ -176,22 +176,24 @@ public class ProgramConfig {
     // (I have not yet been able to work out how to make a macro not appear on the Info
     // page or how tell from the XML whether it is or is not on the Info page.)
     //
-    int nextContinuousCcNo = 31;
-    int nextSwitchCcNo = 112;
+    // int nextContinuousCcNo = 31;
+    // int nextSwitchCcNo = 112;
     for (int index = 0; index < ConstantModulations.Count; index++) {
       var constantModulation = ConstantModulations[index];
-      int ccNo;
-      if (constantModulation.IsContinuous) {
-        ccNo = ConvertContinuousCcNo(nextContinuousCcNo);
-        nextContinuousCcNo++;
-      } else {
-        ccNo = nextSwitchCcNo;
-        nextSwitchCcNo++;
-      }
+      // int ccNo;
+      // if (constantModulation.IsContinuous) {
+      //   ccNo = ConvertContinuousCcNo(nextContinuousCcNo);
+      //   nextContinuousCcNo++;
+      // } else {
+      //   ccNo = nextSwitchCcNo;
+      //   nextSwitchCcNo++;
+      // }
+      var indexCcNos = GetConstantModulationSignalConnections();
       if (constantModulation.SignalConnections.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a CC number.
         var signalConnection = new SignalConnection {
-          CcNo = ccNo,
+          CcNo = indexCcNos[index],
+          // CcNo = ccNo,
           Destination = "Value"
         };
         ProgramXml.AddConstantModulationSignalConnection(signalConnection, index);
@@ -203,6 +205,30 @@ public class ProgramConfig {
         ProgramXml.UpdateConstantModulationSignalConnection(signalConnection, index);
       }
     }
+  }
+
+  private SortedList<ConstantModulation, SignalConnection> 
+    GetConstantModulationSignalConnections() {
+    var sortedByLocation = new SortedSet<ConstantModulation>(
+      new ConstantModulationLocationComparer());
+    for (int index = 0; index < ConstantModulations.Count; index++) {
+      var constantModulation = ConstantModulations[index];
+      constantModulation.Index = index;
+      sortedByLocation.Add(constantModulation);
+    }
+    int nextContinuousCcNo = 31;
+    int nextSwitchCcNo = 112;
+    foreach (var constantModulation in sortedByLocation) {
+      int ccNo;
+      if (constantModulation.IsContinuous) {
+        ccNo = ConvertContinuousCcNo(nextContinuousCcNo);
+        nextContinuousCcNo++;
+      } else {
+        ccNo = nextSwitchCcNo;
+        nextSwitchCcNo++;
+      }
+    }
+    return sortedByLocation;
   }
 
   private void UpdateMacroCcsInScriptProcessor() {
