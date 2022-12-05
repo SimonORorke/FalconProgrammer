@@ -7,7 +7,7 @@ namespace FalconProgrammer;
 /// </summary>
 public class ConstantModulationLocationComparer : Comparer<ConstantModulation> {
   public override int Compare(ConstantModulation? a, ConstantModulation? b) {
-    if (a.Properties.Y < b.Properties.Y) {
+    if (a!.Properties.Y < b!.Properties.Y) {
       return -1;
     }
     if (a.Properties.Y > b.Properties.Y) {
@@ -16,6 +16,11 @@ public class ConstantModulationLocationComparer : Comparer<ConstantModulation> {
     if (a.Properties.X < b.Properties.X) {
       return -1;
     }
-    return a.Properties.X > b.Properties.X ? 1 : 0;
+    if (a.Properties.X > b.Properties.X) {
+      return 1;
+    }
+    throw new ApplicationException(
+      "Duplicate ConstantModulation.Properties location: X = " + 
+      $"{a.Properties.X}; Y = {a.Properties.Y}.");
   }
 }

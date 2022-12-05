@@ -36,7 +36,7 @@ public class ProgramConfig {
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")] 
   protected string ProgramPath { get; private set; } = null!;
   
-  protected ProgramXml ProgramXml { get; set; } = null!;
+  protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
   [PublicAPI] public string TemplateProgramCategory { get; }
   [PublicAPI] public string TemplateProgramName { get; }
@@ -64,13 +64,6 @@ public class ProgramConfig {
     }
   }
 
-  /// <summary>
-  ///   Convert the fifth controller's CC number to 11 to map to the touch slider.
-  /// </summary>
-  private static int ConvertContinuousCcNo(int nextContinuousCcNo) {
-    return nextContinuousCcNo != 35 ? nextContinuousCcNo : 11;
-  }
-
   protected virtual ProgramXml CreateProgramXml() {
     return new ProgramXml(TemplateProgramPath, this);
   }
@@ -89,6 +82,17 @@ public class ProgramConfig {
       from scriptProcessor in ScriptProcessors
       where scriptProcessor.Name == MacroCcsScriptProcessorName
       select scriptProcessor).FirstOrDefault();
+  }
+
+  private SortedSet<ConstantModulation> GetConstantModulationsSortedByLocation() {
+    var result = new SortedSet<ConstantModulation>(
+      new ConstantModulationLocationComparer());
+    for (int index = 0; index < ConstantModulations.Count; index++) {
+      var constantModulation = ConstantModulations[index];
+      constantModulation.Index = index;
+      result.Add(constantModulation);
+    }
+    return result;
   }
 
   private DirectoryInfo GetInstrumentProgramsFolder() {
@@ -169,83 +173,65 @@ public class ProgramConfig {
   /// </summary>
   private void UpdateMacroCcsInConstantModulations() {
     // Most Factory programs list the ConstantModulation macro specifications in order
-    // top to bottom, left to right.  But a few, e.g. Keys/Days Of Old 1.4, do not.
+    // top to bottom, left to right. But a few, e.g. Factory/Keys/Days Of Old 1.4, do not.
     // 
     // In the Devinity sound bank, the XML lists the
     // macros out of order and some macros do not appear on the info page.
     // (I have not yet been able to work out how to make a macro not appear on the Info
     // page or how tell from the XML whether it is or is not on the Info page.)
+    // WILL THIS WORK?
     //
-    // int nextContinuousCcNo = 31;
-    // int nextSwitchCcNo = 112;
-    for (int index = 0; index < ConstantModulations.Count; index++) {
-      var constantModulation = ConstantModulations[index];
-      // int ccNo;
-      // if (constantModulation.IsContinuous) {
-      //   ccNo = ConvertContinuousCcNo(nextContinuousCcNo);
-      //   nextContinuousCcNo++;
-      // } else {
-      //   ccNo = nextSwitchCcNo;
-      //   nextSwitchCcNo++;
-      // }
-      var indexCcNos = GetConstantModulationSignalConnections();
+    var sortedByLocation = 
+      GetConstantModulationsSortedByLocation();
+    int nextContinuousCcNo = 31;
+    int nextSwitchCcNo = 112;
+    foreach (var constantModulation in sortedByLocation) {
+      int ccNo = constantModulation.GetCcNo(ref nextContinuousCcNo, ref nextSwitchCcNo);
       if (constantModulation.SignalConnections.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a CC number.
-        var signalConnection = new SignalConnection {
-          CcNo = indexCcNos[index],
-          // CcNo = ccNo,
-          Destination = "Value"
-        };
-        ProgramXml.AddConstantModulationSignalConnection(signalConnection, index);
+        var signalConnection = new SignalConnection { CcNo = ccNo };
+        ProgramXml.AddConstantModulationSignalConnection(
+          signalConnection, constantModulation.Index);
       } else {
         // The macro already has a Connections block mapping to a CC.
         // We need to conserve the SignalConnection tag, which might contain a custom
         // Ratio, and just replace the CC number.
         var signalConnection = constantModulation.SignalConnections[0];
-        ProgramXml.UpdateConstantModulationSignalConnection(signalConnection, index);
+        signalConnection.CcNo = ccNo;
+        ProgramXml.UpdateConstantModulationSignalConnection(
+          signalConnection, constantModulation.Index);
       }
     }
-  }
-
-  private SortedList<ConstantModulation, SignalConnection> 
-    GetConstantModulationSignalConnections() {
-    var sortedByLocation = new SortedSet<ConstantModulation>(
-      new ConstantModulationLocationComparer());
-    for (int index = 0; index < ConstantModulations.Count; index++) {
-      var constantModulation = ConstantModulations[index];
-      constantModulation.Index = index;
-      sortedByLocation.Add(constantModulation);
-    }
-    int nextContinuousCcNo = 31;
-    int nextSwitchCcNo = 112;
-    foreach (var constantModulation in sortedByLocation) {
-      int ccNo;
-      if (constantModulation.IsContinuous) {
-        ccNo = ConvertContinuousCcNo(nextContinuousCcNo);
-        nextContinuousCcNo++;
-      } else {
-        ccNo = nextSwitchCcNo;
-        nextSwitchCcNo++;
-      }
-    }
-    return sortedByLocation;
   }
 
   private void UpdateMacroCcsInScriptProcessor() {
-    int macroCount = ConstantModulations.Count;
-    // So far, all Factory programs with macro CCs specified in the
-    // ScriptProcessor have no switch macros and are listed in the ConstantModulations
-    // in top to bottom order.  But if this is made generic, it may work for many other
-    // sound banks.
+    // In Factory/Keys, the only Factory program category I've looked at so far, all
+    // programs with macro CCs specified in the ScriptProcessor are listed in the
+    // ConstantModulations in top to bottom order. But ConstantModulation.Properties
+    // does specify the location. I don't (yet) know of any Falcon programs where this is
+    // not the case. But, just in case,
+    // assign the CC numbers top to bottom, left to right.
+    //
+    // In some sound banks, such as Organic Keys, ConstantModulations specify only
+    // modulation wheel assignment, not macros. In those cases, the custom CC number
+    // assignment needs to be modelled on a template program in ScriptConfig. 
+    //
+    // Assign button CCs to switch macros. 
+    // Example: Factory/Keys/Smooth E-piano 2.1.
+    //
+    var sortedByLocation = 
+      GetConstantModulationsSortedByLocation();
+    int macroNo = 0;
     int nextContinuousCcNo = 31;
+    int nextSwitchCcNo = 112;
     MacroCcsScriptProcessor!.SignalConnections.Clear();
-    for (int macroNo = 1; macroNo <= macroCount; macroNo++) {
+    foreach (var constantModulation in sortedByLocation) {
+      macroNo++;
       MacroCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
           MacroNo = macroNo,
-          CcNo = ConvertContinuousCcNo(nextContinuousCcNo)
+          CcNo = constantModulation.GetCcNo(ref nextContinuousCcNo, ref nextSwitchCcNo)
         });
-      nextContinuousCcNo++;
     }
     ProgramXml.UpdateMacroCcsScriptProcessor();
   }

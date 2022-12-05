@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.XmlDeserialised;
 
@@ -13,14 +14,14 @@ public class SignalConnection {
   [XmlAttribute] public string Source { get; set; }
   [XmlAttribute] public string Destination { get; set; }
 
-  public int CcNo {
+  [PublicAPI] public int CcNo {
     get =>
       Convert.ToInt32(
         Source.Replace("@MIDI CC ", string.Empty));
     set => Source = $"@MIDI CC {value}";
   }
 
-  public int? MacroNo {
+  [PublicAPI] public int? MacroNo {
     get =>
       Destination.StartsWith("Macro")
         ? Convert.ToInt32(Destination.Replace("Macro", string.Empty))
