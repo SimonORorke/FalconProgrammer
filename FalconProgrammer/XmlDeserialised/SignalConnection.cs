@@ -5,23 +5,33 @@ namespace FalconProgrammer.XmlDeserialised;
 
 public class SignalConnection {
   public SignalConnection() {
-    Ratio = "1";
+    Ratio = 1;
     Source = string.Empty;
     Destination = "Value";
   }
   
-  [XmlAttribute] public string Ratio { get; set; }
+  [XmlAttribute] public float Ratio { get; set; }
   [XmlAttribute] public string Source { get; set; }
   [XmlAttribute] public string Destination { get; set; }
+  [XmlAttribute] public int ConnectionMode { get; set; }
 
-  [PublicAPI] public int CcNo {
+  public int CcNo {
     get =>
       Convert.ToInt32(
         Source.Replace("@MIDI CC ", string.Empty));
     set => Source = $"@MIDI CC {value}";
   }
 
-  [PublicAPI] public int? MacroNo {
+  public int Index { get; set; }
+
+  /// <summary>
+  ///   Gets whether the MIDI CC mapping is to control a macro on the Info page.
+  ///   So far, the only CC mappings that are not for Info page controls are for the
+  ///   modulation wheel (MIDI CC 1).
+  /// </summary>
+  public bool IsForInfoPageMacro => ConnectionMode == 1;
+
+  public int? MacroNo {
     get =>
       Destination.StartsWith("Macro")
         ? Convert.ToInt32(Destination.Replace("Macro", string.Empty))

@@ -6,11 +6,11 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class ScriptConfig : ProgramConfig {
-  public ScriptConfig(string instrumentName, string templateProgramCategory,
+  public ScriptConfig(string templateSoundBankName, string templateCategoryName,
     string templateProgramName,
     string templateScriptProcessorName) : base(
-    instrumentName, templateProgramCategory, templateProgramName) {
-    MacroCcsScriptProcessorName = templateScriptProcessorName;
+    templateSoundBankName, templateCategoryName, templateProgramName) {
+    InfoPageCcsScriptProcessorName = templateScriptProcessorName;
     TemplateScriptProcessorName = templateScriptProcessorName;
   }
 
@@ -18,7 +18,7 @@ public class ScriptConfig : ProgramConfig {
   [PublicAPI] public string TemplateScriptProcessorName { get; }
 
   protected override ProgramXml CreateProgramXml() {
-    return new ScriptProgramXml(TemplateProgramPath, this);
+    return new ScriptProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor!);
   }
 
   private void DeserialiseTemplateProgram() {
@@ -39,10 +39,10 @@ public class ScriptConfig : ProgramConfig {
   }
 
   protected override void UpdateMacroCcs() {
-    MacroCcsScriptProcessor!.SignalConnections.Clear();
+    InfoPageCcsScriptProcessor!.SignalConnections.Clear();
     foreach (var signalConnection in TemplateScriptProcessor.SignalConnections) {
-      MacroCcsScriptProcessor.SignalConnections.Add(signalConnection);
+      InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
     }
-    ProgramXml.UpdateMacroCcsScriptProcessor();
+    ProgramXml.UpdateInfoPageCcsScriptProcessor();
   }
 }

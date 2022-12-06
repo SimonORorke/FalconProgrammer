@@ -21,6 +21,7 @@ public class ConstantModulationLocationComparer : Comparer<ConstantModulation> {
     }
     throw new ApplicationException(
       "Duplicate ConstantModulation.Properties location: X = " + 
-      $"{a.Properties.X}; Y = {a.Properties.Y}.");
+      $"{a.Properties.X}; Y = {a.Properties.Y}. " + 
+      $"a = {a}. b = {b}.");
   }
 }

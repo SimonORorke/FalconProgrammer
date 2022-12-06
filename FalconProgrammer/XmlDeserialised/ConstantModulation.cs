@@ -42,4 +42,8 @@ public class ConstantModulation {
     }
     return result;
   }
+
+  public override string ToString() {
+    return $"{DisplayName} ({Name})";
+  }
 }

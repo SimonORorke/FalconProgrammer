@@ -8,17 +8,18 @@ namespace FalconProgrammer.XmlLinq;
 public class ProgramXml {
   private XElement? _templateSignalConnectionElement;
 
-  public ProgramXml(string templatePath, ProgramConfig programConfig) {
-    TemplatePath = templatePath;
-    ProgramConfig = programConfig;
+  public ProgramXml(
+    string templateProgramPath, ScriptProcessor? infoPageCcsScriptProcessor = null) {
+    TemplateProgramPath = templateProgramPath;
+    InfoPageCcsScriptProcessor = infoPageCcsScriptProcessor;
   }
 
   private List<XElement> ConstantModulationElements { get; set; } = null!;
-  [PublicAPI] public string InputPath { get; set; } = null!;
-  protected XElement? MacroCcsScriptProcessorElement { get; private set; }
-  private ProgramConfig ProgramConfig { get; }
+  [PublicAPI] public string InputProgramPath { get; set; } = null!;
+  private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
+  protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
-  [PublicAPI] public string TemplatePath { get; }
+  [PublicAPI] public string TemplateProgramPath { get; }
 
   private XElement TemplateSignalConnectionElement =>
     _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
@@ -26,33 +27,38 @@ public class ProgramXml {
   public void AddConstantModulationSignalConnection(
     SignalConnection signalConnection, int index) {
     var constantModulationElement = ConstantModulationElements[index];
-    var connectionsElement = new XElement("Connections");
-    constantModulationElement.Add(connectionsElement);
+    // If there's already a modulation wheel assignment, the ConstantModulation element
+    // will already own a Connections element. 
+    var connectionsElement = constantModulationElement.Element("Connections");
+    if (connectionsElement == null) {
+      connectionsElement = new XElement("Connections"); 
+      constantModulationElement.Add(connectionsElement);
+    }
     connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
   }
-  
+
   private XElement CreateSignalConnectionElement(SignalConnection signalConnection) {
     var result = new XElement(TemplateSignalConnectionElement);
     // In case the template SignalConnection contains a non-default (< 1) Ratio,
     // set the Ratio to the default, 1.
-    var ratioAttribute = 
+    var ratioAttribute =
       result.Attribute("Ratio") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} " 
-        + $"attribute in '{TemplatePath}'.");
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} "
+        + $"attribute in '{TemplateProgramPath}'.");
     ratioAttribute.Value = "1";
     UpdateSignalConnectionElement(signalConnection, result);
     return result;
   }
 
-  public void LoadFromFile(string inputPath) {
-    InputPath = inputPath;
+  public void LoadFromFile(string inputProgramPath) {
+    InputProgramPath = inputProgramPath;
     try {
-      RootElement = XElement.Load(InputPath);
+      RootElement = XElement.Load(InputProgramPath);
       var controlSignalSourcesElement =
         RootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
         throw new ApplicationException(
-          $"Cannot find ControlSignalSources element in '{TemplatePath}'.");
+          $"Cannot find ControlSignalSources element in '{TemplateProgramPath}'.");
       ConstantModulationElements = controlSignalSourcesElement.Elements(
         "ConstantModulation").ToList();
       var eventProcessorsElement =
@@ -60,31 +66,31 @@ public class ProgramXml {
       if (eventProcessorsElement != null) {
         var scriptProcessorElements = eventProcessorsElement.Elements(
           "ScriptProcessor");
-        MacroCcsScriptProcessorElement = (
+        InfoPageCcsScriptProcessorElement = (
           from scriptProcessorElement in scriptProcessorElements
           where scriptProcessorElement.Attribute("Name")!.Value ==
-                ProgramConfig.MacroCcsScriptProcessorName
+                InfoPageCcsScriptProcessor!.Name
           select scriptProcessorElement).FirstOrDefault();
       }
     } catch (XmlException ex) {
       throw new ApplicationException(
-        $"The following XML error was found in '{InputPath}'\r\n:{ex.Message}");
+        $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
     }
   }
 
   protected virtual XElement GetTemplateSignalConnectionElement() {
-    var rootElement = XElement.Load(TemplatePath);
+    var rootElement = XElement.Load(TemplateProgramPath);
     var result =
       rootElement.Descendants("SignalConnection").FirstOrDefault() ??
       throw new ApplicationException(
-        $"Cannot find SignalConnection element in '{TemplatePath}'.");
+        $"Cannot find SignalConnection element in '{TemplateProgramPath}'.");
     return result;
   }
 
-  public void SaveToFile(string outputPath) {
+  public void SaveToFile(string outputProgramPath) {
     try {
       var writer = XmlWriter.Create(
-        outputPath,
+        outputProgramPath,
         new XmlWriterSettings {
           Indent = true,
           IndentChars = "    "
@@ -93,50 +99,55 @@ public class ProgramXml {
       writer.Close();
     } catch (XmlException ex) {
       throw new ApplicationException(
-        $"The following XML error was found on writing to '{outputPath}'\r\n:{ex.Message}");
+        $"The following XML error was found on writing to '{outputProgramPath}'\r\n:{ex.Message}");
     }
   }
 
   public void UpdateConstantModulationSignalConnection(
-    SignalConnection signalConnection, int index) {
-    var constantModulationElement = ConstantModulationElements[index];
+    ConstantModulation constantModulation, 
+    SignalConnection signalConnection) {
+    var constantModulationElement = ConstantModulationElements[constantModulation.Index];
     var connectionsElement = constantModulationElement.Element("Connections")!;
-    var signalConnectionElement = connectionsElement.Element("SignalConnection")!;
+    var signalConnectionElements = 
+      connectionsElement.Elements("SignalConnection").ToList();
+    // The ConstantModulation will have two SignalConnections if one of them maps to the
+    // modulation wheel (MIDI CC 1). 
+    var signalConnectionElement = signalConnectionElements[signalConnection.Index]; 
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }
 
-  public virtual void UpdateMacroCcsScriptProcessor() {
-    var connectionsElement = MacroCcsScriptProcessorElement!.Element("Connections");
+  public virtual void UpdateInfoPageCcsScriptProcessor() {
+    var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections");
     if (connectionsElement != null) {
       connectionsElement.RemoveAll();
     } else {
       connectionsElement = new XElement("Connections");
-      MacroCcsScriptProcessorElement.Add(connectionsElement);
+      InfoPageCcsScriptProcessorElement.Add(connectionsElement);
     }
-    foreach (var signalConnection in ProgramConfig.MacroCcsScriptProcessor!.SignalConnections) {
+    foreach (var signalConnection in InfoPageCcsScriptProcessor!.SignalConnections) {
       connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
     }
   }
-  
+
   private void UpdateSignalConnectionElement(
     SignalConnection signalConnection, XElement signalConnectionElement) {
-    var ratioAttribute = 
+    var ratioAttribute =
       signalConnectionElement.Attribute("Ratio") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} " 
-        + $"attribute in '{ProgramConfig.ProgramPath}'.");
-    ratioAttribute.Value = signalConnection.Ratio;
-    var sourceAttribute = 
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} "
+        + $"attribute in '{InputProgramPath}'.");
+    ratioAttribute.Value = signalConnection.Ratio.ToString();
+    var sourceAttribute =
       signalConnectionElement.Attribute(nameof(SignalConnection.Source)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Source)} " 
-        + $"attribute in '{ProgramConfig.ProgramPath}'.");
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Source)} "
+        + $"attribute in '{InputProgramPath}'.");
     sourceAttribute.Value = signalConnection.Source;
-    var destinationAttribute = 
+    var destinationAttribute =
       signalConnectionElement.Attribute(nameof(SignalConnection.Destination)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Destination)} " 
-        + $"attribute in '{ProgramConfig.ProgramPath}'.");
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Destination)} "
+        + $"attribute in '{InputProgramPath}'.");
     destinationAttribute.Value = signalConnection.Destination;
   }
 }

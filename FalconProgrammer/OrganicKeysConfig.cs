@@ -9,6 +9,6 @@ public class OrganicKeysConfig : ScriptConfig {
   }
 
   protected override ProgramXml CreateProgramXml() {
-    return new OrganicKeysProgramXml(TemplateProgramPath, this);
+    return new OrganicKeysProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor!);
   }
 }
