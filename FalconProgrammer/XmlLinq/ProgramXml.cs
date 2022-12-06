@@ -38,7 +38,8 @@ public class ProgramXml {
     var ratioAttribute = 
       result.Attribute("Ratio") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.Ratio attribute in '{TemplatePath}'.");
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} " 
+        + $"attribute in '{TemplatePath}'.");
     ratioAttribute.Value = "1";
     UpdateSignalConnectionElement(signalConnection, result);
     return result;
@@ -117,17 +118,25 @@ public class ProgramXml {
     }
   }
   
-  private static void UpdateSignalConnectionElement(
+  private void UpdateSignalConnectionElement(
     SignalConnection signalConnection, XElement signalConnectionElement) {
+    var ratioAttribute = 
+      signalConnectionElement.Attribute("Ratio") ??
+      throw new ApplicationException(
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} " 
+        + $"attribute in '{ProgramConfig.ProgramPath}'.");
+    ratioAttribute.Value = signalConnection.Ratio;
     var sourceAttribute = 
       signalConnectionElement.Attribute(nameof(SignalConnection.Source)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Source)} attribute.");
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Source)} " 
+        + $"attribute in '{ProgramConfig.ProgramPath}'.");
     sourceAttribute.Value = signalConnection.Source;
     var destinationAttribute = 
       signalConnectionElement.Attribute(nameof(SignalConnection.Destination)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Destination)} attribute.");
+        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Destination)} " 
+        + $"attribute in '{ProgramConfig.ProgramPath}'.");
     destinationAttribute.Value = signalConnection.Destination;
   }
 }

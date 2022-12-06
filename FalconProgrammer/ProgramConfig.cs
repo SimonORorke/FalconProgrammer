@@ -34,7 +34,7 @@ public class ProgramConfig {
   public string MacroCcsScriptProcessorName { get; protected set; } = "EventProcessor9";
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")] 
-  protected string ProgramPath { get; private set; } = null!;
+  public string ProgramPath { get; private set; } = null!;
   
   protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
@@ -198,6 +198,14 @@ public class ProgramConfig {
         // Ratio, and just replace the CC number.
         var signalConnection = constantModulation.SignalConnections[0];
         signalConnection.CcNo = ccNo;
+        // In Factory/Keys/Days Of Old 1.4, Macro 1, a switch macro, has Ratio -1 instead
+        // of the usual 1. I don't know what the point of that is. But it prevents the
+        // button controller mapped to the macro from working. To fix this, if a switch
+        // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing
+        // that. 
+        if (!constantModulation.IsContinuous && signalConnection.Ratio == "-1") {
+          signalConnection.Ratio = "1";
+        }
         ProgramXml.UpdateConstantModulationSignalConnection(
           signalConnection, constantModulation.Index);
       }
