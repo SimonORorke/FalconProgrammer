@@ -153,9 +153,8 @@ public class ProgramConfig {
       where programFile.FullName != TemplateProgramPath
       select programFile).ToList();
     if (result.Count == 0) {
-      Console.Error.WriteLine(
+      throw new ApplicationException(
         $"There are no program files to edit in folder '{folder.FullName}'.");
-      Environment.Exit(1);
     }
     return result;
   }
@@ -164,8 +163,7 @@ public class ProgramConfig {
     var result = new DirectoryInfo(
       Path.Combine(SoundBankFolder.FullName, categoryName));
     if (!result.Exists) {
-      Console.Error.WriteLine($"Cannot find folder '{result.FullName}'.");
-      Environment.Exit(1);
+      throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
     }
     return result;
   }
@@ -176,16 +174,14 @@ public class ProgramConfig {
         Environment.GetFolderPath(Environment.SpecialFolder.Personal),
         "Music", "Software", SynthName));
     if (!synthSoftwareFolder.Exists) {
-      Console.Error.WriteLine(
+      throw new ApplicationException(
         $"Cannot find folder '{synthSoftwareFolder.FullName}'.");
-      Environment.Exit(1);
     }
     var result = new DirectoryInfo(
       Path.Combine(
         synthSoftwareFolder.FullName, "Programs", soundBankName));
     if (!result.Exists) {
-      Console.Error.WriteLine($"Cannot find folder '{result.FullName}'.");
-      Environment.Exit(1);
+      throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
     }
     return result;
   }
@@ -195,8 +191,7 @@ public class ProgramConfig {
       Path.Combine(GetSoundBankFolder(TemplateSoundBankName).FullName,
         TemplateCategoryName, TemplateProgramName + ProgramExtension));
     if (!templateProgramFile.Exists) {
-      Console.Error.WriteLine($"Cannot find file '{templateProgramFile.FullName}'.");
-      Environment.Exit(1);
+      throw new ApplicationException($"Cannot find file '{templateProgramFile.FullName}'.");
     }
     return templateProgramFile.FullName;
   }
