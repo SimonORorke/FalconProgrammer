@@ -61,16 +61,19 @@ public class ProgramXml {
           $"Cannot find ControlSignalSources element in '{TemplateProgramPath}'.");
       ConstantModulationElements = controlSignalSourcesElement.Elements(
         "ConstantModulation").ToList();
-      var eventProcessorsElement =
-        RootElement.Descendants("EventProcessors").FirstOrDefault();
-      if (eventProcessorsElement != null) {
-        var scriptProcessorElements = eventProcessorsElement.Elements(
-          "ScriptProcessor");
-        InfoPageCcsScriptProcessorElement = (
-          from scriptProcessorElement in scriptProcessorElements
-          where scriptProcessorElement.Attribute("Name")!.Value ==
-                InfoPageCcsScriptProcessor!.Name
-          select scriptProcessorElement).FirstOrDefault();
+      InfoPageCcsScriptProcessorElement = null;
+      if (InfoPageCcsScriptProcessor != null) {
+        var eventProcessorsElement =
+          RootElement.Descendants("EventProcessors").FirstOrDefault();
+        if (eventProcessorsElement != null) {
+          var scriptProcessorElements = eventProcessorsElement.Elements(
+            "ScriptProcessor");
+          InfoPageCcsScriptProcessorElement = (
+            from scriptProcessorElement in scriptProcessorElements
+            where scriptProcessorElement.Attribute("Name")!.Value ==
+                  InfoPageCcsScriptProcessor!.Name
+            select scriptProcessorElement).FirstOrDefault();
+        }
       }
     } catch (XmlException ex) {
       throw new ApplicationException(

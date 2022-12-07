@@ -7,13 +7,13 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class ProgramConfig {
-  //public const string ProgramExtension = ".uvip";
-  private const string ProgramExtension = ".xml";
+  private const string ProgramExtension = ".uvip";
+  // private const string ProgramExtension = ".xml";
   private const string SynthName = "UVI Falcon";
 
   public ProgramConfig(
     string templateSoundBankName = "Factory",
-    string templateCategoryName = "Keys XML WITH TEMPLATE",
+    string templateCategoryName = "Keys WITH TEMPLATE",
     string templateProgramName = "DX Mania") {
     TemplateSoundBankName = templateSoundBankName;
     TemplateCategoryName = templateCategoryName;

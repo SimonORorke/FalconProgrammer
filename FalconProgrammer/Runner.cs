@@ -3,7 +3,7 @@
 public static class Runner {
   public static void ConfigureCcs() {
     var config = new ProgramConfig();
-    config.ConfigureMacroCcs("Devinity", "Bass XML");
+    config.ConfigureMacroCcs("Devinity", "Plucks-Leads");
     //config.ConfigureMacroCcs("Devinity", "Bass XML");
     // var config = new ProgramConfig(
     //   "Factory", 
