@@ -49,7 +49,6 @@ public class ProgramConfig {
     SignalConnection signalConnection) {
     if (!signalConnection.IsForInfoPageMacro && signalConnection.CcNo != 1) {
       throw new ApplicationException(
-        $"Error in '{ProgramPath}':\r\n:" +
         $"MIDI CC {signalConnection.CcNo} is mapped to " +
         $"{signalConnection.Destination}, which is not a Info page macro.");
     }
@@ -310,7 +309,6 @@ public class ProgramConfig {
       // We've already validated against non-mod wheel CCs that don't control Info page
       // macros. So the reference to the mod wheel in this error message should be fine.
       throw new ApplicationException(
-        $"Error in '{ProgramPath}'.\r\n:" +
         "Modulation wheel assignment found in Info page CCs ScriptProcessor.");
     }
     InfoPageCcsScriptProcessor!.SignalConnections.Clear();

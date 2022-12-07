@@ -5,6 +5,11 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
+/// <summary>
+///   In some sound banks, such as Organic Keys, ConstantModulations do not specify
+///   Info page macros. Instead MIDI CC numbers in a ScriptProcessor need to be modelled
+///   on a template program.
+/// </summary>
 public class ScriptConfig : ProgramConfig {
   public ScriptConfig(string templateSoundBankName, string templateCategoryName,
     string templateProgramName,
