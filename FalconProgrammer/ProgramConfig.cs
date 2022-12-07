@@ -45,9 +45,10 @@ public class ProgramConfig {
   [PublicAPI] public string TemplateProgramName { get; }
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
 
-  private void CheckForNonModWheelNonInfoPageSignalConnection(
+  private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
-    if (!signalConnection.IsForInfoPageMacro && signalConnection.CcNo != 1) {
+    if (!signalConnection.IsForInfoPageMacro 
+        && signalConnection.CcNo.HasValue && signalConnection.CcNo != 1) {
       throw new ApplicationException(
         $"MIDI CC {signalConnection.CcNo} is mapped to " +
         $"{signalConnection.Destination}, which is not a Info page macro.");
@@ -60,16 +61,16 @@ public class ProgramConfig {
   ///   duplicate CC numbers we map to Info page macros.  So let's validate that there
   ///   are none.
   /// </summary>
-  private void CheckForNonModWheelNonInfoPageSignalConnections() {
+  private void CheckForNonModWheelNonInfoPageMacros() {
     foreach (
       var signalConnection in ConstantModulations.SelectMany(constantModulation =>
         constantModulation.SignalConnections)) {
-      CheckForNonModWheelNonInfoPageSignalConnection(signalConnection);
+      CheckForNonModWheelNonInfoPageMacro(signalConnection);
     }
     foreach (
       var signalConnection in ScriptProcessors.SelectMany(scriptProcessor =>
         scriptProcessor.SignalConnections)) {
-      CheckForNonModWheelNonInfoPageSignalConnection(signalConnection);
+      CheckForNonModWheelNonInfoPageMacro(signalConnection);
     }
   }
 
@@ -91,6 +92,7 @@ public class ProgramConfig {
       // file from those lists. Instead, the program XML file must be updated via
       // LINQ to XML in ProgramXml. 
       DeserialiseProgram();
+      ProgramXml = CreateProgramXml();
       ProgramXml.LoadFromFile(ProgramPath);
       UpdateMacroCcs();
       ProgramXml.SaveToFile(ProgramPath);
@@ -108,7 +110,7 @@ public class ProgramConfig {
     ConstantModulations = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
-    CheckForNonModWheelNonInfoPageSignalConnections();
+    CheckForNonModWheelNonInfoPageMacros();
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
@@ -205,7 +207,6 @@ public class ProgramConfig {
 
   protected virtual void Initialise() {
     TemplateProgramPath = GetTemplateProgramPath();
-    ProgramXml = CreateProgramXml();
   }
 
   protected virtual void UpdateMacroCcs() {
