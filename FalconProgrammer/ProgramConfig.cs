@@ -35,7 +35,7 @@ public class ProgramConfig {
   ///   Gets or sets the order in which MIDI CC numbers are to be mapped to macros
   ///   relative to their locations on the Info page.
   /// </summary>
-  public LocationOrder MacroCcLocationOrder { get; set; } =
+  [PublicAPI] public LocationOrder MacroCcLocationOrder { get; set; } =
     LocationOrder.TopToBottomLeftToRight;
 
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
@@ -45,7 +45,7 @@ public class ProgramConfig {
 
   protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-  [PublicAPI] public string TemplateProgramPath { get; protected set; } = null!;
+  [PublicAPI] public string TemplateProgramPath { get; protected set; }
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
@@ -142,6 +142,7 @@ public class ProgramConfig {
   }
 
   private SortedSet<ConstantModulation> GetConstantModulationsSortedByLocation() {
+    // TODO: Throw exceptions if ConstantModulation.Properties showValue="0" (otherwise not specified) 
     var result = new SortedSet<ConstantModulation>(
       MacroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
