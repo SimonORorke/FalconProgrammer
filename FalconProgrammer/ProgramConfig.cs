@@ -78,25 +78,42 @@ public class ProgramConfig {
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
   public virtual void ConfigureMacroCcs(
-    string soundBankName, string categoryName) {
+    string soundBankName, string? categoryName = null) {
     Initialise();
     SoundBankFolder = GetSoundBankFolder(soundBankName);
+    if (categoryName != null) {
+      ConfigureMacroCcsForCategory(categoryName);
+    } else {
+      foreach (var folder in SoundBankFolder.GetDirectories()) {
+        if (!folder.Name.EndsWith(" ORIGINAL")) {
+          ConfigureMacroCcsForCategory(folder.Name);
+          Console.WriteLine("==========================");
+        }
+      }
+    }
+  }
+
+  private void ConfigureMacroCcsForCategory(string categoryName) {
     var programFilesToEdit = GetProgramFilesToEdit(categoryName);
     foreach (var programFileToEdit in programFilesToEdit) {
-      ProgramPath = programFileToEdit.FullName;
-      Console.WriteLine($"Updating '{ProgramPath}'.");
-      // Dual XML data load strategy:
-      // To maximise forward compatibility with possible future changes to the program XML
-      // data structure, we are deserialising only nodes we need, to the
-      // ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
-      // file from those lists. Instead, the program XML file must be updated via
-      // LINQ to XML in ProgramXml. 
-      DeserialiseProgram();
-      ProgramXml = CreateProgramXml();
-      ProgramXml.LoadFromFile(ProgramPath);
-      UpdateMacroCcs();
-      ProgramXml.SaveToFile(ProgramPath);
+      ConfigureMacroCcsForProgram(programFileToEdit);
     }
+  }
+
+  private void ConfigureMacroCcsForProgram(FileSystemInfo programFileToEdit) {
+    ProgramPath = programFileToEdit.FullName;
+    Console.WriteLine($"Updating '{ProgramPath}'.");
+    // Dual XML data load strategy:
+    // To maximise forward compatibility with possible future changes to the program XML
+    // data structure, we are deserialising only nodes we need, to the
+    // ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
+    // file from those lists. Instead, the program XML file must be updated via
+    // LINQ to XML in ProgramXml. 
+    DeserialiseProgram();
+    ProgramXml = CreateProgramXml();
+    ProgramXml.LoadFromFile(ProgramPath);
+    UpdateMacroCcs();
+    ProgramXml.SaveToFile(ProgramPath);
   }
 
   protected virtual ProgramXml CreateProgramXml() {

@@ -1,11 +1,12 @@
-﻿namespace FalconProgrammer; 
+﻿namespace FalconProgrammer;
 
 public class VoklmConfig : ScriptConfig {
   public VoklmConfig() : base(
     "Voklm", "Synth Choirs",
     "Breath Five", "EventProcessor0") { }
 
-  public override void ConfigureMacroCcs(string soundBankName, string categoryName) {
+  public override void ConfigureMacroCcs(string soundBankName,
+    string? categoryName = null) {
     InfoPageCcsScriptProcessorName = categoryName == "Vox Instruments"
       ? "EventProcessor9"
       : TemplateScriptProcessorName;
