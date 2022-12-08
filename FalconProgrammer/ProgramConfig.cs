@@ -13,12 +13,9 @@ public class ProgramConfig {
   private const string SynthName = "UVI Falcon";
 
   public ProgramConfig(
-    string templateSoundBankName = "Factory",
-    string templateCategoryName = "Keys",
-    string templateProgramName = "DX Mania") {
-    TemplateSoundBankName = templateSoundBankName;
-    TemplateCategoryName = templateCategoryName;
-    TemplateProgramName = templateProgramName;
+    string templateProgramPath =
+      @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\Programs\Factory\Keys\DX Mania.uvip") {
+    TemplateProgramPath = templateProgramPath;
   }
 
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
@@ -42,16 +39,13 @@ public class ProgramConfig {
     LocationOrder.TopToBottomLeftToRight;
 
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
-  [PublicAPI] public string TemplateSoundBankName { get; }
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   public string ProgramPath { get; private set; } = null!;
 
   protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-  [PublicAPI] public string TemplateCategoryName { get; }
-  [PublicAPI] public string TemplateProgramName { get; }
-  [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
+  [PublicAPI] public string TemplateProgramPath { get; protected set; } = null!;
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
@@ -93,19 +87,20 @@ public class ProgramConfig {
       ConfigureMacroCcsForCategory(categoryName);
     } else {
       foreach (var folder in SoundBankFolder.GetDirectories()) {
-        if (!folder.Name.EndsWith(" ORIGINAL")) {
+        if (!folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
           ConfigureMacroCcsForCategory(folder.Name);
-          Console.WriteLine("==========================");
         }
       }
     }
   }
 
   private void ConfigureMacroCcsForCategory(string categoryName) {
+    Console.WriteLine($"Category: {categoryName}");
     var programFilesToEdit = GetProgramFilesToEdit(categoryName);
     foreach (var programFileToEdit in programFilesToEdit) {
       ConfigureMacroCcsForProgram(programFileToEdit);
     }
+    Console.WriteLine("==========================");
   }
 
   private void ConfigureMacroCcsForProgram(FileSystemInfo programFileToEdit) {
@@ -139,6 +134,7 @@ public class ProgramConfig {
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
+    InfoPageCcsScriptProcessorName = GetInfoPageCcsScriptProcessorName();
     return (
       from scriptProcessor in ScriptProcessors
       where scriptProcessor.Name == InfoPageCcsScriptProcessorName
@@ -171,6 +167,12 @@ public class ProgramConfig {
       }
     }
     return result;
+  }
+
+  private string GetInfoPageCcsScriptProcessorName() {
+    return SoundBankFolder.Name == "Hypnotic Drive"
+      ? "EventProcessor99"
+      : "EventProcessor9";
   }
 
   private IEnumerable<FileInfo> GetProgramFilesToEdit(string categoryName) {
@@ -214,17 +216,6 @@ public class ProgramConfig {
     return result;
   }
 
-  private string GetTemplateProgramPath() {
-    var templateProgramFile = new FileInfo(
-      Path.Combine(GetSoundBankFolder(TemplateSoundBankName).FullName,
-        TemplateCategoryName, TemplateProgramName + ProgramExtension));
-    if (!templateProgramFile.Exists) {
-      throw new ApplicationException(
-        $"Cannot find file '{templateProgramFile.FullName}'.");
-    }
-    return templateProgramFile.FullName;
-  }
-
   private bool HasUniqueLocation(ConstantModulation constantModulation) {
     return (
       from cm in ConstantModulations
@@ -234,7 +225,10 @@ public class ProgramConfig {
   }
 
   protected virtual void Initialise() {
-    TemplateProgramPath = GetTemplateProgramPath();
+    if (!File.Exists(TemplateProgramPath)) {
+      throw new ApplicationException(
+        $"Cannot find template file '{TemplateProgramPath}'.");
+    }
   }
 
   protected virtual void UpdateMacroCcs() {

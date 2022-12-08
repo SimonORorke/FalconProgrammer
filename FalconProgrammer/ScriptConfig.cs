@@ -7,14 +7,14 @@ namespace FalconProgrammer;
 
 /// <summary>
 ///   In some sound banks, such as Organic Keys, ConstantModulations do not specify
-///   Info page macros. Instead MIDI CC numbers in a ScriptProcessor need to be modelled
+///   Info page macros. In others, such as Hypnotic Drive, the macro locations
+///   specified in ConstantModulations are not used on the Info page.  
+///   Instead MIDI CC numbers in a ScriptProcessor need to be modelled
 ///   on a template program.
 /// </summary>
 public class ScriptConfig : ProgramConfig {
-  public ScriptConfig(string templateSoundBankName, string templateCategoryName,
-    string templateProgramName,
-    string templateScriptProcessorName) : base(
-    templateSoundBankName, templateCategoryName, templateProgramName) {
+  public ScriptConfig(string templateProgramPath,
+    string templateScriptProcessorName) : base(templateProgramPath) {
     InfoPageCcsScriptProcessorName = templateScriptProcessorName;
     TemplateScriptProcessorName = templateScriptProcessorName;
   }
