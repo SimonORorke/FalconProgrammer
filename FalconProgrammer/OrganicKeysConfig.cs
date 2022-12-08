@@ -4,8 +4,8 @@ namespace FalconProgrammer;
 
 public class OrganicKeysConfig : ScriptConfig {
   public OrganicKeysConfig() : base(
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\Programs\Organic Keys\Acoustic Mood\A Rhapsody.uvip", 
-    "EventProcessor0") {
+    "Organic Keys", "Acoustic Mood XML",
+    "A Rhapsody", "EventProcessor0") {
   }
 
   protected override ProgramXml CreateProgramXml() {

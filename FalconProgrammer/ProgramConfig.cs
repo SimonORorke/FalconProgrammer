@@ -13,9 +13,12 @@ public class ProgramConfig {
   private const string SynthName = "UVI Falcon";
 
   public ProgramConfig(
-    string templateProgramPath =
-      @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\Programs\Factory\Keys\DX Mania.uvip") {
-    TemplateProgramPath = templateProgramPath;
+    string templateSoundBankName = "Factory",
+    string templateCategoryName = "Keys",
+    string templateProgramName = "DX Mania") {
+    TemplateSoundBankName = templateSoundBankName;
+    TemplateCategoryName = templateCategoryName;
+    TemplateProgramName = templateProgramName;
   }
 
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
@@ -39,13 +42,16 @@ public class ProgramConfig {
     LocationOrder.TopToBottomLeftToRight;
 
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
+  [PublicAPI] public string TemplateSoundBankName { get; }
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   public string ProgramPath { get; private set; } = null!;
 
   protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-  [PublicAPI] public string TemplateProgramPath { get; protected set; }
+  [PublicAPI] public string TemplateCategoryName { get; }
+  [PublicAPI] public string TemplateProgramName { get; }
+  [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
@@ -217,6 +223,17 @@ public class ProgramConfig {
     return result;
   }
 
+  private string GetTemplateProgramPath() {
+    var templateProgramFile = new FileInfo(
+      Path.Combine(GetSoundBankFolder(TemplateSoundBankName).FullName,
+        TemplateCategoryName, TemplateProgramName + ProgramExtension));
+    if (!templateProgramFile.Exists) {
+      throw new ApplicationException(
+        $"Cannot find file '{templateProgramFile.FullName}'.");
+    }
+    return templateProgramFile.FullName;
+  }
+
   private bool HasUniqueLocation(ConstantModulation constantModulation) {
     return (
       from cm in ConstantModulations
@@ -226,10 +243,7 @@ public class ProgramConfig {
   }
 
   protected virtual void Initialise() {
-    if (!File.Exists(TemplateProgramPath)) {
-      throw new ApplicationException(
-        $"Cannot find template file '{TemplateProgramPath}'.");
-    }
+    TemplateProgramPath = GetTemplateProgramPath();
   }
 
   protected virtual void UpdateMacroCcs() {

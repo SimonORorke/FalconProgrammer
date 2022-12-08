@@ -14,8 +14,10 @@ namespace FalconProgrammer;
 ///   on a template program.
 /// </summary>
 public class ScriptConfig : ProgramConfig {
-  public ScriptConfig(string templateProgramPath,
-    string templateScriptProcessorName) : base(templateProgramPath) {
+  public ScriptConfig(string templateSoundBankName, string templateCategoryName,
+    string templateProgramName,
+    string templateScriptProcessorName) : base(
+    templateSoundBankName, templateCategoryName, templateProgramName) {
     InfoPageCcsScriptProcessorName = templateScriptProcessorName;
     TemplateScriptProcessorName = templateScriptProcessorName;
   }
