@@ -3,20 +3,20 @@
 namespace FalconProgrammer; 
 
 /// <summary>
-///   Sorts the ConstantModulations top to bottom, left to right.
+///   Orders the ConstantModulations left to right, top to bottom.
 /// </summary>
-public class ConstantModulationLocationComparer : Comparer<ConstantModulation> {
+public class LeftToRightTopToBottomComparer : Comparer<ConstantModulation> {
   public override int Compare(ConstantModulation? a, ConstantModulation? b) {
-    if (a!.Properties.Y < b!.Properties.Y) {
-      return -1;
-    }
-    if (a.Properties.Y > b.Properties.Y) {
-      return 1;
-    }
-    if (a.Properties.X < b.Properties.X) {
+    if (a!.Properties.X < b!.Properties.X) {
       return -1;
     }
     if (a.Properties.X > b.Properties.X) {
+      return 1;
+    }
+    if (a.Properties.Y < b.Properties.Y) {
+      return -1;
+    }
+    if (a.Properties.Y > b.Properties.Y) {
       return 1;
     }
     throw new ApplicationException(

@@ -8,12 +8,13 @@ namespace FalconProgrammer;
 
 public class ProgramConfig {
   private const string ProgramExtension = ".uvip";
+
   // private const string ProgramExtension = ".xml";
   private const string SynthName = "UVI Falcon";
 
   public ProgramConfig(
     string templateSoundBankName = "Factory",
-    string templateCategoryName = "Keys WITH TEMPLATE",
+    string templateCategoryName = "Keys",
     string templateProgramName = "DX Mania") {
     TemplateSoundBankName = templateSoundBankName;
     TemplateCategoryName = templateCategoryName;
@@ -33,6 +34,13 @@ public class ProgramConfig {
   /// </remarks>
   protected string InfoPageCcsScriptProcessorName { get; set; } = "EventProcessor9";
 
+  /// <summary>
+  ///   Gets or sets the order in which MIDI CC numbers are to be mapped to macros
+  ///   relative to their locations on the Info page.
+  /// </summary>
+  public LocationOrder MacroCcLocationOrder { get; set; } =
+    LocationOrder.TopToBottomLeftToRight;
+
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   [PublicAPI] public string TemplateSoundBankName { get; }
 
@@ -47,7 +55,7 @@ public class ProgramConfig {
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
-    if (!signalConnection.IsForInfoPageMacro 
+    if (!signalConnection.IsForInfoPageMacro
         && signalConnection.CcNo.HasValue && signalConnection.CcNo != 1) {
       throw new ApplicationException(
         $"MIDI CC {signalConnection.CcNo} is mapped to " +
@@ -139,7 +147,9 @@ public class ProgramConfig {
 
   private SortedSet<ConstantModulation> GetConstantModulationsSortedByLocation() {
     var result = new SortedSet<ConstantModulation>(
-      new ConstantModulationLocationComparer());
+      MacroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
+        ? new TopToBottomLeftToRightComparer()
+        : new LeftToRightTopToBottomComparer());
     for (int i = 0; i < ConstantModulations.Count; i++) {
       var constantModulation = ConstantModulations[i];
       constantModulation.Index = i;
@@ -209,7 +219,8 @@ public class ProgramConfig {
       Path.Combine(GetSoundBankFolder(TemplateSoundBankName).FullName,
         TemplateCategoryName, TemplateProgramName + ProgramExtension));
     if (!templateProgramFile.Exists) {
-      throw new ApplicationException($"Cannot find file '{templateProgramFile.FullName}'.");
+      throw new ApplicationException(
+        $"Cannot find file '{templateProgramFile.FullName}'.");
     }
     return templateProgramFile.FullName;
   }
