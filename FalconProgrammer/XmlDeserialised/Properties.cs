@@ -3,6 +3,29 @@
 namespace FalconProgrammer.XmlDeserialised;
 
 public class Properties {
+  [XmlAttribute("showValue")] public string? ShowValue { get; set; }
   [XmlAttribute("x")] public int X { get; set; }
   [XmlAttribute("y")] public int Y { get; set; }
+
+  /// <summary>
+  ///   Gets whether the coordinates specified in the Properties are actually to be used
+  ///   to determine the location of the macro on the Info page. False if the optional
+  ///   showValue attribute is included in the Properties XML element and set to "0"
+  ///   (showValue="0"), in which case the SignalConnection mapping the MIDI CC number to
+  ///   the macro must be added, via <see cref="ScriptConfig"/>, to the ScriptProcessor
+  ///   for the script that defines the Info page layout. 
+  /// </summary>
+  private bool DeterminesMacroLocationOnInfoPage => ShowValue != "0";
+
+  public void Validate() {
+    if (!DeterminesMacroLocationOnInfoPage) {
+      throw new ApplicationException(
+        "ConstantModulation.Properties include the optional attribute " + 
+        "showValue=\"0\", indicating that the coordinates specified in the Properties " +
+        "will not actually to be used to determine the locations of macros on the " + 
+        "Info page. Instead, the SignalConnections mapping MIDI CC numbers to " +
+        "macros must be added, via ScriptConfig, to the ScriptProcessor for the " + 
+        "script that defines the Info page layout.");
+    }
+  }
 }

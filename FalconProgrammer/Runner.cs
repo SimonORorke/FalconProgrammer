@@ -2,12 +2,14 @@
 
 public static class Runner {
   public static void ConfigureCcs() {
-    var config = new ScriptConfig();
-    config.ConfigureMacroCcs("Hypnotic Drive");
+    // var config = new ScriptConfig();
+    // config.ConfigureMacroCcs("Hypnotic Drive", "Leads");
     // var config = new ProgramConfig {
     //   MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom
     // };
     // config.ConfigureMacroCcs("Spectre");
+    var config = new ProgramConfig();
+    config.ConfigureMacroCcs("Hypnotic Drive","Synths");
     // config.ConfigureMacroCcs("Factory","Pure Additive 2.0");
     // config.ConfigureMacroCcs("Factory","Keys");
     // config.ConfigureMacroCcs("Devinity", "Plucks-Leads");

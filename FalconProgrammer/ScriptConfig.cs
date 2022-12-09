@@ -7,11 +7,16 @@ namespace FalconProgrammer;
 
 /// <summary>
 ///   In some sound banks, such as Organic Keys, ConstantModulations do not specify
-///   Info page macros. In others, such as Hypnotic Drive, the macro locations
-///   specified in ConstantModulations are not used on the Info page
-///   (ConstantModulation.Properties showValue="0").  
-///   Instead MIDI CC numbers in a ScriptProcessor need to be modelled
-///   on a template program.
+///   Info page macros. In others, such as Hypnotic Drive, ConstantModulation.Properties
+///   include the optional attribute showValue="0", indicating that the coordinates
+///   specified in the Properties will not actually to be used to determine the locations
+///   of macros on the Info page.
+///   <para>
+///     In these cases, this <see cref="ScriptConfig" /> class must be used to add the
+///     SignalConnections mapping MIDI CC numbers to macros to the ScriptProcessor for
+///     the script that defines the Info page layout. The SignalConnections are copied
+///     from a template program file, of which there is expected to be one per sound bank.  
+///   </para>
 /// </summary>
 public class ScriptConfig : ProgramConfig {
   private ScriptProcessor TemplateScriptProcessor { get; set; } = null!;

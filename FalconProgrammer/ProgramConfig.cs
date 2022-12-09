@@ -139,13 +139,13 @@ public class ProgramConfig {
   }
 
   private SortedSet<ConstantModulation> GetConstantModulationsSortedByLocation() {
-    // TODO: Throw exceptions if ConstantModulation.Properties showValue="0" (otherwise not specified) 
     var result = new SortedSet<ConstantModulation>(
       MacroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
     for (int i = 0; i < ConstantModulations.Count; i++) {
       var constantModulation = ConstantModulations[i];
+      constantModulation.Properties.Validate();
       constantModulation.Index = i;
       for (int j = 0; j < constantModulation.SignalConnections.Count; j++) {
         var signalConnection = constantModulation.SignalConnections[j];
@@ -153,14 +153,16 @@ public class ProgramConfig {
       }
       // In the Devinity sound bank, some macros do not appear on the Info page (only
       // the Mods page). For example Devinity/Bass/Comber Bass.
-      // This is achieved by setting the X coordinates of all those macros to 999,
-      // presumably off the right edge of the Info page, and the Y coordinates to 353. I
-      // don't know whether that is standard practice or just a trick in Devinity.
+      // This is achieved by setting, in ConstantModulation.Properties, the X coordinates
+      // of all those macros to 999, presumably off the right edge of the Info page, and
+      // the Y coordinates to 353.
+      // (Those ConstantModulation.Properties do not have the optional attribute
+      // showValue="0".)
+      // I don't know whether that is standard practice or just a trick in Devinity.
       // So, to prevent CC numbers from being given to macros that do not appear on the
       // Info page, omit all macros with duplicate locations from this set. Those macros
       // do not need CC numbers, and attempting to add duplicates to the set would throw
       // an exception in ConstantModulationLocationComparer.
-      // TODO: Check Devinity ConstantModulation.Properties for showValue="0".
       if (HasUniqueLocation(constantModulation)) {
         result.Add(constantModulation);
       }
