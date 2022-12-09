@@ -3,7 +3,14 @@
 namespace FalconProgrammer.XmlDeserialised;
 
 public class Properties {
+  
+  /// <summary>
+  ///   An optional attribute that, if present, seems always to have the value "0".
+  ///   A deserialisation exception would be thrown when the attribute is absent, if we
+  ///   were to give it the type int? instead of string?. 
+  /// </summary>
   [XmlAttribute("showValue")] public string? ShowValue { get; set; }
+  
   [XmlAttribute("x")] public int X { get; set; }
   [XmlAttribute("y")] public int Y { get; set; }
 
