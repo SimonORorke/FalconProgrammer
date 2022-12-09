@@ -2,7 +2,7 @@
 
 public static class Runner {
   public static void ConfigureCcs() {
-    var config = new HypnoticDriveConfig();
+    var config = new ScriptConfig();
     config.ConfigureMacroCcs("Hypnotic Drive");
     // var config = new ProgramConfig {
     //   MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom

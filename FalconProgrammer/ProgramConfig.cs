@@ -8,19 +8,8 @@ namespace FalconProgrammer;
 
 public class ProgramConfig {
   private const string ProgramExtension = ".uvip";
-
-  // private const string ProgramExtension = ".xml";
   private const string SynthName = "UVI Falcon";
-
-  public ProgramConfig(
-    string templateSoundBankName = "Factory",
-    string templateCategoryName = "Keys",
-    string templateProgramName = "DX Mania") {
-    TemplateSoundBankName = templateSoundBankName;
-    TemplateCategoryName = templateCategoryName;
-    TemplateProgramName = templateProgramName;
-  }
-
+  protected DirectoryInfo CategoryFolder { get; private set; } = null!;
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
   protected ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
 
@@ -32,26 +21,27 @@ public class ProgramConfig {
   ///   Factory/Keys/Smooth E-piano 2.1.
   ///   But Info page CC numbers don't go there.
   /// </remarks>
-  protected string InfoPageCcsScriptProcessorName { get; set; } = "EventProcessor9";
+  private string InfoPageCcsScriptProcessorName { get; set; } = null!;
 
   /// <summary>
   ///   Gets or sets the order in which MIDI CC numbers are to be mapped to macros
   ///   relative to their locations on the Info page.
   /// </summary>
-  [PublicAPI] public LocationOrder MacroCcLocationOrder { get; set; } =
+  [PublicAPI]
+  public LocationOrder MacroCcLocationOrder { get; set; } =
     LocationOrder.TopToBottomLeftToRight;
 
-  private DirectoryInfo SoundBankFolder { get; set; } = null!;
-  [PublicAPI] public string TemplateSoundBankName { get; }
+  protected DirectoryInfo SoundBankFolder { get; private set; } = null!;
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   public string ProgramPath { get; private set; } = null!;
 
   protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-  [PublicAPI] public string TemplateCategoryName { get; }
-  [PublicAPI] public string TemplateProgramName { get; }
+  [PublicAPI] public string TemplateCategoryName { get; protected set; } = "Keys";
+  [PublicAPI] public string TemplateProgramName { get; protected set; } = "DX Mania";
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
+  [PublicAPI] public string TemplateSoundBankName { get; protected set; } = "Factory";
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
@@ -86,7 +76,7 @@ public class ProgramConfig {
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
-  public virtual void ConfigureMacroCcs(
+  [PublicAPI] public virtual void ConfigureMacroCcs(
     string soundBankName, string? categoryName = null) {
     Initialise();
     SoundBankFolder = GetSoundBankFolder(soundBankName);
@@ -102,12 +92,13 @@ public class ProgramConfig {
   }
 
   private void ConfigureMacroCcsForCategory(string categoryName) {
+    Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
-    var programFilesToEdit = GetProgramFilesToEdit(categoryName);
+    var programFilesToEdit = GetCategoryProgramFilesToEdit(categoryName);
+    InfoPageCcsScriptProcessorName = GetInfoPageCcsScriptProcessorName();
     foreach (var programFileToEdit in programFilesToEdit) {
       ConfigureMacroCcsForProgram(programFileToEdit);
     }
-    Console.WriteLine("==========================");
   }
 
   private void ConfigureMacroCcsForProgram(FileSystemInfo programFileToEdit) {
@@ -141,7 +132,6 @@ public class ProgramConfig {
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
-    InfoPageCcsScriptProcessorName = GetInfoPageCcsScriptProcessorName();
     return (
       from scriptProcessor in ScriptProcessors
       where scriptProcessor.Name == InfoPageCcsScriptProcessorName
@@ -170,6 +160,7 @@ public class ProgramConfig {
       // Info page, omit all macros with duplicate locations from this set. Those macros
       // do not need CC numbers, and attempting to add duplicates to the set would throw
       // an exception in ConstantModulationLocationComparer.
+      // TODO: Check Devinity ConstantModulation.Properties for showValue="0".
       if (HasUniqueLocation(constantModulation)) {
         result.Add(constantModulation);
       }
@@ -177,27 +168,23 @@ public class ProgramConfig {
     return result;
   }
 
-  private string GetInfoPageCcsScriptProcessorName() {
-    return SoundBankFolder.Name == "Hypnotic Drive"
-      ? "EventProcessor99"
-      : "EventProcessor9";
-  }
+  protected virtual string GetInfoPageCcsScriptProcessorName() => "EventProcessor9";  
 
-  private IEnumerable<FileInfo> GetProgramFilesToEdit(string categoryName) {
-    var folder = GetProgramsFolderToEdit(categoryName);
-    var programFiles = folder.GetFiles("*" + ProgramExtension);
+  private IEnumerable<FileInfo> GetCategoryProgramFilesToEdit(string categoryName) {
+    CategoryFolder = GetCategoryFolder(categoryName);
+    var programFiles = CategoryFolder.GetFiles("*" + ProgramExtension);
     var result = (
       from programFile in programFiles
       where programFile.FullName != TemplateProgramPath
       select programFile).ToList();
     if (result.Count == 0) {
       throw new ApplicationException(
-        $"There are no program files to edit in folder '{folder.FullName}'.");
+        $"There are no program files to edit in folder '{CategoryFolder.FullName}'.");
     }
     return result;
   }
 
-  private DirectoryInfo GetProgramsFolderToEdit(string categoryName) {
+  private DirectoryInfo GetCategoryFolder(string categoryName) {
     var result = new DirectoryInfo(
       Path.Combine(SoundBankFolder.FullName, categoryName));
     if (!result.Exists) {
@@ -230,7 +217,7 @@ public class ProgramConfig {
         TemplateCategoryName, TemplateProgramName + ProgramExtension));
     if (!templateProgramFile.Exists) {
       throw new ApplicationException(
-        $"Cannot find file '{templateProgramFile.FullName}'.");
+        $"Cannot find template file '{templateProgramFile.FullName}'.");
     }
     return templateProgramFile.FullName;
   }
@@ -261,7 +248,7 @@ public class ProgramConfig {
   ///   ConstantModulations,
   ///   updates the macro CCs so that the macros are successively assigned standard CCs
   ///   in the order of their locations on the Info page (top to bottom, left to right or
-  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder"/>).
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and switch macros.
   /// </summary>
   private void UpdateMacroCcsInConstantModulations() {
@@ -316,7 +303,7 @@ public class ProgramConfig {
   ///   ScriptProcessor,
   ///   updates the macro CCs so that the macros are successively assigned standard CCs
   ///   in the order of their locations on the Info page (top to bottom, left to right or
-  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder"/>).
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and switch macros.
   /// </summary>
   private void UpdateMacroCcsInScriptProcessor() {
