@@ -56,6 +56,7 @@ public class ProgramConfig {
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
     if (!signalConnection.IsForInfoPageMacro
+        // ReSharper disable once MergeIntoPattern
         && signalConnection.CcNo.HasValue && signalConnection.CcNo != 1) {
       throw new ApplicationException(
         $"MIDI CC {signalConnection.CcNo} is mapped to " +
@@ -258,9 +259,10 @@ public class ProgramConfig {
   /// <summary>
   ///   Where MIDI CC assignments to macros shown on the Info page are specified in
   ///   ConstantModulations,
-  ///   updates the macro CCs so that, top to bottom, left to right on the Info page,
-  ///   the macros are successively assigned standard CCs in ascending order,
-  ///   with different series of CCs for continuous and switch macros.
+  ///   updates the macro CCs so that the macros are successively assigned standard CCs
+  ///   in the order of their locations on the Info page (top to bottom, left to right or
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder"/>).
+  ///   There are different series of CCs for continuous and switch macros.
   /// </summary>
   private void UpdateMacroCcsInConstantModulations() {
     // Most Factory programs list the ConstantModulation macro specifications in order
@@ -312,18 +314,12 @@ public class ProgramConfig {
   /// <summary>
   ///   Where MIDI CC assignments to macros shown on the Info page are specified in a
   ///   ScriptProcessor,
-  ///   updates the macro CCs so that, top to bottom, left to right on the Info page,
-  ///   the macros are successively assigned standard CCs in ascending order,
-  ///   with different series of CCs for continuous and switch macros.
+  ///   updates the macro CCs so that the macros are successively assigned standard CCs
+  ///   in the order of their locations on the Info page (top to bottom, left to right or
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder"/>).
+  ///   There are different series of CCs for continuous and switch macros.
   /// </summary>
   private void UpdateMacroCcsInScriptProcessor() {
-    // In Factory/Keys, the only Factory program category I've looked at so far, all
-    // programs with macro CCs specified in the ScriptProcessor are listed in the
-    // ConstantModulations in top to bottom order. But ConstantModulation.Properties
-    // does specify the location. I don't (yet) know of any Falcon programs where this is
-    // not the case. But, just in case,
-    // assign the CC numbers top to bottom, left to right.
-    //
     // In some sound banks, such as Organic Keys, ConstantModulations specify only
     // modulation wheel assignment, not macros. In those cases, the custom CC number
     // assignment needs to be modelled on a template program in ScriptConfig. 
