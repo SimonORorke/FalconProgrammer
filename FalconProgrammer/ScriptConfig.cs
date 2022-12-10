@@ -15,7 +15,14 @@ namespace FalconProgrammer;
 ///     In these cases, this <see cref="ScriptConfig" /> class must be used to add the
 ///     SignalConnections mapping MIDI CC numbers to macros to the ScriptProcessor for
 ///     the script that defines the Info page layout. The SignalConnections are copied
-///     from a template program file, of which there is expected to be one per sound bank.  
+///     from a template program file.  
+///   </para>
+///   <para>
+///     There is generally one template program file per sound bank, supporting a common
+///     Info page layout defined in a single script for the whole sound bank. However, in
+///     the Factory sound bank, "Organic Texture 2.8" is the only category for which a
+///     script defines the Info page layout. So in that case, there is a
+///     category-specific template program file.
 ///   </para>
 /// </summary>
 public class ScriptConfig : ProgramConfig {
@@ -29,8 +36,8 @@ public class ScriptConfig : ProgramConfig {
   public override void ConfigureMacroCcs(
     string soundBankName, string? categoryName = null) {
     TemplateSoundBankName = soundBankName;
-    TemplateCategoryName = GetTemplateCategoryName();
-    TemplateProgramName = GetTemplateProgramName();
+    TemplateCategoryName = GetTemplateCategoryName(categoryName);
+    TemplateProgramName = GetTemplateProgramName(categoryName);
     TemplateScriptProcessorName = GetTemplateScriptProcessorName();
     base.ConfigureMacroCcs(soundBankName, categoryName);
   }
@@ -54,7 +61,10 @@ public class ScriptConfig : ProgramConfig {
     return "EventProcessor9"; // Voklm/Vox Instruments
   }
 
-  private string GetTemplateCategoryName() {
+  private string GetTemplateCategoryName(string? categoryName) {
+    if (TemplateSoundBankName == "Factory" && categoryName == "Organic Texture 2.8") {
+      return categoryName;
+    }
     return TemplateSoundBankName switch {
       "Hypnotic Drive" => "Leads",
       "Organic Keys" => "Acoustic Mood",
@@ -65,7 +75,10 @@ public class ScriptConfig : ProgramConfig {
     };
   }
 
-  private string GetTemplateProgramName() {
+  private string GetTemplateProgramName(string? categoryName) {
+    if (TemplateSoundBankName == "Factory" && categoryName == "Organic Texture 2.8") {
+      return "ARP Breather";
+    }
     return TemplateSoundBankName switch {
       "Hypnotic Drive" => "Lead - Acid Gravel",
       "Organic Keys" => "A Rhapsody",
@@ -79,11 +92,7 @@ public class ScriptConfig : ProgramConfig {
   private string GetTemplateScriptProcessorName() {
     return TemplateSoundBankName switch {
       "Hypnotic Drive" => "EventProcessor99",
-      "Organic Keys" => "EventProcessor0",
-      "Voklm" => "EventProcessor0",
-      _ => throw new ApplicationException(
-        $"A template script processor name for sound bank '{TemplateSoundBankName}' " + 
-        "has not yet been specified.")
+      _ => "EventProcessor0"
     };
   }
 

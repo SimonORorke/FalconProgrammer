@@ -31,13 +31,12 @@ public class ProgramConfig {
   public LocationOrder MacroCcLocationOrder { get; set; } =
     LocationOrder.TopToBottomLeftToRight;
 
-  protected DirectoryInfo SoundBankFolder { get; private set; } = null!;
-
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   public string ProgramPath { get; private set; } = null!;
 
   protected ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
+  protected DirectoryInfo SoundBankFolder { get; private set; } = null!;
   [PublicAPI] public string TemplateCategoryName { get; protected set; } = "Keys";
   [PublicAPI] public string TemplateProgramName { get; protected set; } = "DX Mania";
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
@@ -76,7 +75,8 @@ public class ProgramConfig {
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
-  [PublicAPI] public virtual void ConfigureMacroCcs(
+  [PublicAPI]
+  public virtual void ConfigureMacroCcs(
     string soundBankName, string? categoryName = null) {
     Initialise();
     SoundBankFolder = GetSoundBankFolder(soundBankName);
@@ -84,7 +84,8 @@ public class ProgramConfig {
       ConfigureMacroCcsForCategory(categoryName);
     } else {
       foreach (var folder in SoundBankFolder.GetDirectories()) {
-        if (!folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
+        if (!IsCategoryInfoPageLayoutInScriptProcessor(folder.Name) &&
+            !folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
           ConfigureMacroCcsForCategory(folder.Name);
         }
       }
@@ -132,6 +133,16 @@ public class ProgramConfig {
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
+    if (SoundBankFolder.Name == "Factory" &&
+        CategoryFolder.Name == "Organic Texture 2.8") {
+      // The Info page layout ScriptProcessor name is not consistent across all programs
+      // in this category. E.g. for "BEL SoToy" it's "EventProcessor1", while for
+      // programs alphabetically prior to that one it's "EventProcessor0". But there
+      // should only be one ScriptProcessor in each program in the category.
+      return (
+        from scriptProcessor in ScriptProcessors
+        select scriptProcessor).FirstOrDefault();
+    }
     return (
       from scriptProcessor in ScriptProcessors
       where scriptProcessor.Name == InfoPageCcsScriptProcessorName
@@ -170,7 +181,9 @@ public class ProgramConfig {
     return result;
   }
 
-  protected virtual string GetInfoPageCcsScriptProcessorName() => "EventProcessor9";  
+  protected virtual string GetInfoPageCcsScriptProcessorName() {
+    return "EventProcessor9";
+  }
 
   private IEnumerable<FileInfo> GetCategoryProgramFilesToEdit(string categoryName) {
     CategoryFolder = GetCategoryFolder(categoryName);
@@ -236,7 +249,20 @@ public class ProgramConfig {
     TemplateProgramPath = GetTemplateProgramPath();
   }
 
+  private bool IsCategoryInfoPageLayoutInScriptProcessor(string categoryName) {
+    return SoundBankFolder.Name switch {
+      "Factory" => categoryName == "Organic Texture 2.8",
+      _ => false
+    };
+  }
+
   protected virtual void UpdateMacroCcs() {
+    if (IsCategoryInfoPageLayoutInScriptProcessor(CategoryFolder.Name)) {
+      throw new ApplicationException(
+        $"The Info page layout for sound bank '{SoundBankFolder.Name}' " + 
+        $"category '{CategoryFolder.Name}' is defined in a script processor. Use " + 
+        "ScriptConfig to configure macro CCs for the category.");
+    }
     if (InfoPageCcsScriptProcessor != null) {
       Console.WriteLine($"Macro CCs ScriptProcessor in '{ProgramPath}'.");
       UpdateMacroCcsInScriptProcessor();
