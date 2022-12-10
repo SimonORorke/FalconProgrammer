@@ -19,7 +19,7 @@ public class Properties {
   ///   to determine the location of the macro on the Info page. False if the optional
   ///   showValue attribute is included in the Properties XML element and set to "0"
   ///   (showValue="0"), in which case the SignalConnection mapping the MIDI CC number to
-  ///   the macro must be added, via <see cref="ScriptConfig"/>, to the ScriptProcessor
+  ///   the macro must be added to the ScriptProcessor
   ///   for the script that defines the Info page layout. 
   /// </summary>
   private bool DeterminesMacroLocationOnInfoPage => ShowValue != "0";
@@ -31,7 +31,7 @@ public class Properties {
         "showValue=\"0\", indicating that the coordinates specified in the Properties " +
         "will not actually to be used to determine the locations of macros on the " + 
         "Info page. Instead, the SignalConnections mapping MIDI CC numbers to " +
-        "macros must be added, via ScriptConfig, to the ScriptProcessor for the " + 
+        "macros must be added to the ScriptProcessor for the " + 
         "script that defines the Info page layout.");
     }
   }

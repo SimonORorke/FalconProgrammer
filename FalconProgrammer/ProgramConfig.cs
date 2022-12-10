@@ -9,9 +9,9 @@ namespace FalconProgrammer;
 public class ProgramConfig {
   private const string ProgramExtension = ".uvip";
   private const string SynthName = "UVI Falcon";
-  protected DirectoryInfo CategoryFolder { get; private set; } = null!;
+  private DirectoryInfo CategoryFolder { get; set; } = null!;
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
-  protected ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
+  private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
 
   /// <summary>
   ///   Name of ScriptProcessor, if any, that is to define the Info page macro CCs.
@@ -34,12 +34,14 @@ public class ProgramConfig {
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   public string ProgramPath { get; private set; } = null!;
 
-  protected ProgramXml ProgramXml { get; private set; } = null!;
+  private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-  protected DirectoryInfo SoundBankFolder { get; private set; } = null!;
+  private DirectoryInfo SoundBankFolder { get; set; } = null!;
   [PublicAPI] public string TemplateCategoryName { get; protected set; } = "Keys";
   [PublicAPI] public string TemplateProgramName { get; protected set; } = "DX Mania";
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
+  private ScriptProcessor? TemplateScriptProcessor { get; set; }
+  private string? TemplateScriptProcessorName { get; set; }
   [PublicAPI] public string TemplateSoundBankName { get; protected set; } = "Factory";
 
   private static void CheckForNonModWheelNonInfoPageMacro(
@@ -78,14 +80,12 @@ public class ProgramConfig {
   [PublicAPI]
   public virtual void ConfigureMacroCcs(
     string soundBankName, string? categoryName = null) {
-    Initialise();
     SoundBankFolder = GetSoundBankFolder(soundBankName);
     if (categoryName != null) {
       ConfigureMacroCcsForCategory(categoryName);
     } else {
       foreach (var folder in SoundBankFolder.GetDirectories()) {
-        if (!IsCategoryInfoPageLayoutInScriptProcessor(folder.Name) &&
-            !folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
+        if (!folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
           ConfigureMacroCcsForCategory(folder.Name);
         }
       }
@@ -95,7 +95,19 @@ public class ProgramConfig {
   private void ConfigureMacroCcsForCategory(string categoryName) {
     Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
+    TemplateSoundBankName = IsCategoryInfoPageLayoutInScriptProcessor(categoryName) 
+      ? SoundBankFolder.Name 
+      : "Factory";
+    TemplateCategoryName = GetTemplateCategoryName(categoryName);
+    TemplateProgramName = GetTemplateProgramName(categoryName);
+    TemplateProgramPath = GetTemplateProgramPath();
     var programFilesToEdit = GetCategoryProgramFilesToEdit(categoryName);
+    TemplateScriptProcessorName = GetTemplateScriptProcessorName();
+    if (IsCategoryInfoPageLayoutInScriptProcessor(categoryName)) {
+      DeserialiseTemplateProgram();
+    } else {
+      TemplateScriptProcessor = null;
+    }
     InfoPageCcsScriptProcessorName = GetInfoPageCcsScriptProcessorName();
     foreach (var programFileToEdit in programFilesToEdit) {
       ConfigureMacroCcsForProgram(programFileToEdit);
@@ -118,8 +130,13 @@ public class ProgramConfig {
     ProgramXml.SaveToFile(ProgramPath);
   }
 
-  protected virtual ProgramXml CreateProgramXml() {
-    return new ProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor);
+  private ProgramXml CreateProgramXml() {
+    if (SoundBankFolder.Name == "Organic Keys") {
+      return new OrganicKeysProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor!);
+    }
+    return IsCategoryInfoPageLayoutInScriptProcessor(CategoryFolder.Name) 
+      ? new ScriptProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor!) 
+      : new ProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor);
   }
 
   private void DeserialiseProgram() {
@@ -130,6 +147,18 @@ public class ProgramConfig {
     ScriptProcessors = root.Program.ScriptProcessors;
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     CheckForNonModWheelNonInfoPageMacros();
+  }
+
+  private void DeserialiseTemplateProgram() {
+    using var reader = new StreamReader(TemplateProgramPath);
+    var serializer = new XmlSerializer(typeof(UviRoot));
+    var root = (UviRoot)serializer.Deserialize(reader)!;
+    TemplateScriptProcessor =
+      (from scriptProcessor in root.Program.ScriptProcessors
+        where scriptProcessor.Name == TemplateScriptProcessorName
+        select scriptProcessor).FirstOrDefault() ??
+      throw new ApplicationException(
+        $"Cannot find {TemplateScriptProcessorName} in file '{TemplateProgramPath}'.");
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
@@ -181,8 +210,15 @@ public class ProgramConfig {
     return result;
   }
 
-  protected virtual string GetInfoPageCcsScriptProcessorName() {
-    return "EventProcessor9";
+  private string GetInfoPageCcsScriptProcessorName() {
+    if (IsCategoryInfoPageLayoutInScriptProcessor(CategoryFolder.Name) 
+        && (SoundBankFolder.Name != "Voklm" 
+            || CategoryFolder.Name != "Vox Instruments")) {
+      return TemplateScriptProcessorName!;
+    }
+    // Info page layout is defined in ConstantModulations
+    // or category is "Voklm/Vox Instruments".
+    return "EventProcessor9"; 
   }
 
   private IEnumerable<FileInfo> GetCategoryProgramFilesToEdit(string categoryName) {
@@ -226,6 +262,30 @@ public class ProgramConfig {
     return result;
   }
 
+  private string GetTemplateCategoryName(string categoryName) {
+    if (TemplateSoundBankName == "Factory" && categoryName == "Organic Texture 2.8") {
+      return categoryName;
+    }
+    return TemplateSoundBankName switch {
+      "Hypnotic Drive" => "Leads",
+      "Organic Keys" => "Acoustic Mood",
+      "Voklm" => "Synth Choirs",
+      _ => "Keys"
+    };
+  }
+
+  private string GetTemplateProgramName(string categoryName) {
+    if (TemplateSoundBankName == "Factory" && categoryName == "Organic Texture 2.8") {
+      return "ARP Breather";
+    }
+    return TemplateSoundBankName switch {
+      "Hypnotic Drive" => "Lead - Acid Gravel",
+      "Organic Keys" => "A Rhapsody",
+      "Voklm" => "Breath Five",
+      _ => "DX Mania"
+    };
+  }
+
   private string GetTemplateProgramPath() {
     var templateProgramFile = new FileInfo(
       Path.Combine(GetSoundBankFolder(TemplateSoundBankName).FullName,
@@ -237,6 +297,16 @@ public class ProgramConfig {
     return templateProgramFile.FullName;
   }
 
+  private string? GetTemplateScriptProcessorName() {
+    if (IsCategoryInfoPageLayoutInScriptProcessor(CategoryFolder.Name)) {
+      return TemplateSoundBankName switch {
+        "Hypnotic Drive" => "EventProcessor99",
+        _ => "EventProcessor0"
+      };
+    }
+    return null;
+  }
+
   private bool HasUniqueLocation(ConstantModulation constantModulation) {
     return (
       from cm in ConstantModulations
@@ -245,24 +315,49 @@ public class ProgramConfig {
       select cm).Count() == 1;
   }
 
-  protected virtual void Initialise() {
-    TemplateProgramPath = GetTemplateProgramPath();
-  }
-
+  /// <summary>
+  ///   In some sound banks, such as Organic Keys, ConstantModulations do not specify
+  ///   Info page macros, only modulation wheel assignment. In others, such as
+  ///   Hypnotic Drive, ConstantModulation.Properties include the optional attribute
+  ///   showValue="0", indicating that the coordinates specified in the Properties will
+  ///   not actually be used to determine the locations of macros on the Info page.
+  ///   <para>
+  ///     In these cases, the Info page layout is specified in a script.
+  ///     SignalConnections mapping MIDI CC numbers to macros must be added to that
+  ///     script's ScriptProcessor. The SignalConnections are copied from a template
+  ///     program file specific to the Info page layout.
+  ///   </para>
+  ///   <para>
+  ///     There is generally one template program file per sound bank, supporting a
+  ///     common Info page layout defined in a single script for the whole sound bank.
+  ///     However, in the Factory sound bank, "Organic Texture 2.8" is the only category
+  ///     for which a script defines the Info page layout. So in that case, there is a
+  ///     category-specific template program file.
+  ///   </para>
+  /// </summary>
   private bool IsCategoryInfoPageLayoutInScriptProcessor(string categoryName) {
-    return SoundBankFolder.Name switch {
-      "Factory" => categoryName == "Organic Texture 2.8",
-      _ => false
-    };
+    switch (SoundBankFolder.Name) {
+      case "Hypnotic Drive":
+      case "Organic Keys":
+      case "Voklm":
+        return true;
+      case "Factory":
+        return categoryName == "Organic Texture 2.8";
+      default:
+        return false;
+    }
   }
 
   protected virtual void UpdateMacroCcs() {
     if (IsCategoryInfoPageLayoutInScriptProcessor(CategoryFolder.Name)) {
-      throw new ApplicationException(
-        $"The Info page layout for sound bank '{SoundBankFolder.Name}' " + 
-        $"category '{CategoryFolder.Name}' is defined in a script processor. Use " + 
-        "ScriptConfig to configure macro CCs for the category.");
+      InfoPageCcsScriptProcessor!.SignalConnections.Clear();
+      foreach (var signalConnection in TemplateScriptProcessor!.SignalConnections) {
+        InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
+      }
+      ProgramXml.UpdateInfoPageCcsScriptProcessor();
+      return;
     }
+    // The category's Info page layout is specified in ConstantModulations.
     if (InfoPageCcsScriptProcessor != null) {
       Console.WriteLine($"Macro CCs ScriptProcessor in '{ProgramPath}'.");
       UpdateMacroCcsInScriptProcessor();
@@ -335,10 +430,6 @@ public class ProgramConfig {
   ///   There are different series of CCs for continuous and switch macros.
   /// </summary>
   private void UpdateMacroCcsInScriptProcessor() {
-    // In some sound banks, such as Organic Keys, ConstantModulations specify only
-    // modulation wheel assignment, not macros. In those cases, the custom CC number
-    // assignment needs to be modelled on a template program in ScriptConfig. 
-    //
     // Assign button CCs to switch macros. 
     // Example: Factory/Keys/Smooth E-piano 2.1.
     //
