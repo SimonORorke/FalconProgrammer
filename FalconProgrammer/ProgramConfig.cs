@@ -37,12 +37,12 @@ public class ProgramConfig {
   private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
-  [PublicAPI] public string TemplateCategoryName { get; protected set; } = "Keys";
-  [PublicAPI] public string TemplateProgramName { get; protected set; } = "DX Mania";
+  [PublicAPI] public string TemplateCategoryName { get; private set; } = "Keys";
+  [PublicAPI] public string TemplateProgramName { get; private set; } = "DX Mania";
   [PublicAPI] public string TemplateProgramPath { get; private set; } = null!;
   private ScriptProcessor? TemplateScriptProcessor { get; set; }
   private string? TemplateScriptProcessorName { get; set; }
-  [PublicAPI] public string TemplateSoundBankName { get; protected set; } = "Factory";
+  [PublicAPI] public string TemplateSoundBankName { get; private set; } = "Factory";
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
@@ -78,7 +78,7 @@ public class ProgramConfig {
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
   [PublicAPI]
-  public virtual void ConfigureMacroCcs(
+  public void ConfigureMacroCcs(
     string soundBankName, string? categoryName = null) {
     SoundBankFolder = GetSoundBankFolder(soundBankName);
     if (categoryName != null) {
@@ -185,7 +185,9 @@ public class ProgramConfig {
         : new LeftToRightTopToBottomComparer());
     for (int i = 0; i < ConstantModulations.Count; i++) {
       var constantModulation = ConstantModulations[i];
-      constantModulation.Properties.Validate();
+      // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
+      // ConstantModulation.Properties showValue="0" are shown on the Info page. 
+      //constantModulation.Properties.Validate();
       constantModulation.Index = i;
       for (int j = 0; j < constantModulation.SignalConnections.Count; j++) {
         var signalConnection = constantModulation.SignalConnections[j];
@@ -348,7 +350,7 @@ public class ProgramConfig {
     }
   }
 
-  protected virtual void UpdateMacroCcs() {
+  private void UpdateMacroCcs() {
     if (IsCategoryInfoPageLayoutInScriptProcessor(CategoryFolder.Name)) {
       InfoPageCcsScriptProcessor!.SignalConnections.Clear();
       foreach (var signalConnection in TemplateScriptProcessor!.SignalConnections) {

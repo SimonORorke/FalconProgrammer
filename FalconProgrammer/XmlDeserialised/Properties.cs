@@ -15,6 +15,7 @@ public class Properties {
   [XmlAttribute("y")] public int Y { get; set; }
 
   /// <summary>
+  ///   UNRELIABLE. See <see cref="Validate" /> documentation.
   ///   Gets whether the coordinates specified in the Properties are actually to be used
   ///   to determine the location of the macro on the Info page. False if the optional
   ///   showValue attribute is included in the Properties XML element and set to "0"
@@ -24,6 +25,11 @@ public class Properties {
   /// </summary>
   private bool DeterminesMacroLocationOnInfoPage => ShowValue != "0";
 
+  /// <summary>
+  ///   This validation is not reliable. It looks right for "Factory\Organic Texture 2.8".
+  ///   But in "Factory\Bells\Glowing 1.2", the macros with ConstantModulation.Properties
+  ///   showValue="0" are shown on the Info page. 
+  /// </summary>
   public void Validate() {
     if (!DeterminesMacroLocationOnInfoPage) {
       throw new ApplicationException(
