@@ -3,7 +3,8 @@
 public static class Runner {
   public static void ConfigureCcs() {
     var config = new ProgramConfig();
-    config.ConfigureMacroCcs("Factory");
+    config.ConfigureMacroCcs("Factory", "Brutal Bass 2.1");
+    // config.ConfigureMacroCcs("Factory");
     // config.ConfigureMacroCcs("Hypnotic Drive", "Leads");
     // var config = new ProgramConfig {
     //   MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom

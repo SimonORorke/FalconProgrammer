@@ -16,7 +16,7 @@ public class ProgramXml {
 
   private List<XElement> ConstantModulationElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
-  private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
+  protected ScriptProcessor? InfoPageCcsScriptProcessor { get; }
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
   [PublicAPI] public string TemplateProgramPath { get; }

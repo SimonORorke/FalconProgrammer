@@ -95,16 +95,16 @@ public class ProgramConfig {
   private void ConfigureMacroCcsForCategory(string categoryName) {
     Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
-    TemplateSoundBankName = IsCategoryInfoPageLayoutInScript(categoryName)
+    CategoryFolder = GetCategoryFolder(categoryName);
+    TemplateSoundBankName = IsCategoryInfoPageLayoutInScript()
       ? SoundBankFolder.Name
       : "Factory";
-    TemplateCategoryName = GetTemplateCategoryName(categoryName);
-    TemplateProgramName = GetTemplateProgramName(categoryName);
+    TemplateCategoryName = GetTemplateCategoryName();
+    TemplateProgramName = GetTemplateProgramName();
     TemplateProgramPath = GetTemplateProgramPath();
-    CategoryFolder = GetCategoryFolder(categoryName);
     var programFilesToEdit = GetCategoryProgramFilesToEdit();
     TemplateScriptProcessorName = GetTemplateScriptProcessorName();
-    if (IsCategoryInfoPageLayoutInScript(categoryName)) {
+    if (IsCategoryInfoPageLayoutInScript()) {
       DeserialiseTemplateProgram();
     } else {
       TemplateScriptProcessor = null;
@@ -135,7 +135,7 @@ public class ProgramConfig {
     if (SoundBankFolder.Name == "Organic Keys") {
       return new OrganicKeysProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor!);
     }
-    return IsCategoryInfoPageLayoutInScript(CategoryFolder.Name)
+    return IsCategoryInfoPageLayoutInScript()
       ? new ScriptProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor!)
       : new ProgramXml(TemplateProgramPath, InfoPageCcsScriptProcessor);
   }
@@ -163,12 +163,16 @@ public class ProgramConfig {
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
+    // When the Info page layout is defined in a script, it may be fine to simplify this
+    // and always pick the last ScriptProcessor. So I will try not bothering to specify
+    // any more non-standard ScriptProcessor names. 
+    //
     // Sometimes the Info page layout ScriptProcessor name is not consistent across all
     // programs in this category. E.g. for "Factory\Organic Texture 2.8\BEL SoToy" it's
     // "EventProcessor1", while for programs alphabetically prior to that one it's
     // "EventProcessor0". So, if there's only one ScriptProcessor in the program,
     // it must be the right one!
-    if (IsCategoryInfoPageLayoutInScript(CategoryFolder.Name) &&
+    if (IsCategoryInfoPageLayoutInScript() &&
         ScriptProcessors.Count == 1) {
       return ScriptProcessors[0];
     }
@@ -178,7 +182,7 @@ public class ProgramConfig {
       from scriptProcessor in ScriptProcessors
       where scriptProcessor.Name == InfoPageCcsScriptProcessorName
       select scriptProcessor).FirstOrDefault();
-    if (withName != null || !IsCategoryInfoPageLayoutInScript(CategoryFolder.Name)) {
+    if (withName != null || !IsCategoryInfoPageLayoutInScript()) {
       return withName;
     }
     // When there's no ScriptProcessor with the designated name yet we expect the
@@ -222,12 +226,17 @@ public class ProgramConfig {
   }
 
   private string GetInfoPageCcsScriptProcessorName() {
-    if (IsCategoryInfoPageLayoutInScript(CategoryFolder.Name)
+    // When the Info page layout is defined in a script, it may be fine to always pick
+    // the last ScriptProcessor, which is the fallback in FindInfoPageCcsScriptProcessor.
+    // So I will try not bothering to specify any more non-standard ScriptProcessor
+    // names. 
+    if (IsCategoryInfoPageLayoutInScript()
         && (SoundBankFolder.Name != "Voklm"
             || CategoryFolder.Name != "Vox Instruments")) {
       return TemplateScriptProcessorName!;
     }
     // Info page layout is defined in ConstantModulations
+    // (and MIDI CC numbers may or may not need to be specified in a ScriptProcessor)
     // or category is "Voklm/Vox Instruments".
     return "EventProcessor9";
   }
@@ -249,7 +258,8 @@ public class ProgramConfig {
     var result = new DirectoryInfo(
       Path.Combine(SoundBankFolder.FullName, categoryName));
     if (!result.Exists) {
-      throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
+      throw new ApplicationException(
+        $"Cannot find category folder '{result.FullName}'.");
     }
     return result;
   }
@@ -261,7 +271,7 @@ public class ProgramConfig {
         "Music", "Software", SynthName));
     if (!synthSoftwareFolder.Exists) {
       throw new ApplicationException(
-        $"Cannot find folder '{synthSoftwareFolder.FullName}'.");
+        $"Cannot find sound bank folder '{synthSoftwareFolder.FullName}'.");
     }
     var result = new DirectoryInfo(
       Path.Combine(
@@ -272,13 +282,13 @@ public class ProgramConfig {
     return result;
   }
 
-  private string GetTemplateCategoryName(string categoryName) {
+  private string GetTemplateCategoryName() {
     if (TemplateSoundBankName == "Factory") {
-      switch (categoryName) {
+      switch (CategoryFolder.Name) {
         case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
           return "Lo-Fi 2.5";
-        case "Organic Texture 2.8":
-          return categoryName;
+        case "Brutal Bass 2.1" or "Organic Texture 2.8":
+          return CategoryFolder.Name;
       }
     }
     return TemplateSoundBankName switch {
@@ -290,9 +300,11 @@ public class ProgramConfig {
   }
 
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
-  private string GetTemplateProgramName(string categoryName) {
+  private string GetTemplateProgramName() {
     if (TemplateSoundBankName == "Factory") {
-      switch (categoryName) {
+      switch (CategoryFolder.Name) {
+        case "Brutal Bass 2.1":
+          return "808 Line";
         case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
           return "ARP Concert Echo";
         case "Organic Texture 2.8":
@@ -319,7 +331,11 @@ public class ProgramConfig {
   }
 
   private string? GetTemplateScriptProcessorName() {
-    if (IsCategoryInfoPageLayoutInScript(CategoryFolder.Name)) {
+    if (TemplateSoundBankName == "Factory" &&
+        CategoryFolder.Name == "Brutal Bass 2.1") {
+      return "EventProcessor9";
+    }
+    if (IsCategoryInfoPageLayoutInScript()) {
       return TemplateSoundBankName switch {
         "Hypnotic Drive" => "EventProcessor99",
         _ => "EventProcessor0"
@@ -337,11 +353,14 @@ public class ProgramConfig {
   }
 
   /// <summary>
-  ///   In some sound banks, such as Organic Keys, ConstantModulations do not specify
+  ///   In some sound banks, such as "Organic Keys", ConstantModulations do not specify
   ///   Info page macros, only modulation wheel assignment. In others, such as
-  ///   Hypnotic Drive, ConstantModulation.Properties include the optional attribute
+  ///   "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
   ///   showValue="0", indicating that the coordinates specified in the Properties will
   ///   not actually be used to determine the locations of macros on the Info page.
+  ///   In still others, such as "Factory\Brutal Bass 2.1", the coordinates specified in
+  ///   the ConstantModulation.Properties are inaccurate, despite not having the
+  ///   showValue="0" attribute. 
   ///   <para>
   ///     In these cases, the Info page layout is specified in a script.
   ///     SignalConnections mapping MIDI CC numbers to macros must be added to that
@@ -351,27 +370,28 @@ public class ProgramConfig {
   ///   <para>
   ///     There is generally one template program file per sound bank, supporting a
   ///     common Info page layout defined in a single script for the whole sound bank.
-  ///     However, in the Factory sound bank, "Organic Texture 2.8" is the only category
-  ///     for which a script defines the Info page layout. So in that case, there is a
-  ///     category-specific template program file.
+  ///     However, in the Factory sound bank, there are categories, such as
+  ///     "Organic Texture 2.8", or groups of categories for which a script defines the
+  ///     Info page layout. In those cases, the template program file has to be specified
+  ///     per category.
   ///   </para>
   /// </summary>
-  private bool IsCategoryInfoPageLayoutInScript(string categoryName) {
+  private bool IsCategoryInfoPageLayoutInScript() {
     switch (SoundBankFolder.Name) {
       case "Hypnotic Drive":
       case "Organic Keys":
       case "Voklm":
         return true;
       case "Factory":
-        return categoryName is "Lo-Fi 2.5" or "Organic Texture 2.8" or "RetroWave 2.5"
-          or "VCF-20 Synths 2.5";
+        return CategoryFolder.Name is "Brutal Bass 2.1" or "Lo-Fi 2.5" 
+          or "Organic Texture 2.8" or "RetroWave 2.5" or "VCF-20 Synths 2.5";
       default:
         return false;
     }
   }
 
   private void UpdateMacroCcs() {
-    if (IsCategoryInfoPageLayoutInScript(CategoryFolder.Name)) {
+    if (IsCategoryInfoPageLayoutInScript()) {
       InfoPageCcsScriptProcessor!.SignalConnections.Clear();
       foreach (var signalConnection in TemplateScriptProcessor!.SignalConnections) {
         InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
