@@ -1,35 +1,23 @@
 ﻿using System.Xml.Serialization;
+using FalconProgrammer.XmlDeserialised;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer.XmlDeserialised; 
+namespace FalconProgrammer; 
 
 public class FalconProgram {
-  /// <summary>
-  ///   Parameterless constructor required for deserialisation.
-  /// </summary>
-  public FalconProgram() {
-  }
   
   public FalconProgram(string path, Category category) {
     Path = path;
     Category = category;
   }
   
-  [XmlAttribute] public string DisplayName { get; set; } = null!;
-  
-  [XmlArray("ControlSignalSources")]
-  [XmlArrayItem("ConstantModulation")]
+  [PublicAPI] public Category Category { get; }
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
-  
-  [XmlArray("EventProcessors")]
-  [XmlArrayItem("ScriptProcessor")]
-  public List<ScriptProcessor> ScriptProcessors { get; private set; } = null!;
-  
-  [PublicAPI] public Category Category { get; } = null!;
-  internal ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
+  public ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
-  public string Path { get; } = null!;
+  public string Path { get; }
+  private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
