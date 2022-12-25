@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class ProgramConfig {
+  private const int ModWheelReplacementCcNo = 34;
   public const string ProgramExtension = ".uvip";
   private const string SynthName = "UVI Falcon";
   private Category Category { get; set; } = null!;
@@ -20,33 +21,43 @@ public class ProgramConfig {
   private FalconProgram Program { get; set; } = null!;
   private ProgramXml ProgramXml { get; set; } = null!;
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
+  private ConfigTask Task { get; set; }
 
-  /// <summary>
-  ///   Configures macro CCs for Falcon program presets.
-  /// </summary>
-  [PublicAPI]
-  public void ConfigureMacroCcs(
+  private void ConfigurePrograms(
     string soundBankName, string? categoryName = null) {
     SoundBankFolder = GetSoundBankFolder(soundBankName);
     if (categoryName != null) {
-      ConfigureMacroCcsForCategory(categoryName);
+      ConfigureProgramsInCategory(categoryName);
     } else {
       foreach (var folder in SoundBankFolder.GetDirectories()) {
         if (!folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
-          ConfigureMacroCcsForCategory(folder.Name);
+          ConfigureProgramsInCategory(folder.Name);
         }
       }
     }
   }
 
-  private void ConfigureMacroCcsForCategory(string categoryName) {
+  private void ConfigureProgramsInCategory(string categoryName) {
     Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
     Category = new Category(categoryName, SoundBankFolder);
     Category.Initialise();
+    if (Task == ConfigTask.ReplaceModWheelWithMacro &&
+        Category.IsInfoPageLayoutInScript) {
+      Console.WriteLine(
+        $"Cannot replace mod wheel modulations for category '{categoryName}' " +
+        "because the category's Info page layout is defined in a script.");
+    }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       ReadProgram(programFileToEdit);
-      UpdateMacroCcs();
+      switch (Task) {
+        case ConfigTask.ReplaceModWheelWithMacro:
+          ReplaceModWheelWithMacroInProgram();
+          break;
+        case ConfigTask.UpdateMacroCcs:
+          UpdateMacroCcsInProgram();
+          break;
+      }
       ProgramXml.SaveToFile(Program.Path);
     }
   }
@@ -95,11 +106,109 @@ public class ProgramConfig {
     ProgramXml.LoadFromFile(Program.Path);
   }
 
-  private void UpdateMacroCcs() {
+  /// <summary>
+  ///   In each of the specified Falcon program presets where it is feasible, replaces
+  ///   use of the modulation wheel with a Wheel macro that executes the same
+  ///   modulations.
+  /// </summary>
+  [PublicAPI]
+  public void ReplaceModWheelWithMacro(
+    string soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ReplaceModWheelWithMacro;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
+  private void ReplaceModWheelWithMacroInProgram() {
+    Console.WriteLine($"Checking '{Program.Path}'.");
+    var continuousMacros = Program.GetContinuousMacros();
+    string? existingWheelMacroDisplayName = (
+      from continuousMacro in continuousMacros
+      where continuousMacro.DisplayName.Contains("Wheel")
+      select continuousMacro.DisplayName).FirstOrDefault();
+    if (existingWheelMacroDisplayName != null) {
+      Console.WriteLine(
+        $"'{Program.Name}' already has a '{existingWheelMacroDisplayName}' macro.");
+      return;
+    }
+    if (continuousMacros.Count > 3) {
+      Console.WriteLine(
+        $"'{Program.Name}' already has more than three continuous macros.");
+      return;
+    }
+    bool hasReplacementCcNo = false;
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      hasReplacementCcNo = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.CcNo == ModWheelReplacementCcNo
+        select signalConnection).Any();
+    } else {
+      foreach (var continuousMacro in continuousMacros) {
+        hasReplacementCcNo = (
+          from signalConnection in continuousMacro.SignalConnections
+          where signalConnection.CcNo == ModWheelReplacementCcNo
+          select signalConnection).Any();
+        if (hasReplacementCcNo) {
+          break;
+        }
+      }
+    }
+    if (hasReplacementCcNo) {
+      Console.WriteLine(
+        $"'{Program.Name}' already has a macro mapped to mod wheel replacement " +
+        $"MIDI CC {ModWheelReplacementCcNo}.");
+      return;
+    }
+    if (!ProgramXml.FindModWheelModulations()) {
+      Console.WriteLine($"'{Program.Name}' contains no mod wheel modulations.");
+      return;
+    }
+    var locationForNewMacro = Program.GetLocationForNewMacro();
+    if (locationForNewMacro == null) {
+      Console.WriteLine(
+        $"'{Program.Name}' " +
+        "does not have room on its Info page's bottom row for a new macro.");
+      return;
+    }
+    int newMacroNo = (
+      from macro in Program.Macros select macro.MacroNo!.Value).Max() + 1;
+    var newMacro = new ConstantModulation {
+      MacroNo = newMacroNo,
+      DisplayName = "Wheel",
+      Bipolar = 0,
+      IsContinuous = false,
+      Value = 0,
+      SignalConnections = new List<SignalConnection>() {
+        new SignalConnection {
+          CcNo = ModWheelReplacementCcNo
+        }
+      },
+      Properties = new Properties {
+        X = locationForNewMacro.Value.X,
+        Y = locationForNewMacro.Value.Y
+      }
+    };
+    ProgramXml.AddMacro(newMacro);
+    ProgramXml.ChangeModWheelModulationSourcesToMacro(newMacroNo);
+    Console.WriteLine(
+      $"'{Program.Name}': Replaced mod wheel with macro.");
+  }
+
+  /// <summary>
+  ///   Configures macro CCs for Falcon program presets.
+  /// </summary>
+  [PublicAPI]
+  public void UpdateMacroCcs(
+    string soundBankName, string? categoryName = null) {
+    Task = ConfigTask.UpdateMacroCcs;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
+  private void UpdateMacroCcsInProgram() {
     Console.WriteLine($"Updating '{Program.Path}'.");
     if (Category.IsInfoPageLayoutInScript) {
       Program.InfoPageCcsScriptProcessor!.SignalConnections.Clear();
-      foreach (var signalConnection in Category.TemplateScriptProcessor!.SignalConnections) {
+      foreach (var signalConnection in
+               Category.TemplateScriptProcessor!.SignalConnections) {
         Program.InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
       }
       ProgramXml.UpdateInfoPageCcsScriptProcessor();
@@ -126,8 +235,8 @@ public class ProgramConfig {
     // Most Factory programs list the ConstantModulation macro specifications in order
     // top to bottom, left to right. But a few, e.g. Factory/Keys/Days Of Old 1.4, do not.
     //
-    var sortedByLocation = 
-      Program.GetConstantModulationsSortedByLocation(MacroCcLocationOrder);
+    var sortedByLocation =
+      Program.GetMacrosSortedByLocation(MacroCcLocationOrder);
     foreach (var constantModulation in sortedByLocation) {
       //int ccNo = constantModulation.GetCcNo(ref nextContinuousCcNo, ref nextToggleCcNo);
       // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
@@ -145,7 +254,7 @@ public class ProgramConfig {
       if (infoPageSignalConnections.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a non-mod wheel CC number.
         var signalConnection = new SignalConnection {
-          CcNo = ccNo 
+          CcNo = ccNo
         };
         ProgramXml.AddConstantModulationSignalConnection(
           signalConnection, constantModulation.Index);
@@ -183,7 +292,7 @@ public class ProgramConfig {
     // Example: Factory/Keys/Smooth E-piano 2.1.
     //
     var sortedByLocation =
-      Program.GetConstantModulationsSortedByLocation(MacroCcLocationOrder);
+      Program.GetMacrosSortedByLocation(MacroCcLocationOrder);
     int macroNo = 0;
     // Any assignment of a macro the modulation wheel  or any other
     // MIDI CC mapping that's not on the Info page is expected to be
@@ -204,9 +313,14 @@ public class ProgramConfig {
       Program.InfoPageCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
           MacroNo = macroNo,
-          CcNo = Program.GetCcNo(constantModulation) 
+          CcNo = Program.GetCcNo(constantModulation)
         });
     }
     ProgramXml.UpdateInfoPageCcsScriptProcessor();
+  }
+
+  private enum ConfigTask {
+    ReplaceModWheelWithMacro,
+    UpdateMacroCcs
   }
 }

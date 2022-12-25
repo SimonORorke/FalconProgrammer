@@ -1,19 +1,31 @@
-﻿using System.Xml.Serialization;
+﻿using System.Drawing;
+using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer; 
+namespace FalconProgrammer;
 
 public class FalconProgram {
-  
+  private List<ConstantModulation>? _macros;
+
   public FalconProgram(string path, Category category) {
     Path = path;
     Category = category;
   }
-  
+
   [PublicAPI] public Category Category { get; }
   private List<ConstantModulation> ConstantModulations { get; set; } = null!;
   public ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
+
+  /// <summary>
+  ///   Maybe check whether all ConstantModulations are macros?  
+  /// </summary>
+  public List<ConstantModulation> Macros => _macros ??=
+    (from constantModulation in ConstantModulations
+      where constantModulation.IsMacro
+      select constantModulation).ToList();
+
+  public string Name { get; private set; } = null!;
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
   public string Path { get; }
@@ -53,6 +65,7 @@ public class FalconProgram {
     using var reader = new StreamReader(Path);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
+    Name = root.Program.DisplayName;
     ConstantModulations = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
@@ -104,20 +117,68 @@ public class FalconProgram {
     return result;
   }
 
-  public SortedSet<ConstantModulation> GetConstantModulationsSortedByLocation(
+  public List<ConstantModulation> GetContinuousMacros() {
+    return (
+      from macro in Macros
+      where macro.IsContinuous
+      select macro).ToList();
+  }
+
+  public Point? GetLocationForNewMacro() {
+    const int macroWidth = 60;
+    const int minHorizontalGapBetweenMacros = 5;
+    const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
+    const int rightEdge = 675;
+    int bottomRowY = (
+      from macro in Macros
+      select macro.Properties.Y).Max();
+    var bottomRowMacros = (
+      from macro in GetMacrosSortedByLocation(
+        LocationOrder.TopToBottomLeftToRight)
+      where macro.Properties.Y == bottomRowY
+      select macro).ToList();
+    var gapWidths = new List<int> { bottomRowMacros[0].Properties.X };
+    if (bottomRowMacros.Count > 1) {
+      for (int i = 0; i < bottomRowMacros.Count - 1; i++) {
+        gapWidths.Add(
+          bottomRowMacros[i + 1].Properties.X
+          - (bottomRowMacros[i].Properties.X
+          + macroWidth));
+      }
+    }
+    gapWidths.Add(rightEdge - (bottomRowMacros[^1].Properties.X + macroWidth));
+    int maxGapWidth = (from gapWidth in gapWidths select gapWidth).Max();
+    if (maxGapWidth < minNewMacroGapWidth) {
+      return null;
+    }
+    int newMacroGapIndex = -1;
+    for (int i = 0; i < gapWidths.Count; i++) {
+      if (gapWidths[i] == maxGapWidth) {
+        newMacroGapIndex = i;
+        break;
+      }
+    }
+    int newMacroGapX = newMacroGapIndex == 0
+      ? 0
+      : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
+    int newMacroX = newMacroGapX + (maxGapWidth - macroWidth) / 2;
+    return new Point(newMacroX, bottomRowY);
+  }
+
+  public SortedSet<ConstantModulation> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
     var result = new SortedSet<ConstantModulation>(
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
-    for (int i = 0; i < ConstantModulations.Count; i++) {
-      var constantModulation = ConstantModulations[i];
+    for (int i = 0; i < Macros.Count; i++) {
+      var macro = Macros[i];
       // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
       //constantModulation.Properties.Validate();
-      constantModulation.Index = i;
-      for (int j = 0; j < constantModulation.SignalConnections.Count; j++) {
-        var signalConnection = constantModulation.SignalConnections[j];
+      macro.Index = i;
+      for (int j = 0; j < macro.SignalConnections.Count; j++) {
+        var signalConnection = macro.SignalConnections[j];
         signalConnection.Index = j;
       }
       // In the Devinity sound bank, some macros do not appear on the Info page (only
@@ -132,18 +193,18 @@ public class FalconProgram {
       // Info page, omit all macros with duplicate locations from this set. Those macros
       // do not need CC numbers, and attempting to add duplicates to the set would throw
       // an exception in ConstantModulationLocationComparer.
-      if (HasUniqueLocation(constantModulation)) {
-        result.Add(constantModulation);
+      if (HasUniqueLocation(macro)) {
+        result.Add(macro);
       }
     }
     return result;
   }
 
-  private bool HasUniqueLocation(ConstantModulation constantModulation) {
+  private bool HasUniqueLocation(ConstantModulation macro) {
     return (
-      from cm in ConstantModulations
-      where cm.Properties.X == constantModulation.Properties.X
-            && cm.Properties.Y == constantModulation.Properties.Y
-      select cm).Count() == 1;
+      from m in Macros
+      where m.Properties.X == macro.Properties.X
+            && m.Properties.Y == macro.Properties.Y
+      select m).Count() == 1;
   }
 }

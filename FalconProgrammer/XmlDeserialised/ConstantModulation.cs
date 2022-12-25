@@ -6,7 +6,9 @@ namespace FalconProgrammer.XmlDeserialised;
 public class ConstantModulation {
   [XmlAttribute] public string Name { get; set; } = null!;
   [XmlAttribute] public string DisplayName { get; set; } = null!;
+  [XmlAttribute] public int Bipolar { get; set; } // bool ?
   [XmlAttribute] public int Style { get; set; }
+  [XmlAttribute] public float Value { get; set; }
 
   /// <summary>
   ///   For a ConstantModulation, there is 0 or 1 SignalConnection only. 
@@ -19,13 +21,29 @@ public class ConstantModulation {
 
   public int Index { get; set; }
 
-  [PublicAPI] public bool IsContinuous =>
-    Style == 0 || (Style == 1
-      ? false
-      : throw new NotSupportedException($"Style {Style} is not supported."));
-  
-  [PublicAPI] public int MacroNo => Convert.ToInt32(
-    Name.Replace("Macro ", string.Empty));
+  public bool IsContinuous {
+    get =>
+      Style == 0 || (Style == 1
+        ? false
+        : throw new NotSupportedException($"Style {Style} is not supported."));
+    set => Style = value ? 0 : 1;
+  }
+
+  public bool IsMacro => MacroNo != null;
+
+  [PublicAPI] public int? MacroNo {
+    get {
+      if (!Name.StartsWith("Macro ")) {
+        return null;
+      }
+      if (!int.TryParse(
+            Name.Replace("Macro ", string.Empty), out int macroNo)) {
+        return null;
+      }
+      return macroNo;
+    }
+    set => Name = $"Macro {value}";
+  }
 
   public override string ToString() {
     return $"{DisplayName} ({Name})";

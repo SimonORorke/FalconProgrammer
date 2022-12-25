@@ -7,6 +7,7 @@ public class SignalConnection {
     Ratio = 1;
     Source = string.Empty;
     Destination = "Value";
+    ConnectionMode = 1;
   }
 
   [XmlAttribute] public float Ratio { get; set; }
