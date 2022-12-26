@@ -14,7 +14,8 @@ public class BatchConfig {
   [PublicAPI]
   public LocationOrder MacroCcLocationOrder { get; set; } =
     LocationOrder.TopToBottomLeftToRight;
-
+  
+  [PublicAPI]public int ModWheelReplacementCcNo { get; set; } = 34;
   private FalconProgram Program { get; set; } = null!;
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
@@ -50,7 +51,7 @@ public class BatchConfig {
       Program.Read();
       switch (Task) {
         case ConfigTask.ReplaceModWheelWithMacro:
-          Program.ReplaceModWheelWithMacro();
+          Program.ReplaceModWheelWithMacro(ModWheelReplacementCcNo);
           break;
         case ConfigTask.UpdateMacroCcs:
           Program.UpdateMacroCcs(MacroCcLocationOrder);

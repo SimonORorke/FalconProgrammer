@@ -7,8 +7,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class FalconProgram {
-  private const int ModWheelReplacementCcNo = 34;
-  
   public FalconProgram(string path, Category category) {
     Path = path;
     Category = category;
@@ -23,11 +21,11 @@ public class FalconProgram {
   ///   relative to their locations on the Info page.
   /// </summary>
   private LocationOrder MacroCcLocationOrder { get; set; }
-  
+
   private string Name { get; set; } = null!;
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
-  [PublicAPI]public string Path { get; }
+  [PublicAPI] public string Path { get; }
   private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
@@ -139,8 +137,12 @@ public class FalconProgram {
     const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;
     const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
-    // The original right edge 675 is probably correct.  All placements of the Wheel
-    // macro seem to be too far to the left.  Why?  Example: "Factory\Pluck\Mutan Mute".
+    // We need to horizontally align the new macro relative not only to macros that are
+    // bottommost on the Info window (i.e. highest Y) but also those that are close to
+    // the bottom.  The vertical clearance is 95, so this should be safe. In reality,
+    // many are up just 5 from the bottommost macros.
+    // Example: "Factory\Pluck\Mutan Mute".
+    const int verticalFudge = 50;
     const int rightEdge = 695; // 675?
     int bottomRowY = (
       from macro in ConstantModulations
@@ -149,7 +151,7 @@ public class FalconProgram {
     var bottomRowMacros = (
       from macro in GetMacrosSortedByLocation(
         LocationOrder.TopToBottomLeftToRight)
-      where macro.Properties.Y == bottomRowY
+      where macro.Properties.Y >= bottomRowY - verticalFudge
       select macro).ToList();
     // List, from left to right, the widths of the gaps between the macros on the bottom
     // row of macros on the Info page.  Include the gap between the leftmost macro and
@@ -160,7 +162,7 @@ public class FalconProgram {
         gapWidths.Add(
           bottomRowMacros[i + 1].Properties.X
           - (bottomRowMacros[i].Properties.X
-          + macroWidth));
+             + macroWidth));
       }
     }
     gapWidths.Add(rightEdge - (bottomRowMacros[^1].Properties.X + macroWidth));
@@ -251,7 +253,7 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
   }
 
-  public void ReplaceModWheelWithMacro() {
+  public void ReplaceModWheelWithMacro(int modWheelReplacementCcNo) {
     Console.WriteLine($"Checking '{Path}'.");
     var continuousMacros = GetContinuousMacros();
     string? existingWheelMacroDisplayName = (
@@ -272,13 +274,13 @@ public class FalconProgram {
     if (InfoPageCcsScriptProcessor != null) {
       hasReplacementCcNo = (
         from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
-        where signalConnection.CcNo == ModWheelReplacementCcNo
+        where signalConnection.CcNo == modWheelReplacementCcNo
         select signalConnection).Any();
     } else {
       foreach (var continuousMacro in continuousMacros) {
         hasReplacementCcNo = (
           from signalConnection in continuousMacro.SignalConnections
-          where signalConnection.CcNo == ModWheelReplacementCcNo
+          where signalConnection.CcNo == modWheelReplacementCcNo
           select signalConnection).Any();
         if (hasReplacementCcNo) {
           break;
@@ -288,7 +290,7 @@ public class FalconProgram {
     if (hasReplacementCcNo) {
       Console.WriteLine(
         $"'{Name}' already has a macro mapped to mod wheel replacement " +
-        $"MIDI CC {ModWheelReplacementCcNo}.");
+        $"MIDI CC {modWheelReplacementCcNo}.");
       return;
     }
     if (!ProgramXml.FindModWheelModulations()) {
@@ -303,7 +305,7 @@ public class FalconProgram {
       return;
     }
     int newMacroNo = (
-      from macro in ConstantModulations 
+      from macro in ConstantModulations
       select macro.MacroNo).Max() + 1;
     var newMacro = new ConstantModulation {
       MacroNo = newMacroNo,
@@ -311,9 +313,9 @@ public class FalconProgram {
       Bipolar = 0,
       IsContinuous = true,
       Value = 0,
-      SignalConnections = new List<SignalConnection>() {
+      SignalConnections = new List<SignalConnection> {
         new SignalConnection {
-          CcNo = ModWheelReplacementCcNo
+          CcNo = modWheelReplacementCcNo
         }
       },
       Properties = new Properties {
@@ -415,7 +417,7 @@ public class FalconProgram {
   ///   in the order of their locations on the Info page (top to bottom, left to right or
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and toggle macros.
-  ///   Example: Factory/Keys/Smooth E-piano 2.1. 
+  ///   Example: Factory/Keys/Smooth E-piano 2.1.
   /// </summary>
   private void UpdateMacroCcsInScriptProcessor() {
     var sortedByLocation =
