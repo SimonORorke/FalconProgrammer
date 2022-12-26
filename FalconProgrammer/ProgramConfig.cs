@@ -47,6 +47,7 @@ public class ProgramConfig {
       Console.WriteLine(
         $"Cannot replace mod wheel modulations for category '{categoryName}' " +
         "because the category's Info page layout is defined in a script.");
+      return;
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       ReadProgram(programFileToEdit);
@@ -170,12 +171,13 @@ public class ProgramConfig {
       return;
     }
     int newMacroNo = (
-      from macro in Program.Macros select macro.MacroNo!.Value).Max() + 1;
+      from macro in Program.ConstantModulations 
+      select macro.MacroNo).Max() + 1;
     var newMacro = new ConstantModulation {
       MacroNo = newMacroNo,
       DisplayName = "Wheel",
       Bipolar = 0,
-      IsContinuous = false,
+      IsContinuous = true,
       Value = 0,
       SignalConnections = new List<SignalConnection>() {
         new SignalConnection {
@@ -216,7 +218,7 @@ public class ProgramConfig {
     }
     // The category's Info page layout is specified in ConstantModulations.
     if (Program.InfoPageCcsScriptProcessor != null) {
-      Console.WriteLine($"Macro CCs ScriptProcessor in '{Program.Path}'.");
+      // But the CCs are specified for a script. Example?
       UpdateMacroCcsInScriptProcessor();
     } else {
       UpdateMacroCcsInConstantModulations();
@@ -229,7 +231,7 @@ public class ProgramConfig {
   ///   updates the macro CCs so that the macros are successively assigned standard CCs
   ///   in the order of their locations on the Info page (top to bottom, left to right or
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
-  ///   There are different series of CCs for continuous and switch macros.
+  ///   There are different series of CCs for continuous and toggle macros.
   /// </summary>
   private void UpdateMacroCcsInConstantModulations() {
     // Most Factory programs list the ConstantModulation macro specifications in order
@@ -285,12 +287,10 @@ public class ProgramConfig {
   ///   updates the macro CCs so that the macros are successively assigned standard CCs
   ///   in the order of their locations on the Info page (top to bottom, left to right or
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
-  ///   There are different series of CCs for continuous and switch macros.
+  ///   There are different series of CCs for continuous and toggle macros.
+  ///   Example: Factory/Keys/Smooth E-piano 2.1. 
   /// </summary>
   private void UpdateMacroCcsInScriptProcessor() {
-    // Assign button CCs to switch macros. 
-    // Example: Factory/Keys/Smooth E-piano 2.1.
-    //
     var sortedByLocation =
       Program.GetMacrosSortedByLocation(MacroCcLocationOrder);
     int macroNo = 0;

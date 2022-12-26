@@ -3,10 +3,13 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.XmlDeserialised;
 
+/// <summary>
+///   Seems to be the same thing as a macro.
+/// </summary>
 public class ConstantModulation {
   [XmlAttribute] public string Name { get; set; } = null!;
   [XmlAttribute] public string DisplayName { get; set; } = null!;
-  [XmlAttribute] public int Bipolar { get; set; } // bool ?
+  [XmlAttribute] public int Bipolar { get; set; }
   [XmlAttribute] public int Style { get; set; }
   [XmlAttribute] public float Value { get; set; }
 
@@ -29,16 +32,15 @@ public class ConstantModulation {
     set => Style = value ? 0 : 1;
   }
 
-  public bool IsMacro => MacroNo != null;
-
-  [PublicAPI] public int? MacroNo {
+  [PublicAPI] public int MacroNo {
     get {
-      if (!Name.StartsWith("Macro ")) {
-        return null;
-      }
-      if (!int.TryParse(
-            Name.Replace("Macro ", string.Empty), out int macroNo)) {
-        return null;
+      // In most programs, ConstantModulation Names consist of "Macro " followed by the
+      // macro number. In a few programs, such as 'Factory\Keys\Pure FM Tines', 
+      // the Names start with "MacroKnob " instead. 
+      string[] split = Name.Split();
+      if (split.Length != 2 || !int.TryParse(split[1], out int macroNo)) {
+        throw new NotSupportedException(
+          $"'{Name}' is not a supported macro name.");
       }
       return macroNo;
     }

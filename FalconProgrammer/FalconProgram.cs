@@ -6,25 +6,14 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class FalconProgram {
-  private List<ConstantModulation>? _macros;
-
   public FalconProgram(string path, Category category) {
     Path = path;
     Category = category;
   }
 
   [PublicAPI] public Category Category { get; }
-  private List<ConstantModulation> ConstantModulations { get; set; } = null!;
+  public List<ConstantModulation> ConstantModulations { get; set; } = null!;
   public ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
-
-  /// <summary>
-  ///   Maybe check whether all ConstantModulations are macros?  
-  /// </summary>
-  public List<ConstantModulation> Macros => _macros ??=
-    (from constantModulation in ConstantModulations
-      where constantModulation.IsMacro
-      select constantModulation).ToList();
-
   public string Name { get; private set; } = null!;
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
@@ -119,7 +108,7 @@ public class FalconProgram {
 
   public List<ConstantModulation> GetContinuousMacros() {
     return (
-      from macro in Macros
+      from macro in ConstantModulations
       where macro.IsContinuous
       select macro).ToList();
   }
@@ -130,7 +119,7 @@ public class FalconProgram {
     const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
     const int rightEdge = 675;
     int bottomRowY = (
-      from macro in Macros
+      from macro in ConstantModulations
       select macro.Properties.Y).Max();
     var bottomRowMacros = (
       from macro in GetMacrosSortedByLocation(
@@ -171,8 +160,8 @@ public class FalconProgram {
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
-    for (int i = 0; i < Macros.Count; i++) {
-      var macro = Macros[i];
+    for (int i = 0; i < ConstantModulations.Count; i++) {
+      var macro = ConstantModulations[i];
       // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
       //constantModulation.Properties.Validate();
@@ -202,7 +191,7 @@ public class FalconProgram {
 
   private bool HasUniqueLocation(ConstantModulation macro) {
     return (
-      from m in Macros
+      from m in ConstantModulations
       where m.Properties.X == macro.Properties.X
             && m.Properties.Y == macro.Properties.Y
       select m).Count() == 1;

@@ -113,9 +113,9 @@ public class Category {
           case "Brutal Bass 2.1":
             return "808 Line";
           case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
-            return "ARP Concert Echo";
+            return "BAS Gameboy Bass";
           case "Organic Texture 2.8":
-            return "ARP Breather";
+            return "BAS Biggy";
         }
       }
       return TemplateSoundBankName switch {
