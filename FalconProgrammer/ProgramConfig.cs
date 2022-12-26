@@ -46,15 +46,14 @@ public class ProgramConfig {
       return;
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
-      Program = new FalconProgram(
-        programFileToEdit.FullName, Category, MacroCcLocationOrder);
+      Program = new FalconProgram(programFileToEdit.FullName, Category);
       Program.Read();
       switch (Task) {
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro();
           break;
         case ConfigTask.UpdateMacroCcs:
-          Program.UpdateMacroCcs();
+          Program.UpdateMacroCcs(MacroCcLocationOrder);
           break;
       }
       Program.Save();

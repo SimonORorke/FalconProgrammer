@@ -9,11 +9,9 @@ namespace FalconProgrammer;
 public class FalconProgram {
   private const int ModWheelReplacementCcNo = 34;
   
-  public FalconProgram(string path, Category category, 
-    LocationOrder macroCcLocationOrder) {
+  public FalconProgram(string path, Category category) {
     Path = path;
     Category = category;
-    MacroCcLocationOrder = macroCcLocationOrder;
   }
 
   [PublicAPI] public Category Category { get; }
@@ -24,8 +22,7 @@ public class FalconProgram {
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
   ///   relative to their locations on the Info page.
   /// </summary>
-  [PublicAPI]
-  public LocationOrder MacroCcLocationOrder { get; }
+  private LocationOrder MacroCcLocationOrder { get; set; }
   
   private string Name { get; set; } = null!;
   private int NextContinuousCcNo { get; set; } = 31;
@@ -142,7 +139,7 @@ public class FalconProgram {
     const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;
     const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
-    const int rightEdge = 675;
+    const int rightEdge = 695; // 675?
     int bottomRowY = (
       from macro in ConstantModulations
       select macro.Properties.Y).Max();
@@ -176,14 +173,14 @@ public class FalconProgram {
     }
     // There is at least one gap wide enough to accommodate a new macro.
     // Put the new macro on the bottom row of macros, in the middle of the rightmost gap
-    // of the minimum width within which it will fit.
-    int minSuitableGapWidth = (
+    // within which it will fit.
+    int rightmostSuitableGapWidth = (
       from gapWidth in gapWidths
       where gapWidth >= minNewMacroGapWidth
-      select gapWidth).Min();
+      select gapWidth).Last();
     int newMacroGapIndex = -1;
     for (int i = gapWidths.Count - 1; i >= 0; i--) {
-      if (gapWidths[i] == minSuitableGapWidth) {
+      if (gapWidths[i] == rightmostSuitableGapWidth) {
         newMacroGapIndex = i;
         break;
       }
@@ -191,7 +188,7 @@ public class FalconProgram {
     int newMacroGapX = newMacroGapIndex == 0
       ? 0
       : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
-    int newMacroX = newMacroGapX + (minSuitableGapWidth - macroWidth) / 2;
+    int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - macroWidth) / 2;
     return new Point(newMacroX, bottomRowY);
   }
 
@@ -332,8 +329,9 @@ public class FalconProgram {
     ProgramXml.SaveToFile(Path);
   }
 
-  public void UpdateMacroCcs() {
+  public void UpdateMacroCcs(LocationOrder macroCcLocationOrder) {
     Console.WriteLine($"Updating '{Path}'.");
+    MacroCcLocationOrder = macroCcLocationOrder;
     if (Category.IsInfoPageLayoutInScript) {
       InfoPageCcsScriptProcessor!.SignalConnections.Clear();
       foreach (var signalConnection in
