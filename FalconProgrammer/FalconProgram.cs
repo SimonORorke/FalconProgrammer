@@ -146,11 +146,15 @@ public class FalconProgram {
     int bottomRowY = (
       from macro in ConstantModulations
       select macro.Properties.Y).Max();
+    // List, from left to right, the macros on the bottom row of macros on the Info page.
     var bottomRowMacros = (
       from macro in GetMacrosSortedByLocation(
         LocationOrder.TopToBottomLeftToRight)
       where macro.Properties.Y == bottomRowY
       select macro).ToList();
+    // List, from left to right, the widths of the gaps between the macros on the bottom
+    // row of macros on the Info page.  Include the gap between the leftmost macro and
+    // the left edge and the gap between the rightmost macro and the right edge.
     var gapWidths = new List<int> { bottomRowMacros[0].Properties.X };
     if (bottomRowMacros.Count > 1) {
       for (int i = 0; i < bottomRowMacros.Count - 1; i++) {
@@ -161,6 +165,8 @@ public class FalconProgram {
       }
     }
     gapWidths.Add(rightEdge - (bottomRowMacros[^1].Properties.X + macroWidth));
+    // Check whether there any gaps on the bottom rowe wide enough to accommodate a new
+    // macro.
     bool canFitInGap = (
       from gapWidth in gapWidths
       where gapWidth >= minNewMacroGapWidth
@@ -169,8 +175,8 @@ public class FalconProgram {
       return null;
     }
     // There is at least one gap wide enough to accommodate a new macro.
-    // Put the new macro in the middle of the rightmost gap of the minimum width within
-    // which it will fit.
+    // Put the new macro on the bottom row of macros, in the middle of the rightmost gap
+    // of the minimum width within which it will fit.
     int minSuitableGapWidth = (
       from gapWidth in gapWidths
       where gapWidth >= minNewMacroGapWidth
