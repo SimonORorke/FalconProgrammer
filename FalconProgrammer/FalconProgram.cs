@@ -161,14 +161,22 @@ public class FalconProgram {
       }
     }
     gapWidths.Add(rightEdge - (bottomRowMacros[^1].Properties.X + macroWidth));
-    int maxGapWidth = (from gapWidth in gapWidths select gapWidth).Max();
-    if (maxGapWidth < minNewMacroGapWidth) {
+    bool canFitInGap = (
+      from gapWidth in gapWidths
+      where gapWidth >= minNewMacroGapWidth
+      select gapWidth).Any();
+    if (!canFitInGap) {
       return null;
     }
-    // Put the new macro in the middle of the rightmost gap of the maximum width.
+    int minSuitableGapWidth = (
+      from gapWidth in gapWidths
+      where gapWidth >= minNewMacroGapWidth
+      select gapWidth).Min();
+    // Put the new macro in the middle of the rightmost gap of the minimum width that
+    // will fit.
     int newMacroGapIndex = -1;
     for (int i = gapWidths.Count - 1; i >= 0; i--) {
-      if (gapWidths[i] == maxGapWidth) {
+      if (gapWidths[i] == minSuitableGapWidth) {
         newMacroGapIndex = i;
         break;
       }
@@ -176,7 +184,7 @@ public class FalconProgram {
     int newMacroGapX = newMacroGapIndex == 0
       ? 0
       : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
-    int newMacroX = newMacroGapX + (maxGapWidth - macroWidth) / 2;
+    int newMacroX = newMacroGapX + (minSuitableGapWidth - macroWidth) / 2;
     return new Point(newMacroX, bottomRowY);
   }
 
