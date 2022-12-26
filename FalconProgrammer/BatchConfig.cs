@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer;
 
-public class ProgramConfig {
+public class BatchConfig {
   public const string ProgramExtension = ".uvip";
   private const string SynthName = "UVI Falcon";
   private Category Category { get; set; } = null!;

@@ -2,7 +2,7 @@
 
 public static class Runner {
   public static void ConfigureCcs() {
-    var config = new ProgramConfig();
+    var config = new BatchConfig();
     // config.ReplaceModWheelWithMacro("Factory", "Test");
     config.ReplaceModWheelWithMacro("Factory");
     // config.ReplaceModWheelWithMacro("Factory", "Brutal Bass 2.1");

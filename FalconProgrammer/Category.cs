@@ -159,7 +159,7 @@ public class Category {
 
   public IEnumerable<FileInfo> GetProgramFilesToEdit() {
     var programFiles = Folder.GetFiles(
-      "*" + ProgramConfig.ProgramExtension);
+      "*" + BatchConfig.ProgramExtension);
     var result = (
       from programFile in programFiles
       where programFile.FullName != TemplateProgramPath
@@ -174,8 +174,8 @@ public class Category {
   private string GetTemplateProgramPath() {
     var templateProgramFile = new FileInfo(
       Path.Combine(
-        ProgramConfig.GetSoundBankFolder(TemplateSoundBankName).FullName,
-        TemplateCategoryName, TemplateProgramName + ProgramConfig.ProgramExtension));
+        BatchConfig.GetSoundBankFolder(TemplateSoundBankName).FullName,
+        TemplateCategoryName, TemplateProgramName + BatchConfig.ProgramExtension));
     if (!templateProgramFile.Exists) {
       throw new ApplicationException(
         $"Cannot find template file '{templateProgramFile.FullName}'.");
