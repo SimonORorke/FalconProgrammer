@@ -1,23 +1,37 @@
 ﻿using System.Drawing;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
+using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
 public class FalconProgram {
-  public FalconProgram(string path, Category category) {
+  private const int ModWheelReplacementCcNo = 34;
+  
+  public FalconProgram(string path, Category category, 
+    LocationOrder macroCcLocationOrder) {
     Path = path;
     Category = category;
+    MacroCcLocationOrder = macroCcLocationOrder;
   }
 
   [PublicAPI] public Category Category { get; }
-  public List<ConstantModulation> ConstantModulations { get; set; } = null!;
-  public ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
-  public string Name { get; private set; } = null!;
+  private List<ConstantModulation> ConstantModulations { get; set; } = null!;
+  private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
+
+  /// <summary>
+  ///   Gets the order in which MIDI CC numbers are to be mapped to macros
+  ///   relative to their locations on the Info page.
+  /// </summary>
+  [PublicAPI]
+  public LocationOrder MacroCcLocationOrder { get; }
+  
+  private string Name { get; set; } = null!;
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
-  public string Path { get; }
+  [PublicAPI]public string Path { get; }
+  private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   private static void CheckForNonModWheelNonInfoPageMacro(
@@ -50,7 +64,18 @@ public class FalconProgram {
     }
   }
 
-  public void Deserialise() {
+  private ProgramXml CreateProgramXml() {
+    if (Category.SoundBankFolder.Name == "Organic Keys") {
+      return new OrganicKeysProgramXml(
+        Category.TemplateProgramPath, InfoPageCcsScriptProcessor!);
+    }
+    return Category.IsInfoPageLayoutInScript
+      ? new ScriptProgramXml(
+        Category.TemplateProgramPath, InfoPageCcsScriptProcessor!)
+      : new ProgramXml(Category.TemplateProgramPath, InfoPageCcsScriptProcessor);
+  }
+
+  private void Deserialise() {
     using var reader = new StreamReader(Path);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
@@ -90,7 +115,7 @@ public class FalconProgram {
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
-  public int GetCcNo(ConstantModulation constantModulation) {
+  private int GetCcNo(ConstantModulation constantModulation) {
     int result;
     if (constantModulation.IsContinuous) {
       // Map continuous controller CC to continuous macro. 
@@ -106,14 +131,14 @@ public class FalconProgram {
     return result;
   }
 
-  public List<ConstantModulation> GetContinuousMacros() {
+  private List<ConstantModulation> GetContinuousMacros() {
     return (
       from macro in ConstantModulations
       where macro.IsContinuous
       select macro).ToList();
   }
 
-  public Point? GetLocationForNewMacro() {
+  private Point? GetLocationForNewMacro() {
     const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;
     const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
@@ -140,8 +165,9 @@ public class FalconProgram {
     if (maxGapWidth < minNewMacroGapWidth) {
       return null;
     }
+    // Put the new macro in the middle of the rightmost gap of the maximum width.
     int newMacroGapIndex = -1;
-    for (int i = 0; i < gapWidths.Count; i++) {
+    for (int i = gapWidths.Count - 1; i >= 0; i--) {
       if (gapWidths[i] == maxGapWidth) {
         newMacroGapIndex = i;
         break;
@@ -154,7 +180,7 @@ public class FalconProgram {
     return new Point(newMacroX, bottomRowY);
   }
 
-  public SortedSet<ConstantModulation> GetMacrosSortedByLocation(
+  private SortedSet<ConstantModulation> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
     var result = new SortedSet<ConstantModulation>(
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
@@ -195,5 +221,213 @@ public class FalconProgram {
       where m.Properties.X == macro.Properties.X
             && m.Properties.Y == macro.Properties.Y
       select m).Count() == 1;
+  }
+
+  /// <summary>
+  ///   Dual XML data load strategy:
+  ///   To maximise forward compatibility with possible future changes to the program XML
+  ///   data structure, we are deserialising only nodes we need, to the
+  ///   ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
+  ///   file from those lists. Instead, the program XML file must be updated via
+  ///   LINQ to XML in ProgramXml.
+  /// </summary>
+  public void Read() {
+    Deserialise();
+    ProgramXml = CreateProgramXml();
+    ProgramXml.LoadFromFile(Path);
+  }
+
+  public void ReplaceModWheelWithMacro() {
+    Console.WriteLine($"Checking '{Path}'.");
+    var continuousMacros = GetContinuousMacros();
+    string? existingWheelMacroDisplayName = (
+      from continuousMacro in continuousMacros
+      where continuousMacro.DisplayName.Contains("Wheel")
+      select continuousMacro.DisplayName).FirstOrDefault();
+    if (existingWheelMacroDisplayName != null) {
+      Console.WriteLine(
+        $"'{Name}' already has a '{existingWheelMacroDisplayName}' macro.");
+      return;
+    }
+    if (continuousMacros.Count > 3) {
+      Console.WriteLine(
+        $"'{Name}' already has more than three continuous macros.");
+      return;
+    }
+    bool hasReplacementCcNo = false;
+    if (InfoPageCcsScriptProcessor != null) {
+      hasReplacementCcNo = (
+        from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.CcNo == ModWheelReplacementCcNo
+        select signalConnection).Any();
+    } else {
+      foreach (var continuousMacro in continuousMacros) {
+        hasReplacementCcNo = (
+          from signalConnection in continuousMacro.SignalConnections
+          where signalConnection.CcNo == ModWheelReplacementCcNo
+          select signalConnection).Any();
+        if (hasReplacementCcNo) {
+          break;
+        }
+      }
+    }
+    if (hasReplacementCcNo) {
+      Console.WriteLine(
+        $"'{Name}' already has a macro mapped to mod wheel replacement " +
+        $"MIDI CC {ModWheelReplacementCcNo}.");
+      return;
+    }
+    if (!ProgramXml.FindModWheelModulations()) {
+      Console.WriteLine($"'{Name}' contains no mod wheel modulations.");
+      return;
+    }
+    var locationForNewMacro = GetLocationForNewMacro();
+    if (locationForNewMacro == null) {
+      Console.WriteLine(
+        $"'{Name}' " +
+        "does not have room on its Info page's bottom row for a new macro.");
+      return;
+    }
+    int newMacroNo = (
+      from macro in ConstantModulations 
+      select macro.MacroNo).Max() + 1;
+    var newMacro = new ConstantModulation {
+      MacroNo = newMacroNo,
+      DisplayName = "Wheel",
+      Bipolar = 0,
+      IsContinuous = true,
+      Value = 0,
+      SignalConnections = new List<SignalConnection>() {
+        new SignalConnection {
+          CcNo = ModWheelReplacementCcNo
+        }
+      },
+      Properties = new Properties {
+        X = locationForNewMacro.Value.X,
+        Y = locationForNewMacro.Value.Y
+      }
+    };
+    ProgramXml.AddMacro(newMacro);
+    ProgramXml.ChangeModWheelModulationSourcesToMacro(newMacroNo);
+    Console.WriteLine(
+      $"'{Name}': Replaced mod wheel with macro.");
+  }
+
+  public void Save() {
+    ProgramXml.SaveToFile(Path);
+  }
+
+  public void UpdateMacroCcs() {
+    Console.WriteLine($"Updating '{Path}'.");
+    if (Category.IsInfoPageLayoutInScript) {
+      InfoPageCcsScriptProcessor!.SignalConnections.Clear();
+      foreach (var signalConnection in
+               Category.TemplateScriptProcessor!.SignalConnections) {
+        InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
+      }
+      ProgramXml.UpdateInfoPageCcsScriptProcessor();
+      return;
+    }
+    // The category's Info page layout is specified in ConstantModulations.
+    if (InfoPageCcsScriptProcessor != null) {
+      // But the CCs are specified for a script. Example?
+      UpdateMacroCcsInScriptProcessor();
+    } else {
+      UpdateMacroCcsInConstantModulations();
+    }
+  }
+
+  /// <summary>
+  ///   Where MIDI CC assignments to macros shown on the Info page are specified in
+  ///   ConstantModulations,
+  ///   updates the macro CCs so that the macros are successively assigned standard CCs
+  ///   in the order of their locations on the Info page (top to bottom, left to right or
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
+  ///   There are different series of CCs for continuous and toggle macros.
+  /// </summary>
+  private void UpdateMacroCcsInConstantModulations() {
+    // Most Factory programs list the ConstantModulation macro specifications in order
+    // top to bottom, left to right. But a few, e.g. Factory/Keys/Days Of Old 1.4, do not.
+    //
+    var sortedByLocation =
+      GetMacrosSortedByLocation(MacroCcLocationOrder);
+    foreach (var constantModulation in sortedByLocation) {
+      //int ccNo = constantModulation.GetCcNo(ref nextContinuousCcNo, ref nextToggleCcNo);
+      // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
+      // MIDI CC mapping that's not on the Info page.
+      // Example: Devinity/Bass/Comber Bass.
+      var infoPageSignalConnections = (
+        from sc in constantModulation.SignalConnections
+        where sc.IsForInfoPageMacro
+        select sc).ToList();
+      // if (infoPageSignalConnections.Count !=
+      //     constantModulation.SignalConnections.Count) {
+      //   Console.WriteLine($"Modulation wheel assignment found: {constantModulation}");
+      // }
+      int ccNo = GetCcNo(constantModulation);
+      if (infoPageSignalConnections.Count == 0) { // Will be 0 or 1
+        // The macro is not already mapped to a non-mod wheel CC number.
+        var signalConnection = new SignalConnection {
+          CcNo = ccNo
+        };
+        ProgramXml.AddConstantModulationSignalConnection(
+          signalConnection, constantModulation.Index);
+      } else {
+        // The macro already has a SignalConnection mapping to a non-mod wheel CC number.
+        // We need to conserve the SignalConnection tag, which might contain a custom
+        // Ratio, and, with the exception below, just replace the CC number.
+        var signalConnection = infoPageSignalConnections[0];
+        signalConnection.CcNo = ccNo;
+        // In Factory/Keys/Days Of Old 1.4, Macro 1, a switch macro, has Ratio -1 instead
+        // of the usual 1. I don't know what the point of that is. But it prevents the
+        // button controller mapped to the macro from working. To fix this, if a switch
+        // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing
+        // that. 
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        if (!constantModulation.IsContinuous && signalConnection.Ratio == -1) {
+          signalConnection.Ratio = 1;
+        }
+        ProgramXml.UpdateConstantModulationSignalConnection(
+          constantModulation, signalConnection);
+      }
+    }
+  }
+
+  /// <summary>
+  ///   Where MIDI CC assignments to macros shown on the Info page are specified in a
+  ///   ScriptProcessor,
+  ///   updates the macro CCs so that the macros are successively assigned standard CCs
+  ///   in the order of their locations on the Info page (top to bottom, left to right or
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
+  ///   There are different series of CCs for continuous and toggle macros.
+  ///   Example: Factory/Keys/Smooth E-piano 2.1. 
+  /// </summary>
+  private void UpdateMacroCcsInScriptProcessor() {
+    var sortedByLocation =
+      GetMacrosSortedByLocation(MacroCcLocationOrder);
+    int macroNo = 0;
+    // Any assignment of a macro the modulation wheel  or any other
+    // MIDI CC mapping that's not on the Info page is expected to be
+    // specified in a different ScriptProcessor. But let's check!
+    bool infoPageCcsScriptProcessorHasModWheelSignalConnections = (
+      from signalConnection in InfoPageCcsScriptProcessor!.SignalConnections
+      where !signalConnection.IsForInfoPageMacro
+      select signalConnection).Any();
+    if (infoPageCcsScriptProcessorHasModWheelSignalConnections) {
+      // We've already validated against non-mod wheel CCs that don't control Info page
+      // macros. So the reference to the mod wheel in this error message should be fine.
+      throw new ApplicationException(
+        "Modulation wheel assignment found in Info page CCs ScriptProcessor.");
+    }
+    InfoPageCcsScriptProcessor!.SignalConnections.Clear();
+    foreach (var constantModulation in sortedByLocation) {
+      macroNo++;
+      InfoPageCcsScriptProcessor.SignalConnections.Add(
+        new SignalConnection {
+          MacroNo = macroNo,
+          CcNo = GetCcNo(constantModulation)
+        });
+    }
+    ProgramXml.UpdateInfoPageCcsScriptProcessor();
   }
 }

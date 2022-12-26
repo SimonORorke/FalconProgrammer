@@ -84,7 +84,7 @@ public class Category {
   }
   
   [PublicAPI] public string Name { get; }
-  [PublicAPI] public DirectoryInfo SoundBankFolder { get; }
+  public DirectoryInfo SoundBankFolder { get; }
   
   [PublicAPI] public string TemplateCategoryName {
     get {
