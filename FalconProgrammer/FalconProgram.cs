@@ -200,7 +200,22 @@ public class FalconProgram {
       ? 0
       : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
     int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - macroWidth) / 2;
-    int newMacroY = bottomRowY <= standardBottommostY ? bottomRowY : standardBottommostY;
+    // If there are continuous and toggle macros on the bottom row, the continuous macros
+    // may be a little higher up than the toggle macros, as they are taller.  In that
+    // case, align the new macro horizontally with the bottommost continuous macro.
+    // Example: "Factory\Pluck\Mutan Mute".
+    var bottomRowContinuousMacros = (
+      from macro in bottomRowMacros
+      where macro.IsContinuous
+      select macro).ToList();
+    int newMacroY;
+    if (bottomRowContinuousMacros.Count > 0) {
+      newMacroY = (
+        from macro in bottomRowContinuousMacros
+        select macro.Properties.Y).Max();
+    } else {
+      newMacroY = bottomRowY <= standardBottommostY ? bottomRowY : standardBottommostY;
+    }
     return new Point(newMacroX, newMacroY);
   }
 
