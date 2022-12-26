@@ -139,6 +139,8 @@ public class FalconProgram {
     const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;
     const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
+    // The original right edge 675 is probably correct.  All placements of the Wheel
+    // macro seem to be too far to the left.  Why?  Example: "Factory\Pluck\Mutan Mute".
     const int rightEdge = 695; // 675?
     int bottomRowY = (
       from macro in ConstantModulations
