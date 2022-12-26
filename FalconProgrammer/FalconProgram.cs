@@ -133,10 +133,17 @@ public class FalconProgram {
       select macro).ToList();
   }
 
-  private Point? GetLocationForNewMacro() {
+  private Point? GetLocationForNewContinuousMacro() {
     const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;
     const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
+    // When there are only toggle macros on the bottom row, they may be lower than the
+    // standard bottom, usually to accomodate two-line display names.  This looks OK for
+    // toggle macros.  But for continuous macros, being taller, it makes an ugly lack of
+    // bottom margin.  So place the new continuous macro no lower than the standard
+    // bottommost Y.
+    // Example: "Factory\Pluck\Pad Mullerizer".
+    const int standardBottommostY = 355;
     // We need to horizontally align the new macro relative not only to macros that are
     // bottommost on the Info window (i.e. highest Y) but also those that are close to
     // the bottom.  The vertical clearance is 95, so this should be safe. In reality,
@@ -193,7 +200,8 @@ public class FalconProgram {
       ? 0
       : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
     int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - macroWidth) / 2;
-    return new Point(newMacroX, bottomRowY);
+    int newMacroY = bottomRowY <= standardBottommostY ? bottomRowY : standardBottommostY;
+    return new Point(newMacroX, newMacroY);
   }
 
   private SortedSet<ConstantModulation> GetMacrosSortedByLocation(
@@ -297,7 +305,7 @@ public class FalconProgram {
       Console.WriteLine($"'{Name}' contains no mod wheel modulations.");
       return;
     }
-    var locationForNewMacro = GetLocationForNewMacro();
+    var locationForNewMacro = GetLocationForNewContinuousMacro();
     if (locationForNewMacro == null) {
       Console.WriteLine(
         $"'{Name}' " +
