@@ -168,12 +168,13 @@ public class FalconProgram {
     if (!canFitInGap) {
       return null;
     }
+    // There is at least one gap wide enough to accommodate a new macro.
+    // Put the new macro in the middle of the rightmost gap of the minimum width within
+    // which it will fit.
     int minSuitableGapWidth = (
       from gapWidth in gapWidths
       where gapWidth >= minNewMacroGapWidth
       select gapWidth).Min();
-    // Put the new macro in the middle of the rightmost gap of the minimum width that
-    // will fit.
     int newMacroGapIndex = -1;
     for (int i = gapWidths.Count - 1; i >= 0; i--) {
       if (gapWidths[i] == minSuitableGapWidth) {
