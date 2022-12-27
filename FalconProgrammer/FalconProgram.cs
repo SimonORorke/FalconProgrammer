@@ -276,21 +276,22 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
   }
 
-  public void ReplaceModWheelWithMacro(int modWheelReplacementCcNo) {
+  public void ReplaceModWheelWithMacro(
+    int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
     Console.WriteLine($"Checking '{Path}'.");
     var continuousMacros = GetContinuousMacros();
     string? existingWheelMacroDisplayName = (
       from continuousMacro in continuousMacros
-      where continuousMacro.DisplayName.Contains("Wheel")
+      where continuousMacro.DisplayName.ToLower().Contains("wheel")
       select continuousMacro.DisplayName).FirstOrDefault();
     if (existingWheelMacroDisplayName != null) {
       Console.WriteLine(
         $"'{Name}' already has a '{existingWheelMacroDisplayName}' macro.");
       return;
     }
-    if (continuousMacros.Count > 3) {
+    if (continuousMacros.Count > maxExistingContinuousMacroCount) {
       Console.WriteLine(
-        $"'{Name}' already has more than three continuous macros.");
+        $"'{Name}' already has more than {maxExistingContinuousMacroCount} continuous macros.");
       return;
     }
     bool hasReplacementCcNo = false;
