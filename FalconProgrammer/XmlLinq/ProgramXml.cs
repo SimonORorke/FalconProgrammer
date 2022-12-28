@@ -52,31 +52,31 @@ public class ProgramXml {
     var nameAttribute =
       constantModulationElement.Attribute(nameof(ConstantModulation.Name)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(ConstantModulation.Name)} "
+        "Cannot find ConstantModulation.Name "
         + $"attribute in '{TemplateProgramPath}'.");
     nameAttribute.Value = newMacro.Name;
     var displayNameAttribute =
       constantModulationElement.Attribute(nameof(ConstantModulation.DisplayName)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(ConstantModulation.DisplayName)} "
+        "Cannot find ConstantModulation.DisplayName "
         + $"attribute in '{TemplateProgramPath}'.");
     displayNameAttribute.Value = newMacro.DisplayName;
     var bipolarAttribute =
       constantModulationElement.Attribute($"{nameof(ConstantModulation.Bipolar)}") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(ConstantModulation.Bipolar)} "
+        "Cannot find ConstantModulation.Bipolar "
         + $"attribute in '{TemplateProgramPath}'.");
     bipolarAttribute.Value = newMacro.Bipolar.ToString();
     var styleAttribute =
       constantModulationElement.Attribute($"{nameof(ConstantModulation.Style)}") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(ConstantModulation.Style)} "
+        "Cannot find ConstantModulation.Style "
         + $"attribute in '{TemplateProgramPath}'.");
     styleAttribute.Value = newMacro.Style.ToString();
     var valueAttribute =
       constantModulationElement.Attribute($"{nameof(ConstantModulation.Value)}") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(ConstantModulation.Value)} "
+        "Cannot find ConstantModulation.Value "
         + $"attribute in '{TemplateProgramPath}'.");
     valueAttribute.Value = newMacro.Value.ToString();
     ControlSignalSourcesElement.Add(constantModulationElement);
@@ -85,28 +85,46 @@ public class ProgramXml {
         .FirstOrDefault();
     if (signalConnectionElement == null) {
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(SignalConnection)} "
+        "Cannot find ConstantModulation.SignalConnection "
         + $"element in '{TemplateProgramPath}'.");
     }
     UpdateSignalConnectionElement(newMacro.SignalConnections[0], signalConnectionElement);
     var propertiesElement = constantModulationElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
-        $"Cannot find {nameof(ConstantModulation)}.{nameof(Properties)} "
+        $"Cannot find ConstantModulation.Properties "
         + $"element in '{TemplateProgramPath}'.");
     }
     var xAttribute =
       propertiesElement.Attribute("x") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(Properties)}.{nameof(Properties.X)} "
+        "Cannot find Properties.X "
         + $"attribute in '{TemplateProgramPath}'.");
     xAttribute.Value = newMacro.Properties.X.ToString();
     var yAttribute =
       propertiesElement.Attribute("y") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(Properties)}.{nameof(Properties.Y)} "
+        "Cannot find Properties.Y "
         + $"attribute in '{TemplateProgramPath}'.");
     yAttribute.Value = newMacro.Properties.Y.ToString();
+  }
+
+  public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
+    string newSource = $"$Program/Macro {macroNo}";
+    foreach (var signalConnectionElement in ModWheelSignalConnectionElements) {
+      signalConnectionElement.Attribute("Source")!.Value = newSource;
+    }
+  }
+
+  public void ChangeSignalConnectionSource(
+    SignalConnection oldSignalConnection, SignalConnection newSignalConnection) {
+    var signalConnectionElements =
+      from signalConnectionElement in RootElement.Descendants("SignalConnection")
+      where signalConnectionElement.Attribute("Source")!.Value == oldSignalConnection.Source
+      select signalConnectionElement;
+    foreach (var signalConnectionElement in signalConnectionElements) {
+      signalConnectionElement.Attribute("Source")!.Value = newSignalConnection.Source;
+    }
   }
 
   private XElement CreateSignalConnectionElement(SignalConnection signalConnection) {
@@ -116,21 +134,14 @@ public class ProgramXml {
     var ratioAttribute =
       result.Attribute(nameof(SignalConnection.Ratio)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} "
+        "Cannot find SignalConnection.Ratio "
         + $"attribute in '{TemplateProgramPath}'.");
     ratioAttribute.Value = "1";
     UpdateSignalConnectionElement(signalConnection, result);
     return result;
   }
 
-  public void ChangeModWheelModulationSourcesToMacro(int macroNo) {
-    string newSource = $"$Program/Macro {macroNo}";
-    foreach (var signalConnectionElement in ModWheelSignalConnectionElements) {
-      signalConnectionElement.Attribute("Source")!.Value = newSource;
-    }
-  }
-
-  public bool FindModWheelModulations() {
+  public bool FindModWheelSignalConnections() {
     ModWheelSignalConnectionElements = (
       from signalConnectionElement in RootElement.Descendants("SignalConnection")
       where signalConnectionElement.Attribute("Source")!.Value == "@MIDI CC 1"
@@ -231,19 +242,19 @@ public class ProgramXml {
     var ratioAttribute =
       signalConnectionElement.Attribute("Ratio") ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Ratio)} "
+        "Cannot find SignalConnection.Ratio "
         + $"attribute in '{InputProgramPath}'.");
     ratioAttribute.Value = signalConnection.Ratio.ToString();
     var sourceAttribute =
       signalConnectionElement.Attribute(nameof(SignalConnection.Source)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Source)} "
+        "Cannot find SignalConnection.Source "
         + $"attribute in '{InputProgramPath}'.");
     sourceAttribute.Value = signalConnection.Source;
     var destinationAttribute =
       signalConnectionElement.Attribute(nameof(SignalConnection.Destination)) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(SignalConnection)}.{nameof(SignalConnection.Destination)} "
+        "Cannot find SignalConnection.Destination "
         + $"attribute in '{InputProgramPath}'.");
     destinationAttribute.Value = signalConnection.Destination;
   }

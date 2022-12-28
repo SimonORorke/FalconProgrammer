@@ -3,7 +3,7 @@
 using FalconProgrammer;
 
 try {
-  Runner.ConfigureCcs();
+  Runner.Run();
 } catch (ApplicationException e) {
   Console.Error.WriteLine("===================================");
   Console.Error.WriteLine("Application Exception:");

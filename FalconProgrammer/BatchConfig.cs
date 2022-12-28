@@ -32,9 +32,25 @@ public class BatchConfig {
   [PublicAPI]
   public int ModWheelReplacementCcNo { get; set; } = 34;
 
+  private int NewCcNo { get; set; }
+  private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
+
+  /// <summary>
+  ///   Changes every occurrence of the specified old macro CC number to the specified
+  ///   new CC number.
+  /// </summary>
+  [PublicAPI]
+  public void ChangeMacroCcNo(
+    int oldCcNo, int newCcNo,
+    string soundBankName, string? categoryName = null) {
+    OldCcNo = oldCcNo;
+    NewCcNo = newCcNo;
+    Task = ConfigTask.ChangeMacroCcNo;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
 
   private void ConfigurePrograms(
     string soundBankName, string? categoryName = null) {
@@ -66,6 +82,9 @@ public class BatchConfig {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
       Program.Read();
       switch (Task) {
+        case ConfigTask.ChangeMacroCcNo:
+          Program.ChangeMacroCcNo(OldCcNo, NewCcNo);
+          break;
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro(
             ModWheelReplacementCcNo, MaxExistingContinuousMacroCount);
@@ -119,6 +138,7 @@ public class BatchConfig {
   }
 
   private enum ConfigTask {
+    ChangeMacroCcNo,
     ReplaceModWheelWithMacro,
     UpdateMacroCcs
   }

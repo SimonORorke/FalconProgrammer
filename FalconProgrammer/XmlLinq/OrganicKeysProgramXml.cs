@@ -13,13 +13,13 @@ public class OrganicKeysProgramXml : ScriptProgramXml {
     var delaySendAttribute = 
       InfoPageCcsScriptProcessorElement!.Attribute(delaySendAttributeName) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ScriptProcessor)}.{delaySendAttributeName} attribute.");
+        "Cannot find ScriptProcessor.delaySend attribute.");
     delaySendAttribute.Value = "0";
     const string reverbSendAttributeName = "reverbSend";
     var reverbSendAttribute = 
       InfoPageCcsScriptProcessorElement!.Attribute(reverbSendAttributeName) ??
       throw new ApplicationException(
-        $"Cannot find {nameof(ScriptProcessor)}.{reverbSendAttributeName} attribute.");
+        "Cannot find ScriptProcessor.reverbSend attribute.");
     reverbSendAttribute.Value = "0";
     base.UpdateInfoPageCcsScriptProcessor();
   }

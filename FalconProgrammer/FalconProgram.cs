@@ -29,6 +29,13 @@ public class FalconProgram {
   private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
+  public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
+    Console.WriteLine($"Updating '{Path}'.");
+    var oldSignalConnection = new SignalConnection { CcNo = oldCcNo};
+    var newSignalConnection = new SignalConnection { CcNo = newCcNo};
+    ProgramXml.ChangeSignalConnectionSource(oldSignalConnection, newSignalConnection);
+  }
+
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
     if (!signalConnection.IsForInfoPageMacro
@@ -53,6 +60,7 @@ public class FalconProgram {
   ///   file. Strangely, the problem is not reproduced in a test category folder
   ///   containing only Flipmode and the template file.
   /// </remarks>
+  // ReSharper disable once UnusedMember.Local
   private void CheckForNonModWheelNonInfoPageMacros() {
     foreach (
       var signalConnection in ConstantModulations.SelectMany(constantModulation =>
@@ -331,7 +339,7 @@ public class FalconProgram {
         $"MIDI CC {modWheelReplacementCcNo}.");
       return;
     }
-    if (!ProgramXml.FindModWheelModulations()) {
+    if (!ProgramXml.FindModWheelSignalConnections()) {
       Console.WriteLine($"'{Name}' contains no mod wheel modulations.");
       return;
     }
@@ -362,7 +370,7 @@ public class FalconProgram {
       }
     };
     ProgramXml.AddMacro(newMacro);
-    ProgramXml.ChangeModWheelModulationSourcesToMacro(newMacroNo);
+    ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(newMacroNo);
     Console.WriteLine(
       $"'{Name}': Replaced mod wheel with macro.");
   }
@@ -384,11 +392,12 @@ public class FalconProgram {
       return;
     }
     // The category's Info page layout is specified in ConstantModulations.
-    if (InfoPageCcsScriptProcessor != null) {
-      // But the CCs are specified for a script. Example?
-      UpdateMacroCcsInScriptProcessor();
-    } else {
+    if (InfoPageCcsScriptProcessor == null) {
+      // And the CCs are specified in the ConstantModulations. This is usual.
       UpdateMacroCcsInConstantModulations();
+    } else {
+      // But the CCs are specified for a script.
+      UpdateMacroCcsInScriptProcessor();
     }
   }
 

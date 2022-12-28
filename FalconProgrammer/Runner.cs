@@ -1,9 +1,11 @@
 ﻿namespace FalconProgrammer;
 
 public static class Runner {
-  public static void ConfigureCcs() {
+  public static void Run() {
     var config = new BatchConfig();
-    config.UpdateMacroCcs("Organic Keys");
+    config.ChangeMacroCcNo(38, 28, "Factory");
+    // config.ChangeMacroCcNo(38, 28, "Devinity");
+    // config.UpdateMacroCcs("Organic Keys");
     // config.UpdateMacroCcs("Pulsar", "Bass");
     // config.ReplaceModWheelWithMacro("Devinity");
     // config.UpdateMacroCcs("Devinity");
