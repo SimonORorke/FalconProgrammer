@@ -89,16 +89,17 @@ public class Category {
   
   [PublicAPI] public string TemplateCategoryName {
     get {
-      if (TemplateSoundBankName == "Factory") {
-        switch (Name) {
-          case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
-            return "Lo-Fi 2.5";
-          case "Brutal Bass 2.1" or "Organic Texture 2.8":
-            return Name;
-        }
-      }
-      if (TemplateSoundBankName == "Pulsar") {
-        return Name;
+      switch (TemplateSoundBankName) {
+        case "Factory":
+          switch (Name) {
+            case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
+              return "Lo-Fi 2.5";
+            case "Brutal Bass 2.1" or "Organic Texture 2.8":
+              return Name;
+          }
+          break;
+        case "Pulsar":
+          return Name;
       }
       return TemplateSoundBankName switch {
         "Hypnotic Drive" => "Leads",
@@ -123,13 +124,13 @@ public class Category {
         }
       }
       if (TemplateSoundBankName == "Pulsar") {
-        switch (Name) {
-          case "Bass":
-          case "Test":
-            return "Warped";
-          default:
-            throw new NotImplementedException();
-        }
+        return Name switch {
+          "Bass" => "Warped",
+          "Leads" => "Autumn Rust",
+          "Pads" => "Lore",
+          "Plucks" => "Resonator",
+          _ => throw new NotImplementedException()
+        };
       }
       return TemplateSoundBankName switch {
         "Hypnotic Drive" => "Lead - Acid Gravel",

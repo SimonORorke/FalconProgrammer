@@ -3,7 +3,10 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    config.ChangeMacroCcNo(38, 28, "Factory");
+    config.UpdateMacroCcs("Pulsar", "Plucks");
+    // config.UpdateMacroCcs("Pulsar", "Pads");
+    // config.UpdateMacroCcs("Pulsar", "Leads");
+    // config.ChangeMacroCcNo(38, 28, "Factory");
     // config.ChangeMacroCcNo(38, 28, "Devinity");
     // config.UpdateMacroCcs("Organic Keys");
     // config.UpdateMacroCcs("Pulsar", "Bass");
