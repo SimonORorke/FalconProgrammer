@@ -76,13 +76,11 @@ public class FalconProgram {
 
   private ProgramXml CreateProgramXml() {
     if (Category.SoundBankFolder.Name == "Organic Keys") {
-      return new OrganicKeysProgramXml(
-        Category.TemplateProgramPath, InfoPageCcsScriptProcessor!);
+      return new OrganicKeysProgramXml(Category, InfoPageCcsScriptProcessor!);
     }
     return Category.IsInfoPageLayoutInScript
-      ? new ScriptProgramXml(
-        Category.TemplateProgramPath, InfoPageCcsScriptProcessor!)
-      : new ProgramXml(Category.TemplateProgramPath, InfoPageCcsScriptProcessor);
+      ? new ScriptProgramXml(Category, InfoPageCcsScriptProcessor!)
+      : new ProgramXml(Category, InfoPageCcsScriptProcessor);
   }
 
   private void Deserialise() {
@@ -122,7 +120,8 @@ public class FalconProgram {
     }
     // When there's no ScriptProcessor with the designated name yet we expect the
     // Info page layout to be defined in a script, guess the last ScriptProcessor. That
-    // works for "Factory\RetroWave 2.5\BAS Endless Droids"
+    // works for "Factory\RetroWave 2.5\BAS Endless Droids" and
+    // "Fluidity\Water\Fluid Resonances".
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 

@@ -4,8 +4,8 @@ namespace FalconProgrammer.XmlLinq;
 
 public class OrganicKeysProgramXml : ScriptProgramXml {
   public OrganicKeysProgramXml(
-    string templateProgramPath, ScriptProcessor infoPageCcsScriptProcessor) : base(
-    templateProgramPath, infoPageCcsScriptProcessor) { }
+    Category category, ScriptProcessor infoPageCcsScriptProcessor) : base(
+    category, infoPageCcsScriptProcessor) { }
 
   public override void UpdateInfoPageCcsScriptProcessor() {
     // Initialise Delay and Reverb to zero.

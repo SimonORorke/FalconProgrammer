@@ -11,11 +11,12 @@ public class ProgramXml {
   private XElement? _templateSignalConnectionElement;
 
   public ProgramXml(
-    string templateProgramPath, ScriptProcessor? infoPageCcsScriptProcessor = null) {
-    TemplateProgramPath = templateProgramPath;
+    Category category, ScriptProcessor? infoPageCcsScriptProcessor = null) {
+    Category = category;
     InfoPageCcsScriptProcessor = infoPageCcsScriptProcessor;
   }
 
+  [PublicAPI] public Category Category { get; }
   private XElement ControlSignalSourcesElement { get; set; } = null!;
   private List<XElement> ConstantModulationElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
@@ -23,13 +24,12 @@ public class ProgramXml {
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private List<XElement> ModWheelSignalConnectionElements { get; set; } = null!;
   private XElement RootElement { get; set; } = null!;
-  [PublicAPI] public string TemplateProgramPath { get; }
 
   private XElement TemplateConstantModulationElement =>
     _templateConstantModulationElement ??= GetTemplateConstantModulationElement();
 
   private XElement TemplateRootElement =>
-    _templateRootElement ??= XElement.Load(TemplateProgramPath);
+    _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
 
   private XElement TemplateSignalConnectionElement =>
     _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
@@ -53,31 +53,31 @@ public class ProgramXml {
       constantModulationElement.Attribute(nameof(ConstantModulation.Name)) ??
       throw new ApplicationException(
         "Cannot find ConstantModulation.Name "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     nameAttribute.Value = newMacro.Name;
     var displayNameAttribute =
       constantModulationElement.Attribute(nameof(ConstantModulation.DisplayName)) ??
       throw new ApplicationException(
         "Cannot find ConstantModulation.DisplayName "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     displayNameAttribute.Value = newMacro.DisplayName;
     var bipolarAttribute =
       constantModulationElement.Attribute($"{nameof(ConstantModulation.Bipolar)}") ??
       throw new ApplicationException(
         "Cannot find ConstantModulation.Bipolar "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     bipolarAttribute.Value = newMacro.Bipolar.ToString();
     var styleAttribute =
       constantModulationElement.Attribute($"{nameof(ConstantModulation.Style)}") ??
       throw new ApplicationException(
         "Cannot find ConstantModulation.Style "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     styleAttribute.Value = newMacro.Style.ToString();
     var valueAttribute =
       constantModulationElement.Attribute($"{nameof(ConstantModulation.Value)}") ??
       throw new ApplicationException(
         "Cannot find ConstantModulation.Value "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     valueAttribute.Value = newMacro.Value.ToString();
     ControlSignalSourcesElement.Add(constantModulationElement);
     var signalConnectionElement =
@@ -86,26 +86,26 @@ public class ProgramXml {
     if (signalConnectionElement == null) {
       throw new ApplicationException(
         "Cannot find ConstantModulation.SignalConnection "
-        + $"element in '{TemplateProgramPath}'.");
+        + $"element in '{Category.TemplateProgramPath}'.");
     }
     UpdateSignalConnectionElement(newMacro.SignalConnections[0], signalConnectionElement);
     var propertiesElement = constantModulationElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
         $"Cannot find ConstantModulation.Properties "
-        + $"element in '{TemplateProgramPath}'.");
+        + $"element in '{Category.TemplateProgramPath}'.");
     }
     var xAttribute =
       propertiesElement.Attribute("x") ??
       throw new ApplicationException(
         "Cannot find Properties.X "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     xAttribute.Value = newMacro.Properties.X.ToString();
     var yAttribute =
       propertiesElement.Attribute("y") ??
       throw new ApplicationException(
         "Cannot find Properties.Y "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     yAttribute.Value = newMacro.Properties.Y.ToString();
   }
 
@@ -135,7 +135,7 @@ public class ProgramXml {
       result.Attribute(nameof(SignalConnection.Ratio)) ??
       throw new ApplicationException(
         "Cannot find SignalConnection.Ratio "
-        + $"attribute in '{TemplateProgramPath}'.");
+        + $"attribute in '{Category.TemplateProgramPath}'.");
     ratioAttribute.Value = "1";
     UpdateSignalConnectionElement(signalConnection, result);
     return result;
@@ -156,7 +156,7 @@ public class ProgramXml {
       ControlSignalSourcesElement =
         RootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
         throw new ApplicationException(
-          $"Cannot find ControlSignalSources element in '{TemplateProgramPath}'.");
+          $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
       ConstantModulationElements = ControlSignalSourcesElement.Elements(
         "ConstantModulation").ToList();
       InfoPageCcsScriptProcessorElement = null;
@@ -183,7 +183,7 @@ public class ProgramXml {
     var result =
       TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
       throw new ApplicationException(
-        $"Cannot find ConstantModulation element in '{TemplateProgramPath}'.");
+        $"Cannot find ConstantModulation element in '{Category.TemplateProgramPath}'.");
     return result;
   }
 
@@ -191,7 +191,7 @@ public class ProgramXml {
     var result =
       TemplateRootElement.Descendants("SignalConnection").FirstOrDefault() ??
       throw new ApplicationException(
-        $"Cannot find SignalConnection element in '{TemplateProgramPath}'.");
+        $"Cannot find SignalConnection element in '{Category.TemplateProgramPath}'.");
     return result;
   }
 

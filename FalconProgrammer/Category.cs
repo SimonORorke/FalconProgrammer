@@ -70,6 +70,7 @@ public class Category {
   public bool IsInfoPageLayoutInScript {
     get {
       switch (SoundBankFolder.Name) {
+        case "Fluidity":
         case "Hypnotic Drive":
         case "Organic Keys":
         case "Pulsar":
@@ -102,6 +103,7 @@ public class Category {
           return Name;
       }
       return TemplateSoundBankName switch {
+        "Fluidity" => "Strings",
         "Hypnotic Drive" => "Leads",
         "Organic Keys" => "Acoustic Mood",
         "Voklm" => "Synth Choirs",
@@ -113,26 +115,32 @@ public class Category {
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   [PublicAPI] public string TemplateProgramName {
     get {
-      if (TemplateSoundBankName == "Factory") {
-        switch (Name) {
-          case "Brutal Bass 2.1":
-            return "808 Line";
-          case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
-            return "BAS Gameboy Bass";
-          case "Organic Texture 2.8":
-            return "BAS Biggy";
-        }
-      }
-      if (TemplateSoundBankName == "Pulsar") {
-        return Name switch {
-          "Bass" => "Warped",
-          "Leads" => "Autumn Rust",
-          "Pads" => "Lore",
-          "Plucks" => "Resonator",
-          _ => throw new NotImplementedException()
-        };
+      switch (TemplateSoundBankName) {
+        case "Factory":
+          switch (Name) {
+            case "Brutal Bass 2.1":
+              return "808 Line";
+            case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
+              return "BAS Gameboy Bass";
+            case "Organic Texture 2.8":
+              return "BAS Biggy";
+          }
+          break;
+        case "Pulsar":
+          return Name switch {
+            "Bass" => "Warped",
+            "Leads" => "Autumn Rust",
+            "Pads" => "Lore",
+            "Plucks" => "Resonator",
+            _ => throw new NotImplementedException()
+          };
       }
       return TemplateSoundBankName switch {
+        // In Fluidity, there's no (easy?) way to tell programatically whether a macro
+        // is continuous or toggle. In the template, they are all continuous. The toggle
+        // macros will have to be manually mapped to toggle MIDI CC numbers on a per 
+        // program basis.
+        "Fluidity" => "Cittern Synth",
         "Hypnotic Drive" => "Lead - Acid Gravel",
         "Organic Keys" => "A Rhapsody",
         "Voklm" => "Breath Five",
