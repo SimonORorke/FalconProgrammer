@@ -72,6 +72,7 @@ public class Category {
       switch (SoundBankFolder.Name) {
         case "Hypnotic Drive":
         case "Organic Keys":
+        case "Pulsar":
         case "Voklm":
           return true;
         case "Factory":
@@ -96,6 +97,9 @@ public class Category {
             return Name;
         }
       }
+      if (TemplateSoundBankName == "Pulsar") {
+        return Name;
+      }
       return TemplateSoundBankName switch {
         "Hypnotic Drive" => "Leads",
         "Organic Keys" => "Acoustic Mood",
@@ -118,6 +122,15 @@ public class Category {
             return "BAS Biggy";
         }
       }
+      if (TemplateSoundBankName == "Pulsar") {
+        switch (Name) {
+          case "Bass":
+          case "Test":
+            return "Warped";
+          default:
+            throw new NotImplementedException();
+        }
+      }
       return TemplateSoundBankName switch {
         "Hypnotic Drive" => "Lead - Acid Gravel",
         "Organic Keys" => "A Rhapsody",
@@ -129,6 +142,7 @@ public class Category {
   
   public string TemplateProgramPath { get; private set; } = null!;
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
+  
   private string? TemplateScriptProcessorName {
     get {
       if (TemplateSoundBankName == "Factory" &&

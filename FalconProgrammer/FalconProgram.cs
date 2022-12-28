@@ -36,7 +36,7 @@ public class FalconProgram {
         && signalConnection.CcNo.HasValue && signalConnection.CcNo != 1) {
       throw new ApplicationException(
         $"MIDI CC {signalConnection.CcNo} is mapped to " +
-        $"{signalConnection.Destination}, which is not a Info page macro.");
+        $"{signalConnection.Destination}, which is not an Info page macro.");
     }
   }
 
@@ -46,6 +46,13 @@ public class FalconProgram {
   ///   duplicate CC numbers we map to Info page macros.  So let's validate that there
   ///   are none.
   /// </summary>
+  /// <remarks>
+  ///   I've had to disable usage of this check in <see cref="Deserialise" /> because,
+  ///   for unknown reason, it can report a false positive. In "Pulsar\Bass\Flipmode",
+  ///   it reports CcNo 3 (Source="@MIDI CC 3").  Yet no such Source can be found in the
+  ///   file. Strangely, the problem is not reproduced in a test category folder
+  ///   containing only Flipmode and the template file.
+  /// </remarks>
   private void CheckForNonModWheelNonInfoPageMacros() {
     foreach (
       var signalConnection in ConstantModulations.SelectMany(constantModulation =>
@@ -78,7 +85,8 @@ public class FalconProgram {
     ConstantModulations = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
-    CheckForNonModWheelNonInfoPageMacros();
+    // Disabling this check for now, due to false positives.
+    //CheckForNonModWheelNonInfoPageMacros();
   }
 
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
@@ -116,7 +124,13 @@ public class FalconProgram {
       // Map continuous controller CC to continuous macro. 
       // Convert the fifth continuous controller's CC number to 11 to map to the touch
       // strip.
-      result = NextContinuousCcNo != 35 ? NextContinuousCcNo : 11;
+      // Convert MIDI CC 38, which does not work with macros on script-based Info pages,
+      // to 28.
+      result = NextContinuousCcNo switch {
+        35 => 11,
+        38 => 28,
+        _ => NextContinuousCcNo
+      };
       NextContinuousCcNo++;
     } else {
       // Map button CC to toggle macro. 

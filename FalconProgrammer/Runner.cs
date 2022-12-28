@@ -3,7 +3,9 @@
 public static class Runner {
   public static void ConfigureCcs() {
     var config = new BatchConfig();
-    config.ReplaceModWheelWithMacro("Devinity");
+    config.UpdateMacroCcs("Organic Keys");
+    // config.UpdateMacroCcs("Pulsar", "Bass");
+    // config.ReplaceModWheelWithMacro("Devinity");
     // config.UpdateMacroCcs("Devinity");
     // config.ReplaceModWheelWithMacro("Factory", "Test");
     // config.ReplaceModWheelWithMacro("Factory");
