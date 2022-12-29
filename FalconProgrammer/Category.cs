@@ -84,11 +84,12 @@ public class Category {
       }
     }
   }
-  
+
   [PublicAPI] public string Name { get; }
   public DirectoryInfo SoundBankFolder { get; }
-  
-  [PublicAPI] public string TemplateCategoryName {
+
+  [PublicAPI]
+  public string TemplateCategoryName {
     get {
       switch (TemplateSoundBankName) {
         case "Factory":
@@ -111,9 +112,10 @@ public class Category {
       };
     }
   }
-  
+
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
-  [PublicAPI] public string TemplateProgramName {
+  [PublicAPI]
+  public string TemplateProgramName {
     get {
       switch (TemplateSoundBankName) {
         case "Factory":
@@ -140,7 +142,7 @@ public class Category {
         // is continuous or toggle. In the template, they are all continuous. The toggle
         // macros will have to be manually mapped to toggle MIDI CC numbers on a per 
         // program basis.
-        "Fluidity" => "Cittern Synth",
+        "Fluidity" => "Guitar Stream", // Has 11 macros, the maximum for the sound bank.
         "Hypnotic Drive" => "Lead - Acid Gravel",
         "Organic Keys" => "A Rhapsody",
         "Voklm" => "Breath Five",
@@ -148,10 +150,10 @@ public class Category {
       };
     }
   }
-  
+
   public string TemplateProgramPath { get; private set; } = null!;
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
-  
+
   private string? TemplateScriptProcessorName {
     get {
       if (TemplateSoundBankName == "Factory" &&
@@ -167,7 +169,7 @@ public class Category {
       return null;
     }
   }
-  
+
   [PublicAPI] public string TemplateSoundBankName { get; private set; } = null!;
 
   private DirectoryInfo GetFolder(string categoryName) {
@@ -213,7 +215,7 @@ public class Category {
     using var reader = new StreamReader(TemplateProgramPath);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
-    return 
+    return
       (from scriptProcessor in root.Program.ScriptProcessors
         where scriptProcessor.Name == TemplateScriptProcessorName
         select scriptProcessor).FirstOrDefault() ??

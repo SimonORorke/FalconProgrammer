@@ -85,6 +85,9 @@ public class BatchConfig {
         case ConfigTask.ChangeMacroCcNo:
           Program.ChangeMacroCcNo(OldCcNo, NewCcNo);
           break;
+        case ConfigTask.CountMacros:
+          Program.CountMacros();
+          break;
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro(
             ModWheelReplacementCcNo, MaxExistingContinuousMacroCount);
@@ -93,8 +96,15 @@ public class BatchConfig {
           Program.UpdateMacroCcs(MacroCcLocationOrder);
           break;
       }
-      Program.Save();
+      if (Task != ConfigTask.CountMacros) {
+        Program.Save();
+      }
     }
+  }
+  [PublicAPI]
+  public void CountMacros(string soundBankName, string? categoryName = null) {
+    Task = ConfigTask.CountMacros;
+    ConfigurePrograms(soundBankName, categoryName);
   }
 
   public static DirectoryInfo GetSoundBankFolder(string soundBankName) {
@@ -139,6 +149,7 @@ public class BatchConfig {
 
   private enum ConfigTask {
     ChangeMacroCcNo,
+    CountMacros,
     ReplaceModWheelWithMacro,
     UpdateMacroCcs
   }

@@ -3,7 +3,8 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    config.UpdateMacroCcs("Fluidity");
+    config.CountMacros("Fluidity");
+    // config.UpdateMacroCcs("Fluidity");
     // config.UpdateMacroCcs("Pulsar", "Plucks");
     // config.UpdateMacroCcs("Pulsar", "Pads");
     // config.UpdateMacroCcs("Pulsar", "Leads");

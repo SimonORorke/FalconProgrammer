@@ -74,6 +74,12 @@ public class FalconProgram {
     }
   }
 
+  public void CountMacros() {
+    if (ConstantModulations.Count > 10) {
+      Console.WriteLine($"{ConstantModulations.Count} macros in '{Path}'.");
+    }
+  }
+
   private ProgramXml CreateProgramXml() {
     if (Category.SoundBankFolder.Name == "Organic Keys") {
       return new OrganicKeysProgramXml(Category, InfoPageCcsScriptProcessor!);
