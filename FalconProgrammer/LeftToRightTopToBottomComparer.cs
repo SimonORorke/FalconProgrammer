@@ -3,7 +3,7 @@
 namespace FalconProgrammer; 
 
 /// <summary>
-///   Orders the ConstantModulations left to right, top to bottom.
+///   Orders the macros left to right, top to bottom.
 /// </summary>
 public class LeftToRightTopToBottomComparer : Comparer<ConstantModulation> {
   public override int Compare(ConstantModulation? a, ConstantModulation? b) {
