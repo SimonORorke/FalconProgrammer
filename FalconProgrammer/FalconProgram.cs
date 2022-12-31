@@ -13,8 +13,8 @@ public class FalconProgram {
   }
 
   [PublicAPI] public Category Category { get; }
-  private List<ConstantModulation> ConstantModulations { get; set; } = null!;
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
+  private List<ConstantModulation> Macros { get; set; } = null!;
 
   /// <summary>
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
@@ -63,8 +63,8 @@ public class FalconProgram {
   // ReSharper disable once UnusedMember.Local
   private void CheckForNonModWheelNonInfoPageMacros() {
     foreach (
-      var signalConnection in ConstantModulations.SelectMany(constantModulation =>
-        constantModulation.SignalConnections)) {
+      var signalConnection in Macros.SelectMany(macro =>
+        macro.SignalConnections)) {
       CheckForNonModWheelNonInfoPageMacro(signalConnection);
     }
     foreach (
@@ -75,8 +75,8 @@ public class FalconProgram {
   }
 
   public void CountMacros() {
-    if (ConstantModulations.Count > 10) {
-      Console.WriteLine($"{ConstantModulations.Count} macros in '{Path}'.");
+    if (Macros.Count > 10) {
+      Console.WriteLine($"{Macros.Count} macros in '{Path}'.");
     }
   }
 
@@ -94,7 +94,7 @@ public class FalconProgram {
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
     Name = root.Program.DisplayName;
-    ConstantModulations = root.Program.ConstantModulations;
+    Macros = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     // Disabling this check for now, due to false positives.
@@ -131,16 +131,22 @@ public class FalconProgram {
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
-  private int GetCcNo(ConstantModulation constantModulation) {
+  private int GetCcNo(ConstantModulation macro) {
     int result;
-    if (constantModulation.IsContinuous) {
-      // Map continuous controller CC to continuous macro. 
-      // Convert the fifth continuous controller's CC number to 11 to map to the touch
-      // strip.
-      // Convert MIDI CC 38, which does not work with macros on script-based Info pages,
-      // to 28.
+    if (macro.IsContinuous) {
+      // Map continuous controller CC to continuous macro.
+      NextContinuousCcNo = NextContinuousCcNo switch {
+        39 => 41,
+        49 => 51,
+        59 => 61,
+        _ => NextContinuousCcNo
+      };
       result = NextContinuousCcNo switch {
+        // Convert the fifth continuous controller's CC number to 11 to map to the touch
+        // strip.
         35 => 11,
+        // Convert MIDI CC 38, which does not work with macros on script-based Info
+        // pages, to 28.
         38 => 28,
         _ => NextContinuousCcNo
       };
@@ -155,7 +161,7 @@ public class FalconProgram {
 
   private List<ConstantModulation> GetContinuousMacros() {
     return (
-      from macro in ConstantModulations
+      from macro in Macros
       where macro.IsContinuous
       select macro).ToList();
   }
@@ -179,7 +185,7 @@ public class FalconProgram {
     const int verticalFudge = 50;
     const int rightEdge = 695; // 675?
     int bottomRowY = (
-      from macro in ConstantModulations
+      from macro in Macros
       select macro.Properties.Y).Max();
     // List, from left to right, the macros on the bottom row of macros on the Info page.
     var bottomRowMacros = (
@@ -252,11 +258,11 @@ public class FalconProgram {
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
-    for (int i = 0; i < ConstantModulations.Count; i++) {
-      var macro = ConstantModulations[i];
+    for (int i = 0; i < Macros.Count; i++) {
+      var macro = Macros[i];
       // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
-      //constantModulation.Properties.Validate();
+      //macro.Properties.Validate();
       macro.Index = i;
       for (int j = 0; j < macro.SignalConnections.Count; j++) {
         var signalConnection = macro.SignalConnections[j];
@@ -283,7 +289,7 @@ public class FalconProgram {
 
   private bool HasUniqueLocation(ConstantModulation macro) {
     return (
-      from m in ConstantModulations
+      from m in Macros
       where m.Properties.X == macro.Properties.X
             && m.Properties.Y == macro.Properties.Y
       select m).Count() == 1;
@@ -356,7 +362,7 @@ public class FalconProgram {
       return;
     }
     int newMacroNo = (
-      from macro in ConstantModulations
+      from macro in Macros
       select macro.MacroNo).Max() + 1;
     var newMacro = new ConstantModulation {
       MacroNo = newMacroNo,
@@ -420,27 +426,27 @@ public class FalconProgram {
     //
     var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder);
-    foreach (var constantModulation in sortedByLocation) {
-      //int ccNo = constantModulation.GetCcNo(ref nextContinuousCcNo, ref nextToggleCcNo);
+    foreach (var macro in sortedByLocation) {
+      //int ccNo = macro.GetCcNo(ref nextContinuousCcNo, ref nextToggleCcNo);
       // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
       // MIDI CC mapping that's not on the Info page.
       // Example: Devinity/Bass/Comber Bass.
       var infoPageSignalConnections = (
-        from sc in constantModulation.SignalConnections
+        from sc in macro.SignalConnections
         where sc.IsForInfoPageMacro
         select sc).ToList();
       // if (infoPageSignalConnections.Count !=
-      //     constantModulation.SignalConnections.Count) {
-      //   Console.WriteLine($"Modulation wheel assignment found: {constantModulation}");
+      //     macro.SignalConnections.Count) {
+      //   Console.WriteLine($"Modulation wheel assignment found: {macro}");
       // }
-      int ccNo = GetCcNo(constantModulation);
+      int ccNo = GetCcNo(macro);
       if (infoPageSignalConnections.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a non-mod wheel CC number.
         var signalConnection = new SignalConnection {
           CcNo = ccNo
         };
         ProgramXml.AddConstantModulationSignalConnection(
-          signalConnection, constantModulation.Index);
+          signalConnection, macro.Index);
       } else {
         // The macro already has a SignalConnection mapping to a non-mod wheel CC number.
         // We need to conserve the SignalConnection tag, which might contain a custom
@@ -453,11 +459,11 @@ public class FalconProgram {
         // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing
         // that. 
         // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (!constantModulation.IsContinuous && signalConnection.Ratio == -1) {
+        if (!macro.IsContinuous && signalConnection.Ratio == -1) {
           signalConnection.Ratio = 1;
         }
         ProgramXml.UpdateConstantModulationSignalConnection(
-          constantModulation, signalConnection);
+          macro, signalConnection);
       }
     }
   }
@@ -489,12 +495,12 @@ public class FalconProgram {
         "Modulation wheel assignment found in Info page CCs ScriptProcessor.");
     }
     InfoPageCcsScriptProcessor!.SignalConnections.Clear();
-    foreach (var constantModulation in sortedByLocation) {
+    foreach (var macro in sortedByLocation) {
       macroNo++;
       InfoPageCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
           MacroNo = macroNo,
-          CcNo = GetCcNo(constantModulation)
+          CcNo = GetCcNo(macro)
         });
     }
     ProgramXml.UpdateInfoPageCcsScriptProcessor();
