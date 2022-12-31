@@ -72,6 +72,7 @@ public class Category {
       switch (SoundBankFolder.Name) {
         case "Fluidity":
         case "Hypnotic Drive":
+        case "Inner Dimensions":
         case "Organic Keys":
         case "Pulsar":
         case "Voklm":
@@ -106,6 +107,7 @@ public class Category {
       return TemplateSoundBankName switch {
         "Fluidity" => "Strings",
         "Hypnotic Drive" => "Leads",
+        "Inner Dimensions" => "Key",
         "Organic Keys" => "Acoustic Mood",
         "Voklm" => "Synth Choirs",
         _ => "Keys"
@@ -144,6 +146,7 @@ public class Category {
         // program basis.
         "Fluidity" => "Guitar Stream", // Has 11 macros, the maximum for the sound bank.
         "Hypnotic Drive" => "Lead - Acid Gravel",
+        "Inner Dimensions" => "Melodist",
         "Organic Keys" => "A Rhapsody",
         "Voklm" => "Breath Five",
         _ => "DX Mania"
