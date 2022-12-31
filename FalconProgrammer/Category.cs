@@ -157,7 +157,7 @@ public class Category {
   public string TemplateProgramPath { get; private set; } = null!;
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
 
-  private string? TemplateScriptProcessorName {
+  public string? TemplateScriptProcessorName {
     get {
       if (TemplateSoundBankName == "Factory" &&
           Name == "Brutal Bass 2.1") {

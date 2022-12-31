@@ -2,6 +2,10 @@
 
 namespace FalconProgrammer.XmlDeserialised;
 
+/// <summary>
+///   Among other things, this can map a macro to a MIDI CC number. A better name might
+///   be Modulation.
+/// </summary>
 public class SignalConnection {
   public SignalConnection() {
     Ratio = 1;

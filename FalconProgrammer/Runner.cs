@@ -3,7 +3,8 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    config.UpdateMacroCcs("Eternal Funk");
+    config.UpdateMacroCcs("Voklm");
+    // config.UpdateMacroCcs("Eternal Funk");
     // config.UpdateMacroCcs("Ether Fields");
     // config.UpdateMacroCcs("Inner Dimensions");
     // config.CountMacros("Fluidity");

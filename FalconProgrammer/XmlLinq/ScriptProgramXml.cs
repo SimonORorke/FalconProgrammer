@@ -19,15 +19,15 @@ public class ScriptProgramXml : ProgramXml {
     }
     var scriptProcessorElement =
       (from s in scriptProcessorElements
-        where s.Attribute("Name")!.Value == Category.InfoPageCcsScriptProcessorName
+        where s.Attribute("Name")!.Value == Category.TemplateScriptProcessorName
         select s).FirstOrDefault() ??
       throw new ApplicationException(
         "Cannot find ScriptProcessor element " +
-        $"{InfoPageCcsScriptProcessor!.Name} in template file '{Category.TemplateProgramPath}'.");
+        $"{Category.TemplateScriptProcessorName} in template file '{Category.TemplateProgramPath}'.");
     var result =
       scriptProcessorElement.Descendants("SignalConnection").FirstOrDefault() ??
       throw new ApplicationException(
-        $"Cannot find ScriptProcessor {Category.InfoPageCcsScriptProcessorName} " +
+        $"Cannot find ScriptProcessor {Category.TemplateScriptProcessorName} " +
         $"SignalConnection element in template file '{Category.TemplateProgramPath}'.");
     return result;
   }
