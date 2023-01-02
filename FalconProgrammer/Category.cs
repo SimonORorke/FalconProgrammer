@@ -75,6 +75,7 @@ public class Category {
         case "Inner Dimensions":
         case "Organic Keys":
         case "Pulsar":
+        case "Savage":
         case "Voklm":
           return true;
         case "Factory":
@@ -109,6 +110,7 @@ public class Category {
         "Hypnotic Drive" => "Leads",
         "Inner Dimensions" => "Key",
         "Organic Keys" => "Acoustic Mood",
+        "Savage" => "Leads",
         "Voklm" => "Synth Choirs",
         _ => "Keys"
       };
@@ -148,6 +150,7 @@ public class Category {
         "Hypnotic Drive" => "Lead - Acid Gravel",
         "Inner Dimensions" => "Melodist",
         "Organic Keys" => "A Rhapsody",
+        "Savage" => "Plucker",
         "Voklm" => "Breath Five",
         _ => "DX Mania"
       };
@@ -166,6 +169,7 @@ public class Category {
       if (IsInfoPageLayoutInScript) {
         return TemplateSoundBankName switch {
           "Hypnotic Drive" => "EventProcessor99",
+          "Savage" => "EventProcessor9",
           _ => "EventProcessor0"
         };
       }
