@@ -38,7 +38,7 @@ public class FalconProgram {
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
-    if (!signalConnection.IsForInfoPageMacro
+    if (!signalConnection.IsForMacro
         // ReSharper disable once MergeIntoPattern
         && signalConnection.CcNo.HasValue && signalConnection.CcNo != 1) {
       throw new ApplicationException(
@@ -433,7 +433,7 @@ public class FalconProgram {
       // Example: Devinity/Bass/Comber Bass.
       var infoPageSignalConnections = (
         from sc in macro.SignalConnections
-        where sc.IsForInfoPageMacro
+        where sc.IsForMacro
         select sc).ToList();
       // if (infoPageSignalConnections.Count !=
       //     macro.SignalConnections.Count) {
@@ -486,7 +486,7 @@ public class FalconProgram {
     // specified in a different ScriptProcessor. But let's check!
     bool infoPageCcsScriptProcessorHasModWheelSignalConnections = (
       from signalConnection in InfoPageCcsScriptProcessor!.SignalConnections
-      where !signalConnection.IsForInfoPageMacro
+      where !signalConnection.IsForMacro
       select signalConnection).Any();
     if (infoPageCcsScriptProcessorHasModWheelSignalConnections) {
       // We've already validated against non-mod wheel CCs that don't control Info page

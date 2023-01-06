@@ -34,7 +34,7 @@ public class SignalConnection {
   ///   So far, the only CC mappings that are not for Info page controls are for the
   ///   modulation wheel (MIDI CC 1).
   /// </summary>
-  public bool IsForInfoPageMacro => ConnectionMode == 1;
+  public bool IsForMacro => ConnectionMode == 1;
 
   public int? MacroNo {
     get =>

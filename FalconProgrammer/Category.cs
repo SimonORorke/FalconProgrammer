@@ -76,6 +76,7 @@ public class Category {
         case "Organic Keys":
         case "Pulsar":
         case "Savage":
+        case "Titanium":
         case "Voklm":
           return true;
         case "Factory":
@@ -151,6 +152,7 @@ public class Category {
         "Inner Dimensions" => "Melodist",
         "Organic Keys" => "A Rhapsody",
         "Savage" => "Plucker",
+        "Titanium" => "Wood Chill",
         "Voklm" => "Breath Five",
         _ => "DX Mania"
       };
