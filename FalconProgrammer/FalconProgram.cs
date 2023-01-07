@@ -96,7 +96,7 @@ public class FalconProgram {
     Name = root.Program.DisplayName;
     Macros = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
-    InfoPageCcsScriptProcessor = FindMacroCcsScriptProcessor();
+    InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     // Disabling this check for now, due to false positives.
     //CheckForNonModWheelNonInfoPageMacros();
   }
@@ -107,7 +107,7 @@ public class FalconProgram {
   ///   macro's MIDI CC number must be defined in a SignalConnections owned by the
   ///   macro's ConstantModulation.  
   /// </summary>
-  private ScriptProcessor? FindMacroCcsScriptProcessor() {
+  private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
     if (Category.SoundBankFolder.Name == "Factory" 
         && !Category.IsInfoPageLayoutInScript) {
       // The macro MIDI CCs are defined for ScriptProcessor "EventProcessor9" if it
