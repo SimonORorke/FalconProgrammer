@@ -18,32 +18,6 @@ public class Category {
   private DirectoryInfo Folder { get; set; } = null!;
 
   /// <summary>
-  ///   Name of ScriptProcessor, if any, that is to define the Info page macro CCs.
-  /// </summary>
-  /// <remarks>
-  ///   In the Factory sound bank, sometimes there's an EventProcessor0 first, e.g. in
-  ///   Factory/Keys/Smooth E-piano 2.1.
-  ///   But Info page CC numbers don't go there.
-  /// </remarks>
-  public string InfoPageCcsScriptProcessorName {
-    get {
-      // When the Info page layout is defined in a script, it may be fine to always pick
-      // the last ScriptProcessor, which is the fallback in FindInfoPageCcsScriptProcessor.
-      // So I will try not bothering to specify any more non-standard ScriptProcessor
-      // names. 
-      if (IsInfoPageLayoutInScript
-          && (SoundBankFolder.Name != "Voklm"
-              || Name != "Vox Instruments")) {
-        return TemplateScriptProcessorName!;
-      }
-      // Info page layout is defined in ConstantModulations
-      // (and MIDI CC numbers may or may not need to be specified in a ScriptProcessor)
-      // or category is "Voklm/Vox Instruments".
-      return "EventProcessor9";
-    }
-  }
-
-  /// <summary>
   ///   In some sound banks, such as "Organic Keys", ConstantModulations do not specify
   ///   Info page macros, only modulation wheel assignment. In others, such as
   ///   "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
@@ -160,24 +134,13 @@ public class Category {
   }
 
   public string TemplateProgramPath { get; private set; } = null!;
+  
+  /// <summary>
+  ///   For programs where the Info page layout is specified in a script, the template
+  ///   ScriptProcessor contains the SignalConnections that map the macros to MIDI CC
+  ///   numbers.  
+  /// </summary>
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
-
-  public string? TemplateScriptProcessorName {
-    get {
-      if (TemplateSoundBankName == "Factory" &&
-          Name == "Brutal Bass 2.1") {
-        return "EventProcessor9";
-      }
-      if (IsInfoPageLayoutInScript) {
-        return TemplateSoundBankName switch {
-          "Hypnotic Drive" => "EventProcessor99",
-          "Savage" => "EventProcessor9",
-          _ => "EventProcessor0"
-        };
-      }
-      return null;
-    }
-  }
 
   [PublicAPI] public string TemplateSoundBankName { get; private set; } = null!;
 
@@ -217,6 +180,11 @@ public class Category {
     return templateProgramFile.FullName;
   }
 
+  /// <summary>
+  ///   For programs where the Info page layout is specified in a script, the template
+  ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
+  ///   case the template program.  
+  /// </summary>
   private ScriptProcessor? GetTemplateScriptProcessor() {
     if (!IsInfoPageLayoutInScript) {
       return null;
@@ -226,10 +194,9 @@ public class Category {
     var root = (UviRoot)serializer.Deserialize(reader)!;
     return
       (from scriptProcessor in root.Program.ScriptProcessors
-        where scriptProcessor.Name == TemplateScriptProcessorName
-        select scriptProcessor).FirstOrDefault() ??
+        select scriptProcessor).LastOrDefault() ??
       throw new ApplicationException(
-        $"Cannot find {TemplateScriptProcessorName} in file '{TemplateProgramPath}'.");
+        $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
   }
 
   public void Initialise() {

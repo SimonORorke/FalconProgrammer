@@ -3,7 +3,13 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    config.UpdateMacroCcs("Titanium");
+    // config.UpdateMacroCcs("Devinity");
+    // config.UpdateMacroCcs("Eternal Funk");
+    // config.UpdateMacroCcs("Ether Fields");
+    // config.UpdateMacroCcs("Factory");
+    config.UpdateMacroCcs("Fluidity");
+    // config.UpdateMacroCcs("Titanium");
+    //
     // config.UpdateMacroCcs("Savage");
     // config.UpdateMacroCcs("Voklm");
     // config.UpdateMacroCcs("Eternal Funk");

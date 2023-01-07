@@ -96,38 +96,28 @@ public class FalconProgram {
     Name = root.Program.DisplayName;
     Macros = root.Program.ConstantModulations;
     ScriptProcessors = root.Program.ScriptProcessors;
-    InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
+    InfoPageCcsScriptProcessor = FindMacroCcsScriptProcessor();
     // Disabling this check for now, due to false positives.
     //CheckForNonModWheelNonInfoPageMacros();
   }
 
-  private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
-    // When the Info page layout is defined in a script, it may be fine to simplify this
-    // and always pick the last ScriptProcessor. So I will try not bothering to specify
-    // any more non-standard ScriptProcessor names. 
-    //
-    // Sometimes the Info page layout ScriptProcessor name is not consistent across all
-    // programs in this category. E.g. for "Factory\Organic Texture 2.8\BEL SoToy" it's
-    // "EventProcessor1", while for programs alphabetically prior to that one it's
-    // "EventProcessor0". So, if there's only one ScriptProcessor in the program,
-    // it must be the right one!
-    if (Category.IsInfoPageLayoutInScript &&
-        ScriptProcessors.Count == 1) {
-      return ScriptProcessors[0];
+  /// <summary>
+  ///   Finds the ScriptProcessor, if any, that is to contain the SignalConnections that
+  ///   map the macros to MIDI CC numbers. If the ScriptProcessor is not found, each
+  ///   macro's MIDI CC number must be defined in a SignalConnections owned by the
+  ///   macro's ConstantModulation.  
+  /// </summary>
+  private ScriptProcessor? FindMacroCcsScriptProcessor() {
+    if (Category.SoundBankFolder.Name == "Factory" 
+        && !Category.IsInfoPageLayoutInScript) {
+      // The macro MIDI CCs are defined for ScriptProcessor "EventProcessor9" if it
+      // exists.
+      return (
+        from scriptProcessor in ScriptProcessors
+        where scriptProcessor.Name == "EventProcessor9"
+        select scriptProcessor).FirstOrDefault();
     }
-    // If there's two or more script processors, we need to know the name of the
-    // Info page layout ScriptProcessor.
-    var withName = (
-      from scriptProcessor in ScriptProcessors
-      where scriptProcessor.Name == Category.InfoPageCcsScriptProcessorName
-      select scriptProcessor).FirstOrDefault();
-    if (withName != null || !Category.IsInfoPageLayoutInScript) {
-      return withName;
-    }
-    // When there's no ScriptProcessor with the designated name yet we expect the
-    // Info page layout to be defined in a script, guess the last ScriptProcessor. That
-    // works for "Factory\RetroWave 2.5\BAS Endless Droids" and
-    // "Fluidity\Water\Fluid Resonances".
+    // Assume that the macro MIDI CCs are defined for the last ScriptProcessor, if any.
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
