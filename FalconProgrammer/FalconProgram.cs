@@ -384,12 +384,7 @@ public class FalconProgram {
     Console.WriteLine($"Updating '{Path}'.");
     MacroCcLocationOrder = macroCcLocationOrder;
     if (Category.IsInfoPageLayoutInScript) {
-      InfoPageCcsScriptProcessor!.SignalConnections.Clear();
-      foreach (var signalConnection in
-               Category.TemplateScriptProcessor!.SignalConnections) {
-        InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
-      }
-      ProgramXml.UpdateInfoPageCcsScriptProcessor();
+      UpdateMacroCcsFromTemplateScriptProcessor();
       return;
     }
     // The category's Info page layout is specified in ConstantModulations.
@@ -400,6 +395,15 @@ public class FalconProgram {
       // But the CCs are specified for a script.
       UpdateMacroCcsInScriptProcessor();
     }
+  }
+
+  private void UpdateMacroCcsFromTemplateScriptProcessor() {
+    InfoPageCcsScriptProcessor!.SignalConnections.Clear();
+    foreach (var signalConnection in
+             Category.TemplateScriptProcessor!.SignalConnections) {
+      InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
+    }
+    ProgramXml.UpdateInfoPageCcsScriptProcessor();
   }
 
   /// <summary>
