@@ -7,8 +7,8 @@ public static class Runner {
     // config.UpdateMacroCcs("Eternal Funk");
     // config.UpdateMacroCcs("Ether Fields");
     // config.UpdateMacroCcs("Factory");
-    config.UpdateMacroCcs("Fluidity");
-    // config.UpdateMacroCcs("Titanium");
+    // config.UpdateMacroCcs("Fluidity");
+    config.UpdateMacroCcs("Titanium");
     //
     // config.UpdateMacroCcs("Savage");
     // config.UpdateMacroCcs("Voklm");
