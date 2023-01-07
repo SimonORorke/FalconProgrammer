@@ -3,12 +3,24 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    // config.ChangeDelayToZero("Devinity");
+    // config.ChangeDelayToZero("Eternal Funk");
+    // config.ChangeDelayToZero("Ether Fields");
+    config.ChangeDelayToZero("Factory");
+    // config.ChangeDelayToZero("Fluidity");
+    // config.ChangeDelayToZero("Hypnotic Drive"); // None
+    // config.ChangeDelayToZero("Inner Dimensions"); // None
+    // config.ChangeDelayToZero("Pulsar");
+    // config.ChangeDelayToZero("Savage");
+    // config.ChangeDelayMacroValueToZero("Spectre");
+    // config.ChangeDelayMacroValueToZero("Titanium");
+    // config.ChangeDelayMacroValueToZero("Voklm"); // None
     // config.UpdateMacroCcs("Devinity");
     // config.UpdateMacroCcs("Eternal Funk");
     // config.UpdateMacroCcs("Ether Fields");
     // config.UpdateMacroCcs("Factory");
     // config.UpdateMacroCcs("Fluidity");
-    config.UpdateMacroCcs("Titanium");
+    // config.UpdateMacroCcs("Titanium");
     //
     // config.UpdateMacroCcs("Savage");
     // config.UpdateMacroCcs("Voklm");

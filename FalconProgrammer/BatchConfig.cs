@@ -39,6 +39,16 @@ public class BatchConfig {
   private ConfigTask Task { get; set; }
 
   /// <summary>
+  ///   For programs with a Delay macro, changes the Delay macro's value to zero.
+  /// </summary>
+  [PublicAPI]
+  public void ChangeDelayToZero(
+    string soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ChangeDelayToZero;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
+  /// <summary>
   ///   Changes every occurrence of the specified old macro CC number to the specified
   ///   new CC number.
   /// </summary>
@@ -82,6 +92,9 @@ public class BatchConfig {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
       Program.Read();
       switch (Task) {
+        case ConfigTask.ChangeDelayToZero:
+          Program.ChangeDelayToZero();
+          break;
         case ConfigTask.ChangeMacroCcNo:
           Program.ChangeMacroCcNo(OldCcNo, NewCcNo);
           break;
@@ -101,6 +114,7 @@ public class BatchConfig {
       }
     }
   }
+
   [PublicAPI]
   public void CountMacros(string soundBankName, string? categoryName = null) {
     Task = ConfigTask.CountMacros;
@@ -148,6 +162,7 @@ public class BatchConfig {
   }
 
   private enum ConfigTask {
+    ChangeDelayToZero,
     ChangeMacroCcNo,
     CountMacros,
     ReplaceModWheelWithMacro,

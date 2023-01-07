@@ -20,7 +20,7 @@ public class ProgramXml {
   private XElement ControlSignalSourcesElement { get; set; } = null!;
   private List<XElement> ConstantModulationElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
-  protected ScriptProcessor? InfoPageCcsScriptProcessor { get; }
+  private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private List<XElement> ModWheelSignalConnectionElements { get; set; } = null!;
   private XElement RootElement { get; set; } = null!;
@@ -107,6 +107,18 @@ public class ProgramXml {
         "Cannot find Properties.Y "
         + $"attribute in '{Category.TemplateProgramPath}'.");
     yAttribute.Value = newMacro.Properties.Y.ToString();
+  }
+
+  public bool ChangeDelayConstantModulationValueToZero() {
+    var delayConstantModulationElement = (
+      from constantModulationElement in ConstantModulationElements
+      where constantModulationElement.Attribute("DisplayName")!.Value.ToLower() == "delay"
+      select constantModulationElement).FirstOrDefault();
+    if (delayConstantModulationElement != null) {
+      delayConstantModulationElement.Attribute("Value")!.Value = "0";
+      return true;
+    }
+    return false;
   }
 
   public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {

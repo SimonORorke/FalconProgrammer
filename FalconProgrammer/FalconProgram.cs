@@ -29,6 +29,12 @@ public class FalconProgram {
   private ProgramXml ProgramXml { get; set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
+  public void ChangeDelayToZero() {
+    if (ProgramXml.ChangeDelayConstantModulationValueToZero()) {
+      Console.WriteLine($"Changed Delay to zero for '{Path}'.");
+    }
+  }
+
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
     Console.WriteLine($"Updating '{Path}'.");
     var oldSignalConnection = new SignalConnection { CcNo = oldCcNo};
