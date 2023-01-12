@@ -14,7 +14,9 @@ public class ConstantModulation {
   [XmlAttribute] public float Value { get; set; }
 
   /// <summary>
-  ///   For a ConstantModulation, there is 0 or 1 SignalConnection only. 
+  ///   For a ConstantModulation, there is 0 or 1 SignalConnection only, except where
+  ///   there is a SignalConnection that maps to the modulation wheel (MIDI CC 1), in
+  ///   which case there can be two SignalConnections. 
   /// </summary>
   [XmlArray("Connections")]
   [XmlArrayItem("SignalConnection")]
