@@ -6,7 +6,7 @@ public static class Runner {
     // config.ChangeDelayToZero("Devinity");
     // config.ChangeDelayToZero("Eternal Funk");
     // config.ChangeDelayToZero("Ether Fields");
-    config.ChangeDelayToZero("Factory");
+    // config.ChangeDelayToZero("Factory");
     // config.ChangeDelayToZero("Fluidity");
     // config.ChangeDelayToZero("Hypnotic Drive"); // None
     // config.ChangeDelayToZero("Inner Dimensions"); // None
