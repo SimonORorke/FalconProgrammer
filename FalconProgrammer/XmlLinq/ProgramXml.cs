@@ -6,8 +6,8 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
-  private XElement? _templateRootElement;
   private XElement? _templateConstantModulationElement;
+  private XElement? _templateRootElement;
   private XElement? _templateSignalConnectionElement;
 
   public ProgramXml(
@@ -41,7 +41,7 @@ public class ProgramXml {
     // will already own a Connections element. 
     var connectionsElement = constantModulationElement.Element("Connections");
     if (connectionsElement == null) {
-      connectionsElement = new XElement("Connections"); 
+      connectionsElement = new XElement("Connections");
       constantModulationElement.Add(connectionsElement);
     }
     connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
@@ -92,7 +92,7 @@ public class ProgramXml {
     var propertiesElement = constantModulationElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
-        $"Cannot find ConstantModulation.Properties "
+        "Cannot find ConstantModulation.Properties "
         + $"element in '{Category.TemplateProgramPath}'.");
     }
     var xAttribute =
@@ -109,16 +109,25 @@ public class ProgramXml {
     yAttribute.Value = newMacro.Properties.Y.ToString();
   }
 
-  public bool ChangeDelayConstantModulationValueToZero() {
+  private bool ChangeConstantModulationValueToZero(string displayName) {
     var delayConstantModulationElement = (
       from constantModulationElement in ConstantModulationElements
-      where constantModulationElement.Attribute("DisplayName")!.Value.ToLower() == "delay"
+      where string.Equals(constantModulationElement.Attribute("DisplayName")!.Value,
+        displayName, StringComparison.OrdinalIgnoreCase)
       select constantModulationElement).FirstOrDefault();
     if (delayConstantModulationElement != null) {
       delayConstantModulationElement.Attribute("Value")!.Value = "0";
       return true;
     }
     return false;
+  }
+
+  public bool ChangeDelayConstantModulationValueToZero() {
+    return ChangeConstantModulationValueToZero("Delay");
+  }
+
+  public bool ChangeReverbConstantModulationValueToZero() {
+    return ChangeConstantModulationValueToZero("Reverb");
   }
 
   public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
@@ -132,7 +141,8 @@ public class ProgramXml {
     SignalConnection oldSignalConnection, SignalConnection newSignalConnection) {
     var signalConnectionElements =
       from signalConnectionElement in RootElement.Descendants("SignalConnection")
-      where signalConnectionElement.Attribute("Source")!.Value == oldSignalConnection.Source
+      where signalConnectionElement.Attribute("Source")!.Value ==
+            oldSignalConnection.Source
       select signalConnectionElement;
     foreach (var signalConnectionElement in signalConnectionElements) {
       signalConnectionElement.Attribute("Source")!.Value = newSignalConnection.Source;
@@ -224,15 +234,15 @@ public class ProgramXml {
   }
 
   public void UpdateConstantModulationSignalConnection(
-    ConstantModulation constantModulation, 
+    ConstantModulation constantModulation,
     SignalConnection signalConnection) {
     var constantModulationElement = ConstantModulationElements[constantModulation.Index];
     var connectionsElement = constantModulationElement.Element("Connections")!;
-    var signalConnectionElements = 
+    var signalConnectionElements =
       connectionsElement.Elements("SignalConnection").ToList();
     // The ConstantModulation will have two SignalConnections if one of them maps to the
     // modulation wheel (MIDI CC 1). 
-    var signalConnectionElement = signalConnectionElements[signalConnection.Index]; 
+    var signalConnectionElement = signalConnectionElements[signalConnection.Index];
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }
 

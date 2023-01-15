@@ -45,7 +45,7 @@ public class BatchConfig {
   /// </summary>
   [PublicAPI]
   public void ChangeDelayToZero(
-    string soundBankName, string? categoryName = null) {
+    string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.ChangeDelayToZero;
     ConfigurePrograms(soundBankName, categoryName);
   }
@@ -57,27 +57,49 @@ public class BatchConfig {
   [PublicAPI]
   public void ChangeMacroCcNo(
     int oldCcNo, int newCcNo,
-    string soundBankName, string? categoryName = null) {
+    string? soundBankName, string? categoryName = null) {
     OldCcNo = oldCcNo;
     NewCcNo = newCcNo;
     Task = ConfigTask.ChangeMacroCcNo;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  /// <summary>
+  ///   For programs with a Reverb macro, changes the Reverb macro's value to zero.
+  /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
+  [PublicAPI]
+  public void ChangeReverbToZero(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ChangeReverbToZero;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   private void ConfigurePrograms(
-    string soundBankName, string? categoryName = null) {
-    SoundBankFolder = GetSoundBankFolder(soundBankName);
+    string? soundBankName, string? categoryName = null) {
     var settingsFolderLocation = SettingsFolderLocation.Read();
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = DefaultSettingsFolderPath;
       settingsFolderLocation.Write();
     }
-    if (categoryName != null) {
-      ConfigureProgramsInCategory(categoryName);
-    } else {
-      foreach (var folder in SoundBankFolder.GetDirectories()) {
-        if (!folder.Name.EndsWith(" ORIGINAL") && !folder.Name.EndsWith(" TEMPLATE")) {
-          ConfigureProgramsInCategory(folder.Name);
+    if (soundBankName != null) {
+      SoundBankFolder = GetSoundBankFolder(soundBankName);
+      if (categoryName != null) {
+        ConfigureProgramsInCategory(categoryName);
+      } else {
+        foreach (var categoryFolder in SoundBankFolder.GetDirectories()) {
+          ConfigureProgramsInCategory(categoryFolder.Name);
+        }
+      }
+    } else { // All sound banks
+      foreach (var soundBankFolder in GetProgramsFolder().GetDirectories()) {
+        SoundBankFolder = soundBankFolder;
+        foreach (var categoryFolder in SoundBankFolder.GetDirectories()) {
+          ConfigureProgramsInCategory(categoryFolder.Name);
         }
       }
     }
@@ -106,6 +128,9 @@ public class BatchConfig {
         case ConfigTask.ChangeMacroCcNo:
           Program.ChangeMacroCcNo(OldCcNo, NewCcNo);
           break;
+        case ConfigTask.ChangeReverbToZero:
+          Program.ChangeReverbToZero();
+          break;
         case ConfigTask.CountMacros:
           Program.CountMacros();
           break;
@@ -124,23 +149,34 @@ public class BatchConfig {
   }
 
   [PublicAPI]
-  public void CountMacros(string soundBankName, string? categoryName = null) {
+  public void CountMacros(string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.CountMacros;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
-  public static DirectoryInfo GetSoundBankFolder(string soundBankName) {
+  private static DirectoryInfo GetProgramsFolder() {
     var synthSoftwareFolder = new DirectoryInfo(
       Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.Personal),
         "Music", "Software", SynthName));
     if (!synthSoftwareFolder.Exists) {
       throw new ApplicationException(
-        $"Cannot find sound bank folder '{synthSoftwareFolder.FullName}'.");
+        $"Cannot find folder '{synthSoftwareFolder.FullName}'.");
     }
     var result = new DirectoryInfo(
       Path.Combine(
-        synthSoftwareFolder.FullName, "Programs", soundBankName));
+        synthSoftwareFolder.FullName, "Programs"));
+    if (!result.Exists) {
+      throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
+    }
+    return result;
+  }
+
+  public static DirectoryInfo GetSoundBankFolder(string soundBankName) {
+    var programsFolder = GetProgramsFolder();
+    var result = new DirectoryInfo(
+      Path.Combine(
+        programsFolder.FullName, soundBankName));
     if (!result.Exists) {
       throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
     }
@@ -154,7 +190,7 @@ public class BatchConfig {
   /// </summary>
   [PublicAPI]
   public void ReplaceModWheelWithMacro(
-    string soundBankName, string? categoryName = null) {
+    string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.ReplaceModWheelWithMacro;
     ConfigurePrograms(soundBankName, categoryName);
   }
@@ -164,7 +200,7 @@ public class BatchConfig {
   /// </summary>
   [PublicAPI]
   public void UpdateMacroCcs(
-    string soundBankName, string? categoryName = null) {
+    string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.UpdateMacroCcs;
     ConfigurePrograms(soundBankName, categoryName);
   }
@@ -172,6 +208,7 @@ public class BatchConfig {
   private enum ConfigTask {
     ChangeDelayToZero,
     ChangeMacroCcNo,
+    ChangeReverbToZero,
     CountMacros,
     ReplaceModWheelWithMacro,
     UpdateMacroCcs

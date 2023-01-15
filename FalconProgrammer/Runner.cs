@@ -3,6 +3,7 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    config.ChangeReverbToZero(null);
     // config.ChangeDelayToZero("Devinity");
     // config.ChangeDelayToZero("Eternal Funk");
     // config.ChangeDelayToZero("Ether Fields");

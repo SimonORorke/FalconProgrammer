@@ -114,7 +114,7 @@ public class Category {
             "Leads" => "Autumn Rust",
             "Pads" => "Lore",
             "Plucks" => "Resonator",
-            _ => throw new NotImplementedException()
+            _ => throw new NotSupportedException()
           };
       }
       return TemplateSoundBankName switch {

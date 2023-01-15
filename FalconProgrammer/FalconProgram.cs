@@ -42,6 +42,12 @@ public class FalconProgram {
     ProgramXml.ChangeSignalConnectionSource(oldSignalConnection, newSignalConnection);
   }
 
+  public void ChangeReverbToZero() {
+    if (ProgramXml.ChangeReverbConstantModulationValueToZero()) {
+      Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
+    }
+  }
+
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
     if (!signalConnection.IsForMacro
