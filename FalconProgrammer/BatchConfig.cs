@@ -43,6 +43,11 @@ public class BatchConfig {
   /// <summary>
   ///   For programs with a Delay macro, changes the Delay macro's value to zero.
   /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
   [PublicAPI]
   public void ChangeDelayToZero(
     string? soundBankName, string? categoryName = null) {
@@ -54,6 +59,11 @@ public class BatchConfig {
   ///   Changes every occurrence of the specified old macro CC number to the specified
   ///   new CC number.
   /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
   [PublicAPI]
   public void ChangeMacroCcNo(
     int oldCcNo, int newCcNo,
@@ -79,6 +89,14 @@ public class BatchConfig {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  /// <summary>
+  ///   Configures the specified programs0
+  /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
   private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null) {
     var settingsFolderLocation = SettingsFolderLocation.Read();
@@ -148,6 +166,14 @@ public class BatchConfig {
     }
   }
 
+  /// <summary>
+  ///   For each of the specified Falcon program presets, reports the number of macros.
+  /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
   [PublicAPI]
   public void CountMacros(string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.CountMacros;
@@ -188,6 +214,11 @@ public class BatchConfig {
   ///   use of the modulation wheel with a Wheel macro that executes the same
   ///   modulations.
   /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
   [PublicAPI]
   public void ReplaceModWheelWithMacro(
     string? soundBankName, string? categoryName = null) {
@@ -198,6 +229,11 @@ public class BatchConfig {
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
+  /// <param name="soundBankName">Null for all sound banks.</param>
+  /// <param name="categoryName">
+  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   categories in the specified sound bank.
+  /// </param>
   [PublicAPI]
   public void UpdateMacroCcs(
     string? soundBankName, string? categoryName = null) {
