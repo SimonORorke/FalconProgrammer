@@ -90,7 +90,7 @@ public class BatchConfig {
   }
 
   /// <summary>
-  ///   Configures the specified programs0
+  ///   Configures the specified programs as per the required task.
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
