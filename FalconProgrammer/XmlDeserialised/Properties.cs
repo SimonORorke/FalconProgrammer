@@ -9,6 +9,10 @@ public class Properties {
   ///   A deserialisation exception would be thrown when the attribute is absent, if we
   ///   were to give it the type int? instead of string?. 
   /// </summary>
+  /// <remarks>
+  ///   This turns out not to be a reliable indicator of whether a macro is shown on the
+  ///   Info page.  Maybe it means something else.
+  /// </remarks>
   [XmlAttribute("showValue")] public string? ShowValue { get; set; }
   
   [XmlAttribute("x")] public int X { get; set; }

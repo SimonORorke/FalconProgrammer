@@ -3,6 +3,8 @@
 namespace FalconProgrammer;
 
 public class BatchConfig {
+  private const string DefaultSettingsFolderPath = 
+    @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\FalconProgrammer Settings";
   public const string ProgramExtension = ".uvip";
   private const string SynthName = "UVI Falcon";
   private Category Category { get; set; } = null!;
@@ -65,6 +67,11 @@ public class BatchConfig {
   private void ConfigurePrograms(
     string soundBankName, string? categoryName = null) {
     SoundBankFolder = GetSoundBankFolder(soundBankName);
+    var settingsFolderLocation = SettingsFolderLocation.Read();
+    if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
+      settingsFolderLocation.Path = DefaultSettingsFolderPath;
+      settingsFolderLocation.Write();
+    }
     if (categoryName != null) {
       ConfigureProgramsInCategory(categoryName);
     } else {
@@ -76,7 +83,8 @@ public class BatchConfig {
     }
   }
 
-  private void ConfigureProgramsInCategory(string categoryName) {
+  private void ConfigureProgramsInCategory(
+    string categoryName) {
     Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
     Category = new Category(categoryName, SoundBankFolder);

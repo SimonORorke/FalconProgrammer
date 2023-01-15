@@ -10,7 +10,8 @@ namespace FalconProgrammer;
 ///   category name.
 /// </summary>
 public class Category {
-  public Category(string name, DirectoryInfo soundBankFolder) {
+  public Category(
+    string name, DirectoryInfo soundBankFolder) {
     Name = name;
     SoundBankFolder = soundBankFolder;
   }
