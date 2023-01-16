@@ -127,7 +127,9 @@ public class ProgramXml {
   }
 
   public bool ChangeReverbConstantModulationValueToZero() {
-    return ChangeConstantModulationValueToZero("Reverb");
+    return ChangeConstantModulationValueToZero("Reverb") ||
+           ChangeConstantModulationValueToZero("Room") ||
+           ChangeConstantModulationValueToZero("SparkVerb");
   }
 
   public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
