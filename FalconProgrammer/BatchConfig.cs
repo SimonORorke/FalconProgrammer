@@ -46,7 +46,7 @@ public class BatchConfig {
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
   public void ChangeDelayToZero(
@@ -56,13 +56,15 @@ public class BatchConfig {
   }
 
   /// <summary>
-  ///   Changes every occurrence of the specified old macro CC number to the specified
+  ///   Changes every occurrence of the specified old macro MIDI CC number to the specified
   ///   new CC number.
   /// </summary>
+  /// <param name="oldCcNo">MIDI CC number to be replaced.</param>
+  /// <param name="newCcNo">Replacement MIDI CC number.</param>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
   public void ChangeMacroCcNo(
@@ -80,7 +82,7 @@ public class BatchConfig {
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
   public void ChangeReverbToZero(
@@ -95,7 +97,7 @@ public class BatchConfig {
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null) {
@@ -172,7 +174,7 @@ public class BatchConfig {
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
   public void CountMacros(string? soundBankName, string? categoryName = null) {
@@ -217,7 +219,7 @@ public class BatchConfig {
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
   public void ReplaceModWheelWithMacro(
@@ -232,7 +234,7 @@ public class BatchConfig {
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
   ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
-  ///   categories in the specified sound bank.
+  ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
   public void UpdateMacroCcs(
