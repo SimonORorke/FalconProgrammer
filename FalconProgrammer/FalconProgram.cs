@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using FalconProgrammer.XmlLinq;
@@ -30,7 +31,7 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   public void ChangeDelayToZero() {
-    if (ProgramXml.ChangeDelayConstantModulationValueToZero()) {
+    if (ProgramXml.ChangeConstantModulationValueToZero("Delay")) {
       Console.WriteLine($"Changed Delay to zero for '{Path}'.");
     }
   }
@@ -43,8 +44,16 @@ public class FalconProgram {
   }
 
   public void ChangeReverbToZero() {
-    if (ProgramXml.ChangeReverbConstantModulationValueToZero()) {
+    if (ProgramXml.ChangeConstantModulationValueToZero("Reverb")) {
       Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
+      return;
+    }
+    if (ProgramXml.ChangeConstantModulationValueToZero("Room")) {
+      Console.WriteLine($"Changed Room to zero for '{Path}'.");
+      return;
+    }
+    if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb")) {
+      Console.WriteLine($"Changed SparkVerb to zero for '{Path}'.");
     }
   }
 
@@ -72,7 +81,8 @@ public class FalconProgram {
   ///   file. Strangely, the problem is not reproduced in a test category folder
   ///   containing only Flipmode and the template file.
   /// </remarks>
-  // ReSharper disable once UnusedMember.Local
+  [SuppressMessage("ReSharper", "CommentTypo")]
+  [SuppressMessage("ReSharper", "UnusedMember.Local")]
   private void CheckForNonModWheelNonInfoPageMacros() {
     foreach (
       var signalConnection in Macros.SelectMany(macro =>
@@ -168,6 +178,7 @@ public class FalconProgram {
       select macro).ToList();
   }
 
+  [SuppressMessage("ReSharper", "CommentTypo")]
   private Point? GetLocationForNewContinuousMacro() {
     const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;

@@ -109,7 +109,7 @@ public class ProgramXml {
     yAttribute.Value = newMacro.Properties.Y.ToString();
   }
 
-  private bool ChangeConstantModulationValueToZero(string displayName) {
+  public bool ChangeConstantModulationValueToZero(string displayName) {
     var delayConstantModulationElement = (
       from constantModulationElement in ConstantModulationElements
       where string.Equals(constantModulationElement.Attribute("DisplayName")!.Value,
@@ -120,16 +120,6 @@ public class ProgramXml {
       return true;
     }
     return false;
-  }
-
-  public bool ChangeDelayConstantModulationValueToZero() {
-    return ChangeConstantModulationValueToZero("Delay");
-  }
-
-  public bool ChangeReverbConstantModulationValueToZero() {
-    return ChangeConstantModulationValueToZero("Reverb") ||
-           ChangeConstantModulationValueToZero("Room") ||
-           ChangeConstantModulationValueToZero("SparkVerb");
   }
 
   public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
