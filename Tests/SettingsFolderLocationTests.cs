@@ -1,9 +1,9 @@
 namespace FalconProgrammer.Tests;
 
 public class SettingsFolderLocationTests {
-  private const string TestApplicationName = "TestFalconProgrammer";
-
-  private string SettingsFolderPath { get; } = Path.Combine(
+  public const string TestApplicationName = "TestFalconProgrammer";
+  
+  public static string SettingsFolderPath { get; } = Path.Combine(
     TestContext.CurrentContext.TestDirectory, TestApplicationName);
 
   [Test]
@@ -22,7 +22,7 @@ public class SettingsFolderLocationTests {
     }
   }
 
-  private void DeleteAnyTestData() {
+  public static void DeleteAnyTestData() {
     if (Directory.Exists(SettingsFolderPath)) {
       Directory.Delete(SettingsFolderPath);
     }

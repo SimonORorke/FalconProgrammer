@@ -5,7 +5,7 @@ namespace FalconProgrammer;
 [XmlRoot(nameof(SettingsFolderLocation))] public class SettingsFolderLocation {
   public const string DefaultApplicationName = "FalconProgrammer"; 
   
-  [XmlAttribute] public string Path { get; set; } = "";
+  [XmlAttribute] public string Path { get; set; } = string.Empty;
 
   public static SettingsFolderLocation Read(
     string applicationName = DefaultApplicationName) {
@@ -15,9 +15,9 @@ namespace FalconProgrammer;
     }
     using var reader = new StreamReader(locationFile.FullName);
     var serializer = new XmlSerializer(typeof(SettingsFolderLocation));
-    var location = (SettingsFolderLocation)serializer.Deserialize(reader)!;
-    Directory.CreateDirectory(location.Path);
-    return location;
+    var result = (SettingsFolderLocation)serializer.Deserialize(reader)!;
+    Directory.CreateDirectory(result.Path);
+    return result;
   }
 
   public void Write(
