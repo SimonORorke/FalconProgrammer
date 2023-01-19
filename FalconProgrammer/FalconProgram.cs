@@ -33,6 +33,10 @@ public class FalconProgram {
   public void ChangeDelayToZero() {
     if (ProgramXml.ChangeConstantModulationValueToZero("Delay")) {
       Console.WriteLine($"Changed Delay to zero for '{Path}'.");
+      return;
+    }
+    if (ProgramXml.ChangeConstantModulationValueToZero("Delay Mix")) {
+      Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
     }
   }
 
@@ -54,6 +58,10 @@ public class FalconProgram {
     }
     if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb")) {
       Console.WriteLine($"Changed SparkVerb to zero for '{Path}'.");
+      return;
+    }
+    if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb Mix")) {
+      Console.WriteLine($"Changed SparkVerb Mix to zero for '{Path}'.");
     }
   }
 
