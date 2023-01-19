@@ -20,15 +20,16 @@ namespace FalconProgrammer;
 
   [PublicAPI] public string SettingsPath { get; private set; } = string.Empty;
 
-  internal static FileInfo GetSettingsFile(string settingsFolderPath) {
+  private static FileInfo GetSettingsFile(string settingsFolderPath) {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
 
   public static Settings Read(
+    string settingsFolderPath = DefaultSettingsFolderPath,
     string applicationName = SettingsFolderLocation.DefaultApplicationName) {
     var settingsFolderLocation = SettingsFolderLocation.Read(applicationName);
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
-      settingsFolderLocation.Path = DefaultSettingsFolderPath;
+      settingsFolderLocation.Path = settingsFolderPath;
       settingsFolderLocation.Write();
     }
     var settingsFile = GetSettingsFile(settingsFolderLocation.Path);

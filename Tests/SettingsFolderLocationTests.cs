@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace FalconProgrammer.Tests;
 
 public class SettingsFolderLocationTests {
@@ -22,7 +24,8 @@ public class SettingsFolderLocationTests {
     }
   }
 
-  public static void DeleteAnyTestData() {
+  [SuppressMessage("Structure", "NUnit1028:The non-test method is public")]
+  internal static void DeleteAnyTestData() {
     if (Directory.Exists(SettingsFolderPath)) {
       Directory.Delete(SettingsFolderPath);
     }
