@@ -58,6 +58,10 @@ public class FalconProgram {
       Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
       return;
     }
+    if (ProgramXml.ChangeConstantModulationValueToZero("Reverb Mix")) {
+      Console.WriteLine($"Changed Reverb Mix to zero for '{Path}'.");
+      return;
+    }
     if (ProgramXml.ChangeConstantModulationValueToZero("Room")) {
       Console.WriteLine($"Changed Room to zero for '{Path}'.");
       return;
