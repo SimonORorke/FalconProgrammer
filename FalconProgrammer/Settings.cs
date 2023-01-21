@@ -9,8 +9,11 @@ public class Settings {
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\FalconProgrammer Settings";
 
   public Settings() {
+    ProgramsFolder = new Folder();
     ProgramTemplates = new List<ProgramTemplate>();
   }
+
+  [XmlElement] public Folder ProgramsFolder { get; set; }
 
   [XmlArray("ProgramTemplates")]
   [XmlArrayItem(nameof(ProgramTemplate))]
@@ -49,6 +52,10 @@ public class Settings {
     var serializer = new XmlSerializer(typeof(Settings));
     using var writer = new StreamWriter(SettingsPath);
     serializer.Serialize(writer, this);
+  }
+
+  public class Folder {
+    [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
   public class ProgramTemplate {

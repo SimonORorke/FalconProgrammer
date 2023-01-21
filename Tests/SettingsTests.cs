@@ -4,11 +4,16 @@
 public class SettingsTests {
   [Test]
   public void Test1() {
+    const string programsFolderPath =
+      @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\Programs";
     DeleteAnyTestData();
     try {
       var settings = ReadTestSettings();
       Assert.That(!File.Exists(settings.SettingsPath));
       Assert.IsEmpty(settings.ProgramTemplates);
+      settings.ProgramsFolder = new Settings.Folder {
+        Path = programsFolderPath
+      };
       settings.ProgramTemplates.Add(new Settings.ProgramTemplate {
         SoundBank = "Factory",
         Category = "RetroWave 2.5",
@@ -18,10 +23,9 @@ public class SettingsTests {
       });
       settings.Write();
       settings = ReadTestSettings();
-      Assert.Multiple(() => {
-        Assert.That(File.Exists(settings.SettingsPath));
-        Assert.That(settings.ProgramTemplates, Has.Count.EqualTo(1));
-      });
+      Assert.That(File.Exists(settings.SettingsPath));
+      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(programsFolderPath));
+      Assert.That(settings.ProgramTemplates, Has.Count.EqualTo(1));
     } finally {
       DeleteAnyTestData();
     }
