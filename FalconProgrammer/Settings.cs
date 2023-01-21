@@ -1,26 +1,28 @@
 ﻿using System.Xml.Serialization;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer; 
+namespace FalconProgrammer;
 
-[XmlRoot(nameof(Settings))] public class Settings {
+[XmlRoot(nameof(Settings))]
+public class Settings {
   [PublicAPI] public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\FalconProgrammer Settings";
 
-  [XmlArray("ProgramTemplates")]
-  [XmlArrayItem(nameof(ProgramTemplate))]
-  public List<ProgramTemplate> ProgramTemplates { get; set; } = 
-    new List<ProgramTemplate>();
-  
-  public class ProgramTemplate {
-    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
-    [XmlAttribute] public string Category { get; set; } = string.Empty;
-    [XmlAttribute] public string Path { get; set; } = string.Empty;
+  public Settings() {
+    ProgramTemplates = new List<ProgramTemplate>();
   }
 
-  [PublicAPI] public string SettingsPath { get; private set; } = string.Empty;
+  [XmlArray("ProgramTemplates")]
+  [XmlArrayItem(nameof(ProgramTemplate))]
+  public List<ProgramTemplate> ProgramTemplates { get; set; }
+  // In test coverage, this counts as two commands, one of which is not covered.
+  // So we initialise the list in the constructor.
+  // public List<ProgramTemplate> ProgramTemplates { get; set; } =
+  //   new List<ProgramTemplate>();
 
-  private static FileInfo GetSettingsFile(string settingsFolderPath) {
+  [PublicAPI] [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
+
+  internal static FileInfo GetSettingsFile(string settingsFolderPath) {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
 
@@ -34,9 +36,9 @@ namespace FalconProgrammer;
     }
     var settingsFile = GetSettingsFile(settingsFolderLocation.Path);
     if (!settingsFile.Exists) {
-      return new Settings();
+      return new Settings { SettingsPath = settingsFile.FullName };
     }
-    var reader = new StreamReader(settingsFile.FullName);
+    using var reader = new StreamReader(settingsFile.FullName);
     var serializer = new XmlSerializer(typeof(Settings));
     var result = (Settings)serializer.Deserialize(reader)!;
     result.SettingsPath = settingsFile.FullName;
@@ -45,7 +47,13 @@ namespace FalconProgrammer;
 
   public void Write() {
     var serializer = new XmlSerializer(typeof(Settings));
-     var writer = new StreamWriter(SettingsPath);
-     serializer.Serialize(writer, this);
+    using var writer = new StreamWriter(SettingsPath);
+    serializer.Serialize(writer, this);
+  }
+
+  public class ProgramTemplate {
+    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
+    [XmlAttribute] public string Category { get; set; } = string.Empty;
+    [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 }

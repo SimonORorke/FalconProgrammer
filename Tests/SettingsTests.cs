@@ -4,27 +4,39 @@
 public class SettingsTests {
   [Test]
   public void Test1() {
-    var settings = Settings.Read(SettingsFolderLocationTests.SettingsFolderPath,
-      SettingsFolderLocationTests.TestApplicationName);
-    Assert.IsEmpty(settings.SettingsPath);
-    Assert.AreEqual(0, settings.ProgramTemplates.Count);
-    DeleteAnyTestData(string.Empty);
+    DeleteAnyTestData();
     try {
+      var settings = ReadTestSettings();
+      Assert.That(!File.Exists(settings.SettingsPath));
+      Assert.IsEmpty(settings.ProgramTemplates);
+      settings.ProgramTemplates.Add(new Settings.ProgramTemplate {
+        SoundBank = "Factory",
+        Category = "RetroWave 2.5",
+        // ReSharper disable once StringLiteralTypo
+        Path =
+          @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\Program Templates\Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip"
+      });
+      settings.Write();
+      settings = ReadTestSettings();
+      Assert.Multiple(() => {
+        Assert.That(File.Exists(settings.SettingsPath));
+        Assert.That(settings.ProgramTemplates, Has.Count.EqualTo(1));
+      });
     } finally {
-      
+      DeleteAnyTestData();
     }
-    // var settingsFile = new FileInfo(settings.SettingsPath);
-    // Assert.AreEqual(SettingsFolderLocationTests.SettingsFolderPath,
-    //   settingsFile.DirectoryName);
-    // Assert.IsFalse(settingsFile.Exists);
   }
 
-  private static void DeleteAnyTestData(string settingsPath) {
-    if (!string.IsNullOrEmpty(settingsPath)) {
-      var settingFile = new FileInfo(settingsPath);
-      if (settingFile.Exists) {
-        settingFile.Delete();
-      }
+  private static Settings ReadTestSettings() {
+    return Settings.Read(SettingsFolderLocationTests.SettingsFolderPath,
+      SettingsFolderLocationTests.TestApplicationName); 
+  }
+
+  private static void DeleteAnyTestData() {
+    var settingsFile = Settings.GetSettingsFile(
+      SettingsFolderLocationTests.SettingsFolderPath);
+    if (settingsFile.Exists) {
+      settingsFile.Delete();
     }
     SettingsFolderLocationTests.DeleteAnyTestData();
   }

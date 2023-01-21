@@ -13,12 +13,12 @@ public class SettingsFolderLocationTests {
     DeleteAnyTestData();
     try {
       var location1 = SettingsFolderLocation.Read(TestApplicationName);
-      Assert.IsEmpty(location1.Path);
+      Assert.That(location1.Path, Is.Empty);
       location1.Path = SettingsFolderPath;
       location1.Write(TestApplicationName);
-      Assert.That(()=> Directory.Exists(SettingsFolderPath));
+      Assert.That(Directory.Exists(SettingsFolderPath));
       var location2 = SettingsFolderLocation.Read(TestApplicationName);
-      Assert.AreEqual(SettingsFolderPath, location2.Path);
+      Assert.That(location2.Path, Is.EqualTo(SettingsFolderPath));
     } finally {
       DeleteAnyTestData();
     }
