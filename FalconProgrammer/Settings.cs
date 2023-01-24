@@ -10,14 +10,14 @@ public class Settings {
 
   public Settings() {
     ProgramsFolder = new Folder();
-    ProgramTemplates = new List<ProgramTemplate>();
+    ProgramCategories = new List<ProgramCategory>();
   }
 
   [XmlElement] public Folder ProgramsFolder { get; set; }
 
-  [XmlArray("ProgramTemplates")]
-  [XmlArrayItem(nameof(ProgramTemplate))]
-  public List<ProgramTemplate> ProgramTemplates { get; set; }
+  [XmlArray("ProgramCategories")]
+  [XmlArrayItem(nameof(ProgramCategory))]
+  public List<ProgramCategory> ProgramCategories { get; set; }
   // In test coverage, this counts as two commands, one of which is not covered.
   // So we initialise the list in the constructor.
   // public List<ProgramTemplate> ProgramTemplates { get; set; } =
@@ -58,9 +58,10 @@ public class Settings {
     [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
-  public class ProgramTemplate {
+  public class ProgramCategory {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
-    [XmlAttribute] public string Path { get; set; } = string.Empty;
+    [XmlAttribute] public bool IsInfoPageLayoutInScript { get; set; }
+    [XmlAttribute] public string TemplatePath { get; set; } = string.Empty;
   }
 }
