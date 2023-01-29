@@ -3,7 +3,66 @@
 [TestFixture]
 public class CategoryTests {
   [Test]
-  public void Test1() {
+  public void CategoryFolderIsEmpty() {
+    var settings = ReadSettings();
+    var soundBankFolder = GetSoundBankFolder("Pulsar");
+    var settingsCategory = settings.GetProgramCategory(
+      soundBankFolder.Name, "Bass");
+    const string tempCategoryName = "Empty";
+    settingsCategory.Category = tempCategoryName;
+    var tempCategoryFolder = soundBankFolder.CreateSubdirectory(tempCategoryName);
+    try {
+      var category = new Category(soundBankFolder, tempCategoryName, settings);
+      category.Initialise();
+      Assert.Throws<ApplicationException>(() => category.GetProgramFilesToEdit());
+    } finally {
+      tempCategoryFolder.Delete();
+    }
+  }
+
+  [Test]
+  public void CategoryFolderDoesNotExist() {
+    var category =
+      new Category(GetSoundBankFolder("Pulsar"), "DoesNotExist", ReadSettings());
+    Assert.Throws<ApplicationException>(() => category.Initialise());
+  }
+
+  [Test]
+  public void FactoryCategorySpecificTemplate() {
+    var category = new Category(GetSoundBankFolder("Factory"), "Brutal Bass 2.1",
+      ReadSettings());
+    category.Initialise();
+    Assert.IsTrue(category.IsInfoPageLayoutInScript);
+    Assert.AreEqual("Factory", category.TemplateSoundBankName);
+    Assert.AreEqual("Brutal Bass 2.1", category.TemplateCategoryName);
+    Assert.AreEqual("808 Line", category.TemplateProgramName);
+  }
+
+  [Test]
+  public void FactoryDefaultTemplate() {
+    var category =
+      new Category(GetSoundBankFolder("Factory"), "Bass-Sub", ReadSettings());
+    category.Initialise();
+    Assert.IsFalse(category.IsInfoPageLayoutInScript);
+    Assert.AreEqual("Factory", category.TemplateSoundBankName);
+    Assert.AreEqual("Keys", category.TemplateCategoryName);
+    Assert.AreEqual("DX Mania", category.TemplateProgramName);
+  }
+
+  [Test]
+  public void FactorySpecialTemplate() {
+    var category = new Category(GetSoundBankFolder("Factory"), "RetroWave 2.5",
+      ReadSettings());
+    category.Initialise();
+    Assert.IsTrue(category.IsInfoPageLayoutInScript);
+    Assert.AreEqual("Factory", category.TemplateSoundBankName);
+    Assert.AreEqual("Lo-Fi 2.5", category.TemplateCategoryName);
+    // ReSharper disable once StringLiteralTypo
+    Assert.AreEqual("BAS Gameboy Bass", category.TemplateProgramName);
+  }
+
+  [Test]
+  public void Main() {
     var category =
       new Category(GetSoundBankFolder("Fluidity"), "Electronic", ReadSettings());
     category.Initialise();
@@ -23,41 +82,7 @@ public class CategoryTests {
   }
 
   [Test]
-  public void Test2() {
-    var category = new Category(GetSoundBankFolder("Factory"), "Brutal Bass 2.1",
-      ReadSettings());
-    category.Initialise();
-    Assert.IsTrue(category.IsInfoPageLayoutInScript);
-    Assert.AreEqual("Factory", category.TemplateSoundBankName);
-    Assert.AreEqual("Brutal Bass 2.1", category.TemplateCategoryName);
-    Assert.AreEqual("808 Line", category.TemplateProgramName);
-  }
-
-  [Test]
-  public void Test3() {
-    var category =
-      new Category(GetSoundBankFolder("Factory"), "Bass-Sub", ReadSettings());
-    category.Initialise();
-    Assert.IsFalse(category.IsInfoPageLayoutInScript);
-    Assert.AreEqual("Factory", category.TemplateSoundBankName);
-    Assert.AreEqual("Keys", category.TemplateCategoryName);
-    Assert.AreEqual("DX Mania", category.TemplateProgramName);
-  }
-
-  [Test]
-  public void Test4() {
-    var category = new Category(GetSoundBankFolder("Factory"), "RetroWave 2.5",
-      ReadSettings());
-    category.Initialise();
-    Assert.IsTrue(category.IsInfoPageLayoutInScript);
-    Assert.AreEqual("Factory", category.TemplateSoundBankName);
-    Assert.AreEqual("Lo-Fi 2.5", category.TemplateCategoryName);
-    // ReSharper disable once StringLiteralTypo
-    Assert.AreEqual("BAS Gameboy Bass", category.TemplateProgramName);
-  }
-
-  [Test]
-  public void Test5() {
+  public void NonFactoryDefaultTemplateSameAsFactory() {
     // ReSharper disable once StringLiteralTypo
     var category =
       new Category(GetSoundBankFolder("Spectre"), "Polysynth", ReadSettings());
@@ -69,7 +94,7 @@ public class CategoryTests {
   }
 
   [Test]
-  public void Test6() {
+  public void PulsarHasCategorySpecificTemplates() {
     var category = new Category(GetSoundBankFolder("Pulsar"), "Bass", ReadSettings());
     category.Initialise();
     Assert.IsTrue(category.IsInfoPageLayoutInScript);
@@ -79,19 +104,14 @@ public class CategoryTests {
   }
 
   [Test]
-  public void Test7() {
-    var category = new Category(GetSoundBankFolder("Pulsar"), "Wrong", ReadSettings());
+  public void SoundBankFolderDoesNotExist() {
+    var category =
+      new Category(GetSoundBankFolder("DoesNotExist"), "Bass", ReadSettings());
     Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
   [Test]
-  public void Test8() {
-    var category = new Category(GetSoundBankFolder("Xyz"), "Bass", ReadSettings());
-    Assert.Throws<ApplicationException>(() => category.Initialise());
-  }
-
-  [Test]
-  public void Test9() {
+  public void TemplateFileDoesNotExist() {
     var settings = ReadSettings();
     var soundBankFolder = GetSoundBankFolder("Pulsar");
     const string categoryName = "Bass";
@@ -101,24 +121,6 @@ public class CategoryTests {
       settingsCategory.TemplatePath.Replace("Warped", "DoesNotExist");
     var category = new Category(soundBankFolder, categoryName, settings);
     Assert.Throws<ApplicationException>(() => category.Initialise());
-  }
-
-  [Test]
-  public void Test10() {
-    var settings = ReadSettings();
-    var soundBankFolder = GetSoundBankFolder("Pulsar");
-    var settingsCategory = settings.GetProgramCategory(
-      soundBankFolder.Name, "Bass");
-    const string tempCategoryName = "Empty";
-    settingsCategory.Category = tempCategoryName;
-    var tempCategory = soundBankFolder.CreateSubdirectory(tempCategoryName);
-    try {
-      var category = new Category(soundBankFolder, tempCategoryName, settings);
-      category.Initialise();
-      Assert.Throws<ApplicationException>(() => category.GetProgramFilesToEdit());
-    } finally {
-      tempCategory.Delete();
-    }
   }
 
   private static DirectoryInfo GetSoundBankFolder(string soundBankName) {
