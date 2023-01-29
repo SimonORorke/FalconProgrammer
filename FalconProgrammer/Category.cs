@@ -10,10 +10,9 @@ namespace FalconProgrammer;
 ///   category name.
 /// </summary>
 public class Category {
-  public Category(
-    string name, DirectoryInfo soundBankFolder) {
-    Name = name;
+  public Category(DirectoryInfo soundBankFolder, string name) {
     SoundBankFolder = soundBankFolder;
+    Name = name;
   }
 
   private DirectoryInfo Folder { get; set; } = null!;
@@ -114,7 +113,8 @@ public class Category {
             "Leads" => "Autumn Rust",
             "Pads" => "Lore",
             "Plucks" => "Resonator",
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException(
+              $"TemplateProgramName has not been specified for category '{TemplateSoundBankName}.{Name}'.")
           };
       }
       return TemplateSoundBankName switch {

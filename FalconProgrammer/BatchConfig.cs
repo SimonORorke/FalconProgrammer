@@ -124,7 +124,7 @@ public class BatchConfig {
     string categoryName) {
     Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
-    Category = new Category(categoryName, SoundBankFolder);
+    Category = new Category(SoundBankFolder, categoryName);
     Category.Initialise();
     if (Task == ConfigTask.ReplaceModWheelWithMacro &&
         Category.IsInfoPageLayoutInScript) {
