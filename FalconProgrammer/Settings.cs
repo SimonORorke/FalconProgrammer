@@ -28,6 +28,24 @@ public class Settings {
   internal static FileInfo GetSettingsFile(string settingsFolderPath) {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
+  
+  public ProgramCategory GetProgramCategory(
+    string soundBankFolderName, string categoryName) {
+    var result = ((
+      from programCategory in ProgramCategories
+      where programCategory.SoundBank == soundBankFolderName &&
+            programCategory.Category == categoryName
+      select programCategory).FirstOrDefault() ?? (
+      from programCategory in ProgramCategories
+      where programCategory.SoundBank == soundBankFolderName &&
+            programCategory.Category == string.Empty
+      select programCategory).FirstOrDefault()) ?? (
+      from programCategory in ProgramCategories
+      where programCategory.SoundBank == string.Empty &&
+            programCategory.Category == string.Empty
+      select programCategory).First();
+    return result;
+  }
 
   public static Settings Read(
     string settingsFolderPath = DefaultSettingsFolderPath,

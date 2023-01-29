@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using JetBrains.Annotations;
 
@@ -10,9 +9,10 @@ namespace FalconProgrammer;
 ///   category name.
 /// </summary>
 public class Category {
-  public Category(DirectoryInfo soundBankFolder, string name) {
+  public Category(DirectoryInfo soundBankFolder, string name, Settings settings) {
     SoundBankFolder = soundBankFolder;
     Name = name;
+    Settings = settings;
   }
 
   private DirectoryInfo Folder { get; set; } = null!;
@@ -41,109 +41,31 @@ public class Category {
   ///     per category.
   ///   </para>
   /// </summary>
-  public bool IsInfoPageLayoutInScript {
-    get {
-      switch (SoundBankFolder.Name) {
-        case "Fluidity":
-        case "Hypnotic Drive":
-        case "Inner Dimensions":
-        case "Organic Keys":
-        case "Pulsar":
-        case "Savage":
-        case "Titanium":
-        case "Voklm":
-          return true;
-        case "Factory":
-          return Name is "Brutal Bass 2.1" or "Lo-Fi 2.5"
-            or "Organic Texture 2.8" or "RetroWave 2.5" or "VCF-20 Synths 2.5";
-        default:
-          return false;
-      }
-    }
-  }
+  public bool IsInfoPageLayoutInScript => SettingsCategory.IsInfoPageLayoutInScript;
 
   [PublicAPI] public string Name { get; }
+  [PublicAPI] public Settings Settings { get; }
+  private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
+  [PublicAPI] public string TemplateCategoryName => TemplateProgramFile.Directory!.Name;
 
   [PublicAPI]
-  public string TemplateCategoryName {
-    get {
-      switch (TemplateSoundBankName) {
-        case "Factory":
-          switch (Name) {
-            case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
-              return "Lo-Fi 2.5";
-            case "Brutal Bass 2.1" or "Organic Texture 2.8":
-              return Name;
-          }
-          break;
-        case "Pulsar":
-          return Name;
-      }
-      return TemplateSoundBankName switch {
-        "Fluidity" => "Strings",
-        "Hypnotic Drive" => "Leads",
-        "Inner Dimensions" => "Key",
-        "Organic Keys" => "Acoustic Mood",
-        "Savage" => "Leads",
-        "Voklm" => "Synth Choirs",
-        _ => "Keys"
-      };
-    }
-  }
+  public string TemplateProgramName =>
+    Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
-  [SuppressMessage("ReSharper", "StringLiteralTypo")]
-  [PublicAPI]
-  public string TemplateProgramName {
-    get {
-      switch (TemplateSoundBankName) {
-        case "Factory":
-          switch (Name) {
-            case "Brutal Bass 2.1":
-              return "808 Line";
-            case "Lo-Fi 2.5" or "RetroWave 2.5" or "VCF-20 Synths 2.5":
-              return "BAS Gameboy Bass";
-            case "Organic Texture 2.8":
-              return "BAS Biggy";
-          }
-          break;
-        case "Pulsar":
-          return Name switch {
-            "Bass" => "Warped",
-            "Leads" => "Autumn Rust",
-            "Pads" => "Lore",
-            "Plucks" => "Resonator",
-            _ => throw new NotSupportedException(
-              $"TemplateProgramName has not been specified for category '{TemplateSoundBankName}.{Name}'.")
-          };
-      }
-      return TemplateSoundBankName switch {
-        // In Fluidity, there's no (easy?) way to tell programatically whether a macro
-        // is continuous or toggle. In the template, they are all continuous. The toggle
-        // macros will have to be manually mapped to toggle MIDI CC numbers on a per 
-        // program basis.
-        "Fluidity" => "Guitar Stream", // Has 11 macros, the maximum for the sound bank.
-        "Hypnotic Drive" => "Lead - Acid Gravel",
-        "Inner Dimensions" => "Melodist",
-        "Organic Keys" => "A Rhapsody",
-        "Savage" => "Plucker",
-        "Titanium" => "Wood Chill",
-        "Voklm" => "Breath Five",
-        _ => "DX Mania"
-      };
-    }
-  }
+  private FileInfo TemplateProgramFile { get; set; } = null!;
+  public string TemplateProgramPath => TemplateProgramFile.FullName;
 
-  public string TemplateProgramPath { get; private set; } = null!;
-  
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
   ///   ScriptProcessor contains the SignalConnections that map the macros to MIDI CC
-  ///   numbers.  
+  ///   numbers.
   /// </summary>
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
 
-  [PublicAPI] public string TemplateSoundBankName { get; private set; } = null!;
+  [PublicAPI]
+  public string TemplateSoundBankName =>
+    Directory.GetParent(TemplateProgramFile.Directory!.FullName)?.Name!;
 
   private DirectoryInfo GetFolder(string categoryName) {
     var result = new DirectoryInfo(
@@ -169,22 +91,19 @@ public class Category {
     return result;
   }
 
-  private string GetTemplateProgramPath() {
-    var templateProgramFile = new FileInfo(
-      Path.Combine(
-        BatchConfig.GetSoundBankFolder(TemplateSoundBankName).FullName,
-        TemplateCategoryName, TemplateProgramName + BatchConfig.ProgramExtension));
-    if (!templateProgramFile.Exists) {
+  private FileInfo GetTemplateProgramFile() {
+    var result = new FileInfo(SettingsCategory.TemplatePath);
+    if (!result.Exists) {
       throw new ApplicationException(
-        $"Cannot find template file '{templateProgramFile.FullName}'.");
+        $"Cannot find template file '{SettingsCategory.TemplatePath}'.");
     }
-    return templateProgramFile.FullName;
+    return result;
   }
 
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
   ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
-  ///   case the template program.  
+  ///   case the template program.
   /// </summary>
   private ScriptProcessor? GetTemplateScriptProcessor() {
     if (!IsInfoPageLayoutInScript) {
@@ -202,10 +121,8 @@ public class Category {
 
   public void Initialise() {
     Folder = GetFolder(Name);
-    TemplateSoundBankName = IsInfoPageLayoutInScript
-      ? SoundBankFolder.Name
-      : "Factory";
-    TemplateProgramPath = GetTemplateProgramPath();
+    SettingsCategory = Settings.GetProgramCategory(SoundBankFolder.Name, Name);
+    TemplateProgramFile = GetTemplateProgramFile();
     TemplateScriptProcessor = GetTemplateScriptProcessor();
   }
 }

@@ -4,7 +4,6 @@ namespace FalconProgrammer;
 
 public class BatchConfig {
   public const string ProgramExtension = ".uvip";
-  private const string SynthName = "UVI Falcon";
   private Category Category { get; set; } = null!;
 
   /// <summary>
@@ -124,7 +123,7 @@ public class BatchConfig {
     string categoryName) {
     Console.WriteLine("==========================");
     Console.WriteLine($"Category: {categoryName}");
-    Category = new Category(SoundBankFolder, categoryName);
+    Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
     if (Task == ConfigTask.ReplaceModWheelWithMacro &&
         Category.IsInfoPageLayoutInScript) {
@@ -177,25 +176,15 @@ public class BatchConfig {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
-  private static DirectoryInfo GetProgramsFolder() {
-    var synthSoftwareFolder = new DirectoryInfo(
-      Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-        "Music", "Software", SynthName));
-    if (!synthSoftwareFolder.Exists) {
-      throw new ApplicationException(
-        $"Cannot find folder '{synthSoftwareFolder.FullName}'.");
-    }
-    var result = new DirectoryInfo(
-      Path.Combine(
-        synthSoftwareFolder.FullName, "Programs"));
+  private DirectoryInfo GetProgramsFolder() {
+    var result = new DirectoryInfo(Settings.ProgramsFolder.Path);
     if (!result.Exists) {
       throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
     }
     return result;
   }
 
-  public static DirectoryInfo GetSoundBankFolder(string soundBankName) {
+  private DirectoryInfo GetSoundBankFolder(string soundBankName) {
     var programsFolder = GetProgramsFolder();
     var result = new DirectoryInfo(
       Path.Combine(
