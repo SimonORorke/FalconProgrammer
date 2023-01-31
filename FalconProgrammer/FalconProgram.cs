@@ -36,8 +36,7 @@ public class FalconProgram {
       return;
     }
     // May need to zero both these together to eliminate the effect.
-    // ReSharper disable once CommentTypo
-    // Example: "Devinity/Bass/Liquid Bassline"
+    // Example: "Devinity\Plucks-Leads\Warm Plucks"
     if (ProgramXml.ChangeConstantModulationValueToZero("Delay Mix")) {
       Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
     }
@@ -71,8 +70,7 @@ public class FalconProgram {
       return;
     }
     // May need to zero both these together to eliminate the effect.
-    // ReSharper disable once CommentTypo
-    // Example: "Devinity/Bass/Liquid Bassline"
+    // Example: "Devinity\Plucks-Leads\Warm Plucks"
     if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb Mix")) {
       Console.WriteLine($"Changed SparkVerb Mix to zero for '{Path}'.");
     }

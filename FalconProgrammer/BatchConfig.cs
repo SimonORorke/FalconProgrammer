@@ -122,13 +122,14 @@ public class BatchConfig {
   private void ConfigureProgramsInCategory(
     string categoryName) {
     Console.WriteLine("==========================");
-    Console.WriteLine($"Category: {categoryName}");
+    Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
     if (Task == ConfigTask.ReplaceModWheelWithMacro &&
         Category.IsInfoPageLayoutInScript) {
       Console.WriteLine(
-        $"Cannot replace mod wheel modulations for category '{categoryName}' " +
+        "Cannot replace mod wheel modulations for category " +
+        $"'{SoundBankFolder.Name}\\{categoryName}' " +
         "because the category's Info page layout is defined in a script.");
       return;
     }
