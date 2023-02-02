@@ -5,8 +5,8 @@ namespace FalconProgrammer;
 /// <summary>
 ///   Orders the macros left to right, top to bottom.
 /// </summary>
-public class LeftToRightTopToBottomComparer : Comparer<ConstantModulation> {
-  public override int Compare(ConstantModulation? a, ConstantModulation? b) {
+public class LeftToRightTopToBottomComparer : Comparer<Macro> {
+  public override int Compare(Macro? a, Macro? b) {
     if (a!.Properties.X < b!.Properties.X) {
       return -1;
     }

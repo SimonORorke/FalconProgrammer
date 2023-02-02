@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
-  private XElement? _templateConstantModulationElement;
+  private XElement? _templateMacroElement;
   private XElement? _templateRootElement;
   private XElement? _templateSignalConnectionElement;
 
@@ -18,15 +18,15 @@ public class ProgramXml {
 
   [PublicAPI] public Category Category { get; }
   private XElement ControlSignalSourcesElement { get; set; } = null!;
-  private List<XElement> ConstantModulationElements { get; set; } = null!;
+  private List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private List<XElement> ModWheelSignalConnectionElements { get; set; } = null!;
   private XElement RootElement { get; set; } = null!;
 
-  private XElement TemplateConstantModulationElement =>
-    _templateConstantModulationElement ??= GetTemplateConstantModulationElement();
+  private XElement TemplateMacroElement =>
+    _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
     _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
@@ -34,54 +34,29 @@ public class ProgramXml {
   private XElement TemplateSignalConnectionElement =>
     _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
 
-  public void AddConstantModulationSignalConnection(
+  public void AddMacroSignalConnection(
     SignalConnection signalConnection, int index) {
-    var constantModulationElement = ConstantModulationElements[index];
-    // If there's already a modulation wheel assignment, the ConstantModulation element
-    // will already own a Connections element. 
-    var connectionsElement = constantModulationElement.Element("Connections");
+    var macroElement = MacroElements[index];
+    // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
+    // element will already own a Connections element. 
+    var connectionsElement = macroElement.Element("Connections");
     if (connectionsElement == null) {
       connectionsElement = new XElement("Connections");
-      constantModulationElement.Add(connectionsElement);
+      macroElement.Add(connectionsElement);
     }
     connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
   }
 
-  public void AddMacro(ConstantModulation newMacro) {
-    var constantModulationElement = new XElement(TemplateConstantModulationElement);
-    var nameAttribute =
-      constantModulationElement.Attribute(nameof(ConstantModulation.Name)) ??
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.Name "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    nameAttribute.Value = newMacro.Name;
-    var displayNameAttribute =
-      constantModulationElement.Attribute(nameof(ConstantModulation.DisplayName)) ??
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.DisplayName "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    displayNameAttribute.Value = newMacro.DisplayName;
-    var bipolarAttribute =
-      constantModulationElement.Attribute($"{nameof(ConstantModulation.Bipolar)}") ??
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.Bipolar "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    bipolarAttribute.Value = newMacro.Bipolar.ToString();
-    var styleAttribute =
-      constantModulationElement.Attribute($"{nameof(ConstantModulation.Style)}") ??
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.Style "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    styleAttribute.Value = newMacro.Style.ToString();
-    var valueAttribute =
-      constantModulationElement.Attribute($"{nameof(ConstantModulation.Value)}") ??
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.Value "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    valueAttribute.Value = newMacro.Value.ToString();
-    ControlSignalSourcesElement.Add(constantModulationElement);
+  public void AddMacro(Macro newMacro) {
+    var macroElement = new XElement(TemplateMacroElement);
+    SetAttribute(macroElement, nameof(Macro.Name), newMacro.Name);
+    SetAttribute(macroElement, nameof(Macro.DisplayName), newMacro.DisplayName);
+    SetAttribute(macroElement, nameof(Macro.Bipolar), newMacro.Bipolar);
+    SetAttribute(macroElement, nameof(Macro.Style), newMacro.Style);
+    SetAttribute(macroElement, nameof(Macro.Value), newMacro.Value);
+    ControlSignalSourcesElement.Add(macroElement);
     var signalConnectionElement =
-      constantModulationElement.Descendants($"{nameof(SignalConnection)}")
+      macroElement.Descendants($"{nameof(SignalConnection)}")
         .FirstOrDefault();
     if (signalConnectionElement == null) {
       throw new ApplicationException(
@@ -89,34 +64,24 @@ public class ProgramXml {
         + $"element in '{Category.TemplateProgramPath}'.");
     }
     UpdateSignalConnectionElement(newMacro.SignalConnections[0], signalConnectionElement);
-    var propertiesElement = constantModulationElement.Element("Properties");
+    var propertiesElement = macroElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
         "Cannot find ConstantModulation.Properties "
         + $"element in '{Category.TemplateProgramPath}'.");
     }
-    var xAttribute =
-      propertiesElement.Attribute("x") ??
-      throw new ApplicationException(
-        "Cannot find Properties.X "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    xAttribute.Value = newMacro.Properties.X.ToString();
-    var yAttribute =
-      propertiesElement.Attribute("y") ??
-      throw new ApplicationException(
-        "Cannot find Properties.Y "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    yAttribute.Value = newMacro.Properties.Y.ToString();
+    SetAttribute(propertiesElement, "x", newMacro.Properties.X);
+    SetAttribute(propertiesElement, "y", newMacro.Properties.Y);
   }
 
-  public bool ChangeConstantModulationValueToZero(string displayName) {
-    var delayConstantModulationElement = (
-      from constantModulationElement in ConstantModulationElements
-      where string.Equals(constantModulationElement.Attribute("DisplayName")!.Value,
+  public bool ChangeMacroValueToZero(string displayName) {
+    var macroElement = (
+      from element in MacroElements
+      where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
         displayName, StringComparison.OrdinalIgnoreCase)
-      select constantModulationElement).FirstOrDefault();
-    if (delayConstantModulationElement != null) {
-      delayConstantModulationElement.Attribute("Value")!.Value = "0";
+      select element).FirstOrDefault();
+    if (macroElement != null) {
+      SetAttribute(macroElement, nameof(Macro.Value), 0);
       return true;
     }
     return false;
@@ -125,7 +90,8 @@ public class ProgramXml {
   public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
     string newSource = $"$Program/Macro {macroNo}";
     foreach (var signalConnectionElement in ModWheelSignalConnectionElements) {
-      signalConnectionElement.Attribute("Source")!.Value = newSource;
+      SetAttribute(
+        signalConnectionElement, nameof(SignalConnection.Source), newSource);
     }
   }
 
@@ -133,11 +99,14 @@ public class ProgramXml {
     SignalConnection oldSignalConnection, SignalConnection newSignalConnection) {
     var signalConnectionElements =
       from signalConnectionElement in RootElement.Descendants("SignalConnection")
-      where signalConnectionElement.Attribute("Source")!.Value ==
+      where GetAttributeValue(
+              signalConnectionElement, nameof(SignalConnection.Source)) ==
             oldSignalConnection.Source
       select signalConnectionElement;
     foreach (var signalConnectionElement in signalConnectionElements) {
-      signalConnectionElement.Attribute("Source")!.Value = newSignalConnection.Source;
+      SetAttribute(
+        signalConnectionElement, nameof(SignalConnection.Source), 
+        newSignalConnection.Source);
     }
   }
 
@@ -145,21 +114,39 @@ public class ProgramXml {
     var result = new XElement(TemplateSignalConnectionElement);
     // In case the template SignalConnection contains a non-default (< 1) Ratio,
     // set the Ratio to the default, 1.
-    var ratioAttribute =
-      result.Attribute(nameof(SignalConnection.Ratio)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Ratio "
-        + $"attribute in '{Category.TemplateProgramPath}'.");
-    ratioAttribute.Value = "1";
+    SetAttribute(result, nameof(SignalConnection.Ratio), 1);
     UpdateSignalConnectionElement(signalConnection, result);
     return result;
   }
 
-  public bool FindModWheelSignalConnections() {
-    ModWheelSignalConnectionElements = (
+  private XAttribute GetAttribute(XElement element, string attributeName) {
+    return
+      element.Attribute(attributeName) ??
+      throw new ApplicationException(
+        $"Cannot find {element.Name}.{attributeName} attribute in " + 
+        $"'{InputProgramPath}'.");
+  }
+
+  private string GetAttributeValue(XElement element, string attributeName) {
+    return GetAttribute(element, attributeName).Value;
+  }
+
+  public static XElement GetParentElement(XElement element) {
+    return element.Parent!;
+  }
+
+  public List<XElement> GetSignalConnectionElementsWithSource(string source) {
+    return (
       from signalConnectionElement in RootElement.Descendants("SignalConnection")
-      where signalConnectionElement.Attribute("Source")!.Value == "@MIDI CC 1"
+      // EndsWith rather than == because the Source will likely be prefixed by a path
+      where GetAttributeValue(
+        signalConnectionElement, nameof(SignalConnection.Source)).EndsWith(source)
       select signalConnectionElement).ToList();
+  }
+
+  public bool HasModWheelSignalConnections() {
+    ModWheelSignalConnectionElements = 
+      GetSignalConnectionElementsWithSource("@MIDI CC 1");
     return ModWheelSignalConnectionElements.Count > 0;
   }
 
@@ -171,7 +158,7 @@ public class ProgramXml {
         RootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
         throw new ApplicationException(
           $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
-      ConstantModulationElements = ControlSignalSourcesElement.Elements(
+      MacroElements = ControlSignalSourcesElement.Elements(
         "ConstantModulation").ToList();
       InfoPageCcsScriptProcessorElement = null;
       if (InfoPageCcsScriptProcessor != null) {
@@ -182,7 +169,8 @@ public class ProgramXml {
             "ScriptProcessor");
           InfoPageCcsScriptProcessorElement = (
             from scriptProcessorElement in scriptProcessorElements
-            where scriptProcessorElement.Attribute("Name")!.Value ==
+            where GetAttributeValue(
+                    scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
                   InfoPageCcsScriptProcessor!.Name
             select scriptProcessorElement).FirstOrDefault();
         }
@@ -193,7 +181,7 @@ public class ProgramXml {
     }
   }
 
-  private XElement GetTemplateConstantModulationElement() {
+  private XElement GetTemplateMacroElement() {
     var result =
       TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
       throw new ApplicationException(
@@ -225,15 +213,23 @@ public class ProgramXml {
     }
   }
 
-  public void UpdateConstantModulationSignalConnection(
-    ConstantModulation constantModulation,
+  private static void SetAttribute(XAttribute attribute, object value) {
+    attribute.Value = value.ToString()!;
+  }
+
+  public void SetAttribute(XElement element, string attributeName, object value) {
+    SetAttribute(GetAttribute(element, attributeName), value);
+  }
+
+  public void UpdateMacroSignalConnection(
+    Macro macro,
     SignalConnection signalConnection) {
-    var constantModulationElement = ConstantModulationElements[constantModulation.Index];
-    var connectionsElement = constantModulationElement.Element("Connections")!;
+    var macroElement = MacroElements[macro.Index];
+    var connectionsElement = macroElement.Element("Connections")!;
     var signalConnectionElements =
       connectionsElement.Elements("SignalConnection").ToList();
-    // The ConstantModulation will have two SignalConnections if one of them maps to the
-    // modulation wheel (MIDI CC 1). 
+    // The macro ("ConstantModulation") will have two SignalConnections if one of them
+    // maps to the modulation wheel (MIDI CC 1). 
     var signalConnectionElement = signalConnectionElements[signalConnection.Index];
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }
@@ -253,23 +249,11 @@ public class ProgramXml {
 
   private void UpdateSignalConnectionElement(
     SignalConnection signalConnection, XElement signalConnectionElement) {
-    var ratioAttribute =
-      signalConnectionElement.Attribute("Ratio") ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Ratio "
-        + $"attribute in '{InputProgramPath}'.");
-    ratioAttribute.Value = signalConnection.Ratio.ToString();
-    var sourceAttribute =
-      signalConnectionElement.Attribute(nameof(SignalConnection.Source)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Source "
-        + $"attribute in '{InputProgramPath}'.");
-    sourceAttribute.Value = signalConnection.Source;
-    var destinationAttribute =
-      signalConnectionElement.Attribute(nameof(SignalConnection.Destination)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Destination "
-        + $"attribute in '{InputProgramPath}'.");
-    destinationAttribute.Value = signalConnection.Destination;
+    SetAttribute(signalConnectionElement, nameof(SignalConnection.Ratio), 
+      signalConnection.Ratio);
+    SetAttribute(signalConnectionElement, nameof(SignalConnection.Source), 
+      signalConnection.Source);
+    SetAttribute(signalConnectionElement, nameof(SignalConnection.Destination), 
+      signalConnection.Destination);
   }
 }

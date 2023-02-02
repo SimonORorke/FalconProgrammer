@@ -15,7 +15,7 @@ public class FalconProgram {
 
   [PublicAPI] public Category Category { get; }
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
-  private List<ConstantModulation> Macros { get; set; } = null!;
+  private List<Macro> Macros { get; set; } = null!;
 
   /// <summary>
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
@@ -31,18 +31,35 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   public void ChangeDelayToZero() {
-    if (ProgramXml.ChangeConstantModulationValueToZero("Delay")) {
+    if (ChangeMacroValueToZero("Delay")) {
       Console.WriteLine($"Changed Delay to zero for '{Path}'.");
-      return;
     }
-    // May need to zero both these together to eliminate the effect.
-    // Example: "Devinity\Plucks-Leads\Warm Plucks"
-    if (ProgramXml.ChangeConstantModulationValueToZero("Delay Mix")) {
+    if (ChangeMacroValueToZero("Delay Mix")) {
       Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
     }
-    if (ProgramXml.ChangeConstantModulationValueToZero("Delay On/Off")) {
+    if (ChangeMacroValueToZero("Delay On/Off")) {
       Console.WriteLine($"Changed Delay On/Off to zero for '{Path}'.");
     }
+  }
+
+  private bool ChangeMacroValueToZero(string displayName) {
+    if (!ProgramXml.ChangeMacroValueToZero(displayName)) {
+      return false;
+    }
+    // Change the values of the effect parameters modulated by the macro to zero too.
+    string macroName = (
+      from macro in Macros
+      where macro.DisplayName == displayName
+      select macro.Name).First();
+    var signalConnectionElementsWithMacroSource = 
+      ProgramXml.GetSignalConnectionElementsWithSource(macroName);
+    foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
+      var effectElement = ProgramXml.GetParentElement(signalConnectionElement);
+      var signalConnection = new SignalConnection(signalConnectionElement);
+      ProgramXml.SetAttribute(
+        effectElement, signalConnection.Destination, 0);
+    }
+    return true;
   }
 
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
@@ -53,28 +70,22 @@ public class FalconProgram {
   }
 
   public void ChangeReverbToZero() {
-    if (ProgramXml.ChangeConstantModulationValueToZero("Reverb")) {
+    if (ChangeMacroValueToZero("Reverb")) {
       Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
-      return;
     }
-    if (ProgramXml.ChangeConstantModulationValueToZero("Reverb Mix")) {
+    if (ChangeMacroValueToZero("Reverb Mix")) {
       Console.WriteLine($"Changed Reverb Mix to zero for '{Path}'.");
-      return;
     }
-    if (ProgramXml.ChangeConstantModulationValueToZero("Room")) {
+    if (ChangeMacroValueToZero("Room")) {
       Console.WriteLine($"Changed Room to zero for '{Path}'.");
-      return;
     }
-    if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb")) {
+    if (ChangeMacroValueToZero("SparkVerb")) {
       Console.WriteLine($"Changed SparkVerb to zero for '{Path}'.");
-      return;
     }
-    // May need to zero both these together to eliminate the effect.
-    // Example: "Devinity\Plucks-Leads\Warm Plucks"
-    if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb Mix")) {
+    if (ChangeMacroValueToZero("SparkVerb Mix")) {
       Console.WriteLine($"Changed SparkVerb Mix to zero for '{Path}'.");
     }
-    if (ProgramXml.ChangeConstantModulationValueToZero("SparkVerb On/Off")) {
+    if (ChangeMacroValueToZero("SparkVerb On/Off")) {
       Console.WriteLine($"Changed SparkVerb On/Off to zero for '{Path}'.");
     }
   }
@@ -138,7 +149,7 @@ public class FalconProgram {
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
     Name = root.Program.DisplayName;
-    Macros = root.Program.ConstantModulations;
+    Macros = root.Program.Macros;
     ScriptProcessors = root.Program.ScriptProcessors;
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     // Disabling this check for now, due to false positives.
@@ -165,7 +176,7 @@ public class FalconProgram {
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
-  private int GetCcNo(ConstantModulation macro) {
+  private int GetCcNo(Macro macro) {
     int result;
     if (macro.IsContinuous) {
       // Map continuous controller CC to continuous macro.
@@ -193,7 +204,7 @@ public class FalconProgram {
     return result;
   }
 
-  private List<ConstantModulation> GetContinuousMacros() {
+  private List<Macro> GetContinuousMacros() {
     return (
       from macro in Macros
       where macro.IsContinuous
@@ -287,9 +298,9 @@ public class FalconProgram {
     return new Point(newMacroX, newMacroY);
   }
 
-  private SortedSet<ConstantModulation> GetMacrosSortedByLocation(
+  private SortedSet<Macro> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
-    var result = new SortedSet<ConstantModulation>(
+    var result = new SortedSet<Macro>(
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
@@ -322,7 +333,7 @@ public class FalconProgram {
     return result;
   }
 
-  private bool HasUniqueLocation(ConstantModulation macro) {
+  private bool HasUniqueLocation(Macro macro) {
     return (
       from m in Macros
       where m.Properties.X == macro.Properties.X
@@ -385,7 +396,7 @@ public class FalconProgram {
         $"MIDI CC {modWheelReplacementCcNo}.");
       return;
     }
-    if (!ProgramXml.FindModWheelSignalConnections()) {
+    if (!ProgramXml.HasModWheelSignalConnections()) {
       Console.WriteLine($"'{Name}' contains no mod wheel modulations.");
       return;
     }
@@ -399,7 +410,7 @@ public class FalconProgram {
     int newMacroNo = (
       from macro in Macros
       select macro.MacroNo).Max() + 1;
-    var newMacro = new ConstantModulation {
+    var newMacro = new Macro {
       MacroNo = newMacroNo,
       DisplayName = "Wheel",
       Bipolar = 0,
@@ -484,7 +495,7 @@ public class FalconProgram {
         var signalConnection = new SignalConnection {
           CcNo = ccNo
         };
-        ProgramXml.AddConstantModulationSignalConnection(
+        ProgramXml.AddMacroSignalConnection(
           signalConnection, macro.Index);
       } else {
         // The macro already has a SignalConnection mapping to a non-mod wheel CC number.
@@ -501,7 +512,7 @@ public class FalconProgram {
         if (!macro.IsContinuous && signalConnection.Ratio == -1) {
           signalConnection.Ratio = 1;
         }
-        ProgramXml.UpdateConstantModulationSignalConnection(
+        ProgramXml.UpdateMacroSignalConnection(
           macro, signalConnection);
       }
     }

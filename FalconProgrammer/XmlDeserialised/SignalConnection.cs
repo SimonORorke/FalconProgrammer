@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace FalconProgrammer.XmlDeserialised;
 
@@ -12,6 +13,29 @@ public class SignalConnection {
     Source = string.Empty;
     Destination = "Value";
     ConnectionMode = 1;
+  }
+
+  public SignalConnection(XElement signalConnectionElement) {
+    var ratioAttribute =
+      signalConnectionElement.Attribute(nameof(Ratio)) ??
+      throw new ApplicationException(
+        "Cannot find SignalConnection.Ratio attribute.");
+    Ratio = Convert.ToSingle(ratioAttribute.Value);
+    var sourceAttribute =
+      signalConnectionElement.Attribute(nameof(Source)) ??
+      throw new ApplicationException(
+        "Cannot find SignalConnection.Source attribute.");
+    Source = sourceAttribute.Value;
+    var destinationAttribute =
+      signalConnectionElement.Attribute(nameof(Destination)) ??
+      throw new ApplicationException(
+        "Cannot find SignalConnection.Destination attribute.");
+    Destination = destinationAttribute.Value;
+    var connectionModeAttribute =
+      signalConnectionElement.Attribute(nameof(ConnectionMode)) ??
+      throw new ApplicationException(
+        "Cannot find SignalConnection.ConnectionMode attribute.");
+    ConnectionMode = Convert.ToInt32(connectionModeAttribute.Value);
   }
 
   [XmlAttribute] public float Ratio { get; set; }

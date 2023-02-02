@@ -4,9 +4,10 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlDeserialised;
 
 /// <summary>
-///   Seems to be the same thing as a macro.
+///   Called ConstantModulation in the program XML but can only represent a macro, so far
+///   as I can tell.
 /// </summary>
-public class ConstantModulation {
+public class Macro {
   [XmlAttribute] public string Name { get; set; } = null!;
   [XmlAttribute] public string DisplayName { get; set; } = null!;
   [XmlAttribute] public int Bipolar { get; set; }
@@ -14,9 +15,9 @@ public class ConstantModulation {
   [XmlAttribute] public float Value { get; set; }
 
   /// <summary>
-  ///   For a ConstantModulation, there is 0 or 1 SignalConnection only, except where
-  ///   there is a SignalConnection that maps to the modulation wheel (MIDI CC 1), in
-  ///   which case there can be two SignalConnections. 
+  ///   For a macro (ConstantModulation), there is 0 or 1 SignalConnection only, except
+  ///   where there is a SignalConnection that maps to the modulation wheel (MIDI CC 1),
+  ///   in which case there can be two SignalConnections. 
   /// </summary>
   [XmlArray("Connections")]
   [XmlArrayItem("SignalConnection")]
@@ -36,8 +37,8 @@ public class ConstantModulation {
 
   [PublicAPI] public int MacroNo {
     get {
-      // In most programs, ConstantModulation Names consist of "Macro " followed by the
-      // macro number. In a few programs, such as 'Factory\Keys\Pure FM Tines', 
+      // In most programs, macro (ConstantModulation) Names consist of "Macro " followed
+      // by the macro number. In a few programs, such as 'Factory\Keys\Pure FM Tines', 
       // the Names start with "MacroKnob " instead. 
       string[] split = Name.Split();
       if (split.Length != 2 || !int.TryParse(split[1], out int macroNo)) {

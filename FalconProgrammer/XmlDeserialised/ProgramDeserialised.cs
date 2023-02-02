@@ -8,7 +8,7 @@ public class ProgramDeserialised {
   
   [XmlArray("ControlSignalSources")]
   [XmlArrayItem("ConstantModulation")]
-  public List<ConstantModulation> ConstantModulations { get; set; } = null!;
+  public List<Macro> Macros { get; set; } = null!;
   
   [XmlArray("EventProcessors")]
   [XmlArrayItem("ScriptProcessor")]
