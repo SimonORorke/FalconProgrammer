@@ -3,6 +3,12 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    // config.ChangeDelayToZero("Factory", "Pure Additive 2.0");
+    // config.ChangeReverbToZero("Factory", "Pure Additive 2.0");
+    // config.ChangeDelayToZero(null);
+    // config.ChangeReverbToZero(null);
+    // config.ChangeDelayToZero("Devinity", "Plucks-Leads");
+    // config.ChangeReverbToZero("Devinity", "Plucks-Leads");
     // config.ChangeMacroCcNo(38, 28, null);
     // config.ChangeDelayToZero(null);
     // config.ChangeReverbToZero(null);

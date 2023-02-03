@@ -44,21 +44,21 @@ public class FalconProgram {
   }
 
   private bool ChangeMacroValueToZero(string displayName) {
-    if (!ProgramXml.ChangeMacroValueToZero(displayName)) {
+    string? macroName = ProgramXml.ChangeMacroValueToZero(displayName);
+    if (macroName == null) {
       return false;
     }
-    // Change the values of the effect parameters modulated by the macro to zero too.
-    string macroName = (
-      from macro in Macros
-      where macro.DisplayName == displayName
-      select macro.Name).First();
+    // Change the values of the effect parameters modulated by the macro as required too.
     var signalConnectionElementsWithMacroSource = 
       ProgramXml.GetSignalConnectionElementsWithSource(macroName);
     foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
-      var effectElement = ProgramXml.GetParentElement(signalConnectionElement);
+      var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
+      var effectElement = ProgramXml.GetParentElement(connectionsElement);
       var signalConnection = new SignalConnection(signalConnectionElement);
       ProgramXml.SetAttribute(
-        effectElement, signalConnection.Destination, 0);
+        effectElement, signalConnection.Destination, 
+        // If it's a toggle macro, Destination should be "Bypass".  
+        signalConnection.Destination == "Bypass" ? 1 : 0);
     }
     return true;
   }

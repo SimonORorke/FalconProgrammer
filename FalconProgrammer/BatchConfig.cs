@@ -178,6 +178,13 @@ public class BatchConfig {
   }
 
   private DirectoryInfo GetProgramsFolder() {
+    if (string.IsNullOrEmpty(Settings.ProgramsFolder.Path)) {
+      throw new ApplicationException(
+        "The programs folder is not specified in settings file " + 
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " + 
+        "change the settings folder path in " + 
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+    }
     var result = new DirectoryInfo(Settings.ProgramsFolder.Path);
     if (!result.Exists) {
       throw new ApplicationException($"Cannot find folder '{result.FullName}'.");

@@ -74,7 +74,10 @@ public class ProgramXml {
     SetAttribute(propertiesElement, "y", newMacro.Properties.Y);
   }
 
-  public bool ChangeMacroValueToZero(string displayName) {
+  public string? ChangeMacroValueToZero(string displayName) {
+    // Ignore case in the display name when checking whether there is a macro with that
+    // display name.  An example of where the cases of macro display names are
+    // non-standard is Factory\Pure Additive 2.0\Bass Starter.
     var macroElement = (
       from element in MacroElements
       where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
@@ -82,9 +85,9 @@ public class ProgramXml {
       select element).FirstOrDefault();
     if (macroElement != null) {
       SetAttribute(macroElement, nameof(Macro.Value), 0);
-      return true;
+      return GetAttributeValue(macroElement, nameof(Macro.Name));
     }
-    return false;
+    return null;
   }
 
   public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
