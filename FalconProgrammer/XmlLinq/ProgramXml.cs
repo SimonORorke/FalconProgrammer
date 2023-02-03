@@ -74,10 +74,15 @@ public class ProgramXml {
     SetAttribute(propertiesElement, "y", newMacro.Properties.Y);
   }
 
+  /// <summary>
+  ///   If the macro with the specified display name is found, changes its value to zero
+  ///   and returns the macro's name (e.g. 'Macro 2' or 'MacroKnob 2').  Otherwise
+  ///   returns null.
+  /// </summary>
   public string? ChangeMacroValueToZero(string displayName) {
-    // Ignore case in the display name when checking whether there is a macro with that
-    // display name.  An example of where the cases of macro display names are
-    // non-standard is Factory\Pure Additive 2.0\Bass Starter.
+    // Ignore case when checking whether there is a macro with that display name.  An
+    // example of where the cases of macro display names are non-standard is
+    // Factory\Pure Additive 2.0\Bass Starter.
     var macroElement = (
       from element in MacroElements
       where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
