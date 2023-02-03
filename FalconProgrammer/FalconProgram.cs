@@ -34,6 +34,7 @@ public class FalconProgram {
     if (ChangeMacroValueToZero("Delay")) {
       Console.WriteLine($"Changed Delay to zero for '{Path}'.");
     }
+    // An example with both of these is Devinity\Plucks-Leads\Warm Plucks.
     if (ChangeMacroValueToZero("Delay Mix")) {
       Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
     }
