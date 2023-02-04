@@ -95,8 +95,12 @@ public class ProgramXml {
     return null;
   }
 
-  public void ChangeModWheelSignalConnectionSourcesToMacro(int macroNo) {
-    string newSource = $"$Program/Macro {macroNo}";
+  /// <summary>
+  ///   Change all effect parameters that are currently modulated by the modulation wheel
+  ///   to be modulated by the specified macro instead.
+  /// </summary>
+  public void ChangeModWheelSignalConnectionSourcesToMacro(Macro macro) {
+    string newSource = $"$Program/{macro.Name}";
     foreach (var signalConnectionElement in ModWheelSignalConnectionElements) {
       SetAttribute(
         signalConnectionElement, nameof(SignalConnection.Source), newSource);

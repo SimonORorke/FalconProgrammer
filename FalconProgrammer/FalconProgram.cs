@@ -356,6 +356,11 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
   }
 
+  /// <summary>
+  ///   If feasible, replaces all modulations by the modulation wheel of effect
+  ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
+  ///   explaining why it is not feasible.
+  /// </summary>
   public void ReplaceModWheelWithMacro(
     int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
     Console.WriteLine($"Checking '{Path}'.");
@@ -428,7 +433,7 @@ public class FalconProgram {
       }
     };
     ProgramXml.AddMacro(newMacro);
-    ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(newMacroNo);
+    ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(newMacro);
     Console.WriteLine(
       $"'{Name}': Replaced mod wheel with macro.");
   }
