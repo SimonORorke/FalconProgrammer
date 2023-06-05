@@ -8,12 +8,15 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class FalconProgram {
+  private List<Macro>? _continuousMacros;
+
   public FalconProgram(string path, Category category) {
     Path = path;
     Category = category;
   }
 
   [PublicAPI] public Category Category { get; }
+  private List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros();
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
   private List<Macro> Macros { get; set; } = null!;
 
@@ -31,16 +34,22 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   public void ChangeDelayToZero() {
-    if (ChangeMacroValueToZero("Delay")) {
-      Console.WriteLine($"Changed Delay to zero for '{Path}'.");
+    foreach (var continuousMacro in ContinuousMacros.Where(
+               continuousMacro =>
+                 continuousMacro.ControlsDelay
+                 && ChangeMacroValueToZero(continuousMacro.DisplayName))) {
+      Console.WriteLine($"Changed {continuousMacro.DisplayName} to zero for '{Path}'.");
     }
-    // An example with both of these is Devinity\Plucks-Leads\Warm Plucks.
-    if (ChangeMacroValueToZero("Delay Mix")) {
-      Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
-    }
-    if (ChangeMacroValueToZero("Delay On/Off")) {
-      Console.WriteLine($"Changed Delay On/Off to zero for '{Path}'.");
-    }
+    // if (ChangeMacroValueToZero("Delay")) {
+    //   Console.WriteLine($"Changed Delay to zero for '{Path}'.");
+    // }
+    // // An example with both of these is Devinity\Plucks-Leads\Warm Plucks.
+    // if (ChangeMacroValueToZero("Delay Mix")) {
+    //   Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
+    // }
+    // if (ChangeMacroValueToZero("Delay On/Off")) {
+    //   Console.WriteLine($"Changed Delay On/Off to zero for '{Path}'.");
+    // }
   }
 
   private bool ChangeMacroValueToZero(string displayName) {
@@ -49,14 +58,14 @@ public class FalconProgram {
       return false;
     }
     // Change the values of the effect parameters modulated by the macro as required too.
-    var signalConnectionElementsWithMacroSource = 
+    var signalConnectionElementsWithMacroSource =
       ProgramXml.GetSignalConnectionElementsWithSource(macroName);
     foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
       var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
       var effectElement = ProgramXml.GetParentElement(connectionsElement);
       var signalConnection = new SignalConnection(signalConnectionElement);
       ProgramXml.SetAttribute(
-        effectElement, signalConnection.Destination, 
+        effectElement, signalConnection.Destination,
         // If it's a toggle macro, Destination should be "Bypass".  
         signalConnection.Destination == "Bypass" ? 1 : 0);
     }
@@ -65,30 +74,36 @@ public class FalconProgram {
 
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
     Console.WriteLine($"Updating '{Path}'.");
-    var oldSignalConnection = new SignalConnection { CcNo = oldCcNo};
-    var newSignalConnection = new SignalConnection { CcNo = newCcNo};
+    var oldSignalConnection = new SignalConnection { CcNo = oldCcNo };
+    var newSignalConnection = new SignalConnection { CcNo = newCcNo };
     ProgramXml.ChangeSignalConnectionSource(oldSignalConnection, newSignalConnection);
   }
 
   public void ChangeReverbToZero() {
-    if (ChangeMacroValueToZero("Reverb")) {
-      Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
+    foreach (var continuousMacro in ContinuousMacros.Where(
+               continuousMacro =>
+                 continuousMacro.ControlsReverb
+                 && ChangeMacroValueToZero(continuousMacro.DisplayName))) {
+      Console.WriteLine($"Changed {continuousMacro.DisplayName} to zero for '{Path}'.");
     }
-    if (ChangeMacroValueToZero("Reverb Mix")) {
-      Console.WriteLine($"Changed Reverb Mix to zero for '{Path}'.");
-    }
-    if (ChangeMacroValueToZero("Room")) {
-      Console.WriteLine($"Changed Room to zero for '{Path}'.");
-    }
-    if (ChangeMacroValueToZero("SparkVerb")) {
-      Console.WriteLine($"Changed SparkVerb to zero for '{Path}'.");
-    }
-    if (ChangeMacroValueToZero("SparkVerb Mix")) {
-      Console.WriteLine($"Changed SparkVerb Mix to zero for '{Path}'.");
-    }
-    if (ChangeMacroValueToZero("SparkVerb On/Off")) {
-      Console.WriteLine($"Changed SparkVerb On/Off to zero for '{Path}'.");
-    }
+    // if (ChangeMacroValueToZero("Reverb")) {
+    //   Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
+    // }
+    // if (ChangeMacroValueToZero("Reverb Mix")) {
+    //   Console.WriteLine($"Changed Reverb Mix to zero for '{Path}'.");
+    // }
+    // if (ChangeMacroValueToZero("Room")) {
+    //   Console.WriteLine($"Changed Room to zero for '{Path}'.");
+    // }
+    // if (ChangeMacroValueToZero("SparkVerb")) {
+    //   Console.WriteLine($"Changed SparkVerb to zero for '{Path}'.");
+    // }
+    // if (ChangeMacroValueToZero("SparkVerb Mix")) {
+    //   Console.WriteLine($"Changed SparkVerb Mix to zero for '{Path}'.");
+    // }
+    // if (ChangeMacroValueToZero("SparkVerb On/Off")) {
+    //   Console.WriteLine($"Changed SparkVerb On/Off to zero for '{Path}'.");
+    // }
   }
 
   private static void CheckForNonModWheelNonInfoPageMacro(
@@ -161,10 +176,10 @@ public class FalconProgram {
   ///   Finds the ScriptProcessor, if any, that is to contain the SignalConnections that
   ///   map the macros to MIDI CC numbers. If the ScriptProcessor is not found, each
   ///   macro's MIDI CC number must be defined in a SignalConnections owned by the
-  ///   macro's ConstantModulation.  
+  ///   macro's ConstantModulation.
   /// </summary>
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
-    if (Category.SoundBankFolder.Name == "Factory" 
+    if (Category.SoundBankFolder.Name == "Factory"
         && !Category.IsInfoPageLayoutInScript) {
       // The macro MIDI CCs are defined for ScriptProcessor "EventProcessor9" if it
       // exists.
@@ -259,6 +274,7 @@ public class FalconProgram {
       from gapWidth in gapWidths
       where gapWidth >= minNewMacroGapWidth
       select gapWidth).Any();
+    // TODO: Remove can fit in gap check.
     if (!canFitInGap) {
       return null;
     }
@@ -364,9 +380,8 @@ public class FalconProgram {
   public void ReplaceModWheelWithMacro(
     int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
     Console.WriteLine($"Checking '{Path}'.");
-    var continuousMacros = GetContinuousMacros();
     string? existingWheelMacroDisplayName = (
-      from continuousMacro in continuousMacros
+      from continuousMacro in ContinuousMacros
       where continuousMacro.DisplayName.ToLower().Contains("wheel")
       select continuousMacro.DisplayName).FirstOrDefault();
     if (existingWheelMacroDisplayName != null) {
@@ -374,11 +389,13 @@ public class FalconProgram {
         $"'{Name}' already has a '{existingWheelMacroDisplayName}' macro.");
       return;
     }
-    if (continuousMacros.Count > maxExistingContinuousMacroCount) {
+    // TODO: Remove existing continuous macro count check.
+    if (ContinuousMacros.Count > maxExistingContinuousMacroCount) {
       Console.WriteLine(
         $"'{Name}' already has more than {maxExistingContinuousMacroCount} continuous macros.");
       return;
     }
+    // TODO: Remove existing wheel replacement CC signal connection check.
     bool hasReplacementCcNo = false;
     if (InfoPageCcsScriptProcessor != null) {
       hasReplacementCcNo = (
@@ -386,7 +403,7 @@ public class FalconProgram {
         where signalConnection.CcNo == modWheelReplacementCcNo
         select signalConnection).Any();
     } else {
-      foreach (var continuousMacro in continuousMacros) {
+      foreach (var continuousMacro in ContinuousMacros) {
         hasReplacementCcNo = (
           from signalConnection in continuousMacro.SignalConnections
           where signalConnection.CcNo == modWheelReplacementCcNo
@@ -407,6 +424,7 @@ public class FalconProgram {
       return;
     }
     var locationForNewMacro = GetLocationForNewContinuousMacro();
+    // TODO: Remove no room for new macro check.
     if (locationForNewMacro == null) {
       Console.WriteLine(
         $"'{Name}' " +

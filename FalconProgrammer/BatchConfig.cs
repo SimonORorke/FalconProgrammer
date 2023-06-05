@@ -43,7 +43,7 @@ public class BatchConfig {
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
@@ -61,7 +61,7 @@ public class BatchConfig {
   /// <param name="newCcNo">Replacement MIDI CC number.</param>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
@@ -79,7 +79,7 @@ public class BatchConfig {
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
@@ -94,7 +94,7 @@ public class BatchConfig {
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   private void ConfigurePrograms(
@@ -110,7 +110,8 @@ public class BatchConfig {
         }
       }
     } else { // All sound banks
-      foreach (var soundBankFolder in GetProgramsFolder().GetDirectories()) {
+      foreach (var soundBankFolder in GetProgramsFolder().GetDirectories()
+                 .Where(soundBankFolder => soundBankFolder.Name != ".git")) {
         SoundBankFolder = soundBankFolder;
         foreach (var categoryFolder in SoundBankFolder.GetDirectories()) {
           ConfigureProgramsInCategory(categoryFolder.Name);
@@ -168,7 +169,7 @@ public class BatchConfig {
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
@@ -180,9 +181,9 @@ public class BatchConfig {
   private DirectoryInfo GetProgramsFolder() {
     if (string.IsNullOrEmpty(Settings.ProgramsFolder.Path)) {
       throw new ApplicationException(
-        "The programs folder is not specified in settings file " + 
-        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " + 
-        "change the settings folder path in " + 
+        "The programs folder is not specified in settings file " +
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+        "change the settings folder path in " +
         $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
     }
     var result = new DirectoryInfo(Settings.ProgramsFolder.Path);
@@ -210,7 +211,7 @@ public class BatchConfig {
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
@@ -225,7 +226,7 @@ public class BatchConfig {
   /// </summary>
   /// <param name="soundBankName">Null for all sound banks.</param>
   /// <param name="categoryName">
-  ///   If <paramref name="soundBankName"/> is specified, null (the default) for all
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
   ///   categories in the specified sound bank. Otherwise ignored.
   /// </param>
   [PublicAPI]
