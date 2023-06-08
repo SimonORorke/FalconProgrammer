@@ -209,6 +209,14 @@ public class ProgramXml {
     return result;
   }
 
+  public void RemoveSignalConnectionElementsWithSource(string source) {
+    var signalConnectionElements = 
+      GetSignalConnectionElementsWithSource(source);
+    foreach (var signalConnectionElement in signalConnectionElements) {
+      signalConnectionElement.Remove();
+    }
+  }
+
   public void SaveToFile(string outputProgramPath) {
     try {
       var writer = XmlWriter.Create(

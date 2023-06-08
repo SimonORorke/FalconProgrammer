@@ -47,6 +47,7 @@ public static class Runner {
     // config.UpdateMacroCcs("Pulsar", "Bass");
     // config.ReplaceModWheelWithMacro("Devinity");
     // config.UpdateMacroCcs("Devinity");
+    // config.ReplaceModWheelWithMacro(null);
     // config.ReplaceModWheelWithMacro("Factory", "Test");
     // config.ReplaceModWheelWithMacro("Factory");
     // config.ReplaceModWheelWithMacro("Factory", "Brutal Bass 2.1");

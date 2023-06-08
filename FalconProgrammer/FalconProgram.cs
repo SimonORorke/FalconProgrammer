@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using FalconProgrammer.XmlLinq;
@@ -16,9 +15,9 @@ public class FalconProgram {
   }
 
   [PublicAPI] public Category Category { get; }
-  private List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros();
-  private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
-  private List<Macro> Macros { get; set; } = null!;
+  internal List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros();
+  internal ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
+  internal List<Macro> Macros { get; private set; } = null!;
 
   /// <summary>
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
@@ -26,11 +25,11 @@ public class FalconProgram {
   /// </summary>
   private LocationOrder MacroCcLocationOrder { get; set; }
 
-  private string Name { get; set; } = null!;
+  internal string Name { get; private set; } = null!;
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
   [PublicAPI] public string Path { get; }
-  private ProgramXml ProgramXml { get; set; } = null!;
+  internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   public void ChangeDelayToZero() {
@@ -40,16 +39,6 @@ public class FalconProgram {
                  && ChangeMacroValueToZero(continuousMacro.DisplayName))) {
       Console.WriteLine($"Changed {continuousMacro.DisplayName} to zero for '{Path}'.");
     }
-    // if (ChangeMacroValueToZero("Delay")) {
-    //   Console.WriteLine($"Changed Delay to zero for '{Path}'.");
-    // }
-    // // An example with both of these is Devinity\Plucks-Leads\Warm Plucks.
-    // if (ChangeMacroValueToZero("Delay Mix")) {
-    //   Console.WriteLine($"Changed Delay Mix to zero for '{Path}'.");
-    // }
-    // if (ChangeMacroValueToZero("Delay On/Off")) {
-    //   Console.WriteLine($"Changed Delay On/Off to zero for '{Path}'.");
-    // }
   }
 
   private bool ChangeMacroValueToZero(string displayName) {
@@ -86,24 +75,6 @@ public class FalconProgram {
                  && ChangeMacroValueToZero(continuousMacro.DisplayName))) {
       Console.WriteLine($"Changed {continuousMacro.DisplayName} to zero for '{Path}'.");
     }
-    // if (ChangeMacroValueToZero("Reverb")) {
-    //   Console.WriteLine($"Changed Reverb to zero for '{Path}'.");
-    // }
-    // if (ChangeMacroValueToZero("Reverb Mix")) {
-    //   Console.WriteLine($"Changed Reverb Mix to zero for '{Path}'.");
-    // }
-    // if (ChangeMacroValueToZero("Room")) {
-    //   Console.WriteLine($"Changed Room to zero for '{Path}'.");
-    // }
-    // if (ChangeMacroValueToZero("SparkVerb")) {
-    //   Console.WriteLine($"Changed SparkVerb to zero for '{Path}'.");
-    // }
-    // if (ChangeMacroValueToZero("SparkVerb Mix")) {
-    //   Console.WriteLine($"Changed SparkVerb Mix to zero for '{Path}'.");
-    // }
-    // if (ChangeMacroValueToZero("SparkVerb On/Off")) {
-    //   Console.WriteLine($"Changed SparkVerb On/Off to zero for '{Path}'.");
-    // }
   }
 
   private static void CheckForNonModWheelNonInfoPageMacro(
@@ -227,95 +198,7 @@ public class FalconProgram {
       select macro).ToList();
   }
 
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  private Point? GetLocationForNewContinuousMacro() {
-    const int macroWidth = 60;
-    const int minHorizontalGapBetweenMacros = 5;
-    const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
-    // When there are only toggle macros on the bottom row, they may be lower than the
-    // standard bottom, usually to accomodate two-line display names.  This looks OK for
-    // toggle macros.  But for continuous macros, being taller, it makes an ugly lack of
-    // bottom margin.  So place the new continuous macro no lower than the standard
-    // bottommost Y.
-    // Example: "Factory\Pluck\Pad Mullerizer".
-    const int standardBottommostY = 355;
-    // We need to horizontally align the new macro relative not only to macros that are
-    // bottommost on the Info window (i.e. highest Y) but also those that are close to
-    // the bottom.  The vertical clearance is 95, so this should be safe. In reality,
-    // many are up just 5 from the bottommost macros.
-    // Example: "Factory\Pluck\Mutan Mute".
-    const int verticalFudge = 50;
-    const int rightEdge = 695; // 675?
-    int bottomRowY = (
-      from macro in Macros
-      select macro.Properties.Y).Max();
-    // List, from left to right, the macros on the bottom row of macros on the Info page.
-    var bottomRowMacros = (
-      from macro in GetMacrosSortedByLocation(
-        LocationOrder.TopToBottomLeftToRight)
-      where macro.Properties.Y >= bottomRowY - verticalFudge
-      select macro).ToList();
-    // List, from left to right, the widths of the gaps between the macros on the bottom
-    // row of macros on the Info page.  Include the gap between the leftmost macro and
-    // the left edge and the gap between the rightmost macro and the right edge.
-    var gapWidths = new List<int> { bottomRowMacros[0].Properties.X };
-    if (bottomRowMacros.Count > 1) {
-      for (int i = 0; i < bottomRowMacros.Count - 1; i++) {
-        gapWidths.Add(
-          bottomRowMacros[i + 1].Properties.X
-          - (bottomRowMacros[i].Properties.X
-             + macroWidth));
-      }
-    }
-    gapWidths.Add(rightEdge - (bottomRowMacros[^1].Properties.X + macroWidth));
-    // Check whether there any gaps on the bottom rowe wide enough to accommodate a new
-    // macro.
-    bool canFitInGap = (
-      from gapWidth in gapWidths
-      where gapWidth >= minNewMacroGapWidth
-      select gapWidth).Any();
-    // TODO: Remove can fit in gap check.
-    if (!canFitInGap) {
-      return null;
-    }
-    // There is at least one gap wide enough to accommodate a new macro.
-    // Put the new macro on the bottom row of macros, in the middle of the rightmost gap
-    // within which it will fit.
-    int rightmostSuitableGapWidth = (
-      from gapWidth in gapWidths
-      where gapWidth >= minNewMacroGapWidth
-      select gapWidth).Last();
-    int newMacroGapIndex = -1;
-    for (int i = gapWidths.Count - 1; i >= 0; i--) {
-      if (gapWidths[i] == rightmostSuitableGapWidth) {
-        newMacroGapIndex = i;
-        break;
-      }
-    }
-    int newMacroGapX = newMacroGapIndex == 0
-      ? 0
-      : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
-    int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - macroWidth) / 2;
-    // If there are continuous and toggle macros on the bottom row, the continuous macros
-    // may be a little higher up than the toggle macros, as they are taller.  In that
-    // case, align the new macro horizontally with the bottommost continuous macro.
-    // Example: "Factory\Pluck\Mutan Mute".
-    var bottomRowContinuousMacros = (
-      from macro in bottomRowMacros
-      where macro.IsContinuous
-      select macro).ToList();
-    int newMacroY;
-    if (bottomRowContinuousMacros.Count > 0) {
-      newMacroY = (
-        from macro in bottomRowContinuousMacros
-        select macro.Properties.Y).Max();
-    } else {
-      newMacroY = bottomRowY <= standardBottommostY ? bottomRowY : standardBottommostY;
-    }
-    return new Point(newMacroX, newMacroY);
-  }
-
-  private SortedSet<Macro> GetMacrosSortedByLocation(
+  internal SortedSet<Macro> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
     var result = new SortedSet<Macro>(
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
@@ -370,90 +253,6 @@ public class FalconProgram {
     Deserialise();
     ProgramXml = CreateProgramXml();
     ProgramXml.LoadFromFile(Path);
-  }
-
-  /// <summary>
-  ///   If feasible, replaces all modulations by the modulation wheel of effect
-  ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
-  ///   explaining why it is not feasible.
-  /// </summary>
-  public void ReplaceModWheelWithMacro(
-    int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
-    Console.WriteLine($"Checking '{Path}'.");
-    string? existingWheelMacroDisplayName = (
-      from continuousMacro in ContinuousMacros
-      where continuousMacro.DisplayName.ToLower().Contains("wheel")
-      select continuousMacro.DisplayName).FirstOrDefault();
-    if (existingWheelMacroDisplayName != null) {
-      Console.WriteLine(
-        $"'{Name}' already has a '{existingWheelMacroDisplayName}' macro.");
-      return;
-    }
-    // TODO: Remove existing continuous macro count check.
-    if (ContinuousMacros.Count > maxExistingContinuousMacroCount) {
-      Console.WriteLine(
-        $"'{Name}' already has more than {maxExistingContinuousMacroCount} continuous macros.");
-      return;
-    }
-    // TODO: Remove existing wheel replacement CC signal connection check.
-    bool hasReplacementCcNo = false;
-    if (InfoPageCcsScriptProcessor != null) {
-      hasReplacementCcNo = (
-        from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
-        where signalConnection.CcNo == modWheelReplacementCcNo
-        select signalConnection).Any();
-    } else {
-      foreach (var continuousMacro in ContinuousMacros) {
-        hasReplacementCcNo = (
-          from signalConnection in continuousMacro.SignalConnections
-          where signalConnection.CcNo == modWheelReplacementCcNo
-          select signalConnection).Any();
-        if (hasReplacementCcNo) {
-          break;
-        }
-      }
-    }
-    if (hasReplacementCcNo) {
-      Console.WriteLine(
-        $"'{Name}' already has a macro mapped to mod wheel replacement " +
-        $"MIDI CC {modWheelReplacementCcNo}.");
-      return;
-    }
-    if (!ProgramXml.HasModWheelSignalConnections()) {
-      Console.WriteLine($"'{Name}' contains no mod wheel modulations.");
-      return;
-    }
-    var locationForNewMacro = GetLocationForNewContinuousMacro();
-    // TODO: Remove no room for new macro check.
-    if (locationForNewMacro == null) {
-      Console.WriteLine(
-        $"'{Name}' " +
-        "does not have room on its Info page's bottom row for a new macro.");
-      return;
-    }
-    int newMacroNo = (
-      from macro in Macros
-      select macro.MacroNo).Max() + 1;
-    var newMacro = new Macro {
-      MacroNo = newMacroNo,
-      DisplayName = "Wheel",
-      Bipolar = 0,
-      IsContinuous = true,
-      Value = 0,
-      SignalConnections = new List<SignalConnection> {
-        new SignalConnection {
-          CcNo = modWheelReplacementCcNo
-        }
-      },
-      Properties = new Properties {
-        X = locationForNewMacro.Value.X,
-        Y = locationForNewMacro.Value.Y
-      }
-    };
-    ProgramXml.AddMacro(newMacro);
-    ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(newMacro);
-    Console.WriteLine(
-      $"'{Name}': Replaced mod wheel with macro.");
   }
 
   public void Save() {

@@ -151,7 +151,8 @@ public class BatchConfig {
           Program.CountMacros();
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
-          Program.ReplaceModWheelWithMacro(
+          var infoPageLayout = new InfoPageLayout(Program);
+          infoPageLayout.ReplaceModWheelWithMacro(
             ModWheelReplacementCcNo, MaxExistingContinuousMacroCount);
           break;
         case ConfigTask.UpdateMacroCcs:
