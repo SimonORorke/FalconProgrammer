@@ -75,7 +75,9 @@ public class InfoPageLayout {
     // Example: "Factory\Pluck\Pad Mullerizer".
     const int standardBottommostY = 355;
     const int rightEdge = 695;
-    const int verticalClearance = 115; 
+    // Allows a gap above a macro whose display name wraps to two text lines.
+    // 95 would be the bare minimum.
+    const int verticalClearance = 115;
     int bottomRowY = (
       from macro in Program.Macros
       select macro.Properties.Y).Max();
