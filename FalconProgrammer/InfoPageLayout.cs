@@ -82,21 +82,22 @@ public class InfoPageLayout {
       from macro in Program.Macros
       select macro.Properties.Y).Max();
     var bottomRowMacros = GetBottomRowMacros(bottomRowY);
-    bool layoutHasSingleRow = bottomRowMacros.Count == Program.Macros.Count;
+    bool hasSingleRow = bottomRowMacros.Count == Program.Macros.Count;
     FindDelayOrReverbMacroWithModWheelReplacementCcNo(
       out var delayOrReverbMacroWithWheelCcNo,
       out var delayOrReverbSignalConnectionWithWheelCcNo);
-    bool delayOrReverbMacroWithWheelCcNoIsOnBottomRow =
+    bool isDelayOrReverbMacroWithWheelCcNoOnBottomRow =
       delayOrReverbMacroWithWheelCcNo != null
       && bottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
     if (Program.ContinuousMacros.Count > maxExistingContinuousMacroCount
-        && !(layoutHasSingleRow && delayOrReverbMacroWithWheelCcNoIsOnBottomRow)) {
+        && !isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
       Console.WriteLine(
         $"'{Program.Name}' " +
-        "does not have room on its Info page for a Wheel macro.");
+        $"has more than {maxExistingContinuousMacroCount} marcos " 
+        + "and no delay/reverb on the bottom row.");
       return null;
     }
-    if (layoutHasSingleRow && delayOrReverbMacroWithWheelCcNoIsOnBottomRow) {
+    if (isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
       // Remove the wheel replacement CC number assignment from the delay or reverb
       // macro that has it.  It will be reassigned to the new wheel macro when that is
       // added.
@@ -107,7 +108,7 @@ public class InfoPageLayout {
         delayOrReverbMacroWithWheelCcNo!.Properties.X,
         delayOrReverbMacroWithWheelCcNo.Properties.Y - verticalClearance);
     }
-    // There is no wheel replacement CC number to reassign.
+    // There is no wheel replacement CC number on a delay or reverb macro to reassign.
     //
     // List, from left to right, the widths of the gaps between the macros on the bottom
     // row of macros on the Info page.  Include the gap between the leftmost macro and
@@ -129,18 +130,18 @@ public class InfoPageLayout {
       where gapWidth >= minNewMacroGapWidth
       select gapWidth).Any();
     if (!canFitInGap) {
-      if (layoutHasSingleRow) {
-        // Locate the new wheel macro above the rightmost macro.
-        var rightmostMacro = bottomRowMacros[^1];
-        return new Point(
-          rightmostMacro.Properties.X,
-          rightmostMacro.Properties.Y - verticalClearance);
-      } else {
+      if (!hasSingleRow) {
+        // No instances of this have been reported.
         Console.WriteLine(
           $"'{Program.Name}' " +
           "does not have room on its Info page's bottom row for a new macro.");
+        return null;
       }
-      return null;
+      // Locate the new wheel macro above the rightmost macro.
+      var rightmostMacro = bottomRowMacros[^1];
+      return new Point(
+        rightmostMacro.Properties.X,
+        rightmostMacro.Properties.Y - verticalClearance);
     }
     // There is at least one gap wide enough to accommodate a new macro.
     // Put the new macro on the bottom row of macros, in the middle of the rightmost gap

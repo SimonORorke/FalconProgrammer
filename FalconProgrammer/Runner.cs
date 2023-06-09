@@ -3,6 +3,7 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    // config.ReplaceModWheelWithMacro(null);
     // config.ChangeDelayToZero("Factory", "Pure Additive 2.0");
     // config.ChangeReverbToZero("Factory", "Pure Additive 2.0");
     // config.ChangeDelayToZero(null);
@@ -47,7 +48,6 @@ public static class Runner {
     // config.UpdateMacroCcs("Pulsar", "Bass");
     // config.ReplaceModWheelWithMacro("Devinity");
     // config.UpdateMacroCcs("Devinity");
-    // config.ReplaceModWheelWithMacro(null);
     // config.ReplaceModWheelWithMacro("Factory", "Test");
     // config.ReplaceModWheelWithMacro("Factory");
     // config.ReplaceModWheelWithMacro("Factory", "Brutal Bass 2.1");
