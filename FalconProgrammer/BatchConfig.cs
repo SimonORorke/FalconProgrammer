@@ -126,10 +126,10 @@ public class BatchConfig {
     Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
-    if (Task == ConfigTask.ReplaceModWheelWithMacro &&
-        Category.IsInfoPageLayoutInScript) {
+    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.ReplaceModWheelWithMacro  
+        && Category.IsInfoPageLayoutInScript) {
       Console.WriteLine(
-        "Cannot replace mod wheel modulations for category " +
+        $"Cannot {Task} for category " +
         $"'{SoundBankFolder.Name}\\{categoryName}' " +
         "because the category's Info page layout is defined in a script.");
       return;
@@ -137,6 +137,7 @@ public class BatchConfig {
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
       Program.Read();
+      InfoPageLayout infoPageLayout;
       switch (Task) {
         case ConfigTask.ChangeDelayToZero:
           Program.ChangeDelayToZero();
@@ -150,8 +151,13 @@ public class BatchConfig {
         case ConfigTask.CountMacros:
           Program.CountMacros();
           break;
+        case ConfigTask.ReassignDelayMacroCcNoToWheelMacro:
+          infoPageLayout = new InfoPageLayout(Program);
+          infoPageLayout.ReassignDelayMacroCcNoToWheelMacro(
+            ModWheelReplacementCcNo);
+          break;
         case ConfigTask.ReplaceModWheelWithMacro:
-          var infoPageLayout = new InfoPageLayout(Program);
+          infoPageLayout = new InfoPageLayout(Program);
           infoPageLayout.ReplaceModWheelWithMacro(
             ModWheelReplacementCcNo, MaxExistingContinuousMacroCount);
           break;
@@ -205,6 +211,13 @@ public class BatchConfig {
     return result;
   }
 
+  [PublicAPI]
+  public void ReassignDelayMacroCcNoToWheelMacro(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ReassignDelayMacroCcNoToWheelMacro;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   /// <summary>
   ///   In each of the specified Falcon program presets where it is feasible, replaces
   ///   use of the modulation wheel with a Wheel macro that executes the same
@@ -242,6 +255,7 @@ public class BatchConfig {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
+    ReassignDelayMacroCcNoToWheelMacro,
     ReplaceModWheelWithMacro,
     UpdateMacroCcs
   }

@@ -241,6 +241,18 @@ public class ProgramXml {
     SetAttribute(GetAttribute(element, attributeName), value);
   }
 
+  public void UpdateMacroLocation(Macro macro) {
+    var macroElement = MacroElements[macro.Index];
+    var propertiesElement = macroElement.Element("Properties");
+    if (propertiesElement == null) {
+      throw new ApplicationException(
+        "Cannot find Properties "
+        + $"element for ConstantModulation '{macro.DisplayName}'.");
+    }
+    SetAttribute(propertiesElement, "x", macro.Properties.X);
+    SetAttribute(propertiesElement, "y", macro.Properties.Y);
+  }
+
   public void UpdateMacroSignalConnection(
     Macro macro,
     SignalConnection signalConnection) {

@@ -13,6 +13,71 @@ public class InfoPageLayout {
   private FalconProgram Program { get; }
 
   /// <summary>
+  ///   If there is a reverb continuous macro and it's MIDI CC number has been
+  ///   reassigned to a wheel replacement macro, if there is a delay continuous macro,
+  ///   swap the locations of the reverb and delay continuous macros and reassign the
+  ///   delay’s MIDI CC number to the reverb.  When and if those changes have been made,
+  ///   if there are also a reverb toggle macro and a delay toggle macro, swap their
+  ///   locations and MIDI CC numbers.
+  /// </summary>
+  /// <remarks>
+  ///   In many programs, if the reverb continuous macro had the MIDI CC number we want
+  ///   to use for a wheel replacement macro, the reverb continuous macro's MIDI CC
+  ///   number has been reassigned to the wheel replacement macro, which has been located
+  ///   above the reverb continuous macro.  But the reverb continuous macro, though
+  ///   seldom used, is more likely to be used than the delay continuous macro, if it
+  ///   exists.
+  ///   <para>
+  ///     So the idea is to to make best use of the delay continuous macro's MIDI CC
+  ///     number by reassigning it to the reverb continuous macro.  Their locations need
+  ///     to be swaped so that the delay continuous macro, which now has no MIDI CC
+  ///     number, is below the wheel replacement macro.  As the locations of the reverb
+  ///     and delay continuous macros have been swaped, the locations and MIDI CC
+  ///     numbers of the corresponding toggle macros, if any, need to be swaped to, in
+  ///     order to keep then next to the continuous macros they enable. 
+  ///   </para> 
+  /// </remarks>
+  public void ReassignDelayMacroCcNoToWheelMacro(int modWheelReplacementCcNo) {
+    ModWheelReplacementCcNo = modWheelReplacementCcNo;
+    if (!WheelMacroExists(false)) {
+      return;
+    }
+    var reverbContinuousMacro = FindReverbContinuousMacroWithNoCcNo();
+    if (reverbContinuousMacro == null) {
+      return;
+    }
+    var delayContinuousMacro = FindDelayContinuousMacro();
+    if (delayContinuousMacro == null) {
+      return;
+    }
+    if (!ReassignMacroCcNo(delayContinuousMacro, reverbContinuousMacro)) {
+      return;
+    }
+    SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
+    string resultMessage = 
+      $"'{Program.Name}': Reassigned '{delayContinuousMacro.DisplayName}' macro's " + 
+      $"CC number to Wheel macro; swapped '{delayContinuousMacro.DisplayName}' and " + 
+      $"'{reverbContinuousMacro.DisplayName}' locations'."; 
+    var reverbToggleMacro = FindReverbToggleMacro();
+    if (reverbToggleMacro == null) {
+      Console.WriteLine(resultMessage);
+      return;
+    }
+    var delayToggleMacro = FindDelayToggleMacro();
+    if (delayToggleMacro == null) {
+      Console.WriteLine(resultMessage);
+      return;
+    }
+    SwapMacroCcNos(delayToggleMacro, reverbToggleMacro);
+    SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
+    resultMessage = 
+      resultMessage.TrimEnd('.') + 
+      $"; swapped '{delayToggleMacro.DisplayName}' and " +
+      $"'{reverbToggleMacro.DisplayName}' locations'.";
+    Console.WriteLine(resultMessage);
+  }
+
+  /// <summary>
   ///   If feasible, replaces all modulations by the modulation wheel of effect
   ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
   ///   explaining why it is not feasible.
@@ -34,13 +99,6 @@ public class InfoPageLayout {
       return;
     }
     AddWheelMacro(locationForNewWheelMacro.Value);
-  }
-
-  public void ReassignDelayMacroMidiCcNoToWheelMacro(int modWheelReplacementCcNo) {
-    ModWheelReplacementCcNo = modWheelReplacementCcNo;
-    if (!WheelMacroExists(false)) {
-      return;
-    }
   }
 
   private void AddWheelMacro(Point location) {
@@ -67,6 +125,56 @@ public class InfoPageLayout {
     Program.ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(wheelMacro);
     Console.WriteLine(
       $"'{Program.Name}': Replaced mod wheel with macro.");
+  }
+
+  private Macro? FindDelayContinuousMacro() {
+    return (
+      from continuousMacro in Program.ContinuousMacros
+      where continuousMacro.ControlsDelay
+      select continuousMacro).FirstOrDefault();
+  }
+
+  private Macro? FindDelayToggleMacro() {
+    return (
+      from macro in Program.Macros
+      where macro.ControlsDelay && !macro.IsContinuous
+      select macro).FirstOrDefault();
+  }
+
+  private void FindDelayOrReverbMacroWithModWheelReplacementCcNo(
+    out Macro? delayOrReverbMacroWithWheelCcNo,
+    out SignalConnection? delayOrReverbSignalConnectionWithWheelCcNo) {
+    delayOrReverbMacroWithWheelCcNo = null;
+    delayOrReverbSignalConnectionWithWheelCcNo = null;
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      var maybeSignalConnection = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.CcNo == ModWheelReplacementCcNo
+        select signalConnection).FirstOrDefault();
+      if (maybeSignalConnection != null) {
+        delayOrReverbMacroWithWheelCcNo = (
+          from continuousMacro in Program.ContinuousMacros
+          where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
+                && (continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)
+          select continuousMacro).FirstOrDefault();
+        if (delayOrReverbMacroWithWheelCcNo != null) {
+          delayOrReverbSignalConnectionWithWheelCcNo = maybeSignalConnection;
+        }
+      }
+    } else {
+      foreach (var continuousMacro in Program.ContinuousMacros
+                 .Where(continuousMacro => continuousMacro.ControlsDelay
+                                           || continuousMacro.ControlsReverb)) {
+        delayOrReverbSignalConnectionWithWheelCcNo = (
+          from signalConnection in continuousMacro.SignalConnections
+          where signalConnection.CcNo == ModWheelReplacementCcNo
+          select signalConnection).FirstOrDefault();
+        if (delayOrReverbSignalConnectionWithWheelCcNo != null) {
+          delayOrReverbMacroWithWheelCcNo = continuousMacro;
+          break;
+        }
+      }
+    }
   }
 
   [SuppressMessage("ReSharper", "CommentTypo")]
@@ -100,7 +208,7 @@ public class InfoPageLayout {
         && !isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
       Console.WriteLine(
         $"'{Program.Name}' " +
-        $"has more than {maxExistingContinuousMacroCount} marcos "
+        $"has more than {maxExistingContinuousMacroCount} macros "
         + "and no delay/reverb on the bottom row.");
       return null;
     }
@@ -187,74 +295,19 @@ public class InfoPageLayout {
     return new Point(newMacroX, newMacroY);
   }
 
-  private void FindDelayOrReverbMacroWithModWheelReplacementCcNo(
-    out Macro? delayOrReverbMacroWithWheelCcNo,
-    out SignalConnection? delayOrReverbSignalConnectionWithWheelCcNo) {
-    delayOrReverbMacroWithWheelCcNo = null;
-    delayOrReverbSignalConnectionWithWheelCcNo = null;
-    if (Program.InfoPageCcsScriptProcessor != null) {
-      var maybeSignalConnection = (
-        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
-        where signalConnection.CcNo == ModWheelReplacementCcNo
-        select signalConnection).FirstOrDefault();
-      if (maybeSignalConnection != null) {
-        delayOrReverbMacroWithWheelCcNo = (
-          from continuousMacro in Program.ContinuousMacros
-          where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
-                && (continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)
-          select continuousMacro).FirstOrDefault();
-        if (delayOrReverbMacroWithWheelCcNo != null) {
-          delayOrReverbSignalConnectionWithWheelCcNo = maybeSignalConnection;
-        }
-      }
-    } else {
-      foreach (var continuousMacro in Program.ContinuousMacros
-                 .Where(continuousMacro => continuousMacro.ControlsDelay
-                                           || continuousMacro.ControlsReverb)) {
-        delayOrReverbSignalConnectionWithWheelCcNo = (
-          from signalConnection in continuousMacro.SignalConnections
-          where signalConnection.CcNo == ModWheelReplacementCcNo
-          select signalConnection).FirstOrDefault();
-        if (delayOrReverbSignalConnectionWithWheelCcNo != null) {
-          delayOrReverbMacroWithWheelCcNo = continuousMacro;
-          break;
-        }
-      }
-    }
+  private Macro? FindReverbContinuousMacroWithNoCcNo() {
+    return (
+      from continuousMacro in Program.ContinuousMacros
+      where continuousMacro.ControlsReverb
+            && continuousMacro.SignalConnections.Count == 0
+      select continuousMacro).FirstOrDefault();
   }
 
-  private void FindReverbMacroWithNoCcNo(
-    out Macro? delayOrReverbMacroWithWheelCcNo) {
-    delayOrReverbMacroWithWheelCcNo = null;
-    if (Program.InfoPageCcsScriptProcessor != null) {
-      var maybeSignalConnection = (
-        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
-        where signalConnection.CcNo == ModWheelReplacementCcNo
-        select signalConnection).FirstOrDefault();
-      if (maybeSignalConnection != null) {
-        delayOrReverbMacroWithWheelCcNo = (
-          from continuousMacro in Program.ContinuousMacros
-          where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
-                && (continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)
-          select continuousMacro).FirstOrDefault();
-        if (delayOrReverbMacroWithWheelCcNo != null) {
-          delayOrReverbSignalConnectionWithWheelCcNo = maybeSignalConnection;
-        }
-      }
-    } else {
-      foreach (var continuousMacro in Program.ContinuousMacros
-                 .Where(continuousMacro => continuousMacro.ControlsDelay
-                                           || continuousMacro.ControlsReverb)) {
-        delayOrReverbSignalConnectionWithWheelCcNo = (
-          from signalConnection in continuousMacro.SignalConnections
-          where signalConnection.CcNo == ModWheelReplacementCcNo
-          select signalConnection).FirstOrDefault();
-        if (delayOrReverbSignalConnectionWithWheelCcNo != null) {
-          delayOrReverbMacroWithWheelCcNo = continuousMacro;
-          break;
-        }
-      }
-    }
+  private Macro? FindReverbToggleMacro() {
+    return (
+      from macro in Program.Macros
+      where macro.ControlsReverb && !macro.IsContinuous
+      select macro).FirstOrDefault();
   }
 
   /// <summary>
@@ -276,6 +329,37 @@ public class InfoPageLayout {
       select macro).ToList();
   }
 
+  private bool ReassignMacroCcNo(Macro fromMacro, Macro toMacro) {
+    SignalConnection? signalConnectionToChange = null;
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      signalConnectionToChange = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.MacroNo == fromMacro.MacroNo
+        select signalConnection).FirstOrDefault();
+    }
+    if (signalConnectionToChange != null) {
+      signalConnectionToChange.MacroNo = toMacro.MacroNo;
+      Program.ProgramXml.UpdateInfoPageCcsScriptProcessor();
+      return true;
+    }
+    if (fromMacro.SignalConnections.Count == 0) {
+      // This happens if the signal connection belongs to an effect, a scenario we don't
+      // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
+      Console.WriteLine(
+        $"'{Program.Name}': Cannot find SignalConnection of a supported type for " + 
+        $"macro '{fromMacro.DisplayName}'.");
+      return false;
+    }
+    signalConnectionToChange = fromMacro.SignalConnections[0];
+    fromMacro.SignalConnections.Remove(signalConnectionToChange);
+    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
+      signalConnectionToChange.Source);
+    signalConnectionToChange.MacroNo = toMacro.MacroNo;
+    toMacro.SignalConnections.Add(signalConnectionToChange);
+    Program.ProgramXml.AddMacroSignalConnection(signalConnectionToChange, toMacro.Index);
+    return true;
+  }
+
   private void RemoveSignalConnection(Macro macro, SignalConnection signalConnection) {
     if (Program.InfoPageCcsScriptProcessor != null) {
       if (Program.InfoPageCcsScriptProcessor.SignalConnections
@@ -290,13 +374,65 @@ public class InfoPageLayout {
       signalConnection.Source);
   }
 
-  private bool WheelMacroExists(bool showMessageIfExists) {
+  private void SwapMacroCcNos(Macro macro1, Macro macro2) {
+    SignalConnection? signalConnection1 = null;
+    SignalConnection? signalConnection2 = null;
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      signalConnection1 = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.MacroNo == macro1.MacroNo
+        select signalConnection).FirstOrDefault();
+      signalConnection2 = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.MacroNo == macro2.MacroNo
+        select signalConnection).FirstOrDefault();
+    }
+    if (signalConnection1 != null && signalConnection2 != null) {
+      signalConnection1.MacroNo = macro2.MacroNo;
+      signalConnection2.MacroNo = macro1.MacroNo;
+      Program.ProgramXml.UpdateInfoPageCcsScriptProcessor();
+      return;
+    }
+    if (macro1.SignalConnections.Count == 0) {
+      throw new ApplicationException(
+        $"'{Program.Name}': Cannot find SignalConnection for macro '{macro1.DisplayName}'.");
+    }
+    if (macro2.SignalConnections.Count == 0) {
+      throw new ApplicationException(
+        $"'{Program.Name}': Cannot find SignalConnection for macro '{macro2.DisplayName}'.");
+    }
+    signalConnection1 = macro1.SignalConnections[0];
+    signalConnection2 = macro2.SignalConnections[0];
+    macro1.SignalConnections.Remove(signalConnection1);
+    macro2.SignalConnections.Remove(signalConnection2);
+    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
+      signalConnection1.Source);
+    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
+      signalConnection2.Source);
+    signalConnection1.MacroNo = macro2.MacroNo;
+    signalConnection2.MacroNo = macro1.MacroNo;
+    macro2.SignalConnections.Add(signalConnection1);
+    macro1.SignalConnections.Add(signalConnection2);
+    Program.ProgramXml.AddMacroSignalConnection(signalConnection1, macro2.Index);
+    Program.ProgramXml.AddMacroSignalConnection(signalConnection2, macro1.Index);
+  }
+
+  private void SwapMacroLocations(Macro macro1, Macro macro2) {
+    var properties1 = macro1.Properties;
+    var properties2 = macro2.Properties;
+    macro1.Properties = properties2;
+    macro2.Properties = properties1;
+    Program.ProgramXml.UpdateMacroLocation(macro1);
+    Program.ProgramXml.UpdateMacroLocation(macro2);
+  }
+
+  private bool WheelMacroExists(bool showMessageWhenTrue) {
     string? existingWheelMacroDisplayName = (
       from continuousMacro in Program.ContinuousMacros
       where continuousMacro.DisplayName.ToLower().Contains("wheel")
       select continuousMacro.DisplayName).FirstOrDefault();
     if (existingWheelMacroDisplayName != null) {
-      if (showMessageIfExists) {
+      if (showMessageWhenTrue) {
         Console.WriteLine(
           $"'{Program.Name}' already has a '{existingWheelMacroDisplayName}' macro.");
       }

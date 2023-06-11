@@ -44,12 +44,12 @@ public class Macro {
 
   [XmlElement] public Properties Properties { get; set; } = null!;
   public int Index { get; set; }
-  public bool ControlsDelay => IsContinuous && DisplayName.Contains("Delay");
+  public bool ControlsDelay => DisplayName.Contains("Delay");
 
-  public bool ControlsReverb => IsContinuous && (
+  public bool ControlsReverb => 
     DisplayName.Contains("Reverb")
     || DisplayName.Contains("Room")
-    || DisplayName.Contains("SparkVerb"));
+    || DisplayName.Contains("SparkVerb");
 
   /// <summary>
   ///   Indicates whether this is continuous macro.  If false, it's a toggle macro.

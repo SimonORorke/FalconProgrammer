@@ -33,11 +33,11 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   public void ChangeDelayToZero() {
-    foreach (var continuousMacro in ContinuousMacros.Where(
-               continuousMacro =>
-                 continuousMacro.ControlsDelay
-                 && ChangeMacroValueToZero(continuousMacro.DisplayName))) {
-      Console.WriteLine($"Changed {continuousMacro.DisplayName} to zero for '{Path}'.");
+    foreach (var macro in Macros.Where(
+               macro =>
+                 macro.ControlsDelay
+                 && ChangeMacroValueToZero(macro.DisplayName))) {
+      Console.WriteLine($"Changed {macro.DisplayName} to zero for '{Path}'.");
     }
   }
 
@@ -69,11 +69,11 @@ public class FalconProgram {
   }
 
   public void ChangeReverbToZero() {
-    foreach (var continuousMacro in ContinuousMacros.Where(
-               continuousMacro =>
-                 continuousMacro.ControlsReverb
-                 && ChangeMacroValueToZero(continuousMacro.DisplayName))) {
-      Console.WriteLine($"Changed {continuousMacro.DisplayName} to zero for '{Path}'.");
+    foreach (var macro in Macros.Where(
+               macro =>
+                 macro.ControlsReverb
+                 && ChangeMacroValueToZero(macro.DisplayName))) {
+      Console.WriteLine($"Changed {macro.DisplayName} to zero for '{Path}'.");
     }
   }
 
