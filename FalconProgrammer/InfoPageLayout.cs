@@ -21,7 +21,7 @@ public class InfoPageLayout {
     int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
     ModWheelReplacementCcNo = modWheelReplacementCcNo;
     Console.WriteLine($"Checking '{Program.Path}'.");
-    if (WheelMacroExists()) {
+    if (WheelMacroExists(true)) {
       return;
     }
     if (!Program.ProgramXml.HasModWheelSignalConnections()) {
@@ -34,6 +34,13 @@ public class InfoPageLayout {
       return;
     }
     AddWheelMacro(locationForNewWheelMacro.Value);
+  }
+
+  public void ReassignDelayMacroMidiCcNoToWheelMacro(int modWheelReplacementCcNo) {
+    ModWheelReplacementCcNo = modWheelReplacementCcNo;
+    if (!WheelMacroExists(false)) {
+      return;
+    }
   }
 
   private void AddWheelMacro(Point location) {
@@ -93,7 +100,7 @@ public class InfoPageLayout {
         && !isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
       Console.WriteLine(
         $"'{Program.Name}' " +
-        $"has more than {maxExistingContinuousMacroCount} marcos " 
+        $"has more than {maxExistingContinuousMacroCount} marcos "
         + "and no delay/reverb on the bottom row.");
       return null;
     }
@@ -181,10 +188,44 @@ public class InfoPageLayout {
   }
 
   private void FindDelayOrReverbMacroWithModWheelReplacementCcNo(
-    out Macro? delayOrReverbMacroWithWheelCcNo, 
+    out Macro? delayOrReverbMacroWithWheelCcNo,
     out SignalConnection? delayOrReverbSignalConnectionWithWheelCcNo) {
     delayOrReverbMacroWithWheelCcNo = null;
     delayOrReverbSignalConnectionWithWheelCcNo = null;
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      var maybeSignalConnection = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.CcNo == ModWheelReplacementCcNo
+        select signalConnection).FirstOrDefault();
+      if (maybeSignalConnection != null) {
+        delayOrReverbMacroWithWheelCcNo = (
+          from continuousMacro in Program.ContinuousMacros
+          where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
+                && (continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)
+          select continuousMacro).FirstOrDefault();
+        if (delayOrReverbMacroWithWheelCcNo != null) {
+          delayOrReverbSignalConnectionWithWheelCcNo = maybeSignalConnection;
+        }
+      }
+    } else {
+      foreach (var continuousMacro in Program.ContinuousMacros
+                 .Where(continuousMacro => continuousMacro.ControlsDelay
+                                           || continuousMacro.ControlsReverb)) {
+        delayOrReverbSignalConnectionWithWheelCcNo = (
+          from signalConnection in continuousMacro.SignalConnections
+          where signalConnection.CcNo == ModWheelReplacementCcNo
+          select signalConnection).FirstOrDefault();
+        if (delayOrReverbSignalConnectionWithWheelCcNo != null) {
+          delayOrReverbMacroWithWheelCcNo = continuousMacro;
+          break;
+        }
+      }
+    }
+  }
+
+  private void FindReverbMacroWithNoCcNo(
+    out Macro? delayOrReverbMacroWithWheelCcNo) {
+    delayOrReverbMacroWithWheelCcNo = null;
     if (Program.InfoPageCcsScriptProcessor != null) {
       var maybeSignalConnection = (
         from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
@@ -249,14 +290,16 @@ public class InfoPageLayout {
       signalConnection.Source);
   }
 
-  private bool WheelMacroExists() {
+  private bool WheelMacroExists(bool showMessageIfExists) {
     string? existingWheelMacroDisplayName = (
       from continuousMacro in Program.ContinuousMacros
       where continuousMacro.DisplayName.ToLower().Contains("wheel")
       select continuousMacro.DisplayName).FirstOrDefault();
     if (existingWheelMacroDisplayName != null) {
-      Console.WriteLine(
-        $"'{Program.Name}' already has a '{existingWheelMacroDisplayName}' macro.");
+      if (showMessageIfExists) {
+        Console.WriteLine(
+          $"'{Program.Name}' already has a '{existingWheelMacroDisplayName}' macro.");
+      }
       return true;
     }
     return false;
