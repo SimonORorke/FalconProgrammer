@@ -3,7 +3,7 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    config.ReassignDelayMacroCcNoToReverbMacro(null);
+    // config.ReassignDelayMacroCcNoToReverbMacro(null);
     // config.ReassignDelayMacroCcNoToReverbMacro("Devinity", "Bass");
     // config.UpdateMacroCcs("Factory", "Temp");
     // config.ReplaceModWheelWithMacro("Factory", "Temp");

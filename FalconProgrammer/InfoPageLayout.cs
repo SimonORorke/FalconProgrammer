@@ -249,6 +249,7 @@ public class InfoPageLayout {
         return null;
       }
       // Locate the new wheel macro above the rightmost macro.
+      // Example: Factory/Bass-Sub/Gamma Bass 1.4.
       var rightmostMacro = bottomRowMacros[^1];
       return new Point(
         rightmostMacro.Properties.X,
