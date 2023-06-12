@@ -30,16 +30,17 @@ public class InfoPageLayout {
   ///   <para>
   ///     So the idea is to to make best use of the delay continuous macro's MIDI CC
   ///     number by reassigning it to the reverb continuous macro.  Their locations need
-  ///     to be swaped so that the delay continuous macro, which now has no MIDI CC
+  ///     to be swapped so that the delay continuous macro, which now has no MIDI CC
   ///     number, is below the wheel replacement macro.  As the locations of the reverb
-  ///     and delay continuous macros have been swaped, the locations and MIDI CC
-  ///     numbers of the corresponding toggle macros, if any, need to be swaped to, in
+  ///     and delay continuous macros have been swapped, the locations and MIDI CC
+  ///     numbers of the corresponding toggle macros, if any, need to be swapped to, in
   ///     order to keep then next to the continuous macros they enable. 
   ///   </para> 
   /// </remarks>
   public void ReassignDelayMacroCcNoToWheelMacro(int modWheelReplacementCcNo) {
     ModWheelReplacementCcNo = modWheelReplacementCcNo;
-    if (!WheelMacroExists(false)) {
+    var wheelMacro = FindWheelMacro();
+    if (wheelMacro == null) {
       return;
     }
     var reverbContinuousMacro = FindReverbContinuousMacroWithNoCcNo();
@@ -50,9 +51,9 @@ public class InfoPageLayout {
     if (delayContinuousMacro == null) {
       return;
     }
-    if (!ReassignMacroCcNo(delayContinuousMacro, reverbContinuousMacro)) {
-      return;
-    }
+    // if (!ReassignMacroCcNo(delayContinuousMacro, wheelMacro)) {
+    //   return;
+    // }
     SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
     string resultMessage = 
       $"'{Program.Name}': Reassigned '{delayContinuousMacro.DisplayName}' macro's " + 
@@ -68,7 +69,7 @@ public class InfoPageLayout {
       Console.WriteLine(resultMessage);
       return;
     }
-    SwapMacroCcNos(delayToggleMacro, reverbToggleMacro);
+    // SwapMacroCcNos(delayToggleMacro, reverbToggleMacro);
     SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
     resultMessage = 
       resultMessage.TrimEnd('.') + 
@@ -86,7 +87,7 @@ public class InfoPageLayout {
     int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
     ModWheelReplacementCcNo = modWheelReplacementCcNo;
     Console.WriteLine($"Checking '{Program.Path}'.");
-    if (WheelMacroExists(true)) {
+    if (WheelMacroExists()) {
       return;
     }
     if (!Program.ProgramXml.HasModWheelSignalConnections()) {
@@ -387,9 +388,18 @@ public class InfoPageLayout {
         where signalConnection.MacroNo == macro2.MacroNo
         select signalConnection).FirstOrDefault();
     }
-    if (signalConnection1 != null && signalConnection2 != null) {
-      signalConnection1.MacroNo = macro2.MacroNo;
-      signalConnection2.MacroNo = macro1.MacroNo;
+    if (signalConnection1 != null || signalConnection2 != null) {
+      if (signalConnection1 != null && signalConnection2 != null) {
+        signalConnection1.MacroNo = macro2.MacroNo;
+        signalConnection2.MacroNo = macro1.MacroNo;
+      } else if (signalConnection1 != null) {
+        // signalConnection2 is null
+        signalConnection1.MacroNo = macro2.MacroNo;
+      } else {
+        // signalConnection1 is null
+        // signalConnection2 is not null
+        signalConnection2!.MacroNo = macro1.MacroNo;
+      }
       Program.ProgramXml.UpdateInfoPageCcsScriptProcessor();
       return;
     }
@@ -424,18 +434,21 @@ public class InfoPageLayout {
     macro2.Properties = properties1;
     Program.ProgramXml.UpdateMacroLocation(macro1);
     Program.ProgramXml.UpdateMacroLocation(macro2);
+    SwapMacroCcNos(macro1, macro1);
   }
 
-  private bool WheelMacroExists(bool showMessageWhenTrue) {
-    string? existingWheelMacroDisplayName = (
+  private Macro? FindWheelMacro() {
+    return (
       from continuousMacro in Program.ContinuousMacros
       where continuousMacro.DisplayName.ToLower().Contains("wheel")
-      select continuousMacro.DisplayName).FirstOrDefault();
-    if (existingWheelMacroDisplayName != null) {
-      if (showMessageWhenTrue) {
-        Console.WriteLine(
-          $"'{Program.Name}' already has a '{existingWheelMacroDisplayName}' macro.");
-      }
+      select continuousMacro).FirstOrDefault();
+  }
+
+  private bool WheelMacroExists() {
+    var wheelMacro = FindWheelMacro();
+    if (wheelMacro != null) {
+      Console.WriteLine(
+        $"'{Program.Name}' already has a '{wheelMacro.DisplayName}' macro.");
       return true;
     }
     return false;

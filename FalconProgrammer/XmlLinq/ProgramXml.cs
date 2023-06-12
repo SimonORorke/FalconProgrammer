@@ -143,6 +143,19 @@ public class ProgramXml {
     return GetAttribute(element, attributeName).Value;
   }
 
+  private XElement GetMacroElement(string name) {
+    var result = (from macroElement in MacroElements
+      where GetAttributeValue(
+        macroElement, nameof(Macro.Name)) == name
+      select macroElement).FirstOrDefault();
+    if (result != null) {
+      return result;
+    }
+    throw new ApplicationException(
+      $"Cannot find ConstantModulation '{name}' in " + 
+      $"'{InputProgramPath}'.");
+  }
+
   public static XElement GetParentElement(XElement element) {
     return element.Parent!;
   }
@@ -242,7 +255,7 @@ public class ProgramXml {
   }
 
   public void UpdateMacroLocation(Macro macro) {
-    var macroElement = MacroElements[macro.Index];
+    var macroElement = GetMacroElement(macro.Name);
     var propertiesElement = macroElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
@@ -256,7 +269,7 @@ public class ProgramXml {
   public void UpdateMacroSignalConnection(
     Macro macro,
     SignalConnection signalConnection) {
-    var macroElement = MacroElements[macro.Index];
+    var macroElement = GetMacroElement(macro.Name);
     var connectionsElement = macroElement.Element("Connections")!;
     var signalConnectionElements =
       connectionsElement.Elements("SignalConnection").ToList();
