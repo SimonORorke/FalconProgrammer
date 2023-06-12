@@ -43,7 +43,6 @@ public class Macro {
   public List<SignalConnection> SignalConnections { get; set; } = null!;
 
   [XmlElement] public Properties Properties { get; set; } = null!;
-  public int Index { get; set; }
   public bool ControlsDelay => DisplayName.Contains("Delay");
 
   public bool ControlsReverb => 

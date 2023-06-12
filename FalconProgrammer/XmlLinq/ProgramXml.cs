@@ -35,8 +35,8 @@ public class ProgramXml {
     _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
 
   public void AddMacroSignalConnection(
-    SignalConnection signalConnection, int index) {
-    var macroElement = MacroElements[index];
+    SignalConnection signalConnection, Macro macro) {
+    var macroElement = GetMacroElement(macro);
     // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
     // element will already own a Connections element. 
     var connectionsElement = macroElement.Element("Connections");
@@ -143,16 +143,16 @@ public class ProgramXml {
     return GetAttribute(element, attributeName).Value;
   }
 
-  private XElement GetMacroElement(string name) {
+  private XElement GetMacroElement(Macro macro) {
     var result = (from macroElement in MacroElements
       where GetAttributeValue(
-        macroElement, nameof(Macro.Name)) == name
+        macroElement, nameof(Macro.Name)) == macro.Name
       select macroElement).FirstOrDefault();
     if (result != null) {
       return result;
     }
     throw new ApplicationException(
-      $"Cannot find ConstantModulation '{name}' in " + 
+      $"Cannot find ConstantModulation '{macro.Name}' in " + 
       $"'{InputProgramPath}'.");
   }
 
@@ -255,7 +255,7 @@ public class ProgramXml {
   }
 
   public void UpdateMacroLocation(Macro macro) {
-    var macroElement = GetMacroElement(macro.Name);
+    var macroElement = GetMacroElement(macro);
     var propertiesElement = macroElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
@@ -269,7 +269,7 @@ public class ProgramXml {
   public void UpdateMacroSignalConnection(
     Macro macro,
     SignalConnection signalConnection) {
-    var macroElement = GetMacroElement(macro.Name);
+    var macroElement = GetMacroElement(macro);
     var connectionsElement = macroElement.Element("Connections")!;
     var signalConnectionElements =
       connectionsElement.Elements("SignalConnection").ToList();

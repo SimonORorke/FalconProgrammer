@@ -39,7 +39,21 @@ public class SignalConnection {
   }
 
   [XmlAttribute] public float Ratio { get; set; }
+  
+  /// <summary>
+  ///   The MIDI CC number that is the source of the modulation,
+  ///   like this: '"@MIDI CC n"'. 
+  /// </summary>
   [XmlAttribute] public string Source { get; set; }
+  
+  /// <summary>
+  ///   Indicates what is to be modulated.
+  ///   If the <see cref="SignalConnection" /> belongs to the
+  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, this will be the
+  ///   <see cref="Macro.Name" /> of the macro to be modulated, like "Macro n".
+  ///   If the <see cref="SignalConnection" /> belongs to the <see cref="Macro" /> to
+  ///   be modulated, this will be "Value". 
+  /// </summary>
   [XmlAttribute] public string Destination { get; set; }
   [XmlAttribute] public int ConnectionMode { get; set; }
 
@@ -60,11 +74,32 @@ public class SignalConnection {
   /// </summary>
   public bool IsForMacro => ConnectionMode == 1;
 
+  /// <summary>
+  ///   If the <see cref="SignalConnection" /> belongs to the
+  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, returns the
+  ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated.
+  ///   If the <see cref="SignalConnection" /> belongs to the <see cref="Macro" /> to
+  ///   be modulated, returns null. 
+  /// </summary>
+  /// <exception cref="ApplicationException">
+  ///   Thrown when an attempt is made to set <see cref="MacroNo" /> for a
+  ///   <see cref="SignalConnection" /> that is owned by the modulated
+  ///   <see cref="Macro" />.
+  /// </exception>
   public int? MacroNo {
     get =>
       Destination.StartsWith("Macro")
         ? Convert.ToInt32(Destination.Replace("Macro", string.Empty))
         : null;
-    set => Destination = $"Macro{value}";
+    set {
+      if (Destination == "Value") {
+        throw new ApplicationException(
+          "MacroNo may not be set for a SignalConnection that is owned by the " +
+          "modulated macro (SignalConnection.Destination = 'Value'), only for a " +
+          "SignalConnection that is owned by the " +
+          "FalconProgram.InfoPageCcsScriptProcessor.");
+      }
+      Destination = $"Macro{value}";
+    }
   }
 }

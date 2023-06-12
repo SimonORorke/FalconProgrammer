@@ -204,12 +204,10 @@ public class FalconProgram {
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
-    for (int i = 0; i < Macros.Count; i++) {
-      var macro = Macros[i];
+    foreach (var macro in Macros) {
       // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
       //macro.Properties.Validate();
-      macro.Index = i;
       for (int j = 0; j < macro.SignalConnections.Count; j++) {
         var signalConnection = macro.SignalConnections[j];
         signalConnection.Index = j;
@@ -318,8 +316,7 @@ public class FalconProgram {
         var signalConnection = new SignalConnection {
           CcNo = ccNo
         };
-        ProgramXml.AddMacroSignalConnection(
-          signalConnection, macro.Index);
+        ProgramXml.AddMacroSignalConnection(signalConnection, macro);
       } else {
         // The macro already has a SignalConnection mapping to a non-mod wheel CC number.
         // We need to conserve the SignalConnection tag, which might contain a custom

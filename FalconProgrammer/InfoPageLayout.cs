@@ -37,10 +37,9 @@ public class InfoPageLayout {
   ///     order to keep then next to the continuous macros they enable. 
   ///   </para> 
   /// </remarks>
-  public void ReassignDelayMacroCcNoToWheelMacro(int modWheelReplacementCcNo) {
+  public void ReassignDelayMacroCcNoToReverbMacro(int modWheelReplacementCcNo) {
     ModWheelReplacementCcNo = modWheelReplacementCcNo;
-    var wheelMacro = FindWheelMacro();
-    if (wheelMacro == null) {
+    if (FindWheelMacro() == null) {
       return;
     }
     var reverbContinuousMacro = FindReverbContinuousMacroWithNoCcNo();
@@ -51,13 +50,10 @@ public class InfoPageLayout {
     if (delayContinuousMacro == null) {
       return;
     }
-    // if (!ReassignMacroCcNo(delayContinuousMacro, wheelMacro)) {
-    //   return;
-    // }
     SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
     string resultMessage = 
-      $"'{Program.Name}': Reassigned '{delayContinuousMacro.DisplayName}' macro's " + 
-      $"CC number to Wheel macro; swapped '{delayContinuousMacro.DisplayName}' and " + 
+      $"'{Program.Name}': Replaced '{delayContinuousMacro.DisplayName}' macro's " + 
+      $"MIDI control with Wheel macro MIDI control; swapped '{delayContinuousMacro.DisplayName}' and " + 
       $"'{reverbContinuousMacro.DisplayName}' locations'."; 
     var reverbToggleMacro = FindReverbToggleMacro();
     if (reverbToggleMacro == null) {
@@ -69,7 +65,6 @@ public class InfoPageLayout {
       Console.WriteLine(resultMessage);
       return;
     }
-    // SwapMacroCcNos(delayToggleMacro, reverbToggleMacro);
     SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
     resultMessage = 
       resultMessage.TrimEnd('.') + 
@@ -311,6 +306,13 @@ public class InfoPageLayout {
       select macro).FirstOrDefault();
   }
 
+  private Macro? FindWheelMacro() {
+    return (
+      from continuousMacro in Program.ContinuousMacros
+      where continuousMacro.DisplayName.ToLower().Contains("wheel")
+      select continuousMacro).FirstOrDefault();
+  }
+
   /// <summary>
   ///   Returns, from left to right, the macros on the bottom row of macros on the Info
   ///   page.
@@ -330,37 +332,6 @@ public class InfoPageLayout {
       select macro).ToList();
   }
 
-  private bool ReassignMacroCcNo(Macro fromMacro, Macro toMacro) {
-    SignalConnection? signalConnectionToChange = null;
-    if (Program.InfoPageCcsScriptProcessor != null) {
-      signalConnectionToChange = (
-        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
-        where signalConnection.MacroNo == fromMacro.MacroNo
-        select signalConnection).FirstOrDefault();
-    }
-    if (signalConnectionToChange != null) {
-      signalConnectionToChange.MacroNo = toMacro.MacroNo;
-      Program.ProgramXml.UpdateInfoPageCcsScriptProcessor();
-      return true;
-    }
-    if (fromMacro.SignalConnections.Count == 0) {
-      // This happens if the signal connection belongs to an effect, a scenario we don't
-      // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
-      Console.WriteLine(
-        $"'{Program.Name}': Cannot find SignalConnection of a supported type for " + 
-        $"macro '{fromMacro.DisplayName}'.");
-      return false;
-    }
-    signalConnectionToChange = fromMacro.SignalConnections[0];
-    fromMacro.SignalConnections.Remove(signalConnectionToChange);
-    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
-      signalConnectionToChange.Source);
-    signalConnectionToChange.MacroNo = toMacro.MacroNo;
-    toMacro.SignalConnections.Add(signalConnectionToChange);
-    Program.ProgramXml.AddMacroSignalConnection(signalConnectionToChange, toMacro.Index);
-    return true;
-  }
-
   private void RemoveSignalConnection(Macro macro, SignalConnection signalConnection) {
     if (Program.InfoPageCcsScriptProcessor != null) {
       if (Program.InfoPageCcsScriptProcessor.SignalConnections
@@ -376,8 +347,8 @@ public class InfoPageLayout {
   }
 
   private void SwapMacroCcNos(Macro macro1, Macro macro2) {
-    SignalConnection? signalConnection1 = null;
-    SignalConnection? signalConnection2 = null;
+    SignalConnection? signalConnection1;
+    SignalConnection? signalConnection2;
     if (Program.InfoPageCcsScriptProcessor != null) {
       signalConnection1 = (
         from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
@@ -387,44 +358,53 @@ public class InfoPageLayout {
         from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
         where signalConnection.MacroNo == macro2.MacroNo
         select signalConnection).FirstOrDefault();
-    }
-    if (signalConnection1 != null || signalConnection2 != null) {
-      if (signalConnection1 != null && signalConnection2 != null) {
-        signalConnection1.MacroNo = macro2.MacroNo;
-        signalConnection2.MacroNo = macro1.MacroNo;
-      } else if (signalConnection1 != null) {
-        // signalConnection2 is null
-        signalConnection1.MacroNo = macro2.MacroNo;
-      } else {
-        // signalConnection1 is null
-        // signalConnection2 is not null
-        signalConnection2!.MacroNo = macro1.MacroNo;
+      if (signalConnection1 != null || signalConnection2 != null) {
+        if (signalConnection1 != null && signalConnection2 != null) {
+          signalConnection1.MacroNo = macro2.MacroNo;
+          signalConnection2.MacroNo = macro1.MacroNo;
+        } else if (signalConnection1 != null) {
+          // signalConnection2 is null
+          signalConnection1.MacroNo = macro2.MacroNo;
+        } else {
+          // signalConnection1 is null
+          // signalConnection2 is not null
+          signalConnection2!.MacroNo = macro1.MacroNo;
+        }
+        Program.ProgramXml.UpdateInfoPageCcsScriptProcessor();
+        return;
       }
-      Program.ProgramXml.UpdateInfoPageCcsScriptProcessor();
-      return;
     }
-    if (macro1.SignalConnections.Count == 0) {
-      throw new ApplicationException(
-        $"'{Program.Name}': Cannot find SignalConnection for macro '{macro1.DisplayName}'.");
+    // ReSharper disable once ConvertIfStatementToSwitchStatement
+    if (macro1.SignalConnections.Count == 0 && macro2.SignalConnections.Count == 0) {
+      // This happens if the signal connections belongs to effects, a scenario we don't
+      // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
+      Console.WriteLine(
+        $"'{Program.Name}': Cannot find SignalConnections of supported types for " + 
+        $"either macro '{macro1.DisplayName}' or macro '{macro2.DisplayName}'.");
     }
-    if (macro2.SignalConnections.Count == 0) {
-      throw new ApplicationException(
-        $"'{Program.Name}': Cannot find SignalConnection for macro '{macro2.DisplayName}'.");
+    // SignalConnections belong to Macros.
+    signalConnection1 = null;
+    signalConnection2 = null;
+    if (macro1.SignalConnections.Count > 0) {
+      signalConnection1 = macro1.SignalConnections[0];
+      macro1.SignalConnections.Remove(signalConnection1);
+      Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
+        signalConnection1.Source);
     }
-    signalConnection1 = macro1.SignalConnections[0];
-    signalConnection2 = macro2.SignalConnections[0];
-    macro1.SignalConnections.Remove(signalConnection1);
-    macro2.SignalConnections.Remove(signalConnection2);
-    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
-      signalConnection1.Source);
-    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
-      signalConnection2.Source);
-    signalConnection1.MacroNo = macro2.MacroNo;
-    signalConnection2.MacroNo = macro1.MacroNo;
-    macro2.SignalConnections.Add(signalConnection1);
-    macro1.SignalConnections.Add(signalConnection2);
-    Program.ProgramXml.AddMacroSignalConnection(signalConnection1, macro2.Index);
-    Program.ProgramXml.AddMacroSignalConnection(signalConnection2, macro1.Index);
+    if (macro2.SignalConnections.Count > 0) {
+      signalConnection2 = macro2.SignalConnections[0];
+      macro2.SignalConnections.Remove(signalConnection2);
+      Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
+        signalConnection2.Source);
+    }
+    if (signalConnection1 != null) {
+      macro2.SignalConnections.Add(signalConnection1);
+      Program.ProgramXml.AddMacroSignalConnection(signalConnection1, macro2);
+    }
+    if (signalConnection2 != null) {
+      macro1.SignalConnections.Add(signalConnection2);
+      Program.ProgramXml.AddMacroSignalConnection(signalConnection2, macro1);
+    }
   }
 
   private void SwapMacroLocations(Macro macro1, Macro macro2) {
@@ -434,14 +414,9 @@ public class InfoPageLayout {
     macro2.Properties = properties1;
     Program.ProgramXml.UpdateMacroLocation(macro1);
     Program.ProgramXml.UpdateMacroLocation(macro2);
-    SwapMacroCcNos(macro1, macro1);
-  }
-
-  private Macro? FindWheelMacro() {
-    return (
-      from continuousMacro in Program.ContinuousMacros
-      where continuousMacro.DisplayName.ToLower().Contains("wheel")
-      select continuousMacro).FirstOrDefault();
+    // We also need to swap the MIDI CC numbers so that those still increment in the layout
+    // order.
+    SwapMacroCcNos(macro1, macro2);
   }
 
   private bool WheelMacroExists() {

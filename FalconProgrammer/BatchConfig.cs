@@ -151,9 +151,9 @@ public class BatchConfig {
         case ConfigTask.CountMacros:
           Program.CountMacros();
           break;
-        case ConfigTask.ReassignDelayMacroCcNoToWheelMacro:
+        case ConfigTask.ReassignDelayMacroCcNoToReverbMacro:
           infoPageLayout = new InfoPageLayout(Program);
-          infoPageLayout.ReassignDelayMacroCcNoToWheelMacro(
+          infoPageLayout.ReassignDelayMacroCcNoToReverbMacro(
             ModWheelReplacementCcNo);
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
@@ -212,9 +212,9 @@ public class BatchConfig {
   }
 
   [PublicAPI]
-  public void ReassignDelayMacroCcNoToWheelMacro(
+  public void ReassignDelayMacroCcNoToReverbMacro(
     string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.ReassignDelayMacroCcNoToWheelMacro;
+    Task = ConfigTask.ReassignDelayMacroCcNoToReverbMacro;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -255,7 +255,7 @@ public class BatchConfig {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
-    ReassignDelayMacroCcNoToWheelMacro,
+    ReassignDelayMacroCcNoToReverbMacro,
     ReplaceModWheelWithMacro,
     UpdateMacroCcs
   }
