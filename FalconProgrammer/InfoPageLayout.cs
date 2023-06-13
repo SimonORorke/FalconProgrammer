@@ -9,6 +9,7 @@ public class InfoPageLayout {
     Program = program;
   }
 
+  private List<Macro> BottomRowMacros { get; set; } = null!;
   private int ModWheelReplacementCcNo { get; set; }
   private FalconProgram Program { get; }
 
@@ -34,8 +35,8 @@ public class InfoPageLayout {
   ///     number, is below the wheel replacement macro.  As the locations of the reverb
   ///     and delay continuous macros have been swapped, the locations and MIDI CC
   ///     numbers of the corresponding toggle macros, if any, need to be swapped to, in
-  ///     order to keep then next to the continuous macros they enable. 
-  ///   </para> 
+  ///     order to keep then next to the continuous macros they enable.
+  ///   </para>
   /// </remarks>
   public void ReassignDelayMacroCcNoToReverbMacro(int modWheelReplacementCcNo) {
     ModWheelReplacementCcNo = modWheelReplacementCcNo;
@@ -51,10 +52,10 @@ public class InfoPageLayout {
       return;
     }
     SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
-    string resultMessage = 
-      $"'{Program.Name}': Replaced '{delayContinuousMacro.DisplayName}' macro's " + 
-      $"MIDI control with Wheel macro MIDI control; swapped '{delayContinuousMacro.DisplayName}' and " + 
-      $"'{reverbContinuousMacro.DisplayName}' locations'."; 
+    string resultMessage =
+      $"'{Program.Name}': Replaced '{delayContinuousMacro.DisplayName}' macro's " +
+      $"MIDI control with Wheel macro MIDI control; swapped '{delayContinuousMacro.DisplayName}' and " +
+      $"'{reverbContinuousMacro.DisplayName}' locations'.";
     var reverbToggleMacro = FindReverbToggleMacro();
     if (reverbToggleMacro == null) {
       Console.WriteLine(resultMessage);
@@ -66,8 +67,8 @@ public class InfoPageLayout {
       return;
     }
     SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
-    resultMessage = 
-      resultMessage.TrimEnd('.') + 
+    resultMessage =
+      resultMessage.TrimEnd('.') +
       $"; swapped '{delayToggleMacro.DisplayName}' and " +
       $"'{reverbToggleMacro.DisplayName}' locations'.";
     Console.WriteLine(resultMessage);
@@ -192,14 +193,15 @@ public class InfoPageLayout {
     int bottomRowY = (
       from macro in Program.Macros
       select macro.Properties.Y).Max();
-    var bottomRowMacros = GetBottomRowMacros(bottomRowY);
-    bool hasSingleRow = bottomRowMacros.Count == Program.Macros.Count;
+    BottomRowMacros = GetBottomRowMacros(bottomRowY);
+    SwapDelayAndReverbIfReverbHasWheelReplacementCcNo();
+    bool hasSingleRow = BottomRowMacros.Count == Program.Macros.Count;
     FindDelayOrReverbMacroWithModWheelReplacementCcNo(
       out var delayOrReverbMacroWithWheelCcNo,
       out var delayOrReverbSignalConnectionWithWheelCcNo);
     bool isDelayOrReverbMacroWithWheelCcNoOnBottomRow =
       delayOrReverbMacroWithWheelCcNo != null
-      && bottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
+      && BottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
     if (Program.ContinuousMacros.Count > maxExistingContinuousMacroCount
         && !isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
       Console.WriteLine(
@@ -224,16 +226,16 @@ public class InfoPageLayout {
     // List, from left to right, the widths of the gaps between the macros on the bottom
     // row of macros on the Info page.  Include the gap between the leftmost macro and
     // the left edge and the gap between the rightmost macro and the right edge.
-    var gapWidths = new List<int> { bottomRowMacros[0].Properties.X };
-    if (bottomRowMacros.Count > 1) {
-      for (int i = 0; i < bottomRowMacros.Count - 1; i++) {
+    var gapWidths = new List<int> { BottomRowMacros[0].Properties.X };
+    if (BottomRowMacros.Count > 1) {
+      for (int i = 0; i < BottomRowMacros.Count - 1; i++) {
         gapWidths.Add(
-          bottomRowMacros[i + 1].Properties.X
-          - (bottomRowMacros[i].Properties.X
+          BottomRowMacros[i + 1].Properties.X
+          - (BottomRowMacros[i].Properties.X
              + macroWidth));
       }
     }
-    gapWidths.Add(rightEdge - (bottomRowMacros[^1].Properties.X + macroWidth));
+    gapWidths.Add(rightEdge - (BottomRowMacros[^1].Properties.X + macroWidth));
     // Check whether there any gaps on the bottom rowe wide enough to accommodate a new
     // macro.
     bool canFitInGap = (
@@ -250,7 +252,7 @@ public class InfoPageLayout {
       }
       // Locate the new wheel macro above the rightmost macro.
       // Example: Factory/Bass-Sub/Gamma Bass 1.4.
-      var rightmostMacro = bottomRowMacros[^1];
+      var rightmostMacro = BottomRowMacros[^1];
       return new Point(
         rightmostMacro.Properties.X,
         rightmostMacro.Properties.Y - verticalClearance);
@@ -271,14 +273,14 @@ public class InfoPageLayout {
     }
     int newMacroGapX = newMacroGapIndex == 0
       ? 0
-      : bottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
+      : BottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
     int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - macroWidth) / 2;
     // If there are continuous and toggle macros on the bottom row, the continuous macros
     // may be a little higher up than the toggle macros, as they are taller.  In that
     // case, align the new macro horizontally with the bottommost continuous macro.
     // Example: "Factory\Pluck\Mutan Mute".
     var bottomRowContinuousMacros = (
-      from macro in bottomRowMacros
+      from macro in BottomRowMacros
       where macro.IsContinuous
       select macro).ToList();
     int newMacroY;
@@ -290,6 +292,33 @@ public class InfoPageLayout {
       newMacroY = bottomRowY <= standardBottommostY ? bottomRowY : standardBottommostY;
     }
     return new Point(newMacroX, newMacroY);
+  }
+
+  private Macro? FindReverbContinuousMacroWithWheelReplacementCcNo() {
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      // SignalProcessors are owned by InfoPageCcsScriptProcessor
+      var maybeSignalConnection = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.CcNo == ModWheelReplacementCcNo
+        select signalConnection).FirstOrDefault();
+      if (maybeSignalConnection == null) {
+        return null;
+      }
+      return (
+        from continuousMacro in Program.ContinuousMacros
+        where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
+              && continuousMacro.ControlsReverb
+        select continuousMacro).FirstOrDefault();
+    }
+    // SignalProcessors are owned by the Macros they control.
+    return (from continuousMacro in Program.ContinuousMacros.Where(continuousMacro =>
+        continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)
+      let maybeSignalConnection =
+        (from signalConnection in continuousMacro.SignalConnections
+          where signalConnection.CcNo == ModWheelReplacementCcNo
+          select signalConnection).FirstOrDefault()
+      where maybeSignalConnection != null
+      select continuousMacro).FirstOrDefault();
   }
 
   private Macro? FindReverbContinuousMacroWithNoCcNo() {
@@ -347,6 +376,38 @@ public class InfoPageLayout {
       signalConnection.Source);
   }
 
+  /// <summary>
+  ///   If a reverb continuous macro has the MIDI CC number that is to be used for the
+  ///   modulation wheel replacement continuous macro, if there is also a delay
+  ///   continuous macro, swap the locations and CC numbers of the delay continuous macro
+  ///   and the reverb continuous macro.  When and if that has been done, swap the
+  ///   locations and CC numbers of the delay toggle macro and the reverb toggle macro,
+  ///   if both of those exist.
+  /// </summary>
+  /// <remarks>
+  ///   Any delay or reverb continuous macro that has the MIDI CC number that is to be
+  ///   used for the modulation wheel replacement continuous macro will then have no MIDI
+  ///   control.  As reverb tends to be more useful than delay, we are putting the delay
+  ///   continuous macro into that position in advance, where applicable.
+  /// </remarks>
+  private void SwapDelayAndReverbIfReverbHasWheelReplacementCcNo() {
+    var reverbContinuousMacro = FindReverbContinuousMacroWithWheelReplacementCcNo();
+    if (reverbContinuousMacro != null
+        && BottomRowMacros.Contains(reverbContinuousMacro)) {
+      var delayContinuousMacro = FindDelayContinuousMacro();
+      if (delayContinuousMacro != null) {
+        SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
+        var reverbToggleMacro = FindReverbToggleMacro();
+        if (reverbToggleMacro != null) {
+          var delayToggleMacro = FindDelayToggleMacro();
+          if (delayToggleMacro != null) {
+            SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
+          }
+        }
+      }
+    }
+  }
+
   private void SwapMacroCcNos(Macro macro1, Macro macro2) {
     SignalConnection? signalConnection1;
     SignalConnection? signalConnection2;
@@ -380,7 +441,7 @@ public class InfoPageLayout {
       // This happens if the signal connections belongs to effects, a scenario we don't
       // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
       Console.WriteLine(
-        $"'{Program.Name}': Cannot find SignalConnections of supported types for " + 
+        $"'{Program.Name}': Cannot find SignalConnections of supported types for " +
         $"either macro '{macro1.DisplayName}' or macro '{macro2.DisplayName}'.");
     }
     // SignalConnections belong to Macros.
