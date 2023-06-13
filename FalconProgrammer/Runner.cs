@@ -3,9 +3,9 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    config.ReplaceModWheelWithMacro(null);
     // config.UpdateMacroCcs("Factory", "Temp");
     // config.ReplaceModWheelWithMacro("Factory", "Temp");
-    // config.ReplaceModWheelWithMacro(null);
     // config.ChangeDelayToZero("Factory", "Pure Additive 2.0");
     // config.ChangeReverbToZero("Factory", "Pure Additive 2.0");
     // config.ChangeDelayToZero(null);

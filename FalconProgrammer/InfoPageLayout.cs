@@ -63,6 +63,32 @@ public class InfoPageLayout {
       $"'{Program.Name}': Replaced mod wheel with macro.");
   }
 
+  private Macro? FindContinuousMacroWithWheelReplacementCcNo() {
+    if (Program.InfoPageCcsScriptProcessor != null) {
+      // SignalProcessors are owned by InfoPageCcsScriptProcessor
+      var maybeSignalConnection = (
+        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
+        where signalConnection.CcNo == ModWheelReplacementCcNo
+        select signalConnection).FirstOrDefault();
+      if (maybeSignalConnection == null) {
+        return null;
+      }
+      return (
+        from continuousMacro in Program.ContinuousMacros
+        where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
+        select continuousMacro).FirstOrDefault();
+    }
+    // SignalProcessors are owned by the Macros they control.
+    return (
+      from continuousMacro in Program.ContinuousMacros
+      let maybeSignalConnection =
+        (from signalConnection in continuousMacro.SignalConnections
+          where signalConnection.CcNo == ModWheelReplacementCcNo
+          select signalConnection).FirstOrDefault()
+      where maybeSignalConnection != null
+      select continuousMacro).FirstOrDefault();
+  }
+
   private Macro? FindDelayContinuousMacro() {
     return (
       from continuousMacro in Program.ContinuousMacros
@@ -161,6 +187,9 @@ public class InfoPageLayout {
         delayOrReverbMacroWithWheelCcNo.Properties.Y - verticalClearance);
     }
     // There is no wheel replacement CC number on a delay or reverb macro to reassign.
+    if (Program.ContinuousMacros.Count > maxExistingContinuousMacroCount) {
+      
+    }
     //
     // List, from left to right, the widths of the gaps between the macros on the bottom
     // row of macros on the Info page.  Include the gap between the leftmost macro and
@@ -234,30 +263,8 @@ public class InfoPageLayout {
   }
 
   private Macro? FindReverbContinuousMacroWithWheelReplacementCcNo() {
-    if (Program.InfoPageCcsScriptProcessor != null) {
-      // SignalProcessors are owned by InfoPageCcsScriptProcessor
-      var maybeSignalConnection = (
-        from signalConnection in Program.InfoPageCcsScriptProcessor.SignalConnections
-        where signalConnection.CcNo == ModWheelReplacementCcNo
-        select signalConnection).FirstOrDefault();
-      if (maybeSignalConnection == null) {
-        return null;
-      }
-      return (
-        from continuousMacro in Program.ContinuousMacros
-        where continuousMacro.MacroNo == maybeSignalConnection.MacroNo
-              && continuousMacro.ControlsReverb
-        select continuousMacro).FirstOrDefault();
-    }
-    // SignalProcessors are owned by the Macros they control.
-    return (from continuousMacro in Program.ContinuousMacros.Where(continuousMacro =>
-        continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)
-      let maybeSignalConnection =
-        (from signalConnection in continuousMacro.SignalConnections
-          where signalConnection.CcNo == ModWheelReplacementCcNo
-          select signalConnection).FirstOrDefault()
-      where maybeSignalConnection != null
-      select continuousMacro).FirstOrDefault();
+    var macro = FindContinuousMacroWithWheelReplacementCcNo();
+    return macro is { ControlsReverb: true } ? macro : null;
   }
 
   private Macro? FindReverbToggleMacro() {
