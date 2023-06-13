@@ -137,7 +137,6 @@ public class BatchConfig {
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
       Program.Read();
-      InfoPageLayout infoPageLayout;
       switch (Task) {
         case ConfigTask.ChangeDelayToZero:
           Program.ChangeDelayToZero();
@@ -151,13 +150,8 @@ public class BatchConfig {
         case ConfigTask.CountMacros:
           Program.CountMacros();
           break;
-        case ConfigTask.ReassignDelayMacroCcNoToReverbMacro:
-          infoPageLayout = new InfoPageLayout(Program);
-          infoPageLayout.ReassignDelayMacroCcNoToReverbMacro(
-            ModWheelReplacementCcNo);
-          break;
         case ConfigTask.ReplaceModWheelWithMacro:
-          infoPageLayout = new InfoPageLayout(Program);
+          var infoPageLayout = new InfoPageLayout(Program);
           infoPageLayout.ReplaceModWheelWithMacro(
             ModWheelReplacementCcNo, MaxExistingContinuousMacroCount);
           break;
@@ -211,13 +205,6 @@ public class BatchConfig {
     return result;
   }
 
-  [PublicAPI]
-  public void ReassignDelayMacroCcNoToReverbMacro(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.ReassignDelayMacroCcNoToReverbMacro;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
   /// <summary>
   ///   In each of the specified Falcon program presets where it is feasible, replaces
   ///   use of the modulation wheel with a Wheel macro that executes the same
@@ -255,7 +242,6 @@ public class BatchConfig {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
-    ReassignDelayMacroCcNoToReverbMacro,
     ReplaceModWheelWithMacro,
     UpdateMacroCcs
   }

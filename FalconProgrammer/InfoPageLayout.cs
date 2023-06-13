@@ -14,67 +14,6 @@ public class InfoPageLayout {
   private FalconProgram Program { get; }
 
   /// <summary>
-  ///   If there is a reverb continuous macro and it's MIDI CC number has been
-  ///   reassigned to a wheel replacement macro, if there is a delay continuous macro,
-  ///   swap the locations of the reverb and delay continuous macros and reassign the
-  ///   delay’s MIDI CC number to the reverb.  When and if those changes have been made,
-  ///   if there are also a reverb toggle macro and a delay toggle macro, swap their
-  ///   locations and MIDI CC numbers.
-  /// </summary>
-  /// <remarks>
-  ///   In many programs, if the reverb continuous macro had the MIDI CC number we want
-  ///   to use for a wheel replacement macro, the reverb continuous macro's MIDI CC
-  ///   number has been reassigned to the wheel replacement macro, which has been located
-  ///   above the reverb continuous macro.  But the reverb continuous macro, though
-  ///   seldom used, is more likely to be used than the delay continuous macro, if it
-  ///   exists.
-  ///   <para>
-  ///     So the idea is to to make best use of the delay continuous macro's MIDI CC
-  ///     number by reassigning it to the reverb continuous macro.  Their locations need
-  ///     to be swapped so that the delay continuous macro, which now has no MIDI CC
-  ///     number, is below the wheel replacement macro.  As the locations of the reverb
-  ///     and delay continuous macros have been swapped, the locations and MIDI CC
-  ///     numbers of the corresponding toggle macros, if any, need to be swapped to, in
-  ///     order to keep then next to the continuous macros they enable.
-  ///   </para>
-  /// </remarks>
-  public void ReassignDelayMacroCcNoToReverbMacro(int modWheelReplacementCcNo) {
-    ModWheelReplacementCcNo = modWheelReplacementCcNo;
-    if (FindWheelMacro() == null) {
-      return;
-    }
-    var reverbContinuousMacro = FindReverbContinuousMacroWithNoCcNo();
-    if (reverbContinuousMacro == null) {
-      return;
-    }
-    var delayContinuousMacro = FindDelayContinuousMacro();
-    if (delayContinuousMacro == null) {
-      return;
-    }
-    SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
-    string resultMessage =
-      $"'{Program.Name}': Replaced '{delayContinuousMacro.DisplayName}' macro's " +
-      $"MIDI control with Wheel macro MIDI control; swapped '{delayContinuousMacro.DisplayName}' and " +
-      $"'{reverbContinuousMacro.DisplayName}' locations'.";
-    var reverbToggleMacro = FindReverbToggleMacro();
-    if (reverbToggleMacro == null) {
-      Console.WriteLine(resultMessage);
-      return;
-    }
-    var delayToggleMacro = FindDelayToggleMacro();
-    if (delayToggleMacro == null) {
-      Console.WriteLine(resultMessage);
-      return;
-    }
-    SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
-    resultMessage =
-      resultMessage.TrimEnd('.') +
-      $"; swapped '{delayToggleMacro.DisplayName}' and " +
-      $"'{reverbToggleMacro.DisplayName}' locations'.";
-    Console.WriteLine(resultMessage);
-  }
-
-  /// <summary>
   ///   If feasible, replaces all modulations by the modulation wheel of effect
   ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
   ///   explaining why it is not feasible.
@@ -131,13 +70,6 @@ public class InfoPageLayout {
       select continuousMacro).FirstOrDefault();
   }
 
-  private Macro? FindDelayToggleMacro() {
-    return (
-      from macro in Program.Macros
-      where macro.ControlsDelay && !macro.IsContinuous
-      select macro).FirstOrDefault();
-  }
-
   private void FindDelayOrReverbMacroWithModWheelReplacementCcNo(
     out Macro? delayOrReverbMacroWithWheelCcNo,
     out SignalConnection? delayOrReverbSignalConnectionWithWheelCcNo) {
@@ -172,6 +104,13 @@ public class InfoPageLayout {
         }
       }
     }
+  }
+
+  private Macro? FindDelayToggleMacro() {
+    return (
+      from macro in Program.Macros
+      where macro.ControlsDelay && !macro.IsContinuous
+      select macro).FirstOrDefault();
   }
 
   [SuppressMessage("ReSharper", "CommentTypo")]
@@ -318,14 +257,6 @@ public class InfoPageLayout {
           where signalConnection.CcNo == ModWheelReplacementCcNo
           select signalConnection).FirstOrDefault()
       where maybeSignalConnection != null
-      select continuousMacro).FirstOrDefault();
-  }
-
-  private Macro? FindReverbContinuousMacroWithNoCcNo() {
-    return (
-      from continuousMacro in Program.ContinuousMacros
-      where continuousMacro.ControlsReverb
-            && continuousMacro.SignalConnections.Count == 0
       select continuousMacro).FirstOrDefault();
   }
 
