@@ -5,6 +5,8 @@ using FalconProgrammer.XmlDeserialised;
 namespace FalconProgrammer;
 
 public class InfoPageLayout {
+  private const int MacroWidth = 60;
+  
   public InfoPageLayout(FalconProgram program) {
     Program = program;
   }
@@ -114,6 +116,7 @@ public class InfoPageLayout {
       select macro).FirstOrDefault();
   }
 
+  [SuppressMessage("ReSharper", "CommentTypo")]
   private Point? FindLocationForNewWheelMacro(out bool updateMacroCcs) {
     updateMacroCcs = false;
     BottomRowY = (
@@ -123,7 +126,7 @@ public class InfoPageLayout {
     var result = LocateWheelAboveDelayOrReverbMacro();
     if (result != null) {
       // If the delay or reverb macro that has lost its CC is the last continuous macro,
-      // it can have a new onw. Example Factory\Bass-Sub\BA-Shomp 1.2.
+      // it can have a new one. Example Factory\Bass-Sub\BA-Shomp 1.2.
       // Counter-example, where the delay or reverb macro must not get a new CC:
       // Factory\Keys\Dirty Toy Piano 1.1.
       if (Program.ContinuousMacros.Count == MaxExistingContinuousMacroCount + 1) {
@@ -183,13 +186,28 @@ public class InfoPageLayout {
       select macro).ToList();
   }
 
-  private static Point LocateNewMacroAboveMacro(Macro macro) {
+  [SuppressMessage("ReSharper", "CommentTypo")]
+  private Point LocateNewMacroAboveMacro(Macro macro) {
     // Allows a gap above a macro whose display name wraps to two text lines.
     // 95 would be the bare minimum.
     const int verticalClearance = 115;
-    return new Point(
+    var result = new Point(
       macro.Properties.X,
       macro.Properties.Y - verticalClearance);
+    var overlappingMacro = (
+      from otherMacro in Program.Macros
+      where otherMacro.Properties.Y > result.Y - 50
+            && otherMacro.Properties.Y < result.Y + 50
+            && otherMacro.Properties.X > result.X - MacroWidth
+            && otherMacro.Properties.X < result.X + MacroWidth
+      select otherMacro).FirstOrDefault();
+    if (overlappingMacro != null) {
+      // Example: Spectre\Polysynth\PL Cream.
+      result = new Point(
+        macro.Properties.X,
+        overlappingMacro.Properties.Y - verticalClearance);
+    }
+    return result;
   }
 
   private Point? LocateWheelAboveDelayOrReverbMacro() {
@@ -197,17 +215,18 @@ public class InfoPageLayout {
     FindDelayOrReverbMacroWithModWheelReplacementCcNo(
       out var delayOrReverbMacroWithWheelCcNo,
       out var delayOrReverbSignalConnectionWithWheelCcNo);
-    bool isDelayOrReverbMacroWithWheelCcNoOnBottomRow =
-      delayOrReverbMacroWithWheelCcNo != null
-      && BottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
-    if (isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
+    // bool isDelayOrReverbMacroWithWheelCcNoOnBottomRow =
+    //   delayOrReverbMacroWithWheelCcNo != null
+    //   && BottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
+    // if (isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
+    if (delayOrReverbMacroWithWheelCcNo != null) {
       // Remove the wheel replacement CC number assignment from the delay or reverb
       // macro that has it.  It will be reassigned to the new wheel macro when that is
       // added.
       RemoveSignalConnection(
-        delayOrReverbMacroWithWheelCcNo!, delayOrReverbSignalConnectionWithWheelCcNo!);
+        delayOrReverbMacroWithWheelCcNo, delayOrReverbSignalConnectionWithWheelCcNo!);
       // Locate the new wheel macro above the delay or reverb macro.
-      return LocateNewMacroAboveMacro(delayOrReverbMacroWithWheelCcNo!);
+      return LocateNewMacroAboveMacro(delayOrReverbMacroWithWheelCcNo);
     }
     return null;
   }
@@ -225,9 +244,8 @@ public class InfoPageLayout {
     if (Program.ContinuousMacros.Count > MaxExistingContinuousMacroCount) {
       return null;
     }
-    const int macroWidth = 60;
     const int minHorizontalGapBetweenMacros = 5;
-    const int minNewMacroGapWidth = macroWidth + 2 * minHorizontalGapBetweenMacros;
+    const int minNewMacroGapWidth = MacroWidth + 2 * minHorizontalGapBetweenMacros;
     // When there are only toggle macros on the bottom row, they may be lower than the
     // standard bottom, usually to accomodate two-line display names.  This looks OK for
     // toggle macros.  But for continuous macros, being taller, it makes an ugly lack of
@@ -245,10 +263,10 @@ public class InfoPageLayout {
         gapWidths.Add(
           BottomRowMacros[i + 1].Properties.X
           - (BottomRowMacros[i].Properties.X
-             + macroWidth));
+             + MacroWidth));
       }
     }
-    gapWidths.Add(rightEdge - (BottomRowMacros[^1].Properties.X + macroWidth));
+    gapWidths.Add(rightEdge - (BottomRowMacros[^1].Properties.X + MacroWidth));
     // Check whether there any gaps on the bottom rowe wide enough to accommodate a new
     // macro.
     bool canFitInGap = (
@@ -285,8 +303,8 @@ public class InfoPageLayout {
     }
     int newMacroGapX = newMacroGapIndex == 0
       ? 0
-      : BottomRowMacros[newMacroGapIndex - 1].Properties.X + macroWidth;
-    int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - macroWidth) / 2;
+      : BottomRowMacros[newMacroGapIndex - 1].Properties.X + MacroWidth;
+    int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - MacroWidth) / 2;
     // If there are continuous and toggle macros on the bottom row, the continuous macros
     // may be a little higher up than the toggle macros, as they are taller.  In that
     // case, align the new macro horizontally with the bottommost continuous macro.
@@ -331,8 +349,9 @@ public class InfoPageLayout {
   /// </remarks>
   private void SwapDelayAndReverbIfReverbHasWheelReplacementCcNo() {
     var reverbContinuousMacro = FindReverbContinuousMacroWithWheelReplacementCcNo();
-    if (reverbContinuousMacro != null
-        && BottomRowMacros.Contains(reverbContinuousMacro)) {
+    // if (reverbContinuousMacro != null
+    //     && BottomRowMacros.Contains(reverbContinuousMacro)) {
+    if (reverbContinuousMacro != null) {
       var delayContinuousMacro = FindDelayContinuousMacro();
       if (delayContinuousMacro != null) {
         SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
