@@ -126,7 +126,7 @@ public class BatchConfig {
     Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
-    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.ReplaceModWheelWithMacro  
+    if (Task is ConfigTask.ReplaceModWheelWithMacro  
         && Category.IsInfoPageLayoutInScript) {
       Console.WriteLine(
         $"Cannot {Task} for category " +

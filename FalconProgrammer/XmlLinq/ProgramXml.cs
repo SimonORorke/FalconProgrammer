@@ -55,15 +55,18 @@ public class ProgramXml {
     SetAttribute(macroElement, nameof(Macro.Style), newMacro.Style);
     SetAttribute(macroElement, nameof(Macro.Value), newMacro.Value);
     ControlSignalSourcesElement.Add(macroElement);
-    var signalConnectionElement =
-      macroElement.Descendants($"{nameof(SignalConnection)}")
-        .FirstOrDefault();
-    if (signalConnectionElement == null) {
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.SignalConnection "
-        + $"element in '{Category.TemplateProgramPath}'.");
+    MacroElements = ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
+    if (newMacro.SignalConnections.Count > 0) {
+      var signalConnectionElement =
+        macroElement.Descendants($"{nameof(SignalConnection)}")
+          .FirstOrDefault();
+      if (signalConnectionElement == null) {
+        AddMacroSignalConnection(newMacro.SignalConnections[0], newMacro);
+      } else {
+        UpdateSignalConnectionElement(
+          newMacro.SignalConnections[0], signalConnectionElement);
+      }
     }
-    UpdateSignalConnectionElement(newMacro.SignalConnections[0], signalConnectionElement);
     var propertiesElement = macroElement.Element("Properties");
     if (propertiesElement == null) {
       throw new ApplicationException(
