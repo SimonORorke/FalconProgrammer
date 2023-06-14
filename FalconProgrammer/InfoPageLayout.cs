@@ -122,6 +122,13 @@ public class InfoPageLayout {
     BottomRowMacros = GetBottomRowMacros(BottomRowY);
     var result = LocateWheelAboveDelayOrReverbMacro();
     if (result != null) {
+      // If the delay or reverb macro that has lost its CC is the last continuous macro,
+      // it can have a new onw. Example Factory\Bass-Sub\BA-Shomp 1.2.
+      // Counter-example, where the delay or reverb macro must not get a new CC:
+      // Factory\Keys\Dirty Toy Piano 1.1.
+      if (Program.ContinuousMacros.Count == MaxExistingContinuousMacroCount + 1) {
+        updateMacroCcs = true;
+      }
       return result;
     }
     // There is no wheel replacement CC number on a delay or reverb macro to reassign.
