@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using FalconProgrammer.XmlDeserialised;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
@@ -12,9 +13,24 @@ public class InfoPageLayout {
   }
 
   private List<Macro> BottomRowMacros { get; set; } = null!;
+
+  /// <summary>
+  ///   Gets or sets the maximum number of continuous macros, in MIDI CC number order,
+  ///   there can be on the Info page before the MIDI CC number that is specified by
+  ///   <see cref="ModWheelReplacementCcNo" /> and used for the modulation wheel
+  ///   replacement macro tha can be added to the layout by
+  ///   <see cref="ReplaceModWheelWithMacro" />.
+  /// </summary>
+  [PublicAPI]
+  public int MaxContinuousMacroCountBeforeWheelMacro { get; set; } = 3;
+
+  /// <summary>
+  ///   Gets or sets the MIDI CC number to be mapped to a program's new mod wheel
+  ///   replacement macro by <see cref="ReplaceModWheelWithMacro" />.
+  /// </summary>
+  [PublicAPI]
+  public int ModWheelReplacementCcNo { get; set; } = 34;
   private int BottomRowY { get; set; }
-  private int MaxExistingContinuousMacroCount { get; set; }
-  private int ModWheelReplacementCcNo { get; set; }
   private FalconProgram Program { get; }
 
   /// <summary>
@@ -22,10 +38,7 @@ public class InfoPageLayout {
   ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
   ///   explaining why it is not feasible.
   /// </summary>
-  public void ReplaceModWheelWithMacro(
-    int modWheelReplacementCcNo, int maxExistingContinuousMacroCount) {
-    ModWheelReplacementCcNo = modWheelReplacementCcNo;
-    MaxExistingContinuousMacroCount = maxExistingContinuousMacroCount;
+  public void ReplaceModWheelWithMacro() {
     Console.WriteLine($"Checking '{Program.Path}'.");
     if (Program.InfoPageCcsScriptProcessor != null) {
       Console.WriteLine(
@@ -129,7 +142,7 @@ public class InfoPageLayout {
       // it can have a new one. Example Factory\Bass-Sub\BA-Shomp 1.2.
       // Counter-example, where the delay or reverb macro must not get a new CC:
       // Factory\Keys\Dirty Toy Piano 1.1.
-      if (Program.ContinuousMacros.Count == MaxExistingContinuousMacroCount + 1) {
+      if (Program.ContinuousMacros.Count == MaxContinuousMacroCountBeforeWheelMacro + 1) {
         updateMacroCcs = true;
       }
       return result;
@@ -140,7 +153,7 @@ public class InfoPageLayout {
       return result;
     }
     // There is no wheel replacement CC number on a delay or reverb macro to reassign
-    // and there are more than {MaxExistingContinuousMacroCount} continuous macros.
+    // and there are more than {MaxContinuousMacroCountBeforeWheelMacro} continuous macros.
     result = LocateWheelMacroAboveMacroWithWheelCcNo();
     if (result != null) {
       updateMacroCcs = true;
@@ -160,10 +173,23 @@ public class InfoPageLayout {
       select macro).FirstOrDefault();
   }
 
+  [SuppressMessage("ReSharper", "CommentTypo")]
   private Macro? FindWheelMacro() {
     return (
       from continuousMacro in Program.ContinuousMacros
-      where continuousMacro.DisplayName.ToLower().Contains("wheel")
+      // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
+      // contains 'Wheel'. The only two additional programs that got wheel macros then
+      // were Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
+      //
+      // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
+      // hear. The mod wheel did work, and the added wheel macro has successfully
+      // replaced it. So the problem with the 'Wheel me' macro, if it's real, has not
+      // been caused by the wheel replacement macro implementation.
+      //
+      // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
+      // wheel and now controls the range of the 'Wheel' macro instead.  So that change
+      // has worked too.
+      where continuousMacro.DisplayName.ToLower() == "wheel"
       select continuousMacro).FirstOrDefault();
   }
 
@@ -241,7 +267,7 @@ public class InfoPageLayout {
 
   [SuppressMessage("ReSharper", "CommentTypo")]
   private Point? LocateWheelMacroOnOrAboveBottomRow() {
-    if (Program.ContinuousMacros.Count > MaxExistingContinuousMacroCount) {
+    if (Program.ContinuousMacros.Count > MaxContinuousMacroCountBeforeWheelMacro) {
       return null;
     }
     const int minHorizontalGapBetweenMacros = 5;

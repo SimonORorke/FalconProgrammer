@@ -15,22 +15,6 @@ public class BatchConfig {
   public LocationOrder MacroCcLocationOrder { get; set; } =
     LocationOrder.TopToBottomLeftToRight;
 
-  /// <summary>
-  ///   Gets or sets the maximum number of continuous macros that can already exist in
-  ///   a program for <see cref="ReplaceModWheelWithMacro" /> to add a new continuous
-  ///   macro to implement the modulations that were previously assigned to the mod
-  ///   wheel.
-  /// </summary>
-  [PublicAPI]
-  public int MaxExistingContinuousMacroCount { get; set; } = 3;
-
-  /// <summary>
-  ///   Gets or sets the MIDI CC number to be mapped to a program's new mod wheel
-  ///   replacement macro by <see cref="ReplaceModWheelWithMacro" />.
-  /// </summary>
-  [PublicAPI]
-  public int ModWheelReplacementCcNo { get; set; } = 34;
-
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
@@ -152,8 +136,7 @@ public class BatchConfig {
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
           var infoPageLayout = new InfoPageLayout(Program);
-          infoPageLayout.ReplaceModWheelWithMacro(
-            ModWheelReplacementCcNo, MaxExistingContinuousMacroCount);
+          infoPageLayout.ReplaceModWheelWithMacro();
           break;
         case ConfigTask.UpdateMacroCcs:
           Program.UpdateMacroCcs(MacroCcLocationOrder);
