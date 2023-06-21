@@ -354,21 +354,28 @@ public class FalconProgram {
     // Any assignment of a macro the modulation wheel  or any other
     // MIDI CC mapping that's not on the Info page is expected to be
     // specified in a different ScriptProcessor. But let's check!
-    bool infoPageCcsScriptProcessorHasModWheelSignalConnections = (
-      from signalConnection in InfoPageCcsScriptProcessor!.SignalConnections
-      where !signalConnection.IsForMacro
-      select signalConnection).Any();
-    if (infoPageCcsScriptProcessorHasModWheelSignalConnections) {
-      // We've already validated against non-mod wheel CCs that don't control Info page
-      // macros. So the reference to the mod wheel in this error message should be fine.
-      throw new ApplicationException(
-        "Modulation wheel assignment found in Info page CCs ScriptProcessor.");
+    // bool infoPageCcsScriptProcessorHasModWheelSignalConnections = (
+    //   from signalConnection in InfoPageCcsScriptProcessor!.SignalConnections
+    //   where !signalConnection.IsForMacro
+    //   select signalConnection).Any();
+    // if (infoPageCcsScriptProcessorHasModWheelSignalConnections) {
+    //   // We've already validated against non-mod wheel CCs that don't control Info page
+    //   // macros. So the reference to the mod wheel in this error message should be fine.
+    //   throw new ApplicationException(
+    //     "Modulation wheel assignment found in Info page CCs ScriptProcessor.");
+    // }
+    // InfoPageCcsScriptProcessor!.SignalConnections.Clear();
+    for (int i = InfoPageCcsScriptProcessor!.SignalConnections.Count - 1; i >= 0; i--) {
+      var signalConnection = InfoPageCcsScriptProcessor!.SignalConnections[i];
+      if (signalConnection.IsForMacro) {
+        InfoPageCcsScriptProcessor!.SignalConnections.Remove(signalConnection);
+      }
     }
-    InfoPageCcsScriptProcessor!.SignalConnections.Clear();
     foreach (var macro in sortedByLocation) {
       macroNo++;
       InfoPageCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
+          Destination = string.Empty, // Stops MacroNo from throwing exception
           MacroNo = macroNo,
           CcNo = GetCcNo(macro)
         });

@@ -3,8 +3,16 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    config.ReplaceModWheelWithMacro(null);
+    // config.ResetIfInfoPageCcsScriptProcessorAndWheelMacro(null);
+    // config.UpdateMacroCcs("Factory");
+    // config.ChangeDelayToZero("Factory");
+    // config.ChangeReverbToZero("Factory");
+    // config.UpdateMacroCcs("Spectre");
+    // config.ChangeDelayToZero("Spectre");
+    // config.ChangeReverbToZero("Spectre");
+    // config.ReplaceModWheelWithMacro(null);
     // config.ReplaceModWheelWithMacro("Spectre");
+    // config.ReplaceModWheelWithMacro("Factory", "Temp");
     // config.UpdateMacroCcs("Factory", "Temp");
     // config.ReplaceModWheelWithMacro("Factory", "Temp");
     // config.ChangeDelayToZero("Factory", "Pure Additive 2.0");

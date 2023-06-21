@@ -110,7 +110,8 @@ public class BatchConfig {
     Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
-    if (Task is ConfigTask.ReplaceModWheelWithMacro  
+    if (Task is ConfigTask.ReplaceModWheelWithMacro 
+          or ConfigTask.ResetIfInfoPageCcsScriptProcessorAndWheelMacro
         && Category.IsInfoPageLayoutInScript) {
       Console.WriteLine(
         $"Cannot {Task} for category " +
@@ -121,6 +122,7 @@ public class BatchConfig {
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
       Program.Read();
+      InfoPageLayout infoPageLayout;
       switch (Task) {
         case ConfigTask.ChangeDelayToZero:
           Program.ChangeDelayToZero();
@@ -135,8 +137,12 @@ public class BatchConfig {
           Program.CountMacros();
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
-          var infoPageLayout = new InfoPageLayout(Program);
+          infoPageLayout = new InfoPageLayout(Program);
           infoPageLayout.ReplaceModWheelWithMacro();
+          break;
+        case ConfigTask.ResetIfInfoPageCcsScriptProcessorAndWheelMacro:
+          infoPageLayout = new InfoPageLayout(Program);
+          infoPageLayout.ResetIfInfoPageCcsScriptProcessorAndWheelMacro();
           break;
         case ConfigTask.UpdateMacroCcs:
           Program.UpdateMacroCcs(MacroCcLocationOrder);
@@ -205,6 +211,13 @@ public class BatchConfig {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  [PublicAPI]
+  public void ResetIfInfoPageCcsScriptProcessorAndWheelMacro(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ResetIfInfoPageCcsScriptProcessorAndWheelMacro;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
@@ -226,6 +239,7 @@ public class BatchConfig {
     ChangeReverbToZero,
     CountMacros,
     ReplaceModWheelWithMacro,
+    ResetIfInfoPageCcsScriptProcessorAndWheelMacro,
     UpdateMacroCcs
   }
 }
