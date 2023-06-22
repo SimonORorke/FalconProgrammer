@@ -69,11 +69,30 @@ public class FalconProgram {
   }
 
   public void ChangeReverbToZero() {
-    foreach (var macro in Macros.Where(
-               macro =>
-                 macro.ControlsReverb
-                 && ChangeMacroValueToZero(macro.DisplayName))) {
-      Console.WriteLine($"Changed {macro.DisplayName} to zero for '{Path}'.");
+    var reverbMacros = (
+      from macro in Macros
+      where macro.ControlsReverb
+            && ChangeMacroValueToZero(macro.DisplayName)
+      select macro).ToList();
+    if (reverbMacros.Count == 0) {
+      return;  
+    }
+    if (Category.SoundBankFolder.Name == "Factory") {
+      if ((Category.Name == "Bass-Sub"
+          && Name is "Coastal Halftones 1.4" or "Metropolis 1.4")
+          || (Category.Name == "Leads" && Name == "Ali3n 1.4")
+          || (Category.Name == "Pads" 
+              // ReSharper disable once StringLiteralTypo
+              && Name is "Arrival 1.4" or "Novachord Noir 1.4" or "Pad Motion 1.5")
+          || (Category.Name == "Synth Brass" && Name == "Gotham Brass 1.4")) {
+        Console.WriteLine($"Changing reverb to zero is disabled for '{Path}'.");
+        return;
+      }
+    }
+    foreach (var reverbMacro in Macros.Where(
+               reverbMacro =>
+                 ChangeMacroValueToZero(reverbMacro.DisplayName))) {
+      Console.WriteLine($"Changed {reverbMacro.DisplayName} to zero for '{Path}'.");
     }
   }
 
