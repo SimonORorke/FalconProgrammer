@@ -6,8 +6,8 @@ public static class Runner {
     // config.RevertToOriginal(null);
     // config.UpdateMacroCcs(null);
     // config.ChangeDelayToZero(null);
-    // config.ChangeReverbToZero(null);
     // config.ReplaceModWheelWithMacro(null);
+    // config.ChangeReverbToZero(null);
     // config.ResetIfInfoPageCcsScriptProcessorAndWheelMacro(null);
     // config.UpdateMacroCcs("Factory");
     // config.ChangeDelayToZero("Factory");

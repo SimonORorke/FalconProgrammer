@@ -47,7 +47,9 @@ public class Macro {
 
   public bool ControlsReverb => 
     DisplayName.Contains("Reverb")
-    || DisplayName.Contains("Room")
+    // Room reduced many Spectre programs silent when zeroed.
+    // So leave it out till I get to the bottom of it.
+    // || DisplayName.Contains("Room")
     || DisplayName.Contains("SparkVerb");
 
   /// <summary>

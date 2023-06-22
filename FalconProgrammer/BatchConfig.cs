@@ -13,7 +13,7 @@ public class BatchConfig {
   /// </summary>
   [PublicAPI]
   public LocationOrder MacroCcLocationOrder { get; set; } =
-    LocationOrder.TopToBottomLeftToRight;
+    LocationOrder.LeftToRightTopToBottom;
 
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
