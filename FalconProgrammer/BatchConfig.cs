@@ -121,7 +121,9 @@ public class BatchConfig {
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
-      Program.Read();
+      if (Task != ConfigTask.RevertToOriginal) {
+        Program.Read();
+      }
       InfoPageLayout infoPageLayout;
       switch (Task) {
         case ConfigTask.ChangeDelayToZero:
@@ -144,11 +146,14 @@ public class BatchConfig {
           infoPageLayout = new InfoPageLayout(Program);
           infoPageLayout.ResetIfInfoPageCcsScriptProcessorAndWheelMacro();
           break;
+        case ConfigTask.RevertToOriginal:
+          Program.RevertToOriginal();
+          break;
         case ConfigTask.UpdateMacroCcs:
           Program.UpdateMacroCcs(MacroCcLocationOrder);
           break;
       }
-      if (Task != ConfigTask.CountMacros) {
+      if (Task is not (ConfigTask.CountMacros or ConfigTask.RevertToOriginal)) {
         Program.Save();
       }
     }
@@ -218,6 +223,13 @@ public class BatchConfig {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  [PublicAPI]
+  public void RevertToOriginal(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.RevertToOriginal;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
@@ -240,6 +252,7 @@ public class BatchConfig {
     CountMacros,
     ReplaceModWheelWithMacro,
     ResetIfInfoPageCcsScriptProcessorAndWheelMacro,
+    RevertToOriginal,
     UpdateMacroCcs
   }
 }

@@ -3,6 +3,11 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    // config.RevertToOriginal(null);
+    // config.UpdateMacroCcs(null);
+    // config.ChangeDelayToZero(null);
+    // config.ChangeReverbToZero(null);
+    // config.ReplaceModWheelWithMacro(null);
     // config.ResetIfInfoPageCcsScriptProcessorAndWheelMacro(null);
     // config.UpdateMacroCcs("Factory");
     // config.ChangeDelayToZero("Factory");

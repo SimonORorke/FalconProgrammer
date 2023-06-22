@@ -135,6 +135,9 @@ public class ProgramXml {
   }
 
   private XAttribute GetAttribute(XElement element, string attributeName) {
+    // if (element.Attribute(attributeName) == null) {
+    //   Debug.Assert(true);
+    // }
     return
       element.Attribute(attributeName) ??
       throw new ApplicationException(

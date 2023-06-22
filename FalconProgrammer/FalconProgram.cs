@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using FalconProgrammer.XmlLinq;
@@ -53,10 +54,14 @@ public class FalconProgram {
       var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
       var effectElement = ProgramXml.GetParentElement(connectionsElement);
       var signalConnection = new SignalConnection(signalConnectionElement);
-      ProgramXml.SetAttribute(
-        effectElement, signalConnection.Destination,
-        // If it's a toggle macro, Destination should be "Bypass".  
-        signalConnection.Destination == "Bypass" ? 1 : 0);
+      try {
+        ProgramXml.SetAttribute(
+          effectElement, signalConnection.Destination,
+          // If it's a toggle macro, Destination should be "Bypass".  
+          signalConnection.Destination == "Bypass" ? 1 : 0);
+        // ReSharper disable once EmptyGeneralCatchClause
+      } catch {
+      }
     }
     return true;
   }
@@ -72,7 +77,6 @@ public class FalconProgram {
     var reverbMacros = (
       from macro in Macros
       where macro.ControlsReverb
-            && ChangeMacroValueToZero(macro.DisplayName)
       select macro).ToList();
     if (reverbMacros.Count == 0) {
       return;  
@@ -95,6 +99,19 @@ public class FalconProgram {
                  ChangeMacroValueToZero(reverbMacro.DisplayName))) {
       Console.WriteLine($"Changed {reverbMacro.DisplayName} to zero for '{Path}'.");
     }
+  }
+
+  public void RevertToOriginal() {
+    string originalPath = System.IO.Path.Combine(
+      System.IO.Path.GetDirectoryName(Path)!.Replace(
+        "FalconPrograms", "Programs ORIGINAL") + " ORIGINAL",
+      System.IO.Path.GetFileName(Path));
+    if (!File.Exists(originalPath)) {
+      Console.WriteLine($"Cannot find original file '{originalPath}' for '{Path}'.");
+      return;
+    }
+    File.Copy(originalPath, Path, true);
+    Console.WriteLine($"Reset '{Path}'.");
   }
 
   private static void CheckForNonModWheelNonInfoPageMacro(
