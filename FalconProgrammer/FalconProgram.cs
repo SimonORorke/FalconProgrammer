@@ -85,6 +85,7 @@ public class FalconProgram {
               // ReSharper disable once StringLiteralTypo
               && Name is "Arrival 1.4" or "Novachord Noir 1.4" or "Pad Motion 1.5")
           || (Category.Name == "Synth Brass" && Name == "Gotham Brass 1.4")) {
+        // These programs are silent without reverb!
         Console.WriteLine($"Changing reverb to zero is disabled for '{Path}'.");
         return;
       }
