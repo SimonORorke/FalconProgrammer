@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using FalconProgrammer.XmlLinq;
@@ -94,7 +93,7 @@ public class FalconProgram {
         return;
       }
     }
-    foreach (var reverbMacro in Macros.Where(
+    foreach (var reverbMacro in reverbMacros.Where(
                reverbMacro =>
                  ChangeMacroValueToZero(reverbMacro.DisplayName))) {
       Console.WriteLine($"Changed {reverbMacro.DisplayName} to zero for '{Path}'.");

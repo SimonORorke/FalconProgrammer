@@ -3,6 +3,11 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
+    // config.UpdateMacroCcs("Devinity", "Test"); // Still OK
+    // config.ChangeDelayToZero("Devinity", "Test"); // Still OK
+    // config.ReplaceModWheelWithMacro("Devinity", "Test"); // Still OK
+    // config.ChangeReverbToZero("Devinity", "Test"); // Fixed!
+    //
     // config.RevertToOriginal(null);
     // config.UpdateMacroCcs(null);
     // config.ChangeDelayToZero(null);
