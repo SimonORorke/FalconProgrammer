@@ -13,7 +13,6 @@ public static class Runner {
     // config.ChangeDelayToZero(null);
     // config.ReplaceModWheelWithMacro(null);
     // config.ChangeReverbToZero(null);
-    // config.ResetIfInfoPageCcsScriptProcessorAndWheelMacro(null);
     // config.UpdateMacroCcs("Factory");
     // config.ChangeDelayToZero("Factory");
     // config.ChangeReverbToZero("Factory");

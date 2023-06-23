@@ -110,8 +110,7 @@ public class BatchConfig {
     Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
-    if (Task is ConfigTask.ReplaceModWheelWithMacro 
-          or ConfigTask.ResetIfInfoPageCcsScriptProcessorAndWheelMacro
+    if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.IsInfoPageLayoutInScript) {
       Console.WriteLine(
         $"Cannot {Task} for category " +
@@ -124,7 +123,6 @@ public class BatchConfig {
       if (Task != ConfigTask.RevertToOriginal) {
         Program.Read();
       }
-      InfoPageLayout infoPageLayout;
       switch (Task) {
         case ConfigTask.ChangeDelayToZero:
           Program.ChangeDelayToZero();
@@ -139,12 +137,8 @@ public class BatchConfig {
           Program.CountMacros();
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
-          infoPageLayout = new InfoPageLayout(Program);
+          var infoPageLayout = new InfoPageLayout(Program);
           infoPageLayout.ReplaceModWheelWithMacro();
-          break;
-        case ConfigTask.ResetIfInfoPageCcsScriptProcessorAndWheelMacro:
-          infoPageLayout = new InfoPageLayout(Program);
-          infoPageLayout.ResetIfInfoPageCcsScriptProcessorAndWheelMacro();
           break;
         case ConfigTask.RevertToOriginal:
           Program.RevertToOriginal();
@@ -217,13 +211,6 @@ public class BatchConfig {
   }
 
   [PublicAPI]
-  public void ResetIfInfoPageCcsScriptProcessorAndWheelMacro(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.ResetIfInfoPageCcsScriptProcessorAndWheelMacro;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
-  [PublicAPI]
   public void RevertToOriginal(
     string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.RevertToOriginal;
@@ -251,7 +238,6 @@ public class BatchConfig {
     ChangeReverbToZero,
     CountMacros,
     ReplaceModWheelWithMacro,
-    ResetIfInfoPageCcsScriptProcessorAndWheelMacro,
     RevertToOriginal,
     UpdateMacroCcs
   }

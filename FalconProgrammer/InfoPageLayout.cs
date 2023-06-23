@@ -61,26 +61,6 @@ public class InfoPageLayout {
     AddWheelMacro(locationForNewWheelMacro.Value, updateMacroCcs);
   }
 
-  public void ResetIfInfoPageCcsScriptProcessorAndWheelMacro() {
-    if (Program.InfoPageCcsScriptProcessor == null) {
-      return;
-    }
-    if (WheelMacroExists()) {
-    }
-    string originalPath = Path.Combine(
-      Path.GetDirectoryName(Program.Path)!.Replace(
-        "FalconPrograms", "Programs ORIGINAL") + " ORIGINAL",
-      Path.GetFileName(Program.Path));
-    if (!File.Exists(originalPath)) {
-      Console.WriteLine($"'{Program.Path}': Cannot find original file '{originalPath}'.");
-    }
-    File.Copy(originalPath, Program.Path, true);
-    Console.WriteLine($"Reset '{Program.Path}'.");
-    // Program.UpdateMacroCcs(LocationOrder.TopToBottomLeftToRight);
-    // Program.ChangeDelayToZero();
-    // Program.ChangeReverbToZero();
-  }
-
   private void AddWheelMacro(Point location, bool updateMacroCcs) {
     int wheelMacroNo = (
       from macro in Program.Macros
