@@ -19,14 +19,14 @@ public class InfoPageLayout {
   ///   there can be on the Info page before the MIDI CC number that is specified by
   ///   <see cref="ModWheelReplacementCcNo" /> and used for the modulation wheel
   ///   replacement macro tha can be added to the layout by
-  ///   <see cref="ReplaceModWheelWithMacro" />.
+  ///   <see cref="TryReplaceModWheelWithMacro" />.
   /// </summary>
   [PublicAPI]
   public int MaxContinuousMacroCountBeforeWheelMacro { get; set; } = 3;
 
   /// <summary>
   ///   Gets or sets the MIDI CC number to be mapped to a program's new mod wheel
-  ///   replacement macro by <see cref="ReplaceModWheelWithMacro" />.
+  ///   replacement macro by <see cref="TryReplaceModWheelWithMacro" />.
   /// </summary>
   [PublicAPI]
   public int ModWheelReplacementCcNo { get; set; } = 34;
@@ -38,30 +38,17 @@ public class InfoPageLayout {
   ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
   ///   explaining why it is not feasible.
   /// </summary>
-  public void ReplaceModWheelWithMacro() {
-    Console.WriteLine($"Checking '{Program.Path}'.");
-    if (Program.InfoPageCcsScriptProcessor != null) {
-      Console.WriteLine(
-        $"'{Program.Name}': Replacing wheel with macro is not supported because " +
-        "there is an Info page CCs script processor.");
-      return;
-    }
-    if (WheelMacroExists()) {
-      return;
-    }
-    if (!Program.ProgramXml.HasModWheelSignalConnections()) {
-      Console.WriteLine($"'{Program.Name}' contains no mod wheel modulations.");
-      return;
-    }
+  public bool TryReplaceModWheelWithMacro(out bool updateMacroCcs) {
     var locationForNewWheelMacro = FindLocationForNewWheelMacro(
-      out bool updateMacroCcs);
+      out updateMacroCcs);
     if (locationForNewWheelMacro == null) {
-      return;
+      return false;
     }
-    AddWheelMacro(locationForNewWheelMacro.Value, updateMacroCcs);
+    AddWheelMacro(locationForNewWheelMacro.Value);
+    return true;
   }
 
-  private void AddWheelMacro(Point location, bool updateMacroCcs) {
+  private void AddWheelMacro(Point location) {
     int wheelMacroNo = (
       from macro in Program.Macros
       select macro.MacroNo).Max() + 1;
@@ -84,11 +71,6 @@ public class InfoPageLayout {
     Program.Macros.Add(wheelMacro);
     Program.ProgramXml.AddMacro(wheelMacro);
     Program.ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(wheelMacro);
-    if (updateMacroCcs) {
-      Program.UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
-    }
-    Console.WriteLine(
-      $"'{Program.Name}': Replaced mod wheel with macro.");
   }
 
   private Macro? FindContinuousMacroWithModWheelReplacementCcNo() {
@@ -171,26 +153,6 @@ public class InfoPageLayout {
       from macro in Program.Macros
       where macro.ControlsReverb && !macro.IsContinuous
       select macro).FirstOrDefault();
-  }
-
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  private Macro? FindWheelMacro() {
-    return (
-      from continuousMacro in Program.ContinuousMacros
-      // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
-      // contains 'Wheel'. The only two additional programs that got wheel macros then
-      // were Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
-      //
-      // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
-      // hear. The mod wheel did work, and the added wheel macro has successfully
-      // replaced it. So the problem with the 'Wheel me' macro, if it's real, has not
-      // been caused by the wheel replacement macro implementation.
-      //
-      // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
-      // wheel and now controls the range of the 'Wheel' macro instead.  So that change
-      // has worked too.
-      where continuousMacro.DisplayName.ToLower() == "wheel"
-      select continuousMacro).FirstOrDefault();
   }
 
   /// <summary>
@@ -436,15 +398,5 @@ public class InfoPageLayout {
     // We also need to swap the MIDI CC numbers so that those still increment in the layout
     // order.
     SwapMacroCcNos(macro1, macro2);
-  }
-
-  private bool WheelMacroExists() {
-    var wheelMacro = FindWheelMacro();
-    if (wheelMacro != null) {
-      Console.WriteLine(
-        $"'{Program.Name}' already has a '{wheelMacro.DisplayName}' macro.");
-      return true;
-    }
-    return false;
   }
 }

@@ -144,8 +144,7 @@ public class BatchConfig {
           Program.RemoveInfoPageCcsScriptProcessor();
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
-          var infoPageLayout = new InfoPageLayout(Program);
-          infoPageLayout.ReplaceModWheelWithMacro();
+          Program.ReplaceModWheelWithMacro();
           break;
         case ConfigTask.RevertToOriginal:
           Program.RevertToOriginal();

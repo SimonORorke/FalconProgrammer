@@ -16,7 +16,7 @@ public class FalconProgram {
 
   [PublicAPI] public Category Category { get; }
   internal List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros();
-  internal ScriptProcessor? InfoPageCcsScriptProcessor { get; private set; }
+  private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
   internal List<Macro> Macros { get; private set; } = null!;
 
   /// <summary>
@@ -313,10 +313,46 @@ public class FalconProgram {
     }
     ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
     InfoPageCcsScriptProcessor = null;
+    MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
     UpdateMacroCcsInConstantModulations();
-    // var infoPageLayout = new InfoPageLayout(this);
-    // infoPageLayout.ReplaceModWheelWithMacro();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
+    // The program's Linq for XML data structure needs to be refreshed for
+    // ReplaceModWheelWithMacro.   
+    Save();
+    Read();
+    ReplaceModWheelWithMacro();
+  }
+
+  /// <summary>
+  ///   If feasible, replaces all modulations by the modulation wheel of effect
+  ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
+  ///   explaining why it is not feasible.
+  /// </summary>
+  public void ReplaceModWheelWithMacro() {
+    if (InfoPageCcsScriptProcessor != null) {
+      Console.WriteLine(
+        $"{PathShort}: Replacing wheel with macro is not supported because " +
+        "there is an Info page CCs script processor.");
+      return;
+    }
+    if (WheelMacroExists()) {
+      Console.WriteLine(
+        $"{PathShort} already has a Wheel macro.");
+      return;
+    }
+    if (!ProgramXml.HasModWheelSignalConnections()) {
+      Console.WriteLine($"{PathShort} contains no mod wheel modulations.");
+      return;
+    }
+    var infoPageLayout = new InfoPageLayout(this);
+    if (infoPageLayout.TryReplaceModWheelWithMacro(out bool updateMacroCcs)) {
+      if (updateMacroCcs) {
+        MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
+        UpdateMacroCcsInConstantModulations();
+      }
+      Console.WriteLine(
+        $"{PathShort}: Replaced mod wheel with macro.");
+    }
   }
 
   public void Save() {
@@ -382,7 +418,7 @@ public class FalconProgram {
         var signalConnection = new SignalConnection {
           CcNo = ccNo
         };
-        // macro.SignalConnections.Add(signalConnection); // ???
+        macro.SignalConnections.Add(signalConnection);
         ProgramXml.AddMacroSignalConnection(signalConnection, macro);
       } else {
         // The macro already has a SignalConnection mapping to a non-mod wheel CC number.
@@ -448,5 +484,26 @@ public class FalconProgram {
         });
     }
     ProgramXml.UpdateInfoPageCcsScriptProcessor();
+  }
+
+  [SuppressMessage("ReSharper", "CommentTypo")]
+  private bool WheelMacroExists() {
+    return (
+      from continuousMacro in ContinuousMacros
+      // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
+      // contains 'Wheel'. The only two additional programs that subsequently got wheel
+      // macros added were
+      // Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
+      //
+      // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
+      // hear. The mod wheel did work, and the added wheel macro has successfully
+      // replaced it. So the problem with the 'Wheel me' macro, if it's real, has not
+      // been caused by the wheel replacement macro implementation.
+      //
+      // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
+      // wheel and now controls the range of the 'Wheel' macro instead.  So that change
+      // has worked too.
+      where continuousMacro.DisplayName.ToLower() == "wheel"
+      select continuousMacro).Any();
   }
 }

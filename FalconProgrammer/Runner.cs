@@ -4,7 +4,6 @@ public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
     config.RemoveInfoPageCcsScriptProcessor("Factory", "Test");
-    config.ReplaceModWheelWithMacro("Factory", "Test");
     // config.RemoveInfoPageCcsScriptProcessor(null);
     //
     // config.ListIfHasInfoPageCcsScriptProcessor(null);
