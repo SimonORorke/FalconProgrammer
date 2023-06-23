@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
 using FalconProgrammer.XmlLinq;
@@ -29,6 +29,10 @@ public class FalconProgram {
   private int NextContinuousCcNo { get; set; } = 31;
   private int NextToggleCcNo { get; set; } = 112;
   [PublicAPI] public string Path { get; }
+
+  [PublicAPI]
+  public string PathShort => $"{Category.SoundBankFolder.Name}\\{Category.Name}\\{Name}";
+
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
@@ -59,8 +63,7 @@ public class FalconProgram {
           // If it's a toggle macro, Destination should be "Bypass".  
           signalConnection.Destination == "Bypass" ? 1 : 0);
         // ReSharper disable once EmptyGeneralCatchClause
-      } catch {
-      }
+      } catch { }
     }
     return true;
   }
@@ -78,13 +81,13 @@ public class FalconProgram {
       where macro.ControlsReverb
       select macro).ToList();
     if (reverbMacros.Count == 0) {
-      return;  
+      return;
     }
     if (Category.SoundBankFolder.Name == "Factory") {
       if ((Category.Name == "Bass-Sub"
-          && Name is "Coastal Halftones 1.4" or "Metropolis 1.4")
+           && Name is "Coastal Halftones 1.4" or "Metropolis 1.4")
           || (Category.Name == "Leads" && Name == "Ali3n 1.4")
-          || (Category.Name == "Pads" 
+          || (Category.Name == "Pads"
               // ReSharper disable once StringLiteralTypo
               && Name is "Arrival 1.4" or "Novachord Noir 1.4" or "Pad Motion 1.5")
           || (Category.Name == "Synth Brass" && Name == "Gotham Brass 1.4")) {
@@ -275,6 +278,12 @@ public class FalconProgram {
       select m).Count() == 1;
   }
 
+  public void ListIfHasInfoPageCcsScriptProcessor() {
+    if (InfoPageCcsScriptProcessor != null) {
+      Console.WriteLine(PathShort);
+    }
+  }
+
   /// <summary>
   ///   Dual XML data load strategy:
   ///   To maximise forward compatibility with possible future changes to the program XML
@@ -287,6 +296,27 @@ public class FalconProgram {
     Deserialise();
     ProgramXml = CreateProgramXml();
     ProgramXml.LoadFromFile(Path);
+  }
+
+  public void RemoveInfoPageCcsScriptProcessor() {
+    if (InfoPageCcsScriptProcessor == null) {
+      return;
+    }
+    if (!ProgramXml.HasModWheelSignalConnections()) {
+      return;
+    }
+    if (Macros.Count > 4) {
+      return;
+    }
+    if (Category.SoundBankFolder.Name == "Organic Keys") {
+      return;
+    }
+    ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
+    InfoPageCcsScriptProcessor = null;
+    UpdateMacroCcsInConstantModulations();
+    // var infoPageLayout = new InfoPageLayout(this);
+    // infoPageLayout.ReplaceModWheelWithMacro();
+    Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
   }
 
   public void Save() {
@@ -352,6 +382,7 @@ public class FalconProgram {
         var signalConnection = new SignalConnection {
           CcNo = ccNo
         };
+        // macro.SignalConnections.Add(signalConnection); // ???
         ProgramXml.AddMacroSignalConnection(signalConnection, macro);
       } else {
         // The macro already has a SignalConnection mapping to a non-mod wheel CC number.

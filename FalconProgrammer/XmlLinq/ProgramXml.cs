@@ -228,6 +228,16 @@ public class ProgramXml {
     return result;
   }
 
+  public void RemoveInfoPageCcsScriptProcessorElement() {
+    if (InfoPageCcsScriptProcessorElement != null) {
+      var eventProcessorsElement = InfoPageCcsScriptProcessorElement.Parent;
+      InfoPageCcsScriptProcessorElement.Remove();
+      if (!eventProcessorsElement!.HasElements) {
+        eventProcessorsElement.Remove();
+      }
+    }
+  }
+
   public void RemoveSignalConnectionElementsWithSource(string source) {
     var signalConnectionElements = 
       GetSignalConnectionElementsWithSource(source);

@@ -110,7 +110,8 @@ public class BatchConfig {
     Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
-    if (Task is ConfigTask.ReplaceModWheelWithMacro
+    if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor 
+          or ConfigTask.ReplaceModWheelWithMacro
         && Category.IsInfoPageLayoutInScript) {
       Console.WriteLine(
         $"Cannot {Task} for category " +
@@ -136,6 +137,12 @@ public class BatchConfig {
         case ConfigTask.CountMacros:
           Program.CountMacros();
           break;
+        case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
+          Program.ListIfHasInfoPageCcsScriptProcessor();
+          break;
+        case ConfigTask.RemoveInfoPageCcsScriptProcessor:
+          Program.RemoveInfoPageCcsScriptProcessor();
+          break;
         case ConfigTask.ReplaceModWheelWithMacro:
           var infoPageLayout = new InfoPageLayout(Program);
           infoPageLayout.ReplaceModWheelWithMacro();
@@ -147,7 +154,9 @@ public class BatchConfig {
           Program.UpdateMacroCcs(MacroCcLocationOrder);
           break;
       }
-      if (Task is not (ConfigTask.CountMacros or ConfigTask.RevertToOriginal)) {
+      if (Task is not (ConfigTask.CountMacros or 
+          ConfigTask.ListIfHasInfoPageCcsScriptProcessor
+          or ConfigTask.RevertToOriginal)) {
         Program.Save();
       }
     }
@@ -191,6 +200,21 @@ public class BatchConfig {
       throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
     }
     return result;
+  }
+
+  [PublicAPI]
+  public void ListIfHasInfoPageCcsScriptProcessor(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ListIfHasInfoPageCcsScriptProcessor;
+    Console.WriteLine("Programs with Info Page CCs Script Processor:");
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
+  [PublicAPI]
+  public void RemoveInfoPageCcsScriptProcessor(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.RemoveInfoPageCcsScriptProcessor;
+    ConfigurePrograms(soundBankName, categoryName);
   }
 
   /// <summary>
@@ -237,6 +261,8 @@ public class BatchConfig {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
+    ListIfHasInfoPageCcsScriptProcessor,
+    RemoveInfoPageCcsScriptProcessor,
     ReplaceModWheelWithMacro,
     RevertToOriginal,
     UpdateMacroCcs
