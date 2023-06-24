@@ -7,12 +7,27 @@ namespace FalconProgrammer;
 
 public class InfoPageLayout {
   private const int MacroWidth = 60;
-  
+  private const int MinHorizontalGapBetweenMacros = 5;
+
+  /// <summary>
+  ///   When there are only toggle macros on the bottom row, they may be lower than the
+  ///   standard bottom, usually to accomodate two-line display names.  This looks OK for
+  ///   toggle macros.  But for continuous macros, being taller, it makes an ugly lack of
+  ///   bottom margin.  So place the new continuous macro no lower than the standard
+  ///   bottommost Y.
+  ///   ReSharper disable once CommentTypo
+  ///   Example: "Factory\Pluck\Pad Mullerizer".
+  /// </summary>
+  private const int StandardBottommostY = 355;
+
+  private const int RightEdge = 695;
+
   public InfoPageLayout(FalconProgram program) {
     Program = program;
   }
 
   private List<Macro> BottomRowMacros { get; set; } = null!;
+  private int BottomRowY { get; set; }
 
   /// <summary>
   ///   Gets or sets the maximum number of continuous macros, in MIDI CC number order,
@@ -30,8 +45,26 @@ public class InfoPageLayout {
   /// </summary>
   [PublicAPI]
   public int ModWheelReplacementCcNo { get; set; } = 34;
-  private int BottomRowY { get; set; }
+
   private FalconProgram Program { get; }
+
+  public void MoveAllMacrosToStandardBottom() {
+    int freeSpace = RightEdge - MacroWidth * Program.Macros.Count;
+    int gapBetweenMacros = freeSpace / (Program.Macros.Count + 1);
+    if (gapBetweenMacros < MinHorizontalGapBetweenMacros) {
+      throw new ApplicationException(
+        $"{Program.PathShort}: There is not enough horizontal space to move " + 
+        $"{Program.Macros.Count} macros to the standard bottom row.");
+    }
+    int x = gapBetweenMacros;
+    foreach (var macro in Program.GetMacrosSortedByLocation(
+               LocationOrder.LeftToRightTopToBottom)) {
+      macro.Properties.X = x;
+      macro.Properties.Y = StandardBottommostY;
+      Program.ProgramXml.UpdateMacroLocation(macro);
+      x += gapBetweenMacros + MacroWidth;
+    }
+  }
 
   /// <summary>
   ///   If feasible, replaces all modulations by the modulation wheel of effect
@@ -232,16 +265,7 @@ public class InfoPageLayout {
     if (Program.ContinuousMacros.Count > MaxContinuousMacroCountBeforeWheelMacro) {
       return null;
     }
-    const int minHorizontalGapBetweenMacros = 5;
-    const int minNewMacroGapWidth = MacroWidth + 2 * minHorizontalGapBetweenMacros;
-    // When there are only toggle macros on the bottom row, they may be lower than the
-    // standard bottom, usually to accomodate two-line display names.  This looks OK for
-    // toggle macros.  But for continuous macros, being taller, it makes an ugly lack of
-    // bottom margin.  So place the new continuous macro no lower than the standard
-    // bottommost Y.
-    // Example: "Factory\Pluck\Pad Mullerizer".
-    const int standardBottommostY = 355;
-    const int rightEdge = 695;
+    const int minNewMacroGapWidth = MacroWidth + 2 * MinHorizontalGapBetweenMacros;
     // List, from left to right, the widths of the gaps between the macros on the bottom
     // row of macros on the Info page.  Include the gap between the leftmost macro and
     // the left edge and the gap between the rightmost macro and the right edge.
@@ -254,7 +278,7 @@ public class InfoPageLayout {
              + MacroWidth));
       }
     }
-    gapWidths.Add(rightEdge - (BottomRowMacros[^1].Properties.X + MacroWidth));
+    gapWidths.Add(RightEdge - (BottomRowMacros[^1].Properties.X + MacroWidth));
     // Check whether there any gaps on the bottom rowe wide enough to accommodate a new
     // macro.
     bool canFitInGap = (
@@ -307,7 +331,7 @@ public class InfoPageLayout {
         from macro in bottomRowContinuousMacros
         select macro.Properties.Y).Max();
     } else {
-      newMacroY = BottomRowY <= standardBottommostY ? BottomRowY : standardBottommostY;
+      newMacroY = BottomRowY <= StandardBottommostY ? BottomRowY : StandardBottommostY;
     }
     return new Point(newMacroX, newMacroY);
   }

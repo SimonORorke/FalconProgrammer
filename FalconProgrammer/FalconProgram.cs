@@ -314,12 +314,12 @@ public class FalconProgram {
     ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
     InfoPageCcsScriptProcessor = null;
     MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
+    new InfoPageLayout(this).MoveAllMacrosToStandardBottom();
     UpdateMacroCcsInConstantModulations();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
-    // The program's Linq for XML data structure needs to be refreshed for
-    // ReplaceModWheelWithMacro.   
-    Save();
-    Read();
+    // Reinitialise NextContinuousCcNo because ReplaceModWheelWithMacro will call
+    // UpdateMacroCcsInConstantModulations again. 
+    NextContinuousCcNo = 31;
     ReplaceModWheelWithMacro();
   }
 
@@ -344,8 +344,8 @@ public class FalconProgram {
       Console.WriteLine($"{PathShort} contains no mod wheel modulations.");
       return;
     }
-    var infoPageLayout = new InfoPageLayout(this);
-    if (infoPageLayout.TryReplaceModWheelWithMacro(out bool updateMacroCcs)) {
+    if (new InfoPageLayout(this).TryReplaceModWheelWithMacro(
+          out bool updateMacroCcs)) {
       if (updateMacroCcs) {
         MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
         UpdateMacroCcsInConstantModulations();

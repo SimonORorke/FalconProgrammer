@@ -67,14 +67,7 @@ public class ProgramXml {
           newMacro.SignalConnections[0], signalConnectionElement);
       }
     }
-    var propertiesElement = macroElement.Element("Properties");
-    if (propertiesElement == null) {
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.Properties "
-        + $"element in '{Category.TemplateProgramPath}'.");
-    }
-    SetAttribute(propertiesElement, "x", newMacro.Properties.X);
-    SetAttribute(propertiesElement, "y", newMacro.Properties.Y);
+    UpdateMacroPropertiesElement(newMacro, macroElement);
   }
 
   /// <summary>
@@ -270,16 +263,22 @@ public class ProgramXml {
     SetAttribute(GetAttribute(element, attributeName), value);
   }
 
+  public virtual void UpdateInfoPageCcsScriptProcessor() {
+    var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections");
+    if (connectionsElement != null) {
+      connectionsElement.RemoveAll();
+    } else {
+      connectionsElement = new XElement("Connections");
+      InfoPageCcsScriptProcessorElement.Add(connectionsElement);
+    }
+    foreach (var signalConnection in InfoPageCcsScriptProcessor!.SignalConnections) {
+      connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
+    }
+  }
+
   public void UpdateMacroLocation(Macro macro) {
     var macroElement = GetMacroElement(macro);
-    var propertiesElement = macroElement.Element("Properties");
-    if (propertiesElement == null) {
-      throw new ApplicationException(
-        "Cannot find Properties "
-        + $"element for ConstantModulation '{macro.DisplayName}'.");
-    }
-    SetAttribute(propertiesElement, "x", macro.Properties.X);
-    SetAttribute(propertiesElement, "y", macro.Properties.Y);
+    UpdateMacroPropertiesElement(macro, macroElement);
   }
 
   public void UpdateMacroSignalConnection(
@@ -295,17 +294,18 @@ public class ProgramXml {
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }
 
-  public virtual void UpdateInfoPageCcsScriptProcessor() {
-    var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections");
-    if (connectionsElement != null) {
-      connectionsElement.RemoveAll();
-    } else {
-      connectionsElement = new XElement("Connections");
-      InfoPageCcsScriptProcessorElement.Add(connectionsElement);
+  private void UpdateMacroPropertiesElement(Macro macro, XContainer macroElement) {
+    var propertiesElement = macroElement.Element("Properties");
+    if (propertiesElement == null) {
+      throw new ApplicationException(
+        "Cannot find ConstantModulation.Properties "
+        + $"element in '{Category.TemplateProgramPath}'.");
     }
-    foreach (var signalConnection in InfoPageCcsScriptProcessor!.SignalConnections) {
-      connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
-    }
+    // customPosition needs to be update if we are converting the layout from a
+    // script processor layout to a standard layout.
+    SetAttribute(propertiesElement, "customPosition", 1);
+    SetAttribute(propertiesElement, "x", macro.Properties.X);
+    SetAttribute(propertiesElement, "y", macro.Properties.Y);
   }
 
   private void UpdateSignalConnectionElement(
