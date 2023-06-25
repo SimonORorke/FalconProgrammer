@@ -7,7 +7,11 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class FalconProgram {
+  private const int FirstContinuousCcNo = 31;
+  private const int FirstToggleCcNo = 112;
+  
   private List<Macro>? _continuousMacros;
+  private InfoPageLayout? _infoPageLayout;
 
   public FalconProgram(string path, Category category) {
     Path = path;
@@ -16,6 +20,10 @@ public class FalconProgram {
 
   [PublicAPI] public Category Category { get; }
   internal List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros();
+
+  private InfoPageLayout InfoPageLayout =>
+    _infoPageLayout ??= new InfoPageLayout(this);
+
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
   internal List<Macro> Macros { get; private set; } = null!;
 
@@ -26,8 +34,8 @@ public class FalconProgram {
   private LocationOrder MacroCcLocationOrder { get; set; }
 
   internal string Name { get; private set; } = null!;
-  private int NextContinuousCcNo { get; set; } = 31;
-  private int NextToggleCcNo { get; set; } = 112;
+  private int NextContinuousCcNo { get; set; }
+  private int NextToggleCcNo { get; set; }
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
@@ -92,15 +100,25 @@ public class FalconProgram {
               && Name is "Arrival 1.4" or "Novachord Noir 1.4" or "Pad Motion 1.5")
           || (Category.Name == "Synth Brass" && Name == "Gotham Brass 1.4")) {
         // These programs are silent without reverb!
-        Console.WriteLine($"Changing reverb to zero is disabled for '{Path}'.");
+        Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
         return;
       }
     }
-    foreach (var reverbMacro in reverbMacros.Where(
-               reverbMacro =>
-                 ChangeMacroValueToZero(reverbMacro.DisplayName))) {
-      Console.WriteLine($"Changed {reverbMacro.DisplayName} to zero for '{Path}'.");
+    foreach (var reverbMacro in reverbMacros) {
+      // Example: Titanium\Pads\Children's Choir.
+      if (reverbMacro.FindSignalConnection(1) != null) {
+        Console.WriteLine(
+          $"{PathShort}: Not changing {reverbMacro.DisplayName} to zero because " + 
+          "it is modulated by the wheel.");
+      } else if (ChangeMacroValueToZero(reverbMacro.DisplayName)) {
+        Console.WriteLine($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
+      }
     }
+    // foreach (var reverbMacro in reverbMacros.Where(
+    //            reverbMacro =>
+    //              ChangeMacroValueToZero(reverbMacro.DisplayName))) {
+    //   Console.WriteLine($"Changed {reverbMacro.DisplayName} to zero for '{Path}'.");
+    // }
   }
 
   public void RevertToOriginal() {
@@ -298,7 +316,17 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
   }
 
-  public void RemoveInfoPageCcsScriptProcessor() {
+  /// <summary>
+  ///   If MIDI CC numbers that modulate macros are defined in
+  ///   <see cref="InfoPageCcsScriptProcessor" /> and the modulation wheel provides
+  ///   modulation for the program, then, if feasible, do away with the script processor.
+  ///   That will give the Info page the default appearance and allow macros to be moved
+  ///   and added. When and if the script processor has been dispensed with,
+  ///   move the existing macros to locations optimal for accommodating a new wheel
+  ///   replacement macro, then add the new Wheel macro and transfer all the wheel
+  ///   modulations to it.
+  /// </summary>
+  public void RemoveInfoPageCcsScriptProcessorAndAddWheelMacro() {
     if (InfoPageCcsScriptProcessor == null) {
       return;
     }
@@ -313,13 +341,25 @@ public class FalconProgram {
     }
     ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
     InfoPageCcsScriptProcessor = null;
+    // This should be the default, but otherwise won't work with wheel replacement. 
     MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
-    new InfoPageLayout(this).MoveAllMacrosToStandardBottom();
+    InfoPageLayout.MoveAllMacrosToStandardBottom();
+    // As we are going to convert script processor-owned 'for macro' SignalConnections to
+    // macro-owned 'for macro' SignalConnections, there should not be any existing
+    // macro-owned 'for macro' SignalConnections.
+    // Example: Titanium\Pads\Children's Choir.
+    // If there are, get rid of them.
+    foreach (var macro in Macros) {
+      var forMacroSignalConnections = 
+        macro.GetForMacroSignalConnections();
+      foreach (var forMacroSignalConnection in forMacroSignalConnections) {
+        macro.SignalConnections.Remove(forMacroSignalConnection);
+        ProgramXml.RemoveSignalConnectionElementsWithSource(
+          forMacroSignalConnection.Source);  
+      }
+    }
     UpdateMacroCcsInConstantModulations();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
-    // Reinitialise NextContinuousCcNo because ReplaceModWheelWithMacro will call
-    // UpdateMacroCcsInConstantModulations again. 
-    NextContinuousCcNo = 31;
     ReplaceModWheelWithMacro();
   }
 
@@ -344,11 +384,36 @@ public class FalconProgram {
       Console.WriteLine($"{PathShort} contains no mod wheel modulations.");
       return;
     }
-    if (new InfoPageLayout(this).TryReplaceModWheelWithMacro(
+    // Debug.WriteLine("================================================");
+    // Debug.WriteLine("Before InfoPageLayout.TryReplaceModWheelWithMacro");
+    // foreach (var macro in Macros) {
+    //   foreach (var signalConnection in macro.SignalConnections) {
+    //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+    //   }
+    // }
+    // Debug.WriteLine("================================================");
+    if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
+      // Debug.WriteLine("================================================");
+      // Debug.WriteLine("After InfoPageLayout.TryReplaceModWheelWithMacro");
+      // foreach (var macro in Macros) {
+      //   foreach (var signalConnection in macro.SignalConnections) {
+      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   }
+      // }
+      // Debug.WriteLine("================================================");
       if (updateMacroCcs) {
+        // This should be the default, but otherwise won't work with wheel replacement. 
         MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
         UpdateMacroCcsInConstantModulations();
+        // Debug.WriteLine("================================================");
+        // Debug.WriteLine("After UpdateMacroCcsInConstantModulations");
+        // foreach (var macro in Macros) {
+        //   foreach (var signalConnection in macro.SignalConnections) {
+        //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+        //   }
+        // }
+        // Debug.WriteLine("================================================");
       }
       Console.WriteLine(
         $"{PathShort}: Replaced mod wheel with macro.");
@@ -399,21 +464,30 @@ public class FalconProgram {
     //
     var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder);
+    // Reinitialise NextContinuousCcNo, incremented by GetCcNo, in case
+    // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
+    // by RemoveInfoPageCcsScriptProcessorAndAddWheelMacro, the second time via
+    // ReplaceModWheelWithMacro. 
+    NextContinuousCcNo = FirstContinuousCcNo;
+    NextToggleCcNo = FirstToggleCcNo;
     foreach (var macro in sortedByLocation) {
-      //int ccNo = macro.GetCcNo(ref nextContinuousCcNo, ref nextToggleCcNo);
       // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
       // MIDI CC mapping that's not on the Info page.
       // Example: Devinity/Bass/Comber Bass.
-      var infoPageSignalConnections = (
-        from sc in macro.SignalConnections
-        where sc.IsForMacro
-        select sc).ToList();
-      // if (infoPageSignalConnections.Count !=
+      var forMacroSignalConnections = 
+        macro.GetForMacroSignalConnections();
+      if (forMacroSignalConnections.Count > 1) {
+        throw new NotSupportedException(
+          $"{PathShort}: Macro '{macro}' owns {forMacroSignalConnections.Count} " +
+          "'for macro' SignalConnections.");
+      }
+      // if (forMacroSignalConnections.Count !=
       //     macro.SignalConnections.Count) {
-      //   Console.WriteLine($"Modulation wheel assignment found: {macro}");
+      //   Console.WriteLine(
+      //     $"{PathShort}: Modulation wheel assignment found in macro {macro}.");
       // }
       int ccNo = GetCcNo(macro);
-      if (infoPageSignalConnections.Count == 0) { // Will be 0 or 1
+      if (forMacroSignalConnections.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a non-mod wheel CC number.
         var signalConnection = new SignalConnection {
           CcNo = ccNo
@@ -424,7 +498,7 @@ public class FalconProgram {
         // The macro already has a SignalConnection mapping to a non-mod wheel CC number.
         // We need to conserve the SignalConnection tag, which might contain a custom
         // Ratio, and, with the exception below, just replace the CC number.
-        var signalConnection = infoPageSignalConnections[0];
+        var signalConnection = forMacroSignalConnections[0];
         signalConnection.CcNo = ccNo;
         // In Factory/Keys/Days Of Old 1.4, Macro 1, a switch macro, has Ratio -1 instead
         // of the usual 1. I don't know what the point of that is. But it prevents the

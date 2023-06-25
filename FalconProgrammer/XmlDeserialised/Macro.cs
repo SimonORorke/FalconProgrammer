@@ -9,11 +9,16 @@ namespace FalconProgrammer.XmlDeserialised;
 /// </summary>
 public class Macro {
   /// <summary>
-  ///   The macro name, which only indicates the macro number. For reference in
-  ///   <see cref="SignalConnection" />s owned by effects that have parameters modulated
-  ///   by the macro. Usually like 'Macro 3' but, in a few programs such as
-  ///   'Factory\Keys\Pure FM Tines', like 'MacroKnob 3'.
+  ///   The macro name, which uniquely identifies the macro. For reference in
+  ///   <see cref="SignalConnection" />s owned by effects or the
+  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />.
+  ///   only indicates the macro number. 
   /// </summary>
+  /// <remarks>
+  ///   The name format is usually like 'Macro 3' but, in a few programs such as
+  ///   'Factory\Keys\Pure FM Tines', like 'MacroKnob 3'.  So a macro number
+  ///   <see cref="MacroNo" /> is derived from the name.
+  /// </remarks>
   [XmlAttribute]
   public string Name { get; set; } = null!;
 
@@ -61,12 +66,18 @@ public class Macro {
     set => Style = value ? 0 : 1;
   }
 
+  /// <summary>
+  ///   The macro number, derived from <see cref="Name" />.
+  /// </summary>
+  /// <remarks>
+  ///   Though <see cref="Name" /> is a unique identifier, this derived macro number
+  ///   cannot be 100% relied on to also be one. This is because there is at least one
+  ///   program, Titanium\Pads\Children's Choir, that has macros named both "Macro 1"
+  ///   and "MacroKnob 1" etc., presumably due to a programmers' oversight.
+  /// </remarks>
   [PublicAPI]
   public int MacroNo {
     get {
-      // In most programs, macro (ConstantModulation) Names consist of "Macro " followed
-      // by the macro number. In a few programs, such as 'Factory\Keys\Pure FM Tines', 
-      // the Names start with "MacroKnob " instead. 
       string[] split = Name.Split();
       if (split.Length != 2 || !int.TryParse(split[1], out int macroNo)) {
         throw new NotSupportedException(
@@ -75,6 +86,20 @@ public class Macro {
       return macroNo;
     }
     set => Name = $"Macro {value}";
+  }
+
+  public SignalConnection? FindSignalConnection(int ccNo) {
+    return (
+      from signalConnection in SignalConnections
+      where signalConnection.CcNo == ccNo
+      select signalConnection).FirstOrDefault();
+  }
+
+  public List<SignalConnection> GetForMacroSignalConnections() {
+    return (
+      from signalConnection in SignalConnections
+      where signalConnection.IsForMacro
+      select signalConnection).ToList();
   }
 
   public override string ToString() {

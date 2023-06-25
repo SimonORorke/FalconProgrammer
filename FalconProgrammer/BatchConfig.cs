@@ -140,8 +140,8 @@ public class BatchConfig {
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
           break;
-        case ConfigTask.RemoveInfoPageCcsScriptProcessor:
-          Program.RemoveInfoPageCcsScriptProcessor();
+        case ConfigTask.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro:
+          Program.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro();
           break;
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro();
@@ -210,9 +210,9 @@ public class BatchConfig {
   }
 
   [PublicAPI]
-  public void RemoveInfoPageCcsScriptProcessor(
+  public void RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(
     string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.RemoveInfoPageCcsScriptProcessor;
+    Task = ConfigTask.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -261,7 +261,7 @@ public class BatchConfig {
     ChangeReverbToZero,
     CountMacros,
     ListIfHasInfoPageCcsScriptProcessor,
-    RemoveInfoPageCcsScriptProcessor,
+    RemoveInfoPageCcsScriptProcessorAndAddWheelMacro,
     ReplaceModWheelWithMacro,
     RevertToOriginal,
     UpdateMacroCcs

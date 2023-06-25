@@ -75,7 +75,7 @@ public class SignalConnection {
   public bool IsForMacro => ConnectionMode == 1;
 
   /// <summary>
-  ///   If the <see cref="SignalConnection" /> belongs to the
+  ///   If the <see cref="SignalConnection" /> belongs to and effect or the
   ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, returns the
   ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated.
   ///   If the <see cref="SignalConnection" /> belongs to the <see cref="Macro" /> to
@@ -96,7 +96,7 @@ public class SignalConnection {
         throw new ApplicationException(
           "MacroNo may not be set for a SignalConnection that is owned by the " +
           "modulated macro (SignalConnection.Destination = 'Value'), only for a " +
-          "SignalConnection that is owned by the " +
+          "SignalConnection that is owned by effects or the " +
           "FalconProgram.InfoPageCcsScriptProcessor.");
       }
       Destination = $"Macro{value}";

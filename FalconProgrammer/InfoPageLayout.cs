@@ -56,9 +56,18 @@ public class InfoPageLayout {
         $"{Program.PathShort}: There is not enough horizontal space to move " + 
         $"{Program.Macros.Count} macros to the standard bottom row.");
     }
+    // Move any reverb and delay macros to the right end of the standard bottom row
+    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
+    // the wheel replacement macro from the continuous  macro I'm least likely to use,
+    // preferably delay, otherwise reverb.
+    // Example: Savage\Leads\Saw Dirty.
+    MoveMacroToEndIfExists(FindReverbToggleMacro());
+    MoveMacroToEndIfExists(FindReverbContinuousMacro());
+    MoveMacroToEndIfExists(FindDelayToggleMacro());
+    MoveMacroToEndIfExists(FindDelayContinuousMacro());
+    Program.ProgramXml.ReplaceMacroElements(Program.Macros);
     int x = gapBetweenMacros;
-    foreach (var macro in Program.GetMacrosSortedByLocation(
-               LocationOrder.LeftToRightTopToBottom)) {
+    foreach (var macro in Program.Macros) {
       macro.Properties.X = x;
       macro.Properties.Y = StandardBottommostY;
       Program.ProgramXml.UpdateMacroLocation(macro);
@@ -74,6 +83,14 @@ public class InfoPageLayout {
   public bool TryReplaceModWheelWithMacro(out bool updateMacroCcs) {
     var locationForNewWheelMacro = FindLocationForNewWheelMacro(
       out updateMacroCcs);
+    // Debug.WriteLine("================================================");
+    // Debug.WriteLine("After FindLocationForNewWheelMacro");
+    // foreach (var macro in Program.Macros) {
+    //   foreach (var signalConnection in macro.SignalConnections) {
+    //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+    //   }
+    // }
+    // Debug.WriteLine("================================================");
     if (locationForNewWheelMacro == null) {
       return false;
     }
@@ -102,18 +119,14 @@ public class InfoPageLayout {
       }
     };
     Program.Macros.Add(wheelMacro);
-    Program.ProgramXml.AddMacro(wheelMacro);
+    Program.ProgramXml.AddMacroElement(wheelMacro);
     Program.ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(wheelMacro);
   }
 
   private Macro? FindContinuousMacroWithModWheelReplacementCcNo() {
     return (
       from continuousMacro in Program.ContinuousMacros
-      let maybeSignalConnection =
-        (from signalConnection in continuousMacro.SignalConnections
-          where signalConnection.CcNo == ModWheelReplacementCcNo
-          select signalConnection).FirstOrDefault()
-      where maybeSignalConnection != null
+      where continuousMacro.FindSignalConnection(ModWheelReplacementCcNo) != null 
       select continuousMacro).FirstOrDefault();
   }
 
@@ -133,7 +146,10 @@ public class InfoPageLayout {
     if (continuousMacro != null &&
         (continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)) {
       delayOrReverbMacroWithWheelCcNo = continuousMacro;
-      delayOrReverbSignalConnectionWithWheelCcNo = continuousMacro.SignalConnections[0];
+      // There could also be a mod wheel CC 1, so we cannot assume it's the first
+      // SignalConnection. Example: Titanium\Pads\Children's Choir.
+      delayOrReverbSignalConnectionWithWheelCcNo = continuousMacro.FindSignalConnection(
+        ModWheelReplacementCcNo);
     }
   }
 
@@ -153,6 +169,14 @@ public class InfoPageLayout {
     BottomRowMacros = GetBottomRowMacros(BottomRowY);
     var result = LocateWheelAboveDelayOrReverbMacro();
     if (result != null) {
+      // Debug.WriteLine("================================================");
+      // Debug.WriteLine("After LocateWheelAboveDelayOrReverbMacro");
+      // foreach (var macro in Program.Macros) {
+      //   foreach (var signalConnection in macro.SignalConnections) {
+      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   }
+      // }
+      // Debug.WriteLine("================================================");
       // If the delay or reverb macro that has lost its CC is the last continuous macro,
       // it can have a new one. Example Factory\Bass-Sub\BA-Shomp 1.2.
       // Counter-example, where the delay or reverb macro must not get a new CC:
@@ -174,6 +198,13 @@ public class InfoPageLayout {
       updateMacroCcs = true;
     }
     return result;
+  }
+
+  private Macro? FindReverbContinuousMacro() {
+    return (
+      from macro in Program.ContinuousMacros
+      where macro.ControlsReverb
+      select macro).FirstOrDefault();
   }
 
   private Macro? FindReverbContinuousMacroWithWheelReplacementCcNo() {
@@ -233,6 +264,14 @@ public class InfoPageLayout {
 
   private Point? LocateWheelAboveDelayOrReverbMacro() {
     SwapDelayAndReverbIfReverbHasWheelReplacementCcNo();
+    // Debug.WriteLine("================================================");
+    // Debug.WriteLine("After SwapDelayAndReverbIfReverbHasWheelReplacementCcNo");
+    // foreach (var macro in Program.Macros) {
+    //   foreach (var signalConnection in macro.SignalConnections) {
+    //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+    //   }
+    // }
+    // Debug.WriteLine("================================================");
     FindDelayOrReverbMacroWithModWheelReplacementCcNo(
       out var delayOrReverbMacroWithWheelCcNo,
       out var delayOrReverbSignalConnectionWithWheelCcNo);
@@ -241,12 +280,28 @@ public class InfoPageLayout {
     //   && BottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
     // if (isDelayOrReverbMacroWithWheelCcNoOnBottomRow) {
     if (delayOrReverbMacroWithWheelCcNo != null) {
+      // Debug.WriteLine("================================================");
+      // Debug.WriteLine("After FindDelayOrReverbMacroWithModWheelReplacementCcNo");
+      // foreach (var macro in Program.Macros) {
+      //   foreach (var signalConnection in macro.SignalConnections) {
+      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   }
+      // }
+      // Debug.WriteLine("================================================");
       // Remove the wheel replacement CC number assignment from the delay or reverb
       // macro that has it.  It will be reassigned to the new wheel macro when that is
       // added.
       RemoveSignalConnection(
         delayOrReverbMacroWithWheelCcNo, delayOrReverbSignalConnectionWithWheelCcNo!);
       // Locate the new wheel macro above the delay or reverb macro.
+      // Debug.WriteLine("================================================");
+      // Debug.WriteLine("After RemoveSignalConnection");
+      // foreach (var macro in Program.Macros) {
+      //   foreach (var signalConnection in macro.SignalConnections) {
+      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   }
+      // }
+      // Debug.WriteLine("================================================");
       return LocateNewMacroAboveMacro(delayOrReverbMacroWithWheelCcNo);
     }
     return null;
@@ -336,9 +391,22 @@ public class InfoPageLayout {
     return new Point(newMacroX, newMacroY);
   }
 
+  private void MoveMacroToEndIfExists(Macro? macroIfExists) {
+    if (macroIfExists != null && macroIfExists != Program.Macros[^1]) {
+      Program.Macros.Remove(macroIfExists);
+      Program.Macros.Add(macroIfExists);
+    }
+  }
+
   private void RemoveSignalConnection(Macro macro, SignalConnection signalConnection) {
     if (macro.SignalConnections.Contains(signalConnection)) {
       macro.SignalConnections.Remove(signalConnection);
+      // Debug.WriteLine("================================================");
+      // Debug.WriteLine("After macro.SignalConnections.Remove");
+      // foreach (var sc in macro.SignalConnections) {
+      //   Debug.WriteLine($"{macro}, CcNo {sc.CcNo}");
+      // }
+      // Debug.WriteLine("================================================");
     }
     Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
       signalConnection.Source);

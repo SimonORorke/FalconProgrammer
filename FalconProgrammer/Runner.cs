@@ -3,8 +3,9 @@
 public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
-    // config.RemoveInfoPageCcsScriptProcessor("Factory", "Test");
-    config.RemoveInfoPageCcsScriptProcessor(null);
+    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium", "Test");
+    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Factory", "Test");
+    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
     //
     // config.ListIfHasInfoPageCcsScriptProcessor(null);
     // config.UpdateMacroCcs("Devinity", "Test"); // Still OK

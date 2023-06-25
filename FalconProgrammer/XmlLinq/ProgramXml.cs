@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Diagnostics;
+using System.Xml;
 using System.Xml.Linq;
 using FalconProgrammer.XmlDeserialised;
 using JetBrains.Annotations;
@@ -47,8 +48,11 @@ public class ProgramXml {
     connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
   }
 
-  public void AddMacro(Macro newMacro) {
+  public void AddMacroElement(Macro newMacro) {
     var macroElement = new XElement(TemplateMacroElement);
+    // Remove any SignalConnection elements and their parent Connections element brought
+    // over with template.
+    macroElement.Element("Connections")?.Remove();
     SetAttribute(macroElement, nameof(Macro.Name), newMacro.Name);
     SetAttribute(macroElement, nameof(Macro.DisplayName), newMacro.DisplayName);
     SetAttribute(macroElement, nameof(Macro.Bipolar), newMacro.Bipolar);
@@ -56,17 +60,22 @@ public class ProgramXml {
     SetAttribute(macroElement, nameof(Macro.Value), newMacro.Value);
     ControlSignalSourcesElement.Add(macroElement);
     MacroElements = ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
-    if (newMacro.SignalConnections.Count > 0) {
-      var signalConnectionElement =
-        macroElement.Descendants($"{nameof(SignalConnection)}")
-          .FirstOrDefault();
-      if (signalConnectionElement == null) {
-        AddMacroSignalConnection(newMacro.SignalConnections[0], newMacro);
-      } else {
-        UpdateSignalConnectionElement(
-          newMacro.SignalConnections[0], signalConnectionElement);
-      }
+    // A macro is expected to own 0, 1 or 2 SignalConnections:
+    // 2 if there is a mod wheel signal connection and a 'for macro' SignalConnection.
+    foreach (var signalConnection in newMacro.SignalConnections) {
+      AddMacroSignalConnection(signalConnection, newMacro);
     }
+    // if (newMacro.SignalConnections.Count > 0) { // Should be just one. WRONG
+    //   var signalConnectionElement =
+    //     macroElement.Descendants($"{nameof(SignalConnection)}")
+    //       .FirstOrDefault();
+    //   if (signalConnectionElement == null) {
+    //     AddMacroSignalConnection(newMacro.SignalConnections[0], newMacro);
+    //   } else {
+    //     UpdateSignalConnectionElement(
+    //       newMacro.SignalConnections[0], signalConnectionElement);
+    //   }
+    // }
     UpdateMacroPropertiesElement(newMacro, macroElement);
   }
 
@@ -239,6 +248,13 @@ public class ProgramXml {
     }
   }
 
+  public void ReplaceMacroElements(IEnumerable<Macro> macros) {
+    ControlSignalSourcesElement.RemoveNodes(); 
+    foreach (var macro in macros) {
+      AddMacroElement(macro);
+    }
+  }
+
   public void SaveToFile(string outputProgramPath) {
     try {
       var writer = XmlWriter.Create(
@@ -290,6 +306,10 @@ public class ProgramXml {
       connectionsElement.Elements("SignalConnection").ToList();
     // The macro ("ConstantModulation") will have two SignalConnections if one of them
     // maps to the modulation wheel (MIDI CC 1). 
+    if (signalConnectionElements.Count == 1 && signalConnection.Index == 1) {
+      // Mod wheel signal connection element has been lost!
+      Debug.Assert(true);
+    }
     var signalConnectionElement = signalConnectionElements[signalConnection.Index];
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }
