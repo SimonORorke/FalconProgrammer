@@ -240,6 +240,15 @@ public class BatchConfig {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  [PublicAPI]
+  public void RollForward() {
+    UpdateMacroCcs(null);
+    ChangeDelayToZero(null);
+    ChangeReverbToZero(null);
+    ReplaceModWheelWithMacro(null);
+    RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+  }
+
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>

@@ -425,7 +425,6 @@ public class FalconProgram {
   }
 
   public void UpdateMacroCcs(LocationOrder macroCcLocationOrder) {
-    Console.WriteLine($"Updating '{Path}'.");
     MacroCcLocationOrder = macroCcLocationOrder;
     if (Category.IsInfoPageLayoutInScript) {
       UpdateMacroCcsFromTemplateScriptProcessor();
@@ -439,6 +438,7 @@ public class FalconProgram {
       // But the CCs are specified for a script.
       UpdateMacroCcsInScriptProcessor();
     }
+    Console.WriteLine($"{PathShort}: Updated Macro CCs.");
   }
 
   private void UpdateMacroCcsFromTemplateScriptProcessor() {
