@@ -8,6 +8,8 @@ namespace FalconProgrammer.XmlDeserialised;
 ///   be Modulation.
 /// </summary>
 public class SignalConnection {
+  // private const string SourceCcPrefix = "@MIDI CC ";
+  
   public SignalConnection() {
     Ratio = 1;
     Source = string.Empty;
@@ -42,7 +44,8 @@ public class SignalConnection {
   
   /// <summary>
   ///   The MIDI CC number that is the source of the modulation,
-  ///   like this: '"@MIDI CC n"'. 
+  ///   like this: '"@MIDI CC n"'.
+  ///   Or the path of the macro that modulates an effect. 
   /// </summary>
   [XmlAttribute] public string Source { get; set; }
   
@@ -57,11 +60,27 @@ public class SignalConnection {
   [XmlAttribute] public string Destination { get; set; }
   [XmlAttribute] public int ConnectionMode { get; set; }
 
+  // public int CcNo {
+  //   get {
+  //     if (Source.StartsWith(SourceCcPrefix)) {
+  //       string resultAsString = Source.Replace(
+  //         SourceCcPrefix, string.Empty);
+  //       if (int.TryParse(resultAsString, out int result)) {
+  //         return result;
+  //       }
+  //     }
+  //     throw new NotSupportedException(
+  //       $"{nameof(SignalConnection)}: {nameof(CcNo)} cannot be derived from " + 
+  //       $"{nameof(Source)} '{Source}'.");
+  //   }
+  //   set => Source = $"{SourceCcPrefix}{value}";
+  // }
+
   public int? CcNo {
     get =>
       Source.StartsWith("@MIDI CC ")
         ? Convert.ToInt32(Source.Replace("@MIDI CC ", string.Empty))
-        : null;
+        : null; // Effect modulated by macro
     set => Source = $"@MIDI CC {value}";
   }
 

@@ -246,7 +246,7 @@ public class BatchConfig {
     ChangeDelayToZero(null);
     ChangeReverbToZero(null);
     ReplaceModWheelWithMacro(null);
-    RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+    // RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
   }
 
   /// <summary>

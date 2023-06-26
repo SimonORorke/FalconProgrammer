@@ -108,6 +108,7 @@ public class InfoPageLayout {
       Bipolar = 0,
       IsContinuous = true,
       Value = 0,
+      ProgramXml = Program.ProgramXml,
       SignalConnections = new List<SignalConnection> {
         new SignalConnection {
           CcNo = ModWheelReplacementCcNo
@@ -126,7 +127,7 @@ public class InfoPageLayout {
   private Macro? FindContinuousMacroWithModWheelReplacementCcNo() {
     return (
       from continuousMacro in Program.ContinuousMacros
-      where continuousMacro.FindSignalConnection(ModWheelReplacementCcNo) != null 
+      where continuousMacro.FindSignalConnectionWithCcNo(ModWheelReplacementCcNo) != null 
       select continuousMacro).FirstOrDefault();
   }
 
@@ -148,7 +149,7 @@ public class InfoPageLayout {
       delayOrReverbMacroWithWheelCcNo = continuousMacro;
       // There could also be a mod wheel CC 1, so we cannot assume it's the first
       // SignalConnection. Example: Titanium\Pads\Children's Choir.
-      delayOrReverbSignalConnectionWithWheelCcNo = continuousMacro.FindSignalConnection(
+      delayOrReverbSignalConnectionWithWheelCcNo = continuousMacro.FindSignalConnectionWithCcNo(
         ModWheelReplacementCcNo);
     }
   }
@@ -291,8 +292,8 @@ public class InfoPageLayout {
       // Remove the wheel replacement CC number assignment from the delay or reverb
       // macro that has it.  It will be reassigned to the new wheel macro when that is
       // added.
-      RemoveSignalConnection(
-        delayOrReverbMacroWithWheelCcNo, delayOrReverbSignalConnectionWithWheelCcNo!);
+      delayOrReverbMacroWithWheelCcNo.RemoveSignalConnection(
+        delayOrReverbSignalConnectionWithWheelCcNo!);
       // Locate the new wheel macro above the delay or reverb macro.
       // Debug.WriteLine("================================================");
       // Debug.WriteLine("After RemoveSignalConnection");
@@ -398,20 +399,6 @@ public class InfoPageLayout {
     }
   }
 
-  private void RemoveSignalConnection(Macro macro, SignalConnection signalConnection) {
-    if (macro.SignalConnections.Contains(signalConnection)) {
-      macro.SignalConnections.Remove(signalConnection);
-      // Debug.WriteLine("================================================");
-      // Debug.WriteLine("After macro.SignalConnections.Remove");
-      // foreach (var sc in macro.SignalConnections) {
-      //   Debug.WriteLine($"{macro}, CcNo {sc.CcNo}");
-      // }
-      // Debug.WriteLine("================================================");
-    }
-    Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
-      signalConnection.Source);
-  }
-
   /// <summary>
   ///   If a reverb continuous macro has the MIDI CC number that is to be used for the
   ///   modulation wheel replacement continuous macro, if there is also a delay
@@ -460,23 +447,17 @@ public class InfoPageLayout {
     SignalConnection? signalConnection2 = null;
     if (macro1.SignalConnections.Count > 0) {
       signalConnection1 = macro1.SignalConnections[0];
-      macro1.SignalConnections.Remove(signalConnection1);
-      Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
-        signalConnection1.Source);
+      macro1.RemoveSignalConnection(signalConnection1);
     }
     if (macro2.SignalConnections.Count > 0) {
       signalConnection2 = macro2.SignalConnections[0];
-      macro2.SignalConnections.Remove(signalConnection2);
-      Program.ProgramXml.RemoveSignalConnectionElementsWithSource(
-        signalConnection2.Source);
+      macro2.RemoveSignalConnection(signalConnection2);
     }
     if (signalConnection1 != null) {
-      macro2.SignalConnections.Add(signalConnection1);
-      Program.ProgramXml.AddMacroSignalConnection(signalConnection1, macro2);
+      macro2.AddSignalConnection(signalConnection1);
     }
     if (signalConnection2 != null) {
-      macro1.SignalConnections.Add(signalConnection2);
-      Program.ProgramXml.AddMacroSignalConnection(signalConnection2, macro1);
+      macro1.AddSignalConnection(signalConnection2);
     }
   }
 

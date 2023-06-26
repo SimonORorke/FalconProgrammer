@@ -4,9 +4,10 @@ public static class Runner {
   public static void Run() {
     var config = new BatchConfig();
     // config.RollForward();
+    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium");
     // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium", "Test");
     // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Factory", "Test");
-    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+    config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
     // config.ListIfHasInfoPageCcsScriptProcessor(null);
     // config.UpdateMacroCcs("Devinity", "Test"); // Still OK
     // config.ChangeDelayToZero("Devinity", "Test"); // Still OK

@@ -65,39 +65,27 @@ public class ProgramXml {
     foreach (var signalConnection in newMacro.SignalConnections) {
       AddMacroSignalConnection(signalConnection, newMacro);
     }
-    // if (newMacro.SignalConnections.Count > 0) { // Should be just one. WRONG
-    //   var signalConnectionElement =
-    //     macroElement.Descendants($"{nameof(SignalConnection)}")
-    //       .FirstOrDefault();
-    //   if (signalConnectionElement == null) {
-    //     AddMacroSignalConnection(newMacro.SignalConnections[0], newMacro);
-    //   } else {
-    //     UpdateSignalConnectionElement(
-    //       newMacro.SignalConnections[0], signalConnectionElement);
-    //   }
-    // }
     UpdateMacroPropertiesElement(newMacro, macroElement);
   }
 
   /// <summary>
-  ///   If the macro with the specified display name is found, changes its value to zero
-  ///   and returns the macro's name (e.g. 'Macro 2' or 'MacroKnob 2').  Otherwise
-  ///   returns null.
+  ///   If the specified macro is found, changes its value to zero
+  ///   and returns true.  Otherwise returns false.
   /// </summary>
-  public string? ChangeMacroValueToZero(string displayName) {
+  public bool ChangeMacroValueToZero(Macro macro) {
     // Ignore case when checking whether there is a macro with that display name.  An
     // example of where the cases of macro display names are non-standard is
     // Factory\Pure Additive 2.0\Bass Starter.
     var macroElement = (
       from element in MacroElements
       where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
-        displayName, StringComparison.OrdinalIgnoreCase)
+        macro.DisplayName, StringComparison.OrdinalIgnoreCase)
       select element).FirstOrDefault();
     if (macroElement != null) {
       SetAttribute(macroElement, nameof(Macro.Value), 0);
-      return GetAttributeValue(macroElement, nameof(Macro.Name));
+      return true;
     }
-    return null;
+    return false;
   }
 
   /// <summary>
@@ -168,19 +156,41 @@ public class ProgramXml {
     return element.Parent!;
   }
 
-  public List<XElement> GetSignalConnectionElementsWithSource(string source) {
+  /// <summary>
+  ///   Returns a list of all the SignalConnection elements in the program whose source
+  ///   indicates the specified MIDI CC number.
+  /// </summary>
+  /// <remarks>
+  ///   The Linq For XML data structure has to be searched because the deserialised
+  ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  ///   by effects.
+  /// </remarks>
+  public List<XElement> GetSignalConnectionElementsWithCcNo(int ccNo) {
+    string source = $"@MIDI CC {ccNo}";
     return (
       from signalConnectionElement in RootElement.Descendants("SignalConnection")
-      // EndsWith rather than == because the Source will likely be prefixed by a path
       where GetAttributeValue(
-        signalConnectionElement, nameof(SignalConnection.Source)).EndsWith(source)
+        signalConnectionElement, nameof(SignalConnection.Source)) == source
       select signalConnectionElement).ToList();
   }
 
-  public bool HasModWheelSignalConnections() {
-    ModWheelSignalConnectionElements = 
-      GetSignalConnectionElementsWithSource("@MIDI CC 1");
-    return ModWheelSignalConnectionElements.Count > 0;
+  /// <summary>
+  ///   Returns a list of all the SignalConnection elements in the program whose source
+  ///   indicates the specified macro (as a modulator of an effect).
+  /// </summary>
+  /// <remarks>
+  ///   The Linq For XML data structure has to be searched because the deserialised
+  ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  ///   by effects.
+  /// </remarks>
+  public List<XElement> GetSignalConnectionElementsModulatedByMacro(Macro macro) {
+    return (
+      from signalConnectionElement in RootElement.Descendants("SignalConnection")
+      // EndsWith rather than == because the Source will be prefixed by a path
+      // if it indicates a macro that modulates an effect.
+      where GetAttributeValue(
+        signalConnectionElement, nameof(SignalConnection.Source)).EndsWith(macro.Name)
+      select signalConnectionElement).ToList();
   }
 
   public void LoadFromFile(string inputProgramPath) {
@@ -240,9 +250,9 @@ public class ProgramXml {
     }
   }
 
-  public void RemoveSignalConnectionElementsWithSource(string source) {
+  public void RemoveSignalConnectionElementsWithCcNo(int ccNo) {
     var signalConnectionElements = 
-      GetSignalConnectionElementsWithSource(source);
+      GetSignalConnectionElementsWithCcNo(ccNo);
     foreach (var signalConnectionElement in signalConnectionElements) {
       signalConnectionElement.Remove();
     }

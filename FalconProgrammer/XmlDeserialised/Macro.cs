@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.XmlDeserialised;
@@ -12,7 +13,7 @@ public class Macro {
   ///   The macro name, which uniquely identifies the macro. For reference in
   ///   <see cref="SignalConnection" />s owned by effects or the
   ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />.
-  ///   only indicates the macro number. 
+  ///   only indicates the macro number.
   /// </summary>
   /// <remarks>
   ///   The name format is usually like 'Macro 3' but, in a few programs such as
@@ -50,7 +51,7 @@ public class Macro {
   [XmlElement] public Properties Properties { get; set; } = null!;
   public bool ControlsDelay => DisplayName.Contains("Delay");
 
-  public bool ControlsReverb => 
+  public bool ControlsReverb =>
     DisplayName.Contains("Reverb")
     || DisplayName.Contains("Room")
     || DisplayName.Contains("SparkVerb");
@@ -62,7 +63,8 @@ public class Macro {
     get =>
       Style == 0 || (Style == 1
         ? false
-        : throw new NotSupportedException($"Style {Style} is not supported."));
+        : throw new NotSupportedException(
+          $"{nameof(Macro)}: {nameof(Style)} {Style} is not supported."));
     set => Style = value ? 0 : 1;
   }
 
@@ -81,14 +83,47 @@ public class Macro {
       string[] split = Name.Split();
       if (split.Length != 2 || !int.TryParse(split[1], out int macroNo)) {
         throw new NotSupportedException(
-          $"'{Name}' is not a supported macro name.");
+          $"{nameof(Macro)}: '{Name}' is not a supported macro name.");
       }
       return macroNo;
     }
     set => Name = $"Macro {value}";
   }
 
-  public SignalConnection? FindSignalConnection(int ccNo) {
+  internal ProgramXml ProgramXml { get; set; } = null!;
+
+  /// <summary>
+  ///   Adds the specified <see cref="SignalConnection" /> to the <see cref="Macro" /> 
+  ///   in the Linq For XML data structure as well as in the deserialised data structure.
+  /// </summary>
+  public void AddSignalConnection(SignalConnection signalConnection) {
+    SignalConnections.Add(signalConnection);
+    ProgramXml.AddMacroSignalConnection(signalConnection, this);
+  }
+
+  public bool ChangeValueToZero() {
+    if (!ProgramXml.ChangeMacroValueToZero(this)) {
+      return false;
+    }
+    // Change the values of the effect parameters modulated by the macro as required too.
+    var signalConnectionElementsWithMacroSource =
+      ProgramXml.GetSignalConnectionElementsModulatedByMacro(this);
+    foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
+      var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
+      var effectElement = ProgramXml.GetParentElement(connectionsElement);
+      var signalConnection = new SignalConnection(signalConnectionElement);
+      try {
+        ProgramXml.SetAttribute(
+          effectElement, signalConnection.Destination,
+          // If it's a toggle macro, Destination should be "Bypass".  
+          signalConnection.Destination == "Bypass" ? 1 : 0);
+        // ReSharper disable once EmptyGeneralCatchClause
+      } catch { }
+    }
+    return true;
+  }
+
+  public SignalConnection? FindSignalConnectionWithCcNo(int ccNo) {
     return (
       from signalConnection in SignalConnections
       where signalConnection.CcNo == ccNo
@@ -100,6 +135,18 @@ public class Macro {
       from signalConnection in SignalConnections
       where signalConnection.IsForMacro
       select signalConnection).ToList();
+  }
+
+  /// <summary>
+  ///   Removes the specified <see cref="SignalConnection" /> from the Linq For XML data
+  ///   structure as well as from the <see cref="Macro"/> in the deserialised data
+  ///   structure.
+  /// </summary>
+  public void RemoveSignalConnection(SignalConnection signalConnection) {
+    if (SignalConnections.Contains(signalConnection)) {
+      SignalConnections.Remove(signalConnection);
+    }
+    ProgramXml.RemoveSignalConnectionElementsWithCcNo(signalConnection.CcNo!.Value);
   }
 
   public override string ToString() {
