@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Linq;
 using FalconProgrammer.XmlDeserialised;
 using JetBrains.Annotations;
@@ -343,10 +342,6 @@ public class ProgramXml {
       connectionsElement.Elements("SignalConnection").ToList();
     // The macro ("ConstantModulation") will have two SignalConnections if one of them
     // maps to the modulation wheel (MIDI CC 1). 
-    if (signalConnectionElements.Count == 1 && signalConnection.Index == 1) {
-      // Mod wheel signal connection element has been lost!
-      Debug.Assert(true);
-    }
     var signalConnectionElement = signalConnectionElements[signalConnection.Index];
     UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
   }

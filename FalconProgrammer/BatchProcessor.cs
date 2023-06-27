@@ -140,9 +140,6 @@ public class BatchProcessor {
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
           break;
-        case ConfigTask.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro:
-          Program.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro();
-          break;
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro();
           break;
@@ -209,13 +206,6 @@ public class BatchProcessor {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
-  [PublicAPI]
-  public void RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
   /// <summary>
   ///   In each of the specified Falcon program presets where it is feasible, replaces
   ///   use of the modulation wheel with a Wheel macro that executes the same
@@ -245,8 +235,7 @@ public class BatchProcessor {
     UpdateMacroCcs(null);
     ChangeDelayToZero(null);
     ChangeReverbToZero(null);
-    ReplaceModWheelWithMacro(null);
-    RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+    // ReplaceModWheelWithMacro(null);
   }
 
   /// <summary>
@@ -270,7 +259,6 @@ public class BatchProcessor {
     ChangeReverbToZero,
     CountMacros,
     ListIfHasInfoPageCcsScriptProcessor,
-    RemoveInfoPageCcsScriptProcessorAndAddWheelMacro,
     ReplaceModWheelWithMacro,
     RevertToOriginal,
     UpdateMacroCcs

@@ -43,30 +43,41 @@ public class FalconProgram {
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
+  private bool CanRemoveInfoPageCcsScriptProcessor() {
+    // There are programs where the InfoPageCcsScriptProcessor contains SignalConnections
+    // whose Destinations do not specify existing macros. Remove those, otherwise
+    // subsequent logic in CanReplaceModWheelWithMacro will be messed up.
+    // The serve no useful purpose anyway
+    RemoveScriptProcessorSignalConnectionsWithInvalidDestinations();
+    if (Macros.Count > 4) {
+      return false;
+    }
+    // I've customised this script processor and it looks to hard to get rid of.
+    return Category.SoundBankFolder.Name != "Organic Keys";
+  }
+
   /// <summary>
   ///   Returns whether certain conditions are fulfilled indicating that the program's
   ///   mod wheel modulations may be reassigned to a new macro.
   /// </summary>
-  /// <remarks>
-  ///   Conditions are only included that apply when called by both
-  ///   <see cref="ReplaceModWheelWithMacro" /> and
-  ///   <see cref="RemoveInfoPageCcsScriptProcessorAndAddWheelMacro" />.
-  /// </remarks>
   private bool CanReplaceModWheelWithMacro() {
+    if (Category.SoundBankFolder.Name == "Ether Fields") {
+      // There are lots of macros in every program of this sound bank.
+      // I tried adding wheel macros. But it's too busy to be feasible.
+      return false;
+    }
+    if (InfoPageCcsScriptProcessor != null 
+        && !CanRemoveInfoPageCcsScriptProcessor()) {
+      Console.WriteLine(
+        $"{PathShort}: Replacing wheel with macro is not supported because " +
+        "there is an Info page CCs script processor that is not feasible/desirable " +
+        " to remove.");
+      return false;
+    }
     if (WheelMacroExists()) {
       Console.WriteLine(
         $"{PathShort} already has a Wheel macro.");
       return false;
-    }
-    // There are programs where the InfoPageCcsScriptProcessor contains SignalConnections
-    // whose Destinations do not specify existing macros. Remove those, otherwise the
-    // subsequent logic will be messed up.
-    int removedCount = RemoveScriptProcessorSignalConnectionsWithInvalidDestinations();
-    if (removedCount != 0) {
-      // Example: Factory\Pads\DX FM Pad 2.0
-      Console.WriteLine(
-        $"{PathShort}: Removed {removedCount} ScriptProcessor SignalConnections with " +
-        "invalid destinations.");
     }
     int modWheelSignalConnectionCount =
       ProgramXml.GetSignalConnectionElementsWithCcNo(1).Count;
@@ -342,36 +353,22 @@ public class FalconProgram {
   }
 
   /// <summary>
-  ///   If MIDI CC numbers that modulate macros are defined in
-  ///   <see cref="InfoPageCcsScriptProcessor" /> and the modulation wheel provides
-  ///   modulation for the program, then, if feasible, do away with the script processor.
+  ///   Do away with the <see cref="InfoPageCcsScriptProcessor" />, which defines a
+  ///   special Info Page layout and MIDI CC numbers that modulate macros.
   ///   That will give the Info page the default appearance and allow macros to be moved
-  ///   and added. When and if the script processor has been dispensed with,
+  ///   and added. When the script processor has been dispensed with,
   ///   move the existing macros to locations optimal for accommodating a new wheel
-  ///   replacement macro, then add the new Wheel macro and transfer all the wheel
-  ///   modulations to it.
+  ///   replacement macro.
   /// </summary>
-  public void RemoveInfoPageCcsScriptProcessorAndAddWheelMacro() {
-    if (InfoPageCcsScriptProcessor == null) {
-      return;
-    }
-    if (Macros.Count > 4) {
-      return;
-    }
-    if (Category.SoundBankFolder.Name == "Organic Keys") {
-      return;
-    }
-    if (!CanReplaceModWheelWithMacro()) {
-      return;
-    }
+  private void RemoveInfoPageCcsScriptProcessor() {
     ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
     InfoPageCcsScriptProcessor = null;
     // This should be the default, but otherwise won't work with wheel replacement. 
     MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
     InfoPageLayout.MoveAllMacrosToStandardBottom();
-    // As we are going to convert script processor-owned 'for macro' SignalConnections to
-    // macro-owned 'for macro' SignalConnections, there should not be any existing
-    // macro-owned 'for macro' SignalConnections.
+    // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
+    // for the mod wheel) SignalConnections to macro-owned 'for macro' SignalConnections,
+    // there should not be any existing macro-owned 'for macro' SignalConnections.
     // Example: Titanium\Pads\Children's Choir.
     // If there are, get rid of them.
     foreach (var macro in Macros) {
@@ -383,18 +380,17 @@ public class FalconProgram {
     }
     UpdateMacroCcsInConstantModulations();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
-    ReplaceModWheelWithMacro();
   }
 
   /// <summary>
   ///   Remove <see cref="SignalConnection" />s belonging to the
   ///   <see cref="InfoPageCcsScriptProcessor" /> whose
   ///   <see cref="SignalConnection.Destination" />s do not specify existing macros.
-  ///   Example: Factory\Pads\DX FM Pad 2.0.
+  ///   Example: Factory\Pads\DX FM Pad 2.0, but there are hundreds!
   /// </summary>
-  private int RemoveScriptProcessorSignalConnectionsWithInvalidDestinations() {
+  private void RemoveScriptProcessorSignalConnectionsWithInvalidDestinations() {
     if (InfoPageCcsScriptProcessor == null) {
-      return 0;
+      return;
     }
     var signalConnections = (
       from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
@@ -406,7 +402,11 @@ public class FalconProgram {
         signalConnection.Destination);
       removedCount++;
     }
-    return removedCount;
+    if (removedCount != 0) {
+      Console.WriteLine(
+        $"{PathShort}: Removed {removedCount} ScriptProcessor SignalConnections with " +
+        "invalid destinations.");
+    }
   }
 
   /// <summary>
@@ -415,45 +415,18 @@ public class FalconProgram {
   ///   explaining why it is not feasible.
   /// </summary>
   public void ReplaceModWheelWithMacro() {
-    if (InfoPageCcsScriptProcessor != null) {
-      Console.WriteLine(
-        $"{PathShort}: Replacing wheel with macro is not supported because " +
-        "there is an Info page CCs script processor.");
-      return;
-    }
     if (!CanReplaceModWheelWithMacro()) {
       return;
     }
-    // Debug.WriteLine("================================================");
-    // Debug.WriteLine("Before InfoPageLayout.TryReplaceModWheelWithMacro");
-    // foreach (var macro in Macros) {
-    //   foreach (var signalConnection in macro.SignalConnections) {
-    //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
-    //   }
-    // }
-    // Debug.WriteLine("================================================");
+    if (InfoPageCcsScriptProcessor != null) {
+      RemoveInfoPageCcsScriptProcessor();
+    }
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
-      // Debug.WriteLine("================================================");
-      // Debug.WriteLine("After InfoPageLayout.TryReplaceModWheelWithMacro");
-      // foreach (var macro in Macros) {
-      //   foreach (var signalConnection in macro.SignalConnections) {
-      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
-      //   }
-      // }
-      // Debug.WriteLine("================================================");
       if (updateMacroCcs) {
         // This should be the default, but otherwise won't work with wheel replacement. 
         MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
         UpdateMacroCcsInConstantModulations();
-        // Debug.WriteLine("================================================");
-        // Debug.WriteLine("After UpdateMacroCcsInConstantModulations");
-        // foreach (var macro in Macros) {
-        //   foreach (var signalConnection in macro.SignalConnections) {
-        //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
-        //   }
-        // }
-        // Debug.WriteLine("================================================");
       }
       Console.WriteLine(
         $"{PathShort}: Replaced mod wheel with macro.");
@@ -519,7 +492,7 @@ public class FalconProgram {
       GetMacrosSortedByLocation(MacroCcLocationOrder);
     // Reinitialise NextContinuousCcNo, incremented by GetCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
-    // by RemoveInfoPageCcsScriptProcessorAndAddWheelMacro, the second time via
+    // by RemoveInfoPageCcsScriptProcessor, the second time via
     // ReplaceModWheelWithMacro. 
     NextContinuousCcNo = FirstContinuousCcNo;
     NextToggleCcNo = FirstToggleCcNo;

@@ -3,11 +3,12 @@
 public static class Runner {
   public static void Run() {
     var batch = new BatchProcessor();
+    batch.ReplaceModWheelWithMacro(null);
     // batch.RollForward();
-    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium");
-    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Factory", "Test");
-    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium", "Test");
-    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+    // batch.ReplaceModWheelWithMacro("Factory");
+    // batch.ReplaceModWheelWithMacro("Titanium");
+    // batch.RemoveInfoPageCcsScriptProcessor("Factory", "Test");
+    // batch.RemoveInfoPageCcsScriptProcessor("Titanium", "Test");
     // batch.ListIfHasInfoPageCcsScriptProcessor(null);
     // batch.UpdateMacroCcs("Devinity", "Test"); // Still OK
     // batch.ChangeDelayToZero("Devinity", "Test"); // Still OK
