@@ -2,79 +2,79 @@
 
 public static class Runner {
   public static void Run() {
-    var config = new BatchConfig();
-    // config.RollForward();
-    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium");
-    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium", "Test");
-    // config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Factory", "Test");
-    config.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
-    // config.ListIfHasInfoPageCcsScriptProcessor(null);
-    // config.UpdateMacroCcs("Devinity", "Test"); // Still OK
-    // config.ChangeDelayToZero("Devinity", "Test"); // Still OK
-    // config.ReplaceModWheelWithMacro("Devinity", "Test"); // Still OK
-    // config.ChangeReverbToZero("Devinity", "Test"); // Fixed!
-    // config.RevertToOriginal(null);
-    // config.UpdateMacroCcs(null);
-    // config.ChangeDelayToZero(null);
-    // config.ReplaceModWheelWithMacro(null);
-    // config.ChangeReverbToZero(null);
-    // config.UpdateMacroCcs("Factory");
-    // config.ChangeDelayToZero("Factory");
-    // config.ChangeReverbToZero("Factory");
-    // config.UpdateMacroCcs("Spectre");
-    // config.ChangeDelayToZero("Spectre");
-    // config.ChangeReverbToZero("Spectre");
-    // config.ReplaceModWheelWithMacro(null);
-    // config.ReplaceModWheelWithMacro("Spectre");
-    // config.ReplaceModWheelWithMacro("Factory", "Temp");
-    // config.UpdateMacroCcs("Factory", "Temp");
-    // config.ReplaceModWheelWithMacro("Factory", "Temp");
-    // config.ChangeDelayToZero("Factory", "Pure Additive 2.0");
-    // config.ChangeReverbToZero("Factory", "Pure Additive 2.0");
-    // config.ChangeDelayToZero(null);
-    // config.ChangeReverbToZero(null);
-    // config.ChangeDelayToZero("Devinity", "Plucks-Leads");
-    // config.ChangeReverbToZero("Devinity", "Plucks-Leads");
-    // config.ChangeMacroCcNo(38, 28, null);
-    // config.ChangeDelayToZero(null);
-    // config.ChangeReverbToZero(null);
-    // config.ChangeDelayToZero("Devinity");
-    // config.ChangeDelayToZero("Eternal Funk");
-    // config.ChangeDelayToZero("Ether Fields");
-    // config.ChangeDelayToZero("Factory");
-    // config.ChangeDelayToZero("Fluidity");
-    // config.ChangeDelayToZero("Hypnotic Drive"); // None
-    // config.ChangeDelayToZero("Inner Dimensions"); // None
-    // config.ChangeDelayToZero("Pulsar");
-    // config.ChangeDelayToZero("Savage");
-    // config.ChangeDelayMacroValueToZero("Spectre");
-    // config.ChangeDelayMacroValueToZero("Titanium");
-    // config.ChangeDelayMacroValueToZero("Voklm"); // None
-    // config.UpdateMacroCcs("Devinity");
-    // config.UpdateMacroCcs("Eternal Funk");
-    // config.UpdateMacroCcs("Ether Fields");
-    // config.UpdateMacroCcs("Factory");
-    // config.UpdateMacroCcs("Fluidity");
-    // config.UpdateMacroCcs("Titanium");
+    var batch = new BatchProcessor();
+    // batch.RollForward();
+    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium");
+    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Factory", "Test");
+    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro("Titanium", "Test");
+    // batch.RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+    // batch.ListIfHasInfoPageCcsScriptProcessor(null);
+    // batch.UpdateMacroCcs("Devinity", "Test"); // Still OK
+    // batch.ChangeDelayToZero("Devinity", "Test"); // Still OK
+    // batch.ReplaceModWheelWithMacro("Devinity", "Test"); // Still OK
+    // batch.ChangeReverbToZero("Devinity", "Test"); // Fixed!
+    // batch.RevertToOriginal(null);
+    // batch.UpdateMacroCcs(null);
+    // batch.ChangeDelayToZero(null);
+    // batch.ReplaceModWheelWithMacro(null);
+    // batch.ChangeReverbToZero(null);
+    // batch.UpdateMacroCcs("Factory");
+    // batch.ChangeDelayToZero("Factory");
+    // batch.ChangeReverbToZero("Factory");
+    // batch.UpdateMacroCcs("Spectre");
+    // batch.ChangeDelayToZero("Spectre");
+    // batch.ChangeReverbToZero("Spectre");
+    // batch.ReplaceModWheelWithMacro(null);
+    // batch.ReplaceModWheelWithMacro("Spectre");
+    // batch.ReplaceModWheelWithMacro("Factory", "Temp");
+    // batch.UpdateMacroCcs("Factory", "Temp");
+    // batch.ReplaceModWheelWithMacro("Factory", "Temp");
+    // batch.ChangeDelayToZero("Factory", "Pure Additive 2.0");
+    // batch.ChangeReverbToZero("Factory", "Pure Additive 2.0");
+    // batch.ChangeDelayToZero(null);
+    // batch.ChangeReverbToZero(null);
+    // batch.ChangeDelayToZero("Devinity", "Plucks-Leads");
+    // batch.ChangeReverbToZero("Devinity", "Plucks-Leads");
+    // batch.ChangeMacroCcNo(38, 28, null);
+    // batch.ChangeDelayToZero(null);
+    // batch.ChangeReverbToZero(null);
+    // batch.ChangeDelayToZero("Devinity");
+    // batch.ChangeDelayToZero("Eternal Funk");
+    // batch.ChangeDelayToZero("Ether Fields");
+    // batch.ChangeDelayToZero("Factory");
+    // batch.ChangeDelayToZero("Fluidity");
+    // batch.ChangeDelayToZero("Hypnotic Drive"); // None
+    // batch.ChangeDelayToZero("Inner Dimensions"); // None
+    // batch.ChangeDelayToZero("Pulsar");
+    // batch.ChangeDelayToZero("Savage");
+    // batch.ChangeDelayMacroValueToZero("Spectre");
+    // batch.ChangeDelayMacroValueToZero("Titanium");
+    // batch.ChangeDelayMacroValueToZero("Voklm"); // None
+    // batch.UpdateMacroCcs("Devinity");
+    // batch.UpdateMacroCcs("Eternal Funk");
+    // batch.UpdateMacroCcs("Ether Fields");
+    // batch.UpdateMacroCcs("Factory");
+    // batch.UpdateMacroCcs("Fluidity");
+    // batch.UpdateMacroCcs("Titanium");
     //
-    // config.UpdateMacroCcs("Savage");
-    // config.UpdateMacroCcs("Voklm");
-    // config.UpdateMacroCcs("Eternal Funk");
-    // config.UpdateMacroCcs("Ether Fields");
-    // config.UpdateMacroCcs("Inner Dimensions");
-    // config.CountMacros("Fluidity");
-    // config.UpdateMacroCcs("Fluidity");
-    // config.UpdateMacroCcs("Pulsar", "Plucks");
-    // config.UpdateMacroCcs("Pulsar", "Pads");
-    // config.UpdateMacroCcs("Pulsar", "Leads");
-    // config.ChangeMacroCcNo(38, 28, "Factory");
-    // config.ChangeMacroCcNo(38, 28, "Devinity");
-    // config.UpdateMacroCcs("Organic Keys");
-    // config.UpdateMacroCcs("Pulsar", "Bass");
-    // config.ReplaceModWheelWithMacro("Devinity");
-    // config.UpdateMacroCcs("Devinity");
-    // config.ReplaceModWheelWithMacro("Factory", "Test");
-    // config.ReplaceModWheelWithMacro("Factory");
-    // config.ReplaceModWheelWithMacro("Factory", "Brutal Bass 2.1");
+    // batch.UpdateMacroCcs("Savage");
+    // batch.UpdateMacroCcs("Voklm");
+    // batch.UpdateMacroCcs("Eternal Funk");
+    // batch.UpdateMacroCcs("Ether Fields");
+    // batch.UpdateMacroCcs("Inner Dimensions");
+    // batch.CountMacros("Fluidity");
+    // batch.UpdateMacroCcs("Fluidity");
+    // batch.UpdateMacroCcs("Pulsar", "Plucks");
+    // batch.UpdateMacroCcs("Pulsar", "Pads");
+    // batch.UpdateMacroCcs("Pulsar", "Leads");
+    // batch.ChangeMacroCcNo(38, 28, "Factory");
+    // batch.ChangeMacroCcNo(38, 28, "Devinity");
+    // batch.UpdateMacroCcs("Organic Keys");
+    // batch.UpdateMacroCcs("Pulsar", "Bass");
+    // batch.ReplaceModWheelWithMacro("Devinity");
+    // batch.UpdateMacroCcs("Devinity");
+    // batch.ReplaceModWheelWithMacro("Factory", "Test");
+    // batch.ReplaceModWheelWithMacro("Factory");
+    // batch.ReplaceModWheelWithMacro("Factory", "Brutal Bass 2.1");
   }
 }

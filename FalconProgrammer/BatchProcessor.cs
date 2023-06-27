@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer;
 
-public class BatchConfig {
+public class BatchProcessor {
   public const string ProgramExtension = ".uvip";
   private Category Category { get; set; } = null!;
 
@@ -246,7 +246,7 @@ public class BatchConfig {
     ChangeDelayToZero(null);
     ChangeReverbToZero(null);
     ReplaceModWheelWithMacro(null);
-    // RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
+    RemoveInfoPageCcsScriptProcessorAndAddWheelMacro(null);
   }
 
   /// <summary>

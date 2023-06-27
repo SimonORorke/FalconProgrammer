@@ -93,7 +93,7 @@ public class Macro {
   internal ProgramXml ProgramXml { get; set; } = null!;
 
   /// <summary>
-  ///   Adds the specified <see cref="SignalConnection" /> to the <see cref="Macro" /> 
+  ///   Adds the specified <see cref="SignalConnection" /> to the <see cref="Macro" />
   ///   in the Linq For XML data structure as well as in the deserialised data structure.
   /// </summary>
   public void AddSignalConnection(SignalConnection signalConnection) {
@@ -139,7 +139,7 @@ public class Macro {
 
   /// <summary>
   ///   Removes the specified <see cref="SignalConnection" /> from the Linq For XML data
-  ///   structure as well as from the <see cref="Macro"/> in the deserialised data
+  ///   structure as well as from the <see cref="Macro" /> in the deserialised data
   ///   structure.
   /// </summary>
   public void RemoveSignalConnection(SignalConnection signalConnection) {

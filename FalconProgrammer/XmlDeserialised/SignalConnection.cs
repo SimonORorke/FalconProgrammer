@@ -8,7 +8,6 @@ namespace FalconProgrammer.XmlDeserialised;
 ///   be Modulation.
 /// </summary>
 public class SignalConnection {
-  // private const string SourceCcPrefix = "@MIDI CC ";
   
   public SignalConnection() {
     Ratio = 1;
@@ -59,22 +58,6 @@ public class SignalConnection {
   /// </summary>
   [XmlAttribute] public string Destination { get; set; }
   [XmlAttribute] public int ConnectionMode { get; set; }
-
-  // public int CcNo {
-  //   get {
-  //     if (Source.StartsWith(SourceCcPrefix)) {
-  //       string resultAsString = Source.Replace(
-  //         SourceCcPrefix, string.Empty);
-  //       if (int.TryParse(resultAsString, out int result)) {
-  //         return result;
-  //       }
-  //     }
-  //     throw new NotSupportedException(
-  //       $"{nameof(SignalConnection)}: {nameof(CcNo)} cannot be derived from " + 
-  //       $"{nameof(Source)} '{Source}'.");
-  //   }
-  //   set => Source = $"{SourceCcPrefix}{value}";
-  // }
 
   public int? CcNo {
     get =>

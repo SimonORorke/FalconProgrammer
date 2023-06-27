@@ -43,6 +43,60 @@ public class FalconProgram {
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
+  /// <summary>
+  ///   Returns whether certain conditions are fulfilled indicating that the program's
+  ///   mod wheel modulations may be reassigned to a new macro.
+  /// </summary>
+  /// <remarks>
+  ///   Conditions are only included that apply when called by both
+  ///   <see cref="ReplaceModWheelWithMacro" /> and
+  ///   <see cref="RemoveInfoPageCcsScriptProcessorAndAddWheelMacro" />.
+  /// </remarks>
+  private bool CanReplaceModWheelWithMacro() {
+    if (WheelMacroExists()) {
+      Console.WriteLine(
+        $"{PathShort} already has a Wheel macro.");
+      return false;
+    }
+    // There are programs where the InfoPageCcsScriptProcessor contains SignalConnections
+    // whose Destinations do not specify existing macros. Remove those, otherwise the
+    // subsequent logic will be messed up.
+    int removedCount = RemoveScriptProcessorSignalConnectionsWithInvalidDestinations();
+    if (removedCount != 0) {
+      // Example: Factory\Pads\DX FM Pad 2.0
+      Console.WriteLine(
+        $"{PathShort}: Removed {removedCount} ScriptProcessor SignalConnections with " +
+        "invalid destinations.");
+    }
+    int modWheelSignalConnectionCount =
+      ProgramXml.GetSignalConnectionElementsWithCcNo(1).Count;
+    switch (modWheelSignalConnectionCount) {
+      case 0:
+        Console.WriteLine($"{PathShort} contains no mod wheel modulations.");
+        return false;
+      case > 1:
+        return true;
+    }
+    // There is 1 SignalConnection that has the mod wheel as the modulation source.
+    // If the mod wheel only 100% modulates a single macro, there's not point replacing
+    // the mod wheel modulations with a Wheel macro.
+    // Wheel (MIDI CC number 1) SignalConnections that modulate a macro are invariably
+    // owned by the macro. So, if an InfoPageCcsScriptProcessor exists, we don't need to
+    // check the SignalConnections it owns.
+    var macrosOwningModWheelSignalConnections = (
+      from macro in Macros
+      where macro.FindSignalConnectionWithCcNo(1) != null
+      select macro).ToList();
+    if (macrosOwningModWheelSignalConnections.Count == 1) {
+      Console.WriteLine(
+        $"{PathShort}: The mod wheel has not been replaced, as it only modulates a " +
+        "single macro 100%.");
+      // Example: Factory\Pads\DX FM Pad 2.0
+      return false;
+    }
+    return true;
+  }
+
   public void ChangeDelayToZero() {
     foreach (var macro in Macros.Where(
                macro =>
@@ -91,132 +145,6 @@ public class FalconProgram {
       }
     }
   }
-
-  private bool CanReplaceModWheelWithMacro() {
-    if (WheelMacroExists()) {
-      Console.WriteLine(
-        $"{PathShort} already has a Wheel macro.");
-      return false;
-    }
-    // SignalConnection? modWheelSignalConnectionOwnedByMacro = null;
-    int modWheelSignalConnectionCount =
-      ProgramXml.GetSignalConnectionElementsWithCcNo(1).Count;
-    switch (modWheelSignalConnectionCount) {
-      case 0:
-        Console.WriteLine($"{PathShort} contains no mod wheel modulations.");
-        return false;
-      case > 2:
-        return true;
-    }
-    // There are 1 or 2 SignalConnections that have the mod wheel as the modulation
-    // source.
-    //
-    // If the mod wheel only 100% modulates a single macro, there's not point replacing
-    // the mod wheel modulations with a Wheel macro.
-    //
-    // In some programs whose Info Page layout is specified in an
-    // InfoPageCcsScriptProcessor, there are two SignalConnections that specify
-    // modulation by the mod wheel of the same Macro, with one of those SignalConnections
-    // owned by the Macro, the other by the InfoPageCcsScriptProcessor.
-    // Example: Titanium\Basses\Analog Electricity.
-    //
-    SignalConnection? candidateSignalConnectionOwnedByScriptProcessor = null;
-    if (InfoPageCcsScriptProcessor != null) {
-      var modWheelSignalConnectionsOwnedByScriptProcessor =
-        InfoPageCcsScriptProcessor.GetSignalConnectionsWithCcNo(1);
-      switch (modWheelSignalConnectionsOwnedByScriptProcessor.Count) {
-        case > 1:
-        case 1 when
-          Math.Abs(modWheelSignalConnectionsOwnedByScriptProcessor[0].Ratio - 1) > 0:
-          return true;
-        case 1:
-          candidateSignalConnectionOwnedByScriptProcessor =
-            modWheelSignalConnectionsOwnedByScriptProcessor[0];
-          break;
-      }
-    }
-    var macrosOwningModWheelSignalConnections = (
-      from macro in Macros
-      where macro.FindSignalConnectionWithCcNo(1) != null
-      select macro).ToList();
-    switch (macrosOwningModWheelSignalConnections.Count) {
-      case 0:
-        if (candidateSignalConnectionOwnedByScriptProcessor != null) {
-          // Example: 
-          return false;
-        }
-        break;
-      case 1:
-        var macro = macrosOwningModWheelSignalConnections[0];
-        var signalConnection = macro.FindSignalConnectionWithCcNo(1)!;
-        if (Math.Abs(signalConnection.Ratio - 1) > 0) {
-          return true;
-        }
-        if (candidateSignalConnectionOwnedByScriptProcessor == null) {
-          // Example: Factory\Bass-Sub\808 Mate 1.6
-          return false;
-        }
-        if (candidateSignalConnectionOwnedByScriptProcessor.Destination == macro.Name) {
-          // Example: Titanium\Basses\Analog Electricity
-          return false;
-        }
-        break;
-      case > 1:
-        return true;
-    }
-    return true;
-  }
-  // var modWheelSignalConnectionOwnedByMacro =
-  //   macrosOwningModWheelSignalConnections.Count == 1
-  //   ? macrosOwningModWheelSignalConnections[0].FindSignalConnectionWithCcNo(1)
-  //   : null;
-  // if (modWheelSignalConnectionOwnedByMacro != null 
-  //     && Math.Abs(modWheelSignalConnectionOwnedByMacro.Ratio - 1) > 0) {
-  //   return true;
-  // }
-  // if (modWheelSignalConnectionOwnedByMacro == null 
-  //     && InfoPageCcsScriptProcessor == null) {
-  //   // Example: Factory\Bass-Sub\808 Mate 1.6
-  //   return false;
-  // }
-
-  // if (ModWheelOnlyModulatesOneMacroWithRatioOne(out var modulatedMacro)) {
-  //   Console.WriteLine(
-  //     $"{PathShort}: Mod wheel only 100% modulates one macro, {modulatedMacro}.");
-  //   return false;
-  // }
-  //
-  // /// <summary>
-  // ///   If the mod wheel only 100% modulates a single macro, there's not point replacing
-  // ///   the mod wheel modulations with a Wheel macro.
-  // /// </summary>
-  // private bool ModWheelOnlyModulatesOneMacroWithRatioOne(out Macro? modulatedMacro) {
-  //   SignalConnection? macroOwnedSignalConnection = null; 
-  //   Macro? macroOwnedSignalConnectionMacro = null;
-  //   foreach (var continuousMacro in ContinuousMacros) {
-  //     if (expr) {
-  //       
-  //     }
-  //   }
-  //   // var macroOwnedModWheel = (
-  //   //   from continuousMacro in ContinuousMacros
-  //   //   where continuousMacro.FindSignalConnection(1) != null 
-  //   //   select continuousMacro).FirstOrDefault();
-  //
-  //   // if (ModWheelSignalConnectionElements[0].Parent!.Parent!.Name !=
-  //   //     "ConstantModulation") {
-  //   //   // The SignalConnection is not the grandchild of a macro (ConstantModulation).
-  //   //   // So it can't be modulating a macro. That assumes a mod wheel SignalConnection
-  //   //   // is never going to belong to a SignalProcessor, which seems to be the case.
-  //   //   return true;
-  //   // }
-  //   // var ratio = GetAttribute(
-  //   //   ModWheelSignalConnectionElements[0], nameof(SignalConnection.Ratio));
-  //   // if (ratio.Value == "1") {
-  //   //   Debug.Assert(true);
-  //   // }
-  //   // return ratio.Value != "1";
-  // }
 
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
@@ -302,6 +230,13 @@ public class FalconProgram {
     }
     // Assume that the macro MIDI CCs are defined for the last ScriptProcessor, if any.
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
+  }
+
+  private Macro? FindMacroWithName(string name) {
+    return (
+      from macro in Macros
+      where macro.Name == name
+      select macro).FirstOrDefault();
   }
 
   private int GetCcNo(Macro macro) {
@@ -401,6 +336,9 @@ public class FalconProgram {
     foreach (var macro in Macros) {
       macro.ProgramXml = ProgramXml;
     }
+    foreach (var scriptProcessor in ScriptProcessors) {
+      scriptProcessor.ProgramXml = ProgramXml;
+    }
   }
 
   /// <summary>
@@ -446,6 +384,29 @@ public class FalconProgram {
     UpdateMacroCcsInConstantModulations();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     ReplaceModWheelWithMacro();
+  }
+
+  /// <summary>
+  ///   Remove <see cref="SignalConnection" />s belonging to the
+  ///   <see cref="InfoPageCcsScriptProcessor" /> whose
+  ///   <see cref="SignalConnection.Destination" />s do not specify existing macros.
+  ///   Example: Factory\Pads\DX FM Pad 2.0.
+  /// </summary>
+  private int RemoveScriptProcessorSignalConnectionsWithInvalidDestinations() {
+    if (InfoPageCcsScriptProcessor == null) {
+      return 0;
+    }
+    var signalConnections = (
+      from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
+      where FindMacroWithName(signalConnection.Destination) == null
+      select signalConnection).ToList();
+    int removedCount = 0;
+    foreach (var signalConnection in signalConnections) {
+      InfoPageCcsScriptProcessor.RemoveSignalConnectionsWithDestination(
+        signalConnection.Destination);
+      removedCount++;
+    }
+    return removedCount;
   }
 
   /// <summary>

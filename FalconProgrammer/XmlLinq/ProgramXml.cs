@@ -23,7 +23,6 @@ public class ProgramXml {
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
-  private List<XElement> ModWheelSignalConnectionElements { get; set; } = null!;
   private XElement RootElement { get; set; } = null!;
 
   private XElement TemplateMacroElement =>
@@ -94,7 +93,9 @@ public class ProgramXml {
   /// </summary>
   public void ChangeModWheelSignalConnectionSourcesToMacro(Macro macro) {
     string newSource = $"$Program/{macro.Name}";
-    foreach (var signalConnectionElement in ModWheelSignalConnectionElements) {
+    var modWheelSignalConnectionElements = 
+      GetSignalConnectionElementsWithCcNo(1);
+    foreach (var signalConnectionElement in modWheelSignalConnectionElements) {
       SetAttribute(
         signalConnectionElement, nameof(SignalConnection.Source), newSource);
     }
@@ -255,6 +256,32 @@ public class ProgramXml {
       GetSignalConnectionElementsWithCcNo(ccNo);
     foreach (var signalConnectionElement in signalConnectionElements) {
       signalConnectionElement.Remove();
+    }
+  }
+
+  /// <summary>
+  ///   Removes all the SignalConnection elements in the program with the specified
+  ///   destination.
+  /// </summary>
+  /// <remarks>
+  ///   The Linq For XML data structure has to be searched because the deserialised
+  ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  ///   by effects.
+  /// </remarks>
+  public void RemoveSignalConnectionElementsWithDestination(string destination) {
+    var signalConnectionElements = (
+      from signalConnectionElement in RootElement.Descendants("SignalConnection")
+      where GetAttributeValue(
+        signalConnectionElement, nameof(SignalConnection.Destination)) == destination
+      select signalConnectionElement).ToList();
+    foreach (var signalConnectionElement in signalConnectionElements) {
+      signalConnectionElement.Remove();
+    }
+    var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections")!;
+    if (!connectionsElement.HasElements) {
+      // We've removed all its SignalConnection elements.
+      // Example: Factory\Pads\DX FM Pad 2.0
+      connectionsElement.Remove();
     }
   }
 
