@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.XmlDeserialised;
 
-public class Properties {
+public class MacroProperties {
   
   /// <summary>
   ///   An optional attribute that, if present, seems always to have the value "0".

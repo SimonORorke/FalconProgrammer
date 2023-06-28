@@ -114,7 +114,7 @@ public class InfoPageLayout {
           CcNo = ModWheelReplacementCcNo
         }
       },
-      Properties = new Properties {
+      Properties = new MacroProperties {
         X = location.X,
         Y = location.Y
       }

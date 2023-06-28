@@ -48,7 +48,7 @@ public class Macro {
   [XmlArrayItem("SignalConnection")]
   public List<SignalConnection> SignalConnections { get; set; } = null!;
 
-  [XmlElement] public Properties Properties { get; set; } = null!;
+  [XmlElement] public MacroProperties Properties { get; set; } = null!;
   public bool ControlsDelay => DisplayName.Contains("Delay");
 
   public bool ControlsReverb =>
