@@ -121,7 +121,7 @@ public class BatchProcessor {
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
       Program = new FalconProgram(programFileToEdit.FullName, Category);
-      if (Task != ConfigTask.RevertToOriginal) {
+      if (Task != ConfigTask.RestoreOriginal) {
         Program.Read();
       }
       switch (Task) {
@@ -143,8 +143,8 @@ public class BatchProcessor {
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro();
           break;
-        case ConfigTask.RevertToOriginal:
-          Program.RevertToOriginal();
+        case ConfigTask.RestoreOriginal:
+          Program.RestoreOriginal();
           break;
         case ConfigTask.UpdateMacroCcs:
           Program.UpdateMacroCcs(MacroCcLocationOrder);
@@ -152,7 +152,7 @@ public class BatchProcessor {
       }
       if (Task is not (ConfigTask.CountMacros or 
           ConfigTask.ListIfHasInfoPageCcsScriptProcessor
-          or ConfigTask.RevertToOriginal)) {
+          or ConfigTask.RestoreOriginal)) {
         Program.Save();
       }
     }
@@ -224,9 +224,9 @@ public class BatchProcessor {
   }
 
   [PublicAPI]
-  public void RevertToOriginal(
+  public void RestoreOriginal(
     string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.RevertToOriginal;
+    Task = ConfigTask.RestoreOriginal;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -260,7 +260,7 @@ public class BatchProcessor {
     CountMacros,
     ListIfHasInfoPageCcsScriptProcessor,
     ReplaceModWheelWithMacro,
-    RevertToOriginal,
+    RestoreOriginal,
     UpdateMacroCcs
   }
 }

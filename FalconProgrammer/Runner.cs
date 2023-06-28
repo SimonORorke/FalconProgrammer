@@ -3,7 +3,11 @@
 public static class Runner {
   public static void Run() {
     var batch = new BatchProcessor();
-    batch.ReplaceModWheelWithMacro(null);
+    // batch.RestoreOriginal(null);
+    // batch.UpdateMacroCcs(null);
+    batch.UpdateMacroCcs("Titanium", "Plucks");
+    // batch.ReplaceModWheelWithMacro(null);
+    // batch.ReplaceModWheelWithMacro("Factory", "Test");
     // batch.RollForward();
     // batch.ReplaceModWheelWithMacro("Factory");
     // batch.ReplaceModWheelWithMacro("Titanium");
@@ -14,7 +18,7 @@ public static class Runner {
     // batch.ChangeDelayToZero("Devinity", "Test"); // Still OK
     // batch.ReplaceModWheelWithMacro("Devinity", "Test"); // Still OK
     // batch.ChangeReverbToZero("Devinity", "Test"); // Fixed!
-    // batch.RevertToOriginal(null);
+    // batch.RestoreOriginal(null);
     // batch.UpdateMacroCcs(null);
     // batch.ChangeDelayToZero(null);
     // batch.ReplaceModWheelWithMacro(null);

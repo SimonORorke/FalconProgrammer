@@ -106,17 +106,17 @@ public class Category {
   ///   case the template program.
   /// </summary>
   private ScriptProcessor? GetTemplateScriptProcessor() {
-    if (!IsInfoPageLayoutInScript) {
-      return null;
-    }
     using var reader = new StreamReader(TemplateProgramPath);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
-    return
-      (from scriptProcessor in root.Program.ScriptProcessors
-        select scriptProcessor).LastOrDefault() ??
+    var templateScriptProcessor = (
+      from scriptProcessor in root.Program.ScriptProcessors
+      select scriptProcessor).LastOrDefault();
+    if (templateScriptProcessor == null && IsInfoPageLayoutInScript) {
       throw new ApplicationException(
         $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
+    }
+    return templateScriptProcessor;
   }
 
   public void Initialise() {

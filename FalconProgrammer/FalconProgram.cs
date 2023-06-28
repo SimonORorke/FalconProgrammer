@@ -44,15 +44,15 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   private bool CanRemoveInfoPageCcsScriptProcessor() {
-    // There are programs where the InfoPageCcsScriptProcessor contains SignalConnections
-    // whose Destinations do not specify existing macros. Remove those, otherwise
-    // subsequent logic in CanReplaceModWheelWithMacro will be messed up.
-    // The serve no useful purpose anyway
-    RemoveScriptProcessorSignalConnectionsWithInvalidDestinations();
+    // // There are programs where the InfoPageCcsScriptProcessor contains SignalConnections
+    // // whose Destinations do not specify existing macros. Remove those, otherwise
+    // // subsequent logic in CanReplaceModWheelWithMacro will be messed up.
+    // // They serve no useful purpose anyway ???
+    // RemoveScriptProcessorSignalConnectionsWithInvalidDestinations();
     if (Macros.Count > 4) {
       return false;
     }
-    // I've customised this script processor and it looks to hard to get rid of.
+    // I've customised this script processor and it looks too hard to get rid of.
     return Category.SoundBankFolder.Name != "Organic Keys";
   }
 
@@ -132,18 +132,21 @@ public class FalconProgram {
     if (reverbMacros.Count == 0) {
       return;
     }
-    if (Category.SoundBankFolder.Name == "Factory") {
-      if ((Category.Name == "Bass-Sub"
-           && Name is "Coastal Halftones 1.4" or "Metropolis 1.4")
-          || (Category.Name == "Leads" && Name == "Ali3n 1.4")
-          || (Category.Name == "Pads"
-              // ReSharper disable once StringLiteralTypo
-              && Name is "Arrival 1.4" or "Novachord Noir 1.4" or "Pad Motion 1.5")
-          || (Category.Name == "Synth Brass" && Name == "Gotham Brass 1.4")) {
-        // These programs are silent without reverb!
-        Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
-        return;
-      }
+    if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4" 
+        or "Factory\\Bass-Sub\\Metropolis 1.4"
+        or "Factory\\Leads\\Ali3n 1.4"
+        or "Factory\\Pads\\Arrival 1.4"
+        // ReSharper disable once StringLiteralTypo
+        or "Factory\\Pads\\Novachord Noir 1.4"
+        or "Factory\\Pads\\Pad Motion 1.5"
+        or "Factory\\Synth Brass\\Gotham Brass 1.4"
+        or "Inner Dimensions\\Pad\\GrainVoices 2"
+        or "Savage\\Pads-Drones\\Lunar Nashi"
+        or "Savage\\Pads-Drones\\Voc Sidechain"
+        or "Savage\\Pads-Drones\\Wonder Land") {
+      // These programs are silent without reverb!
+      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
+      return;
     }
     foreach (var reverbMacro in reverbMacros) {
       // Example: Titanium\Pads\Children's Choir.
@@ -243,12 +246,12 @@ public class FalconProgram {
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
-  private Macro? FindMacroWithName(string name) {
-    return (
-      from macro in Macros
-      where macro.Name == name
-      select macro).FirstOrDefault();
-  }
+  // private Macro? FindMacroWithName(string name) {
+  //   return (
+  //     from macro in Macros
+  //     where macro.Name == name
+  //     select macro).FirstOrDefault();
+  // }
 
   private int GetCcNo(Macro macro) {
     int result;
@@ -382,32 +385,32 @@ public class FalconProgram {
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
   }
 
-  /// <summary>
-  ///   Remove <see cref="SignalConnection" />s belonging to the
-  ///   <see cref="InfoPageCcsScriptProcessor" /> whose
-  ///   <see cref="SignalConnection.Destination" />s do not specify existing macros.
-  ///   Example: Factory\Pads\DX FM Pad 2.0, but there are hundreds!
-  /// </summary>
-  private void RemoveScriptProcessorSignalConnectionsWithInvalidDestinations() {
-    if (InfoPageCcsScriptProcessor == null) {
-      return;
-    }
-    var signalConnections = (
-      from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
-      where FindMacroWithName(signalConnection.Destination) == null
-      select signalConnection).ToList();
-    int removedCount = 0;
-    foreach (var signalConnection in signalConnections) {
-      InfoPageCcsScriptProcessor.RemoveSignalConnectionsWithDestination(
-        signalConnection.Destination);
-      removedCount++;
-    }
-    if (removedCount != 0) {
-      Console.WriteLine(
-        $"{PathShort}: Removed {removedCount} ScriptProcessor SignalConnections with " +
-        "invalid destinations.");
-    }
-  }
+  // /// <summary>
+  // ///   Remove <see cref="SignalConnection" />s belonging to the
+  // ///   <see cref="InfoPageCcsScriptProcessor" /> whose
+  // ///   <see cref="SignalConnection.Destination" />s do not specify existing macros.
+  // ///   Example: Factory\Pads\DX FM Pad 2.0, but there are hundreds!
+  // /// </summary>
+  // private void RemoveScriptProcessorSignalConnectionsWithInvalidDestinations() {
+  //   if (InfoPageCcsScriptProcessor == null) {
+  //     return;
+  //   }
+  //   var signalConnections = (
+  //     from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
+  //     where FindMacroWithName(signalConnection.Destination) == null
+  //     select signalConnection).ToList();
+  //   int removedCount = 0;
+  //   foreach (var signalConnection in signalConnections) {
+  //     InfoPageCcsScriptProcessor.RemoveSignalConnectionsWithDestination(
+  //       signalConnection.Destination);
+  //     removedCount++;
+  //   }
+  //   if (removedCount != 0) {
+  //     Console.WriteLine(
+  //       $"{PathShort}: Removed {removedCount} ScriptProcessor SignalConnections with " +
+  //       "invalid destinations.");
+  //   }
+  // }
 
   /// <summary>
   ///   If feasible, replaces all modulations by the modulation wheel of effect
@@ -433,7 +436,7 @@ public class FalconProgram {
     }
   }
 
-  public void RevertToOriginal() {
+  public void RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
       System.IO.Path.GetDirectoryName(Path)!.Replace(
         "FalconPrograms", "Programs ORIGINAL") + " ORIGINAL",
@@ -452,16 +455,22 @@ public class FalconProgram {
 
   public void UpdateMacroCcs(LocationOrder macroCcLocationOrder) {
     MacroCcLocationOrder = macroCcLocationOrder;
-    if (Category.IsInfoPageLayoutInScript) {
-      UpdateMacroCcsFromTemplateScriptProcessor();
-      return;
-    }
-    // The category's Info page layout is specified in ConstantModulations.
     if (InfoPageCcsScriptProcessor == null) {
-      // And the CCs are specified in the ConstantModulations. This is usual.
+      // The CCs are specified in SignalConnections owned by the Macros
+      // (ConstantModulations) that they modulate
       UpdateMacroCcsInConstantModulations();
+    } else if (Category.TemplateScriptProcessor != null) {
+      // The CCs are specified SignalConnections owned by the Info page ScriptProcessor
+      // and can be copied from a template ScriptProcessor.
+      // This applies to all programs in categories for which IsInfoPageLayoutInScript
+      // is set to true in the settings file.
+      // In some categories, we have or are going to remove the Info page
+      // ScriptProcessor, so IsInfoPageLayoutInScript has had to be changed to false for
+      // the Category, yet we still need to use the template if it is available.
+      UpdateMacroCcsFromTemplateScriptProcessor();
     } else {
-      // But the CCs are specified for a script.
+      // The CCs are specified in the Info page ScriptProcessor but there's no template
+      // ScriptProcessor. 
       UpdateMacroCcsInScriptProcessor();
     }
     Console.WriteLine($"{PathShort}: Updated Macro CCs.");
@@ -573,8 +582,10 @@ public class FalconProgram {
         InfoPageCcsScriptProcessor!.SignalConnections.Remove(signalConnection);
       }
     }
+    NextContinuousCcNo = FirstContinuousCcNo;
+    NextToggleCcNo = FirstToggleCcNo;
     foreach (var macro in sortedByLocation) {
-      macroNo++;
+      macroNo++; // Can we assume the macro numbers are always going to increment from 1?
       InfoPageCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
           Destination = string.Empty, // Stops MacroNo from throwing exception
