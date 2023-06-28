@@ -33,8 +33,8 @@ public class FalconProgram {
   private LocationOrder MacroCcLocationOrder { get; set; }
 
   internal string Name { get; private set; } = null!;
-  private int NextContinuousCcNo { get; set; }
-  private int NextToggleCcNo { get; set; }
+  private int NextContinuousCcNo { get; set; } = FirstContinuousCcNo;
+  private int NextToggleCcNo { get; set; } = FirstToggleCcNo;
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
@@ -44,15 +44,12 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   private bool CanRemoveInfoPageCcsScriptProcessor() {
-    // // There are programs where the InfoPageCcsScriptProcessor contains SignalConnections
-    // // whose Destinations do not specify existing macros. Remove those, otherwise
-    // // subsequent logic in CanReplaceModWheelWithMacro will be messed up.
-    // // They serve no useful purpose anyway ???
-    // RemoveScriptProcessorSignalConnectionsWithInvalidDestinations();
     if (Macros.Count > 4) {
       return false;
     }
     // I've customised this script processor and it looks too hard to get rid of.
+    // It should be excluded anyway because it has the setting
+    // Category.IsInfoPageLayoutInScript true.
     return Category.SoundBankFolder.Name != "Organic Keys";
   }
 
@@ -246,13 +243,6 @@ public class FalconProgram {
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
-  // private Macro? FindMacroWithName(string name) {
-  //   return (
-  //     from macro in Macros
-  //     where macro.Name == name
-  //     select macro).FirstOrDefault();
-  // }
-
   private int GetCcNo(Macro macro) {
     int result;
     if (macro.IsContinuous) {
@@ -350,9 +340,6 @@ public class FalconProgram {
     foreach (var macro in Macros) {
       macro.ProgramXml = ProgramXml;
     }
-    foreach (var scriptProcessor in ScriptProcessors) {
-      scriptProcessor.ProgramXml = ProgramXml;
-    }
   }
 
   /// <summary>
@@ -384,33 +371,6 @@ public class FalconProgram {
     UpdateMacroCcsInConstantModulations();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
   }
-
-  // /// <summary>
-  // ///   Remove <see cref="SignalConnection" />s belonging to the
-  // ///   <see cref="InfoPageCcsScriptProcessor" /> whose
-  // ///   <see cref="SignalConnection.Destination" />s do not specify existing macros.
-  // ///   Example: Factory\Pads\DX FM Pad 2.0, but there are hundreds!
-  // /// </summary>
-  // private void RemoveScriptProcessorSignalConnectionsWithInvalidDestinations() {
-  //   if (InfoPageCcsScriptProcessor == null) {
-  //     return;
-  //   }
-  //   var signalConnections = (
-  //     from signalConnection in InfoPageCcsScriptProcessor.SignalConnections
-  //     where FindMacroWithName(signalConnection.Destination) == null
-  //     select signalConnection).ToList();
-  //   int removedCount = 0;
-  //   foreach (var signalConnection in signalConnections) {
-  //     InfoPageCcsScriptProcessor.RemoveSignalConnectionsWithDestination(
-  //       signalConnection.Destination);
-  //     removedCount++;
-  //   }
-  //   if (removedCount != 0) {
-  //     Console.WriteLine(
-  //       $"{PathShort}: Removed {removedCount} ScriptProcessor SignalConnections with " +
-  //       "invalid destinations.");
-  //   }
-  // }
 
   /// <summary>
   ///   If feasible, replaces all modulations by the modulation wheel of effect

@@ -52,10 +52,15 @@ public class SignalConnection {
   ///   Indicates what is to be modulated.
   ///   If the <see cref="SignalConnection" /> belongs to the
   ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, this will be the
-  ///   <see cref="Macro.Name" /> of the macro to be modulated, like "Macro n".
+  ///   name in the script of the macro to be modulated, like "Macro1".
   ///   If the <see cref="SignalConnection" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, this will be "Value". 
   /// </summary>
+  /// <remarks>
+  ///   UVI evidently only reference macros by names like "Macro1" internally in scripts.
+  ///   In the ConstantModulation definition of the macro, even in programs with
+  ///   Info page layout script processors, the name is like "Macro 1".
+  /// </remarks>
   [XmlAttribute] public string Destination { get; set; }
   [XmlAttribute] public int ConnectionMode { get; set; }
 

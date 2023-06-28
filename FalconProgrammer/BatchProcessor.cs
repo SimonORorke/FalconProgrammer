@@ -235,7 +235,7 @@ public class BatchProcessor {
     UpdateMacroCcs(null);
     ChangeDelayToZero(null);
     ChangeReverbToZero(null);
-    // ReplaceModWheelWithMacro(null);
+    ReplaceModWheelWithMacro(null);
   }
 
   /// <summary>
