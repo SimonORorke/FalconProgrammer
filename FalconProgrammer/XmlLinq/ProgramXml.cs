@@ -139,6 +139,16 @@ public class ProgramXml {
     return GetAttribute(element, attributeName).Value;
   }
 
+  public string GetDescription() {
+    var programElement = RootElement.Element("Program")!;
+    var propertiesElement = programElement.Element("Properties");
+    if (propertiesElement == null) {
+      return string.Empty;
+    }
+    var descriptionAttribute = propertiesElement.Attribute("description");
+    return descriptionAttribute != null ? descriptionAttribute.Value : string.Empty;
+  }
+
   private XElement GetMacroElement(Macro macro) {
     var result = (from macroElement in MacroElements
       where GetAttributeValue(
@@ -313,6 +323,16 @@ public class ProgramXml {
 
   public void SetAttribute(XElement element, string attributeName, object value) {
     SetAttribute(GetAttribute(element, attributeName), value);
+  }
+
+  public void SetDescription(string text) {
+    var programElement = RootElement.Element("Program")!;
+    var propertiesElement = programElement.Element("Properties");
+    if (propertiesElement == null) {
+      propertiesElement = new XElement("Properties");
+      programElement.Add(propertiesElement);
+    }
+    SetAttribute(propertiesElement, "description", text);
   }
 
   public virtual void UpdateInfoPageCcsScriptProcessor() {

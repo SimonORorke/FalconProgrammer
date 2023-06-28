@@ -325,6 +325,22 @@ public class FalconProgram {
     }
   }
 
+  public void PrependPathLineToDescription() {
+    const string pathIndicator = "PATH: ";
+    const string crLf = "\r\n";
+    string oldDescription = ProgramXml.GetDescription();
+    string oldPathLine =
+      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf)
+        ? oldDescription[..(oldDescription.IndexOf(crLf, StringComparison.Ordinal) + 2)]
+        : string.Empty;
+    string newPathLine = pathIndicator + PathShort + crLf;
+    string newDescription = oldPathLine != string.Empty
+      ? oldDescription.Replace(oldPathLine, newPathLine)
+      : newPathLine + oldDescription;
+    ProgramXml.SetDescription(newDescription);
+    Console.WriteLine($"{PathShort}: Prepended path line to description.");
+  }
+
   /// <summary>
   ///   Dual XML data load strategy:
   ///   To maximise forward compatibility with possible future changes to the program XML

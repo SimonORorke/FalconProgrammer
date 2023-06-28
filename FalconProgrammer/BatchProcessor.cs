@@ -140,6 +140,9 @@ public class BatchProcessor {
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
           break;
+        case ConfigTask.PrependPathLineToDescription:
+          Program.PrependPathLineToDescription();
+          break;
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro();
           break;
@@ -206,6 +209,13 @@ public class BatchProcessor {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  [PublicAPI]
+  public void PrependPathLineToDescription(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.PrependPathLineToDescription;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   /// <summary>
   ///   In each of the specified Falcon program presets where it is feasible, replaces
   ///   use of the modulation wheel with a Wheel macro that executes the same
@@ -259,6 +269,7 @@ public class BatchProcessor {
     ChangeReverbToZero,
     CountMacros,
     ListIfHasInfoPageCcsScriptProcessor,
+    PrependPathLineToDescription,
     ReplaceModWheelWithMacro,
     RestoreOriginal,
     UpdateMacroCcs
