@@ -20,9 +20,8 @@ public class Category {
   /// <summary>
   ///   This documentation probably needs updating.  I think the only categories
   ///   where the info page script processor cannot be removed to allow a mod wheel
-  ///   replacement macro are when there's no button on the original to allow then script
-  ///   view to be hidden or when there are more than 4 macros.
-  ///   That needs to be confirmed by testing.
+  ///   replacement macro are when there's no way (that I can find) to hide the script
+  ///   view or when there are more than 4 macros.
   ///   In some sound banks, such as "Organic Keys", ConstantModulations do not specify
   ///   Info page macros, only modulation wheel assignment. In others, such as
   ///   "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
