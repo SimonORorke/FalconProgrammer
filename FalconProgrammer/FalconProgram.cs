@@ -49,7 +49,7 @@ public class FalconProgram {
     }
     // I've customised this script processor and it looks too hard to get rid of.
     // It should be excluded anyway because it has the setting
-    // Category.IsInfoPageLayoutInScript true.
+    // Category.InfoPageMustUseScript true.
     return Category.SoundBankFolder.Name != "Organic Keys";
   }
 
@@ -206,7 +206,7 @@ public class FalconProgram {
     if (Category.SoundBankFolder.Name == "Organic Keys") {
       return new OrganicKeysProgramXml(Category, InfoPageCcsScriptProcessor!);
     }
-    return Category.IsInfoPageLayoutInScript
+    return Category.InfoPageMustUseScript
       ? new ScriptProgramXml(Category, InfoPageCcsScriptProcessor!)
       : new ProgramXml(Category, InfoPageCcsScriptProcessor);
   }
@@ -231,7 +231,7 @@ public class FalconProgram {
   /// </summary>
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
     if (Category.SoundBankFolder.Name == "Factory"
-        && !Category.IsInfoPageLayoutInScript) {
+        && !Category.InfoPageMustUseScript) {
       // The macro MIDI CCs are defined for ScriptProcessor "EventProcessor9" if it
       // exists.
       return (
@@ -438,10 +438,10 @@ public class FalconProgram {
     } else if (Category.TemplateScriptProcessor != null) {
       // The CCs are specified SignalConnections owned by the Info page ScriptProcessor
       // and can be copied from a template ScriptProcessor.
-      // This applies to all programs in categories for which IsInfoPageLayoutInScript
+      // This applies to all programs in categories for which InfoPageMustUseScript
       // is set to true in the settings file.
       // In some categories, we have or are going to remove the Info page
-      // ScriptProcessor, so IsInfoPageLayoutInScript has had to be changed to false for
+      // ScriptProcessor, so InfoPageMustUseScript has had to be changed to false for
       // the Category, yet we still need to use the template if it is available.
       UpdateMacroCcsFromTemplateScriptProcessor();
     } else {

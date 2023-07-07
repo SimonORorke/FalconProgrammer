@@ -112,7 +112,7 @@ public class BatchProcessor {
     Category.Initialise();
     if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor 
           or ConfigTask.ReplaceModWheelWithMacro
-        && Category.IsInfoPageLayoutInScript) {
+        && Category.InfoPageMustUseScript) {
       Console.WriteLine(
         $"Cannot {Task} for category " +
         $"'{SoundBankFolder.Name}\\{categoryName}' " +
@@ -241,11 +241,12 @@ public class BatchProcessor {
   }
 
   [PublicAPI]
-  public void RollForward() {
-    UpdateMacroCcs(null);
-    ChangeDelayToZero(null);
-    ChangeReverbToZero(null);
-    ReplaceModWheelWithMacro(null);
+  public void RollForward(
+    string? soundBankName, string? categoryName = null) {
+    UpdateMacroCcs(soundBankName, categoryName);
+    ChangeDelayToZero(soundBankName, categoryName);
+    ChangeReverbToZero(soundBankName, categoryName);
+    ReplaceModWheelWithMacro(soundBankName, categoryName);
   }
 
   /// <summary>

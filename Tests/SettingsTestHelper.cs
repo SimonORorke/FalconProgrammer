@@ -40,6 +40,9 @@ public static class SettingsTestHelper {
     return Settings.Read(SettingsFolderPath, TestApplicationName);
   }
 
+  /// <summary>
+  ///   This should generate the required production settings.
+  /// </summary>
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void WriteSettings(Settings settings) {
     settings.ProgramsFolder = new Settings.Folder {
@@ -53,105 +56,100 @@ public static class SettingsTestHelper {
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "Brutal Bass 2.1",
-      IsInfoPageLayoutInScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Brutal Bass 2.1\808 Line.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "Lo-Fi 2.5",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "Organic Texture 2.8",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Organic Texture 2.8\BAS Biggy.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "RetroWave 2.5",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "VCF-20 Synths 2.5",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Fluidity",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Fluidity\Strings\Guitar Stream.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Hypnotic Drive",
-      IsInfoPageLayoutInScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Hypnotic Drive\Leads\Lead - Acid Gravel.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Inner Dimensions",
-      IsInfoPageLayoutInScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Inner Dimensions\Key\Melodist.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Organic Keys",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Organic Keys\Acoustic Mood\A Rhapsody.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Bass",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Bass\Warped.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Leads",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Leads\Autumn Rust.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Pads",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Pads\Lore.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Plucks",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Plucks\Resonator.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Savage",
-      IsInfoPageLayoutInScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Savage\Leads\Plucker.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Titanium",
-      IsInfoPageLayoutInScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Titanium\Keys\Wood Chill.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Voklm",
-      IsInfoPageLayoutInScript = true,
+      InfoPageMustUseScript = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Voklm\Synth Choirs\Breath Five.uvip")
     });

@@ -18,6 +18,11 @@ public class Category {
   private DirectoryInfo Folder { get; set; } = null!;
 
   /// <summary>
+  ///   This documentation probably needs updating.  I think the only categories
+  ///   where the info page script processor cannot be removed to allow a mod wheel
+  ///   replacement macro are when there's no button on the original to allow then script
+  ///   view to be hidden or when there are more than 4 macros.
+  ///   That needs to be confirmed by testing.
   ///   In some sound banks, such as "Organic Keys", ConstantModulations do not specify
   ///   Info page macros, only modulation wheel assignment. In others, such as
   ///   "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
@@ -41,7 +46,7 @@ public class Category {
   ///     per category.
   ///   </para>
   /// </summary>
-  public bool IsInfoPageLayoutInScript => SettingsCategory.IsInfoPageLayoutInScript;
+  public bool InfoPageMustUseScript => SettingsCategory.InfoPageMustUseScript;
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public Settings Settings { get; }
@@ -112,7 +117,7 @@ public class Category {
     var templateScriptProcessor = (
       from scriptProcessor in root.Program.ScriptProcessors
       select scriptProcessor).LastOrDefault();
-    if (templateScriptProcessor == null && IsInfoPageLayoutInScript) {
+    if (templateScriptProcessor == null && InfoPageMustUseScript) {
       throw new ApplicationException(
         $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
     }

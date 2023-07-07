@@ -32,7 +32,7 @@ public class CategoryTests {
     var category = new Category(GetSoundBankFolder("Factory"), "Brutal Bass 2.1",
       ReadSettings());
     category.Initialise();
-    Assert.IsTrue(category.IsInfoPageLayoutInScript);
+    Assert.IsTrue(category.InfoPageMustUseScript);
     Assert.AreEqual("Factory", category.TemplateSoundBankName);
     Assert.AreEqual("Brutal Bass 2.1", category.TemplateCategoryName);
     Assert.AreEqual("808 Line", category.TemplateProgramName);
@@ -43,7 +43,7 @@ public class CategoryTests {
     var category =
       new Category(GetSoundBankFolder("Factory"), "Bass-Sub", ReadSettings());
     category.Initialise();
-    Assert.IsFalse(category.IsInfoPageLayoutInScript);
+    Assert.IsFalse(category.InfoPageMustUseScript);
     Assert.AreEqual("Factory", category.TemplateSoundBankName);
     Assert.AreEqual("Keys", category.TemplateCategoryName);
     Assert.AreEqual("DX Mania", category.TemplateProgramName);
@@ -54,7 +54,7 @@ public class CategoryTests {
     var category = new Category(GetSoundBankFolder("Factory"), "RetroWave 2.5",
       ReadSettings());
     category.Initialise();
-    Assert.IsTrue(category.IsInfoPageLayoutInScript);
+    Assert.IsTrue(category.InfoPageMustUseScript);
     Assert.AreEqual("Factory", category.TemplateSoundBankName);
     Assert.AreEqual("Lo-Fi 2.5", category.TemplateCategoryName);
     // ReSharper disable once StringLiteralTypo
@@ -66,7 +66,7 @@ public class CategoryTests {
     var category =
       new Category(GetSoundBankFolder("Fluidity"), "Electronic", ReadSettings());
     category.Initialise();
-    Assert.IsTrue(category.IsInfoPageLayoutInScript);
+    Assert.IsTrue(category.InfoPageMustUseScript);
     Assert.AreEqual("Electronic", category.Name);
     Assert.AreEqual("Fluidity", category.SoundBankFolder.Name);
     Assert.AreEqual("Fluidity", category.TemplateSoundBankName);
@@ -87,7 +87,7 @@ public class CategoryTests {
     var category =
       new Category(GetSoundBankFolder("Spectre"), "Polysynth", ReadSettings());
     category.Initialise();
-    Assert.IsFalse(category.IsInfoPageLayoutInScript);
+    Assert.IsFalse(category.InfoPageMustUseScript);
     Assert.AreEqual("Factory", category.TemplateSoundBankName);
     Assert.AreEqual("Keys", category.TemplateCategoryName);
     Assert.AreEqual("DX Mania", category.TemplateProgramName);
@@ -97,7 +97,7 @@ public class CategoryTests {
   public void PulsarHasCategorySpecificTemplates() {
     var category = new Category(GetSoundBankFolder("Pulsar"), "Bass", ReadSettings());
     category.Initialise();
-    Assert.IsTrue(category.IsInfoPageLayoutInScript);
+    Assert.IsTrue(category.InfoPageMustUseScript);
     Assert.AreEqual("Pulsar", category.TemplateSoundBankName);
     Assert.AreEqual("Bass", category.TemplateCategoryName);
     Assert.AreEqual("Warped", category.TemplateProgramName);
