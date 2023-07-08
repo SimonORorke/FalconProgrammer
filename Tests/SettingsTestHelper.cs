@@ -62,7 +62,7 @@ public static class SettingsTestHelper {
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "Lo-Fi 2.5",
-      InfoPageMustUseScript = true,
+      InfoPageMustUseScript = false,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
@@ -76,14 +76,14 @@ public static class SettingsTestHelper {
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "RetroWave 2.5",
-      InfoPageMustUseScript = true,
+      InfoPageMustUseScript = false,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "VCF-20 Synths 2.5",
-      InfoPageMustUseScript = true,
+      InfoPageMustUseScript = false,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
