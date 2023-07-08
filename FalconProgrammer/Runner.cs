@@ -6,6 +6,9 @@ public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]
   public static void Run() {
     var batch = new BatchProcessor();
+    // batch.PrependPathLineToDescription("Factory", "Lo-Fi 2.5");
+    // batch.PrependPathLineToDescription("Factory", "RetroWave 2.5");
+    // batch.PrependPathLineToDescription("Factory", "VCF-20 Synths 2.5");
     // batch.ReplaceModWheelWithMacro("Factory", "Lo-Fi 2.5");
     // batch.ReplaceModWheelWithMacro("Factory", "RetroWave 2.5");
     // batch.ReplaceModWheelWithMacro("Factory", "VCF-20 Synths 2.5");

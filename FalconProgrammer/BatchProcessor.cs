@@ -243,6 +243,7 @@ public class BatchProcessor {
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null) {
+    PrependPathLineToDescription(soundBankName, categoryName);
     UpdateMacroCcs(soundBankName, categoryName);
     ChangeDelayToZero(soundBankName, categoryName);
     ChangeReverbToZero(soundBankName, categoryName);
