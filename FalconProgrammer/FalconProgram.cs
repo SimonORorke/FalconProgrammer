@@ -58,22 +58,22 @@ public class FalconProgram {
   ///   mod wheel modulations may be reassigned to a new macro.
   /// </summary>
   private bool CanReplaceModWheelWithMacro() {
+    if (WheelMacroExists()) {
+      Console.WriteLine(
+        $"{PathShort} already has a Wheel macro.");
+      return false;
+    }
     if (Category.SoundBankFolder.Name == "Ether Fields") {
       // There are lots of macros in every program of this sound bank.
       // I tried adding wheel macros. But it's too busy to be feasible.
       return false;
     }
-    if (InfoPageCcsScriptProcessor != null 
+    if (InfoPageCcsScriptProcessor != null
         && !CanRemoveInfoPageCcsScriptProcessor()) {
       Console.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
         "there is an Info page CCs script processor that is not feasible/desirable " +
         " to remove.");
-      return false;
-    }
-    if (WheelMacroExists()) {
-      Console.WriteLine(
-        $"{PathShort} already has a Wheel macro.");
       return false;
     }
     int modWheelSignalConnectionCount =
@@ -129,7 +129,7 @@ public class FalconProgram {
     if (reverbMacros.Count == 0) {
       return;
     }
-    if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4" 
+    if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4"
         or "Factory\\Bass-Sub\\Metropolis 1.4"
         or "Factory\\Leads\\Ali3n 1.4"
         or "Factory\\Pads\\Arrival 1.4"
@@ -230,16 +230,20 @@ public class FalconProgram {
   ///   macro's ConstantModulation.
   /// </summary>
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
-    if (Category.SoundBankFolder.Name == "Factory"
-        && !Category.InfoPageMustUseScript) {
-      // The macro MIDI CCs are defined for ScriptProcessor "EventProcessor9" if it
-      // exists.
-      return (
+    string? name =
+      Category.TemplateScriptProcessor?.Name
+      ?? (Category.SoundBankFolder.Name == "Factory" ? "EventProcessor9" : null);
+    if (name != null) {
+      var scriptProcessorWithName = (
         from scriptProcessor in ScriptProcessors
-        where scriptProcessor.Name == "EventProcessor9"
+        where scriptProcessor.Name == name
         select scriptProcessor).FirstOrDefault();
+      if (scriptProcessorWithName != null) {
+        return scriptProcessorWithName;
+      }
     }
-    // Assume that the macro MIDI CCs are defined for the last ScriptProcessor, if any.
+    // Cannot find the required script processor by name. So assume that
+    // the macro MIDI CCs are defined in the last ScriptProcessor, if any.
     return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 

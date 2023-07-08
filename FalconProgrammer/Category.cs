@@ -18,18 +18,22 @@ public class Category {
   private DirectoryInfo Folder { get; set; } = null!;
 
   /// <summary>
-  ///   This documentation probably needs updating.  I think the only categories
-  ///   where the info page script processor cannot be removed to allow a mod wheel
-  ///   replacement macro are when there's no way (that I can find) to hide the script
-  ///   view or when there are more than 4 macros.
-  ///   In some sound banks, such as "Organic Keys", ConstantModulations do not specify
-  ///   Info page macros, only modulation wheel assignment. In others, such as
-  ///   "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
-  ///   showValue="0", indicating that the coordinates specified in the Properties will
-  ///   not actually be used to determine the locations of macros on the Info page.
-  ///   In still others, such as "Factory\Brutal Bass 2.1", the coordinates specified in
-  ///   the ConstantModulation.Properties are inaccurate, despite not having the
-  ///   showValue="0" attribute.
+  ///   I think the only categories where the info page script processor cannot be
+  ///   removed to allow a mod wheel replacement macro are when there are more than 4
+  ///   macros. Theoretically that could be done by automatic code analysis, rather than
+  ///   with this category setting. But the setting is more efficient, for what it is worth.
+  /// </summary>
+  /// <remarks>
+  ///   <para>
+  ///     In some sound banks, such as "Organic Keys", ConstantModulations do not specify
+  ///     Info page macros, only modulation wheel assignment. In others, such as
+  ///     "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
+  ///     showValue="0", indicating that the coordinates specified in the Properties will
+  ///     not actually be used to determine the locations of macros on the Info page.
+  ///     In still others, such as "Factory\Brutal Bass 2.1", the coordinates specified
+  ///     in the ConstantModulation.Properties are inaccurate, despite not having the
+  ///     showValue="0" attribute.
+  ///   </para>
   ///   <para>
   ///     In these cases, the Info page layout is specified in a script.
   ///     SignalConnections mapping MIDI CC numbers to macros must be added to that
@@ -44,7 +48,7 @@ public class Category {
   ///     Info page layout. In those cases, the template program file has to be specified
   ///     per category.
   ///   </para>
-  /// </summary>
+  /// </remarks>
   public bool InfoPageMustUseScript => SettingsCategory.InfoPageMustUseScript;
 
   [PublicAPI] public string Name { get; }

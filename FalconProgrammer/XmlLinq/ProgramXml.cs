@@ -253,10 +253,16 @@ public class ProgramXml {
   public void RemoveInfoPageCcsScriptProcessorElement() {
     if (InfoPageCcsScriptProcessorElement != null) {
       var eventProcessorsElement = InfoPageCcsScriptProcessorElement.Parent;
-      InfoPageCcsScriptProcessorElement.Remove();
-      if (!eventProcessorsElement!.HasElements) {
-        eventProcessorsElement.Remove();
-      }
+      // We need to remove the EventProcessors element, including all its
+      // ScriptProcessor elements, if there are more than one.
+      // Just removing the Info page CCs ScriptProcessor element will not work.
+      // ReSharper disable once CommentTypo
+      // Example: Factory\RetroWave 2.5\BAS Voltage Reso.
+      eventProcessorsElement!.Remove();
+      // InfoPageCcsScriptProcessorElement.Remove();
+      // if (!eventProcessorsElement!.HasElements) {
+      //   eventProcessorsElement.Remove();
+      // }
     }
   }
 
