@@ -106,18 +106,18 @@ public class BatchProcessor {
 
   private void ConfigureProgramsInCategory(
     string categoryName) {
-    Console.WriteLine("==========================");
-    Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
+    // Console.WriteLine("==========================");
+    // Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
     if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor
           or ConfigTask.OptimiseWheelMacro
           or ConfigTask.ReplaceModWheelWithMacro
         && Category.InfoPageMustUseScript) {
-      Console.WriteLine(
-        $"Cannot {Task} for category " +
-        $"'{SoundBankFolder.Name}\\{categoryName}' " +
-        "because the category's Info page layout has to be defined in a script.");
+      // Console.WriteLine(
+      //   $"Cannot {Task} for category " +
+      //   $"'{SoundBankFolder.Name}\\{categoryName}' " +
+      //   "because the category's Info page layout has to be defined in a script.");
       return;
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
@@ -159,7 +159,6 @@ public class BatchProcessor {
       }
       if (Task is not (ConfigTask.CountMacros or 
           ConfigTask.ListIfHasInfoPageCcsScriptProcessor
-          // or ConfigTask.OptimiseWheelMacro // Temp!!!
           or ConfigTask.RestoreOriginal)) {
         Program.Save();
       }
