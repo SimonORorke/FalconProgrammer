@@ -339,9 +339,9 @@ public class FalconProgram {
       return;
     }
     if (Macros.Any(macro => macro.GetForMacroSignalConnections().Count > 1)) {
-      // The problem is modulations by another macro
-      // (Source will indicate the modulating macro.
-      // which would be the wheel replacement macro, instead of a MIDI CC number).
+      // The problem is modulations by the wheel replacement macro.
+      // (Source will indicate the modulating macro,
+      // which would be the wheel replacement macro, instead of a MIDI CC number.)
       // Example: "M.1 Cutoff" macro of
       // Hypnotic Drive\Atmospheres & Pads\Vocal Atmos - Prophecy.
       // Requires further investigation. Maybe OK as is.
