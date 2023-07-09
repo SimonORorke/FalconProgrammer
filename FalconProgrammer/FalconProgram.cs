@@ -329,6 +329,43 @@ public class FalconProgram {
     }
   }
 
+  [SuppressMessage("ReSharper", "CommentTypo")]
+  public void OptimiseWheelMacro() {
+    if (!WheelMacroExists() 
+        || Macros.Count != 5 
+        || ContinuousMacros.Count != 5
+        || InfoPageLayout.FindDelayContinuousMacro() != null
+        || InfoPageLayout.FindReverbContinuousMacro() != null) {
+      return;
+    }
+    if (Macros.Any(macro => macro.GetForMacroSignalConnections().Count > 1)) {
+      // The problem is modulations by another macro
+      // (Source will indicate the modulating macro.
+      // which would be the wheel replacement macro, instead of a MIDI CC number).
+      // Example: "M.1 Cutoff" macro of
+      // Hypnotic Drive\Atmospheres & Pads\Vocal Atmos - Prophecy.
+      // Requires further investigation. Maybe OK as is.
+      return;
+    }
+    InfoPageLayout.MoveAllMacrosToStandardBottom();
+    // Wheel macro will now be at the right end, as it was added last.
+    UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
+    var macro4 = Macros[3];
+    var macro4SignalConnection = macro4.FindSignalConnectionWithCcNo(11);
+    if (macro4SignalConnection != null) {
+      macro4SignalConnection.CcNo = 34;
+      ProgramXml.UpdateMacroSignalConnection(macro4, macro4SignalConnection);
+    }
+    var wheelMacro = Macros[4];
+    var wheelMacroSignalConnection = 
+      wheelMacro.FindSignalConnectionWithCcNo(34) 
+      ?? wheelMacro.FindSignalConnectionWithCcNo(11)!;
+    wheelMacroSignalConnection.CcNo = 1;
+    ProgramXml.UpdateMacroSignalConnection(wheelMacro, wheelMacroSignalConnection);
+    Console.WriteLine(
+      $"{PathShort}: Optimised Wheel macro.");
+  }
+
   public void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
     const string crLf = "\r\n";

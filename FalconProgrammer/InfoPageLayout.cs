@@ -131,7 +131,7 @@ public class InfoPageLayout {
       select continuousMacro).FirstOrDefault();
   }
 
-  private Macro? FindDelayContinuousMacro() {
+  public Macro? FindDelayContinuousMacro() {
     return (
       from continuousMacro in Program.ContinuousMacros
       where continuousMacro.ControlsDelay
@@ -201,7 +201,7 @@ public class InfoPageLayout {
     return result;
   }
 
-  private Macro? FindReverbContinuousMacro() {
+  public Macro? FindReverbContinuousMacro() {
     return (
       from macro in Program.ContinuousMacros
       where macro.ControlsReverb

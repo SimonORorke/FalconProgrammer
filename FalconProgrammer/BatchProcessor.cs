@@ -110,13 +110,14 @@ public class BatchProcessor {
     Console.WriteLine($"Category: {SoundBankFolder.Name}\\{categoryName}");
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
-    if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor 
+    if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor
+          or ConfigTask.OptimiseWheelMacro
           or ConfigTask.ReplaceModWheelWithMacro
         && Category.InfoPageMustUseScript) {
       Console.WriteLine(
         $"Cannot {Task} for category " +
         $"'{SoundBankFolder.Name}\\{categoryName}' " +
-        "because the category's Info page layout is defined in a script.");
+        "because the category's Info page layout has to be defined in a script.");
       return;
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
@@ -140,6 +141,9 @@ public class BatchProcessor {
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
           break;
+        case ConfigTask.OptimiseWheelMacro:
+          Program.OptimiseWheelMacro();
+          break;
         case ConfigTask.PrependPathLineToDescription:
           Program.PrependPathLineToDescription();
           break;
@@ -155,6 +159,7 @@ public class BatchProcessor {
       }
       if (Task is not (ConfigTask.CountMacros or 
           ConfigTask.ListIfHasInfoPageCcsScriptProcessor
+          // or ConfigTask.OptimiseWheelMacro // Temp!!!
           or ConfigTask.RestoreOriginal)) {
         Program.Save();
       }
@@ -206,6 +211,13 @@ public class BatchProcessor {
     string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.ListIfHasInfoPageCcsScriptProcessor;
     Console.WriteLine("Programs with Info Page CCs Script Processor:");
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
+  [PublicAPI]
+  public void OptimiseWheelMacro(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.OptimiseWheelMacro;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -271,6 +283,7 @@ public class BatchProcessor {
     ChangeReverbToZero,
     CountMacros,
     ListIfHasInfoPageCcsScriptProcessor,
+    OptimiseWheelMacro,
     PrependPathLineToDescription,
     ReplaceModWheelWithMacro,
     RestoreOriginal,

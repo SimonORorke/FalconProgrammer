@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Serialization;
 using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
@@ -54,7 +55,7 @@ public class Macro {
   public bool ControlsReverb =>
     DisplayName.Contains("Reverb")
     || DisplayName.Contains("Room")
-    || DisplayName.Contains("SparkVerb");
+    || DisplayName.Contains("Verb");
 
   /// <summary>
   ///   Indicates whether this is continuous macro.  If false, it's a toggle macro.
@@ -130,10 +131,12 @@ public class Macro {
       select signalConnection).FirstOrDefault();
   }
 
+  [SuppressMessage("ReSharper", "CommentTypo")]
   public List<SignalConnection> GetForMacroSignalConnections() {
     return (
       from signalConnection in SignalConnections
       where signalConnection.IsForMacro
+      // where signalConnection.IsForMacro && signalConnection.CcNo.HasValue
       select signalConnection).ToList();
   }
 
