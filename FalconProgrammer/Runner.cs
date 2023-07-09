@@ -6,8 +6,8 @@ public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]
   public static void Run() {
     var batch = new BatchProcessor();
-    // batch.PrependPathLineToDescription("Hypnotic Drive", "Test");
-    // batch.UpdateMacroCcs("Hypnotic Drive", "Test");
+    batch.PrependPathLineToDescription("Hypnotic Drive", "Test");
+    batch.UpdateMacroCcs("Hypnotic Drive", "Test");
     // batch.ChangeDelayToZero("Hypnotic Drive", "Test");
     // batch.ChangeReverbToZero("Hypnotic Drive", "Test");
     // batch.ReplaceModWheelWithMacro("Hypnotic Drive", "Test");
