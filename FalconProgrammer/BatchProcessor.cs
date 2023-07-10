@@ -259,6 +259,7 @@ public class BatchProcessor {
     ChangeDelayToZero(soundBankName, categoryName);
     ChangeReverbToZero(soundBankName, categoryName);
     ReplaceModWheelWithMacro(soundBankName, categoryName);
+    OptimiseWheelMacro(soundBankName, categoryName);
   }
 
   /// <summary>

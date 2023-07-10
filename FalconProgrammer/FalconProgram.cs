@@ -110,12 +110,12 @@ public class FalconProgram {
                macro =>
                  macro.ControlsDelay
                  && macro.ChangeValueToZero())) {
-      Console.WriteLine($"Changed {macro.DisplayName} to zero for '{Path}'.");
+      Console.WriteLine($"{PathShort}: Changed {macro.DisplayName} to zero.");
     }
   }
 
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
-    Console.WriteLine($"Updating '{Path}'.");
+    Console.WriteLine($"Updating '{PathShort}'.");
     var oldSignalConnection = new SignalConnection { CcNo = oldCcNo };
     var newSignalConnection = new SignalConnection { CcNo = newCcNo };
     ProgramXml.ChangeSignalConnectionSource(oldSignalConnection, newSignalConnection);
@@ -463,7 +463,7 @@ public class FalconProgram {
       return;
     }
     File.Copy(originalPath, Path, true);
-    Console.WriteLine($"Reset '{Path}'.");
+    Console.WriteLine($"Reset '{PathShort}'.");
   }
 
   public void Save() {

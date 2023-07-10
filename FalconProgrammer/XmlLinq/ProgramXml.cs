@@ -6,8 +6,10 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
+  private XElement? _eventProcessorsElement;
   private XElement? _templateMacroElement;
   private XElement? _templateRootElement;
+  private XElement? _templateScriptProcessorElement;
   private XElement? _templateSignalConnectionElement;
 
   public ProgramXml(
@@ -18,6 +20,10 @@ public class ProgramXml {
 
   [PublicAPI] public Category Category { get; }
   private XElement ControlSignalSourcesElement { get; set; } = null!;
+
+  private XElement EventProcessorsElement =>
+    _eventProcessorsElement ??= GetEventProcessorsElement();
+  
   private List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
@@ -29,6 +35,9 @@ public class ProgramXml {
 
   private XElement TemplateRootElement =>
     _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
+
+  private XElement TemplateScriptProcessorElement =>
+    _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
 
   private XElement TemplateSignalConnectionElement =>
     _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
@@ -234,11 +243,27 @@ public class ProgramXml {
     }
   }
 
+  private XElement GetEventProcessorsElement() {
+    var result =
+      RootElement.Descendants("EventProcessors").FirstOrDefault() ??
+      throw new ApplicationException(
+        $"Cannot find EventProcessors element in '{InputProgramPath}'.");
+    return result;
+  }
+
   private XElement GetTemplateMacroElement() {
     var result =
       TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
       throw new ApplicationException(
         $"Cannot find ConstantModulation element in '{Category.TemplateProgramPath}'.");
+    return result;
+  }
+
+  protected virtual XElement GetTemplateScriptProcessorElement() {
+    var result =
+      TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault() ??
+      throw new ApplicationException(
+        $"Cannot find ScriptProcessor element in '{Category.TemplateProgramPath}'.");
     return result;
   }
 
@@ -342,16 +367,32 @@ public class ProgramXml {
   }
 
   public virtual void UpdateInfoPageCcsScriptProcessor() {
-    var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections");
-    if (connectionsElement != null) {
-      connectionsElement.RemoveAll();
+    var templateConnectionsElement = 
+      TemplateScriptProcessorElement.Element("Connections")!;
+    var connectionsElement = 
+      InfoPageCcsScriptProcessorElement!.Element("Connections");
+    if (connectionsElement == null) {
+      InfoPageCcsScriptProcessorElement.Add(new XElement(templateConnectionsElement));
     } else {
-      connectionsElement = new XElement("Connections");
-      InfoPageCcsScriptProcessorElement.Add(connectionsElement);
+      connectionsElement.RemoveAll();
+      foreach (var templateSignalConnectionElement in templateConnectionsElement.Elements()) {
+        connectionsElement.Add(new XElement(templateSignalConnectionElement));
+      }
     }
-    foreach (var signalConnection in InfoPageCcsScriptProcessor!.SignalConnections) {
-      connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
-    }
+    // InfoPageCcsScriptProcessorElement!.Remove();
+    // InfoPageCcsScriptProcessorElement = new XElement(TemplateScriptProcessorElement);
+    // EventProcessorsElement.Add(InfoPageCcsScriptProcessorElement);    
+    //
+    // var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections");
+    // if (connectionsElement != null) {
+    //   connectionsElement.RemoveAll();
+    // } else {
+    //   connectionsElement = new XElement("Connections");
+    //   InfoPageCcsScriptProcessorElement.Add(connectionsElement);
+    // }
+    // foreach (var signalConnection in InfoPageCcsScriptProcessor!.SignalConnections) {
+    //   connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
+    // }
   }
 
   public void UpdateMacroLocation(Macro macro) {
@@ -394,5 +435,7 @@ public class ProgramXml {
       signalConnection.Source);
     SetAttribute(signalConnectionElement, nameof(SignalConnection.Destination), 
       signalConnection.Destination);
+    SetAttribute(signalConnectionElement, nameof(SignalConnection.ConnectionMode), 
+      signalConnection.ConnectionMode);
   }
 }
