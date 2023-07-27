@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
-  private XElement? _eventProcessorsElement;
   private XElement? _templateMacroElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
@@ -20,9 +19,6 @@ public class ProgramXml {
 
   [PublicAPI] public Category Category { get; }
   private XElement ControlSignalSourcesElement { get; set; } = null!;
-
-  private XElement EventProcessorsElement =>
-    _eventProcessorsElement ??= GetEventProcessorsElement();
   
   private List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
@@ -241,14 +237,6 @@ public class ProgramXml {
       throw new ApplicationException(
         $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
     }
-  }
-
-  private XElement GetEventProcessorsElement() {
-    var result =
-      RootElement.Descendants("EventProcessors").FirstOrDefault() ??
-      throw new ApplicationException(
-        $"Cannot find EventProcessors element in '{InputProgramPath}'.");
-    return result;
   }
 
   private XElement GetTemplateMacroElement() {
