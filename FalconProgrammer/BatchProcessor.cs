@@ -22,6 +22,13 @@ public class BatchProcessor {
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
+  [PublicAPI]
+  public void BypassDelays(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.BypassDelays;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   /// <summary>
   ///   For programs with a Delay macro, changes the Delay macro's value to zero.
   /// </summary>
@@ -126,6 +133,9 @@ public class BatchProcessor {
         Program.Read();
       }
       switch (Task) {
+        case ConfigTask.BypassDelays:
+          Program.BypassDelays();
+          break;
         case ConfigTask.ChangeDelayToZero:
           Program.ChangeDelayToZero();
           break;
@@ -260,6 +270,7 @@ public class BatchProcessor {
     ChangeReverbToZero(soundBankName, categoryName);
     ReplaceModWheelWithMacro(soundBankName, categoryName);
     OptimiseWheelMacro(soundBankName, categoryName);
+    BypassDelays(soundBankName, categoryName);
   }
 
   /// <summary>
@@ -278,6 +289,7 @@ public class BatchProcessor {
   }
 
   private enum ConfigTask {
+    BypassDelays,
     ChangeDelayToZero,
     ChangeMacroCcNo,
     ChangeReverbToZero,

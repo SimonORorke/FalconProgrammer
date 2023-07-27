@@ -43,6 +43,14 @@ public class FalconProgram {
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
+  public void BypassDelays() {
+    bool result1 = ProgramXml.BypassInserts("Buzz"); // Analog Tape Delay!
+    bool result2 = ProgramXml.BypassInserts("DualDelay");
+    if (result1 || result2) {
+      Console.WriteLine($"{PathShort}: Bypassed delays.");
+    }
+  }
+
   private bool CanRemoveInfoPageCcsScriptProcessor() {
     if (Macros.Count > 4) {
       return false;

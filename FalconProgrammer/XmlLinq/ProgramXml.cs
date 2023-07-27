@@ -71,6 +71,20 @@ public class ProgramXml {
     UpdateMacroPropertiesElement(newMacro, macroElement);
   }
 
+  public bool BypassInserts(string xName) {
+    var inserts = (
+      from insert in RootElement.Descendants(xName)
+      where GetAttributeValue(insert, "Bypass") == "0"
+      select insert).ToList();
+    if (inserts.Count == 0) {
+      return false;
+    }
+    foreach (var insert in inserts) {
+      SetAttribute(insert, "Bypass", "1");
+    }
+    return true;
+  }
+
   /// <summary>
   ///   If the specified macro is found, changes its value to zero
   ///   and returns true.  Otherwise returns false.
