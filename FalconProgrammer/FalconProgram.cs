@@ -135,6 +135,11 @@ public class FalconProgram {
       where macro.ControlsReverb
       select macro).ToList();
     if (reverbMacros.Count == 0) {
+      if (Category.SoundBankFolder.Name == "Hypnotic Drive") {
+        if (ProgramXml.BypassInserts("SparkVerb")) {
+          Console.WriteLine($"{PathShort}: Bypassed SparkVerb(s).");
+        }
+      }
       return;
     }
     if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4"
