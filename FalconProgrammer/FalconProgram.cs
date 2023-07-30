@@ -44,8 +44,8 @@ public class FalconProgram {
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
   public void BypassDelays() {
-    bool result1 = ProgramXml.BypassInserts("Buzz"); // Analog Tape Delay!
-    bool result2 = ProgramXml.BypassInserts("DualDelay");
+    bool result1 = ProgramXml.BypassEffects("Buzz"); // Analog Tape Delay!
+    bool result2 = ProgramXml.BypassEffects("DualDelay");
     if (result1 || result2) {
       Console.WriteLine($"{PathShort}: Bypassed delays.");
     }
@@ -116,7 +116,7 @@ public class FalconProgram {
   public void ChangeDelayToZero() {
     foreach (var macro in Macros.Where(
                macro =>
-                 macro.ControlsDelay
+                 macro.ModulatesDelay
                  && macro.ChangeValueToZero())) {
       Console.WriteLine($"{PathShort}: Changed {macro.DisplayName} to zero.");
     }
@@ -132,11 +132,11 @@ public class FalconProgram {
   public void ChangeReverbToZero() {
     var reverbMacros = (
       from macro in Macros
-      where macro.ControlsReverb
+      where macro.ModulatesReverb
       select macro).ToList();
     if (reverbMacros.Count == 0) {
       if (Category.SoundBankFolder.Name == "Hypnotic Drive") {
-        if (ProgramXml.BypassInserts("SparkVerb")) {
+        if (ProgramXml.BypassEffects("SparkVerb")) {
           Console.WriteLine($"{PathShort}: Bypassed SparkVerb(s).");
         }
       }
@@ -344,8 +344,8 @@ public class FalconProgram {
 
   [SuppressMessage("ReSharper", "CommentTypo")]
   public void OptimiseWheelMacro() {
-    if (!WheelMacroExists() 
-        || Macros.Count != 5 
+    if (!WheelMacroExists()
+        || Macros.Count != 5
         || ContinuousMacros.Count != 5
         || InfoPageLayout.FindDelayContinuousMacro() != null
         || InfoPageLayout.FindReverbContinuousMacro() != null) {
@@ -370,8 +370,8 @@ public class FalconProgram {
       ProgramXml.UpdateMacroSignalConnection(macro4, macro4SignalConnection);
     }
     var wheelMacro = Macros[4];
-    var wheelMacroSignalConnection = 
-      wheelMacro.FindSignalConnectionWithCcNo(34) 
+    var wheelMacroSignalConnection =
+      wheelMacro.FindSignalConnectionWithCcNo(34)
       ?? wheelMacro.FindSignalConnectionWithCcNo(11)!;
     wheelMacroSignalConnection.CcNo = 1;
     ProgramXml.UpdateMacroSignalConnection(wheelMacro, wheelMacroSignalConnection);
@@ -393,6 +393,31 @@ public class FalconProgram {
       : newPathLine + oldDescription;
     ProgramXml.SetDescription(newDescription);
     Console.WriteLine($"{PathShort}: Prepended path line to description.");
+  }
+
+  public IEnumerable<string> QueryDelayTypes() {
+    var result = new List<string>();
+    foreach (var macro in Macros.Where(macro => macro.ModulatesDelay)) {
+      foreach (var effect in macro.ModulatedEffects.Where(effect =>
+                 !result.Contains(effect.EffectType))) {
+        // if (effect.EffectType == "ConstantModulation") {
+        //   Debug.Assert(true);
+        // }
+        result.Add(effect.EffectType);
+      }
+    }
+    return result;
+  }
+
+  public IEnumerable<string> QueryReverbTypes() {
+    var result = new List<string>();
+    foreach (var macro in Macros.Where(macro => macro.ModulatesReverb)) {
+      foreach (var effect in macro.ModulatedEffects.Where(effect =>
+                 !result.Contains(effect.EffectType))) {
+        result.Add(effect.EffectType);
+      }
+    }
+    return result;
   }
 
   /// <summary>

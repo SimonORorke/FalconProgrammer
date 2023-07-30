@@ -134,7 +134,7 @@ public class InfoPageLayout {
   public Macro? FindDelayContinuousMacro() {
     return (
       from continuousMacro in Program.ContinuousMacros
-      where continuousMacro.ControlsDelay
+      where continuousMacro.ModulatesDelay
       select continuousMacro).FirstOrDefault();
   }
 
@@ -145,7 +145,7 @@ public class InfoPageLayout {
     delayOrReverbSignalConnectionWithWheelCcNo = null;
     var continuousMacro = FindContinuousMacroWithModWheelReplacementCcNo();
     if (continuousMacro != null &&
-        (continuousMacro.ControlsDelay || continuousMacro.ControlsReverb)) {
+        (continuousMacro.ModulatesDelay || continuousMacro.ModulatesReverb)) {
       delayOrReverbMacroWithWheelCcNo = continuousMacro;
       // There could also be a mod wheel CC 1, so we cannot assume it's the first
       // SignalConnection. Example: Titanium\Pads\Children's Choir.
@@ -157,7 +157,7 @@ public class InfoPageLayout {
   private Macro? FindDelayToggleMacro() {
     return (
       from macro in Program.Macros
-      where macro.ControlsDelay && !macro.IsContinuous
+      where macro.ModulatesDelay && !macro.IsContinuous
       select macro).FirstOrDefault();
   }
 
@@ -204,19 +204,19 @@ public class InfoPageLayout {
   public Macro? FindReverbContinuousMacro() {
     return (
       from macro in Program.ContinuousMacros
-      where macro.ControlsReverb
+      where macro.ModulatesReverb
       select macro).FirstOrDefault();
   }
 
   private Macro? FindReverbContinuousMacroWithWheelReplacementCcNo() {
     var macro = FindContinuousMacroWithModWheelReplacementCcNo();
-    return macro is { ControlsReverb: true } ? macro : null;
+    return macro is { ModulatesReverb: true } ? macro : null;
   }
 
   private Macro? FindReverbToggleMacro() {
     return (
       from macro in Program.Macros
-      where macro.ControlsReverb && !macro.IsContinuous
+      where macro.ModulatesReverb && !macro.IsContinuous
       select macro).FirstOrDefault();
   }
 

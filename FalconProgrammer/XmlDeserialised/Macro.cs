@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
@@ -10,6 +11,8 @@ namespace FalconProgrammer.XmlDeserialised;
 ///   as I can tell.
 /// </summary>
 public class Macro {
+  private ImmutableList<Effect>? _modulatedEffects;
+
   /// <summary>
   ///   The macro name, which uniquely identifies the macro. For reference in
   ///   <see cref="SignalConnection" />s owned by effects or the
@@ -50,12 +53,6 @@ public class Macro {
   public List<SignalConnection> SignalConnections { get; set; } = null!;
 
   [XmlElement] public MacroProperties Properties { get; set; } = null!;
-  public bool ControlsDelay => DisplayName.Contains("Delay");
-
-  public bool ControlsReverb =>
-    DisplayName.Contains("Reverb")
-    || DisplayName.Contains("Room")
-    || DisplayName.Contains("Verb");
 
   /// <summary>
   ///   Indicates whether this is continuous macro.  If false, it's a toggle macro.
@@ -91,6 +88,16 @@ public class Macro {
     set => Name = $"Macro {value}";
   }
 
+  internal ImmutableList<Effect> ModulatedEffects =>
+    _modulatedEffects ??= GetModulatedEffects();
+
+  public bool ModulatesDelay => DisplayName.Contains("Delay");
+
+  public bool ModulatesReverb =>
+    DisplayName.Contains("Reverb")
+    || DisplayName.Contains("Room")
+    || DisplayName.Contains("Verb");
+
   internal ProgramXml ProgramXml { get; set; } = null!;
 
   /// <summary>
@@ -107,20 +114,23 @@ public class Macro {
       return false;
     }
     // Change the values of the effect parameters modulated by the macro as required too.
-    var signalConnectionElementsWithMacroSource =
-      ProgramXml.GetSignalConnectionElementsModulatedByMacro(this);
-    foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
-      var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
-      var effectElement = ProgramXml.GetParentElement(connectionsElement);
-      var signalConnection = new SignalConnection(signalConnectionElement);
-      try {
-        ProgramXml.SetAttribute(
-          effectElement, signalConnection.Destination,
-          // If it's a toggle macro, Destination should be "Bypass".  
-          signalConnection.Destination == "Bypass" ? 1 : 0);
-        // ReSharper disable once EmptyGeneralCatchClause
-      } catch { }
+    foreach (var effect in ModulatedEffects) {
+      effect.ChangeModulatedParameterToZero();
     }
+    // var signalConnectionElementsWithMacroSource =
+    //   ProgramXml.GetSignalConnectionElementsModulatedByMacro(this);
+    // foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
+    //   var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
+    //   var effectElement = ProgramXml.GetParentElement(connectionsElement);
+    //   var signalConnection = new SignalConnection(signalConnectionElement);
+    //   try {
+    //     ProgramXml.SetAttribute(
+    //       effectElement, signalConnection.Destination,
+    //       // If it's a toggle macro, Destination should be "Bypass".  
+    //       signalConnection.Destination == "Bypass" ? 1 : 0);
+    //     // ReSharper disable once EmptyGeneralCatchClause
+    //   } catch { }
+    // }
     return true;
   }
 
@@ -138,6 +148,12 @@ public class Macro {
       where signalConnection.IsForMacro
       // where signalConnection.IsForMacro && signalConnection.CcNo.HasValue
       select signalConnection).ToList();
+  }
+
+  private ImmutableList<Effect> GetModulatedEffects() {
+    return ProgramXml.GetSignalConnectionElementsModulatedByMacro(this)
+      .Select(signalConnectionElement => new Effect(signalConnectionElement, ProgramXml))
+      .ToImmutableList();
   }
 
   /// <summary>

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace FalconProgrammer.XmlDeserialised;
@@ -78,7 +77,7 @@ public class SignalConnection {
   /// <summary>
   ///   Gets whether the MIDI CC mapping is to control a macro on the Info page.
   ///   So far, the only CC mappings that are not for Info page controls are for the
-  ///   modulation wheel (MIDI CC 1).
+  ///   modulation wheel (MIDI CC 1).  Also false for effect signal connections.
   /// </summary>
   public bool IsForMacro => ConnectionMode == 1;
 

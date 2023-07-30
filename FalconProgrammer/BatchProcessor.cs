@@ -15,6 +15,7 @@ public class BatchProcessor {
   public LocationOrder MacroCcLocationOrder { get; set; } =
     LocationOrder.LeftToRightTopToBottom;
 
+  private List<string> EffectTypes { get; set; } = null!;
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
@@ -157,6 +158,12 @@ public class BatchProcessor {
         case ConfigTask.PrependPathLineToDescription:
           Program.PrependPathLineToDescription();
           break;
+        case ConfigTask.QueryDelayTypes:
+          UpdateEffectTypes(Program.QueryDelayTypes());
+          break;
+        case ConfigTask.QueryReverbTypes:
+          UpdateEffectTypes(Program.QueryReverbTypes());
+          break;
         case ConfigTask.ReplaceModWheelWithMacro:
           Program.ReplaceModWheelWithMacro();
           break;
@@ -169,6 +176,8 @@ public class BatchProcessor {
       }
       if (Task is not (ConfigTask.CountMacros or 
           ConfigTask.ListIfHasInfoPageCcsScriptProcessor
+          or ConfigTask.QueryDelayTypes
+          or ConfigTask.QueryReverbTypes
           or ConfigTask.RestoreOriginal)) {
         Program.Save();
       }
@@ -237,6 +246,30 @@ public class BatchProcessor {
     ConfigurePrograms(soundBankName, categoryName);
   }
 
+  [PublicAPI]
+  public void QueryDelayTypes(
+    string? soundBankName, string? categoryName = null) {
+    EffectTypes = new List<string>();
+    Task = ConfigTask.QueryDelayTypes;
+    Console.WriteLine("Delay Types:");
+    ConfigurePrograms(soundBankName, categoryName);
+    foreach (string effectType in EffectTypes) {
+      Console.WriteLine(effectType);
+    }
+  }
+
+  [PublicAPI]
+  public void QueryReverbTypes(
+    string? soundBankName, string? categoryName = null) {
+    EffectTypes = new List<string>();
+    Task = ConfigTask.QueryReverbTypes;
+    Console.WriteLine("Reverb Types:");
+    ConfigurePrograms(soundBankName, categoryName);
+    foreach (string effectType in EffectTypes) {
+      Console.WriteLine(effectType);
+    }
+  }
+
   /// <summary>
   ///   In each of the specified Falcon program presets where it is feasible, replaces
   ///   use of the modulation wheel with a Wheel macro that executes the same
@@ -273,6 +306,13 @@ public class BatchProcessor {
     BypassDelays(soundBankName, categoryName);
   }
 
+  private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
+    foreach (string effectType in effectTypes.Where(effectType =>
+               !EffectTypes.Contains(effectType))) {
+      EffectTypes.Add(effectType);
+    }
+  }
+
   /// <summary>
   ///   Configures macro CCs for Falcon program presets.
   /// </summary>
@@ -297,6 +337,8 @@ public class BatchProcessor {
     ListIfHasInfoPageCcsScriptProcessor,
     OptimiseWheelMacro,
     PrependPathLineToDescription,
+    QueryDelayTypes,
+    QueryReverbTypes,
     ReplaceModWheelWithMacro,
     RestoreOriginal,
     UpdateMacroCcs

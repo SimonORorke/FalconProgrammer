@@ -71,7 +71,7 @@ public class ProgramXml {
     UpdateMacroPropertiesElement(newMacro, macroElement);
   }
 
-  public bool BypassInserts(string xName) {
+  public bool BypassEffects(string xName) {
     var inserts = (
       from insert in RootElement.Descendants(xName)
       where GetAttributeValue(insert, "Bypass") == "0"
@@ -154,7 +154,7 @@ public class ProgramXml {
         $"'{InputProgramPath}'.");
   }
 
-  private string GetAttributeValue(XElement element, string attributeName) {
+  public string GetAttributeValue(XElement element, string attributeName) {
     return GetAttribute(element, attributeName).Value;
   }
 
@@ -181,10 +181,10 @@ public class ProgramXml {
       $"'{InputProgramPath}'.");
   }
 
-  public static XElement GetParentElement(XElement element) {
-    return element.Parent!;
-  }
-
+  // public static XElement GetParentElement(XElement element) {
+  //   return element.Parent!;
+  // }
+  
   /// <summary>
   ///   Returns a list of all the SignalConnection elements in the program whose source
   ///   indicates the specified MIDI CC number.

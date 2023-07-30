@@ -6,6 +6,8 @@ public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]
   public static void Run() {
     var batch = new BatchProcessor();
+    batch.QueryDelayTypes(null);
+    // batch.QueryReverbTypes(null);
     // batch.ChangeReverbToZero("Hypnotic Drive");
     // batch.BypassDelays(null);
     // batch.PrependPathLineToDescription("Factory", "DelayDisabled");
