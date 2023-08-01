@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
@@ -18,7 +19,13 @@ public class FalconProgram {
   }
 
   [PublicAPI] public Category Category { get; }
-  internal List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros();
+
+  internal List<Macro> ContinuousMacros {
+    get => _continuousMacros ??= GetContinuousMacros();
+    private set => _continuousMacros = value;
+  }
+
+  private ImmutableList<Effect> Effects { get; set; } = null!;
 
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
@@ -42,14 +49,6 @@ public class FalconProgram {
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
-
-  public void BypassDelays() {
-    bool result1 = ProgramXml.BypassEffects("Buzz"); // Analog Tape Delay!
-    bool result2 = ProgramXml.BypassEffects("DualDelay");
-    if (result1 || result2) {
-      Console.WriteLine($"{PathShort}: Bypassed delays.");
-    }
-  }
 
   private bool CanRemoveInfoPageCcsScriptProcessor() {
     if (Macros.Count > 4) {
@@ -113,15 +112,6 @@ public class FalconProgram {
     return true;
   }
 
-  public void ChangeDelayToZero() {
-    foreach (var macro in Macros.Where(
-               macro =>
-                 macro.ModulatesDelay
-                 && macro.ChangeValueToZero())) {
-      Console.WriteLine($"{PathShort}: Changed {macro.DisplayName} to zero.");
-    }
-  }
-
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
     Console.WriteLine($"Updating '{PathShort}'.");
     var oldSignalConnection = new SignalConnection { CcNo = oldCcNo };
@@ -129,50 +119,9 @@ public class FalconProgram {
     ProgramXml.ChangeSignalConnectionSource(oldSignalConnection, newSignalConnection);
   }
 
-  public void ChangeReverbToZero() {
-    var reverbMacros = (
-      from macro in Macros
-      where macro.ModulatesReverb
-      select macro).ToList();
-    if (reverbMacros.Count == 0) {
-      if (Category.SoundBankFolder.Name == "Hypnotic Drive") {
-        if (ProgramXml.BypassEffects("SparkVerb")) {
-          Console.WriteLine($"{PathShort}: Bypassed SparkVerb(s).");
-        }
-      }
-      return;
-    }
-    if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4"
-        or "Factory\\Bass-Sub\\Metropolis 1.4"
-        or "Factory\\Leads\\Ali3n 1.4"
-        or "Factory\\Pads\\Arrival 1.4"
-        // ReSharper disable once StringLiteralTypo
-        or "Factory\\Pads\\Novachord Noir 1.4"
-        or "Factory\\Pads\\Pad Motion 1.5"
-        or "Factory\\Synth Brass\\Gotham Brass 1.4"
-        or "Inner Dimensions\\Pad\\GrainVoices 2"
-        or "Savage\\Pads-Drones\\Lunar Nashi"
-        or "Savage\\Pads-Drones\\Voc Sidechain"
-        or "Savage\\Pads-Drones\\Wonder Land") {
-      // These programs are silent without reverb!
-      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
-      return;
-    }
-    foreach (var reverbMacro in reverbMacros) {
-      // Example: Titanium\Pads\Children's Choir.
-      if (reverbMacro.FindSignalConnectionWithCcNo(1) != null) {
-        Console.WriteLine(
-          $"{PathShort}: Not changing {reverbMacro.DisplayName} to zero because " +
-          "it is modulated by the wheel.");
-      } else if (reverbMacro.ChangeValueToZero()) {
-        Console.WriteLine($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
-      }
-    }
-  }
-
   private static void CheckForNonModWheelNonInfoPageMacro(
     SignalConnection signalConnection) {
-    if (!signalConnection.IsForMacro
+    if (!signalConnection.ModulatesMacro
         // ReSharper disable once MergeIntoPattern
         && signalConnection.CcNo.HasValue && signalConnection.CcNo != 1) {
       throw new ApplicationException(
@@ -236,6 +185,70 @@ public class FalconProgram {
     //CheckForNonModWheelNonInfoPageMacros();
   }
 
+  public void DisableDelay() {
+    foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
+      effect.Bypass = true;
+      Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
+    }
+    bool hasMacroBeenRemoved = false;
+    for (int i = Macros.Count - 1; i >= 0; i--) {
+      var macro = Macros[i];
+      macro.RemoveDelayModulations();
+      if (macro.ModulatedEffects.Count == 0 || macro.ModulatesDelay) {
+        macro.RemoveMacroElement();
+        Macros.RemoveAt(i);
+        hasMacroBeenRemoved = true;
+        Console.WriteLine($"{PathShort}: Removed {macro}.");
+      }
+    }
+    if (hasMacroBeenRemoved) {
+      ContinuousMacros = GetContinuousMacros();
+    }
+  }
+
+  public void DisableReverb() {
+    foreach (var effect in Effects.Where(
+               effect => effect is { IsReverb: true, IsModulated: false })) {
+      effect.Bypass = true;
+      Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
+    }
+    var reverbMacros = (
+      from macro in Macros
+      where macro.ModulatesReverb
+      select macro).ToList();
+    if (reverbMacros.Count == 0) {
+      return;
+    }
+    if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4"
+        or "Factory\\Bass-Sub\\Metropolis 1.4"
+        or "Factory\\Leads\\Ali3n 1.4"
+        or "Factory\\Pads\\Arrival 1.4"
+        // ReSharper disable once StringLiteralTypo
+        or "Factory\\Pads\\Novachord Noir 1.4"
+        or "Factory\\Pads\\Pad Motion 1.5"
+        or "Factory\\Synth Brass\\Gotham Brass 1.4"
+        or "Inner Dimensions\\Pad\\GrainVoices 2"
+        or "Savage\\Pads-Drones\\Lunar Nashi"
+        or "Savage\\Pads-Drones\\Voc Sidechain"
+        or "Savage\\Pads-Drones\\Wonder Land") {
+      // These programs are silent without reverb!
+      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
+      return;
+    }
+    foreach (var reverbMacro in reverbMacros) {
+      // Example: Titanium\Pads\Children's Choir.
+      if (reverbMacro.FindSignalConnectionWithCcNo(1) != null) {
+        Console.WriteLine(
+          $"{PathShort}: Not changing {reverbMacro.DisplayName} to zero because " +
+          "it is modulated by the wheel.");
+      } else {
+        // } else if (reverbMacro.ChangeValueToZero()) {
+        reverbMacro.ChangeValueToZero();
+        Console.WriteLine($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
+      }
+    }
+  }
+
   /// <summary>
   ///   Finds the ScriptProcessor, if any, that is to contain the SignalConnections that
   ///   map the macros to MIDI CC numbers. If the ScriptProcessor is not found, each
@@ -252,12 +265,35 @@ public class FalconProgram {
         where scriptProcessor.Name == name
         select scriptProcessor).FirstOrDefault();
       if (scriptProcessorWithName != null) {
-        return scriptProcessorWithName;
+        // Example of Factory program's EventProcessor9 script processor
+        // that does not own signal connections that modulate macros:
+        // ReSharper disable once CommentTypo
+        // Factory\Bass-Sub\Balarbas 2.0
+        if (scriptProcessorWithName.SignalConnections.Any(signalConnection =>
+              signalConnection.MacroNo != null)) {
+          return scriptProcessorWithName;
+        }
       }
     }
     // Cannot find the required script processor by name. So assume that
-    // the macro MIDI CCs are defined in the last ScriptProcessor, if any.
-    return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
+    // the macro MIDI CCs are defined in the last ScriptProcessor, if any,
+    // provided it owns SignalConnections that modulate macros.
+    if (ScriptProcessors.Count == 0) {
+      return null;
+    }
+    var candidateScriptProcessor = ScriptProcessors[^1];
+    return candidateScriptProcessor.SignalConnections.Any(signalConnection =>
+      signalConnection.MacroNo != null)
+      ? candidateScriptProcessor
+      // Example of a ScriptProcessor with no SignalConnections: 
+      // ReSharper disable once CommentTypo
+      // Ether Fields\Bells - Plucks\Cloche Esperer Split
+      // Example of a ScriptProcessor with only a SignalConnection that does not 
+      // modulate a macro:
+      // ReSharper disable once CommentTypo
+      // Factory\Bass-Sub\BA Shomp 1.2
+      : null;
+    //return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
   }
 
   private int GetCcNo(Macro macro) {
@@ -293,6 +329,23 @@ public class FalconProgram {
       from macro in Macros
       where macro.IsContinuous
       select macro).ToList();
+  }
+
+  private ImmutableList<Effect> GetEffects() {
+    var list = new List<Effect>();
+    foreach (var effectElement in ProgramXml.GetEffectElements()) {
+      var effect = new Effect(effectElement, ProgramXml);
+      foreach (var signalConnection in effect.SignalConnections) {
+        signalConnection.SourceMacro = (
+          from macro in Macros
+          // Are there other formats?
+          where signalConnection.Source == $"$Program/{macro.Name}"
+          select macro).FirstOrDefault();
+        signalConnection.SourceMacro?.ModulatedEffects.Add(effect);
+      }
+      list.Add(effect);
+    }
+    return list.ToImmutableList();
   }
 
   internal SortedSet<Macro> GetMacrosSortedByLocation(
@@ -367,14 +420,14 @@ public class FalconProgram {
     var macro4SignalConnection = macro4.FindSignalConnectionWithCcNo(11);
     if (macro4SignalConnection != null) {
       macro4SignalConnection.CcNo = 34;
-      ProgramXml.UpdateMacroSignalConnection(macro4, macro4SignalConnection);
+      macro4.UpdateSignalConnection(macro4SignalConnection);
     }
     var wheelMacro = Macros[4];
     var wheelMacroSignalConnection =
       wheelMacro.FindSignalConnectionWithCcNo(34)
       ?? wheelMacro.FindSignalConnectionWithCcNo(11)!;
     wheelMacroSignalConnection.CcNo = 1;
-    ProgramXml.UpdateMacroSignalConnection(wheelMacro, wheelMacroSignalConnection);
+    wheelMacro.UpdateSignalConnection(wheelMacroSignalConnection);
     Console.WriteLine(
       $"{PathShort}: Optimised Wheel macro.");
   }
@@ -412,6 +465,9 @@ public class FalconProgram {
   public IEnumerable<string> QueryReverbTypes() {
     var result = new List<string>();
     foreach (var macro in Macros.Where(macro => macro.ModulatesReverb)) {
+      // if (macro.ModulatedEffects.Count > 0) {
+      //   Debug.Assert(true);
+      // }
       foreach (var effect in macro.ModulatedEffects.Where(effect =>
                  !result.Contains(effect.EffectType))) {
         result.Add(effect.EffectType);
@@ -435,6 +491,7 @@ public class FalconProgram {
     foreach (var macro in Macros) {
       macro.ProgramXml = ProgramXml;
     }
+    Effects = GetEffects();
   }
 
   /// <summary>
@@ -598,8 +655,7 @@ public class FalconProgram {
         if (!macro.IsContinuous && signalConnection.Ratio == -1) {
           signalConnection.Ratio = 1;
         }
-        ProgramXml.UpdateMacroSignalConnection(
-          macro, signalConnection);
+        macro.UpdateSignalConnection(signalConnection);
       }
     }
   }
@@ -633,7 +689,7 @@ public class FalconProgram {
     // InfoPageCcsScriptProcessor!.SignalConnections.Clear();
     for (int i = InfoPageCcsScriptProcessor!.SignalConnections.Count - 1; i >= 0; i--) {
       var signalConnection = InfoPageCcsScriptProcessor!.SignalConnections[i];
-      if (signalConnection.IsForMacro) {
+      if (signalConnection.ModulatesMacro) {
         InfoPageCcsScriptProcessor!.SignalConnections.Remove(signalConnection);
       }
     }
@@ -643,8 +699,12 @@ public class FalconProgram {
       macroNo++; // Can we assume the macro numbers are always going to increment from 1?
       InfoPageCcsScriptProcessor.SignalConnections.Add(
         new SignalConnection {
-          Destination = string.Empty, // Stops MacroNo from throwing exception
-          MacroNo = macroNo,
+          Destination = $"Macro{macroNo}",
+          // Stops DestinationMacro setter from throwing exception
+          // Destination = string.Empty,
+          // DestinationMacro = macro,
+          // Destination = string.Empty, // Stops MacroNo from throwing exception
+          // MacroNo = macroNo,
           CcNo = GetCcNo(macro)
         });
     }

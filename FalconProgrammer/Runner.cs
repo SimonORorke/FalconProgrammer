@@ -6,9 +6,14 @@ public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]
   public static void Run() {
     var batch = new BatchProcessor();
-    batch.QueryDelayTypes(null);
+    // batch.RestoreOriginal(null);
+    // batch.PrependPathLineToDescription(null);
+    // batch.UpdateMacroCcs("Factory", "Test");
+    batch.UpdateMacroCcs(null);
+    //
+    // batch.QueryDelayTypes(null);
     // batch.QueryReverbTypes(null);
-    // batch.ChangeReverbToZero("Hypnotic Drive");
+    // batch.DisableReverb("Hypnotic Drive");
     // batch.BypassDelays(null);
     // batch.PrependPathLineToDescription("Factory", "DelayDisabled");
     // batch.RestoreOriginal("Hypnotic Drive");
@@ -19,7 +24,7 @@ public static class Runner {
     // batch.PrependPathLineToDescription("Hypnotic Drive", "Test");
     // batch.UpdateMacroCcs("Hypnotic Drive", "Test");
     // batch.ChangeDelayToZero("Hypnotic Drive", "Test");
-    // batch.ChangeReverbToZero("Hypnotic Drive", "Test");
+    // batch.DisableReverb("Hypnotic Drive", "Test");
     // batch.ReplaceModWheelWithMacro("Hypnotic Drive", "Test");
     // batch.OptimiseWheelMacro("Hypnotic Drive", "Test");
     //
@@ -40,7 +45,7 @@ public static class Runner {
     // batch.RollForward();
     // batch.UpdateMacroCcs(null);
     // batch.ChangeDelayToZero(null);
-    // batch.ChangeReverbToZero("Savage", "Pads-Drones"); 
+    // batch.DisableReverb("Savage", "Pads-Drones"); 
     // batch.RestoreOriginal(null);
     // batch.ReplaceModWheelWithMacro(null);
     // batch.ReplaceModWheelWithMacro("Factory", "Test");
@@ -52,32 +57,32 @@ public static class Runner {
     // batch.UpdateMacroCcs("Devinity", "Test"); // Still OK
     // batch.ChangeDelayToZero("Devinity", "Test"); // Still OK
     // batch.ReplaceModWheelWithMacro("Devinity", "Test"); // Still OK
-    // batch.ChangeReverbToZero("Devinity", "Test"); // Fixed!
+    // batch.DisableReverb("Devinity", "Test"); // Fixed!
     // batch.RestoreOriginal(null);
     // batch.UpdateMacroCcs(null);
     // batch.ChangeDelayToZero(null);
     // batch.ReplaceModWheelWithMacro(null);
-    // batch.ChangeReverbToZero(null);
+    // batch.DisableReverb(null);
     // batch.UpdateMacroCcs("Factory");
     // batch.ChangeDelayToZero("Factory");
-    // batch.ChangeReverbToZero("Factory");
+    // batch.DisableReverb("Factory");
     // batch.UpdateMacroCcs("Spectre");
     // batch.ChangeDelayToZero("Spectre");
-    // batch.ChangeReverbToZero("Spectre");
+    // batch.DisableReverb("Spectre");
     // batch.ReplaceModWheelWithMacro(null);
     // batch.ReplaceModWheelWithMacro("Spectre");
     // batch.ReplaceModWheelWithMacro("Factory", "Temp");
     // batch.UpdateMacroCcs("Factory", "Temp");
     // batch.ReplaceModWheelWithMacro("Factory", "Temp");
     // batch.ChangeDelayToZero("Factory", "Pure Additive 2.0");
-    // batch.ChangeReverbToZero("Factory", "Pure Additive 2.0");
+    // batch.DisableReverb("Factory", "Pure Additive 2.0");
     // batch.ChangeDelayToZero(null);
-    // batch.ChangeReverbToZero(null);
+    // batch.DisableReverb(null);
     // batch.ChangeDelayToZero("Devinity", "Plucks-Leads");
-    // batch.ChangeReverbToZero("Devinity", "Plucks-Leads");
+    // batch.DisableReverb("Devinity", "Plucks-Leads");
     // batch.ChangeMacroCcNo(38, 28, null);
     // batch.ChangeDelayToZero(null);
-    // batch.ChangeReverbToZero(null);
+    // batch.DisableReverb(null);
     // batch.ChangeDelayToZero("Devinity");
     // batch.ChangeDelayToZero("Eternal Funk");
     // batch.ChangeDelayToZero("Ether Fields");

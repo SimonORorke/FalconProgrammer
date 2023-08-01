@@ -70,7 +70,7 @@ public class InfoPageLayout {
     foreach (var macro in Program.Macros) {
       macro.Properties.X = x;
       macro.Properties.Y = StandardBottommostY;
-      Program.ProgramXml.UpdateMacroLocation(macro);
+      macro.UpdateLocation();
       x += gapBetweenMacros + MacroWidth;
     }
   }
@@ -120,8 +120,8 @@ public class InfoPageLayout {
       }
     };
     Program.Macros.Add(wheelMacro);
-    Program.ProgramXml.AddMacroElement(wheelMacro);
-    Program.ProgramXml.ChangeModWheelSignalConnectionSourcesToMacro(wheelMacro);
+    wheelMacro.AddMacroElement();
+    wheelMacro.ChangeModWheelSignalConnectionSourcesToMacro();
   }
 
   private Macro? FindContinuousMacroWithModWheelReplacementCcNo() {
@@ -439,7 +439,7 @@ public class InfoPageLayout {
       // This happens if the signal connections belongs to effects, a scenario we don't
       // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
       Console.WriteLine(
-        $"'{Program.Name}': Cannot find SignalConnections of supported types for " +
+        $"'{Program.PathShort}': Cannot find SignalConnections of supported types for " +
         $"either macro '{macro1.DisplayName}' or macro '{macro2.DisplayName}'.");
     }
     // SignalConnections belong to Macros.
@@ -466,8 +466,8 @@ public class InfoPageLayout {
     var properties2 = macro2.Properties;
     macro1.Properties = properties2;
     macro2.Properties = properties1;
-    Program.ProgramXml.UpdateMacroLocation(macro1);
-    Program.ProgramXml.UpdateMacroLocation(macro2);
+    macro1.UpdateLocation();
+    macro2.UpdateLocation();
     // We also need to swap the MIDI CC numbers so that those still increment in the layout
     // order.
     SwapMacroCcNos(macro1, macro2);

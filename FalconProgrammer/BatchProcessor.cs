@@ -23,28 +23,6 @@ public class BatchProcessor {
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
-  [PublicAPI]
-  public void BypassDelays(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.BypassDelays;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
-  /// <summary>
-  ///   For programs with a Delay macro, changes the Delay macro's value to zero.
-  /// </summary>
-  /// <param name="soundBankName">Null for all sound banks.</param>
-  /// <param name="categoryName">
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  [PublicAPI]
-  public void ChangeDelayToZero(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.ChangeDelayToZero;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
   /// <summary>
   ///   Changes every occurrence of the specified old macro MIDI CC number to the specified
   ///   new CC number.
@@ -63,21 +41,6 @@ public class BatchProcessor {
     OldCcNo = oldCcNo;
     NewCcNo = newCcNo;
     Task = ConfigTask.ChangeMacroCcNo;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
-  /// <summary>
-  ///   For programs with a Reverb macro, changes the Reverb macro's value to zero.
-  /// </summary>
-  /// <param name="soundBankName">Null for all sound banks.</param>
-  /// <param name="categoryName">
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  [PublicAPI]
-  public void ChangeReverbToZero(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.ChangeReverbToZero;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -134,20 +97,17 @@ public class BatchProcessor {
         Program.Read();
       }
       switch (Task) {
-        case ConfigTask.BypassDelays:
-          Program.BypassDelays();
-          break;
-        case ConfigTask.ChangeDelayToZero:
-          Program.ChangeDelayToZero();
-          break;
         case ConfigTask.ChangeMacroCcNo:
           Program.ChangeMacroCcNo(OldCcNo, NewCcNo);
           break;
-        case ConfigTask.ChangeReverbToZero:
-          Program.ChangeReverbToZero();
-          break;
         case ConfigTask.CountMacros:
           Program.CountMacros();
+          break;
+        case ConfigTask.DisableDelay:
+          Program.DisableDelay();
+          break;
+        case ConfigTask.DisableReverb:
+          Program.DisableReverb();
           break;
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
@@ -195,6 +155,20 @@ public class BatchProcessor {
   [PublicAPI]
   public void CountMacros(string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.CountMacros;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
+  [PublicAPI]
+  public void DisableDelay(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.DisableDelay;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+  
+  [PublicAPI]
+  public void DisableReverb(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.DisableReverb;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -299,11 +273,10 @@ public class BatchProcessor {
     string? soundBankName, string? categoryName = null) {
     PrependPathLineToDescription(soundBankName, categoryName);
     UpdateMacroCcs(soundBankName, categoryName);
-    ChangeDelayToZero(soundBankName, categoryName);
-    ChangeReverbToZero(soundBankName, categoryName);
+    DisableDelay(soundBankName, categoryName);
+    DisableReverb(soundBankName, categoryName);
     ReplaceModWheelWithMacro(soundBankName, categoryName);
     OptimiseWheelMacro(soundBankName, categoryName);
-    BypassDelays(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
@@ -329,11 +302,10 @@ public class BatchProcessor {
   }
 
   private enum ConfigTask {
-    BypassDelays,
-    ChangeDelayToZero,
     ChangeMacroCcNo,
-    ChangeReverbToZero,
     CountMacros,
+    DisableDelay,
+    DisableReverb,
     ListIfHasInfoPageCcsScriptProcessor,
     OptimiseWheelMacro,
     PrependPathLineToDescription,

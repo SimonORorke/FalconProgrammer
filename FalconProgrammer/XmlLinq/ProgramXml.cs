@@ -18,15 +18,14 @@ public class ProgramXml {
   }
 
   [PublicAPI] public Category Category { get; }
-  private XElement ControlSignalSourcesElement { get; set; } = null!;
-  
-  private List<XElement> MacroElements { get; set; } = null!;
+  public XElement ControlSignalSourcesElement { get; private set; } = null!;
+  public List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
 
-  private XElement TemplateMacroElement =>
+  public XElement TemplateMacroElement =>
     _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
@@ -38,86 +37,39 @@ public class ProgramXml {
   private XElement TemplateSignalConnectionElement =>
     _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
 
-  public void AddMacroSignalConnection(
-    SignalConnection signalConnection, Macro macro) {
-    var macroElement = GetMacroElement(macro);
-    // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
-    // element will already own a Connections element. 
-    var connectionsElement = macroElement.Element("Connections");
-    if (connectionsElement == null) {
-      connectionsElement = new XElement("Connections");
-      macroElement.Add(connectionsElement);
-    }
-    connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
-  }
+  // public bool BypassEffects(string xName) {
+  //   var inserts = (
+  //     from insert in RootElement.Descendants(xName)
+  //     where GetAttributeValue(insert, "Bypass") == "0"
+  //     select insert).ToList();
+  //   if (inserts.Count == 0) {
+  //     return false;
+  //   }
+  //   foreach (var insert in inserts) {
+  //     SetAttribute(insert, "Bypass", "1");
+  //   }
+  //   return true;
+  // }
 
-  public void AddMacroElement(Macro newMacro) {
-    var macroElement = new XElement(TemplateMacroElement);
-    // Remove any SignalConnection elements and their parent Connections element brought
-    // over with template.
-    macroElement.Element("Connections")?.Remove();
-    SetAttribute(macroElement, nameof(Macro.Name), newMacro.Name);
-    SetAttribute(macroElement, nameof(Macro.DisplayName), newMacro.DisplayName);
-    SetAttribute(macroElement, nameof(Macro.Bipolar), newMacro.Bipolar);
-    SetAttribute(macroElement, nameof(Macro.Style), newMacro.Style);
-    SetAttribute(macroElement, nameof(Macro.Value), newMacro.Value);
-    ControlSignalSourcesElement.Add(macroElement);
-    MacroElements = ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
-    // A macro is expected to own 0, 1 or 2 SignalConnections:
-    // 2 if there is a mod wheel signal connection and a 'for macro' SignalConnection.
-    foreach (var signalConnection in newMacro.SignalConnections) {
-      AddMacroSignalConnection(signalConnection, newMacro);
-    }
-    UpdateMacroPropertiesElement(newMacro, macroElement);
-  }
-
-  public bool BypassEffects(string xName) {
-    var inserts = (
-      from insert in RootElement.Descendants(xName)
-      where GetAttributeValue(insert, "Bypass") == "0"
-      select insert).ToList();
-    if (inserts.Count == 0) {
-      return false;
-    }
-    foreach (var insert in inserts) {
-      SetAttribute(insert, "Bypass", "1");
-    }
-    return true;
-  }
-
-  /// <summary>
-  ///   If the specified macro is found, changes its value to zero
-  ///   and returns true.  Otherwise returns false.
-  /// </summary>
-  public bool ChangeMacroValueToZero(Macro macro) {
-    // Ignore case when checking whether there is a macro with that display name.  An
-    // example of where the cases of macro display names are non-standard is
-    // Factory\Pure Additive 2.0\Bass Starter.
-    var macroElement = (
-      from element in MacroElements
-      where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
-        macro.DisplayName, StringComparison.OrdinalIgnoreCase)
-      select element).FirstOrDefault();
-    if (macroElement != null) {
-      SetAttribute(macroElement, nameof(Macro.Value), 0);
-      return true;
-    }
-    return false;
-  }
-
-  /// <summary>
-  ///   Change all effect parameters that are currently modulated by the modulation wheel
-  ///   to be modulated by the specified macro instead.
-  /// </summary>
-  public void ChangeModWheelSignalConnectionSourcesToMacro(Macro macro) {
-    string newSource = $"$Program/{macro.Name}";
-    var modWheelSignalConnectionElements = 
-      GetSignalConnectionElementsWithCcNo(1);
-    foreach (var signalConnectionElement in modWheelSignalConnectionElements) {
-      SetAttribute(
-        signalConnectionElement, nameof(SignalConnection.Source), newSource);
-    }
-  }
+  // /// <summary>
+  // ///   If the specified macro is found, changes its value to zero
+  // ///   and returns true.  Otherwise returns false.
+  // /// </summary>
+  // public bool ChangeMacroValueToZero(Macro macro) {
+  //   // Ignore case when checking whether there is a macro with that display name.  An
+  //   // example of where the cases of macro display names are non-standard is
+  //   // Factory\Pure Additive 2.0\Bass Starter.
+  //   var macroElement = (
+  //     from element in MacroElements
+  //     where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
+  //       macro.DisplayName, StringComparison.OrdinalIgnoreCase)
+  //     select element).FirstOrDefault();
+  //   if (macroElement != null) {
+  //     SetAttribute(macroElement, nameof(Macro.Value), 0);
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   public void ChangeSignalConnectionSource(
     SignalConnection oldSignalConnection, SignalConnection newSignalConnection) {
@@ -134,7 +86,7 @@ public class ProgramXml {
     }
   }
 
-  private XElement CreateSignalConnectionElement(SignalConnection signalConnection) {
+  public XElement CreateSignalConnectionElement(SignalConnection signalConnection) {
     var result = new XElement(TemplateSignalConnectionElement);
     // In case the template SignalConnection contains a non-default (< 1) Ratio,
     // set the Ratio to the default, 1.
@@ -168,19 +120,6 @@ public class ProgramXml {
     return descriptionAttribute != null ? descriptionAttribute.Value : string.Empty;
   }
 
-  private XElement GetMacroElement(Macro macro) {
-    var result = (from macroElement in MacroElements
-      where GetAttributeValue(
-        macroElement, nameof(Macro.Name)) == macro.Name
-      select macroElement).FirstOrDefault();
-    if (result != null) {
-      return result;
-    }
-    throw new ApplicationException(
-      $"Cannot find ConstantModulation '{macro.Name}' in " + 
-      $"'{InputProgramPath}'.");
-  }
-
   // public static XElement GetParentElement(XElement element) {
   //   return element.Parent!;
   // }
@@ -203,24 +142,24 @@ public class ProgramXml {
       select signalConnectionElement).ToList();
   }
 
-  /// <summary>
-  ///   Returns a list of all the SignalConnection elements in the program whose source
-  ///   indicates the specified macro (as a modulator of an effect).
-  /// </summary>
-  /// <remarks>
-  ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="SignalConnection"/>s that are owned
-  ///   by effects.
-  /// </remarks>
-  public List<XElement> GetSignalConnectionElementsModulatedByMacro(Macro macro) {
-    return (
-      from signalConnectionElement in RootElement.Descendants("SignalConnection")
-      // EndsWith rather than == because the Source will be prefixed by a path
-      // if it indicates a macro that modulates an effect.
-      where GetAttributeValue(
-        signalConnectionElement, nameof(SignalConnection.Source)).EndsWith(macro.Name)
-      select signalConnectionElement).ToList();
-  }
+  // /// <summary>
+  // ///   Returns a list of all the SignalConnection elements in the program whose source
+  // ///   indicates the specified macro (as a modulator of an effect).
+  // /// </summary>
+  // /// <remarks>
+  // ///   The Linq For XML data structure has to be searched because the deserialised
+  // ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  // ///   by effects.
+  // /// </remarks>
+  // public List<XElement> GetSignalConnectionElementsModulatedByMacro(Macro macro) {
+  //   return (
+  //     from signalConnectionElement in RootElement.Descendants("SignalConnection")
+  //     // EndsWith rather than == because the Source will be prefixed by a path
+  //     // if it indicates a macro that modulates an effect.
+  //     where GetAttributeValue(
+  //       signalConnectionElement, nameof(SignalConnection.Source)).EndsWith(macro.Name)
+  //     select signalConnectionElement).ToList();
+  // }
 
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
@@ -253,6 +192,15 @@ public class ProgramXml {
     }
   }
 
+  public IEnumerable<XElement> GetEffectElements() {
+    var result = new List<XElement>();
+    var insertsElements = RootElement.Descendants("Inserts");
+    foreach (var insertsElement in insertsElements) {
+      result.AddRange(insertsElement.Descendants());
+    }
+    return result;
+  }
+
   private XElement GetTemplateMacroElement() {
     var result =
       TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
@@ -263,9 +211,12 @@ public class ProgramXml {
 
   protected virtual XElement GetTemplateScriptProcessorElement() {
     var result =
-      TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault() ??
+      TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault();
+    if (result == null) {
       throw new ApplicationException(
-        $"Cannot find ScriptProcessor element in '{Category.TemplateProgramPath}'.");
+        $"'{InputProgramPath}': Cannot find ScriptProcessor element in " + 
+        $"'{Category.TemplateProgramPath}'.");
+    }
     return result;
   }
 
@@ -330,7 +281,7 @@ public class ProgramXml {
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
     ControlSignalSourcesElement.RemoveNodes(); 
     foreach (var macro in macros) {
-      AddMacroElement(macro);
+      macro.AddMacroElement();
     }
   }
 
@@ -381,55 +332,28 @@ public class ProgramXml {
         connectionsElement.Add(new XElement(templateSignalConnectionElement));
       }
     }
-    // InfoPageCcsScriptProcessorElement!.Remove();
-    // InfoPageCcsScriptProcessorElement = new XElement(TemplateScriptProcessorElement);
-    // EventProcessorsElement.Add(InfoPageCcsScriptProcessorElement);    
-    //
-    // var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections");
-    // if (connectionsElement != null) {
-    //   connectionsElement.RemoveAll();
-    // } else {
-    //   connectionsElement = new XElement("Connections");
-    //   InfoPageCcsScriptProcessorElement.Add(connectionsElement);
-    // }
-    // foreach (var signalConnection in InfoPageCcsScriptProcessor!.SignalConnections) {
-    //   connectionsElement.Add(CreateSignalConnectionElement(signalConnection));
-    // }
   }
 
-  public void UpdateMacroLocation(Macro macro) {
-    var macroElement = GetMacroElement(macro);
-    UpdateMacroPropertiesElement(macro, macroElement);
-  }
+  // public void UpdateMacroLocation(Macro macro) {
+  //   var macroElement = GetMacroElement(macro);
+  //   UpdateMacroPropertiesElement(macro, macroElement);
+  // }
 
-  public void UpdateMacroSignalConnection(
-    Macro macro,
-    SignalConnection signalConnection) {
-    var macroElement = GetMacroElement(macro);
-    var connectionsElement = macroElement.Element("Connections")!;
-    var signalConnectionElements =
-      connectionsElement.Elements("SignalConnection").ToList();
-    // The macro ("ConstantModulation") will have two SignalConnections if one of them
-    // maps to the modulation wheel (MIDI CC 1). 
-    var signalConnectionElement = signalConnectionElements[signalConnection.Index];
-    UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
-  }
+  // private void UpdateMacroPropertiesElement(Macro macro, XContainer macroElement) {
+  //   var propertiesElement = macroElement.Element("Properties");
+  //   if (propertiesElement == null) {
+  //     throw new ApplicationException(
+  //       "Cannot find ConstantModulation.Properties "
+  //       + $"element in '{Category.TemplateProgramPath}'.");
+  //   }
+  //   // customPosition needs to be update if we are converting the layout from a
+  //   // script processor layout to a standard layout.
+  //   SetAttribute(propertiesElement, "customPosition", 1);
+  //   SetAttribute(propertiesElement, "x", macro.Properties.X);
+  //   SetAttribute(propertiesElement, "y", macro.Properties.Y);
+  // }
 
-  private void UpdateMacroPropertiesElement(Macro macro, XContainer macroElement) {
-    var propertiesElement = macroElement.Element("Properties");
-    if (propertiesElement == null) {
-      throw new ApplicationException(
-        "Cannot find ConstantModulation.Properties "
-        + $"element in '{Category.TemplateProgramPath}'.");
-    }
-    // customPosition needs to be update if we are converting the layout from a
-    // script processor layout to a standard layout.
-    SetAttribute(propertiesElement, "customPosition", 1);
-    SetAttribute(propertiesElement, "x", macro.Properties.X);
-    SetAttribute(propertiesElement, "y", macro.Properties.Y);
-  }
-
-  private void UpdateSignalConnectionElement(
+  public void UpdateSignalConnectionElement(
     SignalConnection signalConnection, XElement signalConnectionElement) {
     SetAttribute(signalConnectionElement, nameof(SignalConnection.Ratio), 
       signalConnection.Ratio);

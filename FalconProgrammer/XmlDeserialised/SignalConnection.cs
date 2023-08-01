@@ -8,7 +8,8 @@ namespace FalconProgrammer.XmlDeserialised;
 ///   be Modulation.
 /// </summary>
 public class SignalConnection {
-  
+  // private Macro? _destinationMacro;
+    
   public SignalConnection() {
     Ratio = 1;
     Source = string.Empty;
@@ -17,23 +18,24 @@ public class SignalConnection {
   }
 
   public SignalConnection(XElement signalConnectionElement) {
+    SignalConnectionElement = signalConnectionElement;
     var ratioAttribute =
-      signalConnectionElement.Attribute(nameof(Ratio)) ??
+      SignalConnectionElement.Attribute(nameof(Ratio)) ??
       throw new ApplicationException(
         "Cannot find SignalConnection.Ratio attribute.");
     Ratio = Convert.ToSingle(ratioAttribute.Value);
     var sourceAttribute =
-      signalConnectionElement.Attribute(nameof(Source)) ??
+      SignalConnectionElement.Attribute(nameof(Source)) ??
       throw new ApplicationException(
         "Cannot find SignalConnection.Source attribute.");
     Source = sourceAttribute.Value;
     var destinationAttribute =
-      signalConnectionElement.Attribute(nameof(Destination)) ??
+      SignalConnectionElement.Attribute(nameof(Destination)) ??
       throw new ApplicationException(
         "Cannot find SignalConnection.Destination attribute.");
     Destination = destinationAttribute.Value;
     var connectionModeAttribute =
-      signalConnectionElement.Attribute(nameof(ConnectionMode)) ??
+      SignalConnectionElement.Attribute(nameof(ConnectionMode)) ??
       throw new ApplicationException(
         "Cannot find SignalConnection.ConnectionMode attribute.");
     ConnectionMode = Convert.ToInt32(connectionModeAttribute.Value);
@@ -74,12 +76,31 @@ public class SignalConnection {
 
   public int Index { get; set; }
 
+  // public Macro? DestinationMacro {
+  //   get => _destinationMacro;
+  //   set {
+  //     if (Destination == "Value") {
+  //       throw new ApplicationException(
+  //         "DestinationMacro may not be set for a SignalConnection that is owned by the " +
+  //         "modulated macro (SignalConnection.Destination = 'Value'), only for a " +
+  //         "SignalConnection that is owned by effects or the " +
+  //         "FalconProgram.InfoPageCcsScriptProcessor.");
+  //     }
+  //     _destinationMacro = value;
+  //     Destination = $"Macro{value}";
+  //   }
+  // }
+
   /// <summary>
-  ///   Gets whether the MIDI CC mapping is to control a macro on the Info page.
+  ///   Gets whether the MIDI CC mapping is to modulate a macro on the Info page.
   ///   So far, the only CC mappings that are not for Info page controls are for the
   ///   modulation wheel (MIDI CC 1).  Also false for effect signal connections.
   /// </summary>
-  public bool IsForMacro => ConnectionMode == 1;
+  public bool ModulatesMacro => ConnectionMode == 1;
+
+  internal XElement? SignalConnectionElement { get; }
+
+  public Macro? SourceMacro { get; set; }
 
   /// <summary>
   ///   If the <see cref="SignalConnection" /> belongs to and effect or the
