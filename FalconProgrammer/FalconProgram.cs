@@ -179,10 +179,19 @@ public class FalconProgram {
     var root = (UviRoot)serializer.Deserialize(reader)!;
     Name = root.Program.DisplayName;
     Macros = root.Program.Macros;
+    foreach (var macro in Macros) {
+      foreach (var signalConnection in macro.SignalConnections) {
+        signalConnection.Owner = macro;
+      }
+    }
     ScriptProcessors = root.Program.ScriptProcessors;
+    foreach (var scriptProcessor in ScriptProcessors) {
+      foreach (var signalConnection in scriptProcessor.SignalConnections) {
+        // Needed for signalConnection.ModulatesMacro in FindInfoPageCcsScriptProcessor 
+        signalConnection.Owner = scriptProcessor;
+      }
+    }
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
-    // Disabling this check for now, due to false positives.
-    //CheckForNonModWheelNonInfoPageMacros();
   }
 
   public void DisableDelay() {
@@ -219,18 +228,18 @@ public class FalconProgram {
     if (reverbMacros.Count == 0) {
       return;
     }
-    if (PathShort is "Factory\\Bass-Sub\\Coastal Halftones 1.4"
-        or "Factory\\Bass-Sub\\Metropolis 1.4"
-        or "Factory\\Leads\\Ali3n 1.4"
-        or "Factory\\Pads\\Arrival 1.4"
+    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
+        or @"Factory\Bass-Sub\Metropolis 1.4"
+        or @"Factory\Leads\Ali3n 1.4"
+        or @"Factory\Pads\Arrival 1.4"
         // ReSharper disable once StringLiteralTypo
-        or "Factory\\Pads\\Novachord Noir 1.4"
-        or "Factory\\Pads\\Pad Motion 1.5"
-        or "Factory\\Synth Brass\\Gotham Brass 1.4"
-        or "Inner Dimensions\\Pad\\GrainVoices 2"
-        or "Savage\\Pads-Drones\\Lunar Nashi"
-        or "Savage\\Pads-Drones\\Voc Sidechain"
-        or "Savage\\Pads-Drones\\Wonder Land") {
+        or @"Factory\Pads\Novachord Noir 1.4"
+        or @"Factory\Pads\Pad Motion 1.5"
+        or @"Factory\Synth Brass\Gotham Brass 1.4"
+        or @"Inner Dimensions\Pad\GrainVoices 2"
+        or @"Savage\Pads-Drones\Lunar Nashi"
+        or @"Savage\Pads-Drones\Voc Sidechain"
+        or @"Savage\Pads-Drones\Wonder Land") {
       // These programs are silent without reverb!
       Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
       return;
@@ -255,45 +264,36 @@ public class FalconProgram {
   ///   macro's MIDI CC number must be defined in a SignalConnections owned by the
   ///   macro's ConstantModulation.
   /// </summary>
+  [SuppressMessage("ReSharper", "CommentTypo")]
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
-    string? name =
-      Category.TemplateScriptProcessor?.Name
-      ?? (Category.SoundBankFolder.Name == "Factory" ? "EventProcessor9" : null);
-    if (name != null) {
-      var scriptProcessorWithName = (
+    if (Category.TemplateScriptProcessor != null) {
+      var matchingScriptProcessor = (
         from scriptProcessor in ScriptProcessors
-        where scriptProcessor.Name == name
+        where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
         select scriptProcessor).FirstOrDefault();
-      if (scriptProcessorWithName != null) {
-        // Example of Factory program's EventProcessor9 script processor
-        // that does not own signal connections that modulate macros:
-        // ReSharper disable once CommentTypo
-        // Factory\Bass-Sub\Balarbas 2.0
-        if (scriptProcessorWithName.SignalConnections.Any(signalConnection =>
-              signalConnection.MacroNo != null)) {
-          return scriptProcessorWithName;
-        }
+      if (matchingScriptProcessor != null) {
+        return matchingScriptProcessor;
+      }
+      // Example: Voklm\Vox Instruments\*
+      return (
+        from scriptProcessor in ScriptProcessors
+        select scriptProcessor).LastOrDefault();  
+    }
+    if (Category.SoundBankFolder.Name == "Factory") {
+      var matchingScriptProcessor = (
+        from scriptProcessor in ScriptProcessors
+        where scriptProcessor.Name == "EventProcessor9"
+        select scriptProcessor).FirstOrDefault();
+      if (matchingScriptProcessor != null) {
+        // Example: Factory\Polysynth\Cymatic Polyscape 2.0
+        return matchingScriptProcessor;
       }
     }
-    // Cannot find the required script processor by name. So assume that
-    // the macro MIDI CCs are defined in the last ScriptProcessor, if any,
-    // provided it owns SignalConnections that modulate macros.
-    if (ScriptProcessors.Count == 0) {
-      return null;
-    }
-    var candidateScriptProcessor = ScriptProcessors[^1];
-    return candidateScriptProcessor.SignalConnections.Any(signalConnection =>
-      signalConnection.MacroNo != null)
-      ? candidateScriptProcessor
-      // Example of a ScriptProcessor with no SignalConnections: 
-      // ReSharper disable once CommentTypo
-      // Ether Fields\Bells - Plucks\Cloche Esperer Split
-      // Example of a ScriptProcessor with only a SignalConnection that does not 
-      // modulate a macro:
-      // ReSharper disable once CommentTypo
-      // Factory\Bass-Sub\BA Shomp 1.2
-      : null;
-    //return ScriptProcessors.Any() ? ScriptProcessors[^1] : null;
+    return (
+      from scriptProcessor in ScriptProcessors
+      where scriptProcessor.SignalConnections.Any(
+        signalConnection => signalConnection.ModulatesMacro)
+      select scriptProcessor).FirstOrDefault();
   }
 
   private int GetCcNo(Macro macro) {
@@ -490,8 +490,20 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
     foreach (var macro in Macros) {
       macro.ProgramXml = ProgramXml;
+      // foreach (var signalConnection in macro.SignalConnections) {
+      //   signalConnection.Owner = macro;
+      // }
     }
+    // foreach (var scriptProcessor in ScriptProcessors) {
+    //   foreach (var signalConnection in scriptProcessor.SignalConnections) {
+    //     // Needed for signalConnection.ModulatesMacro in FindInfoPageCcsScriptProcessor 
+    //     signalConnection.Owner = scriptProcessor;
+    //   }
+    // }
+    // InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     Effects = GetEffects();
+    // Disabling this check for now, due to false positives.
+    // CheckForNonModWheelNonInfoPageMacros();
   }
 
   /// <summary>
@@ -689,6 +701,7 @@ public class FalconProgram {
     // InfoPageCcsScriptProcessor!.SignalConnections.Clear();
     for (int i = InfoPageCcsScriptProcessor!.SignalConnections.Count - 1; i >= 0; i--) {
       var signalConnection = InfoPageCcsScriptProcessor!.SignalConnections[i];
+      // if (signalConnection.ModulatedMacroNo != null) {
       if (signalConnection.ModulatesMacro) {
         InfoPageCcsScriptProcessor!.SignalConnections.Remove(signalConnection);
       }

@@ -10,7 +10,7 @@ namespace FalconProgrammer.XmlDeserialised;
 ///   Called ConstantModulation in the program XML but can only represent a macro, so far
 ///   as I can tell.
 /// </summary>
-public class Macro {
+public class Macro : INamed {
   private XElement? _macroElement;
   private XElement? _propertiesElement;
 
@@ -203,6 +203,7 @@ public class Macro {
   public List<SignalConnection> GetForMacroSignalConnections() {
     return (
       from signalConnection in SignalConnections
+      // where signalConnection.ConnectionMode == 1
       where signalConnection.ModulatesMacro
       select signalConnection).ToList();
   }

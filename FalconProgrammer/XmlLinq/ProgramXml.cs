@@ -101,7 +101,7 @@ public class ProgramXml {
     // }
     return
       element.Attribute(attributeName) ??
-      throw new ApplicationException(
+      throw new InvalidOperationException(
         $"Cannot find {element.Name}.{attributeName} attribute in " + 
         $"'{InputProgramPath}'.");
   }
@@ -196,7 +196,7 @@ public class ProgramXml {
     var result = new List<XElement>();
     var insertsElements = RootElement.Descendants("Inserts");
     foreach (var insertsElement in insertsElements) {
-      result.AddRange(insertsElement.Descendants());
+      result.AddRange(insertsElement.Nodes().Cast<XElement>());
     }
     return result;
   }

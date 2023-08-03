@@ -3,7 +3,7 @@ using FalconProgrammer.XmlLinq;
 
 namespace FalconProgrammer.XmlDeserialised; 
 
-public class ScriptProcessor {
+public class ScriptProcessor : INamed {
   [XmlAttribute] public string Name { get; set; } = null!;
   
   [XmlArray("Connections")]

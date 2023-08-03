@@ -4,9 +4,10 @@ using FalconProgrammer.XmlDeserialised;
 
 namespace FalconProgrammer.XmlLinq;
 
-public class Effect {
+public class Effect : INamed {
   private bool? _isDelay;
   private bool? _isReverb;
+
   // private ImmutableList<Macro>? _modulatingMacros;
   private ImmutableList<SignalConnection>? _signalConnections;
 
@@ -14,6 +15,7 @@ public class Effect {
     EffectElement = effectElement;
     ProgramXml = programXml;
     EffectType = EffectElement.Name.ToString();
+    Name = ProgramXml.GetAttributeValue(EffectElement, nameof(Name));
   }
 
   public bool Bypass {
@@ -31,7 +33,6 @@ public class Effect {
   //   get => _modulatingMacros ??= GetModulatingMacros();
   //   set => _modulatingMacros = value;
   // }
-
   private ProgramXml ProgramXml { get; }
 
   /// <summary>
@@ -42,6 +43,7 @@ public class Effect {
     private set => _signalConnections = value;
   }
 
+  public string Name { get; }
 
   // private ImmutableList<Macro> GetModulatingMacros() {
   //   var list = new List<Macro>();
@@ -85,7 +87,8 @@ public class Effect {
     var connectionsElement = EffectElement.Element("Connections");
     if (connectionsElement != null) {
       list.AddRange(connectionsElement.Elements("SignalConnection").Select(
-        signalConnectionElement => new SignalConnection(signalConnectionElement)));
+        signalConnectionElement => new SignalConnection(
+          this, signalConnectionElement)));
     }
     return list.ToImmutableList();
   }

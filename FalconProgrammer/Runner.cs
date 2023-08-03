@@ -8,8 +8,14 @@ public static class Runner {
     var batch = new BatchProcessor();
     // batch.RestoreOriginal(null);
     // batch.PrependPathLineToDescription(null);
+    // batch.UpdateMacroCcs("Factory");
+    // batch.UpdateMacroCcs("Factory", "Lo-Fi 2.5");
+    // batch.UpdateMacroCcs("Factory", "Pure Additive 2.0");
     // batch.UpdateMacroCcs("Factory", "Test");
+    // batch.UpdateMacroCcs("Hypnotic Drive", "Test");
+    // batch.UpdateMacroCcs("Hypnotic Drive");
     batch.UpdateMacroCcs(null);
+    // batch.DisableDelay(null);
     //
     // batch.QueryDelayTypes(null);
     // batch.QueryReverbTypes(null);

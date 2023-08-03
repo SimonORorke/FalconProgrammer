@@ -121,7 +121,7 @@ public class Category {
       from scriptProcessor in root.Program.ScriptProcessors
       select scriptProcessor).LastOrDefault();
     if (templateScriptProcessor == null && InfoPageMustUseScript) {
-      throw new ApplicationException(
+      throw new InvalidOperationException(
         $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
     }
     return templateScriptProcessor;
