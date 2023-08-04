@@ -300,7 +300,7 @@ public class FalconProgram {
     return (
       from scriptProcessor in ScriptProcessors
       // Example where the Script of the program's InfoPageCcsScriptProcessor
-      // does not match the template ScriptProcessor Script:
+      // does not match the template ScriptProcessor's Script:
       // Titanium\Basses\Aggression
       select scriptProcessor).LastOrDefault();  
   }

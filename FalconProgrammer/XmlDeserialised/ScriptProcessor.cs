@@ -21,6 +21,8 @@ public class ScriptProcessor : INamed {
   /// </summary>
   public void AddSignalConnection(SignalConnection signalConnection) {
     SignalConnections.Add(signalConnection);
+    // We should only be adding SignalConnections to the InfoPageCcsScriptProcessor.
+    // So this should work!
     var connectionsElement = 
       ProgramXml.InfoPageCcsScriptProcessorElement!.Element("Connections");
     if (connectionsElement == null) {
