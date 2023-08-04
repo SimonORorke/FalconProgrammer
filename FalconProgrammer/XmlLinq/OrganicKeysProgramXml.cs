@@ -5,7 +5,7 @@ namespace FalconProgrammer.XmlLinq;
 public class OrganicKeysProgramXml : ScriptProgramXml {
   public OrganicKeysProgramXml(Category category) : base(category) { }
 
-  public override void UpdateInfoPageCcsScriptProcessor() {
+  public override void UpdateInfoPageCcsScriptProcessorFromTemplate() {
     // Initialise Delay and Reverb to zero.
     const string delaySendAttributeName = "delaySend";
     var delaySendAttribute = 
@@ -19,6 +19,6 @@ public class OrganicKeysProgramXml : ScriptProgramXml {
       throw new ApplicationException(
         "Cannot find ScriptProcessor.reverbSend attribute.");
     reverbSendAttribute.Value = "0";
-    base.UpdateInfoPageCcsScriptProcessor();
+    base.UpdateInfoPageCcsScriptProcessorFromTemplate();
   }
 }

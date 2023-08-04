@@ -265,39 +265,43 @@ public class FalconProgram {
   /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
-    if (ScriptProcessors.Count == 0
-        // Examples of programs with ScriptProcessors but no InfoPageCcsScriptProcessor:
-        // Ether Fields\Bells - Plucks\Cloche Esperer
-        // Factory\Bass-Sub\BA Shomp 1.2
-        || ProgramXml.TemplateScriptProcessorElement == null) {
+    if (ScriptProcessors.Count == 0) {
       return null;
     }
-    if (Category.TemplateScriptProcessor != null) {
-      var matchingScriptProcessor = (
-        from scriptProcessor in ScriptProcessors
-        // Comparing the Scripts will hopefully be more reliable than comparing the
-        // Names.
-        // Examples where the Names do not match:
-        // Inner Dimensions\Pluck\Pulse And Repeat
-        // Voklm\Vox Instruments\*
-        where scriptProcessor.Script == Category.TemplateScriptProcessor.Script
-        // where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
-        select scriptProcessor).FirstOrDefault();
-      if (matchingScriptProcessor != null) {
-        return matchingScriptProcessor;
+    if (ProgramXml.TemplateScriptProcessorElement == null) {
+      if (Category.SoundBankFolder.Name == "Factory") {
+        return (
+          from scriptProcessor in ScriptProcessors
+          // Examples of program with InfoPageCcsScriptProcessor
+          // but no template ScriptProcessor:
+          // Factory/Keys/Smooth E-piano 2.1.
+          where scriptProcessor.Name == "EventProcessor9"
+          select scriptProcessor).FirstOrDefault();
       }
+      // Examples of programs with ScriptProcessors but no InfoPageCcsScriptProcessor:
+      // Ether Fields\Bells - Plucks\Cloche Esperer
+      // Factory\Bass-Sub\BA Shomp 1.2
+      return null;
     }
-    if (Category.SoundBankFolder.Name == "Factory") {
-      var matchingScriptProcessor = (
-        from scriptProcessor in ScriptProcessors
-        where scriptProcessor.Name == "EventProcessor9"
-        select scriptProcessor).FirstOrDefault();
-      if (matchingScriptProcessor != null) {
-        return matchingScriptProcessor;
-      }
+    // Using a template ScriptProcessor
+    var matchingScriptProcessor = (
+      from scriptProcessor in ScriptProcessors
+      // Comparing the Scripts will hopefully be more reliable than comparing the
+      // Names.
+      // Examples where the Names do not match:
+      // Inner Dimensions\Pluck\Pulse And Repeat
+      // Voklm\Vox Instruments\*
+      where scriptProcessor.Script == Category.TemplateScriptProcessor.Script
+      // where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
+      select scriptProcessor).FirstOrDefault();
+    if (matchingScriptProcessor != null) {
+      return matchingScriptProcessor;
     }
     return (
       from scriptProcessor in ScriptProcessors
+      // Example where the Script of the program's InfoPageCcsScriptProcessor
+      // does not match the template ScriptProcessor Script:
+      // Titanium\Basses\Aggression
       select scriptProcessor).LastOrDefault();  
   }
 
@@ -496,6 +500,9 @@ public class FalconProgram {
     foreach (var macro in Macros) {
       macro.ProgramXml = ProgramXml;
     }
+    foreach (var scriptProcessor in ScriptProcessors) {
+      scriptProcessor.ProgramXml = ProgramXml;
+    }
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     if (InfoPageCcsScriptProcessor != null) {
       ProgramXml.SetInfoPageCcsScriptProcessorElement(InfoPageCcsScriptProcessor);
@@ -605,7 +612,7 @@ public class FalconProgram {
              Category.TemplateScriptProcessor!.SignalConnections) {
       InfoPageCcsScriptProcessor.SignalConnections.Add(signalConnection);
     }
-    ProgramXml.UpdateInfoPageCcsScriptProcessor();
+    ProgramXml.UpdateInfoPageCcsScriptProcessorFromTemplate();
   }
 
   /// <summary>
@@ -678,8 +685,11 @@ public class FalconProgram {
   ///   in the order of their locations on the Info page (top to bottom, left to right or
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and toggle macros.
-  ///   Example: Factory/Keys/Smooth E-piano 2.1.
+  ///   Examples (I think they may all be in Factory):
+  ///   Factory\Bass-Sub\Balarbas 2.0
+  ///   Factory\Keys\Smooth E-piano 2.1.
   /// </summary>
+  [SuppressMessage("ReSharper", "CommentTypo")]
   private void UpdateMacroCcsInScriptProcessor() {
     var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder);
@@ -709,18 +719,12 @@ public class FalconProgram {
     NextToggleCcNo = FirstToggleCcNo;
     foreach (var macro in sortedByLocation) {
       macroNo++; // Can we assume the macro numbers are always going to increment from 1?
-      InfoPageCcsScriptProcessor.SignalConnections.Add(
+      InfoPageCcsScriptProcessor.AddSignalConnection(
         new SignalConnection {
           Destination = $"Macro{macroNo}",
-          // Stops DestinationMacro setter from throwing exception
-          // Destination = string.Empty,
-          // DestinationMacro = macro,
-          // Destination = string.Empty, // Stops MacroNo from throwing exception
-          // MacroNo = macroNo,
           CcNo = GetCcNo(macro)
         });
     }
-    ProgramXml.UpdateInfoPageCcsScriptProcessor();
   }
 
   [SuppressMessage("ReSharper", "CommentTypo")]

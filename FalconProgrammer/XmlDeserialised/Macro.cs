@@ -129,7 +129,6 @@ public class Macro : INamed {
   /// </summary>
   public void AddSignalConnection(SignalConnection signalConnection) {
     SignalConnections.Add(signalConnection);
-    // ProgramXml.AddMacroSignalConnection(signalConnection, this);
     // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
     // element will already own a Connections element. 
     var connectionsElement = MacroElement.Element("Connections");

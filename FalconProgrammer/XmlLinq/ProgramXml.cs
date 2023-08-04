@@ -18,8 +18,8 @@ public class ProgramXml {
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
   public List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
-  protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
-  private XElement RootElement { get; set; } = null!;
+  public XElement? InfoPageCcsScriptProcessorElement { get; private set; }
+  public XElement RootElement { get; private set; } = null!;
 
   private XElement TemplateRootElement =>
     _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
@@ -160,7 +160,7 @@ public class ProgramXml {
           $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
       MacroElements = ControlSignalSourcesElement.Elements(
         "ConstantModulation").ToList();
-      InfoPageCcsScriptProcessorElement = null;
+      // InfoPageCcsScriptProcessorElement = null;
       // if (InfoPageCcsScriptProcessor != null) {
       //   var eventProcessorsElement =
       //     RootElement.Descendants("EventProcessors").FirstOrDefault();
@@ -305,12 +305,12 @@ public class ProgramXml {
         from scriptProcessorElement in scriptProcessorElements
         where GetAttributeValue(
                 scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
-              infoPageCcsScriptProcessor.Name
+              infoPageCcsScriptProcessor!.Name
         select scriptProcessorElement).FirstOrDefault();
     }
   }
 
-  public virtual void UpdateInfoPageCcsScriptProcessor() {
+  public virtual void UpdateInfoPageCcsScriptProcessorFromTemplate() {
     var templateConnectionsElement = 
       TemplateScriptProcessorElement!.Element("Connections")!;
     var connectionsElement = 
