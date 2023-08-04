@@ -13,6 +13,7 @@ public class Category {
     SoundBankFolder = soundBankFolder;
     Name = name;
     Settings = settings;
+    Path = $"{SoundBankFolder.Name}\\{Name}";
   }
 
   private DirectoryInfo Folder { get; set; } = null!;
@@ -52,6 +53,7 @@ public class Category {
   public bool InfoPageMustUseScript => SettingsCategory.InfoPageMustUseScript;
 
   [PublicAPI] public string Name { get; }
+  [PublicAPI] public string Path { get; }
   [PublicAPI] public Settings Settings { get; }
   private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
@@ -59,7 +61,7 @@ public class Category {
 
   [PublicAPI]
   public string TemplateProgramName =>
-    Path.GetFileNameWithoutExtension(TemplateProgramPath);
+    System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
   private FileInfo TemplateProgramFile { get; set; } = null!;
   public string TemplateProgramPath => TemplateProgramFile.FullName;
@@ -72,15 +74,15 @@ public class Category {
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
 
   [PublicAPI]
-  public string TemplateSoundBankName =>
+  public string TemplateSoundBankName => 
     Directory.GetParent(TemplateProgramFile.Directory!.FullName)?.Name!;
 
   private DirectoryInfo GetFolder(string categoryName) {
     var result = new DirectoryInfo(
-      Path.Combine(SoundBankFolder.FullName, categoryName));
+      System.IO.Path.Combine(SoundBankFolder.FullName, categoryName));
     if (!result.Exists) {
-      throw new ApplicationException(
-        $"Cannot find category folder '{result.FullName}'.");
+      throw new InvalidOperationException(
+        $"Category {Path}: Cannot find category folder '{result.FullName}'.");
     }
     return result;
   }
@@ -93,17 +95,22 @@ public class Category {
       where programFile.FullName != TemplateProgramPath
       select programFile).ToList();
     if (result.Count == 0) {
-      throw new ApplicationException(
-        $"There are no program files to edit in folder '{Folder.FullName}'.");
+      throw new InvalidOperationException(
+        $"Category {Path}: There are no program files to edit in folder '{Folder.FullName}'.");
     }
     return result;
   }
 
   private FileInfo GetTemplateProgramFile() {
+    if (string.IsNullOrEmpty(SettingsCategory.TemplatePath)) {
+      throw new InvalidOperationException(
+        $"Category {Path}: A default TemplatePath must be specified the " + 
+        "Settings file, to specify TemplateScriptProcessor.");
+    }
     var result = new FileInfo(SettingsCategory.TemplatePath);
     if (!result.Exists) {
-      throw new ApplicationException(
-        $"Cannot find template file '{SettingsCategory.TemplatePath}'.");
+      throw new InvalidOperationException(
+        $"Category {Path}: Cannot find template file '{SettingsCategory.TemplatePath}'.");
     }
     return result;
   }
@@ -117,12 +124,17 @@ public class Category {
     using var reader = new StreamReader(TemplateProgramPath);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
+    // Testing for macro-modulating SignalConnections might be more reliable than
+    // assuming the last ScriptProcessor.  But I think I tried that and there was 
+    // a problem, don't know what though.  Can be revisited if assuming the last
+    // ScriptProcessor turns out not to be reliable.  But I think that's actually fine
+    // in all cases.
     var templateScriptProcessor = (
       from scriptProcessor in root.Program.ScriptProcessors
       select scriptProcessor).LastOrDefault();
     if (templateScriptProcessor == null && InfoPageMustUseScript) {
       throw new InvalidOperationException(
-        $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
+        $"Category {Path}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
     }
     return templateScriptProcessor;
   }

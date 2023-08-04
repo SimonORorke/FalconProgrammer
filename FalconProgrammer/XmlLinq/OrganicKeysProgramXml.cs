@@ -3,9 +3,7 @@
 namespace FalconProgrammer.XmlLinq;
 
 public class OrganicKeysProgramXml : ScriptProgramXml {
-  public OrganicKeysProgramXml(
-    Category category, ScriptProcessor infoPageCcsScriptProcessor) : base(
-    category, infoPageCcsScriptProcessor) { }
+  public OrganicKeysProgramXml(Category category) : base(category) { }
 
   public override void UpdateInfoPageCcsScriptProcessor() {
     // Initialise Delay and Reverb to zero.

@@ -166,11 +166,11 @@ public class FalconProgram {
 
   private ProgramXml CreateProgramXml() {
     if (Category.SoundBankFolder.Name == "Organic Keys") {
-      return new OrganicKeysProgramXml(Category, InfoPageCcsScriptProcessor!);
+      return new OrganicKeysProgramXml(Category);
     }
     return Category.InfoPageMustUseScript
-      ? new ScriptProgramXml(Category, InfoPageCcsScriptProcessor!)
-      : new ProgramXml(Category, InfoPageCcsScriptProcessor);
+      ? new ScriptProgramXml(Category)
+      : new ProgramXml(Category);
   }
 
   private void Deserialise() {
@@ -191,7 +191,6 @@ public class FalconProgram {
         signalConnection.Owner = scriptProcessor;
       }
     }
-    InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
   }
 
   public void DisableDelay() {
@@ -266,18 +265,27 @@ public class FalconProgram {
   /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
   private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
+    if (ScriptProcessors.Count == 0
+        // Examples of programs with ScriptProcessors but no InfoPageCcsScriptProcessor:
+        // Ether Fields\Bells - Plucks\Cloche Esperer
+        // Factory\Bass-Sub\BA Shomp 1.2
+        || ProgramXml.TemplateScriptProcessorElement == null) {
+      return null;
+    }
     if (Category.TemplateScriptProcessor != null) {
       var matchingScriptProcessor = (
         from scriptProcessor in ScriptProcessors
-        where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
+        // Comparing the Scripts will hopefully be more reliable than comparing the
+        // Names.
+        // Examples where the Names do not match:
+        // Inner Dimensions\Pluck\Pulse And Repeat
+        // Voklm\Vox Instruments\*
+        where scriptProcessor.Script == Category.TemplateScriptProcessor.Script
+        // where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
         select scriptProcessor).FirstOrDefault();
       if (matchingScriptProcessor != null) {
         return matchingScriptProcessor;
       }
-      // Example: Voklm\Vox Instruments\*
-      return (
-        from scriptProcessor in ScriptProcessors
-        select scriptProcessor).LastOrDefault();  
     }
     if (Category.SoundBankFolder.Name == "Factory") {
       var matchingScriptProcessor = (
@@ -285,15 +293,12 @@ public class FalconProgram {
         where scriptProcessor.Name == "EventProcessor9"
         select scriptProcessor).FirstOrDefault();
       if (matchingScriptProcessor != null) {
-        // Example: Factory\Polysynth\Cymatic Polyscape 2.0
         return matchingScriptProcessor;
       }
     }
     return (
       from scriptProcessor in ScriptProcessors
-      where scriptProcessor.SignalConnections.Any(
-        signalConnection => signalConnection.ModulatesMacro)
-      select scriptProcessor).FirstOrDefault();
+      select scriptProcessor).LastOrDefault();  
   }
 
   private int GetCcNo(Macro macro) {
@@ -490,17 +495,11 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
     foreach (var macro in Macros) {
       macro.ProgramXml = ProgramXml;
-      // foreach (var signalConnection in macro.SignalConnections) {
-      //   signalConnection.Owner = macro;
-      // }
     }
-    // foreach (var scriptProcessor in ScriptProcessors) {
-    //   foreach (var signalConnection in scriptProcessor.SignalConnections) {
-    //     // Needed for signalConnection.ModulatesMacro in FindInfoPageCcsScriptProcessor 
-    //     signalConnection.Owner = scriptProcessor;
-    //   }
-    // }
-    // InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
+    InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
+    if (InfoPageCcsScriptProcessor != null) {
+      ProgramXml.SetInfoPageCcsScriptProcessorElement(InfoPageCcsScriptProcessor);
+    }
     Effects = GetEffects();
     // Disabling this check for now, due to false positives.
     // CheckForNonModWheelNonInfoPageMacros();

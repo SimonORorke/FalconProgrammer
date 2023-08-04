@@ -6,32 +6,25 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
-  private XElement? _templateMacroElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
   private XElement? _templateSignalConnectionElement;
 
-  public ProgramXml(
-    Category category, ScriptProcessor? infoPageCcsScriptProcessor = null) {
+  public ProgramXml(Category category) {
     Category = category;
-    InfoPageCcsScriptProcessor = infoPageCcsScriptProcessor;
   }
 
   [PublicAPI] public Category Category { get; }
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
   public List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
-  private ScriptProcessor? InfoPageCcsScriptProcessor { get; }
   protected XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
-
-  public XElement TemplateMacroElement =>
-    _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
     _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
 
-  private XElement TemplateScriptProcessorElement =>
+  public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
 
   private XElement TemplateSignalConnectionElement =>
@@ -119,10 +112,6 @@ public class ProgramXml {
     var descriptionAttribute = propertiesElement.Attribute("description");
     return descriptionAttribute != null ? descriptionAttribute.Value : string.Empty;
   }
-
-  // public static XElement GetParentElement(XElement element) {
-  //   return element.Parent!;
-  // }
   
   /// <summary>
   ///   Returns a list of all the SignalConnection elements in the program whose source
@@ -167,27 +156,27 @@ public class ProgramXml {
       RootElement = XElement.Load(InputProgramPath);
       ControlSignalSourcesElement =
         RootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
-        throw new ApplicationException(
+        throw new InvalidOperationException(
           $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
       MacroElements = ControlSignalSourcesElement.Elements(
         "ConstantModulation").ToList();
       InfoPageCcsScriptProcessorElement = null;
-      if (InfoPageCcsScriptProcessor != null) {
-        var eventProcessorsElement =
-          RootElement.Descendants("EventProcessors").FirstOrDefault();
-        if (eventProcessorsElement != null) {
-          var scriptProcessorElements = eventProcessorsElement.Elements(
-            "ScriptProcessor");
-          InfoPageCcsScriptProcessorElement = (
-            from scriptProcessorElement in scriptProcessorElements
-            where GetAttributeValue(
-                    scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
-                  InfoPageCcsScriptProcessor!.Name
-            select scriptProcessorElement).FirstOrDefault();
-        }
-      }
+      // if (InfoPageCcsScriptProcessor != null) {
+      //   var eventProcessorsElement =
+      //     RootElement.Descendants("EventProcessors").FirstOrDefault();
+      //   if (eventProcessorsElement != null) {
+      //     var scriptProcessorElements = eventProcessorsElement.Elements(
+      //       "ScriptProcessor");
+      //     InfoPageCcsScriptProcessorElement = (
+      //       from scriptProcessorElement in scriptProcessorElements
+      //       where GetAttributeValue(
+      //               scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
+      //             InfoPageCcsScriptProcessor!.Name
+      //       select scriptProcessorElement).FirstOrDefault();
+      //   }
+      // }
     } catch (XmlException ex) {
-      throw new ApplicationException(
+      throw new InvalidOperationException(
         $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
     }
   }
@@ -201,30 +190,16 @@ public class ProgramXml {
     return result;
   }
 
-  private XElement GetTemplateMacroElement() {
-    var result =
-      TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
-      throw new ApplicationException(
-        $"Cannot find ConstantModulation element in '{Category.TemplateProgramPath}'.");
-    return result;
-  }
-
-  protected virtual XElement GetTemplateScriptProcessorElement() {
-    var result =
-      TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault();
-    if (result == null) {
-      throw new ApplicationException(
-        $"'{InputProgramPath}': Cannot find ScriptProcessor element in " + 
-        $"'{Category.TemplateProgramPath}'.");
-    }
-    return result;
+  private XElement? GetTemplateScriptProcessorElement() {
+    return TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault(); 
   }
 
   protected virtual XElement GetTemplateSignalConnectionElement() {
     var result =
       TemplateRootElement.Descendants("SignalConnection").FirstOrDefault() ??
-      throw new ApplicationException(
-        $"Cannot find SignalConnection element in '{Category.TemplateProgramPath}'.");
+      throw new InvalidOperationException(
+        $"'{InputProgramPath}': Cannot find SignalConnection element in " + 
+        $"'{Category.TemplateProgramPath}'.");
     return result;
   }
 
@@ -296,7 +271,7 @@ public class ProgramXml {
       RootElement.WriteTo(writer);
       writer.Close();
     } catch (XmlException ex) {
-      throw new ApplicationException(
+      throw new InvalidOperationException(
         $"The following XML error was found on writing to '{outputProgramPath}'\r\n:{ex.Message}");
     }
   }
@@ -319,9 +294,25 @@ public class ProgramXml {
     SetAttribute(propertiesElement, "description", text);
   }
 
+  public void SetInfoPageCcsScriptProcessorElement(
+    ScriptProcessor infoPageCcsScriptProcessor) {
+    var eventProcessorsElement =
+      RootElement.Descendants("EventProcessors").FirstOrDefault();
+    if (eventProcessorsElement != null) {
+      var scriptProcessorElements = eventProcessorsElement.Elements(
+        "ScriptProcessor");
+      InfoPageCcsScriptProcessorElement = (
+        from scriptProcessorElement in scriptProcessorElements
+        where GetAttributeValue(
+                scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
+              infoPageCcsScriptProcessor.Name
+        select scriptProcessorElement).FirstOrDefault();
+    }
+  }
+
   public virtual void UpdateInfoPageCcsScriptProcessor() {
     var templateConnectionsElement = 
-      TemplateScriptProcessorElement.Element("Connections")!;
+      TemplateScriptProcessorElement!.Element("Connections")!;
     var connectionsElement = 
       InfoPageCcsScriptProcessorElement!.Element("Connections");
     if (connectionsElement == null) {
@@ -333,25 +324,6 @@ public class ProgramXml {
       }
     }
   }
-
-  // public void UpdateMacroLocation(Macro macro) {
-  //   var macroElement = GetMacroElement(macro);
-  //   UpdateMacroPropertiesElement(macro, macroElement);
-  // }
-
-  // private void UpdateMacroPropertiesElement(Macro macro, XContainer macroElement) {
-  //   var propertiesElement = macroElement.Element("Properties");
-  //   if (propertiesElement == null) {
-  //     throw new ApplicationException(
-  //       "Cannot find ConstantModulation.Properties "
-  //       + $"element in '{Category.TemplateProgramPath}'.");
-  //   }
-  //   // customPosition needs to be update if we are converting the layout from a
-  //   // script processor layout to a standard layout.
-  //   SetAttribute(propertiesElement, "customPosition", 1);
-  //   SetAttribute(propertiesElement, "x", macro.Properties.X);
-  //   SetAttribute(propertiesElement, "y", macro.Properties.Y);
-  // }
 
   public void UpdateSignalConnectionElement(
     SignalConnection signalConnection, XElement signalConnectionElement) {

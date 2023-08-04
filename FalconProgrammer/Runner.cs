@@ -14,6 +14,7 @@ public static class Runner {
     // batch.UpdateMacroCcs("Factory", "Test");
     // batch.UpdateMacroCcs("Hypnotic Drive", "Test");
     // batch.UpdateMacroCcs("Hypnotic Drive");
+    // batch.UpdateMacroCcs("Inner Dimensions", "Test");
     batch.UpdateMacroCcs(null);
     // batch.DisableDelay(null);
     //
