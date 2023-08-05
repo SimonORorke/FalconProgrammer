@@ -272,8 +272,9 @@ public class FalconProgram {
       if (Category.SoundBankFolder.Name == "Factory") {
         return (
           from scriptProcessor in ScriptProcessors
-          // Example of program with InfoPageCcsScriptProcessor
+          // Examples of programs with InfoPageCcsScriptProcessor
           // but no template ScriptProcessor:
+          // Factory\Bass-Sub\Balarbas 2.0
           // Factory/Keys/Smooth E-piano 2.1.
           where scriptProcessor.Name == "EventProcessor9"
           select scriptProcessor).FirstOrDefault();
@@ -695,7 +696,7 @@ public class FalconProgram {
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and toggle macros.
   ///   All applicable programs are in Factory, identified by "EventProcessor9" being the
-  ///   InfoPageCcsScriptProcessor.
+  ///   InfoPageCcsScriptProcessor: see <see cref="FindInfoPageCcsScriptProcessor" />.
   ///   Examples:
   ///   Factory\Bass-Sub\Balarbas 2.0
   ///   Factory\Keys\Smooth E-piano 2.1.
