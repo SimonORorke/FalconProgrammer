@@ -45,17 +45,6 @@ public class Effect : INamed {
 
   public string Name { get; }
 
-  // private ImmutableList<Macro> GetModulatingMacros() {
-  //   var list = new List<Macro>();
-  //   foreach (
-  //     var signalConnection in SignalConnections.Where(signalConnection =>
-  //       signalConnection.SourceMacro != null &&
-  //       !list.Contains(signalConnection.SourceMacro))) {
-  //     list.Add(signalConnection.SourceMacro!);
-  //   }
-  //   return list.ToImmutableList();
-  // }
-
   /// <summary>
   ///   TODO: Review ChangeModulatedParametersToZero requirement
   /// </summary>
@@ -97,13 +86,13 @@ public class Effect : INamed {
     var signalConnections = SignalConnections.ToList();
     for (int i = signalConnections.Count - 1; i >= 0; i--) {
       if (signalConnections[i].SourceMacro == macro) {
-        signalConnections.Remove(signalConnections[i]);
         signalConnections[i].SignalConnectionElement!.Remove();
+        signalConnections.Remove(signalConnections[i]);
       }
     }
     SignalConnections = signalConnections.ToImmutableList();
-    var connectionsElement = EffectElement.Element("Connections")!;
-    if (!connectionsElement.Nodes().Any()) {
+    var connectionsElement = EffectElement.Element("Connections");
+    if (connectionsElement != null && !connectionsElement.Nodes().Any()) {
       connectionsElement.Remove();
     }
   }
