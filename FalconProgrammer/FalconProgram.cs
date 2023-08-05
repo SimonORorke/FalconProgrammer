@@ -286,23 +286,30 @@ public class FalconProgram {
     // Using a template ScriptProcessor
     var matchingScriptProcessor = (
       from scriptProcessor in ScriptProcessors
-      // Comparing the Scripts will hopefully be more reliable than comparing the
-      // Names.
-      // Examples where the Names do not match:
+      // Comparing the Scripts may be more reliable than comparing the Names.
+      // Examples where the Scripts match but the Names do not:
       // Inner Dimensions\Pluck\Pulse And Repeat
       // Voklm\Vox Instruments\*
       where scriptProcessor.Script == Category.TemplateScriptProcessor.Script
-      // where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
       select scriptProcessor).FirstOrDefault();
     if (matchingScriptProcessor != null) {
+      // Scripts match.
       return matchingScriptProcessor;
     }
+    matchingScriptProcessor = (
+      from scriptProcessor in ScriptProcessors
+      where scriptProcessor.Name == Category.TemplateScriptProcessor.Name
+      select scriptProcessor).FirstOrDefault();
+    if (matchingScriptProcessor != null) {
+      // Names match but Scripts do not.
+      // Example: Titanium\Basses\Aggression
+      return matchingScriptProcessor;
+    }
+    // Neither Scripts nor Names match. So assume the last ScriptProcessor. 
+    // Example: Titanium\Basses\Noiser
     return (
       from scriptProcessor in ScriptProcessors
-      // Example where the Script of the program's InfoPageCcsScriptProcessor
-      // does not match the template ScriptProcessor's Script:
-      // Titanium\Basses\Aggression
-      select scriptProcessor).LastOrDefault();  
+      select scriptProcessor).Last();  
   }
 
   private int GetCcNo(Macro macro) {
@@ -685,7 +692,9 @@ public class FalconProgram {
   ///   in the order of their locations on the Info page (top to bottom, left to right or
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and toggle macros.
-  ///   Examples (I think they may all be in Factory):
+  ///   All applicable programs are in Factory, identified by "EventProcessor9" being the
+  ///   InfoPageCcsScriptProcessor.
+  ///   Examples:
   ///   Factory\Bass-Sub\Balarbas 2.0
   ///   Factory\Keys\Smooth E-piano 2.1.
   /// </summary>
@@ -694,23 +703,8 @@ public class FalconProgram {
     var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder);
     int macroNo = 0;
-    // Any assignment of a macro the modulation wheel  or any other
-    // MIDI CC mapping that's not on the Info page is expected to be
-    // specified in a different ScriptProcessor. But let's check!
-    // bool infoPageCcsScriptProcessorHasModWheelSignalConnections = (
-    //   from signalConnection in InfoPageCcsScriptProcessor!.SignalConnections
-    //   where !signalConnection.IsForMacro
-    //   select signalConnection).Any();
-    // if (infoPageCcsScriptProcessorHasModWheelSignalConnections) {
-    //   // We've already validated against non-mod wheel CCs that don't control Info page
-    //   // macros. So the reference to the mod wheel in this error message should be fine.
-    //   throw new ApplicationException(
-    //     "Modulation wheel assignment found in Info page CCs ScriptProcessor.");
-    // }
-    // InfoPageCcsScriptProcessor!.SignalConnections.Clear();
     for (int i = InfoPageCcsScriptProcessor!.SignalConnections.Count - 1; i >= 0; i--) {
       var signalConnection = InfoPageCcsScriptProcessor!.SignalConnections[i];
-      // if (signalConnection.ModulatedMacroNo != null) {
       if (signalConnection.ModulatesMacro) {
         InfoPageCcsScriptProcessor!.SignalConnections.Remove(signalConnection);
       }

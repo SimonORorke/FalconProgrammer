@@ -15,7 +15,8 @@ public static class Runner {
     // batch.UpdateMacroCcs("Hypnotic Drive", "Test");
     // batch.UpdateMacroCcs("Hypnotic Drive");
     // batch.UpdateMacroCcs("Inner Dimensions", "Test");
-    batch.UpdateMacroCcs(null);
+    // batch.UpdateMacroCcs(null);
+    // batch.RollForward("Titanium");
     // batch.DisableDelay(null);
     //
     // batch.QueryDelayTypes(null);
@@ -26,7 +27,6 @@ public static class Runner {
     // batch.RestoreOriginal("Hypnotic Drive");
     // batch.RestoreOriginal("Titanium");
     // batch.RollForward("Hypnotic Drive");
-    // batch.RollForward("Titanium");
     // batch.RollForward("Hypnotic Drive", "Test");
     // batch.PrependPathLineToDescription("Hypnotic Drive", "Test");
     // batch.UpdateMacroCcs("Hypnotic Drive", "Test");

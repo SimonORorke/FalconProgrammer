@@ -271,12 +271,13 @@ public class BatchProcessor {
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null) {
+    RestoreOriginal(soundBankName, categoryName);
     PrependPathLineToDescription(soundBankName, categoryName);
     UpdateMacroCcs(soundBankName, categoryName);
-    DisableDelay(soundBankName, categoryName);
-    DisableReverb(soundBankName, categoryName);
-    ReplaceModWheelWithMacro(soundBankName, categoryName);
-    OptimiseWheelMacro(soundBankName, categoryName);
+    // DisableDelay(soundBankName, categoryName);
+    // DisableReverb(soundBankName, categoryName);
+    // ReplaceModWheelWithMacro(soundBankName, categoryName);
+    // OptimiseWheelMacro(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
