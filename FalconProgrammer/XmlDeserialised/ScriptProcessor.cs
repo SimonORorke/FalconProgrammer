@@ -12,6 +12,7 @@ public class ScriptProcessor : INamed {
 
   [XmlElement("script")] public string Script { get; set; } = null!;
   internal ProgramXml ProgramXml { get; set; } = null!;
+  internal XElement ScriptProcessorElement { get; set; } = null!;
 
   [XmlAttribute] public string Name { get; set; } = null!;
 
@@ -21,13 +22,10 @@ public class ScriptProcessor : INamed {
   /// </summary>
   public void AddSignalConnection(SignalConnection signalConnection) {
     SignalConnections.Add(signalConnection);
-    // We should only be adding SignalConnections to the InfoPageCcsScriptProcessor.
-    // So this should work!
-    var connectionsElement = 
-      ProgramXml.InfoPageCcsScriptProcessorElement!.Element("Connections");
+    var connectionsElement = ScriptProcessorElement.Element("Connections");
     if (connectionsElement == null) {
       connectionsElement = new XElement("Connections");
-      ProgramXml.InfoPageCcsScriptProcessorElement!.Add(connectionsElement);
+      ScriptProcessorElement.Add(connectionsElement);
     }
     connectionsElement.Add(ProgramXml.CreateSignalConnectionElement(signalConnection));
   }

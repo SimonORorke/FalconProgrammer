@@ -272,7 +272,7 @@ public class FalconProgram {
       if (Category.SoundBankFolder.Name == "Factory") {
         return (
           from scriptProcessor in ScriptProcessors
-          // Examples of program with InfoPageCcsScriptProcessor
+          // Example of program with InfoPageCcsScriptProcessor
           // but no template ScriptProcessor:
           // Factory/Keys/Smooth E-piano 2.1.
           where scriptProcessor.Name == "EventProcessor9"
@@ -513,6 +513,8 @@ public class FalconProgram {
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
     if (InfoPageCcsScriptProcessor != null) {
       ProgramXml.SetInfoPageCcsScriptProcessorElement(InfoPageCcsScriptProcessor);
+      InfoPageCcsScriptProcessor.ScriptProcessorElement =
+        ProgramXml.InfoPageCcsScriptProcessorElement!;
     }
     Effects = GetEffects();
     // Disabling this check for now, due to false positives.

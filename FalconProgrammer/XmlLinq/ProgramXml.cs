@@ -19,7 +19,7 @@ public class ProgramXml {
   public List<XElement> MacroElements { get; set; } = null!;
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   public XElement? InfoPageCcsScriptProcessorElement { get; private set; }
-  public XElement RootElement { get; private set; } = null!;
+  private XElement RootElement { get; set; } = null!;
 
   private XElement TemplateRootElement =>
     _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
