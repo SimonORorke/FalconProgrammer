@@ -5,7 +5,6 @@ using FalconProgrammer.XmlLinq;
 namespace FalconProgrammer.XmlDeserialised;
 
 public class ScriptProcessor : INamed {
-
   [XmlArray("Connections")]
   [XmlArrayItem("SignalConnection")]
   public List<SignalConnection> SignalConnections { get; set; } = null!;
@@ -13,7 +12,6 @@ public class ScriptProcessor : INamed {
   [XmlElement("script")] public string Script { get; set; } = null!;
   internal ProgramXml ProgramXml { get; set; } = null!;
   internal XElement ScriptProcessorElement { get; set; } = null!;
-
   [XmlAttribute] public string Name { get; set; } = null!;
 
   /// <summary>
@@ -22,11 +20,9 @@ public class ScriptProcessor : INamed {
   /// </summary>
   public void AddSignalConnection(SignalConnection signalConnection) {
     SignalConnections.Add(signalConnection);
-    var connectionsElement = ScriptProcessorElement.Element("Connections");
-    if (connectionsElement == null) {
-      connectionsElement = new XElement("Connections");
-      ScriptProcessorElement.Add(connectionsElement);
-    }
+    var connectionsElement = ScriptProcessorElement.Element("Connections") ??
+                             new XElement("Connections");
+    ScriptProcessorElement.Add(connectionsElement);
     connectionsElement.Add(ProgramXml.CreateSignalConnectionElement(signalConnection));
   }
 }
