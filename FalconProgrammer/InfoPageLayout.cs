@@ -99,26 +99,30 @@ public class InfoPageLayout {
   }
 
   private void AddWheelMacro(Point location) {
-    int wheelMacroNo = (
+    int wheelMacroNo = Program.Macros.Count > 1 
+      ? (
       from macro in Program.Macros
-      select macro.MacroNo).Max() + 1;
+      select macro.MacroNo).Max() + 1
+      // ReSharper disable once CommentTypo
+      // Example: Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
+      : 1; 
     var wheelMacro = new Macro {
       MacroNo = wheelMacroNo,
       DisplayName = "Wheel",
       Bipolar = 0,
       IsContinuous = true,
+      SignalConnections = new List<SignalConnection>(),
       Value = 0,
       ProgramXml = Program.ProgramXml,
-      SignalConnections = new List<SignalConnection> {
-        new SignalConnection {
-          CcNo = ModWheelReplacementCcNo
-        }
-      },
       Properties = new MacroProperties {
         X = location.X,
         Y = location.Y
       }
     };
+    wheelMacro.AddMacroElement();
+    wheelMacro.AddSignalConnection(new SignalConnection {
+      CcNo = ModWheelReplacementCcNo
+    });
     Program.Macros.Add(wheelMacro);
     wheelMacro.AddMacroElement();
     wheelMacro.ChangeModWheelSignalConnectionSourcesToMacro();
@@ -164,6 +168,11 @@ public class InfoPageLayout {
   [SuppressMessage("ReSharper", "CommentTypo")]
   private Point? FindLocationForNewWheelMacro(out bool updateMacroCcs) {
     updateMacroCcs = false;
+    if (Program.Macros.Count == 0) {
+      // Example: Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
+      updateMacroCcs = true;
+      return new Point(0, StandardBottommostY);
+    }
     BottomRowY = (
       from macro in Program.Macros
       select macro.Properties.Y).Max();

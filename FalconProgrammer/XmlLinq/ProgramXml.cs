@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
+  private XElement? _templateMacroElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
   private XElement? _templateSignalConnectionElement;
@@ -20,6 +21,9 @@ public class ProgramXml {
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   public XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
+
+  public XElement TemplateMacroElement =>
+    _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
     _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
@@ -187,6 +191,14 @@ public class ProgramXml {
     foreach (var insertsElement in insertsElements) {
       result.AddRange(insertsElement.Nodes().Cast<XElement>());
     }
+    return result;
+  }
+
+  private XElement GetTemplateMacroElement() {
+    var result =
+      TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
+      throw new ApplicationException(
+        $"Cannot find ConstantModulation element in '{Category.TemplateProgramPath}'.");
     return result;
   }
 

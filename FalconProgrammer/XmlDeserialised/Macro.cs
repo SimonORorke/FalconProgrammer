@@ -67,7 +67,10 @@ public class Macro : INamed {
     set => Style = value ? 0 : 1;
   }
   
-  private XElement MacroElement => _macroElement ??= GetMacroElement();
+  private XElement MacroElement {
+    get => _macroElement ??= GetMacroElement();
+    set => _macroElement = value;
+  }
 
   /// <summary>
   ///   The macro number, derived from <see cref="Name" />.
@@ -105,6 +108,7 @@ public class Macro : INamed {
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
   
   public void AddMacroElement() {
+    MacroElement = new XElement(ProgramXml.TemplateMacroElement);
     // Remove any SignalConnection elements and their parent Connections element brought
     // over with template.
     MacroElement.Element("Connections")?.Remove();
@@ -114,11 +118,12 @@ public class Macro : INamed {
     ProgramXml.SetAttribute(MacroElement, nameof(Style), Style);
     ProgramXml.SetAttribute(MacroElement, nameof(Value), Value);
     ProgramXml.ControlSignalSourcesElement.Add(MacroElement);
-    ProgramXml.MacroElements = ProgramXml.ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
+    ProgramXml.MacroElements = 
+      ProgramXml.ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
     // A macro is expected to own 0, 1 or 2 SignalConnections:
     // 2 if there is a mod wheel signal connection and a 'for macro' SignalConnection.
     foreach (var signalConnection in SignalConnections) {
-      AddSignalConnection(signalConnection);
+      AddSignalConnectionElement(signalConnection);
     }
     UpdatePropertiesElement();
   }
@@ -128,7 +133,12 @@ public class Macro : INamed {
   ///   in the Linq For XML data structure as well as in the deserialised data structure.
   /// </summary>
   public void AddSignalConnection(SignalConnection signalConnection) {
+    signalConnection.Owner = this;
     SignalConnections.Add(signalConnection);
+    AddSignalConnectionElement(signalConnection);
+  }
+
+  private void AddSignalConnectionElement(SignalConnection signalConnection) {
     // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
     // element will already own a Connections element. 
     var connectionsElement = MacroElement.Element("Connections");
@@ -202,19 +212,19 @@ public class Macro : INamed {
   public List<SignalConnection> GetForMacroSignalConnections() {
     return (
       from signalConnection in SignalConnections
-      // where signalConnection.ConnectionMode == 1
       where signalConnection.ModulatesMacro
       select signalConnection).ToList();
   }
 
   private XElement GetMacroElement() {
-    // Ignore case when checking whether there is a macro with that display name.  An
-    // example of where the cases of macro display names are non-standard is
-    // Factory\Pure Additive 2.0\Bass Starter.
-    var result = (from macroElement in ProgramXml.MacroElements
-      where string.Equals(ProgramXml.GetAttributeValue(
-        macroElement, nameof(DisplayName)), DisplayName, StringComparison.OrdinalIgnoreCase) 
-        // macroElement, nameof(Name)) == Name
+    var result = (
+      from macroElement in ProgramXml.MacroElements
+      // Match on Name, not DisplayName. There can be duplicate DisplayNames.
+      // Example: Devinity\Bass\Talking Bass, which has three toggle macros with blank
+      // DisplayNames.
+      where ProgramXml.GetAttributeValue(macroElement, nameof(Name)) == Name
+      // where string.Equals(ProgramXml.GetAttributeValue(
+      // macroElement, nameof(DisplayName)), DisplayName, StringComparison.OrdinalIgnoreCase) 
       select macroElement).FirstOrDefault();
     if (result != null) {
       return result;

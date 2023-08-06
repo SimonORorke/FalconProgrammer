@@ -18,7 +18,10 @@ public static class Runner {
     // batch.UpdateMacroCcs(null);
     // batch.RollForward("Titanium");
     // batch.BypassDelayEffects(null);
-    batch.RollForward(null);
+    // batch.RollForward("Devinity", "Bass");
+    // batch.UpdateMacroCcs("Devinity", "Test");
+    // batch.RollForward("Factory", "Test");
+    // batch.RollForward(null);
     //
     // batch.QueryDelayTypes(null);
     // batch.QueryReverbTypes(null);

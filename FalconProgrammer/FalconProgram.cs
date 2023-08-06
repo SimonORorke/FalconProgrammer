@@ -16,6 +16,8 @@ public class FalconProgram {
 
   public FalconProgram(string path, Category category) {
     Path = path;
+    // Cannot be read from XML when RestoreOriginal.
+    Name = System.IO.Path.GetFileNameWithoutExtension(path); 
     Category = category;
   }
 
@@ -41,13 +43,13 @@ public class FalconProgram {
   /// </summary>
   private LocationOrder MacroCcLocationOrder { get; set; }
 
-  internal string Name { get; private set; } = null!;
+  internal string Name { get; }
   private int NextContinuousCcNo { get; set; } = FirstContinuousCcNo;
   private int NextToggleCcNo { get; set; } = FirstToggleCcNo;
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
-  public string PathShort => $"{Category.SoundBankFolder.Name}\\{Category.Name}\\{Name}";
+  public string PathShort => $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
@@ -228,7 +230,6 @@ public class FalconProgram {
     using var reader = new StreamReader(Path);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
-    Name = root.Program.DisplayName;
     Macros = root.Program.Macros;
     foreach (var macro in Macros) {
       foreach (var signalConnection in macro.SignalConnections) {
@@ -509,7 +510,7 @@ public class FalconProgram {
     // CheckForNonModWheelNonInfoPageMacros();
   }
 
-  private void RemoveDelayMacro() {
+  private void RemoveDelayMacros() {
     int removedCount = 0;
     for (int i = Macros.Count - 1; i >= 0; i--) {
       var macro = Macros[i];
@@ -524,7 +525,7 @@ public class FalconProgram {
     }
     if (removedCount > 0) {
       ContinuousMacros = GetContinuousMacros();
-      if (removedCount > 1) {
+      if (removedCount > 2) {
         Debug.Assert(true);
       }
     }
@@ -572,7 +573,7 @@ public class FalconProgram {
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
     }
-    RemoveDelayMacro();
+    RemoveDelayMacros();
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
       if (updateMacroCcs) {
@@ -595,7 +596,7 @@ public class FalconProgram {
       return;
     }
     File.Copy(originalPath, Path, true);
-    Console.WriteLine($"Reset '{PathShort}'.");
+    Console.WriteLine($"{PathShort}: Restored to Original");
   }
 
   public void Save() {
