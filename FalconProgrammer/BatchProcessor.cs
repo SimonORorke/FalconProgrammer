@@ -23,9 +23,16 @@ public class BatchProcessor {
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
+  [PublicAPI]
+  public void BypassDelayEffects(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.BypassDelayEffects;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+
   /// <summary>
-  ///   Changes every occurrence of the specified old macro MIDI CC number to the specified
-  ///   new CC number.
+  ///   Changes every occurrence of the specified old macro MIDI CC number to the
+  ///   specified new CC number.
   /// </summary>
   /// <param name="oldCcNo">MIDI CC number to be replaced.</param>
   /// <param name="newCcNo">Replacement MIDI CC number.</param>
@@ -41,6 +48,13 @@ public class BatchProcessor {
     OldCcNo = oldCcNo;
     NewCcNo = newCcNo;
     Task = ConfigTask.ChangeMacroCcNo;
+    ConfigurePrograms(soundBankName, categoryName);
+  }
+  
+  [PublicAPI]
+  public void ChangeReverbToZero(
+    string? soundBankName, string? categoryName = null) {
+    Task = ConfigTask.ChangeReverbToZero;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -103,11 +117,11 @@ public class BatchProcessor {
         case ConfigTask.CountMacros:
           Program.CountMacros();
           break;
-        case ConfigTask.DisableDelay:
-          Program.DisableDelay();
+        case ConfigTask.BypassDelayEffects:
+          Program.BypassDelayEffects();
           break;
-        case ConfigTask.DisableReverb:
-          Program.DisableReverb();
+        case ConfigTask.ChangeReverbToZero:
+          Program.ChangeReverbToZero();
           break;
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
@@ -155,20 +169,6 @@ public class BatchProcessor {
   [PublicAPI]
   public void CountMacros(string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.CountMacros;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
-  [PublicAPI]
-  public void DisableDelay(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.DisableDelay;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-  
-  [PublicAPI]
-  public void DisableReverb(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.DisableReverb;
     ConfigurePrograms(soundBankName, categoryName);
   }
 
@@ -271,12 +271,12 @@ public class BatchProcessor {
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null) {
-    RestoreOriginal(soundBankName, categoryName);
-    PrependPathLineToDescription(soundBankName, categoryName);
-    UpdateMacroCcs(soundBankName, categoryName);
-    // DisableDelay(soundBankName, categoryName);
-    // DisableReverb(soundBankName, categoryName);
-    // ReplaceModWheelWithMacro(soundBankName, categoryName);
+    // RestoreOriginal(soundBankName, categoryName);
+    // PrependPathLineToDescription(soundBankName, categoryName);
+    // UpdateMacroCcs(soundBankName, categoryName);
+    // BypassDelayEffects(soundBankName, categoryName);
+    // ChangeReverbToZero(soundBankName, categoryName);
+    ReplaceModWheelWithMacro(soundBankName, categoryName);
     // OptimiseWheelMacro(soundBankName, categoryName);
   }
 
@@ -303,10 +303,10 @@ public class BatchProcessor {
   }
 
   private enum ConfigTask {
+    BypassDelayEffects,
     ChangeMacroCcNo,
+    ChangeReverbToZero,
     CountMacros,
-    DisableDelay,
-    DisableReverb,
     ListIfHasInfoPageCcsScriptProcessor,
     OptimiseWheelMacro,
     PrependPathLineToDescription,

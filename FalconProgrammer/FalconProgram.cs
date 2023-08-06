@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
@@ -20,6 +21,7 @@ public class FalconProgram {
 
   [PublicAPI] public Category Category { get; }
 
+  // internal List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros(); 
   internal List<Macro> ContinuousMacros {
     get => _continuousMacros ??= GetContinuousMacros();
     private set => _continuousMacros = value;
@@ -49,6 +51,13 @@ public class FalconProgram {
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
+
+  public void BypassDelayEffects() {
+    foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
+      effect.Bypass = true;
+      Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
+    }
+  }
 
   private bool CanRemoveInfoPageCcsScriptProcessor() {
     if (Macros.Count > 4) {
@@ -117,6 +126,48 @@ public class FalconProgram {
     var oldSignalConnection = new SignalConnection { CcNo = oldCcNo };
     var newSignalConnection = new SignalConnection { CcNo = newCcNo };
     ProgramXml.ChangeSignalConnectionSource(oldSignalConnection, newSignalConnection);
+  }
+
+  public void ChangeReverbToZero() {
+    // foreach (var effect in Effects.Where(
+    //            effect => effect is { IsReverb: true, IsModulated: false })) {
+    //   effect.Bypass = true;
+    //   Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
+    // }
+    var reverbMacros = (
+      from macro in Macros
+      where macro.ModulatesReverb
+      select macro).ToList();
+    if (reverbMacros.Count == 0) {
+      return;
+    }
+    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
+        or @"Factory\Bass-Sub\Metropolis 1.4"
+        or @"Factory\Leads\Ali3n 1.4"
+        or @"Factory\Pads\Arrival 1.4"
+        // ReSharper disable once StringLiteralTypo
+        or @"Factory\Pads\Novachord Noir 1.4"
+        or @"Factory\Pads\Pad Motion 1.5"
+        or @"Factory\Synth Brass\Gotham Brass 1.4"
+        or @"Inner Dimensions\Pad\GrainVoices 2"
+        or @"Savage\Pads-Drones\Lunar Nashi"
+        or @"Savage\Pads-Drones\Voc Sidechain"
+        or @"Savage\Pads-Drones\Wonder Land") {
+      // These programs are silent without reverb!
+      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
+      return;
+    }
+    foreach (var reverbMacro in reverbMacros) {
+      if (reverbMacro.FindSignalConnectionWithCcNo(1) != null) {
+        // Example: Titanium\Pads\Children's Choir.
+        Console.WriteLine(
+          $"{PathShort}: Not changing {reverbMacro.DisplayName} to zero because " +
+          "it is modulated by the wheel.");
+      } else {
+        reverbMacro.ChangeValueToZero();
+        Console.WriteLine($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
+      }
+    }
   }
 
   private static void CheckForNonModWheelNonInfoPageMacro(
@@ -189,70 +240,6 @@ public class FalconProgram {
       foreach (var signalConnection in scriptProcessor.SignalConnections) {
         // Needed for signalConnection.ModulatesMacro in FindInfoPageCcsScriptProcessor 
         signalConnection.Owner = scriptProcessor;
-      }
-    }
-  }
-
-  public void DisableDelay() {
-    foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
-      effect.Bypass = true;
-      Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
-    }
-    bool hasMacroBeenRemoved = false;
-    for (int i = Macros.Count - 1; i >= 0; i--) {
-      var macro = Macros[i];
-      macro.RemoveDelayModulations();
-      if (macro.ModulatedEffects.Count == 0 || macro.ModulatesDelay) {
-        macro.RemoveMacroElement();
-        Macros.RemoveAt(i);
-        hasMacroBeenRemoved = true;
-        Console.WriteLine($"{PathShort}: Removed {macro}.");
-      }
-    }
-    if (hasMacroBeenRemoved) {
-      ContinuousMacros = GetContinuousMacros();
-    }
-  }
-
-  public void DisableReverb() {
-    foreach (var effect in Effects.Where(
-               effect => effect is { IsReverb: true, IsModulated: false })) {
-      effect.Bypass = true;
-      Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
-    }
-    var reverbMacros = (
-      from macro in Macros
-      where macro.ModulatesReverb
-      select macro).ToList();
-    if (reverbMacros.Count == 0) {
-      return;
-    }
-    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
-        or @"Factory\Bass-Sub\Metropolis 1.4"
-        or @"Factory\Leads\Ali3n 1.4"
-        or @"Factory\Pads\Arrival 1.4"
-        // ReSharper disable once StringLiteralTypo
-        or @"Factory\Pads\Novachord Noir 1.4"
-        or @"Factory\Pads\Pad Motion 1.5"
-        or @"Factory\Synth Brass\Gotham Brass 1.4"
-        or @"Inner Dimensions\Pad\GrainVoices 2"
-        or @"Savage\Pads-Drones\Lunar Nashi"
-        or @"Savage\Pads-Drones\Voc Sidechain"
-        or @"Savage\Pads-Drones\Wonder Land") {
-      // These programs are silent without reverb!
-      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
-      return;
-    }
-    foreach (var reverbMacro in reverbMacros) {
-      // Example: Titanium\Pads\Children's Choir.
-      if (reverbMacro.FindSignalConnectionWithCcNo(1) != null) {
-        Console.WriteLine(
-          $"{PathShort}: Not changing {reverbMacro.DisplayName} to zero because " +
-          "it is modulated by the wheel.");
-      } else {
-        // } else if (reverbMacro.ChangeValueToZero()) {
-        reverbMacro.ChangeValueToZero();
-        Console.WriteLine($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
       }
     }
   }
@@ -522,6 +509,27 @@ public class FalconProgram {
     // CheckForNonModWheelNonInfoPageMacros();
   }
 
+  private void RemoveDelayMacro() {
+    int removedCount = 0;
+    for (int i = Macros.Count - 1; i >= 0; i--) {
+      var macro = Macros[i];
+      // macro.RemoveDelayModulations();
+      // if (macro.ModulatedEffects.Count == 0 || macro.ModulatesDelay) {
+      if (macro.ModulatesDelay) {
+        macro.RemoveMacroElement();
+        Macros.RemoveAt(i);
+        removedCount++;
+        Console.WriteLine($"{PathShort}: Removed {macro}.");
+      }
+    }
+    if (removedCount > 0) {
+      ContinuousMacros = GetContinuousMacros();
+      if (removedCount > 1) {
+        Debug.Assert(true);
+      }
+    }
+  }
+
   /// <summary>
   ///   Do away with the <see cref="InfoPageCcsScriptProcessor" />, which defines a
   ///   special Info Page layout and MIDI CC numbers that modulate macros.
@@ -564,6 +572,7 @@ public class FalconProgram {
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
     }
+    RemoveDelayMacro();
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
       if (updateMacroCcs) {

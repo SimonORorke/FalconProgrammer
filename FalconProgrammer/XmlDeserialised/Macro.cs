@@ -219,7 +219,7 @@ public class Macro : INamed {
     if (result != null) {
       return result;
     }
-    throw new ApplicationException(
+    throw new InvalidOperationException(
       $"Cannot find ConstantModulation '{Name}' in " + 
       $"'{ProgramXml.InputProgramPath}'.");
   }
@@ -227,7 +227,7 @@ public class Macro : INamed {
   private XElement GetPropertiesElement() {
     var result = MacroElement.Element("Properties");
     if (result == null) {
-      throw new ApplicationException(
+      throw new InvalidOperationException(
         "Cannot find ConstantModulation.Properties "
         + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
     }

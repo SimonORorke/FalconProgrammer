@@ -9,8 +9,7 @@ namespace FalconProgrammer.XmlDeserialised;
 ///   be Modulation.
 /// </summary>
 public class SignalConnection {
-  // private Macro? _destinationMacro;
-
+  
   public SignalConnection() {
     Ratio = 1;
     Source = string.Empty;

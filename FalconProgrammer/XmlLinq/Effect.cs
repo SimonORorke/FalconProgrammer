@@ -8,7 +8,6 @@ public class Effect : INamed {
   private bool? _isDelay;
   private bool? _isReverb;
 
-  // private ImmutableList<Macro>? _modulatingMacros;
   private ImmutableList<SignalConnection>? _signalConnections;
 
   public Effect(XElement effectElement, ProgramXml programXml) {
@@ -29,10 +28,6 @@ public class Effect : INamed {
   public bool IsReverb => _isReverb ??= GetIsReverb();
   public bool IsModulated => SignalConnections.Count > 0;
 
-  // public ImmutableList<Macro> ModulatingMacros {
-  //   get => _modulatingMacros ??= GetModulatingMacros();
-  //   set => _modulatingMacros = value;
-  // }
   private ProgramXml ProgramXml { get; }
 
   /// <summary>
