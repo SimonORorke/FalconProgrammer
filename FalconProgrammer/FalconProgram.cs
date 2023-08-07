@@ -407,6 +407,12 @@ public class FalconProgram {
         || InfoPageLayout.FindReverbContinuousMacro() != null) {
       return;
     }
+    // If we don't reload, relocating the macros jumbles them.
+    // Perhaps there's a better way.
+    Save();
+    Read();
+    Console.WriteLine(
+      $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
     if (Macros.Any(macro => macro.GetForMacroSignalConnections().Count > 1)) {
       // The problem is modulations by the wheel replacement macro.
       // (Source will indicate the modulating macro,
@@ -431,8 +437,7 @@ public class FalconProgram {
       ?? wheelMacro.FindSignalConnectionWithCcNo(11)!;
     wheelMacroSignalConnection.CcNo = 1;
     wheelMacro.UpdateSignalConnection(wheelMacroSignalConnection);
-    Console.WriteLine(
-      $"{PathShort}: Optimised Wheel macro.");
+    Console.WriteLine($"{PathShort}: Optimised Wheel macro.");
   }
 
   public void PrependPathLineToDescription() {
