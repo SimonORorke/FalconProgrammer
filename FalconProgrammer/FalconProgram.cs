@@ -15,6 +15,8 @@ public class FalconProgram {
   public FalconProgram(string path, Category category) {
     Path = path;
     // Cannot be read from XML when RestoreOriginal.
+    // Trim in case there's a space before the dot in the file name. That would otherwise
+    // show up when Name is combined into PathShort.
     Name = System.IO.Path.GetFileNameWithoutExtension(path).TrimEnd(); 
     Category = category;
   }
