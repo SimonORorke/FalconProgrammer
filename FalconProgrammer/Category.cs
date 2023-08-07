@@ -89,7 +89,7 @@ public class Category {
 
   public IEnumerable<FileInfo> GetProgramFilesToEdit() {
     var programFiles = Folder.GetFiles(
-      "*" + BatchProcessor.ProgramExtension);
+      "*" + Batch.ProgramExtension);
     var result = (
       from programFile in programFiles
       where programFile.FullName != TemplateProgramPath

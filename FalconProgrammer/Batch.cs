@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer;
 
-public class BatchProcessor {
+public class Batch {
   public const string ProgramExtension = ".uvip";
   private Category Category { get; set; } = null!;
 
