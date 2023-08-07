@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
@@ -11,23 +10,22 @@ namespace FalconProgrammer;
 public class FalconProgram {
   private const int FirstContinuousCcNo = 31;
   private const int FirstToggleCcNo = 112;
-  private List<Macro>? _continuousMacros;
   private InfoPageLayout? _infoPageLayout;
 
   public FalconProgram(string path, Category category) {
     Path = path;
     // Cannot be read from XML when RestoreOriginal.
-    Name = System.IO.Path.GetFileNameWithoutExtension(path); 
+    Name = System.IO.Path.GetFileNameWithoutExtension(path).TrimEnd(); 
     Category = category;
   }
 
   [PublicAPI] public Category Category { get; }
 
-  // internal List<Macro> ContinuousMacros => _continuousMacros ??= GetContinuousMacros(); 
-  internal List<Macro> ContinuousMacros {
-    get => _continuousMacros ??= GetContinuousMacros();
-    private set => _continuousMacros = value;
-  }
+  /// <summary>
+  ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
+  ///   time, as it can change already when a delay macro is removed.
+  /// </summary>
+  internal List<Macro> ContinuousMacros => GetContinuousMacros();
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
 
@@ -49,7 +47,8 @@ public class FalconProgram {
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
-  public string PathShort => $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
+  public string PathShort => 
+    $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
@@ -401,9 +400,8 @@ public class FalconProgram {
   }
 
   [SuppressMessage("ReSharper", "CommentTypo")]
-  public void OptimiseWheelMacro() {
-    if (!WheelMacroExists()
-        || Macros.Count != 5
+  private void OptimiseWheelMacro() {
+    if (Macros.Count != 5
         || ContinuousMacros.Count != 5
         || InfoPageLayout.FindDelayContinuousMacro() != null
         || InfoPageLayout.FindReverbContinuousMacro() != null) {
@@ -510,8 +508,12 @@ public class FalconProgram {
     // CheckForNonModWheelNonInfoPageMacros();
   }
 
-  private void RemoveDelayMacros() {
-    int removedCount = 0;
+  /// <summary>
+  ///   Removes the delay macro, if any. By the current criterion for what a delay macro
+  ///   is, there's a maximum of 1 per program.
+  /// </summary>
+  private void RemoveDelayMacro() {
+    // int removedCount = 0;
     for (int i = Macros.Count - 1; i >= 0; i--) {
       var macro = Macros[i];
       // macro.RemoveDelayModulations();
@@ -519,16 +521,17 @@ public class FalconProgram {
       if (macro.ModulatesDelay) {
         macro.RemoveMacroElement();
         Macros.RemoveAt(i);
-        removedCount++;
+        // removedCount++;
         Console.WriteLine($"{PathShort}: Removed {macro}.");
+        return;
       }
     }
-    if (removedCount > 0) {
-      ContinuousMacros = GetContinuousMacros();
-      if (removedCount > 2) {
-        Debug.Assert(true);
-      }
-    }
+    // if (removedCount > 0) {
+    //   ContinuousMacros = GetContinuousMacros();
+    //   if (removedCount > 2) {
+    //     Debug.Assert(true);
+    //   }
+    // }
   }
 
   /// <summary>
@@ -573,7 +576,7 @@ public class FalconProgram {
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
     }
-    RemoveDelayMacros();
+    RemoveDelayMacro();
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
       if (updateMacroCcs) {
@@ -583,6 +586,7 @@ public class FalconProgram {
       }
       Console.WriteLine(
         $"{PathShort}: Replaced mod wheel with macro.");
+      OptimiseWheelMacro();
     }
   }
 

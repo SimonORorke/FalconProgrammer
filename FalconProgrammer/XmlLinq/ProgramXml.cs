@@ -17,7 +17,13 @@ public class ProgramXml {
 
   [PublicAPI] public Category Category { get; }
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
-  public List<XElement> MacroElements { get; set; } = null!;
+
+  /// <summary>
+  ///   Gets the program's macro elements. It's safest to query this each time. Otherwise
+  ///   it would have to be updated in multiple places.
+  /// </summary>
+  public List<XElement> MacroElements =>
+    ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   public XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
@@ -162,23 +168,6 @@ public class ProgramXml {
         RootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
         throw new InvalidOperationException(
           $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
-      MacroElements = ControlSignalSourcesElement.Elements(
-        "ConstantModulation").ToList();
-      // InfoPageCcsScriptProcessorElement = null;
-      // if (InfoPageCcsScriptProcessor != null) {
-      //   var eventProcessorsElement =
-      //     RootElement.Descendants("EventProcessors").FirstOrDefault();
-      //   if (eventProcessorsElement != null) {
-      //     var scriptProcessorElements = eventProcessorsElement.Elements(
-      //       "ScriptProcessor");
-      //     InfoPageCcsScriptProcessorElement = (
-      //       from scriptProcessorElement in scriptProcessorElements
-      //       where GetAttributeValue(
-      //               scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
-      //             InfoPageCcsScriptProcessor!.Name
-      //       select scriptProcessorElement).FirstOrDefault();
-      //   }
-      // }
     } catch (XmlException ex) {
       throw new InvalidOperationException(
         $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");

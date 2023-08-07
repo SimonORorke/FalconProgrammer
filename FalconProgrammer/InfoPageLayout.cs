@@ -123,9 +123,8 @@ public class InfoPageLayout {
     wheelMacro.AddSignalConnection(new SignalConnection {
       CcNo = ModWheelReplacementCcNo
     });
-    Program.Macros.Add(wheelMacro);
-    wheelMacro.AddMacroElement();
     wheelMacro.ChangeModWheelSignalConnectionSourcesToMacro();
+    Program.Macros.Add(wheelMacro);
   }
 
   private Macro? FindContinuousMacroWithModWheelReplacementCcNo() {

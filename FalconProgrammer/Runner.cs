@@ -22,6 +22,9 @@ public static class Runner {
     // batch.UpdateMacroCcs("Devinity", "Test");
     // batch.RollForward("Factory", "Test");
     // batch.RollForward(null);
+    // batch.ReplaceModWheelWithMacro("Factory", "Bass-Sub");
+    // batch.ReplaceModWheelWithMacro("Factory", "Test");
+    batch.ReplaceModWheelWithMacro(null);
     //
     // batch.QueryDelayTypes(null);
     // batch.QueryReverbTypes(null);

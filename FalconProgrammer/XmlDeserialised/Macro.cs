@@ -118,8 +118,6 @@ public class Macro : INamed {
     ProgramXml.SetAttribute(MacroElement, nameof(Style), Style);
     ProgramXml.SetAttribute(MacroElement, nameof(Value), Value);
     ProgramXml.ControlSignalSourcesElement.Add(MacroElement);
-    ProgramXml.MacroElements = 
-      ProgramXml.ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
     // A macro is expected to own 0, 1 or 2 SignalConnections:
     // 2 if there is a mod wheel signal connection and a 'for macro' SignalConnection.
     foreach (var signalConnection in SignalConnections) {
@@ -255,8 +253,6 @@ public class Macro : INamed {
 
   public void RemoveMacroElement() {
     MacroElement.Remove();
-    ProgramXml.MacroElements = 
-      ProgramXml.ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
     for (int i = ModulatedEffects.Count - 1; i >= 0; i--) {
       ModulatedEffects[i].RemoveModulationsByMacro(this);
       ModulatedEffects.RemoveAt(i);

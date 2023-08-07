@@ -96,7 +96,6 @@ public class BatchProcessor {
     Category = new Category(SoundBankFolder, categoryName, Settings);
     Category.Initialise();
     if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor
-          or ConfigTask.OptimiseWheelMacro
           or ConfigTask.ReplaceModWheelWithMacro
         && Category.InfoPageMustUseScript) {
       // Console.WriteLine(
@@ -125,9 +124,6 @@ public class BatchProcessor {
           break;
         case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
           Program.ListIfHasInfoPageCcsScriptProcessor();
-          break;
-        case ConfigTask.OptimiseWheelMacro:
-          Program.OptimiseWheelMacro();
           break;
         case ConfigTask.PrependPathLineToDescription:
           Program.PrependPathLineToDescription();
@@ -207,13 +203,6 @@ public class BatchProcessor {
   }
 
   [PublicAPI]
-  public void OptimiseWheelMacro(
-    string? soundBankName, string? categoryName = null) {
-    Task = ConfigTask.OptimiseWheelMacro;
-    ConfigurePrograms(soundBankName, categoryName);
-  }
-
-  [PublicAPI]
   public void PrependPathLineToDescription(
     string? soundBankName, string? categoryName = null) {
     Task = ConfigTask.PrependPathLineToDescription;
@@ -277,7 +266,6 @@ public class BatchProcessor {
     BypassDelayEffects(soundBankName, categoryName);
     ChangeReverbToZero(soundBankName, categoryName);
     ReplaceModWheelWithMacro(soundBankName, categoryName);
-    OptimiseWheelMacro(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
@@ -308,7 +296,6 @@ public class BatchProcessor {
     ChangeReverbToZero,
     CountMacros,
     ListIfHasInfoPageCcsScriptProcessor,
-    OptimiseWheelMacro,
     PrependPathLineToDescription,
     QueryDelayTypes,
     QueryReverbTypes,
