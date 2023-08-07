@@ -6,7 +6,7 @@ namespace FalconProgrammer.XmlLinq;
 public class ScriptProgramXml : ProgramXml {
   public ScriptProgramXml(Category category) : base(category) { }
 
-  protected override XElement GetTemplateSignalConnectionElement() {
+  protected override XElement GetTemplateModulationElement() {
     var rootElement = XElement.Load(Category.TemplateProgramPath);
     var scriptProcessorElement =
       (from s in rootElement.Descendants("ScriptProcessor")
@@ -19,7 +19,7 @@ public class ScriptProgramXml : ProgramXml {
       throw new ApplicationException(
         $"Cannot find ScriptProcessor {scriptProcessorElement.Attribute("Name")!.Value} " +
         // $"Cannot find ScriptProcessor {Category.TemplateScriptProcessorName} " +
-        $"SignalConnection element in template file '{Category.TemplateProgramPath}'.");
+        $"Modulation element in template file '{Category.TemplateProgramPath}'.");
     return result;
   }
 }

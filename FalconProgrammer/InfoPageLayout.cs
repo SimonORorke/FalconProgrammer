@@ -86,8 +86,8 @@ public class InfoPageLayout {
     // Debug.WriteLine("================================================");
     // Debug.WriteLine("After FindLocationForNewWheelMacro");
     // foreach (var macro in Program.Macros) {
-    //   foreach (var signalConnection in macro.SignalConnections) {
-    //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+    //   foreach (var modulation in macro.Modulations) {
+    //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
     //   }
     // }
     // Debug.WriteLine("================================================");
@@ -111,7 +111,7 @@ public class InfoPageLayout {
       DisplayName = "Wheel",
       Bipolar = 0,
       IsContinuous = true,
-      SignalConnections = new List<SignalConnection>(),
+      Modulations = new List<Modulation>(),
       Value = 0,
       ProgramXml = Program.ProgramXml,
       Properties = new MacroProperties {
@@ -120,17 +120,17 @@ public class InfoPageLayout {
       }
     };
     wheelMacro.AddMacroElement();
-    wheelMacro.AddSignalConnection(new SignalConnection {
+    wheelMacro.AddModulation(new Modulation {
       CcNo = ModWheelReplacementCcNo
     });
-    wheelMacro.ChangeModWheelSignalConnectionSourcesToMacro();
+    wheelMacro.ChangeModWheelModulationSourcesToMacro();
     Program.Macros.Add(wheelMacro);
   }
 
   private Macro? FindContinuousMacroWithModWheelReplacementCcNo() {
     return (
       from continuousMacro in Program.ContinuousMacros
-      where continuousMacro.FindSignalConnectionWithCcNo(ModWheelReplacementCcNo) != null 
+      where continuousMacro.FindModulationWithCcNo(ModWheelReplacementCcNo) != null 
       select continuousMacro).FirstOrDefault();
   }
 
@@ -143,16 +143,16 @@ public class InfoPageLayout {
 
   private void FindDelayOrReverbMacroWithModWheelReplacementCcNo(
     out Macro? delayOrReverbMacroWithWheelCcNo,
-    out SignalConnection? delayOrReverbSignalConnectionWithWheelCcNo) {
+    out Modulation? delayOrReverbModulationWithWheelCcNo) {
     delayOrReverbMacroWithWheelCcNo = null;
-    delayOrReverbSignalConnectionWithWheelCcNo = null;
+    delayOrReverbModulationWithWheelCcNo = null;
     var continuousMacro = FindContinuousMacroWithModWheelReplacementCcNo();
     if (continuousMacro != null &&
         (continuousMacro.ModulatesDelay || continuousMacro.ModulatesReverb)) {
       delayOrReverbMacroWithWheelCcNo = continuousMacro;
       // There could also be a mod wheel CC 1, so we cannot assume it's the first
-      // SignalConnection. Example: Titanium\Pads\Children's Choir.
-      delayOrReverbSignalConnectionWithWheelCcNo = continuousMacro.FindSignalConnectionWithCcNo(
+      // Modulation. Example: Titanium\Pads\Children's Choir.
+      delayOrReverbModulationWithWheelCcNo = continuousMacro.FindModulationWithCcNo(
         ModWheelReplacementCcNo);
     }
   }
@@ -181,8 +181,8 @@ public class InfoPageLayout {
       // Debug.WriteLine("================================================");
       // Debug.WriteLine("After LocateWheelAboveDelayOrReverbMacro");
       // foreach (var macro in Program.Macros) {
-      //   foreach (var signalConnection in macro.SignalConnections) {
-      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   foreach (var modulation in macro.Modulations) {
+      //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
       //   }
       // }
       // Debug.WriteLine("================================================");
@@ -276,14 +276,14 @@ public class InfoPageLayout {
     // Debug.WriteLine("================================================");
     // Debug.WriteLine("After SwapDelayAndReverbIfReverbHasWheelReplacementCcNo");
     // foreach (var macro in Program.Macros) {
-    //   foreach (var signalConnection in macro.SignalConnections) {
-    //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+    //   foreach (var modulation in macro.Modulations) {
+    //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
     //   }
     // }
     // Debug.WriteLine("================================================");
     FindDelayOrReverbMacroWithModWheelReplacementCcNo(
       out var delayOrReverbMacroWithWheelCcNo,
-      out var delayOrReverbSignalConnectionWithWheelCcNo);
+      out var delayOrReverbModulationWithWheelCcNo);
     // bool isDelayOrReverbMacroWithWheelCcNoOnBottomRow =
     //   delayOrReverbMacroWithWheelCcNo != null
     //   && BottomRowMacros.Contains(delayOrReverbMacroWithWheelCcNo);
@@ -292,22 +292,22 @@ public class InfoPageLayout {
       // Debug.WriteLine("================================================");
       // Debug.WriteLine("After FindDelayOrReverbMacroWithModWheelReplacementCcNo");
       // foreach (var macro in Program.Macros) {
-      //   foreach (var signalConnection in macro.SignalConnections) {
-      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   foreach (var modulation in macro.Modulations) {
+      //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
       //   }
       // }
       // Debug.WriteLine("================================================");
       // Remove the wheel replacement CC number assignment from the delay or reverb
       // macro that has it.  It will be reassigned to the new wheel macro when that is
       // added.
-      delayOrReverbMacroWithWheelCcNo.RemoveSignalConnection(
-        delayOrReverbSignalConnectionWithWheelCcNo!);
+      delayOrReverbMacroWithWheelCcNo.RemoveModulation(
+        delayOrReverbModulationWithWheelCcNo!);
       // Locate the new wheel macro above the delay or reverb macro.
       // Debug.WriteLine("================================================");
-      // Debug.WriteLine("After RemoveSignalConnection");
+      // Debug.WriteLine("After RemoveModulation");
       // foreach (var macro in Program.Macros) {
-      //   foreach (var signalConnection in macro.SignalConnections) {
-      //     Debug.WriteLine($"{macro}, CcNo {signalConnection.CcNo}");
+      //   foreach (var modulation in macro.Modulations) {
+      //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
       //   }
       // }
       // Debug.WriteLine("================================================");
@@ -443,29 +443,29 @@ public class InfoPageLayout {
 
   private void SwapMacroCcNos(Macro macro1, Macro macro2) {
     // ReSharper disable once ConvertIfStatementToSwitchStatement
-    if (macro1.SignalConnections.Count == 0 && macro2.SignalConnections.Count == 0) {
+    if (macro1.Modulations.Count == 0 && macro2.Modulations.Count == 0) {
       // This happens if the signal connections belongs to effects, a scenario we don't
       // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
       Console.WriteLine(
-        $"'{Program.PathShort}': Cannot find SignalConnections of supported types for " +
+        $"'{Program.PathShort}': Cannot find Modulations of supported types for " +
         $"either macro '{macro1.DisplayName}' or macro '{macro2.DisplayName}'.");
     }
-    // SignalConnections belong to Macros.
-    SignalConnection? signalConnection1 = null;
-    SignalConnection? signalConnection2 = null;
-    if (macro1.SignalConnections.Count > 0) {
-      signalConnection1 = macro1.SignalConnections[0];
-      macro1.RemoveSignalConnection(signalConnection1);
+    // Modulations belong to Macros.
+    Modulation? modulation1 = null;
+    Modulation? modulation2 = null;
+    if (macro1.Modulations.Count > 0) {
+      modulation1 = macro1.Modulations[0];
+      macro1.RemoveModulation(modulation1);
     }
-    if (macro2.SignalConnections.Count > 0) {
-      signalConnection2 = macro2.SignalConnections[0];
-      macro2.RemoveSignalConnection(signalConnection2);
+    if (macro2.Modulations.Count > 0) {
+      modulation2 = macro2.Modulations[0];
+      macro2.RemoveModulation(modulation2);
     }
-    if (signalConnection1 != null) {
-      macro2.AddSignalConnection(signalConnection1);
+    if (modulation1 != null) {
+      macro2.AddModulation(modulation1);
     }
-    if (signalConnection2 != null) {
-      macro1.AddSignalConnection(signalConnection2);
+    if (modulation2 != null) {
+      macro1.AddModulation(modulation2);
     }
   }
 

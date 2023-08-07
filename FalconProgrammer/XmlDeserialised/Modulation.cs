@@ -5,40 +5,41 @@ using FalconProgrammer.XmlLinq;
 namespace FalconProgrammer.XmlDeserialised;
 
 /// <summary>
-///   Among other things, this can map a macro to a MIDI CC number. A better name might
-///   be Modulation.
+///   Called SignalConnection in the program XML but corresponds to a modulation,
+///   as in the user interface and manual. Among other things, this can map a macro to
+///   a MIDI CC number.
 /// </summary>
-public class SignalConnection {
+public class Modulation {
   
-  public SignalConnection() {
+  public Modulation() {
     Ratio = 1;
     Source = string.Empty;
     Destination = "Value";
     ConnectionMode = 1;
   }
 
-  public SignalConnection(INamed owner, XElement signalConnectionElement) {
+  public Modulation(INamed owner, XElement modulationElement) {
     Owner = owner;
-    SignalConnectionElement = signalConnectionElement;
+    ModulationElement = modulationElement;
     var ratioAttribute =
-      SignalConnectionElement.Attribute(nameof(Ratio)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Ratio attribute.");
+      ModulationElement.Attribute(nameof(Ratio)) ??
+      throw new InvalidOperationException(
+        "Cannot find Modulation.Ratio attribute.");
     Ratio = Convert.ToSingle(ratioAttribute.Value);
     var sourceAttribute =
-      SignalConnectionElement.Attribute(nameof(Source)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Source attribute.");
+      ModulationElement.Attribute(nameof(Source)) ??
+      throw new InvalidOperationException(
+        "Cannot find Modulation.Source attribute.");
     Source = sourceAttribute.Value;
     var destinationAttribute =
-      SignalConnectionElement.Attribute(nameof(Destination)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.Destination attribute.");
+      ModulationElement.Attribute(nameof(Destination)) ??
+      throw new InvalidOperationException(
+        "Cannot find Modulation.Destination attribute.");
     Destination = destinationAttribute.Value;
     var connectionModeAttribute =
-      SignalConnectionElement.Attribute(nameof(ConnectionMode)) ??
-      throw new ApplicationException(
-        "Cannot find SignalConnection.ConnectionMode attribute.");
+      ModulationElement.Attribute(nameof(ConnectionMode)) ??
+      throw new InvalidOperationException(
+        "Cannot find Modulation.ConnectionMode attribute.");
     ConnectionMode = Convert.ToInt32(connectionModeAttribute.Value);
   }
 
@@ -54,10 +55,10 @@ public class SignalConnection {
 
   /// <summary>
   ///   Indicates what is to be modulated.
-  ///   If the <see cref="SignalConnection" /> belongs to the
+  ///   If the <see cref="Modulation" /> belongs to the
   ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, this will be the
   ///   name in the script of the macro to be modulated, like "Macro1".
-  ///   If the <see cref="SignalConnection" /> belongs to the <see cref="Macro" /> to
+  ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, this will be "Value".
   /// </summary>
   /// <remarks>
@@ -98,23 +99,23 @@ public class SignalConnection {
         ScriptProcessor => ModulatedMacroNo.HasValue,
         Effect => false,
         null => throw new InvalidOperationException(
-          "SignalConnection.ModulatesMacro cannot be determined because " +
+          "Modulation.ModulatesMacro cannot be determined because " +
           "Owner has not been specified."),
         _ => throw new NotSupportedException(
-          "SignalConnectionModulatesMacro cannot be determined because " +
+          "ModulationModulatesMacro cannot be determined because " +
           $"Owner is of unsupported type {Owner.GetType().Name}.")
       };
     }
   }
 
-  internal XElement? SignalConnectionElement { get; }
+  internal XElement? ModulationElement { get; }
   public Macro? SourceMacro { get; set; }
 
   /// <summary>
-  ///   If the <see cref="SignalConnection" /> belongs to an effect or the
+  ///   If the <see cref="Modulation" /> belongs to an effect or the
   ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, returns the
   ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated.
-  ///   If the <see cref="SignalConnection" /> belongs to the <see cref="Macro" /> to
+  ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, returns null.
   /// </summary>
   private int? ModulatedMacroNo =>

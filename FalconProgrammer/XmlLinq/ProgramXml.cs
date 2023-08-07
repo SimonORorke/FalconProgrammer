@@ -9,7 +9,7 @@ public class ProgramXml {
   private XElement? _templateMacroElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
-  private XElement? _templateSignalConnectionElement;
+  private XElement? _templateModulationElement;
 
   public ProgramXml(Category category) {
     Category = category;
@@ -37,8 +37,8 @@ public class ProgramXml {
   public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
 
-  private XElement TemplateSignalConnectionElement =>
-    _templateSignalConnectionElement ??= GetTemplateSignalConnectionElement();
+  private XElement TemplateModulationElement =>
+    _templateModulationElement ??= GetTemplateModulationElement();
 
   // public bool BypassEffects(string xName) {
   //   var inserts = (
@@ -74,27 +74,27 @@ public class ProgramXml {
   //   return false;
   // }
 
-  public void ChangeSignalConnectionSource(
-    SignalConnection oldSignalConnection, SignalConnection newSignalConnection) {
-    var signalConnectionElements =
-      from signalConnectionElement in RootElement.Descendants("SignalConnection")
+  public void ChangeModulationSource(
+    Modulation oldModulation, Modulation newModulation) {
+    var modulationElements =
+      from modulationElement in RootElement.Descendants("SignalConnection")
       where GetAttributeValue(
-              signalConnectionElement, nameof(SignalConnection.Source)) ==
-            oldSignalConnection.Source
-      select signalConnectionElement;
-    foreach (var signalConnectionElement in signalConnectionElements) {
+              modulationElement, nameof(Modulation.Source)) ==
+            oldModulation.Source
+      select modulationElement;
+    foreach (var modulationElement in modulationElements) {
       SetAttribute(
-        signalConnectionElement, nameof(SignalConnection.Source), 
-        newSignalConnection.Source);
+        modulationElement, nameof(Modulation.Source), 
+        newModulation.Source);
     }
   }
 
-  public XElement CreateSignalConnectionElement(SignalConnection signalConnection) {
-    var result = new XElement(TemplateSignalConnectionElement);
-    // In case the template SignalConnection contains a non-default (< 1) Ratio,
+  public XElement CreateModulationElement(Modulation modulation) {
+    var result = new XElement(TemplateModulationElement);
+    // In case the template Modulation contains a non-default (< 1) Ratio,
     // set the Ratio to the default, 1.
-    SetAttribute(result, nameof(SignalConnection.Ratio), 1);
-    UpdateSignalConnectionElement(signalConnection, result);
+    SetAttribute(result, nameof(Modulation.Ratio), 1);
+    UpdateModulationElement(modulation, result);
     return result;
   }
 
@@ -124,40 +124,40 @@ public class ProgramXml {
   }
   
   /// <summary>
-  ///   Returns a list of all the SignalConnection elements in the program whose source
+  ///   Returns a list of all the Modulation elements in the program whose source
   ///   indicates the specified MIDI CC number.
   /// </summary>
   /// <remarks>
   ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  ///   data structure does not include <see cref="Modulation"/>s that are owned
   ///   by effects.
   /// </remarks>
-  public List<XElement> GetSignalConnectionElementsWithCcNo(int ccNo) {
+  public List<XElement> GetModulationElementsWithCcNo(int ccNo) {
     string source = $"@MIDI CC {ccNo}";
     return (
-      from signalConnectionElement in RootElement.Descendants("SignalConnection")
+      from modulationElement in RootElement.Descendants("SignalConnection")
       where GetAttributeValue(
-        signalConnectionElement, nameof(SignalConnection.Source)) == source
-      select signalConnectionElement).ToList();
+        modulationElement, nameof(Modulation.Source)) == source
+      select modulationElement).ToList();
   }
 
   // /// <summary>
-  // ///   Returns a list of all the SignalConnection elements in the program whose source
+  // ///   Returns a list of all the Modulation elements in the program whose source
   // ///   indicates the specified macro (as a modulator of an effect).
   // /// </summary>
   // /// <remarks>
   // ///   The Linq For XML data structure has to be searched because the deserialised
-  // ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  // ///   data structure does not include <see cref="Modulation"/>s that are owned
   // ///   by effects.
   // /// </remarks>
-  // public List<XElement> GetSignalConnectionElementsModulatedByMacro(Macro macro) {
+  // public List<XElement> GetModulationElementsModulatedByMacro(Macro macro) {
   //   return (
-  //     from signalConnectionElement in RootElement.Descendants("SignalConnection")
+  //     from modulationElement in RootElement.Descendants("SignalConnection")
   //     // EndsWith rather than == because the Source will be prefixed by a path
   //     // if it indicates a macro that modulates an effect.
   //     where GetAttributeValue(
-  //       signalConnectionElement, nameof(SignalConnection.Source)).EndsWith(macro.Name)
-  //     select signalConnectionElement).ToList();
+  //       modulationElement, nameof(Modulation.Source)).EndsWith(macro.Name)
+  //     select modulationElement).ToList();
   // }
 
   public void LoadFromFile(string inputProgramPath) {
@@ -195,11 +195,11 @@ public class ProgramXml {
     return TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault(); 
   }
 
-  protected virtual XElement GetTemplateSignalConnectionElement() {
+  protected virtual XElement GetTemplateModulationElement() {
     var result =
       TemplateRootElement.Descendants("SignalConnection").FirstOrDefault() ??
       throw new InvalidOperationException(
-        $"'{InputProgramPath}': Cannot find SignalConnection element in " + 
+        $"'{InputProgramPath}': Cannot find Modulation element in " + 
         $"'{Category.TemplateProgramPath}'.");
     return result;
   }
@@ -220,35 +220,35 @@ public class ProgramXml {
     }
   }
 
-  public void RemoveSignalConnectionElementsWithCcNo(int ccNo) {
-    var signalConnectionElements = 
-      GetSignalConnectionElementsWithCcNo(ccNo);
-    foreach (var signalConnectionElement in signalConnectionElements) {
-      signalConnectionElement.Remove();
+  public void RemoveModulationElementsWithCcNo(int ccNo) {
+    var modulationElements = 
+      GetModulationElementsWithCcNo(ccNo);
+    foreach (var modulationElement in modulationElements) {
+      modulationElement.Remove();
     }
   }
 
   /// <summary>
-  ///   Removes all the SignalConnection elements in the program with the specified
+  ///   Removes all the Modulation elements in the program with the specified
   ///   destination.
   /// </summary>
   /// <remarks>
   ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="SignalConnection"/>s that are owned
+  ///   data structure does not include <see cref="Modulation"/>s that are owned
   ///   by effects.
   /// </remarks>
-  public void RemoveSignalConnectionElementsWithDestination(string destination) {
-    var signalConnectionElements = (
-      from signalConnectionElement in RootElement.Descendants("SignalConnection")
+  public void RemoveModulationElementsWithDestination(string destination) {
+    var modulationElements = (
+      from modulationElement in RootElement.Descendants("SignalConnection")
       where GetAttributeValue(
-        signalConnectionElement, nameof(SignalConnection.Destination)) == destination
-      select signalConnectionElement).ToList();
-    foreach (var signalConnectionElement in signalConnectionElements) {
-      signalConnectionElement.Remove();
+        modulationElement, nameof(Modulation.Destination)) == destination
+      select modulationElement).ToList();
+    foreach (var modulationElement in modulationElements) {
+      modulationElement.Remove();
     }
     var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections")!;
     if (!connectionsElement.HasElements) {
-      // We've removed all its SignalConnection elements.
+      // We've removed all its Modulation elements.
       // Example: Factory\Pads\DX FM Pad 2.0
       connectionsElement.Remove();
     }
@@ -320,21 +320,21 @@ public class ProgramXml {
       InfoPageCcsScriptProcessorElement.Add(new XElement(templateConnectionsElement));
     } else {
       connectionsElement.RemoveAll();
-      foreach (var templateSignalConnectionElement in templateConnectionsElement.Elements()) {
-        connectionsElement.Add(new XElement(templateSignalConnectionElement));
+      foreach (var templateModulationElement in templateConnectionsElement.Elements()) {
+        connectionsElement.Add(new XElement(templateModulationElement));
       }
     }
   }
 
-  public void UpdateSignalConnectionElement(
-    SignalConnection signalConnection, XElement signalConnectionElement) {
-    SetAttribute(signalConnectionElement, nameof(SignalConnection.Ratio), 
-      signalConnection.Ratio);
-    SetAttribute(signalConnectionElement, nameof(SignalConnection.Source), 
-      signalConnection.Source);
-    SetAttribute(signalConnectionElement, nameof(SignalConnection.Destination), 
-      signalConnection.Destination);
-    SetAttribute(signalConnectionElement, nameof(SignalConnection.ConnectionMode), 
-      signalConnection.ConnectionMode);
+  public void UpdateModulationElement(
+    Modulation modulation, XElement modulationElement) {
+    SetAttribute(modulationElement, nameof(Modulation.Ratio), 
+      modulation.Ratio);
+    SetAttribute(modulationElement, nameof(Modulation.Source), 
+      modulation.Source);
+    SetAttribute(modulationElement, nameof(Modulation.Destination), 
+      modulation.Destination);
+    SetAttribute(modulationElement, nameof(Modulation.ConnectionMode), 
+      modulation.ConnectionMode);
   }
 }

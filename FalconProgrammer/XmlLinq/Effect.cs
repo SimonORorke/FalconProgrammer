@@ -8,7 +8,7 @@ public class Effect : INamed {
   private bool? _isDelay;
   private bool? _isReverb;
 
-  private ImmutableList<SignalConnection>? _signalConnections;
+  private ImmutableList<Modulation>? _modulations;
 
   public Effect(XElement effectElement, ProgramXml programXml) {
     EffectElement = effectElement;
@@ -26,16 +26,16 @@ public class Effect : INamed {
   public string EffectType { get; }
   public bool IsDelay => _isDelay ??= GetIsDelay();
   public bool IsReverb => _isReverb ??= GetIsReverb();
-  public bool IsModulated => SignalConnections.Count > 0;
+  public bool IsModulated => Modulations.Count > 0;
 
   private ProgramXml ProgramXml { get; }
 
   /// <summary>
-  ///   SignalConnections specifying modulators of the effect.
+  ///   Modulations specifying modulators of the effect.
   /// </summary>
-  public ImmutableList<SignalConnection> SignalConnections {
-    get => _signalConnections ??= GetSignalConnections();
-    private set => _signalConnections = value;
+  public ImmutableList<Modulation> Modulations {
+    get => _modulations ??= GetModulations();
+    private set => _modulations = value;
   }
 
   public string Name { get; }
@@ -44,12 +44,12 @@ public class Effect : INamed {
   ///   TODO: Review ChangeModulatedParametersToZero requirement
   /// </summary>
   public void ChangeModulatedParametersToZero() {
-    foreach (var signalConnection in SignalConnections) {
+    foreach (var modulation in Modulations) {
       try {
         ProgramXml.SetAttribute(
-          EffectElement, signalConnection.Destination,
+          EffectElement, modulation.Destination,
           // If it's a toggle macro, Destination should be "Bypass".  
-          signalConnection.Destination == "Bypass" ? 1 : 0);
+          modulation.Destination == "Bypass" ? 1 : 0);
         // ReSharper disable once EmptyGeneralCatchClause
       } catch { }
     }
@@ -66,26 +66,26 @@ public class Effect : INamed {
       or "SampledReverb" or "SharpVerb" or "TapeEcho";
   }
 
-  private ImmutableList<SignalConnection> GetSignalConnections() {
-    var list = new List<SignalConnection>();
+  private ImmutableList<Modulation> GetModulations() {
+    var list = new List<Modulation>();
     var connectionsElement = EffectElement.Element("Connections");
     if (connectionsElement != null) {
       list.AddRange(connectionsElement.Elements("SignalConnection").Select(
-        signalConnectionElement => new SignalConnection(
-          this, signalConnectionElement)));
+        modulationElement => new Modulation(
+          this, modulationElement)));
     }
     return list.ToImmutableList();
   }
 
   public void RemoveModulationsByMacro(Macro macro) {
-    var signalConnections = SignalConnections.ToList();
-    for (int i = signalConnections.Count - 1; i >= 0; i--) {
-      if (signalConnections[i].SourceMacro == macro) {
-        signalConnections[i].SignalConnectionElement!.Remove();
-        signalConnections.Remove(signalConnections[i]);
+    var modulations = Modulations.ToList();
+    for (int i = modulations.Count - 1; i >= 0; i--) {
+      if (modulations[i].SourceMacro == macro) {
+        modulations[i].ModulationElement!.Remove();
+        modulations.Remove(modulations[i]);
       }
     }
-    SignalConnections = signalConnections.ToImmutableList();
+    Modulations = modulations.ToImmutableList();
     var connectionsElement = EffectElement.Element("Connections");
     if (connectionsElement != null && !connectionsElement.Nodes().Any()) {
       connectionsElement.Remove();

@@ -7,8 +7,8 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.XmlDeserialised;
 
 /// <summary>
-///   Called ConstantModulation in the program XML but can only represent a macro, so far
-///   as I can tell.
+///   Called ConstantModulation in the program XML but corresponds to a macro,
+///   as shown the Info page.
 /// </summary>
 public class Macro : INamed {
   private XElement? _macroElement;
@@ -16,7 +16,7 @@ public class Macro : INamed {
 
   /// <summary>
   ///   The macro name, which uniquely identifies the macro. For reference in
-  ///   <see cref="SignalConnection" />s owned by effects or the
+  ///   <see cref="Modulation" />s owned by effects or the
   ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />.
   ///   only indicates the macro number.
   /// </summary>
@@ -45,13 +45,13 @@ public class Macro : INamed {
   [XmlAttribute] public float Value { get; set; }
 
   /// <summary>
-  ///   For a macro (ConstantModulation), there is 0 or 1 SignalConnection only, except
-  ///   where there is a SignalConnection that maps to the modulation wheel (MIDI CC 1),
-  ///   in which case there can be two SignalConnections.
+  ///   For a macro (ConstantModulation), there is 0 or 1 Modulation only, except
+  ///   where there is a Modulation that maps to the modulation wheel (MIDI CC 1),
+  ///   in which case there can be two Modulations.
   /// </summary>
   [XmlArray("Connections")]
   [XmlArrayItem("SignalConnection")]
-  public List<SignalConnection> SignalConnections { get; set; } = null!;
+  public List<Modulation> Modulations { get; set; } = null!;
 
   [XmlElement] public MacroProperties Properties { get; set; } = null!;
 
@@ -109,7 +109,7 @@ public class Macro : INamed {
   
   public void AddMacroElement() {
     MacroElement = new XElement(ProgramXml.TemplateMacroElement);
-    // Remove any SignalConnection elements and their parent Connections element brought
+    // Remove any Modulation elements and their parent Connections element brought
     // over with template.
     MacroElement.Element("Connections")?.Remove();
     ProgramXml.SetAttribute(MacroElement, nameof(Name), Name);
@@ -118,25 +118,25 @@ public class Macro : INamed {
     ProgramXml.SetAttribute(MacroElement, nameof(Style), Style);
     ProgramXml.SetAttribute(MacroElement, nameof(Value), Value);
     ProgramXml.ControlSignalSourcesElement.Add(MacroElement);
-    // A macro is expected to own 0, 1 or 2 SignalConnections:
-    // 2 if there is a mod wheel signal connection and a 'for macro' SignalConnection.
-    foreach (var signalConnection in SignalConnections) {
-      AddSignalConnectionElement(signalConnection);
+    // A macro is expected to own 0, 1 or 2 Modulations:
+    // 2 if there is a mod wheel signal connection and a 'for macro' Modulation.
+    foreach (var modulation in Modulations) {
+      AddModulationElement(modulation);
     }
     UpdatePropertiesElement();
   }
 
   /// <summary>
-  ///   Adds the specified <see cref="SignalConnection" /> to the <see cref="Macro" />
+  ///   Adds the specified <see cref="Modulation" /> to the <see cref="Macro" />
   ///   in the Linq For XML data structure as well as in the deserialised data structure.
   /// </summary>
-  public void AddSignalConnection(SignalConnection signalConnection) {
-    signalConnection.Owner = this;
-    SignalConnections.Add(signalConnection);
-    AddSignalConnectionElement(signalConnection);
+  public void AddModulation(Modulation modulation) {
+    modulation.Owner = this;
+    Modulations.Add(modulation);
+    AddModulationElement(modulation);
   }
 
-  private void AddSignalConnectionElement(SignalConnection signalConnection) {
+  private void AddModulationElement(Modulation modulation) {
     // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
     // element will already own a Connections element. 
     var connectionsElement = MacroElement.Element("Connections");
@@ -144,20 +144,20 @@ public class Macro : INamed {
       connectionsElement = new XElement("Connections");
       MacroElement.Add(connectionsElement);
     }
-    connectionsElement.Add(ProgramXml.CreateSignalConnectionElement(signalConnection));
+    connectionsElement.Add(ProgramXml.CreateModulationElement(modulation));
   }
 
   /// <summary>
   ///   Change all effect parameters that are currently modulated by the modulation wheel
   ///   to be modulated by the specified macro instead.
   /// </summary>
-  public void ChangeModWheelSignalConnectionSourcesToMacro() {
+  public void ChangeModWheelModulationSourcesToMacro() {
     string newSource = $"$Program/{Name}";
-    var modWheelSignalConnectionElements = 
-      ProgramXml.GetSignalConnectionElementsWithCcNo(1);
-    foreach (var signalConnectionElement in modWheelSignalConnectionElements) {
+    var modWheelModulationElements = 
+      ProgramXml.GetModulationElementsWithCcNo(1);
+    foreach (var modulationElement in modWheelModulationElements) {
       ProgramXml.SetAttribute(
-        signalConnectionElement, nameof(SignalConnection.Source), newSource);
+        modulationElement, nameof(Modulation.Source), newSource);
     }
   }
 
@@ -182,36 +182,36 @@ public class Macro : INamed {
     foreach (var effect in ModulatedEffects) {
       effect.ChangeModulatedParametersToZero();
     }
-    // var signalConnectionElementsWithMacroSource =
-    //   ProgramXml.GetSignalConnectionElementsModulatedByMacro(this);
-    // foreach (var signalConnectionElement in signalConnectionElementsWithMacroSource) {
-    //   var connectionsElement = ProgramXml.GetParentElement(signalConnectionElement);
+    // var modulationElementsWithMacroSource =
+    //   ProgramXml.GetModulationElementsModulatedByMacro(this);
+    // foreach (var modulationElement in modulationElementsWithMacroSource) {
+    //   var connectionsElement = ProgramXml.GetParentElement(modulationElement);
     //   var effectElement = ProgramXml.GetParentElement(connectionsElement);
-    //   var signalConnection = new SignalConnection(signalConnectionElement);
+    //   var modulation = new Modulation(modulationElement);
     //   try {
     //     ProgramXml.SetAttribute(
-    //       effectElement, signalConnection.Destination,
+    //       effectElement, modulation.Destination,
     //       // If it's a toggle macro, Destination should be "Bypass".  
-    //       signalConnection.Destination == "Bypass" ? 1 : 0);
+    //       modulation.Destination == "Bypass" ? 1 : 0);
     //     // ReSharper disable once EmptyGeneralCatchClause
     //   } catch { }
     // }
     // return true;
   }
 
-  public SignalConnection? FindSignalConnectionWithCcNo(int ccNo) {
+  public Modulation? FindModulationWithCcNo(int ccNo) {
     return (
-      from signalConnection in SignalConnections
-      where signalConnection.CcNo == ccNo
-      select signalConnection).FirstOrDefault();
+      from modulation in Modulations
+      where modulation.CcNo == ccNo
+      select modulation).FirstOrDefault();
   }
 
   [SuppressMessage("ReSharper", "CommentTypo")]
-  public List<SignalConnection> GetForMacroSignalConnections() {
+  public List<Modulation> GetForMacroModulations() {
     return (
-      from signalConnection in SignalConnections
-      where signalConnection.ModulatesMacro
-      select signalConnection).ToList();
+      from modulation in Modulations
+      where modulation.ModulatesMacro
+      select modulation).ToList();
   }
 
   private XElement GetMacroElement() {
@@ -260,15 +260,15 @@ public class Macro : INamed {
   }
 
   /// <summary>
-  ///   Removes the specified <see cref="SignalConnection" /> from the Linq For XML data
+  ///   Removes the specified <see cref="Modulation" /> from the Linq For XML data
   ///   structure as well as from the <see cref="Macro" /> in the deserialised data
   ///   structure.
   /// </summary>
-  public void RemoveSignalConnection(SignalConnection signalConnection) {
-    if (SignalConnections.Contains(signalConnection)) {
-      SignalConnections.Remove(signalConnection);
+  public void RemoveModulation(Modulation modulation) {
+    if (Modulations.Contains(modulation)) {
+      Modulations.Remove(modulation);
     }
-    ProgramXml.RemoveSignalConnectionElementsWithCcNo(signalConnection.CcNo!.Value);
+    ProgramXml.RemoveModulationElementsWithCcNo(modulation.CcNo!.Value);
   }
 
   public override string ToString() {
@@ -283,14 +283,14 @@ public class Macro : INamed {
     ProgramXml.SetAttribute(PropertiesElement, "y", Properties.Y);
   }
 
-  public void UpdateSignalConnection(SignalConnection signalConnection) {
+  public void UpdateModulation(Modulation modulation) {
     var connectionsElement = MacroElement.Element("Connections")!;
-    var signalConnectionElements =
+    var modulationElements =
       connectionsElement.Elements("SignalConnection").ToList();
-    // The macro ("ConstantModulation") will have two SignalConnections if one of them
+    // The macro ("ConstantModulation") will have two Modulations if one of them
     // maps to the modulation wheel (MIDI CC 1). 
-    var signalConnectionElement = signalConnectionElements[signalConnection.Index];
-    ProgramXml.UpdateSignalConnectionElement(signalConnection, signalConnectionElement);
+    var modulationElement = modulationElements[modulation.Index];
+    ProgramXml.UpdateModulationElement(modulation, modulationElement);
   }
   
   public void UpdateLocation() {

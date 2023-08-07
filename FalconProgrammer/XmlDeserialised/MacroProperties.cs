@@ -23,7 +23,7 @@ public class MacroProperties {
   ///   Gets whether the coordinates specified in the Properties are actually to be used
   ///   to determine the location of the macro on the Info page. False if the optional
   ///   showValue attribute is included in the Properties XML element and set to "0"
-  ///   (showValue="0"), in which case the SignalConnection mapping the MIDI CC number to
+  ///   (showValue="0"), in which case the Modulation mapping the MIDI CC number to
   ///   the macro must be added to the ScriptProcessor
   ///   for the script that defines the Info page layout. 
   /// </summary>
@@ -40,7 +40,7 @@ public class MacroProperties {
         "ConstantModulation.Properties include the optional attribute " + 
         "showValue=\"0\", indicating that the coordinates specified in the Properties " +
         "will not actually to be used to determine the locations of macros on the " + 
-        "Info page. Instead, the SignalConnections mapping MIDI CC numbers to " +
+        "Info page. Instead, the Modulations mapping MIDI CC numbers to " +
         "macros must be added to the ScriptProcessor for the " + 
         "script that defines the Info page layout.");
     }

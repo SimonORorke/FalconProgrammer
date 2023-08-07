@@ -37,8 +37,8 @@ public class Category {
   ///   </para>
   ///   <para>
   ///     In these cases, the Info page layout is specified in a script.
-  ///     SignalConnections mapping MIDI CC numbers to macros must be added to that
-  ///     script's ScriptProcessor. The SignalConnections are copied from a template
+  ///     Modulations mapping MIDI CC numbers to macros must be added to that
+  ///     script's ScriptProcessor. The Modulations are copied from a template
   ///     program file specific to the Info page layout.
   ///   </para>
   ///   <para>
@@ -68,7 +68,7 @@ public class Category {
 
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
-  ///   ScriptProcessor contains the SignalConnections that map the macros to MIDI CC
+  ///   ScriptProcessor contains the Modulations that map the macros to MIDI CC
   ///   numbers.
   /// </summary>
   public ScriptProcessor? TemplateScriptProcessor { get; private set; }
@@ -124,7 +124,7 @@ public class Category {
     using var reader = new StreamReader(TemplateProgramPath);
     var serializer = new XmlSerializer(typeof(UviRoot));
     var root = (UviRoot)serializer.Deserialize(reader)!;
-    // Testing for macro-modulating SignalConnections might be more reliable than
+    // Testing for macro-modulating Modulations might be more reliable than
     // assuming the last ScriptProcessor.  But I think I tried that and there was 
     // a problem, don't know what though.  Can be revisited if assuming the last
     // ScriptProcessor turns out not to be reliable.  But I think that's actually fine
