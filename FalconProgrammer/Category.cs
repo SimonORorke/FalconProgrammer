@@ -101,6 +101,16 @@ public class Category {
     return result;
   }
 
+  public FileInfo GetProgramFile(string programName) {
+    var result = new FileInfo(
+      System.IO.Path.Combine(Folder.FullName, $"{programName}.uvip"));
+    if (!result.Exists) {
+      throw new InvalidOperationException(
+        $"Category {Path}: Cannot find program file '{result.FullName}'.");
+    }
+    return result;
+  }
+  
   private FileInfo GetTemplateProgramFile() {
     if (string.IsNullOrEmpty(SettingsCategory.TemplatePath)) {
       throw new InvalidOperationException(

@@ -694,7 +694,7 @@ public class FalconProgram {
     } else {
       // The CCs are specified in the Info page ScriptProcessor but there's no template
       // ScriptProcessor. 
-      UpdateMacroCcsInScriptProcessor();
+      UpdateMacroCcsOwnedByScriptProcessor();
     }
     Console.WriteLine($"{PathShort}: Updated Macro CCs.");
   }
@@ -785,7 +785,7 @@ public class FalconProgram {
   ///   Factory\Keys\Smooth E-piano 2.1.
   /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
-  private void UpdateMacroCcsInScriptProcessor() {
+  private void UpdateMacroCcsOwnedByScriptProcessor() {
     var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder);
     int macroNo = 0;
