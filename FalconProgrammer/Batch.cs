@@ -260,12 +260,12 @@ public class Batch {
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null) {
-    RestoreOriginal(soundBankName, categoryName);
+    // RestoreOriginal(soundBankName, categoryName);
     PrependPathLineToDescription(soundBankName, categoryName);
     UpdateMacroCcs(soundBankName, categoryName);
     BypassDelayEffects(soundBankName, categoryName);
     ChangeReverbToZero(soundBankName, categoryName);
-    ReplaceModWheelWithMacro(soundBankName, categoryName);
+    // ReplaceModWheelWithMacro(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {

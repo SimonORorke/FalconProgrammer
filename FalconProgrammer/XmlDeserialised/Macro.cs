@@ -98,6 +98,11 @@ public class Macro : INamed {
 
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
+  public bool ModulatesEnabledEffects => (
+    from effect in ModulatedEffects
+    where !effect.Bypass
+    select effect).Any();
+
   public bool ModulatesReverb =>
     DisplayName.Contains("Reverb")
     || DisplayName.Contains("Room")
@@ -147,6 +152,16 @@ public class Macro : INamed {
     connectionsElement.Add(ProgramXml.CreateModulationElement(modulation));
   }
 
+  public void ChangeCcNoTo(int newCcNo) {
+    var forMacroModulation = GetForMacroModulations().FirstOrDefault();
+    if (forMacroModulation != null) {
+      if (newCcNo != forMacroModulation.CcNo) {
+        forMacroModulation.CcNo = newCcNo;
+        UpdateModulation(forMacroModulation);
+      }
+    }
+  }
+
   /// <summary>
   ///   Change all effect parameters that are currently modulated by the modulation wheel
   ///   to be modulated by the specified macro instead.
@@ -162,41 +177,10 @@ public class Macro : INamed {
   }
 
   public void ChangeValueToZero() {
-  // public bool ChangeValueToZero() {
-    // // Ignore case when checking whether there is a macro with that display name.  An
-    // // example of where the cases of macro display names are non-standard is
-    // // Factory\Pure Additive 2.0\Bass Starter.
-    // var MacroElement = (
-    //   from element in ProgramXml.MacroElements
-    //   where string.Equals(ProgramXml.GetAttributeValue(element, nameof(DisplayName)),
-    //     DisplayName, StringComparison.OrdinalIgnoreCase)
-    //   select element).FirstOrDefault();
-    // if (MacroElement == null) {
-    //   return false;
-    // }
     ProgramXml.SetAttribute(MacroElement, nameof(Value), 0);
-    // if (!ProgramXml.ChangeMacroValueToZero(this)) {
-    //   return false;
-    // }
-    // Change the values of the effect parameters modulated by the macro as required too.
     foreach (var effect in ModulatedEffects) {
       effect.ChangeModulatedParametersToZero();
     }
-    // var modulationElementsWithMacroSource =
-    //   ProgramXml.GetModulationElementsModulatedByMacro(this);
-    // foreach (var modulationElement in modulationElementsWithMacroSource) {
-    //   var connectionsElement = ProgramXml.GetParentElement(modulationElement);
-    //   var effectElement = ProgramXml.GetParentElement(connectionsElement);
-    //   var modulation = new Modulation(modulationElement);
-    //   try {
-    //     ProgramXml.SetAttribute(
-    //       effectElement, modulation.Destination,
-    //       // If it's a toggle macro, Destination should be "Bypass".  
-    //       modulation.Destination == "Bypass" ? 1 : 0);
-    //     // ReSharper disable once EmptyGeneralCatchClause
-    //   } catch { }
-    // }
-    // return true;
   }
 
   public Modulation? FindModulationWithCcNo(int ccNo) {

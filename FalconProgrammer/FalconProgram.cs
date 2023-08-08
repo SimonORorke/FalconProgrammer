@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
@@ -302,6 +303,41 @@ public class FalconProgram {
       select scriptProcessor).Last();  
   }
 
+  private Macro? FindReverbContinuousMacro() {
+    return (
+      from macro in ContinuousMacros
+      where macro.ModulatesReverb
+      select macro).FirstOrDefault();
+  }
+
+  private Macro? FindReverbToggleMacro() {
+    return (
+      from macro in Macros
+      where macro.ModulatesReverb && !macro.IsContinuous
+      select macro).FirstOrDefault();
+  }
+
+  [SuppressMessage("ReSharper", "CommentTypo")]
+  private Macro? FindWheelMacro() {
+    return (
+      from continuousMacro in ContinuousMacros
+      // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
+      // contains 'Wheel'. The only two additional programs that subsequently got wheel
+      // macros added were
+      // Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
+      //
+      // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
+      // hear. The mod wheel did work, and the added wheel macro has successfully
+      // replaced it. So the problem with the 'Wheel me' macro, if it's real, has not
+      // been caused by the wheel replacement macro implementation.
+      //
+      // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
+      // wheel and now controls the range of the 'Wheel' macro instead.  So that change
+      // has worked too.
+      where continuousMacro.DisplayName.ToLower() == "wheel"
+      select continuousMacro).FirstOrDefault();
+  }
+
   private int GetCcNo(Macro macro) {
     int result;
     if (macro.IsContinuous) {
@@ -401,20 +437,26 @@ public class FalconProgram {
     }
   }
 
+  private void MoveMacroToEndIfExists(Macro? macroIfExists) {
+    if (macroIfExists != null && macroIfExists != Macros[^1]) {
+      Macros.Remove(macroIfExists);
+      Macros.Add(macroIfExists);
+    }
+  }
+
   [SuppressMessage("ReSharper", "CommentTypo")]
-  private void OptimiseWheelMacro() {
+  private bool OptimiseWheelMacro() {
     if (Macros.Count != 5
         || ContinuousMacros.Count != 5
-        || InfoPageLayout.FindDelayContinuousMacro() != null
-        || InfoPageLayout.FindReverbContinuousMacro() != null) {
-      return;
+        || FindReverbContinuousMacro() != null) {
+      return false;
     }
-    // If we don't reload, relocating the macros jumbles them.
-    // Perhaps there's a better way.
-    Save();
-    Read();
-    Console.WriteLine(
-      $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
+    // // If we don't reload, relocating the macros jumbles them.
+    // // Perhaps there's a better way.
+    // Save();
+    // Read();
+    // Console.WriteLine(
+    //   $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
     if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
       // The problem is modulations by the wheel replacement macro.
       // (Source will indicate the modulating macro,
@@ -422,24 +464,20 @@ public class FalconProgram {
       // Example: "M.1 Cutoff" macro of
       // Hypnotic Drive\Atmospheres & Pads\Vocal Atmos - Prophecy.
       // Requires further investigation. Maybe OK as is.
-      return;
+      return false;
     }
-    InfoPageLayout.MoveAllMacrosToStandardBottom();
-    // Wheel macro will now be at the right end, as it was added last.
+    // Move any reverb to the right end of the standard bottom row
+    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
+    // the wheel replacement macro from the continuous  macro I'm least likely to use,
+    // preferably delay, otherwise reverb.
+    // Example: Savage\Leads\Saw Dirty.
+    MoveMacroToEndIfExists(FindReverbToggleMacro());
+    MoveMacroToEndIfExists(FindReverbContinuousMacro());
+    MoveMacroToEndIfExists(FindWheelMacro());
+    ProgramXml.ReplaceMacroElements(Macros);
     UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
-    var macro4 = Macros[3];
-    var macro4Modulation = macro4.FindModulationWithCcNo(11);
-    if (macro4Modulation != null) {
-      macro4Modulation.CcNo = 34;
-      macro4.UpdateModulation(macro4Modulation);
-    }
-    var wheelMacro = Macros[4];
-    var wheelMacroModulation =
-      wheelMacro.FindModulationWithCcNo(34)
-      ?? wheelMacro.FindModulationWithCcNo(11)!;
-    wheelMacroModulation.CcNo = 1;
-    wheelMacro.UpdateModulation(wheelMacroModulation);
     Console.WriteLine($"{PathShort}: Optimised Wheel macro.");
+    return true;
   }
 
   public void PrependPathLineToDescription() {
@@ -516,36 +554,30 @@ public class FalconProgram {
   }
 
   /// <summary>
-  ///   Removes the delay macro, if any. By the current criterion for what a delay macro
-  ///   is, there's a maximum of 1 per program.
+  ///   Removes delay macros, if any.
+  ///   To be safe, these are recognised by the macro name, or if all the effects the
+  ///   macro modulates have been bypassed by <see cref="BypassDelayEffects" />.
   /// </summary>
-  private void RemoveDelayMacro() {
-    // int removedCount = 0;
+  private bool RemoveDelayMacros() {
+    int removedCount = 0;
     for (int i = Macros.Count - 1; i >= 0; i--) {
       var macro = Macros[i];
       // macro.RemoveDelayModulations();
-      // if (macro.ModulatedEffects.Count == 0 || macro.ModulatesDelay) {
-      if (macro.ModulatesDelay) {
+      if (macro.ModulatesDelay || !macro.ModulatesEnabledEffects) {
         macro.RemoveMacroElement();
         Macros.RemoveAt(i);
-        // removedCount++;
+        removedCount++;
         Console.WriteLine($"{PathShort}: Removed {macro}.");
-        return;
       }
     }
-    // if (removedCount > 0) {
-    //   ContinuousMacros = GetContinuousMacros();
-    //   if (removedCount > 2) {
-    //     Debug.Assert(true);
-    //   }
-    // }
+    return removedCount > 0;
   }
 
   /// <summary>
   ///   Do away with the <see cref="InfoPageCcsScriptProcessor" />, which defines a
   ///   special Info Page layout and MIDI CC numbers that modulate macros.
-  ///   That will give the Info page the default appearance and allow macros to be moved
-  ///   and added. When the script processor has been dispensed with,
+  ///   That will give the Info page the default appearance and allow macros to be moved,
+  ///   added and removed. When the script processor has been dispensed with,
   ///   move the existing macros to locations optimal for accommodating a new wheel
   ///   replacement macro.
   /// </summary>
@@ -558,8 +590,8 @@ public class FalconProgram {
     // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
     // for the mod wheel) Modulations to macro-owned 'for macro' Modulations,
     // there should not be any existing macro-owned 'for macro' Modulations.
-    // Example: Titanium\Pads\Children's Choir.
     // If there are, get rid of them.
+    // Example: Titanium\Pads\Children's Choir.
     foreach (var macro in Macros) {
       var forMacroModulations =
         macro.GetForMacroModulations();
@@ -580,10 +612,14 @@ public class FalconProgram {
     if (!CanReplaceModWheelWithMacro()) {
       return;
     }
+    bool moveMacros = false;
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
+      moveMacros = true;
     }
-    RemoveDelayMacro();
+    // if (RemoveDelayMacros()) {
+    //   moveMacros = true;
+    // }
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
       if (updateMacroCcs) {
@@ -591,9 +627,19 @@ public class FalconProgram {
         MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
         UpdateMacroCcsOwnedByMacros();
       }
-      Console.WriteLine(
-        $"{PathShort}: Replaced mod wheel with macro.");
-      OptimiseWheelMacro();
+      Console.WriteLine($"{PathShort}: Replaced mod wheel with macro.");
+      if (OptimiseWheelMacro()) {
+        moveMacros = true;
+      }
+      if (ContinuousMacros.Count > 4) {
+        ReuseCc1();
+      }
+    }
+    if (moveMacros && Macros.Count < 10) {
+      if (Macros.Count == 9) {
+        Debug.Assert(true);
+      }
+      InfoPageLayout.MoveAllMacrosToStandardBottom();
     }
   }
 
@@ -608,6 +654,22 @@ public class FalconProgram {
     }
     File.Copy(originalPath, Path, true);
     Console.WriteLine($"{PathShort}: Restored to Original");
+  }
+
+  private void ReuseCc1() {
+    // ContinuousMacros[3].ChangeCcNoTo(34);
+    ContinuousMacros[4].ChangeCcNoTo(1);
+    if (ContinuousMacros.Count > 5) {
+      ContinuousMacros[5].ChangeCcNoTo(11);
+    }
+    if (ContinuousMacros.Count > 6) {
+      int newCcNo = 36;
+      for (int i = 6; i < ContinuousMacros.Count; i++) {
+        ContinuousMacros[i].ChangeCcNoTo(newCcNo);
+        newCcNo++;
+      }
+    }
+    Console.WriteLine($"{PathShort}: Reused MIDI CC 1.");
   }
 
   public void Save() {
@@ -695,9 +757,9 @@ public class FalconProgram {
         // Ratio, and, with the exception below, just replace the CC number.
         var modulation = forMacroModulations[0];
         modulation.CcNo = ccNo;
-        // In Factory/Keys/Days Of Old 1.4, Macro 1, a switch macro, has Ratio -1 instead
+        // In Factory/Keys/Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1 instead
         // of the usual 1. I don't know what the point of that is. But it prevents the
-        // button controller mapped to the macro from working. To fix this, if a switch
+        // button controller mapped to the macro from working. To fix this, if a toggle
         // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing
         // that. 
         // ReSharper disable once CompareOfFloatsByEqualityOperator
@@ -745,24 +807,7 @@ public class FalconProgram {
     }
   }
 
-  [SuppressMessage("ReSharper", "CommentTypo")]
   private bool WheelMacroExists() {
-    return (
-      from continuousMacro in ContinuousMacros
-      // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
-      // contains 'Wheel'. The only two additional programs that subsequently got wheel
-      // macros added were
-      // Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
-      //
-      // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
-      // hear. The mod wheel did work, and the added wheel macro has successfully
-      // replaced it. So the problem with the 'Wheel me' macro, if it's real, has not
-      // been caused by the wheel replacement macro implementation.
-      //
-      // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
-      // wheel and now controls the range of the 'Wheel' macro instead.  So that change
-      // has worked too.
-      where continuousMacro.DisplayName.ToLower() == "wheel"
-      select continuousMacro).Any();
+    return FindWheelMacro() != null;
   }
 }

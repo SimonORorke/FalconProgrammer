@@ -52,20 +52,18 @@ public class InfoPageLayout {
     int freeSpace = RightEdge - MacroWidth * Program.Macros.Count;
     int gapBetweenMacros = freeSpace / (Program.Macros.Count + 1);
     if (gapBetweenMacros < MinHorizontalGapBetweenMacros) {
-      throw new ApplicationException(
+      throw new InvalidOperationException(
         $"{Program.PathShort}: There is not enough horizontal space to move " + 
         $"{Program.Macros.Count} macros to the standard bottom row.");
     }
-    // Move any reverb and delay macros to the right end of the standard bottom row
-    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
-    // the wheel replacement macro from the continuous  macro I'm least likely to use,
-    // preferably delay, otherwise reverb.
-    // Example: Savage\Leads\Saw Dirty.
-    MoveMacroToEndIfExists(FindReverbToggleMacro());
-    MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    MoveMacroToEndIfExists(FindDelayToggleMacro());
-    MoveMacroToEndIfExists(FindDelayContinuousMacro());
-    Program.ProgramXml.ReplaceMacroElements(Program.Macros);
+    // // Move any reverb to the right end of the standard bottom row
+    // // This will allow the standard wheel replacement MIDI CC number to be reassigned to
+    // // the wheel replacement macro from the continuous  macro I'm least likely to use,
+    // // preferably delay, otherwise reverb.
+    // // Example: Savage\Leads\Saw Dirty.
+    // MoveMacroToEndIfExists(FindReverbToggleMacro());
+    // MoveMacroToEndIfExists(FindReverbContinuousMacro());
+    // Program.ProgramXml.ReplaceMacroElements(Program.Macros);
     int x = gapBetweenMacros;
     foreach (var macro in Program.Macros) {
       macro.Properties.X = x;
@@ -73,6 +71,7 @@ public class InfoPageLayout {
       macro.UpdateLocation();
       x += gapBetweenMacros + MacroWidth;
     }
+    Console.WriteLine($"{Program.PathShort}: Moved all macros to bottom.");
   }
 
   /// <summary>
@@ -157,12 +156,12 @@ public class InfoPageLayout {
     }
   }
 
-  private Macro? FindDelayToggleMacro() {
-    return (
-      from macro in Program.Macros
-      where macro.ModulatesDelay && !macro.IsContinuous
-      select macro).FirstOrDefault();
-  }
+  // private Macro? FindDelayToggleMacro() {
+  //   return (
+  //     from macro in Program.Macros
+  //     where macro.ModulatesDelay && !macro.IsContinuous
+  //     select macro).FirstOrDefault();
+  // }
 
   [SuppressMessage("ReSharper", "CommentTypo")]
   private Point? FindLocationForNewWheelMacro(out bool updateMacroCcs) {
@@ -209,24 +208,10 @@ public class InfoPageLayout {
     return result;
   }
 
-  public Macro? FindReverbContinuousMacro() {
-    return (
-      from macro in Program.ContinuousMacros
-      where macro.ModulatesReverb
-      select macro).FirstOrDefault();
-  }
-
-  private Macro? FindReverbContinuousMacroWithWheelReplacementCcNo() {
-    var macro = FindContinuousMacroWithModWheelReplacementCcNo();
-    return macro is { ModulatesReverb: true } ? macro : null;
-  }
-
-  private Macro? FindReverbToggleMacro() {
-    return (
-      from macro in Program.Macros
-      where macro.ModulatesReverb && !macro.IsContinuous
-      select macro).FirstOrDefault();
-  }
+  // private Macro? FindReverbContinuousMacroWithWheelReplacementCcNo() {
+  //   var macro = FindContinuousMacroWithModWheelReplacementCcNo();
+  //   return macro is { ModulatesReverb: true } ? macro : null;
+  // }
 
   /// <summary>
   ///   Returns, from left to right, the macros on the bottom row of macros on the Info
@@ -272,7 +257,7 @@ public class InfoPageLayout {
   }
 
   private Point? LocateWheelAboveDelayOrReverbMacro() {
-    SwapDelayAndReverbIfReverbHasWheelReplacementCcNo();
+    // SwapDelayAndReverbIfReverbHasWheelReplacementCcNo();
     // Debug.WriteLine("================================================");
     // Debug.WriteLine("After SwapDelayAndReverbIfReverbHasWheelReplacementCcNo");
     // foreach (var macro in Program.Macros) {
@@ -400,84 +385,77 @@ public class InfoPageLayout {
     return new Point(newMacroX, newMacroY);
   }
 
-  private void MoveMacroToEndIfExists(Macro? macroIfExists) {
-    if (macroIfExists != null && macroIfExists != Program.Macros[^1]) {
-      Program.Macros.Remove(macroIfExists);
-      Program.Macros.Add(macroIfExists);
-    }
-  }
+  // /// <summary>
+  // ///   If a reverb continuous macro has the MIDI CC number that is to be used for the
+  // ///   modulation wheel replacement continuous macro, if there is also a delay
+  // ///   continuous macro, swap the locations and CC numbers of the delay continuous macro
+  // ///   and the reverb continuous macro.  When and if that has been done, swap the
+  // ///   locations and CC numbers of the delay toggle macro and the reverb toggle macro,
+  // ///   if both of those exist.
+  // /// </summary>
+  // /// <remarks>
+  // ///   Any delay or reverb continuous macro that has the MIDI CC number that is to be
+  // ///   used for the modulation wheel replacement continuous macro will then have no MIDI
+  // ///   control.  As reverb tends to be more useful than delay, we are putting the delay
+  // ///   continuous macro into that position in advance, where applicable.
+  // ///   Example: Devinity/Bass/Tack Bass.
+  // /// </remarks>
+  // private void SwapDelayAndReverbIfReverbHasWheelReplacementCcNo() {
+  //   var reverbContinuousMacro = FindReverbContinuousMacroWithWheelReplacementCcNo();
+  //   // if (reverbContinuousMacro != null
+  //   //     && BottomRowMacros.Contains(reverbContinuousMacro)) {
+  //   if (reverbContinuousMacro != null) {
+  //     var delayContinuousMacro = FindDelayContinuousMacro();
+  //     if (delayContinuousMacro != null) {
+  //       SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
+  //       var reverbToggleMacro = FindReverbToggleMacro();
+  //       if (reverbToggleMacro != null) {
+  //         var delayToggleMacro = FindDelayToggleMacro();
+  //         if (delayToggleMacro != null) {
+  //           SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-  /// <summary>
-  ///   If a reverb continuous macro has the MIDI CC number that is to be used for the
-  ///   modulation wheel replacement continuous macro, if there is also a delay
-  ///   continuous macro, swap the locations and CC numbers of the delay continuous macro
-  ///   and the reverb continuous macro.  When and if that has been done, swap the
-  ///   locations and CC numbers of the delay toggle macro and the reverb toggle macro,
-  ///   if both of those exist.
-  /// </summary>
-  /// <remarks>
-  ///   Any delay or reverb continuous macro that has the MIDI CC number that is to be
-  ///   used for the modulation wheel replacement continuous macro will then have no MIDI
-  ///   control.  As reverb tends to be more useful than delay, we are putting the delay
-  ///   continuous macro into that position in advance, where applicable.
-  ///   Example: Devinity/Bass/Tack Bass.
-  /// </remarks>
-  private void SwapDelayAndReverbIfReverbHasWheelReplacementCcNo() {
-    var reverbContinuousMacro = FindReverbContinuousMacroWithWheelReplacementCcNo();
-    // if (reverbContinuousMacro != null
-    //     && BottomRowMacros.Contains(reverbContinuousMacro)) {
-    if (reverbContinuousMacro != null) {
-      var delayContinuousMacro = FindDelayContinuousMacro();
-      if (delayContinuousMacro != null) {
-        SwapMacroLocations(delayContinuousMacro, reverbContinuousMacro);
-        var reverbToggleMacro = FindReverbToggleMacro();
-        if (reverbToggleMacro != null) {
-          var delayToggleMacro = FindDelayToggleMacro();
-          if (delayToggleMacro != null) {
-            SwapMacroLocations(delayToggleMacro, reverbToggleMacro);
-          }
-        }
-      }
-    }
-  }
+  // private void SwapMacroCcNos(Macro macro1, Macro macro2) {
+  //   // ReSharper disable once ConvertIfStatementToSwitchStatement
+  //   if (macro1.Modulations.Count == 0 && macro2.Modulations.Count == 0) {
+  //     // This happens if the signal connections belongs to effects, a scenario we don't
+  //     // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
+  //     Console.WriteLine(
+  //       $"'{Program.PathShort}': Cannot find Modulations of supported types for " +
+  //       $"either macro '{macro1.DisplayName}' or macro '{macro2.DisplayName}'.");
+  //   }
+  //   // Modulations belong to Macros.
+  //   Modulation? modulation1 = null;
+  //   Modulation? modulation2 = null;
+  //   if (macro1.Modulations.Count > 0) {
+  //     modulation1 = macro1.Modulations[0];
+  //     macro1.RemoveModulation(modulation1);
+  //   }
+  //   if (macro2.Modulations.Count > 0) {
+  //     modulation2 = macro2.Modulations[0];
+  //     macro2.RemoveModulation(modulation2);
+  //   }
+  //   if (modulation1 != null) {
+  //     macro2.AddModulation(modulation1);
+  //   }
+  //   if (modulation2 != null) {
+  //     macro1.AddModulation(modulation2);
+  //   }
+  // }
 
-  private void SwapMacroCcNos(Macro macro1, Macro macro2) {
-    // ReSharper disable once ConvertIfStatementToSwitchStatement
-    if (macro1.Modulations.Count == 0 && macro2.Modulations.Count == 0) {
-      // This happens if the signal connections belongs to effects, a scenario we don't
-      // (yet) support. Example: 'Factory/Pads/Lush Chords 2.0'.
-      Console.WriteLine(
-        $"'{Program.PathShort}': Cannot find Modulations of supported types for " +
-        $"either macro '{macro1.DisplayName}' or macro '{macro2.DisplayName}'.");
-    }
-    // Modulations belong to Macros.
-    Modulation? modulation1 = null;
-    Modulation? modulation2 = null;
-    if (macro1.Modulations.Count > 0) {
-      modulation1 = macro1.Modulations[0];
-      macro1.RemoveModulation(modulation1);
-    }
-    if (macro2.Modulations.Count > 0) {
-      modulation2 = macro2.Modulations[0];
-      macro2.RemoveModulation(modulation2);
-    }
-    if (modulation1 != null) {
-      macro2.AddModulation(modulation1);
-    }
-    if (modulation2 != null) {
-      macro1.AddModulation(modulation2);
-    }
-  }
-
-  private void SwapMacroLocations(Macro macro1, Macro macro2) {
-    var properties1 = macro1.Properties;
-    var properties2 = macro2.Properties;
-    macro1.Properties = properties2;
-    macro2.Properties = properties1;
-    macro1.UpdateLocation();
-    macro2.UpdateLocation();
-    // We also need to swap the MIDI CC numbers so that those still increment in the layout
-    // order.
-    SwapMacroCcNos(macro1, macro2);
-  }
+  // private void SwapMacroLocations(Macro macro1, Macro macro2) {
+  //   var properties1 = macro1.Properties;
+  //   var properties2 = macro2.Properties;
+  //   macro1.Properties = properties2;
+  //   macro2.Properties = properties1;
+  //   macro1.UpdateLocation();
+  //   macro2.UpdateLocation();
+  //   // We also need to swap the MIDI CC numbers so that those still increment in the layout
+  //   // order.
+  //   SwapMacroCcNos(macro1, macro2);
+  // }
 }
