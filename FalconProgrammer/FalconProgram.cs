@@ -586,7 +586,6 @@ public class FalconProgram {
     InfoPageCcsScriptProcessor = null;
     // This should be the default, but otherwise won't work with wheel replacement. 
     MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
-    InfoPageLayout.MoveAllMacrosToStandardBottom();
     // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
     // for the mod wheel) Modulations to macro-owned 'for macro' Modulations,
     // there should not be any existing macro-owned 'for macro' Modulations.
@@ -657,15 +656,16 @@ public class FalconProgram {
   }
 
   private void ReuseCc1() {
-    // ContinuousMacros[3].ChangeCcNoTo(34);
-    ContinuousMacros[4].ChangeCcNoTo(1);
-    if (ContinuousMacros.Count > 5) {
-      ContinuousMacros[5].ChangeCcNoTo(11);
+    var sortedByLocation = 
+      GetMacrosSortedByLocation(MacroCcLocationOrder).ToList();
+    sortedByLocation[4].ChangeCcNoTo(1);
+    if (sortedByLocation.Count > 5) {
+      sortedByLocation[5].ChangeCcNoTo(11);
     }
-    if (ContinuousMacros.Count > 6) {
+    if (sortedByLocation.Count > 6) {
       int newCcNo = 36;
-      for (int i = 6; i < ContinuousMacros.Count; i++) {
-        ContinuousMacros[i].ChangeCcNoTo(newCcNo);
+      for (int i = 6; i < sortedByLocation.Count; i++) {
+        sortedByLocation[i].ChangeCcNoTo(newCcNo);
         newCcNo++;
       }
     }
