@@ -171,10 +171,12 @@ public class InfoPageLayout {
       updateMacroCcs = true;
       return new Point(0, StandardBottommostY);
     }
+    var sortedByLocation = Program.GetMacrosSortedByLocation(
+      LocationOrder.TopToBottomLeftToRight);
     BottomRowY = (
-      from macro in Program.Macros
+      from macro in sortedByLocation
       select macro.Properties.Y).Max();
-    BottomRowMacros = GetBottomRowMacros(BottomRowY);
+    BottomRowMacros = GetBottomRowMacros(sortedByLocation);
     var result = LocateWheelAboveDelayOrReverbMacro();
     if (result != null) {
       // Debug.WriteLine("================================================");
@@ -218,7 +220,7 @@ public class InfoPageLayout {
   ///   page.
   /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
-  private List<Macro> GetBottomRowMacros(int bottomRowY) {
+  private List<Macro> GetBottomRowMacros(IEnumerable<Macro> macrosSortedByLocation) {
     // We need to horizontally align the new macro relative not only to macros that are
     // bottommost on the Info window (i.e. highest Y) but also those that are close to
     // the bottom.  The vertical clearance is 95, so this should be safe. In reality,
@@ -226,9 +228,8 @@ public class InfoPageLayout {
     // Example: "Factory\Pluck\Mutan Mute".
     const int verticalFudge = 50;
     return (
-      from macro in Program.GetMacrosSortedByLocation(
-        LocationOrder.TopToBottomLeftToRight)
-      where macro.Properties.Y >= bottomRowY - verticalFudge
+      from macro in macrosSortedByLocation
+      where macro.Properties.Y >= BottomRowY - verticalFudge
       select macro).ToList();
   }
 

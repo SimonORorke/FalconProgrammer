@@ -9,8 +9,9 @@ public static class Runner {
     var batch = new Batch();
     // batch.RollForward(null);
     // batch.UpdateMacroCcs("Factory", "Bass-Sub", "Growl Alarma");
-    batch.UpdateMacroCcs(null);
-    // batch.ReplaceModWheelWithMacro("Factory", "Test");
+    // batch.UpdateMacroCcs(null);
+    batch.ReplaceModWheelWithMacro(
+      "Factory", "Bass-Sub", "Growl Alarma");
     // batch.ReplaceModWheelWithMacro(null);
   }
 }

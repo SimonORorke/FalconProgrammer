@@ -720,8 +720,7 @@ public class FalconProgram {
     // Most Factory programs list the ConstantModulation macro specifications in order
     // top to bottom, left to right. But a few, e.g. Factory/Keys/Days Of Old 1.4, do not.
     //
-    var sortedByLocation =
-      GetMacrosSortedByLocation(MacroCcLocationOrder);
+    var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
     // Reinitialise NextContinuousCcNo, incremented by GetCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
     // by RemoveInfoPageCcsScriptProcessor, the second time via
