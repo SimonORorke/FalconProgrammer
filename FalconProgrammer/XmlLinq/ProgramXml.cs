@@ -41,40 +41,6 @@ public class ProgramXml {
   private XElement TemplateModulationElement =>
     _templateModulationElement ??= GetTemplateModulationElement();
 
-  // public bool BypassEffects(string xName) {
-  //   var inserts = (
-  //     from insert in RootElement.Descendants(xName)
-  //     where GetAttributeValue(insert, "Bypass") == "0"
-  //     select insert).ToList();
-  //   if (inserts.Count == 0) {
-  //     return false;
-  //   }
-  //   foreach (var insert in inserts) {
-  //     SetAttribute(insert, "Bypass", "1");
-  //   }
-  //   return true;
-  // }
-
-  // /// <summary>
-  // ///   If the specified macro is found, changes its value to zero
-  // ///   and returns true.  Otherwise returns false.
-  // /// </summary>
-  // public bool ChangeMacroValueToZero(Macro macro) {
-  //   // Ignore case when checking whether there is a macro with that display name.  An
-  //   // example of where the cases of macro display names are non-standard is
-  //   // Factory\Pure Additive 2.0\Bass Starter.
-  //   var macroElement = (
-  //     from element in MacroElements
-  //     where string.Equals(GetAttributeValue(element, nameof(Macro.DisplayName)),
-  //       macro.DisplayName, StringComparison.OrdinalIgnoreCase)
-  //     select element).FirstOrDefault();
-  //   if (macroElement != null) {
-  //     SetAttribute(macroElement, nameof(Macro.Value), 0);
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   public void ChangeModulationSource(
     Modulation oldModulation, Modulation newModulation) {
     var modulationElements =
@@ -142,25 +108,6 @@ public class ProgramXml {
       select modulationElement).ToList();
   }
 
-  // /// <summary>
-  // ///   Returns a list of all the Modulation elements in the program whose source
-  // ///   indicates the specified macro (as a modulator of an effect).
-  // /// </summary>
-  // /// <remarks>
-  // ///   The Linq For XML data structure has to be searched because the deserialised
-  // ///   data structure does not include <see cref="Modulation"/>s that are owned
-  // ///   by effects.
-  // /// </remarks>
-  // public List<XElement> GetModulationElementsModulatedByMacro(Macro macro) {
-  //   return (
-  //     from modulationElement in RootElement.Descendants("SignalConnection")
-  //     // EndsWith rather than == because the Source will be prefixed by a path
-  //     // if it indicates a macro that modulates an effect.
-  //     where GetAttributeValue(
-  //       modulationElement, nameof(Modulation.Source)).EndsWith(macro.Name)
-  //     select modulationElement).ToList();
-  // }
-
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
     try {
@@ -212,10 +159,6 @@ public class ProgramXml {
       // ReSharper disable once CommentTypo
       // Example: Factory\RetroWave 2.5\BAS Voltage Reso.
       eventProcessorsElement!.Remove();
-      // InfoPageCcsScriptProcessorElement.Remove();
-      // if (!eventProcessorsElement!.HasElements) {
-      //   eventProcessorsElement.Remove();
-      // }
     }
   }
 
@@ -224,32 +167,6 @@ public class ProgramXml {
       GetModulationElementsWithCcNo(ccNo);
     foreach (var modulationElement in modulationElements) {
       modulationElement.Remove();
-    }
-  }
-
-  /// <summary>
-  ///   Removes all the Modulation elements in the program with the specified
-  ///   destination.
-  /// </summary>
-  /// <remarks>
-  ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="Modulation" />s that are owned
-  ///   by effects.
-  /// </remarks>
-  public void RemoveModulationElementsWithDestination(string destination) {
-    var modulationElements = (
-      from modulationElement in RootElement.Descendants("SignalConnection")
-      where GetAttributeValue(
-        modulationElement, nameof(Modulation.Destination)) == destination
-      select modulationElement).ToList();
-    foreach (var modulationElement in modulationElements) {
-      modulationElement.Remove();
-    }
-    var connectionsElement = InfoPageCcsScriptProcessorElement!.Element("Connections")!;
-    if (!connectionsElement.HasElements) {
-      // We've removed all its Modulation elements.
-      // Example: Factory\Pads\DX FM Pad 2.0
-      connectionsElement.Remove();
     }
   }
 
