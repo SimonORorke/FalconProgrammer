@@ -19,7 +19,7 @@ public static class Runner {
     // batch.RemoveDelayEffectsAndMacros("Devinity", "Bass", "Tumbler Bass");
     // batch.RemoveDelayEffectsAndMacros(null);
     // batch.ChangeReverbToZero(null);
-    batch.ReplaceModWheelWithMacro("Eternal Funk", "Synths", "Bell Shaka");
+    // batch.ReplaceModWheelWithMacro("Factory", "Bass-Sub", "FM Vee Bass B 2.0");
     // batch.ReplaceModWheelWithMacro(null);
   }
 }

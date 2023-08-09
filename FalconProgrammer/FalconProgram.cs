@@ -463,10 +463,6 @@ public class FalconProgram {
         || FindReverbContinuousMacro() != null) {
       return false;
     }
-    // If we don't reload, relocating the macros jumbles them.
-    // Perhaps there's a better way.
-    Save();
-    Read();
     Console.WriteLine(
       $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
     if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
@@ -479,6 +475,10 @@ public class FalconProgram {
       return false;
     }
     InfoPageLayout.MoveAllMacrosToStandardBottom();
+    // If we don't reload, relocating the macros jumbles them.
+    // Perhaps there's a better way, but it broke when I tried.
+    Save(); 
+    Read();
     // Move any reverb to the right end of the standard bottom row
     // This will allow the standard wheel replacement MIDI CC number to be reassigned to
     // the wheel replacement macro from the continuous  macro I'm least likely to use,
@@ -571,10 +571,6 @@ public class FalconProgram {
       if (InfoPageCcsScriptProcessor != null) {
         RemoveInfoPageCcsScriptProcessor();
       }
-      if (Macros.Count < 10) {
-        InfoPageLayout.MoveAllMacrosToStandardBottom();
-      }
-      ReUpdateMacroCcs();
     }
   }
 
@@ -632,6 +628,8 @@ public class FalconProgram {
       }
     }
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
+    InfoPageLayout.MoveAllMacrosToStandardBottom();
+    ReUpdateMacroCcs();
   }
 
   /// <summary>
@@ -645,7 +643,6 @@ public class FalconProgram {
     }
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
-      InfoPageLayout.MoveAllMacrosToStandardBottom();
     }
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
@@ -653,14 +650,13 @@ public class FalconProgram {
         ReUpdateMacroCcs();
       }
       Console.WriteLine($"{PathShort}: Replaced mod wheel with macro.");
-      if (OptimiseWheelMacro()) {
-        // if (Macros.Count == 5 && ContinuousMacros.Count == 5) {
-        //   InfoPageLayout.MoveAllMacrosToStandardBottom();
-        // }
-      }
+      OptimiseWheelMacro();
       if (ContinuousMacros.Count > 4) {
         ReuseCc1();
       }
+    } else {
+      throw new InvalidOperationException(
+        $"{PathShort}: Failed to replace mod wheel with macro.");
     }
   }
 
@@ -668,6 +664,7 @@ public class FalconProgram {
     // This should be the default, but otherwise won't work with wheel replacement. 
     MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
     UpdateMacroCcsOwnedByMacros();
+    Console.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }
 
   public void RestoreOriginal() {
