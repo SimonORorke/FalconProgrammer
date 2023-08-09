@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlDeserialised;
@@ -18,11 +17,12 @@ public class FalconProgram {
     // Cannot be read from XML when RestoreOriginal.
     // Trim in case there's a space before the dot in the file name. That would otherwise
     // show up when Name is combined into PathShort.
-    Name = System.IO.Path.GetFileNameWithoutExtension(path).TrimEnd(); 
+    Name = System.IO.Path.GetFileNameWithoutExtension(path).TrimEnd();
     Category = category;
   }
 
   [PublicAPI] public Category Category { get; }
+  private ImmutableList<ConnectionsParent> ConnectionsParents { get; set; } = null!;
 
   /// <summary>
   ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
@@ -50,13 +50,13 @@ public class FalconProgram {
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
-  public string PathShort => 
+  public string PathShort =>
     $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
   private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
 
-  public void BypassDelayEffects() {
+  private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
       effect.Bypass = true;
       Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
@@ -64,7 +64,7 @@ public class FalconProgram {
   }
 
   private bool CanRemoveInfoPageCcsScriptProcessor() {
-    if (Macros.Count > 4) {
+    if (Category.InfoPageMustUseScript || Macros.Count > 4) {
       return false;
     }
     // I've customised this script processor and it looks too hard to get rid of.
@@ -300,7 +300,7 @@ public class FalconProgram {
     // Example: Titanium\Basses\Noiser
     return (
       from scriptProcessor in ScriptProcessors
-      select scriptProcessor).Last();  
+      select scriptProcessor).Last();
   }
 
   private Macro? FindReverbContinuousMacro() {
@@ -366,6 +366,28 @@ public class FalconProgram {
     return result;
   }
 
+  private ImmutableList<ConnectionsParent> GetConnectionsParents() {
+    var list = new List<ConnectionsParent>();
+    foreach (var connectionsParentElement in ProgramXml.GetConnectionsParentElements()) {
+      var connectionsParent =
+        connectionsParentElement.Parent!.Name.ToString() == "Inserts"
+          ? new Effect(connectionsParentElement, ProgramXml)
+          : new ConnectionsParent(connectionsParentElement, ProgramXml);
+      foreach (var modulation in connectionsParent.Modulations) {
+        modulation.SourceMacro = (
+          from macro in Macros
+          where modulation.Source.EndsWith(macro.Name)
+          select macro).FirstOrDefault();
+        // if (modulation.SourceMacro != null) {
+        //   Debug.Assert(true);
+        // }
+        modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
+      }
+      list.Add(connectionsParent);
+    }
+    return list.ToImmutableList();
+  }
+
   private List<Macro> GetContinuousMacros() {
     return (
       from macro in Macros
@@ -374,20 +396,10 @@ public class FalconProgram {
   }
 
   private ImmutableList<Effect> GetEffects() {
-    var list = new List<Effect>();
-    foreach (var effectElement in ProgramXml.GetEffectElements()) {
-      var effect = new Effect(effectElement, ProgramXml);
-      foreach (var modulation in effect.Modulations) {
-        modulation.SourceMacro = (
-          from macro in Macros
-          // Are there other formats?
-          where modulation.Source == $"$Program/{macro.Name}"
-          select macro).FirstOrDefault();
-        modulation.SourceMacro?.ModulatedEffects.Add(effect);
-      }
-      list.Add(effect);
-    }
-    return list.ToImmutableList();
+    return (
+      from connectionsParent in ConnectionsParents
+      where connectionsParent is Effect
+      select (Effect)connectionsParent).ToImmutableList();
   }
 
   internal SortedSet<Macro> GetMacrosSortedByLocation(
@@ -451,12 +463,12 @@ public class FalconProgram {
         || FindReverbContinuousMacro() != null) {
       return false;
     }
-    // // If we don't reload, relocating the macros jumbles them.
-    // // Perhaps there's a better way.
-    // Save();
-    // Read();
-    // Console.WriteLine(
-    //   $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
+    // If we don't reload, relocating the macros jumbles them.
+    // Perhaps there's a better way.
+    Save();
+    Read();
+    Console.WriteLine(
+      $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
     if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
       // The problem is modulations by the wheel replacement macro.
       // (Source will indicate the modulating macro,
@@ -466,6 +478,7 @@ public class FalconProgram {
       // Requires further investigation. Maybe OK as is.
       return false;
     }
+    InfoPageLayout.MoveAllMacrosToStandardBottom();
     // Move any reverb to the right end of the standard bottom row
     // This will allow the standard wheel replacement MIDI CC number to be reassigned to
     // the wheel replacement macro from the continuous  macro I'm least likely to use,
@@ -499,12 +512,11 @@ public class FalconProgram {
   public IEnumerable<string> QueryDelayTypes() {
     var result = new List<string>();
     foreach (var macro in Macros.Where(macro => macro.ModulatesDelay)) {
-      foreach (var effect in macro.ModulatedEffects.Where(effect =>
-                 !result.Contains(effect.EffectType))) {
-        // if (effect.EffectType == "ConstantModulation") {
-        //   Debug.Assert(true);
-        // }
-        result.Add(effect.EffectType);
+      foreach (var connectionsParent in macro.ModulatedConnectionsParents.Where(
+                 connectionsParent =>
+                   connectionsParent is Effect effect &&
+                   !result.Contains(effect.EffectType))) {
+        result.Add(((Effect)connectionsParent).EffectType);
       }
     }
     return result;
@@ -513,12 +525,11 @@ public class FalconProgram {
   public IEnumerable<string> QueryReverbTypes() {
     var result = new List<string>();
     foreach (var macro in Macros.Where(macro => macro.ModulatesReverb)) {
-      // if (macro.ModulatedEffects.Count > 0) {
-      //   Debug.Assert(true);
-      // }
-      foreach (var effect in macro.ModulatedEffects.Where(effect =>
-                 !result.Contains(effect.EffectType))) {
-        result.Add(effect.EffectType);
+      foreach (var connectionsParent in macro.ModulatedConnectionsParents.Where(
+                 connectionsParent =>
+                   connectionsParent is Effect effect &&
+                   !result.Contains(effect.EffectType))) {
+        result.Add(((Effect)connectionsParent).EffectType);
       }
     }
     return result;
@@ -548,29 +559,52 @@ public class FalconProgram {
       InfoPageCcsScriptProcessor.ScriptProcessorElement =
         ProgramXml.InfoPageCcsScriptProcessorElement!;
     }
+    ConnectionsParents = GetConnectionsParents();
     Effects = GetEffects();
     // Disabling this check for now, due to false positives.
     // CheckForNonModWheelNonInfoPageMacros();
   }
 
+  public void RemoveDelayEffectsAndMacros() {
+    BypassDelayEffects();
+    if (RemoveDelayMacros()) {
+      if (InfoPageCcsScriptProcessor != null) {
+        RemoveInfoPageCcsScriptProcessor();
+      }
+      if (Macros.Count < 10) {
+        InfoPageLayout.MoveAllMacrosToStandardBottom();
+      }
+      ReUpdateMacroCcs();
+    }
+  }
+
   /// <summary>
   ///   Removes delay macros, if any.
-  ///   To be safe, these are recognised by the macro name, or if all the effects the
+  ///   These are recognised by the macro name, or if all the effects the
   ///   macro modulates have been bypassed by <see cref="BypassDelayEffects" />.
   /// </summary>
   private bool RemoveDelayMacros() {
-    int removedCount = 0;
-    for (int i = Macros.Count - 1; i >= 0; i--) {
-      var macro = Macros[i];
-      // macro.RemoveDelayModulations();
-      if (macro.ModulatesDelay || !macro.ModulatesEnabledEffects) {
-        macro.RemoveMacroElement();
-        Macros.RemoveAt(i);
-        removedCount++;
-        Console.WriteLine($"{PathShort}: Removed {macro}.");
-      }
+    var removableMacros = (
+      from macro in Macros
+      where macro.ModulatesDelay || !macro.ModulatesEnabledEffects
+      select macro).ToList();
+    if (removableMacros.Count == 0) {
+      return false;
     }
-    return removedCount > 0;
+    if (InfoPageCcsScriptProcessor != null
+        && !CanRemoveInfoPageCcsScriptProcessor()) {
+      Console.WriteLine(
+        $"{PathShort}: Cannot remove macros because " +
+        "there is an Info page CCs script processor that is not feasible/desirable " +
+        " to remove.");
+      return false;
+    }
+    foreach (var macro in removableMacros) {
+      macro.RemoveMacroElement();
+      Macros.Remove(macro);
+      Console.WriteLine($"{PathShort}: Removed {macro}.");
+    }
+    return true;
   }
 
   /// <summary>
@@ -584,8 +618,7 @@ public class FalconProgram {
   private void RemoveInfoPageCcsScriptProcessor() {
     ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
     InfoPageCcsScriptProcessor = null;
-    // This should be the default, but otherwise won't work with wheel replacement. 
-    MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
+    ReUpdateMacroCcs();
     // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
     // for the mod wheel) Modulations to macro-owned 'for macro' Modulations,
     // there should not be any existing macro-owned 'for macro' Modulations.
@@ -598,7 +631,6 @@ public class FalconProgram {
         macro.RemoveModulation(forMacroModulation);
       }
     }
-    UpdateMacroCcsOwnedByMacros();
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
   }
 
@@ -611,35 +643,31 @@ public class FalconProgram {
     if (!CanReplaceModWheelWithMacro()) {
       return;
     }
-    bool moveMacros = false;
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
-      moveMacros = true;
+      InfoPageLayout.MoveAllMacrosToStandardBottom();
     }
-    // if (RemoveDelayMacros()) {
-    //   moveMacros = true;
-    // }
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
       if (updateMacroCcs) {
-        // This should be the default, but otherwise won't work with wheel replacement. 
-        MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
-        UpdateMacroCcsOwnedByMacros();
+        ReUpdateMacroCcs();
       }
       Console.WriteLine($"{PathShort}: Replaced mod wheel with macro.");
       if (OptimiseWheelMacro()) {
-        moveMacros = true;
+        // if (Macros.Count == 5 && ContinuousMacros.Count == 5) {
+        //   InfoPageLayout.MoveAllMacrosToStandardBottom();
+        // }
       }
       if (ContinuousMacros.Count > 4) {
         ReuseCc1();
       }
     }
-    if (moveMacros && Macros.Count < 10) {
-      if (Macros.Count == 9) {
-        Debug.Assert(true);
-      }
-      InfoPageLayout.MoveAllMacrosToStandardBottom();
-    }
+  }
+
+  private void ReUpdateMacroCcs() {
+    // This should be the default, but otherwise won't work with wheel replacement. 
+    MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
+    UpdateMacroCcsOwnedByMacros();
   }
 
   public void RestoreOriginal() {
@@ -656,7 +684,7 @@ public class FalconProgram {
   }
 
   private void ReuseCc1() {
-    var sortedByLocation = 
+    var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder).ToList();
     sortedByLocation[4].ChangeCcNoTo(1);
     if (sortedByLocation.Count > 5) {

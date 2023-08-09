@@ -76,6 +76,8 @@ public class Modulation {
   /// </summary>
   [XmlAttribute]
   public int ConnectionMode { get; set; }
+  
+  [XmlAttribute] public bool Bypass { get; set; }
 
   public int? CcNo {
     get =>
@@ -95,14 +97,14 @@ public class Modulation {
   public bool ModulatesMacro {
     get {
       return Owner switch {
+        ConnectionsParent => false, // Includes derived type Effect
         Macro => ConnectionMode == 1, // 0 for modulation wheel (MIDI CC 1)
         ScriptProcessor => ModulatedMacroNo.HasValue,
-        Effect => false,
         null => throw new InvalidOperationException(
           "Modulation.ModulatesMacro cannot be determined because " +
           "Owner has not been specified."),
         _ => throw new NotSupportedException(
-          "ModulationModulatesMacro cannot be determined because " +
+          "Modulation.ModulatesMacro cannot be determined because " +
           $"Owner is of unsupported type {Owner.GetType().Name}.")
       };
     }

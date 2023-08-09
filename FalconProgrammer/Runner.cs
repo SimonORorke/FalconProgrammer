@@ -10,8 +10,16 @@ public static class Runner {
     // batch.RollForward(null);
     // batch.UpdateMacroCcs("Factory", "Bass-Sub", "Growl Alarma");
     // batch.UpdateMacroCcs(null);
-    batch.ReplaceModWheelWithMacro(
-      "Factory", "Bass-Sub", "Growl Alarma");
+    // batch.ReplaceModWheelWithMacro(
+    //   "Factory", "Bass-Sub", "Growl Alarma");
+    // batch.ReplaceModWheelWithMacro("Devinity", "Bass");
+    // batch.BypassDelayEffects(null);
+    // batch.ChangeReverbToZero(null);
+    // batch.RemoveDelayEffectsAndMacros("Devinity", "Bass", "Pogo Bass");
+    // batch.RemoveDelayEffectsAndMacros("Devinity", "Bass", "Tumbler Bass");
+    // batch.RemoveDelayEffectsAndMacros(null);
+    // batch.ChangeReverbToZero(null);
+    batch.ReplaceModWheelWithMacro("Eternal Funk", "Synths", "Bell Shaka");
     // batch.ReplaceModWheelWithMacro(null);
   }
 }

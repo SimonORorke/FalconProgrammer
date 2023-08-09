@@ -94,12 +94,13 @@ public class Macro : INamed {
     set => Name = $"Macro {value}";
   }
 
-  internal List<Effect> ModulatedEffects { get; } = new List<Effect>();
+  internal List<ConnectionsParent> ModulatedConnectionsParents { get; } = 
+    new List<ConnectionsParent>();
 
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
   public bool ModulatesEnabledEffects => (
-    from effect in ModulatedEffects
+    from effect in ModulatedConnectionsParents
     where !effect.Bypass
     select effect).Any();
 
@@ -178,7 +179,7 @@ public class Macro : INamed {
 
   public void ChangeValueToZero() {
     ProgramXml.SetAttribute(MacroElement, nameof(Value), 0);
-    foreach (var effect in ModulatedEffects) {
+    foreach (var effect in ModulatedConnectionsParents) {
       effect.ChangeModulatedParametersToZero();
     }
   }
@@ -226,20 +227,11 @@ public class Macro : INamed {
     return result;
   }
 
-  public void RemoveDelayModulations() {
-    for (int i = ModulatedEffects.Count - 1; i >= 0; i--) {
-      if (ModulatedEffects[i].IsDelay) {
-        ModulatedEffects[i].RemoveModulationsByMacro(this);
-        ModulatedEffects.RemoveAt(i);
-      }
-    }
-  }
-
   public void RemoveMacroElement() {
     MacroElement.Remove();
-    for (int i = ModulatedEffects.Count - 1; i >= 0; i--) {
-      ModulatedEffects[i].RemoveModulationsByMacro(this);
-      ModulatedEffects.RemoveAt(i);
+    for (int i = ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
+      ModulatedConnectionsParents[i].RemoveModulationsByMacro(this);
+      ModulatedConnectionsParents.RemoveAt(i);
     }
   }
 

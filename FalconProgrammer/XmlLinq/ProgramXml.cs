@@ -7,9 +7,9 @@ namespace FalconProgrammer.XmlLinq;
 
 public class ProgramXml {
   private XElement? _templateMacroElement;
+  private XElement? _templateModulationElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
-  private XElement? _templateModulationElement;
 
   public ProgramXml(Category category) {
     Category = category;
@@ -22,8 +22,9 @@ public class ProgramXml {
   ///   Gets the program's macro elements. It's safest to query this each time. Otherwise
   ///   it would have to be updated in multiple places.
   /// </summary>
-  public List<XElement> MacroElements =>
+  public IEnumerable<XElement> MacroElements =>
     ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
+
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
   public XElement? InfoPageCcsScriptProcessorElement { get; private set; }
   private XElement RootElement { get; set; } = null!;
@@ -84,7 +85,7 @@ public class ProgramXml {
       select modulationElement;
     foreach (var modulationElement in modulationElements) {
       SetAttribute(
-        modulationElement, nameof(Modulation.Source), 
+        modulationElement, nameof(Modulation.Source),
         newModulation.Source);
     }
   }
@@ -105,7 +106,7 @@ public class ProgramXml {
     return
       element.Attribute(attributeName) ??
       throw new InvalidOperationException(
-        $"Cannot find {element.Name}.{attributeName} attribute in " + 
+        $"Cannot find {element.Name}.{attributeName} attribute in " +
         $"'{InputProgramPath}'.");
   }
 
@@ -122,14 +123,14 @@ public class ProgramXml {
     var descriptionAttribute = propertiesElement.Attribute("description");
     return descriptionAttribute != null ? descriptionAttribute.Value : string.Empty;
   }
-  
+
   /// <summary>
   ///   Returns a list of all the Modulation elements in the program whose source
   ///   indicates the specified MIDI CC number.
   /// </summary>
   /// <remarks>
   ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="Modulation"/>s that are owned
+  ///   data structure does not include <see cref="Modulation" />s that are owned
   ///   by effects.
   /// </remarks>
   public List<XElement> GetModulationElementsWithCcNo(int ccNo) {
@@ -174,13 +175,11 @@ public class ProgramXml {
     }
   }
 
-  public IEnumerable<XElement> GetEffectElements() {
-    var result = new List<XElement>();
-    var insertsElements = RootElement.Descendants("Inserts");
-    foreach (var insertsElement in insertsElements) {
-      result.AddRange(insertsElement.Nodes().Cast<XElement>());
-    }
-    return result;
+  public IEnumerable<XElement> GetConnectionsParentElements() {
+    var connectionsElements = RootElement.Descendants("Connections");
+    return
+      from connectionsElement in connectionsElements
+      select connectionsElement.Parent;
   }
 
   private XElement GetTemplateMacroElement() {
@@ -192,14 +191,14 @@ public class ProgramXml {
   }
 
   private XElement? GetTemplateScriptProcessorElement() {
-    return TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault(); 
+    return TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault();
   }
 
   protected virtual XElement GetTemplateModulationElement() {
     var result =
       TemplateRootElement.Descendants("SignalConnection").FirstOrDefault() ??
       throw new InvalidOperationException(
-        $"'{InputProgramPath}': Cannot find Modulation element in " + 
+        $"'{InputProgramPath}': Cannot find Modulation element in " +
         $"'{Category.TemplateProgramPath}'.");
     return result;
   }
@@ -221,7 +220,7 @@ public class ProgramXml {
   }
 
   public void RemoveModulationElementsWithCcNo(int ccNo) {
-    var modulationElements = 
+    var modulationElements =
       GetModulationElementsWithCcNo(ccNo);
     foreach (var modulationElement in modulationElements) {
       modulationElement.Remove();
@@ -234,7 +233,7 @@ public class ProgramXml {
   /// </summary>
   /// <remarks>
   ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="Modulation"/>s that are owned
+  ///   data structure does not include <see cref="Modulation" />s that are owned
   ///   by effects.
   /// </remarks>
   public void RemoveModulationElementsWithDestination(string destination) {
@@ -255,7 +254,7 @@ public class ProgramXml {
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
-    ControlSignalSourcesElement.RemoveNodes(); 
+    ControlSignalSourcesElement.RemoveNodes();
     foreach (var macro in macros) {
       macro.AddMacroElement();
     }
@@ -312,9 +311,9 @@ public class ProgramXml {
   }
 
   public virtual void UpdateInfoPageCcsScriptProcessorFromTemplate() {
-    var templateConnectionsElement = 
+    var templateConnectionsElement =
       TemplateScriptProcessorElement!.Element("Connections")!;
-    var connectionsElement = 
+    var connectionsElement =
       InfoPageCcsScriptProcessorElement!.Element("Connections");
     if (connectionsElement == null) {
       InfoPageCcsScriptProcessorElement.Add(new XElement(templateConnectionsElement));
@@ -328,13 +327,13 @@ public class ProgramXml {
 
   public void UpdateModulationElement(
     Modulation modulation, XElement modulationElement) {
-    SetAttribute(modulationElement, nameof(Modulation.Ratio), 
+    SetAttribute(modulationElement, nameof(Modulation.Ratio),
       modulation.Ratio);
-    SetAttribute(modulationElement, nameof(Modulation.Source), 
+    SetAttribute(modulationElement, nameof(Modulation.Source),
       modulation.Source);
-    SetAttribute(modulationElement, nameof(Modulation.Destination), 
+    SetAttribute(modulationElement, nameof(Modulation.Destination),
       modulation.Destination);
-    SetAttribute(modulationElement, nameof(Modulation.ConnectionMode), 
+    SetAttribute(modulationElement, nameof(Modulation.ConnectionMode),
       modulation.ConnectionMode);
   }
 }

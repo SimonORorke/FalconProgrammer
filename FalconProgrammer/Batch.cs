@@ -23,13 +23,6 @@ public class Batch {
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
-  [PublicAPI]
-  public void BypassDelayEffects(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.BypassDelayEffects;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
   /// <summary>
   ///   Changes every occurrence of the specified old macro MIDI CC number to the
   ///   specified new CC number.
@@ -125,9 +118,6 @@ public class Batch {
       case ConfigTask.CountMacros:
         Program.CountMacros();
         break;
-      case ConfigTask.BypassDelayEffects:
-        Program.BypassDelayEffects();
-        break;
       case ConfigTask.ChangeReverbToZero:
         Program.ChangeReverbToZero();
         break;
@@ -142,6 +132,9 @@ public class Batch {
         break;
       case ConfigTask.QueryReverbTypes:
         UpdateEffectTypes(Program.QueryReverbTypes());
+        break;
+      case ConfigTask.RemoveDelayEffectsAndMacros:
+        Program.RemoveDelayEffectsAndMacros();
         break;
       case ConfigTask.ReplaceModWheelWithMacro:
         Program.ReplaceModWheelWithMacro();
@@ -274,6 +267,13 @@ public class Batch {
     }
   }
 
+  [PublicAPI]
+  public void RemoveDelayEffectsAndMacros(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.RemoveDelayEffectsAndMacros;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
   /// <summary>
   ///   In each of the specified Falcon program presets where it is feasible, replaces
   ///   use of the modulation wheel with a Wheel macro that executes the same
@@ -312,10 +312,10 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     RestoreOriginal(soundBankName, categoryName, programName);
     PrependPathLineToDescription(soundBankName, categoryName, programName);
-    // UpdateMacroCcs(soundBankName, categoryName, programName);
-    // BypassDelayEffects(soundBankName, categoryName, programName);
-    // ChangeReverbToZero(soundBankName, categoryName, programName);
-    // ReplaceModWheelWithMacro(soundBankName, categoryName);
+    UpdateMacroCcs(soundBankName, categoryName, programName);
+    RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
+    ChangeReverbToZero(soundBankName, categoryName, programName);
+    ReplaceModWheelWithMacro(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
@@ -350,7 +350,6 @@ public class Batch {
   }
 
   private enum ConfigTask {
-    BypassDelayEffects,
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
@@ -358,6 +357,7 @@ public class Batch {
     PrependPathLineToDescription,
     QueryDelayTypes,
     QueryReverbTypes,
+    RemoveDelayEffectsAndMacros,
     ReplaceModWheelWithMacro,
     RestoreOriginal,
     UpdateMacroCcs
