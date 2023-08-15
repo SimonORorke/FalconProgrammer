@@ -349,8 +349,8 @@ public class FalconProgram {
         _ => NextContinuousCcNo
       };
       result = NextContinuousCcNo switch {
-        // Convert the fifth continuous controller's CC number to 11 to map to the touch
-        // strip.
+        // Convert the fifth continuous controller's CC number to 11 to map to the
+        // touch strip.
         35 => 11,
         // Convert MIDI CC 38, which does not work with macros on script-based Info
         // pages, to 28.
@@ -441,12 +441,6 @@ public class FalconProgram {
       where m.Properties.X == macro.Properties.X
             && m.Properties.Y == macro.Properties.Y
       select m).Count() == 1;
-  }
-
-  public void ListIfHasInfoPageCcsScriptProcessor() {
-    if (InfoPageCcsScriptProcessor != null) {
-      Console.WriteLine(PathShort);
-    }
   }
 
   private void MoveMacroToEndIfExists(Macro? macroIfExists) {
@@ -549,6 +543,15 @@ public class FalconProgram {
       }
     }
     return result;
+  }
+
+  public void QueryReuseCc1NotSupported() {
+    if (InfoPageCcsScriptProcessor == null 
+        ||ContinuousMacros.Count < 5
+        || ProgramXml.GetModulationElementsWithCcNo(1).Count > 0) {
+      return;
+    }
+    Console.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
   }
 
   /// <summary>
@@ -698,8 +701,23 @@ public class FalconProgram {
     Console.WriteLine($"{PathShort}: Restored to Original");
   }
 
+  /// <summary>
+  ///   Assuming any modulations by the wheel macro have already been reassigned to a
+  ///   wheel macro, if there are at least 5 continuous macros, i.e. at least 1 more than
+  ///   the usual number of expression pedals that can control them, make the best use
+  ///   of the keyboard's hardware controllers by assigning MIDI CC 1 (mod wheel) to the
+  ///   5th continuous macro and MIDI CC 11 (touch strip) to the 6th, if there is one.
+  ///   Increment MIDI CCs of any subsequent macros accordingly.
+  ///   <para>
+  ///     For programs with an Info page MIDI CCs script processor,
+  ///     changing the MIDI CCs modulating macros is not (yet) supported by this method.
+  ///     If it were to be implemented, at last count by
+  ///     <see cref="QueryReuseCc1NotSupported" />, 51 programs would be impacted:
+  ///     32 in Fluidity and in 19 Pulsar.
+  ///   </para>
+  /// </summary>
   public void ReuseCc1() {
-    if (InfoPageCcsScriptProcessor != null // Maybe can make this work later
+    if (InfoPageCcsScriptProcessor != null // See paragraph in summary.
         || ContinuousMacros.Count < 5
         || (ProgramXml.GetModulationElementsWithCcNo(1)
               .Count > 0

@@ -121,9 +121,6 @@ public class Batch {
       case ConfigTask.ChangeReverbToZero:
         Program.ChangeReverbToZero();
         break;
-      case ConfigTask.ListIfHasInfoPageCcsScriptProcessor:
-        Program.ListIfHasInfoPageCcsScriptProcessor();
-        break;
       case ConfigTask.PrependPathLineToDescription:
         Program.PrependPathLineToDescription();
         break;
@@ -132,6 +129,9 @@ public class Batch {
         break;
       case ConfigTask.QueryReverbTypes:
         UpdateEffectTypes(Program.QueryReverbTypes());
+        break;
+      case ConfigTask.QueryReuseCc1NotSupported:
+        Program.QueryReuseCc1NotSupported();
         break;
       case ConfigTask.RemoveDelayEffectsAndMacros:
         Program.RemoveDelayEffectsAndMacros();
@@ -150,7 +150,7 @@ public class Batch {
         break;
     }
     if (Task is not (ConfigTask.CountMacros or
-        ConfigTask.ListIfHasInfoPageCcsScriptProcessor
+        ConfigTask.QueryReuseCc1NotSupported
         or ConfigTask.QueryDelayTypes
         or ConfigTask.QueryReverbTypes
         or ConfigTask.RestoreOriginal)) {
@@ -161,8 +161,7 @@ public class Batch {
   private void ConfigureProgramsInCategory(
     string categoryName) {
     Category = CreateCategory(categoryName);
-    if (Task is ConfigTask.ListIfHasInfoPageCcsScriptProcessor
-          or ConfigTask.ReplaceModWheelWithMacro
+    if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.InfoPageMustUseScript) {
       // Console.WriteLine(
       //   $"Cannot {Task} for category " +
@@ -232,14 +231,6 @@ public class Batch {
   }
 
   [PublicAPI]
-  public void ListIfHasInfoPageCcsScriptProcessor(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.ListIfHasInfoPageCcsScriptProcessor;
-    Console.WriteLine("Programs with Info Page CCs Script Processor:");
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
   public void PrependPathLineToDescription(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.PrependPathLineToDescription;
@@ -268,6 +259,13 @@ public class Batch {
     foreach (string effectType in EffectTypes) {
       Console.WriteLine(effectType);
     }
+  }
+
+  [PublicAPI]
+  public void QueryReuseCc1NotSupported(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.QueryReuseCc1NotSupported;
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
@@ -320,11 +318,11 @@ public class Batch {
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    // RestoreOriginal(soundBankName, categoryName, programName);
-    // PrependPathLineToDescription(soundBankName, categoryName, programName);
-    // UpdateMacroCcs(soundBankName, categoryName, programName);
-    // RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    // ChangeReverbToZero(soundBankName, categoryName, programName);
+    RestoreOriginal(soundBankName, categoryName, programName);
+    PrependPathLineToDescription(soundBankName, categoryName, programName);
+    UpdateMacroCcs(soundBankName, categoryName, programName);
+    RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
+    ChangeReverbToZero(soundBankName, categoryName, programName);
     ReplaceModWheelWithMacro(soundBankName, categoryName);
     ReuseCc1(soundBankName, categoryName);
   }
@@ -364,10 +362,10 @@ public class Batch {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
-    ListIfHasInfoPageCcsScriptProcessor,
     PrependPathLineToDescription,
     QueryDelayTypes,
     QueryReverbTypes,
+    QueryReuseCc1NotSupported,
     RemoveDelayEffectsAndMacros,
     ReplaceModWheelWithMacro,
     RestoreOriginal,
