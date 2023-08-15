@@ -485,7 +485,7 @@ public class FalconProgram {
     ProgramXml.ReplaceMacroElements(Macros);
     // If we don't reload, relocating the macros jumbles them.
     // Perhaps there's a better way, but it broke when I tried.
-    Save(); 
+    Save();
     Read();
     Console.WriteLine(
       $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
@@ -572,6 +572,8 @@ public class FalconProgram {
     if (RemoveDelayMacros()) {
       if (InfoPageCcsScriptProcessor != null) {
         RemoveInfoPageCcsScriptProcessor();
+      } else {
+        ReUpdateMacroCcs();
       }
     }
   }
@@ -653,9 +655,9 @@ public class FalconProgram {
       }
       Console.WriteLine($"{PathShort}: Replaced mod wheel with macro.");
       OptimiseWheelMacro();
-      if (ContinuousMacros.Count > 4) {
-        ReuseCc1();
-      }
+      // if (ContinuousMacros.Count > 4) {
+      //   ReuseCc1();
+      // }
     } else {
       throw new InvalidOperationException(
         $"{PathShort}: Failed to replace mod wheel with macro.");
@@ -682,17 +684,26 @@ public class FalconProgram {
     Console.WriteLine($"{PathShort}: Restored to Original");
   }
 
-  private void ReuseCc1() {
-    var sortedByLocation =
-      GetMacrosSortedByLocation(MacroCcLocationOrder).ToList();
-    sortedByLocation[4].ChangeCcNoTo(1);
-    if (sortedByLocation.Count > 5) {
-      sortedByLocation[5].ChangeCcNoTo(11);
+  public void ReuseCc1() {
+    if (ContinuousMacros.Count < 5 || WheelMacroExists()) {
+      return;
     }
-    if (sortedByLocation.Count > 6) {
+    var continuousMacrosByLocation = (
+      from continuousMacro in GetMacrosSortedByLocation(MacroCcLocationOrder)
+      where continuousMacro.IsContinuous
+      select continuousMacro).ToList();
+    if (continuousMacrosByLocation.Count < 5) {
+      // Allow for macros with invalid locations: see GetMacrosSortedByLocation. 
+      return;
+    }
+    continuousMacrosByLocation[4].ChangeCcNoTo(1);
+    if (continuousMacrosByLocation.Count > 5) {
+      continuousMacrosByLocation[5].ChangeCcNoTo(11);
+    }
+    if (continuousMacrosByLocation.Count > 6) {
       int newCcNo = 36;
-      for (int i = 6; i < sortedByLocation.Count; i++) {
-        sortedByLocation[i].ChangeCcNoTo(newCcNo);
+      for (int i = 6; i < continuousMacrosByLocation.Count; i++) {
+        continuousMacrosByLocation[i].ChangeCcNoTo(newCcNo);
         newCcNo++;
       }
     }
