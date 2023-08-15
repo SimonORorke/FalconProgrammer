@@ -685,7 +685,11 @@ public class FalconProgram {
   }
 
   public void ReuseCc1() {
-    if (ContinuousMacros.Count < 5 || WheelMacroExists()) {
+    if (InfoPageCcsScriptProcessor != null // Maybe can make this work later
+        || ContinuousMacros.Count < 5
+        || (ProgramXml.GetModulationElementsWithCcNo(1)
+              .Count > 0
+            && !WheelMacroExists())) {
       return;
     }
     var continuousMacrosByLocation = (
@@ -701,6 +705,7 @@ public class FalconProgram {
       continuousMacrosByLocation[5].ChangeCcNoTo(11);
     }
     if (continuousMacrosByLocation.Count > 6) {
+      // Example with many continuous macros: Ether Fields\Bells - Plucks\FM Harp
       int newCcNo = 36;
       for (int i = 6; i < continuousMacrosByLocation.Count; i++) {
         continuousMacrosByLocation[i].ChangeCcNoTo(newCcNo);
