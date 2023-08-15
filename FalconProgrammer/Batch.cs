@@ -323,10 +323,10 @@ public class Batch {
     // RestoreOriginal(soundBankName, categoryName, programName);
     // PrependPathLineToDescription(soundBankName, categoryName, programName);
     // UpdateMacroCcs(soundBankName, categoryName, programName);
-    RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    ChangeReverbToZero(soundBankName, categoryName, programName);
-    // ReplaceModWheelWithMacro(soundBankName, categoryName);
-    // ReuseCc1(soundBankName, categoryName);
+    // RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
+    // ChangeReverbToZero(soundBankName, categoryName, programName);
+    ReplaceModWheelWithMacro(soundBankName, categoryName);
+    ReuseCc1(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {

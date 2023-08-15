@@ -23,7 +23,7 @@ public static class Runner {
     // batch.ReplaceModWheelWithMacro(null);
     // batch.ReuseCc1(null);
     // batch.RemoveDelayEffectsAndMacros("Devinity", "Bass", "Talking Bass");
-    // batch.RollForward(null);
+    batch.RollForward(null);
     // batch.ReplaceModWheelWithMacro("Devinity", "Bass", "Pogo Bass");
   }
 }

@@ -456,14 +456,29 @@ public class FalconProgram {
     }
   }
 
+  /// <summary>
+  ///   When there are 5 macros, including the wheel macro, and they are all continuous,
+  ///   the 4 original macros tend to be more important than the wheel macro, unless
+  ///   there's a reverb macro. So, if ther's a reverb macro, move that to the end.
+  ///   Otherwise move the wheel macro to the end.  The 4 (main) expression pedals will
+  ///   then tend to control the four most important macros.  And once
+  ///   <see cref="ReuseCc1" /> has been run, the mod wheel will control the 5th macro
+  ///   via MIDI CC 1.
+  ///   <para>
+  ///     If any of the four original macros are toggles, there's nothing to do,
+  ///     as toggle macros are not controlled by expression pedals.
+  ///   </para>
+  /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
-  private bool OptimiseWheelMacro() {
+  private void OptimiseWheelMacro() {
+    // Examples:
+    // Devinity\Plucks-Leads\Pluck Sphere (Reverb was already at end but now all macros
+    // are on one line instead of having the wheel macro above the reverb macro.)
+    // Eternal Funk\Brass\Back And Stride (Reverb was previously the first macro. Now
+    // it's last.)
+    // Eternal Funk\Synths\Bell Shaka (No reverb. Wheel macro was 4th, now last.)
     if (Macros.Count != 5 || ContinuousMacros.Count != 5) {
-      return false;
-    }
-    var reverbContinuousMacro = FindReverbContinuousMacro();
-    if (reverbContinuousMacro == null) {
-      return false;
+      return;
     }
     if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
       // The problem is modulations by the wheel replacement macro.
@@ -472,16 +487,16 @@ public class FalconProgram {
       // Example: "M.1 Cutoff" macro of
       // Hypnotic Drive\Atmospheres & Pads\Vocal Atmos - Prophecy.
       // Requires further investigation. Maybe OK as is.
-      return false;
+      return;
     }
-    // Move any reverb to the right end of the standard bottom row
-    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
-    // the wheel replacement macro from the continuous  macro I'm least likely to use.
-    // Examples:
-    // Devinity\Plucks-Leads\Pluck Sphere (Reverb was already at end but now all macros
-    // are on one line instead of having the wheel macro above the reverb macro.)
-    // Eternal Funk\Brass\Back And Stride (Reverb was previously the first macro.)
-    MoveMacroToEndIfExists(reverbContinuousMacro);
+    MoveMacroToEndIfExists(FindReverbContinuousMacro());
+    // var reverbContinuousMacro = FindReverbContinuousMacro();
+    // if (reverbContinuousMacro != null) {
+    //   MoveMacroToEndIfExists(reverbContinuousMacro);
+    // } else {
+    //   Debug.Assert(true);
+    // }
+    MoveMacroToEndIfExists(FindReverbContinuousMacro());
     ProgramXml.ReplaceMacroElements(Macros);
     // If we don't reload, relocating the macros jumbles them.
     // Perhaps there's a better way, but it broke when I tried.
@@ -492,7 +507,6 @@ public class FalconProgram {
     InfoPageLayout.MoveAllMacrosToStandardBottom();
     UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
     Console.WriteLine($"{PathShort}: Optimised Wheel macro.");
-    return true;
   }
 
   public void PrependPathLineToDescription() {
