@@ -310,12 +310,12 @@ public class FalconProgram {
       select macro).FirstOrDefault();
   }
 
-  private Macro? FindReverbToggleMacro() {
-    return (
-      from macro in Macros
-      where macro.ModulatesReverb && !macro.IsContinuous
-      select macro).FirstOrDefault();
-  }
+  // private Macro? FindReverbToggleMacro() {
+  //   return (
+  //     from macro in Macros
+  //     where macro.ModulatesReverb && !macro.IsContinuous
+  //     select macro).FirstOrDefault();
+  // }
 
   [SuppressMessage("ReSharper", "CommentTypo")]
   private Macro? FindWheelMacro() {
@@ -458,13 +458,13 @@ public class FalconProgram {
 
   [SuppressMessage("ReSharper", "CommentTypo")]
   private bool OptimiseWheelMacro() {
-    if (Macros.Count != 5
-        || ContinuousMacros.Count != 5
-        || FindReverbContinuousMacro() != null) {
+    if (Macros.Count != 5 || ContinuousMacros.Count != 5) {
       return false;
     }
-    Console.WriteLine(
-      $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
+    var reverbContinuousMacro = FindReverbContinuousMacro();
+    if (reverbContinuousMacro == null) {
+      return false;
+    }
     if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
       // The problem is modulations by the wheel replacement macro.
       // (Source will indicate the modulating macro,
@@ -474,20 +474,22 @@ public class FalconProgram {
       // Requires further investigation. Maybe OK as is.
       return false;
     }
-    InfoPageLayout.MoveAllMacrosToStandardBottom();
+    // Move any reverb to the right end of the standard bottom row
+    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
+    // the wheel replacement macro from the continuous  macro I'm least likely to use.
+    // Examples:
+    // Devinity\Plucks-Leads\Pluck Sphere (Reverb was already at end but now all macros
+    // are on one line instead of having the wheel macro above the reverb macro.)
+    // Eternal Funk\Brass\Back And Stride (Reverb was previously the first macro.)
+    MoveMacroToEndIfExists(reverbContinuousMacro);
+    ProgramXml.ReplaceMacroElements(Macros);
     // If we don't reload, relocating the macros jumbles them.
     // Perhaps there's a better way, but it broke when I tried.
     Save(); 
     Read();
-    // Move any reverb to the right end of the standard bottom row
-    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
-    // the wheel replacement macro from the continuous  macro I'm least likely to use,
-    // preferably delay, otherwise reverb.
-    // Example: Savage\Leads\Saw Dirty.
-    MoveMacroToEndIfExists(FindReverbToggleMacro());
-    MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    MoveMacroToEndIfExists(FindWheelMacro());
-    ProgramXml.ReplaceMacroElements(Macros);
+    Console.WriteLine(
+      $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
+    InfoPageLayout.MoveAllMacrosToStandardBottom();
     UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
     Console.WriteLine($"{PathShort}: Optimised Wheel macro.");
     return true;

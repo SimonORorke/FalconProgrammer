@@ -20,6 +20,6 @@ public static class Runner {
     // batch.RemoveDelayEffectsAndMacros(null);
     // batch.ChangeReverbToZero(null);
     // batch.ReplaceModWheelWithMacro("Factory", "Bass-Sub", "FM Vee Bass B 2.0");
-    // batch.ReplaceModWheelWithMacro(null);
+    batch.ReplaceModWheelWithMacro(null);
   }
 }
