@@ -546,8 +546,8 @@ public class FalconProgram {
   }
 
   public void QueryReuseCc1NotSupported() {
-    if (InfoPageCcsScriptProcessor == null 
-        ||ContinuousMacros.Count < 5
+    if (InfoPageCcsScriptProcessor == null
+        || ContinuousMacros.Count < 5
         || ProgramXml.GetModulationElementsWithCcNo(1).Count > 0) {
       return;
     }
@@ -711,9 +711,8 @@ public class FalconProgram {
   ///   <para>
   ///     For programs with an Info page MIDI CCs script processor,
   ///     changing the MIDI CCs modulating macros is not (yet) supported by this method.
-  ///     If it were to be implemented, at last count by
-  ///     <see cref="QueryReuseCc1NotSupported" />, 51 programs would be impacted:
-  ///     32 in Fluidity and in 19 Pulsar.
+  ///     If it were to be implemented, 51 programs would be impacted, at last count by
+  ///     <see cref="QueryReuseCc1NotSupported" />: 32 in Fluidity and in 19 Pulsar.
   ///   </para>
   /// </summary>
   public void ReuseCc1() {
