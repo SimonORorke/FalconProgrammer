@@ -527,8 +527,8 @@ public class FalconProgram {
         modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
       }
     }
-    // Now add each remaining Effect, i.e. that is not also a ConnectionsParent,
-    // to Effects. 
+    // Now add to Effects all remaining Effects, which are those that are not also 
+    // ConnectionsParents and so are not modulated by macros or anything else. 
     // ReSharper disable once CommentTypo
     // Example: Titanium\Keys\Synth Xylo 1.
     effects.AddRange(
