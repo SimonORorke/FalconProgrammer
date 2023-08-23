@@ -22,7 +22,6 @@ public class FalconProgram {
   }
 
   [PublicAPI] public Category Category { get; }
-  private ImmutableList<ConnectionsParent> ConnectionsParents { get; set; } = null!;
 
   /// <summary>
   ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
@@ -366,27 +365,27 @@ public class FalconProgram {
     return result;
   }
 
-  private ImmutableList<ConnectionsParent> GetConnectionsParents() {
-    var list = new List<ConnectionsParent>();
-    foreach (var connectionsParentElement in ProgramXml.GetConnectionsParentElements()) {
-      var connectionsParent =
-        connectionsParentElement.Parent!.Name.ToString() == "Inserts"
-          ? new Effect(connectionsParentElement, ProgramXml)
-          : new ConnectionsParent(connectionsParentElement, ProgramXml);
-      foreach (var modulation in connectionsParent.Modulations) {
-        modulation.SourceMacro = (
-          from macro in Macros
-          where modulation.Source.EndsWith(macro.Name)
-          select macro).FirstOrDefault();
-        // if (modulation.SourceMacro != null) {
-        //   Debug.Assert(true);
-        // }
-        modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
-      }
-      list.Add(connectionsParent);
-    }
-    return list.ToImmutableList();
-  }
+  // private ImmutableList<ConnectionsParent> GetConnectionsParents() {
+  //   var list = new List<ConnectionsParent>();
+  //   foreach (var connectionsParentElement in ProgramXml.GetConnectionsParentElements()) {
+  //     var connectionsParent =
+  //       connectionsParentElement.Parent!.Name.ToString() == "Inserts"
+  //         ? new Effect(connectionsParentElement, ProgramXml)
+  //         : new ConnectionsParent(connectionsParentElement, ProgramXml);
+  //     foreach (var modulation in connectionsParent.Modulations) {
+  //       modulation.SourceMacro = (
+  //         from macro in Macros
+  //         where modulation.Source.EndsWith(macro.Name)
+  //         select macro).FirstOrDefault();
+  //       // if (modulation.SourceMacro != null) {
+  //       //   Debug.Assert(true);
+  //       // }
+  //       modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
+  //     }
+  //     list.Add(connectionsParent);
+  //   }
+  //   return list.ToImmutableList();
+  // }
 
   private List<Macro> GetContinuousMacros() {
     return (
@@ -395,12 +394,12 @@ public class FalconProgram {
       select macro).ToList();
   }
 
-  private ImmutableList<Effect> GetEffects() {
-    return (
-      from connectionsParent in ConnectionsParents
-      where connectionsParent is Effect
-      select (Effect)connectionsParent).ToImmutableList();
-  }
+  // private ImmutableList<Effect> GetEffects() {
+  //   return (
+  //     from connectionsParent in ConnectionsParents
+  //     where connectionsParent is Effect
+  //     select (Effect)connectionsParent).ToImmutableList();
+  // }
 
   internal SortedSet<Macro> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
@@ -503,6 +502,41 @@ public class FalconProgram {
     Console.WriteLine($"{PathShort}: Optimised Wheel macro.");
   }
 
+  private void PopulateConnectionsParentsAndEffects() {
+    var connectionsParentElements = ProgramXml.GetConnectionsParentElements();
+    var effectElements = ProgramXml.GetEffectElements();
+    var effects = new List<Effect>();
+    foreach (var connectionsParentElement in connectionsParentElements) {
+      // ConnectionsParents overlap with Effects. So, if the ConnectionsParent is also an
+      // Effect, add it to Effects as well as to ModulatedConnectionsParents of
+      // modulating Macros. 
+      ConnectionsParent connectionsParent; 
+      if (effectElements.Contains(connectionsParentElement)) {
+        connectionsParent = new Effect(connectionsParentElement, ProgramXml);
+        effects.Add((Effect)connectionsParent);
+        // Indicate that the Effect has now been added to Effects.
+        effectElements.Remove(connectionsParentElement);
+      } else {
+        connectionsParent = new ConnectionsParent(connectionsParentElement, ProgramXml);
+      }
+      foreach (var modulation in connectionsParent.Modulations) {
+        modulation.SourceMacro = (
+          from macro in Macros
+          where modulation.Source.EndsWith(macro.Name)
+          select macro).FirstOrDefault();
+        modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
+      }
+    }
+    // Now add each remaining Effect, i.e. that is not also a ConnectionsParent,
+    // to Effects. 
+    // ReSharper disable once CommentTypo
+    // Example: Titanium\Keys\Synth Xylo 1.
+    effects.AddRange(
+      from effectElement in effectElements
+      select new Effect(effectElement, ProgramXml));
+    Effects = effects.ToImmutableList();
+  }
+
   public void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
     const string crLf = "\r\n";
@@ -578,8 +612,9 @@ public class FalconProgram {
       InfoPageCcsScriptProcessor.ScriptProcessorElement =
         ProgramXml.InfoPageCcsScriptProcessorElement!;
     }
-    ConnectionsParents = GetConnectionsParents();
-    Effects = GetEffects();
+    PopulateConnectionsParentsAndEffects();
+    // ConnectionsParents = GetConnectionsParents();
+    // Effects = GetEffects();
     // Disabling this check for now, due to false positives.
     // CheckForNonModWheelNonInfoPageMacros();
   }

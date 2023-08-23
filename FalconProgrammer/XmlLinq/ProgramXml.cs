@@ -122,11 +122,20 @@ public class ProgramXml {
     }
   }
 
-  public IEnumerable<XElement> GetConnectionsParentElements() {
+  public List<XElement> GetConnectionsParentElements() {
     var connectionsElements = RootElement.Descendants("Connections");
-    return
+    return (
       from connectionsElement in connectionsElements
-      select connectionsElement.Parent;
+      select connectionsElement.Parent).ToList();
+  }
+
+  public List<XElement> GetEffectElements() {
+    var insertsElements = RootElement.Descendants("Inserts");
+    var result = new List<XElement>();
+    foreach (var insertsElement in insertsElements) {
+      result.AddRange(insertsElement.Elements());
+    }
+    return result;
   }
 
   private XElement GetTemplateMacroElement() {
