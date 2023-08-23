@@ -29,5 +29,7 @@ public static class Runner {
     // batch.RemoveDelayEffectsAndMacros("Titanium","Keys", "Synth Xylo 1");
     // batch.RemoveDelayEffectsAndMacros("Titanium","Keys", "Synth Xylo 1");
     // batch.RemoveDelayEffectsAndMacros(null);
+    // batch.ReuseCc1("Factory","Polysynth", "Velocity Pluck");
+    // batch.ReuseCc1(null);
   }
 }

@@ -163,6 +163,12 @@ public class Macro : INamed {
         forMacroModulation.CcNo = targetCcNo;
         UpdateModulation(forMacroModulation);
       }
+    } else {
+      // ReSharper disable once CommentTypo
+      // Example: Reverb Mix macro of Factory\Polysynth\Velocity Pluck 
+      AddModulation(new Modulation {
+        CcNo = targetCcNo
+      });
     }
   }
 
