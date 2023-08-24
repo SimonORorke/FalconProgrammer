@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlLinq;
@@ -107,6 +107,8 @@ public class Macro : INamed {
   public bool ModulatesReverb =>
     DisplayName.Contains("Reverb")
     || DisplayName.Contains("Room")
+    // ReSharper disable once StringLiteralTypo
+    || DisplayName.Contains("Sparkverb") // There's at least one like this.
     || DisplayName.Contains("Verb");
 
   internal ProgramXml ProgramXml { get; set; } = null!;
