@@ -149,11 +149,7 @@ public class Batch {
         Program.UpdateMacroCcs(MacroCcLocationOrder);
         break;
     }
-    if (Task is not (ConfigTask.CountMacros or
-        ConfigTask.QueryReuseCc1NotSupported
-        or ConfigTask.QueryDelayTypes
-        or ConfigTask.QueryReverbTypes
-        or ConfigTask.RestoreOriginal)) {
+    if (Program.HasBeenUpdated) {
       Program.Save();
     }
   }
@@ -318,13 +314,13 @@ public class Batch {
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    RestoreOriginal(soundBankName, categoryName, programName);
+    // RestoreOriginal(soundBankName, categoryName, programName);
     PrependPathLineToDescription(soundBankName, categoryName, programName);
     UpdateMacroCcs(soundBankName, categoryName, programName);
-    RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    ChangeReverbToZero(soundBankName, categoryName, programName);
-    ReplaceModWheelWithMacro(soundBankName, categoryName);
-    ReuseCc1(soundBankName, categoryName);
+    // RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
+    // ChangeReverbToZero(soundBankName, categoryName, programName);
+    // ReplaceModWheelWithMacro(soundBankName, categoryName);
+    // ReuseCc1(soundBankName, categoryName);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {

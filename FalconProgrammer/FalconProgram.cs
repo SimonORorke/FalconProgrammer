@@ -30,6 +30,7 @@ public class FalconProgram {
   internal List<Macro> ContinuousMacros => GetContinuousMacros();
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
+  public bool HasBeenUpdated { get; private set; } = false;
 
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
@@ -58,7 +59,7 @@ public class FalconProgram {
   private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
       effect.Bypass = true;
-      Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
+      NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
     }
   }
 
@@ -125,10 +126,10 @@ public class FalconProgram {
   }
 
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
-    Console.WriteLine($"Updating '{PathShort}'.");
     var oldModulation = new Modulation { CcNo = oldCcNo };
     var newModulation = new Modulation { CcNo = newCcNo };
     ProgramXml.ChangeModulationSource(oldModulation, newModulation);
+    NotifyUpdate($"{PathShort}: Changed MIDI CC {oldCcNo}  to {newCcNo}.");
   }
 
   public void ChangeReverbToZero() {
@@ -168,7 +169,7 @@ public class FalconProgram {
           "it is modulated by the wheel.");
       } else {
         reverbMacro.ChangeValueToZero();
-        Console.WriteLine($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
+        NotifyUpdate($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
       }
     }
   }
@@ -449,6 +450,11 @@ public class FalconProgram {
     }
   }
 
+  private void NotifyUpdate(string message) {
+    Console.WriteLine(message);
+    HasBeenUpdated = true;
+  }
+
   /// <summary>
   ///   When there are 5 macros, including the wheel macro, and they are all continuous,
   ///   the 4 original macros tend to be more important than the wheel macro, unless
@@ -499,7 +505,7 @@ public class FalconProgram {
       $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
     InfoPageLayout.MoveAllMacrosToStandardBottom();
     UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
-    Console.WriteLine($"{PathShort}: Optimised Wheel macro.");
+    NotifyUpdate($"{PathShort}: Optimised Wheel macro.");
   }
 
   private void PopulateConnectionsParentsAndEffects() {
@@ -550,7 +556,7 @@ public class FalconProgram {
       ? oldDescription.Replace(oldPathLine, newPathLine)
       : newPathLine + oldDescription;
     ProgramXml.SetDescription(newDescription);
-    Console.WriteLine($"{PathShort}: Prepended path line to description.");
+    NotifyUpdate($"{PathShort}: Prepended path line to description.");
   }
 
   public IEnumerable<string> QueryDelayTypes() {
@@ -654,7 +660,7 @@ public class FalconProgram {
     foreach (var macro in removableMacros) {
       macro.RemoveMacroElement();
       Macros.Remove(macro);
-      Console.WriteLine($"{PathShort}: Removed {macro}.");
+      NotifyUpdate($"{PathShort}: Removed {macro}.");
     }
     return true;
   }
@@ -705,7 +711,7 @@ public class FalconProgram {
       if (updateMacroCcs) {
         ReUpdateMacroCcs();
       }
-      Console.WriteLine($"{PathShort}: Replaced mod wheel with macro.");
+      NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
       OptimiseWheelMacro();
       // if (ContinuousMacros.Count > 4) {
       //   ReuseCc1();
@@ -778,7 +784,7 @@ public class FalconProgram {
         newCcNo++;
       }
     }
-    Console.WriteLine($"{PathShort}: Reused MIDI CC 1.");
+    NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
   }
 
   public void Save() {
@@ -805,7 +811,7 @@ public class FalconProgram {
       // ScriptProcessor. 
       UpdateMacroCcsOwnedByScriptProcessor();
     }
-    Console.WriteLine($"{PathShort}: Updated Macro CCs.");
+    NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
 
   private void UpdateMacroCcsFromTemplateScriptProcessor() {
