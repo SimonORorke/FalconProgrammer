@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using FalconProgrammer.XmlLinq;
@@ -13,20 +13,6 @@ namespace FalconProgrammer.XmlDeserialised;
 public class Macro : INamed {
   private XElement? _macroElement;
   private XElement? _propertiesElement;
-
-  /// <summary>
-  ///   The macro name, which uniquely identifies the macro. For reference in
-  ///   <see cref="Modulation" />s owned by effects or the
-  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />.
-  ///   only indicates the macro number.
-  /// </summary>
-  /// <remarks>
-  ///   The name format is usually like 'Macro 3' but, in a few programs such as
-  ///   'Factory\Keys\Pure FM Tines', like 'MacroKnob 3'.  So a macro number
-  ///   <see cref="MacroNo" /> is derived from the name.
-  /// </remarks>
-  [XmlAttribute]
-  public string Name { get; set; } = null!;
 
   /// <summary>
   ///   The meaningful name of the macro, as displayed on the Info page.
@@ -66,7 +52,7 @@ public class Macro : INamed {
           $"{nameof(Macro)}: {nameof(Style)} {Style} is not supported."));
     set => Style = value ? 0 : 1;
   }
-  
+
   private XElement MacroElement {
     get => _macroElement ??= GetMacroElement();
     set => _macroElement = value;
@@ -94,7 +80,7 @@ public class Macro : INamed {
     set => Name = $"Macro {value}";
   }
 
-  internal List<ConnectionsParent> ModulatedConnectionsParents { get; } = 
+  internal List<ConnectionsParent> ModulatedConnectionsParents { get; } =
     new List<ConnectionsParent>();
 
   public bool ModulatesDelay => DisplayName.Contains("Delay");
@@ -112,9 +98,22 @@ public class Macro : INamed {
     || DisplayName.Contains("Verb");
 
   internal ProgramXml ProgramXml { get; set; } = null!;
-
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
-  
+
+  /// <summary>
+  ///   The macro name, which uniquely identifies the macro. For reference in
+  ///   <see cref="Modulation" />s owned by effects or the
+  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />.
+  ///   only indicates the macro number.
+  /// </summary>
+  /// <remarks>
+  ///   The name format is usually like 'Macro 3' but, in a few programs such as
+  ///   'Factory\Keys\Pure FM Tines', like 'MacroKnob 3'.  So a macro number
+  ///   <see cref="MacroNo" /> is derived from the name.
+  /// </remarks>
+  [XmlAttribute]
+  public string Name { get; set; } = null!;
+
   public void AddMacroElement() {
     MacroElement = new XElement(ProgramXml.TemplateMacroElement);
     // Remove any Modulation elements and their parent Connections element brought
@@ -180,7 +179,7 @@ public class Macro : INamed {
   /// </summary>
   public void ChangeModWheelModulationSourcesToMacro() {
     string newSource = $"$Program/{Name}";
-    var modWheelModulationElements = 
+    var modWheelModulationElements =
       ProgramXml.GetModulationElementsWithCcNo(1);
     foreach (var modulationElement in modWheelModulationElements) {
       ProgramXml.SetAttribute(
@@ -224,7 +223,7 @@ public class Macro : INamed {
       return result;
     }
     throw new InvalidOperationException(
-      $"Cannot find ConstantModulation '{Name}' in " + 
+      $"Cannot find ConstantModulation '{Name}' in " +
       $"'{ProgramXml.InputProgramPath}'.");
   }
 
@@ -279,7 +278,7 @@ public class Macro : INamed {
     var modulationElement = modulationElements[modulation.Index];
     ProgramXml.UpdateModulationElement(modulation, modulationElement);
   }
-  
+
   public void UpdateLocation() {
     UpdatePropertiesElement();
   }
