@@ -23,7 +23,6 @@ public static class Runner {
     // batch.ReplaceModWheelWithMacro(null);
     // batch.ReuseCc1(null);
     // batch.RemoveDelayEffectsAndMacros("Devinity", "Bass", "Talking Bass");
-    // batch.RollForward(null);
     // batch.ReplaceModWheelWithMacro("Devinity", "Bass", "Pogo Bass");
     // batch.QueryReuseCc1NotSupported(null);
     // batch.RemoveDelayEffectsAndMacros("Titanium","Keys", "Synth Xylo 1");
@@ -31,5 +30,7 @@ public static class Runner {
     // batch.RemoveDelayEffectsAndMacros(null);
     // batch.ReuseCc1("Factory","Polysynth", "Velocity Pluck");
     // batch.ReuseCc1(null);
+    // batch.RollForward("Factory","Polysynth", "String Fast Pluck");
+    // batch.ChangeReverbToZero(null);
   }
 }

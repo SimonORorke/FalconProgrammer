@@ -36,11 +36,14 @@ public class ConnectionsParent : INamed {
     foreach (var modulation in Modulations) {
       try {
         ProgramXml.SetAttribute(
-          modulation.ModulationElement!, modulation.Destination,
+          ConnectionsParentElement, modulation.Destination,
           // If it's a toggle macro, Destination should be "Bypass".  
           modulation.Destination == "Bypass" ? 1 : 0);
-        // ReSharper disable once EmptyGeneralCatchClause
-      } catch { }
+      } catch (InvalidOperationException) {
+        // Cannot find attribute. So the modulation is trying to modulate an
+        // effect parameter that does not exist.
+        // Example: Ether Fields\Bells - Plucks\Bali Plucker
+      }
     }
   }
 
