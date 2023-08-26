@@ -7,7 +7,6 @@ public static class Runner {
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void Run() {
     var batch = new Batch();
-    // batch.RollForward(null);
     // batch.UpdateMacroCcs("Factory", "Bass-Sub", "Growl Alarma");
     // batch.UpdateMacroCcs(null);
     // batch.ReplaceModWheelWithMacro(
@@ -32,5 +31,6 @@ public static class Runner {
     // batch.ReuseCc1(null);
     // batch.RollForward("Factory","Polysynth", "String Fast Pluck");
     // batch.ChangeReverbToZero(null);
+    // batch.RollForward(null);
   }
 }
