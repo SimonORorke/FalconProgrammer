@@ -1,5 +1,4 @@
-﻿using System.Xml.Serialization;
-using FalconProgrammer.XmlDeserialised;
+﻿using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer;
@@ -54,6 +53,7 @@ public class Category {
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public string Path { get; }
+  public ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
@@ -131,22 +131,21 @@ public class Category {
   ///   case the template program.
   /// </summary>
   private ScriptProcessor? GetTemplateScriptProcessor() {
-    using var reader = new StreamReader(TemplateProgramPath);
-    var serializer = new XmlSerializer(typeof(UviRoot));
-    var root = (UviRoot)serializer.Deserialize(reader)!;
+    var templateXml = new ProgramXml(this);
+    templateXml.LoadFromFile(TemplateProgramPath);
     // Testing for macro-modulating Modulations might be more reliable than
     // assuming the last ScriptProcessor.  But I think I tried that and there was 
     // a problem, don't know what though.  Can be revisited if assuming the last
     // ScriptProcessor turns out not to be reliable.  But I think that's actually fine
     // in all cases.
-    var templateScriptProcessor = (
-      from scriptProcessor in root.Program.ScriptProcessors
-      select scriptProcessor).LastOrDefault();
-    if (templateScriptProcessor == null && InfoPageMustUseScript) {
-      throw new InvalidOperationException(
-        $"Category {Path}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
+    if (templateXml.TemplateScriptProcessorElement != null) {
+      return new ScriptProcessor(templateXml.TemplateScriptProcessorElement, ProgramXml);
+    } 
+    if (!InfoPageMustUseScript) {
+      return null;
     }
-    return templateScriptProcessor;
+    throw new InvalidOperationException(
+      $"Category {Path}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
   }
 
   public void Initialise() {

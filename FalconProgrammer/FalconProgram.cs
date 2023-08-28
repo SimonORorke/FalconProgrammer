@@ -1,7 +1,5 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml.Serialization;
-using FalconProgrammer.XmlDeserialised;
 using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
@@ -30,7 +28,7 @@ public class FalconProgram {
   internal List<Macro> ContinuousMacros => GetContinuousMacros();
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
-  public bool HasBeenUpdated { get; private set; } = false;
+  public bool HasBeenUpdated { get; private set; }
 
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
@@ -54,7 +52,8 @@ public class FalconProgram {
     $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
-  private List<ScriptProcessor> ScriptProcessors { get; set; } = null!;
+  private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } = 
+    ImmutableList<ScriptProcessor>.Empty;
 
   private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
@@ -126,8 +125,8 @@ public class FalconProgram {
   }
 
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
-    var oldModulation = new Modulation { CcNo = oldCcNo };
-    var newModulation = new Modulation { CcNo = newCcNo };
+    var oldModulation = new Modulation(ProgramXml) { CcNo = oldCcNo };
+    var newModulation = new Modulation(ProgramXml) { CcNo = newCcNo };
     ProgramXml.ChangeModulationSource(oldModulation, newModulation);
     NotifyUpdate($"{PathShort}: Changed MIDI CC {oldCcNo}  to {newCcNo}.");
   }
@@ -174,45 +173,6 @@ public class FalconProgram {
     }
   }
 
-  private static void CheckForNonModWheelNonInfoPageMacro(
-    Modulation modulation) {
-    if (!modulation.ModulatesMacro
-        // ReSharper disable once MergeIntoPattern
-        && modulation.CcNo.HasValue && modulation.CcNo != 1) {
-      throw new ApplicationException(
-        $"MIDI CC {modulation.CcNo} is mapped to " +
-        $"{modulation.Destination}, which is not an Info page macro.");
-    }
-  }
-
-  /// <summary>
-  ///   Modulation wheel (MIDI CC 1) is the only MIDI CC number expected not to control
-  ///   a macro on the Info page. If there are others, there is a risk that they could
-  ///   duplicate CC numbers we map to Info page macros.  So let's validate that there
-  ///   are none.
-  /// </summary>
-  /// <remarks>
-  ///   I've had to disable usage of this check in <see cref="Deserialise" /> because,
-  ///   for unknown reason, it can report a false positive. In "Pulsar\Bass\Flipmode",
-  ///   it reports CcNo 3 (Source="@MIDI CC 3").  Yet no such Source can be found in the
-  ///   file. Strangely, the problem is not reproduced in a test category folder
-  ///   containing only Flipmode and the template file.
-  /// </remarks>
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  [SuppressMessage("ReSharper", "UnusedMember.Local")]
-  private void CheckForNonModWheelNonInfoPageMacros() {
-    foreach (
-      var modulation in Macros.SelectMany(macro =>
-        macro.Modulations)) {
-      CheckForNonModWheelNonInfoPageMacro(modulation);
-    }
-    foreach (
-      var modulation in ScriptProcessors.SelectMany(scriptProcessor =>
-        scriptProcessor.Modulations)) {
-      CheckForNonModWheelNonInfoPageMacro(modulation);
-    }
-  }
-
   public void CountMacros() {
     if (Macros.Count > 10) {
       Console.WriteLine($"{Macros.Count} macros in '{Path}'.");
@@ -220,31 +180,12 @@ public class FalconProgram {
   }
 
   private ProgramXml CreateProgramXml() {
-    if (Category.SoundBankFolder.Name == "Organic Keys") {
-      return new OrganicKeysProgramXml(Category);
-    }
+    // if (Category.SoundBankFolder.Name == "Organic Keys") {
+    //   return new OrganicKeysProgramXml(Category);
+    // }
     return Category.InfoPageMustUseScript
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
-  }
-
-  private void Deserialise() {
-    using var reader = new StreamReader(Path);
-    var serializer = new XmlSerializer(typeof(UviRoot));
-    var root = (UviRoot)serializer.Deserialize(reader)!;
-    Macros = root.Program.Macros;
-    foreach (var macro in Macros) {
-      foreach (var modulation in macro.Modulations) {
-        modulation.Owner = macro;
-      }
-    }
-    ScriptProcessors = root.Program.ScriptProcessors;
-    foreach (var scriptProcessor in ScriptProcessors) {
-      foreach (var modulation in scriptProcessor.Modulations) {
-        // Needed for modulation.ModulatesMacro in FindInfoPageCcsScriptProcessor 
-        modulation.Owner = scriptProcessor;
-      }
-    }
   }
 
   /// <summary>
@@ -411,11 +352,11 @@ public class FalconProgram {
     foreach (var macro in Macros) {
       // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
-      //macro.Properties.Validate();
-      for (int j = 0; j < macro.Modulations.Count; j++) {
-        var modulation = macro.Modulations[j];
-        modulation.Index = j;
-      }
+      //macro.Validate();
+      // for (int j = macro.Modulations.Count - 1; j >= 0; j--) {
+      //   var modulation = macro.Modulations[j];
+      //   // modulation.Index = j;
+      // }
       // In the Devinity sound bank, some macros do not appear on the Info page (only
       // the Mods page). For example Devinity/Bass/Comber Bass.
       // This is achieved by setting, in ConstantModulation.Properties, the X coordinates
@@ -438,8 +379,8 @@ public class FalconProgram {
   private bool HasUniqueLocation(Macro macro) {
     return (
       from m in Macros
-      where m.Properties.X == macro.Properties.X
-            && m.Properties.Y == macro.Properties.Y
+      where m.X == macro.X
+            && m.Y == macro.Y
       select m).Count() == 1;
   }
 
@@ -594,35 +535,53 @@ public class FalconProgram {
     Console.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
   }
 
-  /// <summary>
-  ///   Dual XML data load strategy:
-  ///   To maximise forward compatibility with possible future changes to the program XML
-  ///   data structure, we are deserialising only nodes we need, to the
-  ///   ConstantModulations and ScriptProcessors lists. So we cannot serialise back to
-  ///   file from those lists. Instead, the program XML file must be updated via
-  ///   LINQ to XML in ProgramXml.
-  /// </summary>
+  // private void Deserialise() {
+  //   using var reader = new StreamReader(Path);
+  //   var serializer = new XmlSerializer(typeof(UviRoot));
+  //   var root = (UviRoot)serializer.Deserialize(reader)!;
+  //   Macros = root.Program.Macros;
+  //   foreach (var macro in Macros) {
+  //     foreach (var modulation in macro.Modulations) {
+  //       modulation.Owner = macro;
+  //     }
+  //   }
+  //   ScriptProcessors = root.Program.ScriptProcessors;
+  //   foreach (var scriptProcessor in ScriptProcessors) {
+  //     foreach (var modulation in scriptProcessor.Modulations) {
+  //       // Needed for modulation.ModulatesMacro in FindInfoPageCcsScriptProcessor 
+  //       modulation.Owner = scriptProcessor;
+  //     }
+  //   }
+  // }
+
   public void Read() {
-    Deserialise();
     ProgramXml = CreateProgramXml();
     ProgramXml.LoadFromFile(Path);
+    Category.ProgramXml = ProgramXml;
+    Macros = (
+      from macroElement in ProgramXml.MacroElements
+      select new Macro(macroElement, ProgramXml)).ToList();
     foreach (var macro in Macros) {
-      macro.ProgramXml = ProgramXml;
+      foreach (var modulation in macro.Modulations) {
+        modulation.Owner = macro;
+      }
     }
+    ScriptProcessors = (
+      from scriptProcessorElement in ProgramXml.ScriptProcessorElements
+      select new ScriptProcessor(scriptProcessorElement, ProgramXml)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
-      scriptProcessor.ProgramXml = ProgramXml;
+      foreach (var modulation in scriptProcessor.Modulations) {
+        // Needed for modulation.ModulatesMacro in FindInfoPageCcsScriptProcessor 
+        modulation.Owner = scriptProcessor;
+      }
     }
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
-    if (InfoPageCcsScriptProcessor != null) {
-      ProgramXml.SetInfoPageCcsScriptProcessorElement(InfoPageCcsScriptProcessor);
-      InfoPageCcsScriptProcessor.ScriptProcessorElement =
-        ProgramXml.InfoPageCcsScriptProcessorElement!;
-    }
+    // if (InfoPageCcsScriptProcessor != null) {
+    //   ProgramXml.SetInfoPageCcsScriptProcessorElement(InfoPageCcsScriptProcessor);
+    //   InfoPageCcsScriptProcessor.ScriptProcessorElement =
+    //     ProgramXml.InfoPageCcsScriptProcessorElement!;
+    // }
     PopulateConnectionsParentsAndEffects();
-    // ConnectionsParents = GetConnectionsParents();
-    // Effects = GetEffects();
-    // Disabling this check for now, due to false positives.
-    // CheckForNonModWheelNonInfoPageMacros();
   }
 
   public void RemoveDelayEffectsAndMacros() {
@@ -658,7 +617,7 @@ public class FalconProgram {
       return false;
     }
     foreach (var macro in removableMacros) {
-      macro.RemoveMacroElement();
+      macro.RemoveElement();
       Macros.Remove(macro);
       NotifyUpdate($"{PathShort}: Removed {macro}.");
     }
@@ -674,7 +633,8 @@ public class FalconProgram {
   ///   replacement macro.
   /// </summary>
   private void RemoveInfoPageCcsScriptProcessor() {
-    ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
+    // ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
+    InfoPageCcsScriptProcessor!.Remove();
     InfoPageCcsScriptProcessor = null;
     ReUpdateMacroCcs();
     // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
@@ -713,9 +673,6 @@ public class FalconProgram {
       }
       NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
       OptimiseWheelMacro();
-      // if (ContinuousMacros.Count > 4) {
-      //   ReuseCc1();
-      // }
     } else {
       throw new InvalidOperationException(
         $"{PathShort}: Failed to replace mod wheel with macro.");
@@ -805,7 +762,9 @@ public class FalconProgram {
       // In some categories, we have or are going to remove the Info page
       // ScriptProcessor, so InfoPageMustUseScript has had to be changed to false for
       // the Category, yet we still need to use the template if it is available.
-      UpdateMacroCcsFromTemplateScriptProcessor();
+      InfoPageCcsScriptProcessor.UpdateModulationsFromTemplate(
+        Category.TemplateScriptProcessor.Modulations);
+      //UpdateMacroCcsFromTemplateScriptProcessor();
     } else {
       // The CCs are specified in the Info page ScriptProcessor but there's no template
       // ScriptProcessor. 
@@ -814,14 +773,14 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
 
-  private void UpdateMacroCcsFromTemplateScriptProcessor() {
-    InfoPageCcsScriptProcessor!.Modulations.Clear();
-    foreach (var modulation in
-             Category.TemplateScriptProcessor!.Modulations) {
-      InfoPageCcsScriptProcessor.Modulations.Add(modulation);
-    }
-    ProgramXml.UpdateInfoPageCcsScriptProcessorFromTemplate();
-  }
+  // private void UpdateMacroCcsFromTemplateScriptProcessor() {
+  //   InfoPageCcsScriptProcessor!.Modulations.Clear();
+  //   foreach (var modulation in
+  //            Category.TemplateScriptProcessor!.Modulations) {
+  //     InfoPageCcsScriptProcessor.Modulations.Add(modulation);
+  //   }
+  //   // ProgramXml.UpdateInfoPageCcsScriptProcessorFromTemplate();
+  // }
 
   /// <summary>
   ///   Where MIDI CC assignments to macros shown on the Info page are specified in
@@ -861,7 +820,7 @@ public class FalconProgram {
       int ccNo = GetCcNo(macro);
       if (forMacroModulations.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a non-mod wheel CC number.
-        var modulation = new Modulation {
+        var modulation = new Modulation(ProgramXml) {
           CcNo = ccNo
         };
         macro.AddModulation(modulation);
@@ -880,7 +839,7 @@ public class FalconProgram {
         if (!macro.IsContinuous && modulation.Ratio == -1) {
           modulation.Ratio = 1;
         }
-        macro.UpdateModulation(modulation);
+        // macro.UpdateModulation(modulation);
       }
     }
   }
@@ -906,7 +865,7 @@ public class FalconProgram {
     for (int i = InfoPageCcsScriptProcessor!.Modulations.Count - 1; i >= 0; i--) {
       var modulation = InfoPageCcsScriptProcessor!.Modulations[i];
       if (modulation.ModulatesMacro) {
-        InfoPageCcsScriptProcessor!.Modulations.Remove(modulation);
+        InfoPageCcsScriptProcessor!.RemoveModulation(modulation);
       }
     }
     NextContinuousCcNo = FirstContinuousCcNo;
@@ -914,7 +873,7 @@ public class FalconProgram {
     foreach (var macro in sortedByLocation) {
       macroNo++; // Can we assume the macro numbers are always going to increment from 1?
       InfoPageCcsScriptProcessor.AddModulation(
-        new Modulation {
+        new Modulation(ProgramXml) {
           Destination = $"Macro{macroNo}",
           CcNo = GetCcNo(macro)
         });

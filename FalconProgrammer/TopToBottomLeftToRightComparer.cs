@@ -1,4 +1,4 @@
-﻿using FalconProgrammer.XmlDeserialised;
+﻿using FalconProgrammer.XmlLinq;
 
 namespace FalconProgrammer; 
 
@@ -11,21 +11,21 @@ public class TopToBottomLeftToRightComparer : Comparer<Macro> {
     // The vertical clearance is 95, so this should be safe.
     // Example: "Ether Fields\Wavetable\Vocal Lead Synth".
     const int verticalFudge = 30;
-    if (a!.Properties.Y < b!.Properties.Y - verticalFudge) {
+    if (a!.Y < b!.Y - verticalFudge) {
       return -1;
     }
-    if (a.Properties.Y > b.Properties.Y + verticalFudge) {
+    if (a.Y > b.Y + verticalFudge) {
       return 1;
     }
-    if (a.Properties.X < b.Properties.X) {
+    if (a.X < b.X) {
       return -1;
     }
-    if (a.Properties.X > b.Properties.X) {
+    if (a.X > b.X) {
       return 1;
     }
     throw new ApplicationException(
       "Duplicate ConstantModulation.Properties location: X = " + 
-      $"{a.Properties.X}; Y = {a.Properties.Y}. " + 
+      $"{a.X}; Y = {a.Y}. " + 
       $"a = {a}. b = {b}.");
   }
 }

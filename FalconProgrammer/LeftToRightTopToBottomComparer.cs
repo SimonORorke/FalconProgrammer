@@ -1,4 +1,4 @@
-﻿using FalconProgrammer.XmlDeserialised;
+﻿using FalconProgrammer.XmlLinq;
 
 namespace FalconProgrammer; 
 
@@ -7,21 +7,21 @@ namespace FalconProgrammer;
 /// </summary>
 public class LeftToRightTopToBottomComparer : Comparer<Macro> {
   public override int Compare(Macro? a, Macro? b) {
-    if (a!.Properties.X < b!.Properties.X) {
+    if (a!.X < b!.X) {
       return -1;
     }
-    if (a.Properties.X > b.Properties.X) {
+    if (a.X > b.X) {
       return 1;
     }
-    if (a.Properties.Y < b.Properties.Y) {
+    if (a.Y < b.Y) {
       return -1;
     }
-    if (a.Properties.Y > b.Properties.Y) {
+    if (a.Y > b.Y) {
       return 1;
     }
     throw new ApplicationException(
       "Duplicate ConstantModulation.Properties location: X = " + 
-      $"{a.Properties.X}; Y = {a.Properties.Y}. " + 
+      $"{a.X}; Y = {a.Y}. " + 
       $"a = {a}. b = {b}.");
   }
 }

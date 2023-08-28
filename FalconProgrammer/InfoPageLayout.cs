@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using FalconProgrammer.XmlDeserialised;
+using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer;
@@ -66,9 +66,8 @@ public class InfoPageLayout {
     // Program.ProgramXml.ReplaceMacroElements(Program.Macros);
     int x = gapBetweenMacros;
     foreach (var macro in Program.Macros) {
-      macro.Properties.X = x;
-      macro.Properties.Y = StandardBottommostY;
-      macro.UpdateLocation();
+      macro.X = x;
+      macro.Y = StandardBottommostY;
       x += gapBetweenMacros + MacroWidth;
     }
     Console.WriteLine($"{Program.PathShort}: Moved all macros to bottom.");
@@ -104,22 +103,25 @@ public class InfoPageLayout {
       select macro.MacroNo).Max() + 1
       // ReSharper disable once CommentTypo
       // Example: Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
-      : 1; 
-    var wheelMacro = new Macro {
-      MacroNo = wheelMacroNo,
-      DisplayName = "Wheel",
-      Bipolar = 0,
-      IsContinuous = true,
-      Modulations = new List<Modulation>(),
-      Value = 0,
-      ProgramXml = Program.ProgramXml,
-      Properties = new MacroProperties {
-        X = location.X,
-        Y = location.Y
-      }
-    };
-    wheelMacro.AddMacroElement();
-    wheelMacro.AddModulation(new Modulation {
+      : 1;
+    var wheelMacro = new Macro(Program.ProgramXml);
+    wheelMacro.MacroNo = wheelMacroNo;
+    wheelMacro.DisplayName = "Wheel";
+    wheelMacro.Bipolar = 0;
+    wheelMacro.IsContinuous = true;
+    wheelMacro.Value = 0;
+    wheelMacro.X = location.X;
+    wheelMacro.Y = location.Y;
+    // var wheelMacro = new Macro(Program.ProgramXml) {
+    //   MacroNo = wheelMacroNo,
+    //   DisplayName = "Wheel",
+    //   Bipolar = 0,
+    //   IsContinuous = true,
+    //   Value = 0,
+    //   X = location.X,
+    //   Y = location.Y
+    // };
+    wheelMacro.AddModulation(new Modulation(Program.ProgramXml) {
       CcNo = ModWheelReplacementCcNo
     });
     wheelMacro.ChangeModWheelModulationSourcesToMacro();
@@ -161,7 +163,7 @@ public class InfoPageLayout {
       LocationOrder.TopToBottomLeftToRight);
     BottomRowY = (
       from macro in sortedByLocation
-      select macro.Properties.Y).Max();
+      select macro.Y).Max();
     BottomRowMacros = GetBottomRowMacros(sortedByLocation);
     var result = LocateWheelAboveDelayOrReverbMacro();
     if (result != null) {
@@ -210,7 +212,7 @@ public class InfoPageLayout {
     const int verticalFudge = 50;
     return (
       from macro in macrosSortedByLocation
-      where macro.Properties.Y >= BottomRowY - verticalFudge
+      where macro.Y >= BottomRowY - verticalFudge
       select macro).ToList();
   }
 
@@ -220,20 +222,20 @@ public class InfoPageLayout {
     // 95 would be the bare minimum.
     const int verticalClearance = 115;
     var result = new Point(
-      macro.Properties.X,
-      macro.Properties.Y - verticalClearance);
+      macro.X,
+      macro.Y - verticalClearance);
     var overlappingMacro = (
       from otherMacro in Program.Macros
-      where otherMacro.Properties.Y > result.Y - 50
-            && otherMacro.Properties.Y < result.Y + 50
-            && otherMacro.Properties.X > result.X - MacroWidth
-            && otherMacro.Properties.X < result.X + MacroWidth
+      where otherMacro.Y > result.Y - 50
+            && otherMacro.Y < result.Y + 50
+            && otherMacro.X > result.X - MacroWidth
+            && otherMacro.X < result.X + MacroWidth
       select otherMacro).FirstOrDefault();
     if (overlappingMacro != null) {
       // Example: Spectre\Polysynth\PL Cream.
       result = new Point(
-        macro.Properties.X,
-        overlappingMacro.Properties.Y - verticalClearance);
+        macro.X,
+        overlappingMacro.Y - verticalClearance);
     }
     return result;
   }
@@ -271,16 +273,16 @@ public class InfoPageLayout {
     // List, from left to right, the widths of the gaps between the macros on the bottom
     // row of macros on the Info page.  Include the gap between the leftmost macro and
     // the left edge and the gap between the rightmost macro and the right edge.
-    var gapWidths = new List<int> { BottomRowMacros[0].Properties.X };
+    var gapWidths = new List<int> { BottomRowMacros[0].X };
     if (BottomRowMacros.Count > 1) {
       for (int i = 0; i < BottomRowMacros.Count - 1; i++) {
         gapWidths.Add(
-          BottomRowMacros[i + 1].Properties.X
-          - (BottomRowMacros[i].Properties.X
+          BottomRowMacros[i + 1].X
+          - (BottomRowMacros[i].X
              + MacroWidth));
       }
     }
-    gapWidths.Add(RightEdge - (BottomRowMacros[^1].Properties.X + MacroWidth));
+    gapWidths.Add(RightEdge - (BottomRowMacros[^1].X + MacroWidth));
     // Check whether there any gaps on the bottom rowe wide enough to accommodate a new
     // macro.
     bool canFitInGap = (
@@ -317,7 +319,7 @@ public class InfoPageLayout {
     }
     int newMacroGapX = newMacroGapIndex == 0
       ? 0
-      : BottomRowMacros[newMacroGapIndex - 1].Properties.X + MacroWidth;
+      : BottomRowMacros[newMacroGapIndex - 1].X + MacroWidth;
     int newMacroX = newMacroGapX + (rightmostSuitableGapWidth - MacroWidth) / 2;
     // If there are continuous and toggle macros on the bottom row, the continuous macros
     // may be a little higher up than the toggle macros, as they are taller.  In that
@@ -331,7 +333,7 @@ public class InfoPageLayout {
     if (bottomRowContinuousMacros.Count > 0) {
       newMacroY = (
         from macro in bottomRowContinuousMacros
-        select macro.Properties.Y).Max();
+        select macro.Y).Max();
     } else {
       newMacroY = BottomRowY <= StandardBottommostY ? BottomRowY : StandardBottommostY;
     }

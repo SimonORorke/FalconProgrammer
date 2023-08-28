@@ -1,45 +1,39 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Immutable;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer.XmlDeserialised;
+namespace FalconProgrammer.XmlLinq; 
 
 /// <summary>
 ///   Called ConstantModulation in the program XML but corresponds to a macro,
 ///   as shown the Info page.
 /// </summary>
-public class Macro : INamed {
-  private XElement? _macroElement;
+public class Macro : EntityBase {
+  private XElement? _connectionsElement;
+  private ImmutableList<Modulation>? _modulations;
   private XElement? _propertiesElement;
+
+  public Macro(ProgramXml programXml) : base(programXml, true) {
+  }
+
+  public Macro(XElement macroElement, ProgramXml programXml) : base(programXml) {
+    Element = macroElement;
+  }
+
+  public int Bipolar {
+    get => Convert.ToInt32(GetAttributeValue(nameof(Bipolar)));
+    set => SetAttribute(nameof(Bipolar), value);
+  }
+  
+  private XElement ConnectionsElement => _connectionsElement ??= GetConnectionsElement();
 
   /// <summary>
   ///   The meaningful name of the macro, as displayed on the Info page.
   /// </summary>
-  [XmlAttribute]
-  public string DisplayName { get; set; } = null!;
-
-  [XmlAttribute] public int Bipolar { get; set; }
-
-  /// <summary>
-  ///   0 indicates a toggle macro. 1 indicates a continuous macro.
-  /// </summary>
-  [XmlAttribute]
-  public int Style { get; set; }
-
-  [XmlAttribute] public float Value { get; set; }
-
-  /// <summary>
-  ///   For a macro (ConstantModulation), there is 0 or 1 Modulation only, except
-  ///   where there is a Modulation that maps to the modulation wheel (MIDI CC 1),
-  ///   in which case there can be two Modulations.
-  /// </summary>
-  [XmlArray("Connections")]
-  [XmlArrayItem("SignalConnection")]
-  public List<Modulation> Modulations { get; set; } = null!;
-
-  [XmlElement] public MacroProperties Properties { get; set; } = null!;
+  public string DisplayName {
+    get => GetAttributeValue(nameof(DisplayName));
+    set => SetAttribute(nameof(DisplayName), value);
+  }
 
   /// <summary>
   ///   Indicates whether this is continuous macro.  If false, it's a toggle macro.
@@ -53,18 +47,13 @@ public class Macro : INamed {
     set => Style = value ? 0 : 1;
   }
 
-  private XElement MacroElement {
-    get => _macroElement ??= GetMacroElement();
-    set => _macroElement = value;
-  }
-
   /// <summary>
-  ///   The macro number, derived from <see cref="Name" />.
+  ///   The macro number, derived from <see cref="EntityBase.Name" />.
   /// </summary>
   /// <remarks>
-  ///   Though <see cref="Name" /> is a unique identifier, this derived macro number
-  ///   cannot be 100% relied on to also be one. This is because there is at least one
-  ///   program, Titanium\Pads\Children's Choir, that has macros named both "Macro 1"
+  ///   Though <see cref="EntityBase.Name" /> is a unique identifier, this derived macro
+  ///   number cannot be 100% relied on to also be one. This is because there is at least
+  ///   one program, Titanium\Pads\Children's Choir, that has macros named both "Macro 1"
   ///   and "MacroKnob 1" etc., presumably due to a programmers' oversight.
   /// </remarks>
   [PublicAPI]
@@ -79,10 +68,22 @@ public class Macro : INamed {
     }
     set => Name = $"Macro {value}";
   }
-
-  internal List<ConnectionsParent> ModulatedConnectionsParents { get; } =
+  
+  public List<ConnectionsParent> ModulatedConnectionsParents { get; } =
     new List<ConnectionsParent>();
 
+  /// <summary>
+  ///   Modulations specifying MIDI CC numbers that modulate the macro.
+  /// </summary>
+  /// <remarks>
+  ///   For a macro (ConstantModulation), there is 0 or 1 Modulation only, except
+  ///   where there is a Modulation that maps to the modulation wheel (MIDI CC 1),
+  ///   in which case there can be two Modulations.
+  /// </remarks>
+  public ImmutableList<Modulation> Modulations {
+    get => _modulations ??= GetModulations();
+    private set => _modulations = value;
+  }
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
   public bool ModulatesEnabledEffects => (
@@ -96,62 +97,56 @@ public class Macro : INamed {
     // ReSharper disable once StringLiteralTypo
     || DisplayName.Contains("Sparkverb") // There's at least one like this.
     || DisplayName.Contains("Verb");
-
-  internal ProgramXml ProgramXml { get; set; } = null!;
+  
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
 
   /// <summary>
-  ///   The macro name, which uniquely identifies the macro. For reference in
-  ///   <see cref="Modulation" />s owned by effects or the
-  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />.
-  ///   only indicates the macro number.
+  ///   0 indicates a toggle macro. 1 indicates a continuous macro.
   /// </summary>
-  /// <remarks>
-  ///   The name format is usually like 'Macro 3' but, in a few programs such as
-  ///   'Factory\Keys\Pure FM Tines', like 'MacroKnob 3'.  So a macro number
-  ///   <see cref="MacroNo" /> is derived from the name.
-  /// </remarks>
-  [XmlAttribute]
-  public string Name { get; set; } = null!;
+  public int Style {
+    get => Convert.ToInt32(GetAttributeValue(nameof(Style)));
+    set => SetAttribute(nameof(Style), value);
+  }
 
-  public void AddMacroElement() {
-    MacroElement = new XElement(ProgramXml.TemplateMacroElement);
+  public float Value {
+    get => Convert.ToSingle(GetAttributeValue(nameof(Value)));
+    set => SetAttribute(nameof(Value), value);
+  }
+  
+  public int X {
+    get => Convert.ToInt32(GetAttributeValue(
+      PropertiesElement, nameof(X).ToLower()));
+    set => SetAttribute(
+      PropertiesElement, nameof(X).ToLower(), value);
+  }
+  
+  public int Y {
+    get => Convert.ToInt32(GetAttributeValue(
+      PropertiesElement, nameof(Y).ToLower()));
+    set => SetAttribute(
+      PropertiesElement, nameof(Y).ToLower(), value);
+  }
+
+  public void AddElement() {
     // Remove any Modulation elements and their parent Connections element brought
     // over with template.
-    MacroElement.Element("Connections")?.Remove();
-    ProgramXml.SetAttribute(MacroElement, nameof(Name), Name);
-    ProgramXml.SetAttribute(MacroElement, nameof(DisplayName), DisplayName);
-    ProgramXml.SetAttribute(MacroElement, nameof(Bipolar), Bipolar);
-    ProgramXml.SetAttribute(MacroElement, nameof(Style), Style);
-    ProgramXml.SetAttribute(MacroElement, nameof(Value), Value);
-    ProgramXml.ControlSignalSourcesElement.Add(MacroElement);
+    Element.Element("Connections")?.Remove();
+    SetAttribute(nameof(Name), Name);
+    SetAttribute(nameof(DisplayName), DisplayName);
+    SetAttribute(nameof(Bipolar), Bipolar);
+    SetAttribute(nameof(Style), Style);
+    SetAttribute(nameof(Value), Value);
     // A macro is expected to own 0, 1 or 2 Modulations:
     // 2 if there is a mod wheel signal connection and a 'for macro' Modulation.
     foreach (var modulation in Modulations) {
-      AddModulationElement(modulation);
+      ConnectionsElement.Add(modulation.Element);
     }
     UpdatePropertiesElement();
   }
-
-  /// <summary>
-  ///   Adds the specified <see cref="Modulation" /> to the <see cref="Macro" />
-  ///   in the Linq For XML data structure as well as in the deserialised data structure.
-  /// </summary>
+  
   public void AddModulation(Modulation modulation) {
     modulation.Owner = this;
-    Modulations.Add(modulation);
-    AddModulationElement(modulation);
-  }
-
-  private void AddModulationElement(Modulation modulation) {
-    // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
-    // element will already own a Connections element. 
-    var connectionsElement = MacroElement.Element("Connections");
-    if (connectionsElement == null) {
-      connectionsElement = new XElement("Connections");
-      MacroElement.Add(connectionsElement);
-    }
-    connectionsElement.Add(ProgramXml.CreateModulationElement(modulation));
+    Modulations = Modulations.Add(modulation);
   }
 
   public void ChangeCcNoTo(int newCcNo) {
@@ -162,12 +157,12 @@ public class Macro : INamed {
     if (forMacroModulation != null) {
       if (targetCcNo != forMacroModulation.CcNo) {
         forMacroModulation.CcNo = targetCcNo;
-        UpdateModulation(forMacroModulation);
+        forMacroModulation.Update();
       }
     } else {
       // ReSharper disable once CommentTypo
       // Example: Reverb Mix macro of Factory\Polysynth\Velocity Pluck 
-      AddModulation(new Modulation {
+      AddModulation(new Modulation(ProgramXml) {
         CcNo = targetCcNo
       });
     }
@@ -182,16 +177,22 @@ public class Macro : INamed {
     var modWheelModulationElements =
       ProgramXml.GetModulationElementsWithCcNo(1);
     foreach (var modulationElement in modWheelModulationElements) {
-      ProgramXml.SetAttribute(
+      SetAttribute(
         modulationElement, nameof(Modulation.Source), newSource);
     }
   }
 
   public void ChangeValueToZero() {
-    ProgramXml.SetAttribute(MacroElement, nameof(Value), 0);
+    Value = 0;
     foreach (var effect in ModulatedConnectionsParents) {
       effect.ChangeModulatedParametersToZero();
     }
+  }
+
+  protected override XElement CreateElementFromTemplate() {
+    var result = new XElement(ProgramXml.TemplateMacroElement);
+    ProgramXml.ControlSignalSourcesElement.Add(result);
+    return result;
   }
 
   public Modulation? FindModulationWithCcNo(int ccNo) {
@@ -201,21 +202,13 @@ public class Macro : INamed {
       select modulation).FirstOrDefault();
   }
 
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  public List<Modulation> GetForMacroModulations() {
-    return (
-      from modulation in Modulations
-      where modulation.ModulatesMacro
-      select modulation).ToList();
-  }
-
-  private XElement GetMacroElement() {
+  protected override XElement GetElement() {
     var result = (
       from macroElement in ProgramXml.MacroElements
       // Match on Name, not DisplayName. There can be duplicate DisplayNames.
       // Example: Devinity\Bass\Talking Bass, which has three toggle macros with blank
       // DisplayNames.
-      where ProgramXml.GetAttributeValue(macroElement, nameof(Name)) == Name
+      where GetAttributeValue(macroElement, nameof(Name)) == Name
       // where string.Equals(ProgramXml.GetAttributeValue(
       // macroElement, nameof(DisplayName)), DisplayName, StringComparison.OrdinalIgnoreCase) 
       select macroElement).FirstOrDefault();
@@ -227,8 +220,34 @@ public class Macro : INamed {
       $"'{ProgramXml.InputProgramPath}'.");
   }
 
+  private XElement GetConnectionsElement() {
+    // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
+    // element will already own a Connections element. 
+    var result = Element.Element("Connections");
+    if (result == null) {
+      result = new XElement("Connections");
+      Element.Add(result);
+    }
+    return result;
+  }
+  
+  public ImmutableList<Modulation> GetForMacroModulations() {
+    return (
+      from modulation in Modulations
+      where modulation.ModulatesMacro
+      select modulation).ToImmutableList();
+  }
+
+  private ImmutableList<Modulation> GetModulations() {
+    var list = new List<Modulation>();
+    list.AddRange(ConnectionsElement.Elements("SignalConnection").Select(
+      modulationElement => new Modulation(
+        this, modulationElement, ProgramXml)));
+    return list.ToImmutableList();
+  }
+
   private XElement GetPropertiesElement() {
-    var result = MacroElement.Element("Properties");
+    var result = Element.Element("Properties");
     if (result == null) {
       throw new InvalidOperationException(
         "Cannot find ConstantModulation.Properties "
@@ -237,8 +256,8 @@ public class Macro : INamed {
     return result;
   }
 
-  public void RemoveMacroElement() {
-    MacroElement.Remove();
+  public void RemoveElement() {
+    Element.Remove();
     for (int i = ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
       ModulatedConnectionsParents[i].RemoveModulationsByMacro(this);
       ModulatedConnectionsParents.RemoveAt(i);
@@ -252,7 +271,7 @@ public class Macro : INamed {
   /// </summary>
   public void RemoveModulation(Modulation modulation) {
     if (Modulations.Contains(modulation)) {
-      Modulations.Remove(modulation);
+      Modulations = Modulations.Remove(modulation);
     }
     ProgramXml.RemoveModulationElementsWithCcNo(modulation.CcNo!.Value);
   }
@@ -264,22 +283,8 @@ public class Macro : INamed {
   private void UpdatePropertiesElement() {
     // customPosition needs to be update if we are converting the layout from a
     // script processor layout to a standard layout.
-    ProgramXml.SetAttribute(PropertiesElement, "customPosition", 1);
-    ProgramXml.SetAttribute(PropertiesElement, "x", Properties.X);
-    ProgramXml.SetAttribute(PropertiesElement, "y", Properties.Y);
-  }
-
-  public void UpdateModulation(Modulation modulation) {
-    var connectionsElement = MacroElement.Element("Connections")!;
-    var modulationElements =
-      connectionsElement.Elements("SignalConnection").ToList();
-    // The macro ("ConstantModulation") will have two Modulations if one of them
-    // maps to the modulation wheel (MIDI CC 1). 
-    var modulationElement = modulationElements[modulation.Index];
-    ProgramXml.UpdateModulationElement(modulation, modulationElement);
-  }
-
-  public void UpdateLocation() {
-    UpdatePropertiesElement();
+    SetAttribute(PropertiesElement, "customPosition", 1);
+    SetAttribute(PropertiesElement, "x", X);
+    SetAttribute(PropertiesElement, "y", Y);
   }
 }

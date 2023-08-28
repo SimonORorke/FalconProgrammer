@@ -6,9 +6,9 @@ public class Effect : ConnectionsParent {
   private bool? _isDelay;
   private bool? _isReverb;
 
-  public Effect(XElement connectionsParentElement, ProgramXml programXml) : base(
-    connectionsParentElement, programXml) {
-    EffectType = connectionsParentElement.Name.ToString();
+  public Effect(XElement element, ProgramXml programXml) : base(
+    element, programXml) {
+    EffectType = element.Name.ToString();
   }
 
   public string EffectType { get; }
