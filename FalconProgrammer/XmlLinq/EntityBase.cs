@@ -60,19 +60,12 @@ public abstract class EntityBase {
     throw new NotSupportedException(
       $"{GetType().Name}.GetElement is not supported.");
   }
-  
-  // private static void SetAttribute(XAttribute attribute, object value) {
-  //   attribute.Value = value.ToString()!;
-  // }
 
   protected void SetAttribute(string attributeName, object value) {
     SetAttribute(Element, attributeName, value);
-    // GetAttribute(Element, attributeName).Value = value.ToString()!;
-    // SetAttribute(GetAttribute(Element, attributeName), value);
   }
 
   protected void SetAttribute(XElement element, string attributeName, object value) {
     GetAttribute(element, attributeName).Value = value.ToString()!;
-    // SetAttribute(GetAttribute(Element, attributeName), value);
   }
 }

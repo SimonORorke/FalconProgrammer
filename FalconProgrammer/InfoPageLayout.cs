@@ -65,7 +65,9 @@ public class InfoPageLayout {
     // MoveMacroToEndIfExists(FindReverbContinuousMacro());
     // Program.ProgramXml.ReplaceMacroElements(Program.Macros);
     int x = gapBetweenMacros;
-    foreach (var macro in Program.Macros) {
+    // foreach (var macro in Program.Macros) {
+    foreach (var macro in Program.GetMacrosSortedByLocation(
+               LocationOrder.LeftToRightTopToBottom)) {
       macro.X = x;
       macro.Y = StandardBottommostY;
       x += gapBetweenMacros + MacroWidth;
