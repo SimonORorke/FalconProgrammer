@@ -669,6 +669,11 @@ public class FalconProgram {
     if (InfoPageLayout.TryReplaceModWheelWithMacro(
           out bool updateMacroCcs)) {
       if (updateMacroCcs) {
+        // Saving and reading prevents wheel macro duplicate modulation error.
+        // Example: Devinity\Bass\Comber Bass.
+        // There has to be a better way.
+        Save();
+        Read();
         ReUpdateMacroCcs();
       }
       NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");

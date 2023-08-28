@@ -9,7 +9,7 @@ namespace FalconProgrammer.XmlLinq;
 ///   as shown the Info page.
 /// </summary>
 public class Macro : EntityBase {
-  private XElement? _connectionsElement;
+  // private XElement? _connectionsElement;
   private ImmutableList<Modulation>? _modulations;
   private XElement? _propertiesElement;
 
@@ -25,7 +25,7 @@ public class Macro : EntityBase {
     set => SetAttribute(nameof(Bipolar), value);
   }
   
-  private XElement ConnectionsElement => _connectionsElement ??= GetConnectionsElement();
+  // private XElement ConnectionsElement => _connectionsElement ??= GetConnectionsElement();
 
   /// <summary>
   ///   The meaningful name of the macro, as displayed on the Info page.
@@ -138,15 +138,18 @@ public class Macro : EntityBase {
     SetAttribute(nameof(Value), Value);
     // A macro is expected to own 0, 1 or 2 Modulations:
     // 2 if there is a mod wheel signal connection and a 'for macro' Modulation.
-    foreach (var modulation in Modulations) {
-      ConnectionsElement.Add(modulation.Element);
+    if (Modulations.Count > 0) {
+      var connectionsElement = GetConnectionsElement();
+      foreach (var modulation in Modulations) {
+        connectionsElement.Add(modulation.Element);
+      }
     }
     UpdatePropertiesElement();
   }
   
   public void AddModulation(Modulation modulation) {
     modulation.Owner = this;
-    ConnectionsElement.Add(modulation.Element);
+    GetConnectionsElement().Add(modulation.Element);
     Modulations = Modulations.Add(modulation);
   }
 
@@ -244,9 +247,12 @@ public class Macro : EntityBase {
 
   private ImmutableList<Modulation> GetModulations() {
     var list = new List<Modulation>();
-    list.AddRange(ConnectionsElement.Elements("SignalConnection").Select(
-      modulationElement => new Modulation(
-        this, modulationElement, ProgramXml)));
+    var connectionsElement = Element.Element("Connections");
+    if (connectionsElement != null) {
+      list.AddRange(connectionsElement.Elements("SignalConnection").Select(
+        modulationElement => new Modulation(
+          this, modulationElement, ProgramXml)));
+    }
     return list.ToImmutableList();
   }
 
