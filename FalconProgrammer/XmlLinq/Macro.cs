@@ -146,6 +146,7 @@ public class Macro : EntityBase {
   
   public void AddModulation(Modulation modulation) {
     modulation.Owner = this;
+    ConnectionsElement.Add(modulation.Element);
     Modulations = Modulations.Add(modulation);
   }
 
@@ -191,6 +192,9 @@ public class Macro : EntityBase {
 
   protected override XElement CreateElementFromTemplate() {
     var result = new XElement(ProgramXml.TemplateMacroElement);
+    // Remove any modulations (SignalConnections) that might have been copied over with
+    // the template.
+    result.Element("Connections")?.Remove();
     ProgramXml.ControlSignalSourcesElement.Add(result);
     return result;
   }

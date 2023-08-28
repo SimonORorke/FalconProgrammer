@@ -104,23 +104,15 @@ public class InfoPageLayout {
       // ReSharper disable once CommentTypo
       // Example: Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
       : 1;
-    var wheelMacro = new Macro(Program.ProgramXml);
-    wheelMacro.MacroNo = wheelMacroNo;
-    wheelMacro.DisplayName = "Wheel";
-    wheelMacro.Bipolar = 0;
-    wheelMacro.IsContinuous = true;
-    wheelMacro.Value = 0;
-    wheelMacro.X = location.X;
-    wheelMacro.Y = location.Y;
-    // var wheelMacro = new Macro(Program.ProgramXml) {
-    //   MacroNo = wheelMacroNo,
-    //   DisplayName = "Wheel",
-    //   Bipolar = 0,
-    //   IsContinuous = true,
-    //   Value = 0,
-    //   X = location.X,
-    //   Y = location.Y
-    // };
+    var wheelMacro = new Macro(Program.ProgramXml) {
+      MacroNo = wheelMacroNo,
+      DisplayName = "Wheel",
+      Bipolar = 0,
+      IsContinuous = true,
+      Value = 0,
+      X = location.X,
+      Y = location.Y
+    };
     wheelMacro.AddModulation(new Modulation(Program.ProgramXml) {
       CcNo = ModWheelReplacementCcNo
     });
