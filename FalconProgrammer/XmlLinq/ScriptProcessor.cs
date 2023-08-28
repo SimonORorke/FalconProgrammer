@@ -4,6 +4,8 @@ using System.Xml.Linq;
 namespace FalconProgrammer.XmlLinq;
 
 public class ScriptProcessor : EntityBase {
+  private XElement? _scriptElement;
+  
   public ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml) :
     base(programXml) {
     Element = scriptProcessorElement;
@@ -13,13 +15,10 @@ public class ScriptProcessor : EntityBase {
 
   public ImmutableList<Modulation> Modulations { get; private set; } =
     ImmutableList<Modulation>.Empty;
-  
-  public string Script {
-    get => GetAttributeValue(nameof(Script).ToLower());
-    set => SetAttribute(nameof(Script).ToLower(), value);
-  }
 
-  public string Source => GetAttributeValue(nameof(Source).ToLower());
+  public string Script => ScriptElement.Value;
+  
+  private XElement ScriptElement => _scriptElement ??= GetScriptElement();
 
   public void AddModulation(Modulation modulation) {
     Modulations = Modulations.Add(modulation); 
@@ -29,6 +28,16 @@ public class ScriptProcessor : EntityBase {
       Element.Add(ConnectionsElement);
     }
     ConnectionsElement.Add(modulation.Element);
+  }
+
+  private XElement GetScriptElement() {
+    var result = Element.Element("script");
+    if (result == null) {
+      throw new InvalidOperationException(
+        "Cannot find ScriptProcessor.script "
+        + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
+    }
+    return result;
   }
 
   public void Remove() {

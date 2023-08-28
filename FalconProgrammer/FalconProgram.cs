@@ -413,9 +413,9 @@ public class FalconProgram {
   private void OptimiseWheelMacro() {
     // Examples:
     // Devinity\Plucks-Leads\Pluck Sphere (Reverb was already at end but now all macros
-    // are on one line instead of having the wheel macro above the reverb macro.)
+    // will be on one line instead of having the wheel macro above the reverb macro.)
     // Eternal Funk\Brass\Back And Stride (Reverb was previously the first macro. Now
-    // it's last.)
+    // it will be last.)
     // Eternal Funk\Synths\Bell Shaka (No reverb. Wheel macro was 4th, now last.)
     if (Macros.Count != 5 || ContinuousMacros.Count != 5) {
       return;
