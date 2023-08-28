@@ -437,7 +437,7 @@ public class FalconProgram {
     //   Debug.Assert(true);
     // }
     MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    // ProgramXml.ReplaceMacroElements(Macros);
+    ProgramXml.ReplaceMacroElements(Macros);
     // If we don't reload, relocating the macros jumbles them.
     // Perhaps there's a better way, but it broke when I tried.
     Save();

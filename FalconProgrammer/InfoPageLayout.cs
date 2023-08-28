@@ -61,13 +61,10 @@ public class InfoPageLayout {
     // // the wheel replacement macro from the continuous  macro I'm least likely to use,
     // // preferably delay, otherwise reverb.
     // // Example: Savage\Leads\Saw Dirty.
-    // MoveMacroToEndIfExists(FindReverbToggleMacro());
-    // MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    // Program.ProgramXml.ReplaceMacroElements(Program.Macros);
     int x = gapBetweenMacros;
-    // foreach (var macro in Program.Macros) {
-    foreach (var macro in Program.GetMacrosSortedByLocation(
-               LocationOrder.LeftToRightTopToBottom)) {
+    // foreach (var macro in Program.GetMacrosSortedByLocation(
+    //            LocationOrder.LeftToRightTopToBottom)) {
+    foreach (var macro in Program.Macros) {
       macro.X = x;
       macro.Y = StandardBottommostY;
       x += gapBetweenMacros + MacroWidth;

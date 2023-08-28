@@ -195,12 +195,13 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  // public void ReplaceMacroElements(IEnumerable<Macro> macros) {
-  //   ControlSignalSourcesElement.RemoveNodes();
-  //   foreach (var macro in macros) {
-  //     macro.AddElement();
-  //   }
-  // }
+  public void ReplaceMacroElements(IEnumerable<Macro> macros) {
+    ControlSignalSourcesElement.RemoveNodes();
+    foreach (var macro in macros) {
+      // macro.AddElement();
+      ControlSignalSourcesElement.Add(macro.Element);
+    }
+  }
 
   public void SaveToFile(string outputProgramPath) {
     try {
