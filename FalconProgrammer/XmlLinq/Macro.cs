@@ -9,7 +9,6 @@ namespace FalconProgrammer.XmlLinq;
 ///   as shown the Info page.
 /// </summary>
 public class Macro : EntityBase {
-  // private XElement? _connectionsElement;
   private ImmutableList<Modulation>? _modulations;
   private XElement? _propertiesElement;
 
@@ -25,8 +24,6 @@ public class Macro : EntityBase {
     set => SetAttribute(nameof(Bipolar), value);
   }
   
-  // private XElement ConnectionsElement => _connectionsElement ??= GetConnectionsElement();
-
   /// <summary>
   ///   The meaningful name of the macro, as displayed on the Info page.
   /// </summary>
