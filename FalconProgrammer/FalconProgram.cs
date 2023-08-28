@@ -674,6 +674,8 @@ public class FalconProgram {
         // There has to be a better way.
         Save();
         Read();
+        Console.WriteLine(
+          $"{PathShort}: Saved and reloaded, required for Wheel macro CCs update.");
         ReUpdateMacroCcs();
       }
       NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
