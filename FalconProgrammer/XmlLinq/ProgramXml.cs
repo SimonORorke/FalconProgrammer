@@ -187,13 +187,13 @@ public class ProgramXml : EntityBase {
   //   }
   // }
 
-  public void RemoveModulationElementsWithCcNo(int ccNo) {
-    var modulationElements =
-      GetModulationElementsWithCcNo(ccNo);
-    foreach (var modulationElement in modulationElements) {
-      modulationElement.Remove();
-    }
-  }
+  // public void RemoveModulationElementsWithCcNo(int ccNo) {
+  //   var modulationElements =
+  //     GetModulationElementsWithCcNo(ccNo);
+  //   foreach (var modulationElement in modulationElements) {
+  //     modulationElement.Remove();
+  //   }
+  // }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
     ControlSignalSourcesElement.RemoveNodes();

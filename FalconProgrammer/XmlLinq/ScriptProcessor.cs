@@ -1,9 +1,8 @@
-﻿using System.Collections.Immutable;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace FalconProgrammer.XmlLinq;
 
-public class ScriptProcessor : EntityBase {
+public class ScriptProcessor : ModulationsOwnerBase {
   private XElement? _scriptElement;
   
   public ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml) :
@@ -11,24 +10,9 @@ public class ScriptProcessor : EntityBase {
     Element = scriptProcessorElement;
   }
 
-  private XElement? ConnectionsElement { get; set; }
-
-  public ImmutableList<Modulation> Modulations { get; private set; } =
-    ImmutableList<Modulation>.Empty;
-
   public string Script => ScriptElement.Value;
   
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
-
-  public void AddModulation(Modulation modulation) {
-    Modulations = Modulations.Add(modulation); 
-    if (ConnectionsElement == null) {
-      var existingConnectionsElement = Element.Element("Connections");
-      ConnectionsElement = existingConnectionsElement ?? new XElement("Connections");
-      Element.Add(ConnectionsElement);
-    }
-    ConnectionsElement.Add(modulation.Element);
-  }
 
   private XElement GetScriptElement() {
     var result = Element.Element("script");
@@ -50,17 +34,10 @@ public class ScriptProcessor : EntityBase {
     eventProcessorsElement!.Remove();
   }
 
-  public void RemoveModulation(Modulation modulation) {
-    Modulations = Modulations.Remove(modulation); 
-    modulation.Element.Remove();
-    if (ConnectionsElement is { HasElements: false }) {
-      ConnectionsElement.Remove();
-      ConnectionsElement = null;
-    }
-  }
-
   public void UpdateModulationsFromTemplate(
     IEnumerable<Modulation> templateModulations) {
-    Modulations = Modulations.AddRange(templateModulations);
+    foreach (var modulation in templateModulations) {
+      AddModulation(modulation);
+    }
   }
 }

@@ -8,8 +8,7 @@ namespace FalconProgrammer.XmlLinq;
 ///   Called ConstantModulation in the program XML but corresponds to a macro,
 ///   as shown the Info page.
 /// </summary>
-public class Macro : EntityBase {
-  private ImmutableList<Modulation>? _modulations;
+public class Macro : ModulationsOwnerBase {
   private XElement? _propertiesElement;
 
   public Macro(ProgramXml programXml) : base(programXml, true) {
@@ -68,19 +67,7 @@ public class Macro : EntityBase {
   
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } =
     new List<ConnectionsParent>();
-
-  /// <summary>
-  ///   Modulations specifying MIDI CC numbers that modulate the macro.
-  /// </summary>
-  /// <remarks>
-  ///   For a macro (ConstantModulation), there is 0 or 1 Modulation only, except
-  ///   where there is a Modulation that maps to the modulation wheel (MIDI CC 1),
-  ///   in which case there can be two Modulations.
-  /// </remarks>
-  public ImmutableList<Modulation> Modulations {
-    get => _modulations ??= GetModulations();
-    private set => _modulations = value;
-  }
+  
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
   public bool ModulatesEnabledEffects => (
@@ -142,12 +129,6 @@ public class Macro : EntityBase {
       }
     }
     UpdatePropertiesElement();
-  }
-  
-  public void AddModulation(Modulation modulation) {
-    modulation.Owner = this;
-    GetConnectionsElement().Add(modulation.Element);
-    Modulations = Modulations.Add(modulation);
   }
 
   public void ChangeCcNoTo(int newCcNo) {
@@ -223,34 +204,12 @@ public class Macro : EntityBase {
       $"Cannot find ConstantModulation '{Name}' in " +
       $"'{ProgramXml.InputProgramPath}'.");
   }
-
-  private XElement GetConnectionsElement() {
-    // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
-    // element will already own a Connections element. 
-    var result = Element.Element("Connections");
-    if (result == null) {
-      result = new XElement("Connections");
-      Element.Add(result);
-    }
-    return result;
-  }
   
   public ImmutableList<Modulation> GetForMacroModulations() {
     return (
       from modulation in Modulations
       where modulation.ModulatesMacro
       select modulation).ToImmutableList();
-  }
-
-  private ImmutableList<Modulation> GetModulations() {
-    var list = new List<Modulation>();
-    var connectionsElement = Element.Element("Connections");
-    if (connectionsElement != null) {
-      list.AddRange(connectionsElement.Elements("SignalConnection").Select(
-        modulationElement => new Modulation(
-          this, modulationElement, ProgramXml)));
-    }
-    return list.ToImmutableList();
   }
 
   private XElement GetPropertiesElement() {
@@ -269,18 +228,6 @@ public class Macro : EntityBase {
       ModulatedConnectionsParents[i].RemoveModulationsByMacro(this);
       ModulatedConnectionsParents.RemoveAt(i);
     }
-  }
-
-  /// <summary>
-  ///   Removes the specified <see cref="Modulation" /> from the Linq For XML data
-  ///   structure as well as from the <see cref="Macro" /> in the deserialised data
-  ///   structure.
-  /// </summary>
-  public void RemoveModulation(Modulation modulation) {
-    if (Modulations.Contains(modulation)) {
-      Modulations = Modulations.Remove(modulation);
-    }
-    ProgramXml.RemoveModulationElementsWithCcNo(modulation.CcNo!.Value);
   }
 
   public override string ToString() {
