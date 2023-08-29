@@ -16,9 +16,9 @@ public class Macro : ModulationsOwnerBase {
     Element = macroElement;
   }
 
-  public bool Bipolar {
-    get => GetAttributeValue(nameof(Bipolar)) == "1";
-    set => SetAttribute(nameof(Bipolar), value ? "1" : "0");
+  public int Bipolar {
+    get => Convert.ToInt32(GetAttributeValue(nameof(Bipolar)));
+    set => SetAttribute(nameof(Bipolar), value);
   }
 
   /// <summary>
