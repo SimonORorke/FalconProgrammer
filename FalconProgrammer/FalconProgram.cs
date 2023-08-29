@@ -52,7 +52,8 @@ public class FalconProgram {
     $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
-  private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } = 
+
+  private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } =
     ImmutableList<ScriptProcessor>.Empty;
 
   private void BypassDelayEffects() {
@@ -385,10 +386,12 @@ public class FalconProgram {
   }
 
   public void MoveConnectionsBeforeProperties() {
-    if ((
-          from macro in Macros
-          where macro.MoveConnectionsBeforeProperties()
-          select macro).Any()) {
+    bool updated = false;
+    foreach (var macro in Macros
+               .Where(macro => macro.MoveConnectionsBeforeProperties())) {
+      updated = true;
+    }
+    if (updated) {
       NotifyUpdate($"{PathShort}: Moved Connections before Properties.");
     }
   }
@@ -466,7 +469,7 @@ public class FalconProgram {
       // ConnectionsParents overlap with Effects. So, if the ConnectionsParent is also an
       // Effect, add it to Effects as well as to ModulatedConnectionsParents of
       // modulating Macros. 
-      ConnectionsParent connectionsParent; 
+      ConnectionsParent connectionsParent;
       if (effectElements.Contains(connectionsParentElement)) {
         connectionsParent = new Effect(connectionsParentElement, ProgramXml);
         effects.Add((Effect)connectionsParent);
