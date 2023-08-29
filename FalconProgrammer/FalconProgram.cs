@@ -637,12 +637,13 @@ public class FalconProgram {
     InfoPageCcsScriptProcessor!.Remove();
     InfoPageCcsScriptProcessor = null;
     ReUpdateMacroCcs();
-    // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
-    // for the mod wheel) Modulations to macro-owned 'for macro' Modulations,
-    // there should not be any existing macro-owned 'for macro' Modulations.
-    // If there are, get rid of them.
-    // Example: Titanium\Pads\Children's Choir.
     foreach (var macro in Macros) {
+      macro.CustomPosition = true;
+      // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
+      // for the mod wheel) Modulations to macro-owned 'for macro' Modulations,
+      // there should not be any existing macro-owned 'for macro' Modulations.
+      // If there are, get rid of them.
+      // Example: Titanium\Pads\Children's Choir.
       var forMacroModulations =
         macro.GetForMacroModulations();
       foreach (var forMacroModulation in forMacroModulations) {

@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer.XmlLinq; 
+namespace FalconProgrammer.XmlLinq;
 
 /// <summary>
 ///   Called ConstantModulation in the program XML but corresponds to a macro,
@@ -10,19 +10,27 @@ namespace FalconProgrammer.XmlLinq;
 /// </summary>
 public class Macro : ModulationsOwnerBase {
   private XElement? _propertiesElement;
-
-  public Macro(ProgramXml programXml) : base(programXml, true) {
-  }
+  public Macro(ProgramXml programXml) : base(programXml, true) { }
 
   public Macro(XElement macroElement, ProgramXml programXml) : base(programXml) {
     Element = macroElement;
   }
 
-  public int Bipolar {
-    get => Convert.ToInt32(GetAttributeValue(nameof(Bipolar)));
-    set => SetAttribute(nameof(Bipolar), value);
+  public bool Bipolar {
+    get => GetAttributeValue(nameof(Bipolar)) == "1";
+    set => SetAttribute(nameof(Bipolar), value ? "1" : "0");
   }
-  
+
+  /// <summary>
+  ///   For non-ScriptProcessor macros, unless this is true, X and Y are ignored and the
+  ///   macro is given a default location. 
+  /// </summary>
+  public bool CustomPosition {
+    get => GetAttributeValue(PropertiesElement, "customPosition") == "1";
+    set => SetAttribute(PropertiesElement,
+      "customPosition", value ? "1" : "0");
+  }
+
   /// <summary>
   ///   The meaningful name of the macro, as displayed on the Info page.
   /// </summary>
@@ -64,10 +72,10 @@ public class Macro : ModulationsOwnerBase {
     }
     set => Name = $"Macro {value}";
   }
-  
+
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } =
     new List<ConnectionsParent>();
-  
+
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
   public bool ModulatesEnabledEffects => (
@@ -81,7 +89,7 @@ public class Macro : ModulationsOwnerBase {
     // ReSharper disable once StringLiteralTypo
     || DisplayName.Contains("Sparkverb") // There's at least one like this.
     || DisplayName.Contains("Verb");
-  
+
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
 
   /// <summary>
@@ -96,14 +104,14 @@ public class Macro : ModulationsOwnerBase {
     get => Convert.ToSingle(GetAttributeValue(nameof(Value)));
     set => SetAttribute(nameof(Value), value);
   }
-  
+
   public int X {
     get => Convert.ToInt32(GetAttributeValue(
       PropertiesElement, nameof(X).ToLower()));
     set => SetAttribute(
       PropertiesElement, nameof(X).ToLower(), value);
   }
-  
+
   public int Y {
     get => Convert.ToInt32(GetAttributeValue(
       PropertiesElement, nameof(Y).ToLower()));
@@ -204,7 +212,7 @@ public class Macro : ModulationsOwnerBase {
       $"Cannot find ConstantModulation '{Name}' in " +
       $"'{ProgramXml.InputProgramPath}'.");
   }
-  
+
   public ImmutableList<Modulation> GetForMacroModulations() {
     return (
       from modulation in Modulations

@@ -106,7 +106,8 @@ public class InfoPageLayout {
     var wheelMacro = new Macro(Program.ProgramXml) {
       MacroNo = wheelMacroNo,
       DisplayName = "Wheel",
-      Bipolar = 0,
+      Bipolar = false,
+      CustomPosition = true,
       IsContinuous = true,
       Value = 0,
       X = location.X,
