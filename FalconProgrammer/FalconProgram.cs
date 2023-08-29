@@ -384,6 +384,15 @@ public class FalconProgram {
       select m).Count() == 1;
   }
 
+  public void MoveConnectionsBeforeProperties() {
+    if ((
+          from macro in Macros
+          where macro.MoveConnectionsBeforeProperties()
+          select macro).Any()) {
+      NotifyUpdate($"{PathShort}: Moved Connections before Properties.");
+    }
+  }
+
   private void MoveMacroToEndIfExists(Macro? macroIfExists) {
     if (macroIfExists != null && macroIfExists != Macros[^1]) {
       Macros.Remove(macroIfExists);

@@ -202,8 +202,6 @@ public class Macro : ModulationsOwnerBase {
       // Example: Devinity\Bass\Talking Bass, which has three toggle macros with blank
       // DisplayNames.
       where GetAttributeValue(macroElement, nameof(Name)) == Name
-      // where string.Equals(ProgramXml.GetAttributeValue(
-      // macroElement, nameof(DisplayName)), DisplayName, StringComparison.OrdinalIgnoreCase) 
       select macroElement).FirstOrDefault();
     if (result != null) {
       return result;
@@ -228,6 +226,16 @@ public class Macro : ModulationsOwnerBase {
         + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
     }
     return result;
+  }
+
+  public bool MoveConnectionsBeforeProperties() {
+    var connectionsElement = Element.Element("Connections");
+    if (connectionsElement != null && connectionsElement != Element.Elements().First()) {
+      connectionsElement.Remove();
+      PropertiesElement.AddBeforeSelf(connectionsElement);
+      return true;
+    }
+    return false;
   }
 
   public void RemoveElement() {

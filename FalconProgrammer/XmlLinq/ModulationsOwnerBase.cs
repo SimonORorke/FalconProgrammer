@@ -38,7 +38,14 @@ public abstract class ModulationsOwnerBase : EntityBase {
     var result = Element.Element("Connections");
     if (result == null) {
       result = new XElement("Connections");
-      Element.Add(result);
+      var propertiesElement = Element.Element("Properties");
+      if (propertiesElement != null) {
+        // Macro: should always be true. ScriptProcessor: should never be true.
+        // For file comparison match consistency.
+        propertiesElement.AddBeforeSelf(result);
+      } else {
+        Element.Add(result);
+      }
     }
     return result;
   }

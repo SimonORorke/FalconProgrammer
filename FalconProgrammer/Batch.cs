@@ -121,6 +121,9 @@ public class Batch {
       case ConfigTask.ChangeReverbToZero:
         Program.ChangeReverbToZero();
         break;
+      case ConfigTask.MoveConnectionsBeforeProperties:
+        Program.MoveConnectionsBeforeProperties();
+        break;
       case ConfigTask.PrependPathLineToDescription:
         Program.PrependPathLineToDescription();
         break;
@@ -224,6 +227,13 @@ public class Batch {
       throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
     }
     return result;
+  }
+
+  [PublicAPI]
+  public void MoveConnectionsBeforeProperties(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.MoveConnectionsBeforeProperties;
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
@@ -358,6 +368,7 @@ public class Batch {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
+    MoveConnectionsBeforeProperties,
     PrependPathLineToDescription,
     QueryDelayTypes,
     QueryReverbTypes,

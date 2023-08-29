@@ -123,6 +123,7 @@ public class Modulation : EntityBase {
   }
 
   public void Update() {
+    // TODO: Modulation.Update and UpdateElement should be redundant.   
     UpdateElement(Element);
   }
 
