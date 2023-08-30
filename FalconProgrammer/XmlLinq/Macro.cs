@@ -100,8 +100,8 @@ public class Macro : ModulationsOwnerBase {
     set => SetAttribute(nameof(Style), value);
   }
 
-  public float Value {
-    get => Convert.ToSingle(GetAttributeValue(nameof(Value)));
+  public double Value {
+    get => Convert.ToDouble(GetAttributeValue(nameof(Value)));
     set => SetAttribute(nameof(Value), value);
   }
 
