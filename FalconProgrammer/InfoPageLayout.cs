@@ -56,14 +56,12 @@ public class InfoPageLayout {
         $"{Program.PathShort}: There is not enough horizontal space to move " + 
         $"{Program.Macros.Count} macros to the standard bottom row.");
     }
-    // // Move any reverb to the right end of the standard bottom row
-    // // This will allow the standard wheel replacement MIDI CC number to be reassigned to
-    // // the wheel replacement macro from the continuous  macro I'm least likely to use,
-    // // preferably delay, otherwise reverb.
-    // // Example: Savage\Leads\Saw Dirty.
+    // Move any reverb to the right end of the standard bottom row
+    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
+    // the wheel replacement macro from the continuous  macro I'm least likely to use,
+    // preferably delay, otherwise reverb.
+    // Example: Savage\Leads\Saw Dirty.
     int x = gapBetweenMacros;
-    // foreach (var macro in Program.GetMacrosSortedByLocation(
-    //            LocationOrder.LeftToRightTopToBottom)) {
     foreach (var macro in Program.Macros) {
       macro.X = x;
       macro.Y = StandardBottommostY;
@@ -80,14 +78,6 @@ public class InfoPageLayout {
   public bool TryReplaceModWheelWithMacro(out bool updateMacroCcs) {
     var locationForNewWheelMacro = FindLocationForNewWheelMacro(
       out updateMacroCcs);
-    // Debug.WriteLine("================================================");
-    // Debug.WriteLine("After FindLocationForNewWheelMacro");
-    // foreach (var macro in Program.Macros) {
-    //   foreach (var modulation in macro.Modulations) {
-    //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
-    //   }
-    // }
-    // Debug.WriteLine("================================================");
     if (locationForNewWheelMacro == null) {
       return false;
     }
@@ -159,14 +149,6 @@ public class InfoPageLayout {
     BottomRowMacros = GetBottomRowMacros(sortedByLocation);
     var result = LocateWheelAboveDelayOrReverbMacro();
     if (result != null) {
-      // Debug.WriteLine("================================================");
-      // Debug.WriteLine("After LocateWheelAboveDelayOrReverbMacro");
-      // foreach (var macro in Program.Macros) {
-      //   foreach (var modulation in macro.Modulations) {
-      //     Debug.WriteLine($"{macro}, CcNo {modulation.CcNo}");
-      //   }
-      // }
-      // Debug.WriteLine("================================================");
       // If the delay or reverb macro that has lost its CC is the last continuous macro,
       // it can have a new one. Example Factory\Bass-Sub\BA-Shomp 1.2.
       // Counter-example, where the delay or reverb macro must not get a new CC:

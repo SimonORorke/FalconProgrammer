@@ -60,30 +60,6 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  // public XElement CreateModulationElement(Modulation modulation) {
-  //   var result = new XElement(TemplateModulationElement);
-  //   // In case the template Modulation contains a non-default (< 1) Ratio,
-  //   // set the Ratio to the default, 1.
-  //   SetAttribute(result, nameof(Modulation.Ratio), 1);
-  //   UpdateModulationElement(modulation, result);
-  //   return result;
-  // }
-
-  // private XAttribute GetAttribute(XElement element, string attributeName) {
-  //   // if (element.Attribute(attributeName) == null) {
-  //   //   Debug.Assert(true);
-  //   // }
-  //   return
-  //     element.Attribute(attributeName) ??
-  //     throw new InvalidOperationException(
-  //       $"Cannot find {element.Name}.{attributeName} attribute in " +
-  //       $"'{InputProgramPath}'.");
-  // }
-  //
-  // public string GetAttributeValue(XElement element, string attributeName) {
-  //   return GetAttribute(element, attributeName).Value;
-  // }
-
   public string GetDescription() {
     var programElement = RootElement.Element("Program")!;
     var propertiesElement = programElement.Element("Properties");
@@ -175,26 +151,6 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
-  // public void RemoveInfoPageCcsScriptProcessorElement() {
-  //   if (InfoPageCcsScriptProcessorElement != null) {
-  //     var eventProcessorsElement = InfoPageCcsScriptProcessorElement.Parent;
-  //     // We need to remove the EventProcessors element, including all its
-  //     // ScriptProcessor elements, if there are more than one.
-  //     // Just removing the Info page CCs ScriptProcessor element will not work.
-  //     // ReSharper disable once CommentTypo
-  //     // Example: Factory\RetroWave 2.5\BAS Voltage Reso.
-  //     eventProcessorsElement!.Remove();
-  //   }
-  // }
-
-  // public void RemoveModulationElementsWithCcNo(int ccNo) {
-  //   var modulationElements =
-  //     GetModulationElementsWithCcNo(ccNo);
-  //   foreach (var modulationElement in modulationElements) {
-  //     modulationElement.Remove();
-  //   }
-  // }
-
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
     ControlSignalSourcesElement.RemoveNodes();
     foreach (var macro in macros) {
@@ -224,14 +180,6 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  // private static void SetAttribute(XAttribute attribute, object value) {
-  //   attribute.Value = value.ToString()!;
-  // }
-  //
-  // public void SetAttribute(XElement element, string attributeName, object value) {
-  //   SetAttribute(GetAttribute(element, attributeName), value);
-  // }
-
   public void SetDescription(string text) {
     var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {
@@ -240,47 +188,4 @@ public class ProgramXml : EntityBase {
     }
     SetAttribute(propertiesElement, "description", text);
   }
-
-  // public void SetInfoPageCcsScriptProcessorElement(
-  //   ScriptProcessor infoPageCcsScriptProcessor) {
-  //   var eventProcessorsElement =
-  //     RootElement.Descendants("EventProcessors").FirstOrDefault();
-  //   if (eventProcessorsElement != null) {
-  //     var scriptProcessorElements = eventProcessorsElement.Elements(
-  //       "ScriptProcessor");
-  //     InfoPageCcsScriptProcessorElement = (
-  //       from scriptProcessorElement in scriptProcessorElements
-  //       where GetAttributeValue(
-  //               scriptProcessorElement, nameof(ScriptProcessor.Name)) ==
-  //             infoPageCcsScriptProcessor!.Name
-  //       select scriptProcessorElement).FirstOrDefault();
-  //   }
-  // }
-
-  // public virtual void UpdateInfoPageCcsScriptProcessorFromTemplate() {
-  //   var templateConnectionsElement =
-  //     TemplateScriptProcessorElement!.Element("Connections")!;
-  //   var connectionsElement =
-  //     InfoPageCcsScriptProcessorElement!.Element("Connections");
-  //   if (connectionsElement == null) {
-  //     InfoPageCcsScriptProcessorElement.Add(new XElement(templateConnectionsElement));
-  //   } else {
-  //     connectionsElement.RemoveAll();
-  //     foreach (var templateModulationElement in templateConnectionsElement.Elements()) {
-  //       connectionsElement.Add(new XElement(templateModulationElement));
-  //     }
-  //   }
-  // }
-
-  // public void UpdateModulationElement(
-  //   Modulation modulation, XElement modulationElement) {
-  //   SetAttribute(modulationElement, nameof(Modulation.Ratio),
-  //     modulation.Ratio);
-  //   SetAttribute(modulationElement, nameof(Modulation.Source),
-  //     modulation.Source);
-  //   SetAttribute(modulationElement, nameof(Modulation.Destination),
-  //     modulation.Destination);
-  //   SetAttribute(modulationElement, nameof(Modulation.ConnectionMode),
-  //     modulation.ConnectionMode);
-  // }
 }

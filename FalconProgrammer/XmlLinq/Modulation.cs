@@ -56,8 +56,6 @@ public class Modulation : EntityBase {
     get => GetAttributeValue(nameof(Destination));
     set => SetAttribute(nameof(Destination), value);
   }
-  
-  // public int Index { get; set; }
 
   public EntityBase? Owner { get; set; }
 
@@ -118,18 +116,6 @@ public class Modulation : EntityBase {
     // set the Ratio to the default, 1.
     Ratio = 1;
     var result = CreateElementFromTemplate();
-    // UpdateElement(result);
     return result;
   }
-
-  // public void Update() {
-  //   UpdateElement(Element);
-  // }
-
-  // private void UpdateElement(XElement modulationElement) {
-  //   SetAttribute(modulationElement, nameof(Ratio), Ratio);
-  //   SetAttribute(modulationElement, nameof(Source), Source);
-  //   SetAttribute(modulationElement, nameof(Destination), Destination);
-  //   SetAttribute(modulationElement, nameof(ConnectionMode), ConnectionMode);
-  // }
 }

@@ -181,9 +181,6 @@ public class FalconProgram {
   }
 
   private ProgramXml CreateProgramXml() {
-    // if (Category.SoundBankFolder.Name == "Organic Keys") {
-    //   return new OrganicKeysProgramXml(Category);
-    // }
     return Category.InfoPageMustUseScript
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
@@ -308,41 +305,12 @@ public class FalconProgram {
     return result;
   }
 
-  // private ImmutableList<ConnectionsParent> GetConnectionsParents() {
-  //   var list = new List<ConnectionsParent>();
-  //   foreach (var connectionsParentElement in ProgramXml.GetConnectionsParentElements()) {
-  //     var connectionsParent =
-  //       connectionsParentElement.Parent!.Name.ToString() == "Inserts"
-  //         ? new Effect(connectionsParentElement, ProgramXml)
-  //         : new ConnectionsParent(connectionsParentElement, ProgramXml);
-  //     foreach (var modulation in connectionsParent.Modulations) {
-  //       modulation.SourceMacro = (
-  //         from macro in Macros
-  //         where modulation.Source.EndsWith(macro.Name)
-  //         select macro).FirstOrDefault();
-  //       // if (modulation.SourceMacro != null) {
-  //       //   Debug.Assert(true);
-  //       // }
-  //       modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
-  //     }
-  //     list.Add(connectionsParent);
-  //   }
-  //   return list.ToImmutableList();
-  // }
-
   private List<Macro> GetContinuousMacros() {
     return (
       from macro in Macros
       where macro.IsContinuous
       select macro).ToList();
   }
-
-  // private ImmutableList<Effect> GetEffects() {
-  //   return (
-  //     from connectionsParent in ConnectionsParents
-  //     where connectionsParent is Effect
-  //     select (Effect)connectionsParent).ToImmutableList();
-  // }
 
   internal SortedSet<Macro> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
@@ -442,12 +410,6 @@ public class FalconProgram {
       return;
     }
     MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    // var reverbContinuousMacro = FindReverbContinuousMacro();
-    // if (reverbContinuousMacro != null) {
-    //   MoveMacroToEndIfExists(reverbContinuousMacro);
-    // } else {
-    //   Debug.Assert(true);
-    // }
     MoveMacroToEndIfExists(FindReverbContinuousMacro());
     ProgramXml.ReplaceMacroElements(Macros);
     // If we don't reload, relocating the macros jumbles them.
@@ -547,25 +509,6 @@ public class FalconProgram {
     Console.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
   }
 
-  // private void Deserialise() {
-  //   using var reader = new StreamReader(Path);
-  //   var serializer = new XmlSerializer(typeof(UviRoot));
-  //   var root = (UviRoot)serializer.Deserialize(reader)!;
-  //   Macros = root.Program.Macros;
-  //   foreach (var macro in Macros) {
-  //     foreach (var modulation in macro.Modulations) {
-  //       modulation.Owner = macro;
-  //     }
-  //   }
-  //   ScriptProcessors = root.Program.ScriptProcessors;
-  //   foreach (var scriptProcessor in ScriptProcessors) {
-  //     foreach (var modulation in scriptProcessor.Modulations) {
-  //       // Needed for modulation.ModulatesMacro in FindInfoPageCcsScriptProcessor 
-  //       modulation.Owner = scriptProcessor;
-  //     }
-  //   }
-  // }
-
   public void Read() {
     ProgramXml = CreateProgramXml();
     ProgramXml.LoadFromFile(Path);
@@ -588,11 +531,6 @@ public class FalconProgram {
       }
     }
     InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
-    // if (InfoPageCcsScriptProcessor != null) {
-    //   ProgramXml.SetInfoPageCcsScriptProcessorElement(InfoPageCcsScriptProcessor);
-    //   InfoPageCcsScriptProcessor.ScriptProcessorElement =
-    //     ProgramXml.InfoPageCcsScriptProcessorElement!;
-    // }
     PopulateConnectionsParentsAndEffects();
   }
 
@@ -784,7 +722,6 @@ public class FalconProgram {
       // the Category, yet we still need to use the template if it is available.
       InfoPageCcsScriptProcessor.UpdateModulationsFromTemplate(
         Category.TemplateScriptProcessor.Modulations);
-      //UpdateMacroCcsFromTemplateScriptProcessor();
     } else {
       // The CCs are specified in the Info page ScriptProcessor but there's no template
       // ScriptProcessor. 
@@ -792,15 +729,6 @@ public class FalconProgram {
     }
     NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
-
-  // private void UpdateMacroCcsFromTemplateScriptProcessor() {
-  //   InfoPageCcsScriptProcessor!.Modulations.Clear();
-  //   foreach (var modulation in
-  //            Category.TemplateScriptProcessor!.Modulations) {
-  //     InfoPageCcsScriptProcessor.Modulations.Add(modulation);
-  //   }
-  //   // ProgramXml.UpdateInfoPageCcsScriptProcessorFromTemplate();
-  // }
 
   /// <summary>
   ///   Where MIDI CC assignments to macros shown on the Info page are specified in
@@ -859,7 +787,6 @@ public class FalconProgram {
         if (!macro.IsContinuous && modulation.Ratio == -1) {
           modulation.Ratio = 1;
         }
-        // macro.UpdateModulation(modulation);
       }
     }
   }
@@ -891,7 +818,7 @@ public class FalconProgram {
     NextContinuousCcNo = FirstContinuousCcNo;
     NextToggleCcNo = FirstToggleCcNo;
     foreach (var macro in sortedByLocation) {
-      macroNo++; // Can we assume the macro numbers are always going to increment from 1?
+      macroNo++; 
       InfoPageCcsScriptProcessor.AddModulation(
         new Modulation(ProgramXml) {
           Destination = $"Macro{macroNo}",
