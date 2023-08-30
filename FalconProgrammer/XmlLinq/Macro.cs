@@ -119,25 +119,25 @@ public class Macro : ModulationsOwnerBase {
       PropertiesElement, nameof(Y).ToLower(), value);
   }
 
-  public void AddElement() {
-    // Remove any Modulation elements and their parent Connections element brought
-    // over with template.
-    Element.Element("Connections")?.Remove();
-    SetAttribute(nameof(Name), Name);
-    SetAttribute(nameof(DisplayName), DisplayName);
-    SetAttribute(nameof(Bipolar), Bipolar);
-    SetAttribute(nameof(Style), Style);
-    SetAttribute(nameof(Value), Value);
-    // A macro is expected to own 0, 1 or 2 Modulations:
-    // 2 if there is a mod wheel signal connection and a 'for macro' Modulation.
-    if (Modulations.Count > 0) {
-      var connectionsElement = GetConnectionsElement();
-      foreach (var modulation in Modulations) {
-        connectionsElement.Add(modulation.Element);
-      }
-    }
-    UpdatePropertiesElement();
-  }
+  // public void AddElement() {
+  //   // Remove any Modulation elements and their parent Connections element brought
+  //   // over with template.
+  //   Element.Element("Connections")?.Remove();
+  //   SetAttribute(nameof(Name), Name);
+  //   SetAttribute(nameof(DisplayName), DisplayName);
+  //   SetAttribute(nameof(Bipolar), Bipolar);
+  //   SetAttribute(nameof(Style), Style);
+  //   SetAttribute(nameof(Value), Value);
+  //   // A macro is expected to own 0, 1 or 2 Modulations:
+  //   // 2 if there is a mod wheel signal connection and a 'for macro' Modulation.
+  //   if (Modulations.Count > 0) {
+  //     var connectionsElement = GetConnectionsElement();
+  //     foreach (var modulation in Modulations) {
+  //       connectionsElement.Add(modulation.Element);
+  //     }
+  //   }
+  //   UpdatePropertiesElement();
+  // }
 
   public void ChangeCcNoTo(int newCcNo) {
     // Convert MIDI CC 38, which does not work with macros on script-based Info
@@ -147,7 +147,7 @@ public class Macro : ModulationsOwnerBase {
     if (forMacroModulation != null) {
       if (targetCcNo != forMacroModulation.CcNo) {
         forMacroModulation.CcNo = targetCcNo;
-        forMacroModulation.Update();
+        // forMacroModulation.Update();
       }
     } else {
       // ReSharper disable once CommentTypo
@@ -250,11 +250,11 @@ public class Macro : ModulationsOwnerBase {
     return $"{DisplayName} ({Name})";
   }
 
-  private void UpdatePropertiesElement() {
-    // customPosition needs to be update if we are converting the layout from a
-    // script processor layout to a standard layout.
-    SetAttribute(PropertiesElement, "customPosition", 1);
-    SetAttribute(PropertiesElement, "x", X);
-    SetAttribute(PropertiesElement, "y", Y);
-  }
+  // private void UpdatePropertiesElement() {
+  //   // customPosition needs to be update if we are converting the layout from a
+  //   // script processor layout to a standard layout.
+  //   SetAttribute(PropertiesElement, "customPosition", 1);
+  //   SetAttribute(PropertiesElement, "x", X);
+  //   SetAttribute(PropertiesElement, "y", Y);
+  // }
 }

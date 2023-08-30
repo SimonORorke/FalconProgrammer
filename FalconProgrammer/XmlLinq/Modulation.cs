@@ -118,19 +118,18 @@ public class Modulation : EntityBase {
     // set the Ratio to the default, 1.
     Ratio = 1;
     var result = CreateElementFromTemplate();
-    UpdateElement(result);
+    // UpdateElement(result);
     return result;
   }
 
-  public void Update() {
-    // TODO: Modulation.Update and UpdateElement should be redundant.   
-    UpdateElement(Element);
-  }
+  // public void Update() {
+  //   UpdateElement(Element);
+  // }
 
-  private void UpdateElement(XElement modulationElement) {
-    SetAttribute(modulationElement, nameof(Ratio), Ratio);
-    SetAttribute(modulationElement, nameof(Source), Source);
-    SetAttribute(modulationElement, nameof(Destination), Destination);
-    SetAttribute(modulationElement, nameof(ConnectionMode), ConnectionMode);
-  }
+  // private void UpdateElement(XElement modulationElement) {
+  //   SetAttribute(modulationElement, nameof(Ratio), Ratio);
+  //   SetAttribute(modulationElement, nameof(Source), Source);
+  //   SetAttribute(modulationElement, nameof(Destination), Destination);
+  //   SetAttribute(modulationElement, nameof(ConnectionMode), ConnectionMode);
+  // }
 }

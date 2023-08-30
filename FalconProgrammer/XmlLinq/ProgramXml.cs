@@ -198,13 +198,12 @@ public class ProgramXml : EntityBase {
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
     ControlSignalSourcesElement.RemoveNodes();
     foreach (var macro in macros) {
-      // AddElement is unnecessary and can introduce unnecessary float rounding.
-      // Example: Devinity\Plucks-Leads\Pluck Sphere, where Macro 3 (Pluck)'s Value is
-      // rounded from 0.78265619 to 0.7826562.
-      // However, scrapping it at this stage would create a file difference when testing
-      // the data access refactor.  After all tests pass, it can be fixed:
-      // TODO: After refactor tests, change floats to doubles (first to see if worthwhile), then remove AddElement.  
-      macro.AddElement();
+      // // AddElement is unnecessary and can introduce unnecessary float rounding.
+      // // Example: Devinity\Plucks-Leads\Pluck Sphere, where Macro 3 (Pluck)'s Value is
+      // // rounded from 0.78265619 to 0.7826562.
+      // // However, scrapping it at this stage would create a file difference when testing
+      // // the data access refactor.  After all tests pass, it can be fixed:
+      // macro.AddElement();
       ControlSignalSourcesElement.Add(macro.Element);
     }
   }

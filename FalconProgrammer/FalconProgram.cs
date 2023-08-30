@@ -387,7 +387,7 @@ public class FalconProgram {
 
   public void MoveConnectionsBeforeProperties() {
     bool updated = false;
-    foreach (var macro in Macros
+    foreach (var dummy in Macros
                .Where(macro => macro.MoveConnectionsBeforeProperties())) {
       updated = true;
     }
