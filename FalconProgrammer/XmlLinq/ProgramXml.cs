@@ -27,7 +27,16 @@ public class ProgramXml : EntityBase {
     ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
 
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
-  // public XElement? InfoPageCcsScriptProcessorElement { get; }
+
+  /// <summary>
+  ///   The XML file's root element, for use when reading and writing the file
+  ///   with <see cref="LoadFromFile" /> and <see cref="SaveToFile" /> respectively.
+  ///   This is not this class's <see cref="EntityBase.Element" />!
+  ///   That's the Program element, which should be the root element's only child
+  ///   element, as populated via <see cref="GetElement" />.
+  ///   To avoid confusion, navigate to other elements using Element, not RootElement
+  ///   as the starting point.
+  /// </summary>
   private XElement RootElement { get; set; } = null!;
 
   public ImmutableList<XElement> ScriptProcessorElements =>
@@ -48,7 +57,7 @@ public class ProgramXml : EntityBase {
   public void ChangeModulationSource(
     Modulation oldModulation, Modulation newModulation) {
     var modulationElements =
-      from modulationElement in RootElement.Descendants("SignalConnection")
+      from modulationElement in Element.Descendants("SignalConnection")
       where GetAttributeValue(
               modulationElement, nameof(Modulation.Source)) ==
             oldModulation.Source
@@ -61,8 +70,7 @@ public class ProgramXml : EntityBase {
   }
 
   public string GetDescription() {
-    var programElement = RootElement.Element("Program")!;
-    var propertiesElement = programElement.Element("Properties");
+    var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {
       return string.Empty;
     }
@@ -86,7 +94,7 @@ public class ProgramXml : EntityBase {
   public List<XElement> GetModulationElementsWithCcNo(int ccNo) {
     string source = $"@MIDI CC {ccNo}";
     return (
-      from modulationElement in RootElement.Descendants("SignalConnection")
+      from modulationElement in Element.Descendants("SignalConnection")
       where GetAttributeValue(
         modulationElement, nameof(Modulation.Source)) == source
       select modulationElement).ToList();
@@ -97,7 +105,7 @@ public class ProgramXml : EntityBase {
     try {
       RootElement = XElement.Load(InputProgramPath);
       ControlSignalSourcesElement =
-        RootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
+        Element.Elements("ControlSignalSources").FirstOrDefault() ??
         throw new InvalidOperationException(
           $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
     } catch (XmlException ex) {
@@ -107,14 +115,14 @@ public class ProgramXml : EntityBase {
   }
 
   public List<XElement> GetConnectionsParentElements() {
-    var connectionsElements = RootElement.Descendants("Connections");
+    var connectionsElements = Element.Descendants("Connections");
     return (
       from connectionsElement in connectionsElements
       select connectionsElement.Parent).ToList();
   }
 
   public List<XElement> GetEffectElements() {
-    var insertsElements = RootElement.Descendants("Inserts");
+    var insertsElements = Element.Descendants("Inserts");
     var result = new List<XElement>();
     foreach (var insertsElement in insertsElements) {
       result.AddRange(insertsElement.Elements());
@@ -125,12 +133,12 @@ public class ProgramXml : EntityBase {
   private ImmutableList<XElement> GetScriptProcessorElements() {
     // We are only interested in ScriptProcessors that might include the
     // InfoPageCcsScriptProcessor, which can only be a child of the EventProcessors
-    // element, if any, that is a child of the Root element.
+    // element, if any, that is a child of the Program element.
     // There can be EventProcessors elements lower in the tree, such as a child of a
     // Layer. Example: Factory\RetroWave 2.5\PAD Midnight Organ. But we are not
     // interested in those.
     var eventProcessorsElement =
-      RootElement.Elements("EventProcessors").FirstOrDefault();
+      Element.Elements("EventProcessors").FirstOrDefault();
     return eventProcessorsElement != null
       ? eventProcessorsElement.Elements("ScriptProcessor").ToImmutableList()
       : ImmutableList<XElement>.Empty;
