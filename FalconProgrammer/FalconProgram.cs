@@ -584,8 +584,11 @@ public class FalconProgram {
   /// </summary>
   private void RemoveInfoPageCcsScriptProcessor() {
     // ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
-    InfoPageCcsScriptProcessor!.Remove();
+    // InfoPageCcsScriptProcessor!.Remove();
     InfoPageCcsScriptProcessor = null;
+    // InfoPageCcsScriptProcessor!.Remove will have removed the EventProcessors
+    // element. So we should clear ScriptProcessors for consistency. 
+    ScriptProcessors = ScriptProcessors.Clear();
     ReUpdateMacroCcs();
     foreach (var macro in Macros) {
       macro.CustomPosition = true;
