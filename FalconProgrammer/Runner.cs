@@ -7,8 +7,6 @@ public static class Runner {
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void Run() {
     var batch = new Batch();
-    //batch.MoveConnectionsBeforeProperties("Devinity", "Bass", "Comber Bass");
-    // batch.MoveConnectionsBeforeProperties(null);
     // batch.RollForward("Devinity", "Bass", "Comber Bass");
     // batch.RollForward("Devinity", "Bass");
     // batch.RollForward("Devinity", "Plucks-Leads", "Pluck Sphere");
@@ -19,6 +17,7 @@ public static class Runner {
     // batch.ReuseCc1("Factory", "RetroWave 2.5", "PAD Midnight Organ");
     // batch.RollForward("Factory", "RetroWave 2.5", "PAD Midnight Organ");
     // batch.ReplaceModWheelWithMacro("Factory", "RetroWave 2.5", "PAD Midnight Organ");
+    // batch.MoveConnectionsBeforeProperties(null);
     batch.RollForward(null);
   }
 }

@@ -208,16 +208,6 @@ public class Macro : ModulationsOwnerBase {
     return result;
   }
 
-  public bool MoveConnectionsBeforeProperties() {
-    var connectionsElement = Element.Element("Connections");
-    if (connectionsElement != null && connectionsElement != Element.Elements().First()) {
-      connectionsElement.Remove();
-      PropertiesElement.AddBeforeSelf(connectionsElement);
-      return true;
-    }
-    return false;
-  }
-
   public void RemoveElement() {
     Element.Remove();
     for (int i = ModulatedConnectionsParents.Count - 1; i >= 0; i--) {

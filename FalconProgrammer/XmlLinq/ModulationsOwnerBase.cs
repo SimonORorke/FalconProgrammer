@@ -21,7 +21,7 @@ public abstract class ModulationsOwnerBase : EntityBase {
     get => _modulations ??= GetModulations();
     private set => _modulations = value;
   }
-  
+
   public void AddModulation(Modulation modulation) {
     modulation.Owner = this;
     GetConnectionsElement().Add(modulation.Element);
@@ -32,7 +32,7 @@ public abstract class ModulationsOwnerBase : EntityBase {
   ///   Always get the connections Element dynamically, to avoid the risk of adding one
   ///   when the are no modulations for it to be the parent of.
   /// </summary>
-  protected XElement GetConnectionsElement() {
+  private XElement GetConnectionsElement() {
     // If there's already a modulation wheel assignment, the macro ("ConstantModulation")
     // element will already own a Connections element. 
     var result = Element.Element("Connections");
@@ -40,8 +40,6 @@ public abstract class ModulationsOwnerBase : EntityBase {
       result = new XElement("Connections");
       var propertiesElement = Element.Element("Properties");
       if (propertiesElement != null) {
-        // Macro: should always be true. ScriptProcessor: should never be true.
-        // For file comparison match consistency.
         propertiesElement.AddBeforeSelf(result);
       } else {
         Element.Add(result);
@@ -61,6 +59,18 @@ public abstract class ModulationsOwnerBase : EntityBase {
     return list.ToImmutableList();
   }
 
+  public bool MoveConnectionsBeforeProperties() {
+    var connectionsElement = Element.Element("Connections");
+    var propertiesElement = Element.Element("Properties");
+    if (propertiesElement != null && connectionsElement != null &&
+        connectionsElement != Element.Elements().First()) {
+      connectionsElement.Remove();
+      propertiesElement.AddBeforeSelf(connectionsElement);
+      return true;
+    }
+    return false;
+  }
+
   public void RemoveModulation(Modulation modulation) {
     modulation.Element.Remove();
     if (Modulations.Contains(modulation)) {
@@ -71,6 +81,5 @@ public abstract class ModulationsOwnerBase : EntityBase {
       // No more modulations are owned by this element.
       connectionsElement.Remove();
     }
-    // ProgramXml.RemoveModulationElementsWithCcNo(modulation.CcNo!.Value);
   }
 }

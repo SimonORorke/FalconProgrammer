@@ -359,6 +359,11 @@ public class FalconProgram {
                .Where(macro => macro.MoveConnectionsBeforeProperties())) {
       updated = true;
     }
+    foreach (var dummy in ScriptProcessors
+               .Where(scriptProcessor =>
+                 scriptProcessor.MoveConnectionsBeforeProperties())) {
+      updated = true;
+    }
     if (updated) {
       NotifyUpdate($"{PathShort}: Moved Connections before Properties.");
     }
@@ -583,7 +588,6 @@ public class FalconProgram {
   ///   replacement macro.
   /// </summary>
   private void RemoveInfoPageCcsScriptProcessor() {
-    // ProgramXml.RemoveInfoPageCcsScriptProcessorElement();
     InfoPageCcsScriptProcessor!.Remove();
     InfoPageCcsScriptProcessor = null;
     // InfoPageCcsScriptProcessor!.Remove will have removed the EventProcessors
@@ -821,7 +825,7 @@ public class FalconProgram {
     NextContinuousCcNo = FirstContinuousCcNo;
     NextToggleCcNo = FirstToggleCcNo;
     foreach (var macro in sortedByLocation) {
-      macroNo++; 
+      macroNo++;
       InfoPageCcsScriptProcessor.AddModulation(
         new Modulation(ProgramXml) {
           Destination = $"Macro{macroNo}",
