@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.XmlLinq;
 using JetBrains.Annotations;
@@ -40,7 +41,10 @@ public class FalconProgram {
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
   ///   relative to their locations on the Info page.
   /// </summary>
-  private LocationOrder MacroCcLocationOrder { get; set; }
+  public LocationOrder MacroCcLocationOrder =>
+    Category.SoundBankFolder.Name != "Fluidity"
+      ? LocationOrder.LeftToRightTopToBottom
+      : LocationOrder.TopToBottomLeftToRight;
 
   internal string Name { get; }
   private int NextContinuousCcNo { get; set; } = FirstContinuousCcNo;
@@ -314,6 +318,9 @@ public class FalconProgram {
 
   internal SortedSet<Macro> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
+    if (macroCcLocationOrder == LocationOrder.LeftToRightTopToBottom) {
+      Debug.Assert(true);
+    }
     var result = new SortedSet<Macro>(
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
@@ -424,7 +431,7 @@ public class FalconProgram {
     Console.WriteLine(
       $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
     InfoPageLayout.MoveAllMacrosToStandardBottom();
-    UpdateMacroCcs(LocationOrder.LeftToRightTopToBottom);
+    UpdateMacroCcs();
     NotifyUpdate($"{PathShort}: Optimised Wheel macro.");
   }
 
@@ -587,13 +594,13 @@ public class FalconProgram {
   ///   move the existing macros to locations optimal for accommodating a new wheel
   ///   replacement macro.
   /// </summary>
-  private void RemoveInfoPageCcsScriptProcessor() {
+  private void RemoveInfoPageCcsScriptProcessor(bool reUpdateMacroCcs = true) {
     InfoPageCcsScriptProcessor!.Remove();
     InfoPageCcsScriptProcessor = null;
     // InfoPageCcsScriptProcessor!.Remove will have removed the EventProcessors
     // element. So we should clear ScriptProcessors for consistency. 
     ScriptProcessors = ScriptProcessors.Clear();
-    ReUpdateMacroCcs();
+    // ReUpdateMacroCcs(); // ???
     foreach (var macro in Macros) {
       macro.CustomPosition = true;
       // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
@@ -609,7 +616,9 @@ public class FalconProgram {
     }
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveAllMacrosToStandardBottom();
-    ReUpdateMacroCcs();
+    if (reUpdateMacroCcs) {
+      ReUpdateMacroCcs();
+    }
   }
 
   /// <summary>
@@ -645,8 +654,8 @@ public class FalconProgram {
   }
 
   private void ReUpdateMacroCcs() {
-    // This should be the default, but otherwise won't work with wheel replacement. 
-    MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
+    // // This should be the default, but otherwise won't work with wheel replacement. 
+    // MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
     UpdateMacroCcsOwnedByMacros();
     Console.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }
@@ -713,8 +722,11 @@ public class FalconProgram {
     ProgramXml.SaveToFile(Path);
   }
 
-  public void UpdateMacroCcs(LocationOrder macroCcLocationOrder) {
-    MacroCcLocationOrder = macroCcLocationOrder;
+  public void UpdateMacroCcs() {
+    if (Category.SoundBankFolder.Name == "Fluidity" &&
+        InfoPageCcsScriptProcessor != null) {
+      RemoveInfoPageCcsScriptProcessor(false);
+    }
     if (InfoPageCcsScriptProcessor == null) {
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate

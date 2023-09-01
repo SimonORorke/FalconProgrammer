@@ -5,16 +5,6 @@ namespace FalconProgrammer;
 public class Batch {
   public const string ProgramExtension = ".uvip";
   private Category Category { get; set; } = null!;
-
-  /// <summary>
-  ///   Gets or sets the order in which MIDI CC numbers are to be mapped by
-  ///   <see cref="UpdateMacroCcs" /> to macros relative to their locations on the Info
-  ///   page.
-  /// </summary>
-  [PublicAPI]
-  public LocationOrder MacroCcLocationOrder { get; set; } =
-    LocationOrder.LeftToRightTopToBottom;
-
   private List<string> EffectTypes { get; set; } = null!;
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
@@ -149,7 +139,7 @@ public class Batch {
         Program.ReuseCc1();
         break;
       case ConfigTask.UpdateMacroCcs:
-        Program.UpdateMacroCcs(MacroCcLocationOrder);
+        Program.UpdateMacroCcs();
         break;
     }
     if (Program.HasBeenUpdated) {

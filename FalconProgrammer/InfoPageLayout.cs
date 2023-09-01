@@ -38,7 +38,7 @@ public class InfoPageLayout {
   ///   Gets or sets the maximum number of continuous macros, in MIDI CC number order,
   ///   there can be on the Info page before the MIDI CC number that is specified by
   ///   <see cref="ModWheelReplacementCcNo" /> and used for the modulation wheel
-  ///   replacement macro tha can be added to the layout by
+  ///   replacement macro that can be added to the layout by
   ///   <see cref="TryReplaceModWheelWithMacro" />.
   /// </summary>
   [PublicAPI]
@@ -156,8 +156,10 @@ public class InfoPageLayout {
       return new Point(0, StandardBottommostY);
     }
     var sortedByLocation = Program.GetMacrosSortedByLocation(
+      // Program.MacroCcLocationOrder);
       LocationOrder.TopToBottomLeftToRight);
-    BottomRowY = (
+
+      BottomRowY = (
       from macro in sortedByLocation
       select macro.Y).Max();
     BottomRowMacros = GetBottomRowMacros(sortedByLocation);
