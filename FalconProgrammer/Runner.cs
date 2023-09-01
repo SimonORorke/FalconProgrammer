@@ -18,6 +18,7 @@ public static class Runner {
     // batch.RollForward("Factory", "RetroWave 2.5", "PAD Midnight Organ");
     // batch.ReplaceModWheelWithMacro("Factory", "RetroWave 2.5", "PAD Midnight Organ");
     // batch.MoveConnectionsBeforeProperties(null);
-    batch.RollForward(null);
+    batch.RollForward("Fluidity", "Strings", "Guitar Stream");
+    // batch.RollForward(null);
   }
 }

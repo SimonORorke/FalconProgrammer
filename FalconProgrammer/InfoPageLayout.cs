@@ -8,6 +8,7 @@ namespace FalconProgrammer;
 public class InfoPageLayout {
   private const int MacroWidth = 60;
   private const int MinHorizontalGapBetweenMacros = 5;
+  private const int RightEdge = 695;
 
   /// <summary>
   ///   When there are only toggle macros on the bottom row, they may be lower than the
@@ -20,7 +21,11 @@ public class InfoPageLayout {
   /// </summary>
   private const int StandardBottommostY = 355;
 
-  private const int RightEdge = 695;
+  /// <summary>
+  /// Allows a gap above a macro whose display name wraps to two text lines.
+  /// 95 would be the bare minimum.
+  /// </summary>
+  private const int StandardRowHeight = 115;
 
   public InfoPageLayout(FalconProgram program) {
     Program = program;
@@ -49,23 +54,32 @@ public class InfoPageLayout {
   private FalconProgram Program { get; }
 
   public void MoveAllMacrosToStandardBottom() {
-    int freeSpace = RightEdge - MacroWidth * Program.Macros.Count;
-    int gapBetweenMacros = freeSpace / (Program.Macros.Count + 1);
-    if (gapBetweenMacros < MinHorizontalGapBetweenMacros) {
-      throw new InvalidOperationException(
-        $"{Program.PathShort}: There is not enough horizontal space to move " + 
-        $"{Program.Macros.Count} macros to the standard bottom row.");
+    int gapBetweenMacros ;
+    int macrosPerRow = Program.Macros.Count;
+    int rowCount = 1;
+    while (true) {
+      int freeSpace = RightEdge - MacroWidth * macrosPerRow;
+      gapBetweenMacros = freeSpace / (macrosPerRow + 1);
+      if (gapBetweenMacros >= MinHorizontalGapBetweenMacros) {
+        break;
+      }
+      rowCount++;
+      macrosPerRow = (int)Math.Ceiling((double)macrosPerRow / rowCount);
     }
-    // Move any reverb to the right end of the standard bottom row
-    // This will allow the standard wheel replacement MIDI CC number to be reassigned to
-    // the wheel replacement macro from the continuous  macro I'm least likely to use,
-    // preferably delay, otherwise reverb.
-    // Example: Savage\Leads\Saw Dirty.
     int x = gapBetweenMacros;
+    int y = StandardBottommostY - (rowCount - 1) * StandardRowHeight;
+    int macrosOnCurrentRow = 0;
     foreach (var macro in Program.Macros) {
+      macrosOnCurrentRow++;
       macro.X = x;
-      macro.Y = StandardBottommostY;
-      x += gapBetweenMacros + MacroWidth;
+      macro.Y = y;
+      if (macrosOnCurrentRow < macrosPerRow) {
+        x += gapBetweenMacros + MacroWidth;
+      } else {
+        macrosOnCurrentRow = 0;
+        x = gapBetweenMacros;
+        y += StandardRowHeight;
+      }
     }
     Console.WriteLine($"{Program.PathShort}: Moved all macros to bottom.");
   }
@@ -180,7 +194,7 @@ public class InfoPageLayout {
   private List<Macro> GetBottomRowMacros(IEnumerable<Macro> macrosSortedByLocation) {
     // We need to horizontally align the new macro relative not only to macros that are
     // bottommost on the Info window (i.e. highest Y) but also those that are close to
-    // the bottom.  The vertical clearance is 95, so this should be safe. In reality,
+    // the bottom.  The standard row height is 115, so this should be safe. In reality,
     // many are up just 5 from the bottommost macros.
     // Example: "Factory\Pluck\Mutan Mute".
     const int verticalFudge = 50;
@@ -192,12 +206,9 @@ public class InfoPageLayout {
 
   [SuppressMessage("ReSharper", "CommentTypo")]
   private Point LocateNewMacroAboveMacro(Macro macro) {
-    // Allows a gap above a macro whose display name wraps to two text lines.
-    // 95 would be the bare minimum.
-    const int verticalClearance = 115;
     var result = new Point(
       macro.X,
-      macro.Y - verticalClearance);
+      macro.Y - StandardRowHeight);
     var overlappingMacro = (
       from otherMacro in Program.Macros
       where otherMacro.Y > result.Y - 50
@@ -209,7 +220,7 @@ public class InfoPageLayout {
       // Example: Spectre\Polysynth\PL Cream.
       result = new Point(
         macro.X,
-        overlappingMacro.Y - verticalClearance);
+        overlappingMacro.Y - StandardRowHeight);
     }
     return result;
   }
