@@ -9,6 +9,8 @@ namespace FalconProgrammer.XmlLinq;
 ///   as shown the Info page.
 /// </summary>
 public class Macro : ModulationsOwnerBase {
+  private const int FirstContinuousCcNo = 31;
+  private const int FirstToggleCcNo = 112;
   private XElement? _propertiesElement;
   public Macro(ProgramXml programXml) : base(programXml, true) { }
 
@@ -196,6 +198,77 @@ public class Macro : ModulationsOwnerBase {
       from modulation in Modulations
       where modulation.ModulatesMacro
       select modulation).ToImmutableList();
+  }
+  
+  public int GetNextCcNo(ref int continuousCcNo, ref int toggleCcNo, 
+    bool reuseCc1) {
+    if (!IsContinuous) {
+      // Map button CC to toggle macro. 
+      if (toggleCcNo < FirstToggleCcNo) {
+        toggleCcNo = FirstToggleCcNo;
+      } else {
+        toggleCcNo++;
+      }
+      return toggleCcNo;
+    }
+    // Map continuous controller CC to continuous macro.
+    switch (continuousCcNo) {
+      case 1: // Wheel
+        continuousCcNo = 11; // Touch strip
+        break;
+      case 11: // Touch strip
+        continuousCcNo = 36; 
+        break;
+      case 28:
+        continuousCcNo = 41; // Start of knob bank 2 
+        break;
+      case < FirstContinuousCcNo: // e.g. 0
+        continuousCcNo = FirstContinuousCcNo; // 31
+        break;
+      case <= FirstContinuousCcNo + 2: // 31-33
+        continuousCcNo++;
+        break;
+      case FirstContinuousCcNo + 3: // 34
+        continuousCcNo = reuseCc1 ? 1 : 11; // Wheel or touch strip
+        break;
+      case 37: 
+        // MIDI CC 38 does not work with macros on script-based Info pages
+        continuousCcNo = 28; 
+        break;
+      case 48:
+        continuousCcNo = 51; // Start of knob bank 3 
+        break;
+      case 58:
+        continuousCcNo = 61; // Start of knob bank 4 
+        break;
+      default:
+        continuousCcNo++;
+        break;
+    }
+    return continuousCcNo;
+    // if (IsContinuous) {
+    //   continuousCcNo = continuousCcNo switch {
+    //     39 => 41,
+    //     49 => 51,
+    //     59 => 61,
+    //     _ => continuousCcNo
+    //   };
+    //   result = continuousCcNo switch {
+    //     // Convert the fifth continuous controller's CC number to 11 to map to the
+    //     // touch strip.
+    //     35 => reuseCc1 ? 1 : 11,
+    //     // Convert MIDI CC 38, which does not work with macros on script-based Info
+    //     // pages, to 28.
+    //     38 => 28,
+    //     _ => continuousCcNo
+    //   };
+    //   continuousCcNo++;
+    // } else {
+    //   // Map button CC to toggle macro. 
+    //   result = toggleCcNo;
+    //   toggleCcNo++;
+    // }
+    // return result;
   }
 
   private XElement GetPropertiesElement() {

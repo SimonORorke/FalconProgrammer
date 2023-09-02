@@ -111,6 +111,9 @@ public class Batch {
       case ConfigTask.ChangeReverbToZero:
         Program.ChangeReverbToZero();
         break;
+      case ConfigTask.InitialiseLayout:
+        Program.InitialiseLayout();
+        break;
       case ConfigTask.MoveConnectionsBeforeProperties:
         Program.MoveConnectionsBeforeProperties();
         break;
@@ -220,6 +223,13 @@ public class Batch {
   }
 
   [PublicAPI]
+  public void InitialiseLayout(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.InitialiseLayout;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  [PublicAPI]
   public void MoveConnectionsBeforeProperties(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.MoveConnectionsBeforeProperties;
@@ -316,6 +326,7 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     RestoreOriginal(soundBankName, categoryName, programName);
     PrependPathLineToDescription(soundBankName, categoryName, programName);
+    InitialiseLayout(soundBankName, categoryName, programName);
     UpdateMacroCcs(soundBankName, categoryName, programName);
     RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
     ChangeReverbToZero(soundBankName, categoryName, programName);
@@ -358,6 +369,7 @@ public class Batch {
     ChangeMacroCcNo,
     ChangeReverbToZero,
     CountMacros,
+    InitialiseLayout,
     MoveConnectionsBeforeProperties,
     PrependPathLineToDescription,
     QueryDelayTypes,

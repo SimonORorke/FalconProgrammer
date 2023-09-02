@@ -7,8 +7,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer;
 
 public class FalconProgram {
-  private const int FirstContinuousCcNo = 31;
-  private const int FirstToggleCcNo = 112;
   private InfoPageLayout? _infoPageLayout;
 
   public FalconProgram(string path, Category category) {
@@ -41,14 +39,19 @@ public class FalconProgram {
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
   ///   relative to their locations on the Info page.
   /// </summary>
-  public LocationOrder MacroCcLocationOrder =>
-    Category.SoundBankFolder.Name != "Fluidity"
-      ? LocationOrder.LeftToRightTopToBottom
-      : LocationOrder.TopToBottomLeftToRight;
+  public LocationOrder MacroCcLocationOrder => GetMacroCcLocationOrder();
 
-  internal string Name { get; }
-  private int NextContinuousCcNo { get; set; } = FirstContinuousCcNo;
-  private int NextToggleCcNo { get; set; } = FirstToggleCcNo;
+  private LocationOrder GetMacroCcLocationOrder() {
+    return
+      InfoPageCcsScriptProcessor != null
+      // Category.SoundBankFolder.Name != "Fluidity"
+        ? LocationOrder.LeftToRightTopToBottom
+        : LocationOrder.TopToBottomLeftToRight;
+  }
+
+  private string Name { get; }
+  private int CurrentContinuousCcNo { get; set; }
+  private int CurrentToggleCcNo { get; set; }
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
@@ -175,6 +178,13 @@ public class FalconProgram {
         reverbMacro.ChangeValueToZero();
         NotifyUpdate($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
       }
+      if (InfoPageCcsScriptProcessor == null) {
+        MoveMacroToEndIfExists(FindReverbContinuousMacro());
+        MoveMacroToEndIfExists(FindReverbContinuousMacro());
+        RefreshMacroOrder();
+        InfoPageLayout.MoveAllMacrosToStandardBottom();
+        ReUpdateMacroCcs();
+      }
     }
   }
 
@@ -281,34 +291,6 @@ public class FalconProgram {
       select continuousMacro).FirstOrDefault();
   }
 
-  private int GetCcNo(Macro macro) {
-    int result;
-    if (macro.IsContinuous) {
-      // Map continuous controller CC to continuous macro.
-      NextContinuousCcNo = NextContinuousCcNo switch {
-        39 => 41,
-        49 => 51,
-        59 => 61,
-        _ => NextContinuousCcNo
-      };
-      result = NextContinuousCcNo switch {
-        // Convert the fifth continuous controller's CC number to 11 to map to the
-        // touch strip.
-        35 => 11,
-        // Convert MIDI CC 38, which does not work with macros on script-based Info
-        // pages, to 28.
-        38 => 28,
-        _ => NextContinuousCcNo
-      };
-      NextContinuousCcNo++;
-    } else {
-      // Map button CC to toggle macro. 
-      result = NextToggleCcNo;
-      NextToggleCcNo++;
-    }
-    return result;
-  }
-
   private List<Macro> GetContinuousMacros() {
     return (
       from macro in Macros
@@ -352,12 +334,36 @@ public class FalconProgram {
     return result;
   }
 
+  private int GetNextCcNo(Macro macro, bool reuseCc1) {
+    int currentContinuousCcNo = CurrentContinuousCcNo;
+    int currentToggleCcNo = CurrentToggleCcNo;
+    int ccNo = macro.GetNextCcNo(
+      ref currentContinuousCcNo, ref currentToggleCcNo, reuseCc1);
+    CurrentContinuousCcNo = currentContinuousCcNo;
+    CurrentToggleCcNo = currentToggleCcNo;
+    return ccNo;
+  }
+
   private bool HasUniqueLocation(Macro macro) {
     return (
       from m in Macros
       where m.X == macro.X
             && m.Y == macro.Y
       select m).Count() == 1;
+  }
+
+  public void InitialiseLayout() {
+    switch (Category.SoundBankFolder.Name) {
+      case "Fluidity":
+        RemoveInfoPageCcsScriptProcessor();
+        break;
+      case "Ether Fields" or "Spectre":
+        InfoPageLayout.MoveAllMacrosToStandardBottom();
+        break;
+      default:
+        return;
+    }
+    NotifyUpdate($"{PathShort}: Initialised layout.");
   }
 
   public void MoveConnectionsBeforeProperties() {
@@ -380,6 +386,7 @@ public class FalconProgram {
     if (macroIfExists != null && macroIfExists != Macros[^1]) {
       Macros.Remove(macroIfExists);
       Macros.Add(macroIfExists);
+      Console.WriteLine($"{PathShort}: Moved {macroIfExists.DisplayName} macro to end.");
     }
   }
 
@@ -388,52 +395,46 @@ public class FalconProgram {
     HasBeenUpdated = true;
   }
 
-  /// <summary>
-  ///   When there are 5 macros, including the wheel macro, and they are all continuous,
-  ///   the 4 original macros tend to be more important than the wheel macro, unless
-  ///   there's a reverb macro. So, if ther's a reverb macro, move that to the end.
-  ///   Otherwise move the wheel macro to the end.  The 4 (main) expression pedals will
-  ///   then tend to control the four most important macros.  And once
-  ///   <see cref="ReuseCc1" /> has been run, the mod wheel will control the 5th macro
-  ///   via MIDI CC 1.
-  ///   <para>
-  ///     If any of the four original macros are toggles, there's nothing to do,
-  ///     as toggle macros are not controlled by expression pedals.
-  ///   </para>
-  /// </summary>
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  private void OptimiseWheelMacro() {
-    // Examples:
-    // Devinity\Plucks-Leads\Pluck Sphere (Reverb was already at end but now all macros
-    // will be on one line instead of having the wheel macro above the reverb macro.)
-    // Eternal Funk\Brass\Back And Stride (Reverb was previously the first macro. Now
-    // it will be last.)
-    // Eternal Funk\Synths\Bell Shaka (No reverb. Wheel macro was 4th, now last.)
-    if (Macros.Count != 5 || ContinuousMacros.Count != 5) {
-      return;
-    }
-    if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
-      // The problem is modulations by the wheel replacement macro.
-      // (Source will indicate the modulating macro,
-      // which would be the wheel replacement macro, instead of a MIDI CC number.)
-      // Example: "M.1 Cutoff" macro of
-      // Hypnotic Drive\Atmospheres & Pads\Vocal Atmos - Prophecy.
-      // Requires further investigation. Maybe OK as is.
-      return;
-    }
-    MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    MoveMacroToEndIfExists(FindReverbContinuousMacro());
-    ProgramXml.ReplaceMacroElements(Macros);
-    // If we don't reload, relocating the macros jumbles them.
-    // Perhaps there's a better way, but it broke when I tried.
-    Save();
-    Read();
-    Console.WriteLine(
-      $"{PathShort}: Saved and reloaded, required for Wheel macro optimisation.");
-    InfoPageLayout.MoveAllMacrosToStandardBottom();
-    UpdateMacroCcs();
-    NotifyUpdate($"{PathShort}: Optimised Wheel macro.");
-  }
+  // /// <summary>
+  // ///   When there are 5 macros, including the wheel macro, and they are all continuous,
+  // ///   the 4 original macros tend to be more important than the wheel macro, unless
+  // ///   there's a reverb macro. So, if there's a reverb macro, move that to the end.
+  // ///   Otherwise move the wheel macro to the end.  The 4 (main) expression pedals will
+  // ///   then tend to control the four most important macros.  And once
+  // ///   <see cref="ReuseCc1" /> has been run, the mod wheel will control the 5th macro
+  // ///   via MIDI CC 1.
+  // ///   <para>
+  // ///     If any of the four original macros are toggles, there's nothing to do,
+  // ///     as toggle macros are not controlled by expression pedals.
+  // ///   </para>
+  // /// </summary>
+  // [SuppressMessage("ReSharper", "CommentTypo")]
+  // private void OptimiseWheelMacro() {
+  //   // Examples:
+  //   // Devinity\Plucks-Leads\Pluck Sphere (Reverb was already at end but now all macros
+  //   // will be on one line instead of having the wheel macro above the reverb macro.)
+  //   // Eternal Funk\Brass\Back And Stride (Reverb was previously the first macro. Now
+  //   // it will be last.)
+  //   // Eternal Funk\Synths\Bell Shaka (No reverb. Wheel macro was 4th, now last.)
+  //   if (Macros.Count != 5 || ContinuousMacros.Count != 5) {
+  //     return;
+  //   }
+  //   if (Macros.Any(macro => macro.GetForMacroModulations().Count > 1)) {
+  //     // The problem is modulations by the wheel replacement macro.
+  //     // (Source will indicate the modulating macro,
+  //     // which would be the wheel replacement macro, instead of a MIDI CC number.)
+  //     // Example: "M.1 Cutoff" macro of
+  //     // Hypnotic Drive\Atmospheres & Pads\Vocal Atmos - Prophecy.
+  //     // Requires further investigation. Maybe OK as is.
+  //     return;
+  //   }
+  //   MoveMacroToEndIfExists(FindReverbContinuousMacro());
+  //   MoveMacroToEndIfExists(FindReverbContinuousMacro());
+  //   RefreshMacroOrder();
+  //   InfoPageLayout.MoveAllMacrosToStandardBottom();
+  //   UpdateMacroCcs();
+  //   NotifyUpdate($"{PathShort}: Optimised Wheel macro.");
+  // }
 
   private void PopulateConnectionsParentsAndEffects() {
     var connectionsParentElements = ProgramXml.GetConnectionsParentElements();
@@ -546,14 +547,28 @@ public class FalconProgram {
     PopulateConnectionsParentsAndEffects();
   }
 
+  /// <summary>
+  ///   If the macro order has changed, run this to refresh the XML.
+  /// </summary>
+  public void RefreshMacroOrder() {
+    ProgramXml.ReplaceMacroElements(Macros);
+    // If we don't reload, relocating the macros jumbles them.
+    // Perhaps there's a better way, but it broke when I tried.
+    Save();
+    Read();
+    Console.WriteLine(
+      $"{PathShort}: Saved and reloaded on reordering macros.");
+  }
+
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
     if (RemoveDelayMacros()) {
       if (InfoPageCcsScriptProcessor != null) {
         RemoveInfoPageCcsScriptProcessor();
-      } else {
-        ReUpdateMacroCcs();
       }
+      RefreshMacroOrder();
+      InfoPageLayout.MoveAllMacrosToStandardBottom();
+      ReUpdateMacroCcs();
     }
   }
 
@@ -594,7 +609,7 @@ public class FalconProgram {
   ///   move the existing macros to locations optimal for accommodating a new wheel
   ///   replacement macro.
   /// </summary>
-  private void RemoveInfoPageCcsScriptProcessor(bool reUpdateMacroCcs = true) {
+  private void RemoveInfoPageCcsScriptProcessor() {
     InfoPageCcsScriptProcessor!.Remove();
     InfoPageCcsScriptProcessor = null;
     // InfoPageCcsScriptProcessor!.Remove will have removed the EventProcessors
@@ -616,9 +631,6 @@ public class FalconProgram {
     }
     Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveAllMacrosToStandardBottom();
-    if (reUpdateMacroCcs) {
-      ReUpdateMacroCcs();
-    }
   }
 
   /// <summary>
@@ -633,24 +645,27 @@ public class FalconProgram {
     if (InfoPageCcsScriptProcessor != null) {
       RemoveInfoPageCcsScriptProcessor();
     }
-    if (InfoPageLayout.TryReplaceModWheelWithMacro(
-          out bool updateMacroCcs)) {
-      if (updateMacroCcs) {
-        // Saving and reading prevents wheel macro duplicate modulation error.
-        // Example: Devinity\Bass\Comber Bass.
-        // There has to be a better way.
-        Save();
-        Read();
-        Console.WriteLine(
-          $"{PathShort}: Saved and reloaded, required for Wheel macro CCs update.");
-        ReUpdateMacroCcs();
-      }
-      NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
-      OptimiseWheelMacro();
-    } else {
-      throw new InvalidOperationException(
-        $"{PathShort}: Failed to replace mod wheel with macro.");
-    }
+    InfoPageLayout.ReplaceModWheelWithMacro();
+    ReUpdateMacroCcs();
+    NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
+    // if (InfoPageLayout.ReplaceModWheelWithMacro(
+    //       out bool updateMacroCcs)) {
+    //   if (updateMacroCcs) {
+    //     // Saving and reading prevents wheel macro duplicate modulation error.
+    //     // Example: Devinity\Bass\Comber Bass.
+    //     // There has to be a better way.
+    //     Save();
+    //     Read();
+    //     Console.WriteLine(
+    //       $"{PathShort}: Saved and reloaded, required for Wheel macro CCs update.");
+    //     ReUpdateMacroCcs();
+    //   }
+    //   NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
+    //   OptimiseWheelMacro();
+    // } else {
+    //   throw new InvalidOperationException(
+    //     $"{PathShort}: Failed to replace mod wheel with macro.");
+    // }
   }
 
   private void ReUpdateMacroCcs() {
@@ -703,18 +718,25 @@ public class FalconProgram {
       // Allow for macros with invalid locations: see GetMacrosSortedByLocation. 
       return;
     }
-    continuousMacrosByLocation[4].ChangeCcNoTo(1);
-    if (continuousMacrosByLocation.Count > 5) {
-      continuousMacrosByLocation[5].ChangeCcNoTo(11);
+    CurrentContinuousCcNo = 34; // Required for first call of GetNextCcNo to return 1.
+    CurrentToggleCcNo = 0; // Required by GetNextCcNo but won't be used in this case.
+    for (int i = 4; i < continuousMacrosByLocation.Count; i++) {
+      var macro = continuousMacrosByLocation[i];
+      int newCcNo = GetNextCcNo(macro, true);
+      macro.ChangeCcNoTo(newCcNo);
     }
-    if (continuousMacrosByLocation.Count > 6) {
-      // Example with many continuous macros: Ether Fields\Bells - Plucks\FM Harp
-      int newCcNo = 36;
-      for (int i = 6; i < continuousMacrosByLocation.Count; i++) {
-        continuousMacrosByLocation[i].ChangeCcNoTo(newCcNo);
-        newCcNo++;
-      }
-    }
+    // continuousMacrosByLocation[4].ChangeCcNoTo(1);
+    // if (continuousMacrosByLocation.Count > 5) {
+    //   continuousMacrosByLocation[5].ChangeCcNoTo(11);
+    // }
+    // if (continuousMacrosByLocation.Count > 6) {
+    //   // Example with many continuous macros: Ether Fields\Bells - Plucks\FM Harp
+    //   int newCcNo = 36;
+    //   for (int i = 6; i < continuousMacrosByLocation.Count; i++) {
+    //     continuousMacrosByLocation[i].ChangeCcNoTo(newCcNo);
+    //     newCcNo++;
+    //   }
+    // }
     NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
   }
 
@@ -723,10 +745,6 @@ public class FalconProgram {
   }
 
   public void UpdateMacroCcs() {
-    if (Category.SoundBankFolder.Name == "Fluidity" &&
-        InfoPageCcsScriptProcessor != null) {
-      RemoveInfoPageCcsScriptProcessor(false);
-    }
     if (InfoPageCcsScriptProcessor == null) {
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate
@@ -762,12 +780,14 @@ public class FalconProgram {
     // top to bottom, left to right. But a few, e.g. Factory/Keys/Days Of Old 1.4, do not.
     //
     var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
-    // Reinitialise NextContinuousCcNo, incremented by GetCcNo, in case
+    // Reinitialise CurrentContinuousCcNo, incremented by GetNextCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
     // by RemoveInfoPageCcsScriptProcessor, the second time via
-    // ReplaceModWheelWithMacro. 
-    NextContinuousCcNo = FirstContinuousCcNo;
-    NextToggleCcNo = FirstToggleCcNo;
+    // ReplaceModWheelWithMacro.
+    // Make the first call of GetNextCcNo for a continuous macro return 31.
+    CurrentContinuousCcNo = 0; 
+    // Make the first call of GetNextCcNo for a toggle macro return 112.
+    CurrentToggleCcNo = 0;
     foreach (var macro in sortedByLocation) {
       // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
       // MIDI CC mapping that's not on the Info page.
@@ -784,7 +804,7 @@ public class FalconProgram {
       //   Console.WriteLine(
       //     $"{PathShort}: Modulation wheel assignment found in macro {macro}.");
       // }
-      int ccNo = GetCcNo(macro);
+      int ccNo = GetNextCcNo(macro, false);
       if (forMacroModulations.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a non-mod wheel CC number.
         var modulation = new Modulation(ProgramXml) {
@@ -834,14 +854,16 @@ public class FalconProgram {
         InfoPageCcsScriptProcessor!.RemoveModulation(modulation);
       }
     }
-    NextContinuousCcNo = FirstContinuousCcNo;
-    NextToggleCcNo = FirstToggleCcNo;
+    // Make the first call of GetNextCcNo for a continuous macro return 31.
+    CurrentContinuousCcNo = 0; 
+    // Make the first call of GetNextCcNo for a toggle macro return 112.
+    CurrentToggleCcNo = 0;
     foreach (var macro in sortedByLocation) {
       macroNo++;
       InfoPageCcsScriptProcessor.AddModulation(
         new Modulation(ProgramXml) {
           Destination = $"Macro{macroNo}",
-          CcNo = GetCcNo(macro)
+          CcNo = GetNextCcNo(macro, false)
         });
     }
   }
