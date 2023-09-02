@@ -133,7 +133,7 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: Changed MIDI CC {oldCcNo}  to {newCcNo}.");
   }
 
-  public void ChangeReverbToZero() {
+  public void ZeroMacros() {
     // foreach (var effect in Effects.Where(
     //            effect => effect is { IsReverb: true, IsModulated: false })) {
     //   effect.Bypass = true;
@@ -173,7 +173,7 @@ public class FalconProgram {
         NotifyUpdate($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
       }
       if (InfoPageCcsScriptProcessor == null) {
-        MoveMacroToEndIfExists(FindReverbContinuousMacro());
+        MoveMacroToEndIfExists(FindReverbToggleMacro());
         MoveMacroToEndIfExists(FindReverbContinuousMacro());
         RefreshMacroOrder();
         InfoPageLayout.MoveMacrosToStandardLayout();
@@ -192,6 +192,13 @@ public class FalconProgram {
     return Category.InfoPageMustUseScript
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
+  }
+
+  private Macro? FindAttackMacro() {
+    return (
+      from macro in ContinuousMacros
+      where macro.DisplayName == "Release"
+      select macro).FirstOrDefault();
   }
 
   /// <summary>
@@ -250,10 +257,24 @@ public class FalconProgram {
       select scriptProcessor).Last();
   }
 
+  private Macro? FindReleaseMacro() {
+    return (
+      from macro in ContinuousMacros
+      where macro.DisplayName == "Release"
+      select macro).FirstOrDefault();
+  }
+
   private Macro? FindReverbContinuousMacro() {
     return (
       from macro in ContinuousMacros
       where macro.ModulatesReverb
+      select macro).FirstOrDefault();
+  }
+
+  private Macro? FindReverbToggleMacro() {
+    return (
+      from macro in Macros
+      where !macro.IsContinuous && macro.ModulatesReverb
       select macro).FirstOrDefault();
   }
 
@@ -594,8 +615,6 @@ public class FalconProgram {
   }
 
   private void ReUpdateMacroCcs() {
-    // // This should be the default, but otherwise won't work with wheel replacement. 
-    // MacroCcLocationOrder = LocationOrder.LeftToRightTopToBottom;
     UpdateMacroCcsOwnedByMacros();
     Console.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }

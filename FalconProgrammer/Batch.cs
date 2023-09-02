@@ -44,9 +44,9 @@ public class Batch {
   }
   
   [PublicAPI]
-  public void ChangeReverbToZero(
+  public void ZeroMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.ChangeReverbToZero;
+    Task = ConfigTask.ZeroMacros;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
@@ -108,8 +108,8 @@ public class Batch {
       case ConfigTask.CountMacros:
         Program.CountMacros();
         break;
-      case ConfigTask.ChangeReverbToZero:
-        Program.ChangeReverbToZero();
+      case ConfigTask.ZeroMacros:
+        Program.ZeroMacros();
         break;
       case ConfigTask.InitialiseLayout:
         Program.InitialiseLayout();
@@ -329,7 +329,7 @@ public class Batch {
     InitialiseLayout(soundBankName, categoryName, programName);
     UpdateMacroCcs(soundBankName, categoryName, programName);
     RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    ChangeReverbToZero(soundBankName, categoryName, programName);
+    ZeroMacros(soundBankName, categoryName, programName);
     ReplaceModWheelWithMacro(soundBankName, categoryName, programName);
     ReuseCc1(soundBankName, categoryName, programName);
   }
@@ -367,7 +367,7 @@ public class Batch {
 
   private enum ConfigTask {
     ChangeMacroCcNo,
-    ChangeReverbToZero,
+    ZeroMacros,
     CountMacros,
     InitialiseLayout,
     MoveConnectionsBeforeProperties,
