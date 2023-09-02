@@ -22,6 +22,8 @@ public static class Runner {
     // batch.ReplaceModWheelWithMacro("Fluidity", "Electronic", "Fluid Sweeper");
     // batch.RollForward("Fluidity", "Electronic", "Fluid Sweeper");
     // batch.RollForward("Fluidity");
+    // batch.RollForward("Ether Fields");
+    // batch.RollForward("Spectre");
     // batch.RollForward("Spectre", "Polysynth", "PL Cream");
     // batch.RollForward("Factory", "Bass-Sub", "Balarbas 2.0");
     batch.RollForward(null);

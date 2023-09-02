@@ -246,29 +246,6 @@ public class Macro : ModulationsOwnerBase {
         break;
     }
     return continuousCcNo;
-    // if (IsContinuous) {
-    //   continuousCcNo = continuousCcNo switch {
-    //     39 => 41,
-    //     49 => 51,
-    //     59 => 61,
-    //     _ => continuousCcNo
-    //   };
-    //   result = continuousCcNo switch {
-    //     // Convert the fifth continuous controller's CC number to 11 to map to the
-    //     // touch strip.
-    //     35 => reuseCc1 ? 1 : 11,
-    //     // Convert MIDI CC 38, which does not work with macros on script-based Info
-    //     // pages, to 28.
-    //     38 => 28,
-    //     _ => continuousCcNo
-    //   };
-    //   continuousCcNo++;
-    // } else {
-    //   // Map button CC to toggle macro. 
-    //   result = toggleCcNo;
-    //   toggleCcNo++;
-    // }
-    // return result;
   }
 
   private XElement GetPropertiesElement() {
