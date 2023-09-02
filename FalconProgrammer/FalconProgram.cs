@@ -133,55 +133,6 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: Changed MIDI CC {oldCcNo}  to {newCcNo}.");
   }
 
-  public void ZeroMacros() {
-    // foreach (var effect in Effects.Where(
-    //            effect => effect is { IsReverb: true, IsModulated: false })) {
-    //   effect.Bypass = true;
-    //   Console.WriteLine($"{PathShort}: Bypassed {effect.EffectType}.");
-    // }
-    var reverbMacros = (
-      from macro in Macros
-      where macro.ModulatesReverb
-      select macro).ToList();
-    if (reverbMacros.Count == 0) {
-      return;
-    }
-    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
-        or @"Factory\Bass-Sub\Metropolis 1.4"
-        or @"Factory\Leads\Ali3n 1.4"
-        or @"Factory\Pads\Arrival 1.4"
-        // ReSharper disable once StringLiteralTypo
-        or @"Factory\Pads\Novachord Noir 1.4"
-        or @"Factory\Pads\Pad Motion 1.5"
-        or @"Factory\Synth Brass\Gotham Brass 1.4"
-        or @"Inner Dimensions\Pad\GrainVoices 2"
-        or @"Savage\Pads-Drones\Lunar Nashi"
-        or @"Savage\Pads-Drones\Voc Sidechain"
-        or @"Savage\Pads-Drones\Wonder Land") {
-      // These programs are silent without reverb!
-      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
-      return;
-    }
-    foreach (var reverbMacro in reverbMacros) {
-      if (reverbMacro.FindModulationWithCcNo(1) != null) {
-        // Example: Titanium\Pads\Children's Choir.
-        Console.WriteLine(
-          $"{PathShort}: Not changing {reverbMacro.DisplayName} to zero because " +
-          "it is modulated by the wheel.");
-      } else {
-        reverbMacro.ChangeValueToZero();
-        NotifyUpdate($"{PathShort}: Changed {reverbMacro.DisplayName} to zero.");
-      }
-      if (InfoPageCcsScriptProcessor == null) {
-        MoveMacroToEndIfExists(FindReverbToggleMacro());
-        MoveMacroToEndIfExists(FindReverbContinuousMacro());
-        RefreshMacroOrder();
-        InfoPageLayout.MoveMacrosToStandardLayout();
-        ReUpdateMacroCcs();
-      }
-    }
-  }
-
   public void CountMacros() {
     if (Macros.Count > 10) {
       Console.WriteLine($"{Macros.Count} macros in '{Path}'.");
@@ -197,7 +148,7 @@ public class FalconProgram {
   private Macro? FindAttackMacro() {
     return (
       from macro in ContinuousMacros
-      where macro.DisplayName == "Release"
+      where macro.DisplayName == "Attack"
       select macro).FirstOrDefault();
   }
 
@@ -361,6 +312,11 @@ public class FalconProgram {
     switch (Category.SoundBankFolder.Name) {
       case "Fluidity":
         RemoveInfoPageCcsScriptProcessor();
+        var attackMacro = FindAttackMacro();
+        if (attackMacro != null) {
+          MoveMacroToEnd(attackMacro);
+          RefreshMacroOrder();
+        }
         break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
@@ -387,11 +343,18 @@ public class FalconProgram {
     }
   }
 
-  private void MoveMacroToEndIfExists(Macro? macroIfExists) {
-    if (macroIfExists != null && macroIfExists != Macros[^1]) {
-      Macros.Remove(macroIfExists);
-      Macros.Add(macroIfExists);
-      Console.WriteLine($"{PathShort}: Moved {macroIfExists.DisplayName} macro to end.");
+  /// <summary>
+  ///   Moves the specified macros to the end of the layout of macros on the Info page.
+  /// </summary>
+  /// <remarks>
+  ///   After one or more calls to <see cref="MoveMacroToEnd" />,
+  ///   <see cref="RefreshMacroOrder" /> must be called.
+  /// </remarks>
+  private void MoveMacroToEnd(Macro macro) {
+    if (macro != Macros[^1]) {
+      Macros.Remove(macro);
+      Macros.Add(macro);
+      NotifyUpdate($"{PathShort}: Moved {macro.DisplayName} macro to end.");
     }
   }
 
@@ -797,5 +760,80 @@ public class FalconProgram {
 
   private bool WheelMacroExists() {
     return FindWheelMacro() != null;
+  }
+
+  /// <summary>
+  ///   Sets the specified macro's value to zero if allowed.
+  /// </summary>
+  private void ZeroMacro(Macro macro) {
+    if (macro.FindModulationWithCcNo(1) != null) {
+      // Example: Titanium\Pads\Children's Choir.
+      Console.WriteLine(
+        $"{PathShort}: Not changing {macro.DisplayName} to zero because " +
+        "it is modulated by the wheel.");
+    } else {
+      macro.ChangeValueToZero();
+      NotifyUpdate($"{PathShort}: Changed {macro.DisplayName} to zero.");
+    }
+  }
+
+  public void ZeroAndMoveMacros() {
+    ZeroReverbMacros();
+    var macrosToMove = new List<Macro>();
+    var releaseMacro = FindReleaseMacro();
+    if (releaseMacro != null) {
+      ZeroMacro(releaseMacro);
+      if (InfoPageCcsScriptProcessor == null) {
+        macrosToMove.Add(releaseMacro);
+      }
+    }
+    if (InfoPageCcsScriptProcessor != null) {
+      return;
+    }
+    var reverbToggleMacro = FindReverbToggleMacro();
+    if (reverbToggleMacro != null) {
+      macrosToMove.Add(reverbToggleMacro);
+    }
+    var reverbContinuousMacro = FindReverbContinuousMacro();
+    if (reverbContinuousMacro != null) {
+      macrosToMove.Add(reverbContinuousMacro);
+    }
+    if (macrosToMove.Count > 0) {
+      foreach (var macro in macrosToMove) {
+        MoveMacroToEnd(macro);
+      }
+      RefreshMacroOrder();
+      InfoPageLayout.MoveMacrosToStandardLayout();
+      ReUpdateMacroCcs();
+    }
+  }
+
+  private void ZeroReverbMacros() {
+    var reverbMacros = (
+      from macro in Macros
+      where macro.ModulatesReverb
+      select macro).ToList();
+    if (reverbMacros.Count == 0) {
+      return;
+    }
+    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
+        or @"Factory\Bass-Sub\Metropolis 1.4"
+        or @"Factory\Leads\Ali3n 1.4"
+        or @"Factory\Pads\Arrival 1.4"
+        // ReSharper disable once StringLiteralTypo
+        or @"Factory\Pads\Novachord Noir 1.4"
+        or @"Factory\Pads\Pad Motion 1.5"
+        or @"Factory\Synth Brass\Gotham Brass 1.4"
+        or @"Inner Dimensions\Pad\GrainVoices 2"
+        or @"Savage\Pads-Drones\Lunar Nashi"
+        or @"Savage\Pads-Drones\Voc Sidechain"
+        or @"Savage\Pads-Drones\Wonder Land") {
+      // These programs are silent without reverb!
+      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
+      return;
+    }
+    foreach (var reverbMacro in reverbMacros) {
+      ZeroMacro(reverbMacro);
+    }
   }
 }

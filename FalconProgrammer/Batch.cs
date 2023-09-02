@@ -42,13 +42,6 @@ public class Batch {
     Task = ConfigTask.ChangeMacroCcNo;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
-  
-  [PublicAPI]
-  public void ZeroMacros(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.ZeroMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
 
   /// <summary>
   ///   Configures the specified programs as per the required task.
@@ -108,9 +101,6 @@ public class Batch {
       case ConfigTask.CountMacros:
         Program.CountMacros();
         break;
-      case ConfigTask.ZeroMacros:
-        Program.ZeroMacros();
-        break;
       case ConfigTask.InitialiseLayout:
         Program.InitialiseLayout();
         break;
@@ -143,6 +133,9 @@ public class Batch {
         break;
       case ConfigTask.UpdateMacroCcs:
         Program.UpdateMacroCcs();
+        break;
+      case ConfigTask.ZeroAndMoveMacros:
+        Program.ZeroAndMoveMacros();
         break;
     }
     if (Program.HasBeenUpdated) {
@@ -329,7 +322,7 @@ public class Batch {
     InitialiseLayout(soundBankName, categoryName, programName);
     UpdateMacroCcs(soundBankName, categoryName, programName);
     RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    ZeroMacros(soundBankName, categoryName, programName);
+    ZeroAndMoveMacros(soundBankName, categoryName, programName);
     ReplaceModWheelWithMacro(soundBankName, categoryName, programName);
     ReuseCc1(soundBankName, categoryName, programName);
   }
@@ -364,10 +357,16 @@ public class Batch {
     Task = ConfigTask.UpdateMacroCcs;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
+  
+  [PublicAPI]
+  public void ZeroAndMoveMacros(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.ZeroAndMoveMacros;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
 
   private enum ConfigTask {
     ChangeMacroCcNo,
-    ZeroMacros,
     CountMacros,
     InitialiseLayout,
     MoveConnectionsBeforeProperties,
@@ -379,6 +378,7 @@ public class Batch {
     ReplaceModWheelWithMacro,
     RestoreOriginal,
     ReuseCc1,
-    UpdateMacroCcs
+    UpdateMacroCcs,
+    ZeroAndMoveMacros
   }
 }
