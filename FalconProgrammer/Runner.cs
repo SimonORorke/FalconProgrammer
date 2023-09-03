@@ -26,6 +26,7 @@ public static class Runner {
     // batch.RollForward("Spectre");
     // batch.RollForward("Spectre", "Polysynth", "PL Cream");
     // batch.RollForward("Factory", "Bass-Sub", "Balarbas 2.0");
+    // batch.RollForward("Spectre", "Leads", "LD Showteker");
     batch.RollForward(null);
   }
 }

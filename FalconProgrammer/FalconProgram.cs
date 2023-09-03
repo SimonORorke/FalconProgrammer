@@ -778,7 +778,6 @@ public class FalconProgram {
   }
 
   public void ZeroAndMoveMacros() {
-    ZeroReverbMacros();
     var macrosToMove = new List<Macro>();
     var releaseMacro = FindReleaseMacro();
     if (releaseMacro != null) {
@@ -787,16 +786,25 @@ public class FalconProgram {
         macrosToMove.Add(releaseMacro);
       }
     }
+    bool zeroedReverbMacros = ZeroReverbMacros();
     if (InfoPageCcsScriptProcessor != null) {
       return;
     }
-    var reverbToggleMacro = FindReverbToggleMacro();
-    if (reverbToggleMacro != null) {
-      macrosToMove.Add(reverbToggleMacro);
-    }
-    var reverbContinuousMacro = FindReverbContinuousMacro();
-    if (reverbContinuousMacro != null) {
-      macrosToMove.Add(reverbContinuousMacro);
+    // For unknown reason, when zeroing reverb silences the program and so had been
+    // disallowed, just moving the macro to the end can silence the program.
+    // ReSharper disable once CommentTypo
+    // Example: Spectre\Leads\LD Showteker.
+    // In any case, it's doubtful if moving a reverb macro to the end if it is crucial to
+    // the sound is a good idea. So we won't do it.
+    if (zeroedReverbMacros) {
+      var reverbToggleMacro = FindReverbToggleMacro();
+      if (reverbToggleMacro != null) {
+        macrosToMove.Add(reverbToggleMacro);
+      }
+      var reverbContinuousMacro = FindReverbContinuousMacro();
+      if (reverbContinuousMacro != null) {
+        macrosToMove.Add(reverbContinuousMacro);
+      }
     }
     if (macrosToMove.Count > 0) {
       foreach (var macro in macrosToMove) {
@@ -808,13 +816,13 @@ public class FalconProgram {
     }
   }
 
-  private void ZeroReverbMacros() {
+  private bool ZeroReverbMacros() {
     var reverbMacros = (
       from macro in Macros
       where macro.ModulatesReverb
       select macro).ToList();
     if (reverbMacros.Count == 0) {
-      return;
+      return false;
     }
     if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
         or @"Factory\Bass-Sub\Metropolis 1.4"
@@ -827,13 +835,16 @@ public class FalconProgram {
         or @"Inner Dimensions\Pad\GrainVoices 2"
         or @"Savage\Pads-Drones\Lunar Nashi"
         or @"Savage\Pads-Drones\Voc Sidechain"
-        or @"Savage\Pads-Drones\Wonder Land") {
+        or @"Savage\Pads-Drones\Wonder Land"
+        // ReSharper disable once StringLiteralTypo
+        or @"Spectre\Leads\LD Showteker") {
       // These programs are silent without reverb!
       Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
-      return;
+      return false;
     }
     foreach (var reverbMacro in reverbMacros) {
       ZeroMacro(reverbMacro);
     }
+    return true;
   }
 }
