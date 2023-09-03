@@ -5,6 +5,7 @@ namespace FalconProgrammer;
 
 public class InfoPageLayout {
   private const int MacroWidth = 60;
+
   // private const int MinHorizontalGapBetweenMacros = 5;
   private const int RightEdge = 695;
 
@@ -64,7 +65,7 @@ public class InfoPageLayout {
     }
     int macrosPerRow = visibleMacros.Count <= 16 ? 4 : 5;
     int rowCount = (int)Math.Ceiling((double)visibleMacros.Count / macrosPerRow);
-    int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 5; 
+    int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 5;
     int freeSpaceInRow = RightEdge - MacroWidth * macrosPerRow;
     int gapBetweenMacros = freeSpaceInRow / (macrosPerRow + 1);
     int top = rowCount switch {
@@ -106,6 +107,22 @@ public class InfoPageLayout {
   ///   Replaces all modulations by the modulation wheel of effect
   ///   parameters with modulations by a new 'Wheel' macro.
   /// </summary>
+  /// <remarks>
+  ///   We want the 4 (main) expression pedals to control the four most important macros.
+  ///   So in general the wheel macro will become the fourth continuous macro or, if
+  ///   there are fewer than four existing continuous macros, the last.
+  ///   <para>
+  ///     However, when there are 4 macros and the are all continuous, they tend to be
+  ///     more important than the wheel macro, unless a reverb macro has been zeroed and
+  ///     moved to the end by <see cref="FalconProgram.ZeroAndMoveMacros" />. Several
+  ///     sound banks follow this pattern. So, in that scenario, insert the wheel macro
+  ///     before any zeroed reverb macro if that is last, or otherwise add the wheel
+  ///     macro to the end. Once <see cref="FalconProgram.ReuseCc1" /> has been run, the
+  ///     mod wheel will control the 5th macro via MIDI CC 1.
+  ///     If any of the four existing macros are toggles, there's nothing to do,
+  ///     as toggle macros are not controlled by expression pedals.
+  ///   </para>
+  /// </remarks>
   public void ReplaceModWheelWithMacro() {
     OrderMacrosByLocation();
     var wheelMacro = CreateWheelMacro();
@@ -116,13 +133,37 @@ public class InfoPageLayout {
             && macro.X < RightEdge
       select macro).ToList();
     int insertionIndex = visibleContinuousMacros.Count switch {
-      0 => 0, // First
-      < 4 => Program.Macros.IndexOf(visibleContinuousMacros[^1]) + 1, // Last continuous
-      _ => Program.Macros.IndexOf(visibleContinuousMacros[3]) // 4th continuous
+      0 => 0, // First and only
+      < 4 => AtEnd(),
+      4 => IsLastMacroZeroedReverb() && NoToggleMacros()
+        // Examples:
+        // Devinity\Plucks-Leads\Pluck Sphere (reverb at end in original)
+        // Eternal Funk\Brass\Back And Stride (reverb moved to end by ZeroAndMoveMacros)
+        ? Fourth() 
+        : AtEnd(), // Example: Eternal Funk\Synths\Bell Shaka 
+      _ => Fourth()
     };
     Program.Macros.Insert(insertionIndex, wheelMacro);
     Program.RefreshMacroOrder();
     MoveMacrosToStandardLayout();
+    return;
+
+    int AtEnd() {
+      return Program.Macros.IndexOf(visibleContinuousMacros[^1]) + 1;
+    }
+
+    int Fourth() {
+      return Program.Macros.IndexOf(visibleContinuousMacros[3]);
+    }
+
+    bool IsLastMacroZeroedReverb() {
+      return visibleContinuousMacros[^1].ModulatesReverb &&
+             visibleContinuousMacros[^1].Value == 0;
+    }
+
+    bool NoToggleMacros() {
+      return Program.Macros.Count == visibleContinuousMacros.Count;
+    }
   }
 
   private Macro CreateWheelMacro() {
