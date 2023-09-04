@@ -834,6 +834,7 @@ public class FalconProgram {
         or @"Factory\Synth Brass\Gotham Brass 1.4"
         or @"Inner Dimensions\Pad\GrainVoices 2"
         or @"Savage\Pads-Drones\Lunar Nashi"
+        or @"Savage\Pads-Drones\Pad Chord Ram"
         or @"Savage\Pads-Drones\Voc Sidechain"
         or @"Savage\Pads-Drones\Wonder Land"
         // ReSharper disable once StringLiteralTypo
