@@ -50,12 +50,14 @@ public class FalconProgram {
 
   [PublicAPI]
   public string PathShort =>
-    $@"{Category.SoundBankFolder.Name}\{Category.Name}\{Name}";
+    $@"{SoundBankName}\{Category.Name}\{Name}";
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
 
   private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } =
     ImmutableList<ScriptProcessor>.Empty;
+
+  private string SoundBankName => Category.SoundBankFolder.Name;
 
   private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
@@ -71,7 +73,7 @@ public class FalconProgram {
     // I've customised this script processor and it looks too hard to get rid of.
     // It should be excluded anyway because it has the setting
     // Category.InfoPageMustUseScript true.
-    return Category.SoundBankFolder.Name != "Organic Keys";
+    return SoundBankName != "Organic Keys";
   }
 
   /// <summary>
@@ -84,7 +86,7 @@ public class FalconProgram {
         $"{PathShort} already has a Wheel macro.");
       return false;
     }
-    if (Category.SoundBankFolder.Name == "Ether Fields") {
+    if (SoundBankName == "Ether Fields") {
       // There are lots of macros in every program of this sound bank.
       // I tried adding wheel macros. But it's too busy to be feasible.
       return false;
@@ -164,7 +166,7 @@ public class FalconProgram {
       return null;
     }
     if (ProgramXml.TemplateScriptProcessorElement == null) {
-      if (Category.SoundBankFolder.Name == "Factory") {
+      if (SoundBankName == "Factory") {
         return (
           from scriptProcessor in ScriptProcessors
           // Examples of programs with InfoPageCcsScriptProcessor
@@ -309,7 +311,7 @@ public class FalconProgram {
   }
 
   public void InitialiseLayout() {
-    switch (Category.SoundBankFolder.Name) {
+    switch (SoundBankName) {
       case "Fluidity":
         RemoveInfoPageCcsScriptProcessor();
         var attackMacro = FindAttackMacro();
@@ -463,7 +465,8 @@ public class FalconProgram {
     }
     ScriptProcessors = (
       from scriptProcessorElement in ProgramXml.ScriptProcessorElements
-      select new ScriptProcessor(scriptProcessorElement, ProgramXml)).ToImmutableList();
+      select ScriptProcessor.Create(
+        SoundBankName, scriptProcessorElement, ProgramXml)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
       foreach (var modulation in scriptProcessor.Modulations) {
         // Needed for modulation.ModulatesMacro in FindInfoPageCcsScriptProcessor 

@@ -139,7 +139,8 @@ public class Category {
     // ScriptProcessor turns out not to be reliable.  But I think that's actually fine
     // in all cases.
     if (templateXml.TemplateScriptProcessorElement != null) {
-      return new ScriptProcessor(templateXml.TemplateScriptProcessorElement, ProgramXml);
+      return ScriptProcessor.Create(
+        SoundBankFolder.Name, templateXml.TemplateScriptProcessorElement, ProgramXml);
     } 
     if (!InfoPageMustUseScript) {
       return null;

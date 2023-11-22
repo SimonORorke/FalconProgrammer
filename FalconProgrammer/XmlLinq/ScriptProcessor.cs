@@ -4,15 +4,27 @@ namespace FalconProgrammer.XmlLinq;
 
 public class ScriptProcessor : ModulationsOwnerBase {
   private XElement? _scriptElement;
-  
-  public ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml) :
+
+  /// <summary>
+  ///   Use the <see cref="Create"/> static method for public instantiation of the
+  ///   correct type of <see cref="ScriptProcessor" />.
+  /// </summary>
+  protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml) :
     base(programXml) {
     Element = scriptProcessorElement;
   }
 
   public string Script => ScriptElement.Value;
-  
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
+
+  public static ScriptProcessor Create(string soundBankName,
+    XElement scriptProcessorElement, ProgramXml programXml) {
+    return soundBankName switch {
+      "Organic Keys" or "Organic Pads" => new OrganicScriptProcessor(
+        scriptProcessorElement, programXml),
+      _ => new ScriptProcessor(scriptProcessorElement, programXml)
+    };
+  }
 
   private XElement GetScriptElement() {
     var result = Element.Element("script");
