@@ -104,6 +104,9 @@ public class Batch {
       case ConfigTask.InitialiseLayout:
         Program.InitialiseLayout();
         break;
+      case ConfigTask.InitialiseValuesAndMoveMacros:
+        Program.InitialiseValuesAndMoveMacros();
+        break;
       case ConfigTask.MoveConnectionsBeforeProperties:
         Program.MoveConnectionsBeforeProperties();
         break;
@@ -133,9 +136,6 @@ public class Batch {
         break;
       case ConfigTask.UpdateMacroCcs:
         Program.UpdateMacroCcs();
-        break;
-      case ConfigTask.ZeroAndMoveMacros:
-        Program.ZeroAndMoveMacros();
         break;
     }
     if (Program.HasBeenUpdated) {
@@ -219,6 +219,13 @@ public class Batch {
   public void InitialiseLayout(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.InitialiseLayout;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+  
+  [PublicAPI]
+  public void InitialiseValuesAndMoveMacros(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.InitialiseValuesAndMoveMacros;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
@@ -322,7 +329,7 @@ public class Batch {
     InitialiseLayout(soundBankName, categoryName, programName);
     UpdateMacroCcs(soundBankName, categoryName, programName);
     RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    ZeroAndMoveMacros(soundBankName, categoryName, programName);
+    InitialiseValuesAndMoveMacros(soundBankName, categoryName, programName);
     ReplaceModWheelWithMacro(soundBankName, categoryName, programName);
     ReuseCc1(soundBankName, categoryName, programName);
   }
@@ -357,18 +364,12 @@ public class Batch {
     Task = ConfigTask.UpdateMacroCcs;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
-  
-  [PublicAPI]
-  public void ZeroAndMoveMacros(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.ZeroAndMoveMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
 
   private enum ConfigTask {
     ChangeMacroCcNo,
     CountMacros,
     InitialiseLayout,
+    InitialiseValuesAndMoveMacros,
     MoveConnectionsBeforeProperties,
     PrependPathLineToDescription,
     QueryDelayTypes,
@@ -378,7 +379,6 @@ public class Batch {
     ReplaceModWheelWithMacro,
     RestoreOriginal,
     ReuseCc1,
-    UpdateMacroCcs,
-    ZeroAndMoveMacros
+    UpdateMacroCcs
   }
 }

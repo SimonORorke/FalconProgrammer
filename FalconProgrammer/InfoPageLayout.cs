@@ -114,11 +114,11 @@ public class InfoPageLayout {
   ///   <para>
   ///     However, when there are 4 macros and the are all continuous, they tend to be
   ///     more important than the wheel macro, unless a reverb macro has been zeroed and
-  ///     moved to the end by <see cref="FalconProgram.ZeroAndMoveMacros" />. Several
-  ///     sound banks follow this pattern. So, in that scenario, insert the wheel macro
-  ///     before any zeroed reverb macro if that is last, or otherwise add the wheel
-  ///     macro to the end. Once <see cref="FalconProgram.ReuseCc1" /> has been run, the
-  ///     mod wheel will control the 5th macro via MIDI CC 1.
+  ///     moved to the end by <see cref="FalconProgram.InitialiseValuesAndMoveMacros" />.
+  ///     Several sound banks follow this pattern. So, in that scenario, insert the wheel
+  ///     macro before any zeroed reverb macro if that is last, or otherwise add the
+  ///     wheel macro to the end. Once <see cref="FalconProgram.ReuseCc1" /> has been
+  ///     run, the mod wheel will control the 5th macro via MIDI CC 1.
   ///     If any of the four existing macros are toggles, there's nothing to do,
   ///     as toggle macros are not controlled by expression pedals.
   ///   </para>

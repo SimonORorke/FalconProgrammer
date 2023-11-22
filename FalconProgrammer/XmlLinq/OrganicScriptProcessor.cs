@@ -12,8 +12,6 @@ public class OrganicScriptProcessor : ScriptProcessor {
   /// </summary>
   public OrganicScriptProcessor(XElement scriptProcessorElement,
     ProgramXml programXml) : base(scriptProcessorElement, programXml) {
-    DelaySend = 0;
-    ReverbSend = 0;
   }
 
   public float DelaySend {

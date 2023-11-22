@@ -329,6 +329,33 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: Initialised layout.");
   }
 
+  public void InitialiseValuesAndMoveMacros() {
+    var macrosToMove = new List<Macro>();
+    var releaseMacro = FindReleaseMacro();
+    if (releaseMacro != null) {
+      ZeroMacro(releaseMacro);
+      if (InfoPageCcsScriptProcessor == null) {
+        macrosToMove.Add(releaseMacro);
+      }
+    }
+    bool hasZeroedReverbMacros = ZeroReverbMacros();
+    if (InfoPageCcsScriptProcessor is OrganicScriptProcessor organicScriptProcessor) {
+      // "Organic Keys" or "Organic Pads" sound bank
+      organicScriptProcessor.DelaySend = 0;
+      organicScriptProcessor.ReverbSend = 0;
+      NotifyUpdate(
+        $"{PathShort}: Changed {organicScriptProcessor.Name}.DelaySend " + 
+        "and .ReverbSend to zero.");
+    }
+    if (InfoPageCcsScriptProcessor == null) {
+      MoveMacros(macrosToMove, hasZeroedReverbMacros);
+    }
+  }
+
+  /// <summary>
+  ///   This was needed for the data comparison check when data access was refactored to
+  ///   use Linq for XML throughout. It should not be needed again.
+  /// </summary>
   public void MoveConnectionsBeforeProperties() {
     bool updated = false;
     foreach (var dummy in Macros
@@ -342,6 +369,33 @@ public class FalconProgram {
     }
     if (updated) {
       NotifyUpdate($"{PathShort}: Moved Connections before Properties.");
+    }
+  }
+
+  private void MoveMacros(List<Macro> macrosToMove, bool hasZeroedReverbMacros) {
+    // For unknown reason, when zeroing reverb silences the program and so had been
+    // disallowed, just moving the macro to the end can silence the program.
+    // ReSharper disable once CommentTypo
+    // Example: Spectre\Leads\LD Showteker.
+    // In any case, it's doubtful if moving a reverb macro to the end if it is crucial to
+    // the sound is a good idea. So we won't do it.
+    if (hasZeroedReverbMacros) {
+      var reverbToggleMacro = FindReverbToggleMacro();
+      if (reverbToggleMacro != null) {
+        macrosToMove.Add(reverbToggleMacro);
+      }
+      var reverbContinuousMacro = FindReverbContinuousMacro();
+      if (reverbContinuousMacro != null) {
+        macrosToMove.Add(reverbContinuousMacro);
+      }
+    }
+    if (macrosToMove.Count > 0) {
+      foreach (var macro in macrosToMove) {
+        MoveMacroToEnd(macro);
+      }
+      RefreshMacroOrder();
+      InfoPageLayout.MoveMacrosToStandardLayout();
+      ReUpdateMacroCcs();
     }
   }
 
@@ -777,45 +831,6 @@ public class FalconProgram {
     } else {
       macro.ChangeValueToZero();
       NotifyUpdate($"{PathShort}: Changed {macro.DisplayName} to zero.");
-    }
-  }
-
-  public void ZeroAndMoveMacros() {
-    var macrosToMove = new List<Macro>();
-    var releaseMacro = FindReleaseMacro();
-    if (releaseMacro != null) {
-      ZeroMacro(releaseMacro);
-      if (InfoPageCcsScriptProcessor == null) {
-        macrosToMove.Add(releaseMacro);
-      }
-    }
-    bool zeroedReverbMacros = ZeroReverbMacros();
-    if (InfoPageCcsScriptProcessor != null) {
-      return;
-    }
-    // For unknown reason, when zeroing reverb silences the program and so had been
-    // disallowed, just moving the macro to the end can silence the program.
-    // ReSharper disable once CommentTypo
-    // Example: Spectre\Leads\LD Showteker.
-    // In any case, it's doubtful if moving a reverb macro to the end if it is crucial to
-    // the sound is a good idea. So we won't do it.
-    if (zeroedReverbMacros) {
-      var reverbToggleMacro = FindReverbToggleMacro();
-      if (reverbToggleMacro != null) {
-        macrosToMove.Add(reverbToggleMacro);
-      }
-      var reverbContinuousMacro = FindReverbContinuousMacro();
-      if (reverbContinuousMacro != null) {
-        macrosToMove.Add(reverbContinuousMacro);
-      }
-    }
-    if (macrosToMove.Count > 0) {
-      foreach (var macro in macrosToMove) {
-        MoveMacroToEnd(macro);
-      }
-      RefreshMacroOrder();
-      InfoPageLayout.MoveMacrosToStandardLayout();
-      ReUpdateMacroCcs();
     }
   }
 
