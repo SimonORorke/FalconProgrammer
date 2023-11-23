@@ -344,8 +344,16 @@ public class FalconProgram {
       organicScriptProcessor.DelaySend = 0;
       organicScriptProcessor.ReverbSend = 0;
       NotifyUpdate(
-        $"{PathShort}: Changed {organicScriptProcessor.Name}.DelaySend " + 
+        $"{PathShort}: Changed '{organicScriptProcessor.Name}'.DelaySend " + 
         "and .ReverbSend to zero.");
+      if (SoundBankName == "Organic Pads") {
+        var mainDahdsr = ProgramXml.GetMainDahdsr();
+        mainDahdsr.AttackTime = 0.039999988f; // Result of entering 40 ms via the GUI.
+        mainDahdsr.ReleaseTime = 0.29999998f; // Result of entering 200 ms via the GUI.
+        NotifyUpdate(
+          $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
+          "and .ReleaseTime.");
+      }
     }
     if (InfoPageCcsScriptProcessor == null) {
       MoveMacros(macrosToMove, hasZeroedReverbMacros);

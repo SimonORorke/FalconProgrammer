@@ -130,6 +130,14 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
+  public Dahdsr GetMainDahdsr() {
+    var mainDahdsrElement =
+      ControlSignalSourcesElement.Elements("DAHDSR").FirstOrDefault() ??
+      throw new InvalidOperationException(
+        $"Cannot find DAHDSR in ControlSignalSources of '{InputProgramPath}'.");
+    return new Dahdsr(mainDahdsrElement, this);
+  }
+
   private ImmutableList<XElement> GetScriptProcessorElements() {
     // We are only interested in ScriptProcessors that might include the
     // InfoPageCcsScriptProcessor, which can only be a child of the EventProcessors
