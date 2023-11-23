@@ -3,7 +3,8 @@
 namespace FalconProgrammer.XmlLinq;
 
 /// <summary>
-///   ScriptProcessor for the "Organic Keys" and "Organic Pads" sound banks.
+///   ScriptProcessor for the "Organic Keys" sound bank and base ScriptProcessor for the 
+///   "Organic Pads" sound bank.
 /// </summary>
 public class OrganicScriptProcessor : ScriptProcessor {
   /// <summary>

@@ -20,7 +20,9 @@ public class ScriptProcessor : ModulationsOwnerBase {
   public static ScriptProcessor Create(string soundBankName,
     XElement scriptProcessorElement, ProgramXml programXml) {
     return soundBankName switch {
-      "Organic Keys" or "Organic Pads" => new OrganicScriptProcessor(
+      "Organic Keys" => new OrganicScriptProcessor(
+        scriptProcessorElement, programXml),
+      "Organic Pads" => new OrganicPadsScriptProcessor(
         scriptProcessorElement, programXml),
       _ => new ScriptProcessor(scriptProcessorElement, programXml)
     };
@@ -46,7 +48,7 @@ public class ScriptProcessor : ModulationsOwnerBase {
     eventProcessorsElement!.Remove();
   }
 
-  public void UpdateModulationsFromTemplate(
+  public virtual void UpdateModulationsFromTemplate(
     IEnumerable<Modulation> templateModulations) {
     foreach (var modulation in templateModulations) {
       AddModulation(modulation);
