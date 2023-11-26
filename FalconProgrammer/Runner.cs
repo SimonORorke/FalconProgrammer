@@ -32,6 +32,8 @@ public static class Runner {
     // batch.RollForward("Savage", "Pads-Drones", "Pad Chord Ram");
     // batch.RestoreOriginal("Organic Pads");
     // batch.RollForward("Organic Keys");
-    batch.RollForward("Organic Pads");
+    // batch.RollForward("Organic Pads");
+    // batch.RollForward("Modular Noise", "Bass", "Berghain");
+    batch.RollForward("Modular Noise");
   }
 }

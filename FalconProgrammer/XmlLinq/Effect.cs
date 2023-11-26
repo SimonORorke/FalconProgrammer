@@ -17,7 +17,7 @@ public class Effect : ConnectionsParent {
 
   private bool GetIsDelay() {
     // "Buzz" is Analog Tape Delay!
-    return EffectType is "Buzz" or "DualDelay" or "FatDelay" or "FxDelay"
+    return EffectType is "Buzz" or "DualDelay" or "DualDelayX" or "FatDelay" or "FxDelay"
       or "PingPongDelay" or "SimpleDelay" or "StereoDelay" or "TapeEcho";
   }
 
