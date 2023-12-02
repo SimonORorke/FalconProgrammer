@@ -109,6 +109,8 @@ public class ProgramXml : EntityBase {
         throw new InvalidOperationException(
           $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
     } catch (XmlException ex) {
+      // I got XElement.Load to throw this by changing the open root element line to
+      // "UVI4>". Other invalid changes I tried to make just got ignored at this stage.
       throw new InvalidOperationException(
         $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
     }
