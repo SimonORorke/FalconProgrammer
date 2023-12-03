@@ -650,7 +650,7 @@ public class FalconProgram {
   public void RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
       System.IO.Path.GetDirectoryName(Path)!.Replace(
-        "FalconPrograms", "Programs ORIGINAL") + " ORIGINAL",
+        "Programs", "Programs ORIGINAL") + " ORIGINAL",
       System.IO.Path.GetFileName(Path));
     if (!File.Exists(originalPath)) {
       Console.WriteLine($"Cannot find original file '{originalPath}' for '{Path}'.");
