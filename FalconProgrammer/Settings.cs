@@ -8,7 +8,10 @@ public class Settings {
   [PublicAPI] public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\FalconProgrammer Settings";
 
+  // ReSharper disable once ConvertConstructorToMemberInitializers
   public Settings() {
+    // I'm sure whether converting the constructor to member initializers will work with
+    // Linq for XML.  Can check this later. 
     ProgramsFolder = new Folder();
     ProgramCategories = new List<ProgramCategory>();
   }
