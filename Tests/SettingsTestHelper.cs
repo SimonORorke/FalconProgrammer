@@ -5,10 +5,10 @@ namespace FalconProgrammer.Tests;
 
 public static class SettingsTestHelper {
   public const string ProgramsFolderPath =
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\FalconPrograms";
+    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Programs";
 
   [PublicAPI] public const string TemplatesFolderPath =
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\Program Templates";
+    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Program Templates";
 
   public const string TestApplicationName = "TestFalconProgrammer";
 

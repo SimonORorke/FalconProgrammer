@@ -6,7 +6,7 @@ namespace FalconProgrammer;
 [XmlRoot(nameof(Settings))]
 public class Settings {
   [PublicAPI] public const string DefaultSettingsFolderPath =
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI Falcon\FalconProgrammer Settings";
+    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
   // ReSharper disable once ConvertConstructorToMemberInitializers
   public Settings() {
