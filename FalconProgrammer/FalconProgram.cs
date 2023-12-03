@@ -96,7 +96,7 @@ public class FalconProgram {
       Console.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
         "there is an Info page CCs script processor that is not feasible/desirable " +
-        " to remove.");
+        "to remove.");
       return false;
     }
     int modulationsByModWheelCount =
@@ -582,7 +582,7 @@ public class FalconProgram {
       Console.WriteLine(
         $"{PathShort}: Cannot remove macros because " +
         "there is an Info page CCs script processor that is not feasible/desirable " +
-        " to remove.");
+        "to remove.");
       return false;
     }
     foreach (var macro in removableMacros) {
