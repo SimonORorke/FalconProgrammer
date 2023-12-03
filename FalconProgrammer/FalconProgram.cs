@@ -653,8 +653,8 @@ public class FalconProgram {
         "Programs", "Programs ORIGINAL") + " ORIGINAL",
       System.IO.Path.GetFileName(Path));
     if (!File.Exists(originalPath)) {
-      Console.WriteLine($"Cannot find original file '{originalPath}' for '{Path}'.");
-      return;
+      throw new ApplicationException(
+        $"Cannot find original file '{originalPath}' to restore to '{Path}'.");
     }
     File.Copy(originalPath, Path, true);
     Console.WriteLine($"{PathShort}: Restored to Original");
