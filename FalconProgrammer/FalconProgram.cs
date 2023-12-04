@@ -136,8 +136,8 @@ public class FalconProgram {
   }
 
   public void CountMacros() {
-    if (Macros.Count > 10) {
-      Console.WriteLine($"{Macros.Count} macros in '{Path}'.");
+    if (Macros.Count == 10) {
+      Console.WriteLine($"{PathShort} has {Macros.Count} macros.");
     }
   }
 
@@ -476,6 +476,19 @@ public class FalconProgram {
       : newPathLine + oldDescription;
     ProgramXml.SetDescription(newDescription);
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
+  }
+
+  public void QueryAdsrMacros() {
+    if (InfoPageCcsScriptProcessor != null) {
+      return;
+    }
+    int count = (
+      from macro in ContinuousMacros
+      where macro.DisplayName is "Attack" or "Decay" or "Sustain" or "Release"
+      select macro).Count();
+    if (count == 4) {
+      Console.WriteLine($"{PathShort} has ADSR macros.");
+    }
   }
 
   public IEnumerable<string> QueryDelayTypes() {
