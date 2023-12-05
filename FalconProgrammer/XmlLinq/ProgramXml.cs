@@ -69,6 +69,22 @@ public class ProgramXml : EntityBase {
     }
   }
 
+  public Dahdsr? FindMainDahdsr() {
+    var mainDahdsrElement =
+      ControlSignalSourcesElement.Elements("DAHDSR").FirstOrDefault();
+    return mainDahdsrElement != null
+      ? new Dahdsr(mainDahdsrElement, this)
+      : null;
+  }
+
+  public List<Dahdsr> GetDahdsrs() {
+    var dahdsrElements = Element.Descendants("DAHDSR");
+    return (
+        from dahdsrElement in dahdsrElements 
+        select new Dahdsr(dahdsrElement, this))
+      .ToList();
+  }
+
   public string GetDescription() {
     var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {
@@ -103,7 +119,15 @@ public class ProgramXml : EntityBase {
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
     try {
-      RootElement = XElement.Load(InputProgramPath);
+      using var reader = new XmlTextReader(InputProgramPath);
+      // Stops line breaks from being replaced by spaces in description
+      // when PrependPathLineToDescription updates it.
+      reader.Normalization = false; 
+      var document = XDocument.Load(reader);
+      RootElement = document.Root!;
+      // In the following newer way of loading the XML to an object hierarchy,
+      // there's no way to stop line breaks from being replaced by spaces:
+      // RootElement = XElement.Load(InputProgramPath);
       ControlSignalSourcesElement =
         Element.Elements("ControlSignalSources").FirstOrDefault() ??
         throw new InvalidOperationException(
@@ -133,13 +157,13 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
-  public Dahdsr GetMainDahdsr() {
-    var mainDahdsrElement =
-      ControlSignalSourcesElement.Elements("DAHDSR").FirstOrDefault() ??
-      throw new InvalidOperationException(
-        $"Cannot find DAHDSR in ControlSignalSources of '{InputProgramPath}'.");
-    return new Dahdsr(mainDahdsrElement, this);
-  }
+  // public Dahdsr GetMainDahdsr() {
+  //   var mainDahdsrElement =
+  //     ControlSignalSourcesElement.Elements("DAHDSR").FirstOrDefault() ??
+  //     throw new InvalidOperationException(
+  //       $"Cannot find DAHDSR in ControlSignalSources of '{InputProgramPath}'.");
+  //   return new Dahdsr(mainDahdsrElement, this);
+  // }
 
   private ImmutableList<XElement> GetScriptProcessorElements() {
     // We are only interested in ScriptProcessors that might include the

@@ -347,9 +347,15 @@ public class FalconProgram {
         $"{PathShort}: Changed '{organicScriptProcessor.Name}'.DelaySend " + 
         "and .ReverbSend to zero.");
       if (SoundBankName == "Organic Pads") {
-        var mainDahdsr = ProgramXml.GetMainDahdsr();
-        mainDahdsr.AttackTime = 0.039999988f; // Result of entering 40 ms via the GUI.
-        mainDahdsr.ReleaseTime = 0.29999998f; // Result of entering 200 ms via the GUI.
+        var mainDahdsr = ProgramXml.FindMainDahdsr();
+        if (mainDahdsr == null) {
+          throw new InvalidOperationException(
+            $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
+        }
+        mainDahdsr.AttackTime = 0.04f;
+        mainDahdsr.ReleaseTime = 0.3f;
+        // mainDahdsr.AttackTime = 0.039999988f; // Result of entering 40 ms via the GUI.
+        // mainDahdsr.ReleaseTime = 0.29999998f; // Result of entering 200 ms via the GUI.
         NotifyUpdate(
           $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
           "and .ReleaseTime.");
@@ -488,6 +494,23 @@ public class FalconProgram {
       select macro).Count();
     if (count == 4) {
       Console.WriteLine($"{PathShort} has ADSR macros.");
+    }
+  }
+
+  public void QueryDahdsrModulations() {
+    if (InfoPageCcsScriptProcessor != null) {
+      return;
+    }
+    var dahdsrs = ProgramXml.GetDahdsrs();
+    foreach (var dahdsr in dahdsrs.Where(dahdsr => dahdsr.Modulations.Count > 1)) {
+      using var writer = new StringWriter();
+      writer.Write(
+        $"{PathShort}: {dahdsr.DisplayName} has " + 
+        $"{dahdsr.Modulations.Count} modulations: ");
+      foreach (var modulation in dahdsr.Modulations) {
+        writer.Write($"{modulation.Destination} ");
+      }
+      Console.WriteLine(writer);
     }
   }
 

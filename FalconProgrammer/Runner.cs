@@ -38,6 +38,9 @@ public static class Runner {
     // batch.PrependPathLineToDescription("Organic Pads", "Light", "Crystal Caves");
     // batch.RollForward("Organic Pads", "Light", "Crystal Caves");
     // batch.CountMacros(null);
-    batch.QueryAdsrMacros(null);
+    // batch.QueryAdsrMacros(null);
+    // batch.QueryDahdsrModulations(null);
+    // batch.RollForward("Devinity", "Bass", "Bass Interia");
+    // batch.RollForward(null);
   }
 }

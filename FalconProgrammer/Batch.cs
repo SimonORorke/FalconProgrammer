@@ -113,6 +113,9 @@ public class Batch {
       case ConfigTask.QueryAdsrMacros:
         Program.QueryAdsrMacros();
         break;
+      case ConfigTask.QueryDahdsrModulations:
+        Program.QueryDahdsrModulations();
+        break;
       case ConfigTask.PrependPathLineToDescription:
         Program.PrependPathLineToDescription();
         break;
@@ -254,6 +257,13 @@ public class Batch {
   }
 
   [PublicAPI]
+  public void QueryDahdsrModulations(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.QueryDahdsrModulations;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  [PublicAPI]
   public void QueryDelayTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     EffectTypes = new List<string>();
@@ -383,6 +393,7 @@ public class Batch {
     MoveConnectionsBeforeProperties,
     PrependPathLineToDescription,
     QueryAdsrMacros,
+    QueryDahdsrModulations,
     QueryDelayTypes,
     QueryReverbTypes,
     QueryReuseCc1NotSupported,
