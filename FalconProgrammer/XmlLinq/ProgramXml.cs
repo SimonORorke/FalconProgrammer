@@ -120,7 +120,7 @@ public class ProgramXml : EntityBase {
     InputProgramPath = inputProgramPath;
     try {
       using var reader = new XmlTextReader(InputProgramPath);
-      // Stops line breaks from being replaced by spaces in description
+      // Stops line breaks from being replaced by spaces in Description
       // when PrependPathLineToDescription updates it.
       reader.Normalization = false; 
       var document = XDocument.Load(reader);
@@ -213,7 +213,9 @@ public class ProgramXml : EntityBase {
         outputProgramPath,
         new XmlWriterSettings {
           Indent = true,
-          IndentChars = "    "
+          IndentChars = "    ",
+          // Conserve line breaks in Description as the original \r\n.
+          NewLineHandling = NewLineHandling.None
         });
       RootElement.WriteTo(writer);
       writer.Close();
