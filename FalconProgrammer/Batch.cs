@@ -122,6 +122,9 @@ public class Batch {
       case ConfigTask.QueryDelayTypes:
         UpdateEffectTypes(Program.QueryDelayTypes());
         break;
+      case ConfigTask.QueryMainDahdsr:
+        Program.QueryMainDahdsr();
+        break;
       case ConfigTask.QueryReverbTypes:
         UpdateEffectTypes(Program.QueryReverbTypes());
         break;
@@ -276,6 +279,13 @@ public class Batch {
   }
 
   [PublicAPI]
+  public void QueryMainDahdsr(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    Task = ConfigTask.QueryMainDahdsr;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  [PublicAPI]
   public void QueryReverbTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     EffectTypes = new List<string>();
@@ -395,6 +405,7 @@ public class Batch {
     QueryAdsrMacros,
     QueryDahdsrModulations,
     QueryDelayTypes,
+    QueryMainDahdsr,
     QueryReverbTypes,
     QueryReuseCc1NotSupported,
     RemoveDelayEffectsAndMacros,

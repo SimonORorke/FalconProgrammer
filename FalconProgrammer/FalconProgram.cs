@@ -354,8 +354,6 @@ public class FalconProgram {
         }
         mainDahdsr.AttackTime = 0.04f;
         mainDahdsr.ReleaseTime = 0.3f;
-        // mainDahdsr.AttackTime = 0.039999988f; // Result of entering 40 ms via the GUI.
-        // mainDahdsr.ReleaseTime = 0.29999998f; // Result of entering 200 ms via the GUI.
         NotifyUpdate(
           $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
           "and .ReleaseTime.");
@@ -525,6 +523,16 @@ public class FalconProgram {
       }
     }
     return result;
+  }
+
+  public void QueryMainDahdsr() {
+    // if (InfoPageCcsScriptProcessor != null) {
+    //   return;
+    // }
+    var mainDahdsr = ProgramXml.FindMainDahdsr();
+    if (mainDahdsr != null) {
+      Console.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}"); 
+    }
   }
 
   public IEnumerable<string> QueryReverbTypes() {

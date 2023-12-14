@@ -42,5 +42,6 @@ public static class Runner {
     // batch.QueryDahdsrModulations(null);
     // batch.RollForward("Devinity", "Bass", "Bass Interia");
     // batch.RollForward(null);
+    // batch.QueryMainDahdsr("Factory");
   }
 }

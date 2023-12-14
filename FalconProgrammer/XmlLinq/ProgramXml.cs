@@ -77,7 +77,7 @@ public class ProgramXml : EntityBase {
       : null;
   }
 
-  public List<Dahdsr> GetDahdsrs() {
+  [PublicAPI] public List<Dahdsr> GetDahdsrs() {
     var dahdsrElements = Element.Descendants("DAHDSR");
     return (
         from dahdsrElement in dahdsrElements 
