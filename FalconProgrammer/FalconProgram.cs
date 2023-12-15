@@ -134,7 +134,7 @@ public class FalconProgram(string path, Category category) {
   public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
     var oldModulation = new Modulation(ProgramXml) { CcNo = oldCcNo };
     var newModulation = new Modulation(ProgramXml) { CcNo = newCcNo };
-    ProgramXml.ChangeModulationSource(oldModulation, newModulation);
+    ProgramXml.ChangeModulationSource(oldModulation.Source, newModulation.Source);
     NotifyUpdate($"{PathShort}: Changed MIDI CC {oldCcNo}  to {newCcNo}.");
   }
 
@@ -263,8 +263,30 @@ public class FalconProgram(string path, Category category) {
       // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
       // wheel and now controls the range of the 'Wheel' macro instead.  So that change
       // has worked too.
-      where continuousMacro.DisplayName.ToLower() == "wheel"
+      where continuousMacro.DisplayName.Equals(
+        "wheel", StringComparison.CurrentCultureIgnoreCase)
       select continuousMacro).FirstOrDefault();
+  }
+
+  /// <summary>
+  ///   If the InitialiseLayout batch task has just run for the "Organic Pads"
+  ///   sound bank, the chevron delimiters of the DahdsrController script CDATA will have
+  ///   been incorrectly written as their corresponding HTML substitutes.
+  ///   To fix that, the batch needs to call this method after the Save for
+  ///   InitialiseLayout.  
+  /// </summary>
+  public void FixCData() {
+    if (SoundBankName != "Organic Pads") {
+      return;
+    }
+    var reader = new StreamReader(Path);
+    string oldContents = reader.ReadToEnd();
+    reader.Close();
+    string newContents = oldContents
+      .Replace("<script>&lt;", "<script><")
+      .Replace("&gt;</script>", "></script>");
+    using var writer = new StreamWriter(Path);
+    writer.Write(newContents);
   }
 
   private List<Macro> GetContinuousMacros() {
@@ -280,6 +302,7 @@ public class FalconProgram(string path, Category category) {
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
+    // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
     foreach (var macro in Macros) {
       // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
@@ -351,21 +374,15 @@ public class FalconProgram(string path, Category category) {
     RemoveGuiScriptProcessor();
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
-    // TODO: Ensure Wheel Macro is MIDI CC 1.
     NotifyUpdate($"{PathShort}: Copied macros from template.");
     // The Wheel macro is Macro 9.
-    // So Effects whose source is the original Wheel macro, Macro 1,
+    // So all modulations whose source is the original Wheel macro, Macro 1,
     // need to be updated to Macro 9 instead.
-    // TODO: Wheel modulations within layers are being missed.
-    foreach (
-      var modulation in
-      from effect in Effects
-      from modulation in effect.Modulations
-      where modulation.Source == "$Program/Macro 1"
-      select modulation) {
-      modulation.Source = "$Program/Macro 9";
-    }
+    ProgramXml.ChangeModulationSource(
+      "$Program/Macro 1", "$Program/Macro 9");
     NotifyUpdate($"{PathShort}: Updated modulations by Wheel macro.");
+    // Each of Macros 1 to 4 controls the Gain property of a Layer with a DisplayName
+    // matching the macro's DisplayName.
     var layers = ProgramXml.GetLayers();
     foreach (var layer in layers) {
       string sourceMacroName = layer.DisplayName switch {
@@ -384,11 +401,14 @@ public class FalconProgram(string path, Category category) {
       layer.AddModulation(modulation);
     }
     NotifyUpdate($"{PathShort}: Added modulations to layers.");
+    // Add the ScriptProcessor that will control the DAHDSR.
     ProgramXml.AddScriptProcessor(
       "EventProcessor0",
       "./../../../Scripts/DAHDSR Controller.lua",
       "<![CDATA[require 'DahdsrController/DahdsrController']]>");
     NotifyUpdate($"{PathShort}: Added ScriptProcessor.");
+    // Initialise the DAHDSR attack and release times to subvert the original intention 
+    // for the sound to be a pad!
     var mainDahdsr = ProgramXml.FindMainDahdsr();
     if (mainDahdsr == null) {
       throw new InvalidOperationException(

@@ -64,7 +64,9 @@ public class ProgramXml(Category category) : EntityBase {
     propertiesElement.Add(new XAttribute("ScriptPath", scriptPath));
     scriptProcessorElement.Add(propertiesElement);
     var scriptElement = new XElement("script") {
-      // TODO: Correctly write CDATA.
+      // The < and > delimiting the script CDATA will be incorrectly
+      // written as their corresponding HTML substitutes.
+      // That will be fixed up in FalconProgram.FixCData.
       Value = script
     };
     scriptProcessorElement.Add(scriptElement);
@@ -73,17 +75,17 @@ public class ProgramXml(Category category) : EntityBase {
   }
 
   public void ChangeModulationSource(
-    Modulation oldModulation, Modulation newModulation) {
+    string oldModulationSource, string newModulationSource) {
     var modulationElements =
       from modulationElement in Element.Descendants("SignalConnection")
       where GetAttributeValue(
               modulationElement, nameof(Modulation.Source)) ==
-            oldModulation.Source
+            oldModulationSource
       select modulationElement;
     foreach (var modulationElement in modulationElements) {
       SetAttribute(
         modulationElement, nameof(Modulation.Source),
-        newModulation.Source);
+        newModulationSource);
     }
   }
 
@@ -233,16 +235,20 @@ public class ProgramXml(Category category) : EntityBase {
   }
 
   private static XElement ReadRootElementFromFile(string programPath) {
-    using var reader = new XmlTextReader(programPath);
-    // TODO: Try making the two ways of reading conditional.
-    // Stops line breaks from being replaced by spaces in Description
+    // In the following newer way of loading the XML to an object hierarchy,
+    // there's no way to stop line breaks from being replaced by spaces.
+    // But line breaks are correct when inserting or removing elements.
+    return XElement.Load(programPath);
+    // This way of loading the XML to an object hierarchy
+    // stops line breaks from being replaced by spaces in Description
     // when PrependPathLineToDescription updates it.
+    // However, formatting is messed up when inserting or removing elements:
+    // an inserted element does not start on a new line;
+    // and removing an element leaves a blank line.
+    // using var reader = new XmlTextReader(programPath);
     // reader.Normalization = false;
     // var document = XDocument.Load(reader);
     // return document.Root!;
-    // In the following newer way of loading the XML to an object hierarchy,
-    // there's no way to stop line breaks from being replaced by spaces:
-    return XElement.Load(programPath);
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
@@ -257,12 +263,10 @@ public class ProgramXml(Category category) : EntityBase {
       var writer = XmlWriter.Create(
         outputProgramPath,
         new XmlWriterSettings {
-          //CheckCharacters = false,
           Indent = true,
           IndentChars = "    ",
-          // NewLineChars = Environment.NewLine,
-          // // Conserve line breaks in Description as the original \r\n.
-          // NewLineHandling = NewLineHandling.None
+          // Conserve line breaks in Description as the original \r\n.
+          NewLineHandling = NewLineHandling.None
         });
       RootElement.WriteTo(writer);
       writer.Close();
