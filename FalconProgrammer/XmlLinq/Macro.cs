@@ -8,7 +8,7 @@ namespace FalconProgrammer.XmlLinq;
 ///   Called ConstantModulation in the program XML but corresponds to a macro,
 ///   as shown the Info page.
 /// </summary>
-public class Macro : ModulationsOwnerBase {
+public class Macro : ModulationsOwner {
   private const int FirstContinuousCcNo = 31;
   private const int FirstToggleCcNo = 112;
   private XElement? _propertiesElement;
@@ -31,14 +31,6 @@ public class Macro : ModulationsOwnerBase {
     get => GetAttributeValue(PropertiesElement, "customPosition") == "1";
     set => SetAttribute(PropertiesElement,
       "customPosition", value ? "1" : "0");
-  }
-
-  /// <summary>
-  ///   The meaningful name of the macro, as displayed on the Info page.
-  /// </summary>
-  public string DisplayName {
-    get => GetAttributeValue(nameof(DisplayName));
-    set => SetAttribute(nameof(DisplayName), value);
   }
 
   /// <summary>
@@ -75,8 +67,7 @@ public class Macro : ModulationsOwnerBase {
     set => Name = $"Macro {value}";
   }
 
-  public List<ConnectionsParent> ModulatedConnectionsParents { get; } =
-    new List<ConnectionsParent>();
+  public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
 
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 

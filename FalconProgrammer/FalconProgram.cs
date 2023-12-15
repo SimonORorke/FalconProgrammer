@@ -34,11 +34,12 @@ public class FalconProgram(string path, Category category) {
       : LocationOrder.TopToBottomLeftToRight;
 
   /// <summary>
-  /// Cannot be read from XML when RestoreOriginal.
-  /// Trim in case there's a space before the dot in the file name. That would otherwise
-  /// show up when Name is combined into PathShort.
+  ///   Cannot be read from XML when RestoreOriginal.
+  ///   Trim in case there's a space before the dot in the file name. That would otherwise
+  ///   show up when Name is combined into PathShort.
   /// </summary>
   private string Name { get; } = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
+
   private int CurrentContinuousCcNo { get; set; }
   private int CurrentToggleCcNo { get; set; }
   [PublicAPI] public string Path { get; } = path;
@@ -141,6 +142,18 @@ public class FalconProgram(string path, Category category) {
     if (Macros.Count == 10) {
       Console.WriteLine($"{PathShort} has {Macros.Count} macros.");
     }
+  }
+
+  private List<Macro> CreateMacrosFromElements() {
+    var result = (
+      from macroElement in ProgramXml.MacroElements
+      select new Macro(macroElement, ProgramXml)).ToList();
+    foreach (var macro in result) {
+      foreach (var modulation in macro.Modulations) {
+        modulation.Owner = macro;
+      }
+    }
+    return result;
   }
 
   private ProgramXml CreateProgramXml() {
@@ -336,7 +349,57 @@ public class FalconProgram(string path, Category category) {
 
   private void InitialiseOrganicPadsProgram() {
     RemoveGuiScriptProcessor();
-    ProgramXml.CopyMacrosFromTemplate();
+    ProgramXml.CopyMacroElementsFromTemplate();
+    Macros = CreateMacrosFromElements();
+    // TODO: Ensure Wheel Macro is MIDI CC 1.
+    NotifyUpdate($"{PathShort}: Copied macros from template.");
+    // The Wheel macro is Macro 9.
+    // So Effects whose source is the original Wheel macro, Macro 1,
+    // need to be updated to Macro 9 instead.
+    // TODO: Wheel modulations within layers are being missed.
+    foreach (
+      var modulation in
+      from effect in Effects
+      from modulation in effect.Modulations
+      where modulation.Source == "$Program/Macro 1"
+      select modulation) {
+      modulation.Source = "$Program/Macro 9";
+    }
+    NotifyUpdate($"{PathShort}: Updated modulations by Wheel macro.");
+    var layers = ProgramXml.GetLayers();
+    foreach (var layer in layers) {
+      string sourceMacroName = layer.DisplayName switch {
+        "Synthesis" => "Macro 1",
+        "Sample" => "Macro 4",
+        "Noise" => "Macro 2",
+        "Texture" => "Macro 3",
+        _ => throw new NotSupportedException(
+          $"{layer.DisplayName} Layer is not supported.")
+      };
+      var modulation = new Modulation(ProgramXml) {
+        Destination = "Gain",
+        Owner = layer,
+        Source = $"$Program/{sourceMacroName}"
+      };
+      layer.AddModulation(modulation);
+    }
+    NotifyUpdate($"{PathShort}: Added modulations to layers.");
+    ProgramXml.AddScriptProcessor(
+      "EventProcessor0",
+      "./../../../Scripts/DAHDSR Controller.lua",
+      "<![CDATA[require 'DahdsrController/DahdsrController']]>");
+    NotifyUpdate($"{PathShort}: Added ScriptProcessor.");
+    var mainDahdsr = ProgramXml.FindMainDahdsr();
+    if (mainDahdsr == null) {
+      throw new InvalidOperationException(
+        $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
+    }
+    mainDahdsr.AttackTime = 0.04f;
+    mainDahdsr.ReleaseTime = 0.3f;
+    NotifyUpdate(
+      $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " +
+      "and .ReleaseTime.");
+    BypassReverbEffects();
   }
 
   public void InitialiseValuesAndMoveMacros() {
@@ -354,20 +417,8 @@ public class FalconProgram(string path, Category category) {
       organicKeysScriptProcessor.DelaySend = 0;
       organicKeysScriptProcessor.ReverbSend = 0;
       NotifyUpdate(
-        $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " + 
+        $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " +
         "and .ReverbSend to zero.");
-    }
-    if (SoundBankName == "Organic Pads") {
-      var mainDahdsr = ProgramXml.FindMainDahdsr();
-      if (mainDahdsr == null) {
-        throw new InvalidOperationException(
-          $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
-      }
-      mainDahdsr.AttackTime = 0.04f;
-      mainDahdsr.ReleaseTime = 0.3f;
-      NotifyUpdate(
-        $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
-        "and .ReleaseTime.");
     }
     if (GuiScriptProcessor == null) {
       MoveMacros(macrosToMove, hasZeroedReverbMacros);
@@ -513,7 +564,7 @@ public class FalconProgram(string path, Category category) {
     foreach (var dahdsr in dahdsrs.Where(dahdsr => dahdsr.Modulations.Count > 1)) {
       using var writer = new StringWriter();
       writer.Write(
-        $"{PathShort}: {dahdsr.DisplayName} has " + 
+        $"{PathShort}: {dahdsr.DisplayName} has " +
         $"{dahdsr.Modulations.Count} modulations: ");
       foreach (var modulation in dahdsr.Modulations) {
         writer.Write($"{modulation.Destination} ");
@@ -541,7 +592,7 @@ public class FalconProgram(string path, Category category) {
     // }
     var mainDahdsr = ProgramXml.FindMainDahdsr();
     if (mainDahdsr != null) {
-      Console.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}"); 
+      Console.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}");
     }
   }
 
@@ -571,14 +622,7 @@ public class FalconProgram(string path, Category category) {
     ProgramXml = CreateProgramXml();
     ProgramXml.LoadFromFile(Path);
     Category.ProgramXml = ProgramXml;
-    Macros = (
-      from macroElement in ProgramXml.MacroElements
-      select new Macro(macroElement, ProgramXml)).ToList();
-    foreach (var macro in Macros) {
-      foreach (var modulation in macro.Modulations) {
-        modulation.Owner = macro;
-      }
-    }
+    Macros = CreateMacrosFromElements();
     ScriptProcessors = (
       from scriptProcessorElement in ProgramXml.ScriptProcessorElements
       select ScriptProcessor.Create(
@@ -608,6 +652,13 @@ public class FalconProgram(string path, Category category) {
 
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
+    if (SoundBankName == "Organic Pads") {
+      // The layout is predefined.
+      // And there are macros that are only accessed in the
+      // DahdsrController ScriptProcessor, which would be accidentally removed if we ran
+      // RemoveDelayMacros, as it removes macros that don't modulate enabled effects.
+      return;
+    }
     if (RemoveDelayMacros()) {
       if (GuiScriptProcessor != null) {
         RemoveGuiScriptProcessor();

@@ -8,22 +8,34 @@ public abstract class EntityBase {
   protected EntityBase() {
   }
   
-  protected EntityBase(ProgramXml programXml, bool addNewElement = false) {
+  protected EntityBase(ProgramXml programXml, bool mustAddNewElement = false) {
     ProgramXml = programXml;
-    AddNewElement = addNewElement;
+    MustAddNewElement = mustAddNewElement;
   }
-
-  private bool AddNewElement { get; }
 
   public bool Bypass {
     get => GetAttributeValue(nameof(Bypass)) == "1";
     set => SetAttribute(nameof(Bypass), value ? "1" : "0");
   }
+  
+  /// <summary>
+  ///   Meaningful name.
+  /// </summary>
+  /// <remarks>
+  ///   ScriptProcessors and Modulations don't have them, but all other elements
+  ///   we are interested in do.
+  /// </remarks>
+  public string DisplayName {
+    get => GetAttributeValue(nameof(DisplayName));
+    set => SetAttribute(nameof(DisplayName), value);
+  }
 
   public XElement Element {
-    get => _element ??= AddNewElement ? CreateElementFromTemplate() : GetElement();
+    get => _element ??= MustAddNewElement ? CreateElementFromTemplate() : GetElement();
     protected set => _element = value;
   }
+
+  private bool MustAddNewElement { get; }
 
   protected ProgramXml ProgramXml { get; } = null!;
   

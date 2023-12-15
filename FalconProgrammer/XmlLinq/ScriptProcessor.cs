@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.XmlLinq;
 
-public class ScriptProcessor : ModulationsOwnerBase {
+public class ScriptProcessor : ModulationsOwner {
   private XElement? _scriptElement;
 
   /// <summary>

@@ -41,13 +41,36 @@ public class ProgramXml(Category category) : EntityBase {
     _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
-    _templateRootElement ??= ReadRootElementFromFile(Category.TemplateProgramPath);
+    _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
 
   public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
 
   public XElement TemplateModulationElement =>
     _templateModulationElement ??= GetTemplateModulationElement();
+
+  public void AddScriptProcessor(
+    string name, string scriptPath, string script) {
+    var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
+    if (eventProcessorsElement == null) {
+      eventProcessorsElement = new XElement("EventProcessors"); 
+      ControlSignalSourcesElement.AddAfterSelf(eventProcessorsElement);
+    }
+    var scriptProcessorElement = new XElement("ScriptProcessor");
+    scriptProcessorElement.Add(new XAttribute("Name", name));
+    scriptProcessorElement.Add(new XAttribute("Bypass", 0));
+    scriptProcessorElement.Add(new XAttribute("API_version", 21));
+    var propertiesElement = new XElement("Properties");
+    propertiesElement.Add(new XAttribute("ScriptPath", scriptPath));
+    scriptProcessorElement.Add(propertiesElement);
+    var scriptElement = new XElement("script") {
+      // TODO: Correctly write CDATA.
+      Value = script
+    };
+    scriptProcessorElement.Add(scriptElement);
+    scriptProcessorElement.Add(new XElement("ScriptData"));
+    eventProcessorsElement.Add(scriptProcessorElement);
+  }
 
   public void ChangeModulationSource(
     Modulation oldModulation, Modulation newModulation) {
@@ -64,7 +87,22 @@ public class ProgramXml(Category category) : EntityBase {
     }
   }
 
-  public void CopyMacrosFromTemplate() {
+  public void CopyMacroElementsFromTemplate() {
+    var originalMacroElements = MacroElements.ToList();
+    for (int i = originalMacroElements.Count - 1; i >= 0; i--) {
+      // Just a MIDI CC 1 for Organic Pads
+      originalMacroElements[i].Remove();
+    }
+    var templateControlSignalSourcesElement =
+      TemplateRootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
+      throw new InvalidOperationException(
+        $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
+    var templateMacroElements =
+      templateControlSignalSourcesElement.Elements("ConstantModulation");
+    foreach (var templateMacroElement in templateMacroElements) {
+      var newMacroElement = new XElement(templateMacroElement);
+      ControlSignalSourcesElement.Add(newMacroElement);
+    }
   }
 
   public Dahdsr? FindMainDahdsr() {
@@ -75,10 +113,11 @@ public class ProgramXml(Category category) : EntityBase {
       : null;
   }
 
-  [PublicAPI] public List<Dahdsr> GetDahdsrs() {
+  [PublicAPI]
+  public List<Dahdsr> GetDahdsrs() {
     var dahdsrElements = Element.Descendants("DAHDSR");
     return (
-        from dahdsrElement in dahdsrElements 
+        from dahdsrElement in dahdsrElements
         select new Dahdsr(dahdsrElement, this))
       .ToList();
   }
@@ -94,6 +133,17 @@ public class ProgramXml(Category category) : EntityBase {
 
   protected override XElement GetElement() {
     return RootElement.Element("Program")!;
+  }
+
+  public ImmutableList<ModulationsOwner> GetLayers() {
+    var layersElement =
+      Element.Elements("Layers").FirstOrDefault() ??
+      throw new InvalidOperationException(
+        $"Cannot find Layers element in '{InputProgramPath}'.");
+    var layerElements = layersElement.Elements("Layer");
+    return (
+      from layerElement in layerElements
+      select new ModulationsOwner(layerElement,this)).ToImmutableList();
   }
 
   /// <summary>
@@ -184,14 +234,15 @@ public class ProgramXml(Category category) : EntityBase {
 
   private static XElement ReadRootElementFromFile(string programPath) {
     using var reader = new XmlTextReader(programPath);
+    // TODO: Try making the two ways of reading conditional.
     // Stops line breaks from being replaced by spaces in Description
     // when PrependPathLineToDescription updates it.
-    reader.Normalization = false; 
-    var document = XDocument.Load(reader);
-    return document.Root!;
+    // reader.Normalization = false;
+    // var document = XDocument.Load(reader);
+    // return document.Root!;
     // In the following newer way of loading the XML to an object hierarchy,
     // there's no way to stop line breaks from being replaced by spaces:
-    // return XElement.Load(programPath);
+    return XElement.Load(programPath);
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
@@ -206,10 +257,12 @@ public class ProgramXml(Category category) : EntityBase {
       var writer = XmlWriter.Create(
         outputProgramPath,
         new XmlWriterSettings {
+          //CheckCharacters = false,
           Indent = true,
           IndentChars = "    ",
-          // Conserve line breaks in Description as the original \r\n.
-          NewLineHandling = NewLineHandling.None
+          // NewLineChars = Environment.NewLine,
+          // // Conserve line breaks in Description as the original \r\n.
+          // NewLineHandling = NewLineHandling.None
         });
       RootElement.WriteTo(writer);
       writer.Close();

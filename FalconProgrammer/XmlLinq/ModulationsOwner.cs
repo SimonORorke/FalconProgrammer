@@ -3,11 +3,15 @@ using System.Xml.Linq;
 
 namespace FalconProgrammer.XmlLinq;
 
-public abstract class ModulationsOwnerBase(
-  ProgramXml programXml,
-  bool addNewElement = false)
-  : EntityBase(programXml, addNewElement) {
+public class ModulationsOwner : EntityBase {
   private ImmutableList<Modulation>? _modulations;
+
+  public ModulationsOwner(XElement element, ProgramXml programXml) : base(programXml) {
+    Element = element;
+  }
+  
+  protected ModulationsOwner(ProgramXml programXml,
+    bool mustAddNewElement = false) : base(programXml, mustAddNewElement) { }
 
   /// <summary>
   ///   Modulations specifying MIDI CC numbers that modulate the macro.
