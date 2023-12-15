@@ -5,18 +5,13 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.XmlLinq;
 
-public class ProgramXml : EntityBase {
+public class ProgramXml(Category category) : EntityBase {
   private ImmutableList<XElement>? _scriptProcessorElements;
   private XElement? _templateMacroElement;
   private XElement? _templateModulationElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
-
-  public ProgramXml(Category category) {
-    Category = category;
-  }
-
-  [PublicAPI] public Category Category { get; }
+  [PublicAPI] public Category Category { get; } = category;
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
 
   /// <summary>
@@ -67,6 +62,9 @@ public class ProgramXml : EntityBase {
         modulationElement, nameof(Modulation.Source),
         newModulation.Source);
     }
+  }
+
+  public void CopyMacrosFromTemplate() {
   }
 
   public Dahdsr? FindMainDahdsr() {
@@ -156,14 +154,6 @@ public class ProgramXml : EntityBase {
     }
     return result;
   }
-
-  // public Dahdsr GetMainDahdsr() {
-  //   var mainDahdsrElement =
-  //     ControlSignalSourcesElement.Elements("DAHDSR").FirstOrDefault() ??
-  //     throw new InvalidOperationException(
-  //       $"Cannot find DAHDSR in ControlSignalSources of '{InputProgramPath}'.");
-  //   return new Dahdsr(mainDahdsrElement, this);
-  // }
 
   private ImmutableList<XElement> GetScriptProcessorElements() {
     // We are only interested in ScriptProcessors that might include the
