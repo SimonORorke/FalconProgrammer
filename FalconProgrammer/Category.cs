@@ -18,7 +18,7 @@ public class Category {
   private DirectoryInfo Folder { get; set; } = null!;
 
   /// <summary>
-  ///   I think the only categories where the info page script processor cannot be
+  ///   I think the only categories where the GUI script processor cannot be
   ///   removed to allow a mod wheel replacement macro are when there are more than 4
   ///   macros. Theoretically that could be done by automatic code analysis, rather than
   ///   with this category setting. But the setting is more efficient, for what it is worth.

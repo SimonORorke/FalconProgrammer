@@ -97,7 +97,7 @@ public class FalconProgram(string path, Category category) {
         && !CanRemoveGuiScriptProcessor()) {
       Console.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
-        "there is an Info page CCs script processor that is not feasible/desirable " +
+        "there is a GUI script processor that is not feasible/desirable " +
         "to remove.");
       return false;
     }
@@ -634,7 +634,7 @@ public class FalconProgram(string path, Category category) {
         && !CanRemoveGuiScriptProcessor()) {
       Console.WriteLine(
         $"{PathShort}: Cannot remove macros because " +
-        "there is an Info page CCs script processor that is not feasible/desirable " +
+        "there is a GUI script processor that is not feasible/desirable " +
         "to remove.");
       return false;
     }
@@ -721,7 +721,7 @@ public class FalconProgram(string path, Category category) {
   ///   5th continuous macro and MIDI CC 11 (touch strip) to the 6th, if there is one.
   ///   Increment MIDI CCs of any subsequent macros accordingly.
   ///   <para>
-  ///     For programs with an Info page MIDI CCs script processor,
+  ///     For programs with a GUI script processor,
   ///     changing the MIDI CCs modulating macros is not (yet) supported by this method.
   ///     If it were to be implemented, 19 programs would be impacted, at last count by
   ///     <see cref="QueryReuseCc1NotSupported" />, all in Pulsar.
@@ -763,7 +763,7 @@ public class FalconProgram(string path, Category category) {
       // (ConstantModulations) that they modulate
       UpdateMacroCcsOwnedByMacros();
     } else if (Category.TemplateScriptProcessor != null) {
-      // The CCs are specified Modulations owned by the Info page ScriptProcessor
+      // The CCs are specified Modulations owned by the GUI ScriptProcessor
       // and can be copied from a template ScriptProcessor.
       // This applies to all programs in categories for which InfoPageMustUseScript
       // is set to true in the settings file.
@@ -773,7 +773,7 @@ public class FalconProgram(string path, Category category) {
       GuiScriptProcessor.UpdateModulationsFromTemplate(
         Category.TemplateScriptProcessor.Modulations);
     } else {
-      // The CCs are specified in the Info page ScriptProcessor but there's no template
+      // The CCs are specified in the GUI ScriptProcessor but there's no template
       // ScriptProcessor. 
       UpdateMacroCcsOwnedByScriptProcessor();
     }
