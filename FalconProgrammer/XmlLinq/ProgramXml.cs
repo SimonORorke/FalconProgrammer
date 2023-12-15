@@ -167,7 +167,7 @@ public class ProgramXml : EntityBase {
 
   private ImmutableList<XElement> GetScriptProcessorElements() {
     // We are only interested in ScriptProcessors that might include the
-    // InfoPageCcsScriptProcessor, which can only be a child of the EventProcessors
+    // GuiScriptProcessor, which can only be a child of the EventProcessors
     // element, if any, that is a child of the Program element.
     // There can be EventProcessors elements lower in the tree, such as a child of a
     // Layer. Example: Factory\RetroWave 2.5\PAD Midnight Organ. But we are not

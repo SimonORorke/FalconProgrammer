@@ -16,12 +16,12 @@ public class FalconProgram(string path, Category category) {
   internal List<Macro> ContinuousMacros => GetContinuousMacros();
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
+  private ScriptProcessor? GuiScriptProcessor { get; set; }
   public bool HasBeenUpdated { get; private set; }
 
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
 
-  private ScriptProcessor? InfoPageCcsScriptProcessor { get; set; }
   internal List<Macro> Macros { get; private set; } = null!;
 
   /// <summary>
@@ -29,7 +29,7 @@ public class FalconProgram(string path, Category category) {
   ///   relative to their locations on the Info page.
   /// </summary>
   public LocationOrder MacroCcLocationOrder =>
-    InfoPageCcsScriptProcessor != null
+    GuiScriptProcessor != null
       ? LocationOrder.LeftToRightTopToBottom
       : LocationOrder.TopToBottomLeftToRight;
 
@@ -68,7 +68,7 @@ public class FalconProgram(string path, Category category) {
     }
   }
 
-  private bool CanRemoveInfoPageCcsScriptProcessor() {
+  private bool CanRemoveGuiScriptProcessor() {
     if (Category.InfoPageMustUseScript || Macros.Count > 4) {
       return false;
     }
@@ -93,8 +93,8 @@ public class FalconProgram(string path, Category category) {
       // I tried adding wheel macros. But it's too busy to be feasible.
       return false;
     }
-    if (InfoPageCcsScriptProcessor != null
-        && !CanRemoveInfoPageCcsScriptProcessor()) {
+    if (GuiScriptProcessor != null
+        && !CanRemoveGuiScriptProcessor()) {
       Console.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
         "there is an Info page CCs script processor that is not feasible/desirable " +
@@ -114,7 +114,7 @@ public class FalconProgram(string path, Category category) {
     // If the mod wheel only 100% modulates a single macro, there's not point replacing
     // the mod wheel modulations with a Wheel macro.
     // Wheel (MIDI CC number 1) Modulations that modulate a macro are invariably
-    // owned by the macro. So, if an InfoPageCcsScriptProcessor exists, we don't need to
+    // owned by the macro. So, if an GuiScriptProcessor exists, we don't need to
     // check the Modulations it owns.
     var macrosOwningModWheelModulations = (
       from macro in Macros
@@ -163,7 +163,7 @@ public class FalconProgram(string path, Category category) {
   ///   macro's ConstantModulation.
   /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
-  private ScriptProcessor? FindInfoPageCcsScriptProcessor() {
+  private ScriptProcessor? FindGuiScriptProcessor() {
     if (ScriptProcessors.Count == 0) {
       return null;
     }
@@ -171,14 +171,14 @@ public class FalconProgram(string path, Category category) {
       if (SoundBankName == "Factory") {
         return (
           from scriptProcessor in ScriptProcessors
-          // Examples of programs with InfoPageCcsScriptProcessor
+          // Examples of programs with GuiScriptProcessor
           // but no template ScriptProcessor:
           // Factory\Bass-Sub\Balarbas 2.0
           // Factory/Keys/Smooth E-piano 2.1.
           where scriptProcessor.Name == "EventProcessor9"
           select scriptProcessor).FirstOrDefault();
       }
-      // Examples of programs with ScriptProcessors but no InfoPageCcsScriptProcessor:
+      // Examples of programs with ScriptProcessors but no GuiScriptProcessor:
       // Ether Fields\Bells - Plucks\Cloche Esperer
       // Factory\Bass-Sub\BA Shomp 1.2
       return null;
@@ -315,7 +315,7 @@ public class FalconProgram(string path, Category category) {
   public void InitialiseLayout() {
     switch (SoundBankName) {
       case "Fluidity":
-        RemoveInfoPageCcsScriptProcessor();
+        RemoveGuiScriptProcessor();
         var attackMacro = FindAttackMacro();
         if (attackMacro != null) {
           MoveMacroToEnd(attackMacro);
@@ -335,7 +335,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   private void InitialiseOrganicPadsProgram() {
-    RemoveInfoPageCcsScriptProcessor();
+    RemoveGuiScriptProcessor();
   }
 
   public void InitialiseValuesAndMoveMacros() {
@@ -343,12 +343,12 @@ public class FalconProgram(string path, Category category) {
     var releaseMacro = FindReleaseMacro();
     if (releaseMacro != null) {
       ZeroMacro(releaseMacro);
-      if (InfoPageCcsScriptProcessor == null) {
+      if (GuiScriptProcessor == null) {
         macrosToMove.Add(releaseMacro);
       }
     }
     bool hasZeroedReverbMacros = ZeroReverbMacros();
-    if (InfoPageCcsScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
+    if (GuiScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
       // "Organic Keys" sound bank
       organicKeysScriptProcessor.DelaySend = 0;
       organicKeysScriptProcessor.ReverbSend = 0;
@@ -368,7 +368,7 @@ public class FalconProgram(string path, Category category) {
         $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
         "and .ReleaseTime.");
     }
-    if (InfoPageCcsScriptProcessor == null) {
+    if (GuiScriptProcessor == null) {
       MoveMacros(macrosToMove, hasZeroedReverbMacros);
     }
   }
@@ -492,7 +492,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   public void QueryAdsrMacros() {
-    if (InfoPageCcsScriptProcessor != null) {
+    if (GuiScriptProcessor != null) {
       return;
     }
     int count = (
@@ -505,7 +505,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   public void QueryDahdsrModulations() {
-    if (InfoPageCcsScriptProcessor != null) {
+    if (GuiScriptProcessor != null) {
       return;
     }
     var dahdsrs = ProgramXml.GetDahdsrs();
@@ -535,7 +535,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   public void QueryMainDahdsr() {
-    // if (InfoPageCcsScriptProcessor != null) {
+    // if (GuiScriptProcessor != null) {
     //   return;
     // }
     var mainDahdsr = ProgramXml.FindMainDahdsr();
@@ -558,7 +558,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   public void QueryReuseCc1NotSupported() {
-    if (InfoPageCcsScriptProcessor == null
+    if (GuiScriptProcessor == null
         || ContinuousMacros.Count < 5
         || ProgramXml.GetModulationElementsWithCcNo(1).Count > 0) {
       return;
@@ -584,11 +584,11 @@ public class FalconProgram(string path, Category category) {
         SoundBankName, scriptProcessorElement, ProgramXml)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
       foreach (var modulation in scriptProcessor.Modulations) {
-        // Needed for modulation.ModulatesMacro in FindInfoPageCcsScriptProcessor 
+        // Needed for modulation.ModulatesMacro in FindGuiScriptProcessor 
         modulation.Owner = scriptProcessor;
       }
     }
-    InfoPageCcsScriptProcessor = FindInfoPageCcsScriptProcessor();
+    GuiScriptProcessor = FindGuiScriptProcessor();
     PopulateConnectionsParentsAndEffects();
   }
 
@@ -608,8 +608,8 @@ public class FalconProgram(string path, Category category) {
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
     if (RemoveDelayMacros()) {
-      if (InfoPageCcsScriptProcessor != null) {
-        RemoveInfoPageCcsScriptProcessor();
+      if (GuiScriptProcessor != null) {
+        RemoveGuiScriptProcessor();
       }
       RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
@@ -630,8 +630,8 @@ public class FalconProgram(string path, Category category) {
     if (removableMacros.Count == 0) {
       return false;
     }
-    if (InfoPageCcsScriptProcessor != null
-        && !CanRemoveInfoPageCcsScriptProcessor()) {
+    if (GuiScriptProcessor != null
+        && !CanRemoveGuiScriptProcessor()) {
       Console.WriteLine(
         $"{PathShort}: Cannot remove macros because " +
         "there is an Info page CCs script processor that is not feasible/desirable " +
@@ -647,17 +647,17 @@ public class FalconProgram(string path, Category category) {
   }
 
   /// <summary>
-  ///   Do away with the <see cref="InfoPageCcsScriptProcessor" />, which defines a
+  ///   Do away with the <see cref="GuiScriptProcessor" />, which defines a
   ///   special Info Page layout and MIDI CC numbers that modulate macros.
   ///   That will give the Info page the default appearance and allow macros to be moved,
   ///   added and removed. When the script processor has been dispensed with,
   ///   move the existing macros to locations optimal for accommodating a new wheel
   ///   replacement macro.
   /// </summary>
-  private void RemoveInfoPageCcsScriptProcessor() {
-    InfoPageCcsScriptProcessor!.Remove();
-    InfoPageCcsScriptProcessor = null;
-    // InfoPageCcsScriptProcessor!.Remove will have removed the EventProcessors
+  private void RemoveGuiScriptProcessor() {
+    GuiScriptProcessor!.Remove();
+    GuiScriptProcessor = null;
+    // GuiScriptProcessor!.Remove will have removed the EventProcessors
     // element. So we should clear ScriptProcessors for consistency. 
     ScriptProcessors = ScriptProcessors.Clear();
     // ReUpdateMacroCcs(); // ???
@@ -687,8 +687,8 @@ public class FalconProgram(string path, Category category) {
     if (!CanReplaceModWheelWithMacro()) {
       return;
     }
-    if (InfoPageCcsScriptProcessor != null) {
-      RemoveInfoPageCcsScriptProcessor();
+    if (GuiScriptProcessor != null) {
+      RemoveGuiScriptProcessor();
     }
     InfoPageLayout.ReplaceModWheelWithMacro();
     ReUpdateMacroCcs();
@@ -728,7 +728,7 @@ public class FalconProgram(string path, Category category) {
   ///   </para>
   /// </summary>
   public void ReuseCc1() {
-    if (InfoPageCcsScriptProcessor != null // See paragraph in summary.
+    if (GuiScriptProcessor != null // See paragraph in summary.
         || ContinuousMacros.Count < 5
         || (ProgramXml.GetModulationElementsWithCcNo(1)
               .Count > 0
@@ -758,7 +758,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   public void UpdateMacroCcs() {
-    if (InfoPageCcsScriptProcessor == null) {
+    if (GuiScriptProcessor == null) {
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate
       UpdateMacroCcsOwnedByMacros();
@@ -770,7 +770,7 @@ public class FalconProgram(string path, Category category) {
       // In some categories, we have or are going to remove the Info page
       // ScriptProcessor, so InfoPageMustUseScript has had to be changed to false for
       // the Category, yet we still need to use the template if it is available.
-      InfoPageCcsScriptProcessor.UpdateModulationsFromTemplate(
+      GuiScriptProcessor.UpdateModulationsFromTemplate(
         Category.TemplateScriptProcessor.Modulations);
     } else {
       // The CCs are specified in the Info page ScriptProcessor but there's no template
@@ -795,7 +795,7 @@ public class FalconProgram(string path, Category category) {
     var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
     // Reinitialise CurrentContinuousCcNo, incremented by GetNextCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
-    // by RemoveInfoPageCcsScriptProcessor, the second time via
+    // by RemoveGuiScriptProcessor, the second time via
     // ReplaceModWheelWithMacro.
     // Make the first call of GetNextCcNo for a continuous macro return 31.
     CurrentContinuousCcNo = 0;
@@ -846,7 +846,7 @@ public class FalconProgram(string path, Category category) {
   ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
   ///   There are different series of CCs for continuous and toggle macros.
   ///   All applicable programs are in Factory, identified by "EventProcessor9" being the
-  ///   InfoPageCcsScriptProcessor: see <see cref="FindInfoPageCcsScriptProcessor" />.
+  ///   GuiScriptProcessor: see <see cref="FindGuiScriptProcessor" />.
   ///   Examples:
   ///   Factory\Bass-Sub\Balarbas 2.0
   ///   Factory\Keys\Smooth E-piano 2.1.
@@ -856,10 +856,10 @@ public class FalconProgram(string path, Category category) {
     var sortedByLocation =
       GetMacrosSortedByLocation(MacroCcLocationOrder);
     int macroNo = 0;
-    for (int i = InfoPageCcsScriptProcessor!.Modulations.Count - 1; i >= 0; i--) {
-      var modulation = InfoPageCcsScriptProcessor!.Modulations[i];
+    for (int i = GuiScriptProcessor!.Modulations.Count - 1; i >= 0; i--) {
+      var modulation = GuiScriptProcessor!.Modulations[i];
       if (modulation.ModulatesMacro) {
-        InfoPageCcsScriptProcessor!.RemoveModulation(modulation);
+        GuiScriptProcessor!.RemoveModulation(modulation);
       }
     }
     // Make the first call of GetNextCcNo for a continuous macro return 31.
@@ -868,7 +868,7 @@ public class FalconProgram(string path, Category category) {
     CurrentToggleCcNo = 0;
     foreach (var macro in sortedByLocation) {
       macroNo++;
-      InfoPageCcsScriptProcessor.AddModulation(
+      GuiScriptProcessor.AddModulation(
         new Modulation(ProgramXml) {
           Destination = $"Macro{macroNo}",
           CcNo = GetNextCcNo(macro, false)

@@ -42,7 +42,7 @@ public class Modulation : EntityBase {
   /// <summary>
   ///   Indicates what is to be modulated.
   ///   If the <see cref="Modulation" /> belongs to the
-  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, this will be the
+  ///   <see cref="FalconProgram.GuiScriptProcessor" />, this will be the
   ///   name in the script of the macro to be modulated, like "Macro1".
   ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, this will be "Value".
@@ -76,7 +76,7 @@ public class Modulation : EntityBase {
 
   /// <summary>
   ///   If the <see cref="Modulation" /> belongs to an effect or the
-  ///   <see cref="FalconProgram.InfoPageCcsScriptProcessor" />, returns the
+  ///   <see cref="FalconProgram.GuiScriptProcessor" />, returns the
   ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated.
   ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, returns null.
