@@ -41,7 +41,7 @@ public class ProgramXml(Category category) : EntityBase {
     _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
-    _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
+    _templateRootElement ??= ReadRootElementFromFile(Category.TemplateProgramPath);
 
   public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
@@ -117,21 +117,13 @@ public class ProgramXml(Category category) : EntityBase {
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
     try {
-      using var reader = new XmlTextReader(InputProgramPath);
-      // Stops line breaks from being replaced by spaces in Description
-      // when PrependPathLineToDescription updates it.
-      reader.Normalization = false; 
-      var document = XDocument.Load(reader);
-      RootElement = document.Root!;
-      // In the following newer way of loading the XML to an object hierarchy,
-      // there's no way to stop line breaks from being replaced by spaces:
-      // RootElement = XElement.Load(InputProgramPath);
+      RootElement = ReadRootElementFromFile(InputProgramPath);
       ControlSignalSourcesElement =
         Element.Elements("ControlSignalSources").FirstOrDefault() ??
         throw new InvalidOperationException(
-          $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
+          $"Cannot find ControlSignalSources element in '{InputProgramPath}'.");
     } catch (XmlException ex) {
-      // Simple test to get XElement.Load to throw this:
+      // Simple test to get ReadRootElementFromFile to throw this:
       // Change the open root element line to "UVI4>".
       // But remember the template file is loaded before the updatable file!
       throw new InvalidOperationException(
@@ -188,6 +180,18 @@ public class ProgramXml(Category category) : EntityBase {
         $"'{InputProgramPath}': Cannot find Modulation element in " +
         $"'{Category.TemplateProgramPath}'.");
     return result;
+  }
+
+  private static XElement ReadRootElementFromFile(string programPath) {
+    using var reader = new XmlTextReader(programPath);
+    // Stops line breaks from being replaced by spaces in Description
+    // when PrependPathLineToDescription updates it.
+    reader.Normalization = false; 
+    var document = XDocument.Load(reader);
+    return document.Root!;
+    // In the following newer way of loading the XML to an object hierarchy,
+    // there's no way to stop line breaks from being replaced by spaces:
+    // return XElement.Load(programPath);
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {

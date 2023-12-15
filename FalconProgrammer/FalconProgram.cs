@@ -336,6 +336,7 @@ public class FalconProgram(string path, Category category) {
 
   private void InitialiseOrganicPadsProgram() {
     RemoveGuiScriptProcessor();
+    ProgramXml.CopyMacrosFromTemplate();
   }
 
   public void InitialiseValuesAndMoveMacros() {
