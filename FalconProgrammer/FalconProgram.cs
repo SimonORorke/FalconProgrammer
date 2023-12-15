@@ -5,19 +5,9 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
-public class FalconProgram {
+public class FalconProgram(string path, Category category) {
   private InfoPageLayout? _infoPageLayout;
-
-  public FalconProgram(string path, Category category) {
-    Path = path;
-    // Cannot be read from XML when RestoreOriginal.
-    // Trim in case there's a space before the dot in the file name. That would otherwise
-    // show up when Name is combined into PathShort.
-    Name = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
-    Category = category;
-  }
-
-  [PublicAPI] public Category Category { get; }
+  [PublicAPI] public Category Category { get; } = category;
 
   /// <summary>
   ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
@@ -43,10 +33,15 @@ public class FalconProgram {
       ? LocationOrder.LeftToRightTopToBottom
       : LocationOrder.TopToBottomLeftToRight;
 
-  private string Name { get; }
+  /// <summary>
+  /// Cannot be read from XML when RestoreOriginal.
+  /// Trim in case there's a space before the dot in the file name. That would otherwise
+  /// show up when Name is combined into PathShort.
+  /// </summary>
+  private string Name { get; } = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
   private int CurrentContinuousCcNo { get; set; }
   private int CurrentToggleCcNo { get; set; }
-  [PublicAPI] public string Path { get; }
+  [PublicAPI] public string Path { get; } = path;
 
   [PublicAPI]
   public string PathShort =>
@@ -61,6 +56,13 @@ public class FalconProgram {
 
   private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
+      effect.Bypass = true;
+      NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
+    }
+  }
+
+  private void BypassReverbEffects() {
+    foreach (var effect in Effects.Where(effect => effect.IsReverb)) {
       effect.Bypass = true;
       NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
     }
@@ -323,10 +325,17 @@ public class FalconProgram {
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;
+      case "Organic Pads":
+        InitialiseOrganicPadsProgram();
+        break;
       default:
         return;
     }
     NotifyUpdate($"{PathShort}: Initialised layout.");
+  }
+
+  private void InitialiseOrganicPadsProgram() {
+    RemoveInfoPageCcsScriptProcessor();
   }
 
   public void InitialiseValuesAndMoveMacros() {
@@ -339,25 +348,25 @@ public class FalconProgram {
       }
     }
     bool hasZeroedReverbMacros = ZeroReverbMacros();
-    if (InfoPageCcsScriptProcessor is OrganicScriptProcessor organicScriptProcessor) {
-      // "Organic Keys" or "Organic Pads" sound bank
-      organicScriptProcessor.DelaySend = 0;
-      organicScriptProcessor.ReverbSend = 0;
+    if (InfoPageCcsScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
+      // "Organic Keys" sound bank
+      organicKeysScriptProcessor.DelaySend = 0;
+      organicKeysScriptProcessor.ReverbSend = 0;
       NotifyUpdate(
-        $"{PathShort}: Changed '{organicScriptProcessor.Name}'.DelaySend " + 
+        $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " + 
         "and .ReverbSend to zero.");
-      if (SoundBankName == "Organic Pads") {
-        var mainDahdsr = ProgramXml.FindMainDahdsr();
-        if (mainDahdsr == null) {
-          throw new InvalidOperationException(
-            $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
-        }
-        mainDahdsr.AttackTime = 0.04f;
-        mainDahdsr.ReleaseTime = 0.3f;
-        NotifyUpdate(
-          $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
-          "and .ReleaseTime.");
+    }
+    if (SoundBankName == "Organic Pads") {
+      var mainDahdsr = ProgramXml.FindMainDahdsr();
+      if (mainDahdsr == null) {
+        throw new InvalidOperationException(
+          $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
       }
+      mainDahdsr.AttackTime = 0.04f;
+      mainDahdsr.ReleaseTime = 0.3f;
+      NotifyUpdate(
+        $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " + 
+        "and .ReleaseTime.");
     }
     if (InfoPageCcsScriptProcessor == null) {
       MoveMacros(macrosToMove, hasZeroedReverbMacros);
