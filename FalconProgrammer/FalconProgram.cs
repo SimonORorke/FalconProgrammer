@@ -381,6 +381,11 @@ public class FalconProgram(string path, Category category) {
     ProgramXml.ChangeModulationSource(
       "$Program/Macro 1", "$Program/Macro 9");
     NotifyUpdate($"{PathShort}: Updated modulations by Wheel macro.");
+    // In the original program, the four main timbre parameters (Synthesis, Sample, Noise and
+    // Texture) are controlled by an XY control in the script GUI.
+    // In this customised program, to make variation of these parameters mutually
+    // independent, and to take full advantage of my four main expression pedal
+    // controllers, each is controlled by a separate macro.
     // Each of Macros 1 to 4 controls the Gain property of a Layer with a DisplayName
     // matching the macro's DisplayName.
     var layers = ProgramXml.GetLayers();
