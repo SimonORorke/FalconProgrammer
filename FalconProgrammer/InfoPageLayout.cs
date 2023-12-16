@@ -147,7 +147,7 @@ public class InfoPageLayout {
         _ => Fourth()
       };
     } else { // Insert Wheel macro before ADSR macros
-      // Examples: many Eternal Funk programs
+      // Examples: many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
       insertionIndex = visibleContinuousMacros.IndexOf(adsrMacros["Attack"]);
     }
     Program.Macros.Insert(insertionIndex, wheelMacro);

@@ -282,6 +282,14 @@ public class FalconProgram(string path, Category category) {
     writer.Write(newContents);
   }
 
+  /// <summary>
+  ///   Returns a dictionary of macros for the standard envelope parameters
+  ///   Attack, Decay, Sustain and Release. 
+  /// </summary>
+  /// <remarks>
+  ///   Examples where there are all four:
+  ///   many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
+  /// </remarks>
   public Dictionary<string, Macro> GetAdsrMacros() {
     string[] displayNames = { "Attack",  "Decay", "Sustain", "Release"};
     var result = new Dictionary<string, Macro>();
