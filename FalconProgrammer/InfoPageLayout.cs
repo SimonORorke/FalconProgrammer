@@ -132,17 +132,24 @@ public class InfoPageLayout {
             // Exclude invisible macros
             && macro.X < RightEdge
       select macro).ToList();
-    int insertionIndex = visibleContinuousMacros.Count switch {
-      0 => 0, // First and only
-      < 4 => AtEnd(),
-      4 => IsLastMacroZeroedReverb() && NoToggleMacros()
-        // Examples:
-        // Devinity\Plucks-Leads\Pluck Sphere (reverb at end in original)
-        // Eternal Funk\Brass\Back And Stride (reverb moved to end by ZeroAndMoveMacros)
-        ? Fourth() 
-        : AtEnd(), // Example: Eternal Funk\Synths\Bell Shaka 
-      _ => Fourth()
-    };
+    int insertionIndex;
+    var adsrMacros = Program.GetAdsrMacros(); 
+    if (adsrMacros.Count != 4) {
+      insertionIndex = visibleContinuousMacros.Count switch {
+        0 => 0, // First and only
+        < 4 => AtEnd(),
+        4 => IsLastMacroZeroedReverb() && NoToggleMacros()
+          // Examples:
+          // Devinity\Plucks-Leads\Pluck Sphere (reverb at end in original)
+          // Eternal Funk\Brass\Back And Stride (reverb moved to end by ZeroAndMoveMacros)
+          ? Fourth() 
+          : AtEnd(), // Example: Eternal Funk\Synths\Bell Shaka 
+        _ => Fourth()
+      };
+    } else { // Insert Wheel macro before ADSR macros
+      // Examples: many Eternal Funk programs
+      insertionIndex = visibleContinuousMacros.IndexOf(adsrMacros["Attack"]);
+    }
     Program.Macros.Insert(insertionIndex, wheelMacro);
     Program.RefreshMacroOrder();
     MoveMacrosToStandardLayout();

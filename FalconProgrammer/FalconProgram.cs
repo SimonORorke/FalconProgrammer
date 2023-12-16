@@ -282,6 +282,18 @@ public class FalconProgram(string path, Category category) {
     writer.Write(newContents);
   }
 
+  public Dictionary<string, Macro> GetAdsrMacros() {
+    string[] displayNames = { "Attack",  "Decay", "Sustain", "Release"};
+    var result = new Dictionary<string, Macro>();
+    foreach (string displayName in displayNames) {
+      var macro = FindContinuousMacro(displayName);
+      if (macro != null) {
+        result.Add(displayName, macro);
+      }
+    }
+    return result;
+  }
+
   private List<Macro> GetContinuousMacros() {
     return (
       from macro in Macros
@@ -427,8 +439,9 @@ public class FalconProgram(string path, Category category) {
 
   public void InitialiseValuesAndMoveMacros() {
     var macrosToMove = new List<Macro>();
-    var releaseMacro = FindContinuousMacro("Release");
-    if (releaseMacro != null) {
+    var adsrMacros = GetAdsrMacros();
+    if (adsrMacros.Count == 1 
+        && adsrMacros.TryGetValue("Release", out var releaseMacro)) {
       ZeroMacro(releaseMacro);
       if (GuiScriptProcessor == null) {
         macrosToMove.Add(releaseMacro);
