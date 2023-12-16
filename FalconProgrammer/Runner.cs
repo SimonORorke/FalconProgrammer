@@ -42,6 +42,7 @@ public static class Runner {
     // batch.RollForward("Devinity", "Bass", "Bass Interia");
     // batch.RollForward(null);
     // batch.QueryMainDahdsr("Factory");
-    batch.RollForward("Organic Pads", "Light", "Crystal Caves");
+    // batch.RollForward("Organic Pads", "Light", "Crystal Caves");
+    batch.RollForward("Organic Pads");
   }
 }
