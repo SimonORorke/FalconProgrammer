@@ -440,7 +440,7 @@ public class FalconProgram(string path, Category category) {
   public void InitialiseValuesAndMoveMacros() {
     var macrosToMove = new List<Macro>();
     var adsrMacros = GetAdsrMacros();
-    if (adsrMacros.Count == 1 
+    if (adsrMacros.Count < 4 
         && adsrMacros.TryGetValue("Release", out var releaseMacro)) {
       ZeroMacro(releaseMacro);
       if (GuiScriptProcessor == null) {
