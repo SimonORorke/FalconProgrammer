@@ -13,8 +13,15 @@ public class ModulationsOwner : EntityBase {
   protected ModulationsOwner(ProgramXml programXml,
     bool mustAddNewElement = false) : base(programXml, mustAddNewElement) { }
 
+  public float Gain {
+    get => Convert.ToSingle(GetAttributeValue(nameof(Gain)));
+    set => SetAttribute(nameof(Gain), value);
+  }
+
   /// <summary>
-  ///   Modulations specifying MIDI CC numbers that modulate the macro.
+  ///   For a Macro, modulations specifying MIDI CC numbers that modulate the macro.
+  ///   For other modulation owners, modulations can also specify a MIDI CC number but
+  ///   usually specify a modulating macro. 
   /// </summary>
   /// <remarks>
   ///   For a macro (ConstantModulation), there is 0 or 1 Modulation only, except

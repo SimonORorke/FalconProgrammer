@@ -162,10 +162,10 @@ public class FalconProgram(string path, Category category) {
       : new ProgramXml(Category);
   }
 
-  private Macro? FindAttackMacro() {
+  private Macro? FindContinuousMacro(string displayName) {
     return (
       from macro in ContinuousMacros
-      where macro.DisplayName == "Attack"
+      where macro.DisplayName == displayName
       select macro).FirstOrDefault();
   }
 
@@ -225,13 +225,6 @@ public class FalconProgram(string path, Category category) {
       select scriptProcessor).Last();
   }
 
-  private Macro? FindReleaseMacro() {
-    return (
-      from macro in ContinuousMacros
-      where macro.DisplayName == "Release"
-      select macro).FirstOrDefault();
-  }
-
   private Macro? FindReverbContinuousMacro() {
     return (
       from macro in ContinuousMacros
@@ -270,8 +263,8 @@ public class FalconProgram(string path, Category category) {
 
   /// <summary>
   ///   If the InitialiseLayout batch task has just run for the "Organic Pads"
-  ///   sound bank, the chevron delimiters of the DahdsrController script CDATA will have
-  ///   been incorrectly written as their corresponding HTML substitutes.
+  ///   sound bank, the chevron delimiters of the DAHDSR Controller script CDATA will
+  ///   have been incorrectly written as their corresponding HTML substitutes.
   ///   To fix that, the batch needs to call this method after the Save for
   ///   InitialiseLayout.  
   /// </summary>
@@ -352,7 +345,7 @@ public class FalconProgram(string path, Category category) {
     switch (SoundBankName) {
       case "Fluidity":
         RemoveGuiScriptProcessor();
-        var attackMacro = FindAttackMacro();
+        var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
           MoveMacroToEnd(attackMacro);
           RefreshMacroOrder();
@@ -381,31 +374,32 @@ public class FalconProgram(string path, Category category) {
     ProgramXml.ChangeModulationSource(
       "$Program/Macro 1", "$Program/Macro 9");
     NotifyUpdate($"{PathShort}: Updated modulations by Wheel macro.");
-    // In the original program, the four main timbre parameters (Synthesis, Sample, Noise and
-    // Texture) are controlled by an XY control in the script GUI.
+    // In the original program, the four main timbre parameters (Synthesis, Sample, Noise
+    // and Texture) are controlled by an XY control in the script GUI.
     // In this customised program, to make variation of these parameters mutually
     // independent, and to take full advantage of my four main expression pedal
     // controllers, each is controlled by a separate macro.
-    // Each of Macros 1 to 4 controls the Gain property of a Layer with a DisplayName
-    // matching the macro's DisplayName.
+    // So make each of Macros 1 to 4 control the Gain property of the Layer with the
+    // DisplayName matching the macro's DisplayName. And initialise the macros to the
+    // corresponding Layer Gains.
     var layers = ProgramXml.GetLayers();
     foreach (var layer in layers) {
-      string sourceMacroName = layer.DisplayName switch {
-        "Synthesis" => "Macro 1",
-        "Sample" => "Macro 4",
-        "Noise" => "Macro 2",
-        "Texture" => "Macro 3",
-        _ => throw new NotSupportedException(
-          $"{layer.DisplayName} Layer is not supported.")
-      };
+      var sourceMacro = FindContinuousMacro(layer.DisplayName);
+      if (sourceMacro == null) {
+        throw new NotSupportedException(
+          $"{layer.DisplayName} Layer is not supported.");
+      }
+      sourceMacro.Value = layer.Gain;
       var modulation = new Modulation(ProgramXml) {
         Destination = "Gain",
         Owner = layer,
-        Source = $"$Program/{sourceMacroName}"
+        Source = $"$Program/{sourceMacro.Name}",
+        SourceMacro = sourceMacro
       };
       layer.AddModulation(modulation);
     }
-    NotifyUpdate($"{PathShort}: Added modulations to layers.");
+    NotifyUpdate(
+      $"{PathShort}: Added modulations to layers and initialised macros to layer gains.");
     // Add the ScriptProcessor that will control the DAHDSR.
     ProgramXml.AddScriptProcessor(
       "EventProcessor0",
@@ -429,7 +423,7 @@ public class FalconProgram(string path, Category category) {
 
   public void InitialiseValuesAndMoveMacros() {
     var macrosToMove = new List<Macro>();
-    var releaseMacro = FindReleaseMacro();
+    var releaseMacro = FindContinuousMacro("Release");
     if (releaseMacro != null) {
       ZeroMacro(releaseMacro);
       if (GuiScriptProcessor == null) {
@@ -680,7 +674,7 @@ public class FalconProgram(string path, Category category) {
     if (SoundBankName == "Organic Pads") {
       // The layout is predefined.
       // And there are macros that are only accessed in the
-      // DahdsrController ScriptProcessor, which would be accidentally removed if we ran
+      // DAHDSR Controller ScriptProcessor, which would be accidentally removed if we ran
       // RemoveDelayMacros, as it removes macros that don't modulate enabled effects.
       return;
     }
