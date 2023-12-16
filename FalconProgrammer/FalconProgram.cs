@@ -351,6 +351,10 @@ public class FalconProgram(string path, Category category) {
           RefreshMacroOrder();
         }
         break;
+      case "Eternal Funk":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Yellowish Mid-Green.png");
+        NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
+        break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;

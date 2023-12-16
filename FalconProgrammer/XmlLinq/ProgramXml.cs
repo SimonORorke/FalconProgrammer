@@ -279,6 +279,18 @@ public class ProgramXml(Category category) : EntityBase {
     }
   }
 
+  public void SetBackgroundImagePath(string path) {
+    var propertiesElement = Element.Element("Properties")!;
+    var backgroundImagePathAttribute = 
+      propertiesElement.Attribute("BackgroundImagePath");
+    if (backgroundImagePathAttribute != null) {
+      backgroundImagePathAttribute.Value = path;
+    } else {
+      backgroundImagePathAttribute = new XAttribute("BackgroundImagePath", path);
+      propertiesElement.AddFirst(backgroundImagePathAttribute);
+    }
+  }
+
   public void SetDescription(string text) {
     var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {

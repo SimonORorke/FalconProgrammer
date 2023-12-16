@@ -44,5 +44,7 @@ public static class Runner {
     // batch.QueryMainDahdsr("Factory");
     // batch.RollForward("Organic Pads", "Light", "Crystal Caves");
     // batch.RollForward("Organic Pads");
+    // batch.RollForward("Eternal Funk", "Guitars", "Classic Muted");
+    batch.RollForward("Eternal Funk");
   }
 }
