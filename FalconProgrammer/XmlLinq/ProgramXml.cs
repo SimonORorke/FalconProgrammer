@@ -264,9 +264,12 @@ public class ProgramXml(Category category) : EntityBase {
         outputProgramPath,
         new XmlWriterSettings {
           Indent = true,
-          IndentChars = "    ",
-          // Conserve line breaks in Description as the original \r\n.
-          NewLineHandling = NewLineHandling.None
+          IndentChars = "    "
+          // Conserves line breaks in Description as the original \r\n.
+          // But PATH on separate line in Description does not work if we are not
+          // conserving the line breaks when read.
+          // See comment in ReadRootElementFromFile.
+          // NewLineHandling = NewLineHandling.None
         });
       RootElement.WriteTo(writer);
       writer.Close();

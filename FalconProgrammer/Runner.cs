@@ -40,7 +40,7 @@ public static class Runner {
     // batch.QueryAdsrMacros(null);
     // batch.QueryDahdsrModulations(null);
     // batch.RollForward("Devinity", "Bass", "Bass Interia");
-    batch.RollForward(null);
+    // batch.RollForward(null);
     // batch.QueryMainDahdsr("Factory");
     // batch.RollForward("Organic Pads", "Light", "Crystal Caves");
     // batch.RollForward("Organic Pads");
