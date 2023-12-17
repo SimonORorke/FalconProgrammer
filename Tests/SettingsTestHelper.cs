@@ -62,34 +62,34 @@ public static class SettingsTestHelper {
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "Lo-Fi 2.5",
-      InfoPageMustUseScript = false,
+      MustUseGuiScriptProcessor = false,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "Organic Texture 2.8",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Organic Texture 2.8\BAS Biggy.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "RetroWave 2.5",
-      InfoPageMustUseScript = false,
+      MustUseGuiScriptProcessor = false,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Factory",
       Category = "VCF-20 Synths 2.5",
-      InfoPageMustUseScript = false,
+      MustUseGuiScriptProcessor = false,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Factory\Lo-Fi 2.5\BAS Gameboy Bass.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Fluidity",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Fluidity\Strings\Guitar Stream.uvip")
     });
@@ -105,35 +105,35 @@ public static class SettingsTestHelper {
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Organic Keys",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Organic Keys\Acoustic Mood\A Rhapsody.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Bass",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Bass\Warped.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Leads",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Leads\Autumn Rust.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Pads",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Pads\Lore.uvip")
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Pulsar",
       Category = "Plucks",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Pulsar\Plucks\Resonator.uvip")
     });
@@ -149,7 +149,7 @@ public static class SettingsTestHelper {
     });
     settings.ProgramCategories.Add(new Settings.ProgramCategory {
       SoundBank = "Voklm",
-      InfoPageMustUseScript = true,
+      MustUseGuiScriptProcessor = true,
       TemplatePath = Path.Combine(TemplatesFolderPath,
         @"Voklm\Synth Choirs\Breath Five.uvip")
     });

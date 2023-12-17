@@ -82,7 +82,7 @@ public class Settings {
   public class ProgramCategory {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
-    [XmlAttribute] public bool InfoPageMustUseScript { get; set; }
+    [XmlAttribute] public bool MustUseGuiScriptProcessor { get; set; }
     [XmlAttribute] public string TemplatePath { get; set; } = string.Empty;
   }
 }

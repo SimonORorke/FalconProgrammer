@@ -49,7 +49,7 @@ public class Category {
   ///     per category.
   ///   </para>
   /// </remarks>
-  public bool InfoPageMustUseScript => SettingsCategory.InfoPageMustUseScript;
+  public bool MustUseGuiScriptProcessor => SettingsCategory.MustUseGuiScriptProcessor;
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public string Path { get; }
@@ -142,7 +142,7 @@ public class Category {
       return ScriptProcessor.Create(
         SoundBankFolder.Name, templateXml.TemplateScriptProcessorElement, ProgramXml);
     } 
-    if (!InfoPageMustUseScript) {
+    if (!MustUseGuiScriptProcessor) {
       return null;
     }
     throw new InvalidOperationException(

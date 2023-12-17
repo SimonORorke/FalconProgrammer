@@ -70,12 +70,12 @@ public class FalconProgram(string path, Category category) {
   }
 
   private bool CanRemoveGuiScriptProcessor() {
-    if (Category.InfoPageMustUseScript || Macros.Count > 4) {
+    if (Category.MustUseGuiScriptProcessor || Macros.Count > 4) {
       return false;
     }
     // I've customised this script processor and it looks too hard to get rid of.
     // It should be excluded anyway because it has the setting
-    // Category.InfoPageMustUseScript true.
+    // Category.MustUseGuiScriptProcessor true.
     return SoundBankName != "Organic Keys";
   }
 
@@ -157,7 +157,7 @@ public class FalconProgram(string path, Category category) {
   }
 
   private ProgramXml CreateProgramXml() {
-    return Category.InfoPageMustUseScript
+    return Category.MustUseGuiScriptProcessor
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
   }
@@ -861,10 +861,10 @@ public class FalconProgram(string path, Category category) {
     } else if (Category.TemplateScriptProcessor != null) {
       // The CCs are specified Modulations owned by the GUI ScriptProcessor
       // and can be copied from a template ScriptProcessor.
-      // This applies to all programs in categories for which InfoPageMustUseScript
+      // This applies to all programs in categories for which MustUseGuiScriptProcessor
       // is set to true in the settings file.
       // In some categories, we have or are going to remove the Info page
-      // ScriptProcessor, so InfoPageMustUseScript has had to be changed to false for
+      // ScriptProcessor, so MustUseGuiScriptProcessor has had to be changed to false for
       // the Category, yet we still need to use the template if it is available.
       GuiScriptProcessor.UpdateModulationsFromTemplate(
         Category.TemplateScriptProcessor.Modulations);

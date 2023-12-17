@@ -159,7 +159,7 @@ public class Batch {
     string categoryName) {
     Category = CreateCategory(categoryName);
     if (Task is ConfigTask.ReplaceModWheelWithMacro
-        && Category.InfoPageMustUseScript) {
+        && Category.MustUseGuiScriptProcessor) {
       // Console.WriteLine(
       //   $"Cannot {Task} for category " +
       //   $"'{SoundBankFolder.Name}\\{categoryName}' " +
