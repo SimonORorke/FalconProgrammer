@@ -425,11 +425,22 @@ public class FalconProgram(string path, Category category) {
     NotifyUpdate(
       $"{PathShort}: Added modulations to layers and initialised macros to layer gains.");
     // Add the ScriptProcessor that will control the DAHDSR.
-    ProgramXml.AddScriptProcessor(
-      "EventProcessor0",
+    var scriptProcessor = ProgramXml.AddScriptProcessor(
+      "EventProcessor0", "Organic Pads",
       "./../../../Scripts/DAHDSR Controller.lua",
       "<![CDATA[require 'DahdsrController/DahdsrController']]>");
     NotifyUpdate($"{PathShort}: Added ScriptProcessor.");
+    // Add the ScriptProcessor modulations.
+    var adsrMacros = GetAdsrMacros().Values;
+    foreach (var adsrMacro in adsrMacros) {
+      scriptProcessor.AddModulation(new Modulation(ProgramXml) {
+        Destination = adsrMacro.DisplayName,
+        Owner = scriptProcessor,
+        Source = $"$Program/{adsrMacro.Name}",
+        SourceMacro = adsrMacro
+      });
+    }
+    NotifyUpdate($"{PathShort}: Added ScriptProcessor Modulations.");
     // Initialise the DAHDSR attack and release times to subvert the original intention 
     // for the sound to be a pad!
     var mainDahdsr = ProgramXml.FindMainDahdsr();
@@ -696,13 +707,6 @@ public class FalconProgram(string path, Category category) {
 
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
-    if (SoundBankName == "Organic Pads") {
-      // The layout is predefined.
-      // And there are macros that are only accessed in the
-      // DAHDSR Controller ScriptProcessor, which would be accidentally removed if we ran
-      // RemoveDelayMacros, as it removes macros that don't modulate enabled effects.
-      return;
-    }
     if (RemoveDelayMacros()) {
       if (GuiScriptProcessor != null) {
         RemoveGuiScriptProcessor();

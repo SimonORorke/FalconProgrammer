@@ -49,8 +49,8 @@ public class ProgramXml(Category category) : EntityBase {
   public XElement TemplateModulationElement =>
     _templateModulationElement ??= GetTemplateModulationElement();
 
-  public void AddScriptProcessor(
-    string name, string scriptPath, string script) {
+  public ScriptProcessor AddScriptProcessor(
+    string name, string soundBankName, string scriptPath, string script) {
     var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
     if (eventProcessorsElement == null) {
       eventProcessorsElement = new XElement("EventProcessors"); 
@@ -72,6 +72,7 @@ public class ProgramXml(Category category) : EntityBase {
     scriptProcessorElement.Add(scriptElement);
     scriptProcessorElement.Add(new XElement("ScriptData"));
     eventProcessorsElement.Add(scriptProcessorElement);
+    return ScriptProcessor.Create(soundBankName, scriptProcessorElement, this);
   }
 
   public void ChangeModulationSource(
