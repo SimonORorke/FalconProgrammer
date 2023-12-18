@@ -12,13 +12,16 @@ public class Effect(XElement element, ProgramXml programXml)
 
   private bool GetIsDelay() {
     // "Buzz" is Analog Tape Delay!
-    return EffectType is "Buzz" or "DualDelay" or "DualDelayX" or "FatDelay" or "FxDelay"
-      or "PingPongDelay" or "SimpleDelay" or "StereoDelay" or "TapeEcho";
+    return EffectType is "Buzz" or "DiffuseDelay" or "DualDelay" or "DualDelayX" 
+      or "FatDelay" or "FxDelay" or "PingPongDelay" or "SimpleDelay" or "StereoDelay" 
+      or "TapeEcho" or "TrackDelay" or "VelvetDelay";
   }
 
   private bool GetIsReverb() {
+    // SampledReverb is IReverb.
+    // DelayedReverb is PreDelay Verb
     return EffectType is "DelayedReverb" or "Diffusion" or "FilteredReverb" 
-      or "GateReverb" or "IReverb" or "PlainReverb" or "PreDelayVerb" or "SampledReverb" 
+      or "GateReverb" or "PlainReverb" or "SampledReverb" 
       or "SimpleReverb" or "SparkVerb" or "TapeEcho";
   }
 }
