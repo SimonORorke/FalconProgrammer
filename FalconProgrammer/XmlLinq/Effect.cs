@@ -17,7 +17,8 @@ public class Effect(XElement element, ProgramXml programXml)
   }
 
   private bool GetIsReverb() {
-    return EffectType is "DelayedReverb" or "FilteredReverb" or "PlainReverb"
-      or "SampledReverb" or "SharpVerb" or "TapeEcho";
+    return EffectType is "DelayedReverb" or "Diffusion" or "FilteredReverb" 
+      or "GateReverb" or "IReverb" or "PlainReverb" or "PreDelayVerb" or "SampledReverb" 
+      or "SimpleReverb" or "SparkVerb" or "TapeEcho";
   }
 }
