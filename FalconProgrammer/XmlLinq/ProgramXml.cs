@@ -288,7 +288,12 @@ public class ProgramXml(Category category) : EntityBase {
       backgroundImagePathAttribute.Value = path;
     } else {
       backgroundImagePathAttribute = new XAttribute("BackgroundImagePath", path);
-      propertiesElement.AddFirst(backgroundImagePathAttribute);
+      // Insert BackgroundImagePath as the first attribute of the Properties element.
+      var attributes = propertiesElement.Attributes().ToList();
+      attributes.Insert(0, backgroundImagePathAttribute);
+      propertiesElement.ReplaceAttributes(attributes);      
+      // AddFirst does not work for adding attributes!
+      // propertiesElement.AddFirst(backgroundImagePathAttribute);
     }
   }
 

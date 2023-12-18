@@ -388,6 +388,8 @@ public class FalconProgram(string path, Category category) {
   }
 
   private void InitialiseOrganicPadsProgram() {
+    ProgramXml.SetBackgroundImagePath("./../../../Images/Bluish Teal.png");
+    NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
     RemoveGuiScriptProcessor();
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
