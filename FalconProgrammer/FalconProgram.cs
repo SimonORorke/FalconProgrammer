@@ -426,7 +426,7 @@ public class FalconProgram(string path, Category category) {
     }
     NotifyUpdate(
       $"{PathShort}: Added modulations to layers and initialised macros to layer gains.");
-    // Add the ScriptProcessor that will control the DAHDSR.
+    // Add the DAHDSR Controller ScriptProcessor.
     var scriptProcessor = ProgramXml.AddScriptProcessor(
       "EventProcessor0", "Organic Pads",
       "./../../../Scripts/DAHDSR Controller.lua",
@@ -445,12 +445,16 @@ public class FalconProgram(string path, Category category) {
     NotifyUpdate($"{PathShort}: Added ScriptProcessor Modulations.");
     // Initialise the DAHDSR attack and release times to subvert the original intention 
     // for the sound to be a pad!
+    // A problem still to solve is that reducing the attack time to zero while playing
+    // can cause low volume and then silence. See the comment at the top of the
+    // DahdsrController script for details.
+    // So, for safety, that's another reason to initialise the attack time to be fast.
     var mainDahdsr = ProgramXml.FindMainDahdsr();
     if (mainDahdsr == null) {
       throw new InvalidOperationException(
         $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
     }
-    mainDahdsr.AttackTime = 0.04f;
+    mainDahdsr.AttackTime = 0.02f;
     mainDahdsr.ReleaseTime = 0.3f;
     NotifyUpdate(
       $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " +
