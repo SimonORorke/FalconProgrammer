@@ -380,7 +380,7 @@ public class FalconProgram(string path, Category category) {
         break;
       case "Eternal Funk":
         ProgramXml.SetBackgroundImagePath("./../../../Images/Yellowish Mid-Green.png");
-        NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
@@ -388,9 +388,13 @@ public class FalconProgram(string path, Category category) {
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
         break;
+      case "Savage":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Heath.png");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+        break;
       case "Titanium":
         ProgramXml.SetBackgroundImagePath("./../../../Images/Dull Purple.png");
-        NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       default:
         return;
