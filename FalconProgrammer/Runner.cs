@@ -47,5 +47,6 @@ public static class Runner {
     // batch.RollForward("Eternal Funk", "Guitars", "Classic Muted");
     // batch.RollForward("Eternal Funk");
     // batch.RollForward("Ether Fields");
+    batch.RollForward("Titanium");
   }
 }

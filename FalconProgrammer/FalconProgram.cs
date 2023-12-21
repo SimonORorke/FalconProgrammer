@@ -388,6 +388,10 @@ public class FalconProgram(string path, Category category) {
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
         break;
+      case "Titanium":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Dull Purple.png");
+        NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
+        break;
       default:
         return;
     }
