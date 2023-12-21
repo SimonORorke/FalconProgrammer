@@ -362,9 +362,16 @@ public class FalconProgram(string path, Category category) {
   }
 
   public void InitialiseLayout() {
+    // There can be a delay loading programs with GUI script processors, for example
+    // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
+    // processor, if there is one, unless there is a need to keep it.
+    // This saves having to decide later whether to remove the GUI script processor,
+    // such as to add a wheel macro or remove a delay macro.
+    if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
+      RemoveGuiScriptProcessor();
+    }
     switch (SoundBankName) {
       case "Fluidity":
-        RemoveGuiScriptProcessor();
         var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
           MoveMacroToEnd(attackMacro);
@@ -390,7 +397,6 @@ public class FalconProgram(string path, Category category) {
   private void InitialiseOrganicPadsProgram() {
     ProgramXml.SetBackgroundImagePath("./../../../Images/Bluish Teal.png");
     NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
-    RemoveGuiScriptProcessor();
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
     NotifyUpdate($"{PathShort}: Copied macros from template.");
@@ -548,7 +554,7 @@ public class FalconProgram(string path, Category category) {
     }
   }
 
-  private void NotifyUpdate(string message) {
+  public void NotifyUpdate(string message) {
     Console.WriteLine(message);
     HasBeenUpdated = true;
   }
@@ -714,9 +720,6 @@ public class FalconProgram(string path, Category category) {
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
     if (RemoveDelayMacros()) {
-      if (GuiScriptProcessor != null) {
-        RemoveGuiScriptProcessor();
-      }
       RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
       ReUpdateMacroCcs();
@@ -780,7 +783,7 @@ public class FalconProgram(string path, Category category) {
         macro.RemoveModulation(forMacroModulation);
       }
     }
-    Console.WriteLine($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
+    NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveMacrosToStandardLayout();
   }
 
@@ -792,9 +795,6 @@ public class FalconProgram(string path, Category category) {
   public void ReplaceModWheelWithMacro() {
     if (!CanReplaceModWheelWithMacro()) {
       return;
-    }
-    if (GuiScriptProcessor != null) {
-      RemoveGuiScriptProcessor();
     }
     InfoPageLayout.ReplaceModWheelWithMacro();
     ReUpdateMacroCcs();
@@ -873,15 +873,8 @@ public class FalconProgram(string path, Category category) {
       // and can be copied from a template ScriptProcessor.
       // This applies to all programs in categories for which MustUseGuiScriptProcessor
       // is set to true in the settings file.
-      // In some categories, we have or are going to remove the Info page
-      // ScriptProcessor, so MustUseGuiScriptProcessor has had to be changed to false for
-      // the Category, yet we still need to use the template if it is available.
       GuiScriptProcessor.UpdateModulationsFromTemplate(
         Category.TemplateScriptProcessor.Modulations);
-    } else {
-      // The CCs are specified in the GUI ScriptProcessor but there's no template
-      // ScriptProcessor. 
-      UpdateMacroCcsOwnedByScriptProcessor();
     }
     NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
@@ -941,44 +934,6 @@ public class FalconProgram(string path, Category category) {
           modulation.Ratio = 1;
         }
       }
-    }
-  }
-
-  /// <summary>
-  ///   Where MIDI CC assignments to macros shown on the Info page are specified in a
-  ///   ScriptProcessor,
-  ///   updates the macro CCs so that the macros are successively assigned standard CCs
-  ///   in the order of their locations on the Info page (top to bottom, left to right or
-  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
-  ///   There are different series of CCs for continuous and toggle macros.
-  ///   All applicable programs are in Factory, identified by "EventProcessor9" being the
-  ///   GuiScriptProcessor: see <see cref="FindGuiScriptProcessor" />.
-  ///   Examples:
-  ///   Factory\Bass-Sub\Balarbas 2.0
-  ///   Factory\Keys\Smooth E-piano 2.1.
-  /// </summary>
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  private void UpdateMacroCcsOwnedByScriptProcessor() {
-    var sortedByLocation =
-      GetMacrosSortedByLocation(MacroCcLocationOrder);
-    int macroNo = 0;
-    for (int i = GuiScriptProcessor!.Modulations.Count - 1; i >= 0; i--) {
-      var modulation = GuiScriptProcessor!.Modulations[i];
-      if (modulation.ModulatesMacro) {
-        GuiScriptProcessor!.RemoveModulation(modulation);
-      }
-    }
-    // Make the first call of GetNextCcNo for a continuous macro return 31.
-    CurrentContinuousCcNo = 0;
-    // Make the first call of GetNextCcNo for a toggle macro return 112.
-    CurrentToggleCcNo = 0;
-    foreach (var macro in sortedByLocation) {
-      macroNo++;
-      GuiScriptProcessor.AddModulation(
-        new Modulation(ProgramXml) {
-          Destination = $"Macro{macroNo}",
-          CcNo = GetNextCcNo(macro, false)
-        });
     }
   }
 

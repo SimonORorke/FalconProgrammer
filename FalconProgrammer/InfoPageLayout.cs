@@ -100,7 +100,8 @@ public class InfoPageLayout {
         y += StandardRowHeight;
       }
     }
-    Console.WriteLine($"{Program.PathShort}: Moved macros to standard layout.");
+    Program.NotifyUpdate(
+      $"{Program.PathShort}: Moved macros to standard layout.");
   }
 
   /// <summary>
