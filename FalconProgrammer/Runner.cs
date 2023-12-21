@@ -21,7 +21,6 @@ public static class Runner {
     // batch.RollForward("Fluidity", "Strings", "Guitar Stream");
     // batch.ReplaceModWheelWithMacro("Fluidity", "Electronic", "Fluid Sweeper");
     // batch.RollForward("Fluidity", "Electronic", "Fluid Sweeper");
-    // batch.RollForward("Fluidity");
     // batch.RollForward("Ether Fields");
     // batch.RollForward("Spectre");
     // batch.RollForward("Spectre", "Polysynth", "PL Cream");
@@ -34,7 +33,6 @@ public static class Runner {
     // batch.RollForward("Organic Keys");
     // batch.RollForward("Organic Pads");
     // batch.RollForward("Modular Noise", "Bass", "Berghain");
-    // batch.RollForward("Modular Noise");
     // batch.PrependPathLineToDescription("Organic Pads", "Light", "Crystal Caves");
     // batch.CountMacros(null);
     // batch.QueryAdsrMacros(null);
@@ -49,5 +47,9 @@ public static class Runner {
     // batch.RollForward("Ether Fields");
     // batch.RollForward("Titanium");
     // batch.RollForward("Savage");
+    // batch.RollForward("Hypnotic Drive");
+    // batch.RollForward("Modular Noise");
+    // batch.RollForward("Inner Dimensions");
+    // batch.RollForward("Fluidity");
   }
 }

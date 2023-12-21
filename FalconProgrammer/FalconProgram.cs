@@ -371,19 +371,33 @@ public class FalconProgram(string path, Category category) {
       RemoveGuiScriptProcessor();
     }
     switch (SoundBankName) {
-      case "Fluidity":
-        var attackMacro = FindContinuousMacro("Attack");
-        if (attackMacro != null) {
-          MoveMacroToEnd(attackMacro);
-          RefreshMacroOrder();
-        }
-        break;
       case "Eternal Funk":
         ProgramXml.SetBackgroundImagePath("./../../../Images/Yellowish Mid-Green.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
+        break;
+      case "Fluidity":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Midnight Blue.png");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+        var attackMacro = FindContinuousMacro("Attack");
+        if (attackMacro != null) {
+          MoveMacroToEnd(attackMacro);
+          RefreshMacroOrder();
+        }
+        break;
+      case "Hypnotic Drive":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Dark Goldenrod.png");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+        break;
+      case "Inner Dimensions":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Dark Red.png");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+        break;
+      case "Modular Noise":
+        ProgramXml.SetBackgroundImagePath("./../../../Images/Dark Forest.png");
+        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
