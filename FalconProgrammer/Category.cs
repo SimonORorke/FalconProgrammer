@@ -113,7 +113,7 @@ public class Category {
   }
   
   private FileInfo GetTemplateProgramFile() {
-    string templatesFolderPath = Batch.GetProgramTemplatesFolder().FullName; 
+    string templatesFolderPath = Batch.GetTemplateProgramsFolder().FullName; 
     string categoryTemplateFolderPath = System.IO.Path.Combine(
       templatesFolderPath, SoundBankFolder.Name, Name);
     var folder = new DirectoryInfo(categoryTemplateFolderPath);

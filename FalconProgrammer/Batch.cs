@@ -233,29 +233,30 @@ public class Batch {
     return result;
   }
 
-  public static DirectoryInfo GetProgramTemplatesFolder() {
-    if (string.IsNullOrEmpty(Settings.ProgramTemplatesFolder.Path)) {
-      throw new ApplicationException(
-        "The program templates folder is not specified in settings file " +
-        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-        "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
-    }
-    var result = new DirectoryInfo(Settings.ProgramTemplatesFolder.Path);
-    if (!result.Exists) {
-      throw new ApplicationException(
-        $"Cannot find program templates folder '{result.FullName}'.");
-    }
-    return result;
-  }
-
   private static DirectoryInfo GetSoundBankFolder(string soundBankName) {
     var programsFolder = GetProgramsFolder();
     var result = new DirectoryInfo(
       Path.Combine(
         programsFolder.FullName, soundBankName));
     if (!result.Exists) {
-      throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
+      throw new ApplicationException(
+        $"Cannot find sound bank folder '{result.FullName}'.");
+    }
+    return result;
+  }
+
+  public static DirectoryInfo GetTemplateProgramsFolder() {
+    if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
+      throw new ApplicationException(
+        "The template programs folder is not specified in settings file " +
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+        "change the settings folder path in " +
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+    }
+    var result = new DirectoryInfo(Settings.TemplateProgramsFolder.Path);
+    if (!result.Exists) {
+      throw new ApplicationException(
+        $"Cannot find template programs folder '{result.FullName}'.");
     }
     return result;
   }

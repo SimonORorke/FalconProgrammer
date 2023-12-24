@@ -10,7 +10,7 @@ public class Settings {
 
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
-  [XmlElement] public Folder ProgramTemplatesFolder { get; set; } = new Folder();
+  [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Template DefaultTemplate { get; set; } = new Template();
 
   [XmlArray("MustUseGuiScriptProcessor")]
