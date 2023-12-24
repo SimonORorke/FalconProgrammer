@@ -117,8 +117,8 @@ public class CategoryTests {
     const string categoryName = "Bass";
     var settingsCategory = settings.GetProgramCategory(
       soundBankFolder.Name, categoryName);
-    settingsCategory.TemplatePath =
-      settingsCategory.TemplatePath.Replace("Warped", "DoesNotExist");
+    settingsCategory.Template =
+      settingsCategory.Template.Replace("Warped", "DoesNotExist");
     var category = new Category(soundBankFolder, categoryName, settings);
     Assert.Throws<ApplicationException>(() => category.Initialise());
   }

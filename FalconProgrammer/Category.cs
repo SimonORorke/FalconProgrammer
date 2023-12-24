@@ -112,15 +112,17 @@ public class Category {
   }
   
   private FileInfo GetTemplateProgramFile() {
-    if (string.IsNullOrEmpty(SettingsCategory.TemplatePath)) {
+    if (string.IsNullOrEmpty(SettingsCategory.Template)) {
       throw new InvalidOperationException(
-        $"Category {Path}: A default TemplatePath must be specified the " + 
+        $"Category {Path}: A default Template must be specified the " + 
         "Settings file, to specify TemplateScriptProcessor.");
     }
-    var result = new FileInfo(SettingsCategory.TemplatePath);
+    string templateProgramPath = System.IO.Path.Combine(
+      Batch.GetProgramTemplatesFolder().FullName, SettingsCategory.Template);
+    var result = new FileInfo(templateProgramPath);
     if (!result.Exists) {
       throw new InvalidOperationException(
-        $"Category {Path}: Cannot find template file '{SettingsCategory.TemplatePath}'.");
+        $"Category {Path}: Cannot find template file '{SettingsCategory.Template}'.");
     }
     return result;
   }

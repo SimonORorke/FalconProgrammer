@@ -9,7 +9,7 @@ public class Batch {
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
-  private Settings Settings { get; set; } = null!;
+  private static Settings Settings { get; set; } = null!;
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
@@ -201,7 +201,23 @@ public class Batch {
     return result;
   }
 
-  private DirectoryInfo GetProgramsFolder() {
+  public static DirectoryInfo GetOriginalProgramsFolder() {
+    if (string.IsNullOrEmpty(Settings.OriginalProgramsFolder.Path)) {
+      throw new ApplicationException(
+        "The original programs folder is not specified in settings file " +
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+        "change the settings folder path in " +
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+    }
+    var result = new DirectoryInfo(Settings.OriginalProgramsFolder.Path);
+    if (!result.Exists) {
+      throw new ApplicationException(
+        $"Cannot find original programs folder '{result.FullName}'.");
+    }
+    return result;
+  }
+
+  private static DirectoryInfo GetProgramsFolder() {
     if (string.IsNullOrEmpty(Settings.ProgramsFolder.Path)) {
       throw new ApplicationException(
         "The programs folder is not specified in settings file " +
@@ -211,12 +227,29 @@ public class Batch {
     }
     var result = new DirectoryInfo(Settings.ProgramsFolder.Path);
     if (!result.Exists) {
-      throw new ApplicationException($"Cannot find folder '{result.FullName}'.");
+      throw new ApplicationException(
+        $"Cannot find programs folder '{result.FullName}'.");
     }
     return result;
   }
 
-  private DirectoryInfo GetSoundBankFolder(string soundBankName) {
+  public static DirectoryInfo GetProgramTemplatesFolder() {
+    if (string.IsNullOrEmpty(Settings.ProgramTemplatesFolder.Path)) {
+      throw new ApplicationException(
+        "The program templates folder is not specified in settings file " +
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+        "change the settings folder path in " +
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+    }
+    var result = new DirectoryInfo(Settings.ProgramTemplatesFolder.Path);
+    if (!result.Exists) {
+      throw new ApplicationException(
+        $"Cannot find program templates folder '{result.FullName}'.");
+    }
+    return result;
+  }
+
+  private static DirectoryInfo GetSoundBankFolder(string soundBankName) {
     var programsFolder = GetProgramsFolder();
     var result = new DirectoryInfo(
       Path.Combine(
@@ -272,7 +305,7 @@ public class Batch {
   [PublicAPI]
   public void QueryDelayTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    EffectTypes = new List<string>();
+    EffectTypes = [];
     Task = ConfigTask.QueryDelayTypes;
     Console.WriteLine("Delay Types:");
     ConfigurePrograms(soundBankName, categoryName, programName);

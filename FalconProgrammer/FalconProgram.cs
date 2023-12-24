@@ -830,8 +830,9 @@ public class FalconProgram(string path, Category category) {
 
   public void RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
-      System.IO.Path.GetDirectoryName(Path)!.Replace(
-        "Programs", "Programs ORIGINAL") + " ORIGINAL",
+      Batch.GetOriginalProgramsFolder().FullName,
+      SoundBankName,
+      Category.Name,
       System.IO.Path.GetFileName(Path));
     if (!File.Exists(originalPath)) {
       throw new ApplicationException(

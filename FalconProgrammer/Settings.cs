@@ -8,23 +8,13 @@ public class Settings {
   [PublicAPI] public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
-  // ReSharper disable once ConvertConstructorToMemberInitializers
-  public Settings() {
-    // I'm sure whether converting the constructor to member initializers will work with
-    // Linq for XML.  Can check this later. 
-    ProgramsFolder = new Folder();
-    ProgramCategories = new List<ProgramCategory>();
-  }
-
-  [XmlElement] public Folder ProgramsFolder { get; set; }
+  [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
+  [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
+  [XmlElement] public Folder ProgramTemplatesFolder { get; set; } = new Folder();
 
   [XmlArray("ProgramCategories")]
   [XmlArrayItem(nameof(ProgramCategory))]
-  public List<ProgramCategory> ProgramCategories { get; set; }
-  // In test coverage, this counts as two commands, one of which is not covered.
-  // So we initialise the list in the constructor.
-  // public List<ProgramTemplate> ProgramTemplates { get; set; } =
-  //   new List<ProgramTemplate>();
+  public List<ProgramCategory> ProgramCategories { get; set; } = [];
 
   [PublicAPI] [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
@@ -51,11 +41,11 @@ public class Settings {
   }
 
   public static Settings Read(
-    string settingsFolderPath = DefaultSettingsFolderPath,
+    string defaultSettingsFolderPath = DefaultSettingsFolderPath,
     string applicationName = SettingsFolderLocation.DefaultApplicationName) {
     var settingsFolderLocation = SettingsFolderLocation.Read(applicationName);
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
-      settingsFolderLocation.Path = settingsFolderPath;
+      settingsFolderLocation.Path = defaultSettingsFolderPath;
       settingsFolderLocation.Write();
     }
     var settingsFile = GetSettingsFile(settingsFolderLocation.Path);
@@ -83,6 +73,6 @@ public class Settings {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
     [XmlAttribute] public bool MustUseGuiScriptProcessor { get; set; }
-    [XmlAttribute] public string TemplatePath { get; set; } = string.Empty;
+    [XmlAttribute] public string Template { get; set; } = string.Empty;
   }
 }
