@@ -118,14 +118,17 @@ public class Category {
       templatesFolderPath, SoundBankFolder.Name, Name);
     var folder = new DirectoryInfo(categoryTemplateFolderPath);
     if (!folder.Exists) {
+      folder = null;
       string soundBankTemplateFolderPath = System.IO.Path.Combine(
         templatesFolderPath, SoundBankFolder.Name);
       var soundBankTemplateFolder = new DirectoryInfo(soundBankTemplateFolderPath);
-      folder = soundBankTemplateFolder.Exists 
-        ? (
-          from subFolder in soundBankTemplateFolder.EnumerateDirectories()
-          select subFolder).FirstOrDefault()
-        : null;
+      if (soundBankTemplateFolder.Exists) {
+        var subFolders = 
+          soundBankTemplateFolder.EnumerateDirectories().ToList();
+        if (subFolders.Count == 1) {
+          folder = subFolders[0];
+        }
+      }
     }
     if (folder != null) {
       var templateFile = (
