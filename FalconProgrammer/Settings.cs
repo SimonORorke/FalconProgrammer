@@ -8,13 +8,14 @@ public class Settings {
   [PublicAPI] public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
-  [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
+  [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramTemplatesFolder { get; set; } = new Folder();
+  [XmlElement] public Template DefaultTemplate { get; set; } = new Template();
 
-  [XmlArray("ProgramCategories")]
+  [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(ProgramCategory))]
-  public List<ProgramCategory> ProgramCategories { get; set; } = [];
+  public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
   [PublicAPI] [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
@@ -22,21 +23,20 @@ public class Settings {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
   
-  public ProgramCategory GetProgramCategory(
+  public bool MustUseGuiScriptProcessor(
     string soundBankFolderName, string categoryName) {
-    var result = ((
-      from programCategory in ProgramCategories
+    bool result = (
+      from programCategory in MustUseGuiScriptProcessorCategories
       where programCategory.SoundBank == soundBankFolderName &&
             programCategory.Category == categoryName
-      select programCategory).FirstOrDefault() ?? (
-      from programCategory in ProgramCategories
-      where programCategory.SoundBank == soundBankFolderName &&
-            programCategory.Category == string.Empty
-      select programCategory).FirstOrDefault()) ?? (
-      from programCategory in ProgramCategories
-      where programCategory.SoundBank == string.Empty &&
-            programCategory.Category == string.Empty
-      select programCategory).First();
+      select programCategory).Any();
+    if (!result) {
+      result = (
+        from programCategory in MustUseGuiScriptProcessorCategories
+        where programCategory.SoundBank == soundBankFolderName &&
+              programCategory.Category == string.Empty
+        select programCategory).Any();
+    }
     return result;
   }
 
@@ -72,7 +72,9 @@ public class Settings {
   public class ProgramCategory {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
-    [XmlAttribute] public bool MustUseGuiScriptProcessor { get; set; }
-    [XmlAttribute] public string Template { get; set; } = string.Empty;
+  }
+
+  public class Template {
+    [XmlAttribute] public string SubPath { get; set; } = string.Empty;
   }
 }

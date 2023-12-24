@@ -49,13 +49,14 @@ public class Category {
   ///     per category.
   ///   </para>
   /// </remarks>
-  public bool MustUseGuiScriptProcessor => SettingsCategory.MustUseGuiScriptProcessor;
+  public bool MustUseGuiScriptProcessor => 
+    Settings.MustUseGuiScriptProcessor(SoundBankFolder.Name, Name);
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public string Path { get; }
   public ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
-  private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
+  // private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
   [PublicAPI] public string TemplateCategoryName => TemplateProgramFile.Directory!.Name;
 
@@ -112,19 +113,41 @@ public class Category {
   }
   
   private FileInfo GetTemplateProgramFile() {
-    if (string.IsNullOrEmpty(SettingsCategory.Template)) {
+    string templatesFolderPath = Batch.GetProgramTemplatesFolder().FullName; 
+    string categoryTemplateFolderPath = System.IO.Path.Combine(
+      templatesFolderPath, SoundBankFolder.Name, Name);
+    var folder = new DirectoryInfo(categoryTemplateFolderPath);
+    if (!folder.Exists) {
+      string soundBankTemplateFolderPath = System.IO.Path.Combine(
+        templatesFolderPath, SoundBankFolder.Name);
+      var soundBankTemplateFolder = new DirectoryInfo(soundBankTemplateFolderPath);
+      folder = soundBankTemplateFolder.Exists 
+        ? (
+          from subFolder in soundBankTemplateFolder.EnumerateDirectories()
+          select subFolder).FirstOrDefault()
+        : null;
+    }
+    if (folder != null) {
+      var templateFile = (
+        from programFile in folder.EnumerateFiles("*.uvip")
+        select programFile).FirstOrDefault();
+      if (templateFile != null) {
+        return templateFile;
+      }
+    }
+    if (string.IsNullOrEmpty(Settings.DefaultTemplate.SubPath)) {
       throw new InvalidOperationException(
         $"Category {Path}: A default Template must be specified the " + 
         "Settings file, to specify TemplateScriptProcessor.");
     }
-    string templateProgramPath = System.IO.Path.Combine(
-      Batch.GetProgramTemplatesFolder().FullName, SettingsCategory.Template);
-    var result = new FileInfo(templateProgramPath);
-    if (!result.Exists) {
+    string defaultTemplatePath = System.IO.Path.Combine(
+      templatesFolderPath, Settings.DefaultTemplate.SubPath);
+    var defaultTemplateFile = new FileInfo(defaultTemplatePath);
+    if (!defaultTemplateFile.Exists) {
       throw new InvalidOperationException(
-        $"Category {Path}: Cannot find template file '{SettingsCategory.Template}'.");
+        $"Category {Path}: Cannot find default template file '{defaultTemplatePath}'.");
     }
-    return result;
+    return defaultTemplateFile;
   }
 
   /// <summary>
@@ -153,7 +176,7 @@ public class Category {
 
   public void Initialise() {
     Folder = GetFolder(Name);
-    SettingsCategory = Settings.GetProgramCategory(SoundBankFolder.Name, Name);
+    // SettingsCategory = Settings.MustUseGuiScriptProcessor(SoundBankFolder.Name, Name);
     TemplateProgramFile = GetTemplateProgramFile();
     TemplateScriptProcessor = GetTemplateScriptProcessor();
   }
