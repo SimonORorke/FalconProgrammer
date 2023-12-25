@@ -4,12 +4,13 @@ namespace FalconProgrammer;
 
 public class Batch {
   public const string ProgramExtension = ".uvip";
+  private static Settings? _settings;
   private Category Category { get; set; } = null!;
   private List<string> EffectTypes { get; set; } = null!;
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
-  private static Settings Settings { get; set; } = null!;
+  private static Settings Settings => _settings ??= Settings.Read();
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
@@ -62,11 +63,11 @@ public class Batch {
   /// </param>
   private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    Settings = Settings.Read();
-    if (soundBankName != null) {
+    // Settings = Settings.Read();
+    if (!string.IsNullOrEmpty(soundBankName)) {
       SoundBankFolder = GetSoundBankFolder(soundBankName);
-      if (categoryName != null) {
-        if (programName != null) {
+      if (!string.IsNullOrEmpty(categoryName)) {
+        if (!string.IsNullOrEmpty(programName)) {
           Category = CreateCategory(categoryName);
           string programPath = Category.GetProgramFile(programName).FullName;
           Program = new FalconProgram(programPath, Category);
@@ -190,7 +191,8 @@ public class Batch {
   ///   Otherwise ignored.
   /// </param>
   [PublicAPI]
-  public void CountMacros(string? soundBankName, string? categoryName = null, string? programName = null) {
+  public void CountMacros(string? soundBankName, string? categoryName = null,
+    string? programName = null) {
     Task = ConfigTask.CountMacros;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
@@ -198,6 +200,22 @@ public class Batch {
   private Category CreateCategory(string categoryName) {
     var result = new Category(SoundBankFolder, categoryName, Settings);
     result.Initialise();
+    return result;
+  }
+
+  public static DirectoryInfo GetBatchFolder() {
+    if (string.IsNullOrEmpty(Settings.BatchFolder.Path)) {
+      throw new ApplicationException(
+        "The batch folder is not specified in settings file " +
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+        "change the settings folder path in " +
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+    }
+    var result = new DirectoryInfo(Settings.BatchFolder.Path);
+    if (!result.Exists) {
+      throw new ApplicationException(
+        $"Cannot find batch folder '{result.FullName}'.");
+    }
     return result;
   }
 
@@ -267,7 +285,7 @@ public class Batch {
     Task = ConfigTask.InitialiseLayout;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
-  
+
   [PublicAPI]
   public void InitialiseValuesAndMoveMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
@@ -430,6 +448,29 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.UpdateMacroCcs;
     ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  public void RunScript(string batchScriptPath) {
+    // Settings = Settings.Read();
+    var batchScript = BatchScript.Read(batchScriptPath);
+    foreach (var batchScriptTask in batchScript.Tasks) {
+      try {
+        Task = (ConfigTask)Enum.Parse(typeof(ConfigTask), batchScriptTask.Name);
+      } catch (ArgumentException ex) {
+        throw new ApplicationException(
+          $"Reading '{batchScript.BatchScriptPath}', " +
+          $"'{batchScriptTask.Name}' is not a valid task name.", ex);
+      }
+      Console.WriteLine(
+        $"Task = {batchScriptTask.Name}, SoundBank = '{batchScriptTask.SoundBank}', " +
+        $"Category = '{batchScriptTask.Category}', " + 
+        $"Program = '{batchScriptTask.Program}'");
+      foreach (var parameter in batchScriptTask.Parameters) {
+        Console.WriteLine($"    {parameter.Name} = {parameter.Value}");
+      }
+      ConfigurePrograms(
+        batchScriptTask.SoundBank, batchScriptTask.Category, batchScriptTask.Program);
+    }
   }
 
   private enum ConfigTask {

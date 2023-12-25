@@ -6,7 +6,11 @@ namespace FalconProgrammer;
 internal class Program {
   private static void Main(string[] args) {
     try {
-      Runner.Run();
+      if (args.Length > 0) {
+        new Batch().RunScript(args[0]);
+      } else {
+        Runner.Run();
+      }
     } catch (ApplicationException e) {
       Console.Error.WriteLine("===================================");
       Console.Error.WriteLine("Application Exception:");

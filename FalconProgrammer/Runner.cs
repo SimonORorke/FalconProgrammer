@@ -38,7 +38,7 @@ public static class Runner {
     // batch.QueryAdsrMacros(null);
     // batch.QueryDahdsrModulations(null);
     // batch.RollForward("Devinity", "Bass", "Bass Interia");
-    batch.RollForward(null);
+    // batch.RollForward(null);
     // batch.QueryMainDahdsr("Factory");
     // batch.RollForward("Organic Pads", "Light", "Crystal Caves");
     // batch.RollForward("Organic Pads");
@@ -53,5 +53,7 @@ public static class Runner {
     // batch.RollForward("Fluidity");
     // batch.RollForward("Organic Keys", "Digitalish");
     // batch.RollForward("Factory", "Bass-Sub", "100in1 1.4");
+    // batch.RollForward("Factory", "RetroWave 2.5", "BAS Hawkins Lab");
+    // batch.RollForward("Factory", "VCF-20 Synths 2.5", "Bass Story");
   }
 }

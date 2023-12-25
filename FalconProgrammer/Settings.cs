@@ -8,6 +8,7 @@ public class Settings {
   [PublicAPI] public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
+  [XmlElement] public Folder BatchFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();

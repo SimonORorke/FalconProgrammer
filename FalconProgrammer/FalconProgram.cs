@@ -913,7 +913,6 @@ public class FalconProgram(string path, Category category) {
   private void UpdateMacroCcsOwnedByMacros() {
     // Most Factory programs list the ConstantModulation macro specifications in order
     // top to bottom, left to right. But a few, e.g. Factory/Keys/Days Of Old 1.4, do not.
-    //
     var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
     // Reinitialise CurrentContinuousCcNo, incremented by GetNextCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
