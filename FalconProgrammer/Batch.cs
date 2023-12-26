@@ -204,14 +204,14 @@ public class Batch {
   }
 
   public static DirectoryInfo GetBatchFolder() {
-    if (string.IsNullOrEmpty(Settings.BatchFolder.Path)) {
+    if (string.IsNullOrEmpty(Settings.BatchScriptsFolder.Path)) {
       throw new ApplicationException(
         "The batch folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
         "change the settings folder path in " +
         $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
     }
-    var result = new DirectoryInfo(Settings.BatchFolder.Path);
+    var result = new DirectoryInfo(Settings.BatchScriptsFolder.Path);
     if (!result.Exists) {
       throw new ApplicationException(
         $"Cannot find batch folder '{result.FullName}'.");
