@@ -22,14 +22,14 @@ public class SettingsTests {
       Assert.That(settings.DefaultTemplate.SubPath, Is.EqualTo(
         SettingsTestHelper.DefaultTemplateSubPath));
       Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
+      Assert.That(!settings.MustUseGuiScriptProcessor(
+        "Factory", "Bass-Sub"));
       Assert.That(settings.MustUseGuiScriptProcessor(
-        "Factory", "Bass-Sub"), Is.EqualTo(false));
+        "Factory", "Organic Texture 2.8"));
       Assert.That(settings.MustUseGuiScriptProcessor(
-        "Factory", "Organic Texture 2.8"), Is.EqualTo(true));
-      Assert.That(settings.MustUseGuiScriptProcessor(
-        "Organic Keys", "Acoustic Mood"), Is.EqualTo(true));
-      Assert.That(settings.MustUseGuiScriptProcessor(
-        "Organic Pads", "Nature"), Is.EqualTo(false));
+        "Organic Keys", "Acoustic Mood"));
+      Assert.That(!settings.MustUseGuiScriptProcessor(
+        "Organic Pads", "Nature"));
     } finally {
       SettingsTestHelper.DeleteAnyData();
     }
