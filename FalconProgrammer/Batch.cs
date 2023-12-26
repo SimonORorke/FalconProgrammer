@@ -63,7 +63,6 @@ public class Batch {
   /// </param>
   private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    // Settings = Settings.Read();
     if (!string.IsNullOrEmpty(soundBankName)) {
       SoundBankFolder = GetSoundBankFolder(soundBankName);
       if (!string.IsNullOrEmpty(categoryName)) {
@@ -451,7 +450,6 @@ public class Batch {
   }
 
   public void RunScript(string batchScriptPath) {
-    // Settings = Settings.Read();
     var batchScript = BatchScript.Read(batchScriptPath);
     foreach (var batchScriptTask in batchScript.Tasks) {
       try {
