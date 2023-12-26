@@ -4,33 +4,36 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Tests;
 
 public static class SettingsTestHelper {
-  [PublicAPI] public const string BatchScriptsFolderPath =
+  public const string BatchScriptsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Batch";
 
-  [PublicAPI] public const string DefaultTemplateSubPath = @"Factory\Keys\DX Mania.uvip";
+  public const string DefaultSettingsFolderPath =
+    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
-  [PublicAPI] public const string OriginalProgramsFolderPath =
+  public const string DefaultTemplateSubPath = @"Factory\Keys\DX Mania.uvip";
+
+  public const string OriginalProgramsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Original Programs";
 
   public const string ProgramsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Programs";
 
-  [PublicAPI] public const string TemplateProgramsFolderPath =
+  public const string TemplateProgramsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Template Programs";
 
   public const string TestApplicationName = "TestFalconProgrammer";
 
-  public static string SettingsFolderPath { get; } = Path.Combine(
+  public static string TestSettingsFolderPath { get; } = Path.Combine(
     TestContext.CurrentContext.TestDirectory, TestApplicationName);
 
   public static void DeleteAnyData() {
     var settingsFile = Settings.GetSettingsFile(
-      SettingsFolderPath);
+      TestSettingsFolderPath);
     if (settingsFile.Exists) {
       settingsFile.Delete();
     }
-    if (Directory.Exists(SettingsFolderPath)) {
-      Directory.Delete(SettingsFolderPath);
+    if (Directory.Exists(TestSettingsFolderPath)) {
+      Directory.Delete(TestSettingsFolderPath);
     }
     var locationFile =
       SettingsFolderLocation.GetSettingsFolderLocationFile(TestApplicationName);
@@ -42,10 +45,14 @@ public static class SettingsTestHelper {
     if (appDataFolder.Exists) {
       appDataFolder.Delete();
     }
+    // Restore production settings location.
+    var location = SettingsFolderLocation.Read(); // Default application name
+    location.Path = SettingsTestHelper.DefaultSettingsFolderPath;
+    location.Write(); // Default application name
   }
 
   public static Settings ReadSettings() {
-    return Settings.Read(SettingsFolderPath, TestApplicationName);
+    return Settings.Read(TestSettingsFolderPath, TestApplicationName);
   }
 
   /// <summary>
