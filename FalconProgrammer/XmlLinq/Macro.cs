@@ -9,13 +9,17 @@ namespace FalconProgrammer.XmlLinq;
 ///   as shown the Info page.
 /// </summary>
 public class Macro : ModulationsOwner {
-  private const int FirstContinuousCcNo = 31;
-  private const int FirstToggleCcNo = 112;
   private XElement? _propertiesElement;
-  public Macro(ProgramXml programXml) : base(programXml, true) { }
+  
+  public Macro(ProgramXml programXml, Settings.MacrosMidi midi)
+    : base(programXml, true) {
+    Midi = midi;
+  }
 
-  public Macro(XElement macroElement, ProgramXml programXml) : base(programXml) {
+  public Macro(XElement macroElement, ProgramXml programXml, Settings.MacrosMidi midi) 
+    : base(programXml) {
     Element = macroElement;
+    Midi = midi;
   }
 
   public int Bipolar {
@@ -66,6 +70,8 @@ public class Macro : ModulationsOwner {
     }
     set => Name = $"Macro {value}";
   }
+
+  private Settings.MacrosMidi Midi { get; }
 
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
 
@@ -168,6 +174,30 @@ public class Macro : ModulationsOwner {
       select modulation).FirstOrDefault();
   }
 
+  private static int GetCcNoAfter(int prevCcNo, ImmutableList<int> ccNos) {
+    if (prevCcNo == 0) {
+      return ccNos[0];
+    }
+    int prevIndex = ccNos.IndexOf(prevCcNo);
+    if (prevIndex >= 0 && prevIndex <= ccNos.Count - 2) {
+      // There's at least 1 MIDI CC number after the previous MIDI CC number in the list
+      // of MIDI CC numbers.
+      return ccNos[prevIndex + 1];
+    }
+    return prevCcNo + 1;
+  }
+
+  private int GetContinuousCcNoAfter(int prevContinuousCcNo, bool reuseCc1) {
+    if (prevContinuousCcNo == 1) {
+      return Midi.ContinuousCcNos[
+        Midi.ContinuousCcNos.IndexOf(Midi.ModWheelReplacementCcNo) + 1];
+    }
+    if (prevContinuousCcNo == Midi.ModWheelReplacementCcNo && reuseCc1) {
+      return 1; // Wheel
+    }
+    return GetCcNoAfter(prevContinuousCcNo, Midi.ContinuousCcNos);
+  }
+
   protected override XElement GetElement() {
     var result = (
       from macroElement in ProgramXml.MacroElements
@@ -193,50 +223,15 @@ public class Macro : ModulationsOwner {
   
   public int GetNextCcNo(ref int continuousCcNo, ref int toggleCcNo, 
     bool reuseCc1) {
-    if (!IsContinuous) {
-      // Map button CC to toggle macro. 
-      if (toggleCcNo < FirstToggleCcNo) {
-        toggleCcNo = FirstToggleCcNo;
-      } else {
-        toggleCcNo++;
-      }
-      return toggleCcNo;
+    if (IsContinuous) {
+      // Map continuous controller CC (e.g. knob or expression pedal) to continuous
+      // macro.
+      continuousCcNo = GetContinuousCcNoAfter(continuousCcNo, reuseCc1);
+      return continuousCcNo;
     }
-    // Map continuous controller CC to continuous macro.
-    switch (continuousCcNo) {
-      case 1: // Wheel
-        continuousCcNo = 11; // Touch strip
-        break;
-      case 11: // Touch strip
-        continuousCcNo = 36; 
-        break;
-      case 28:
-        continuousCcNo = 41; // Start of knob bank 2 
-        break;
-      case < FirstContinuousCcNo: // e.g. 0
-        continuousCcNo = FirstContinuousCcNo; // 31
-        break;
-      case <= FirstContinuousCcNo + 2: // 31-33
-        continuousCcNo++;
-        break;
-      case FirstContinuousCcNo + 3: // 34
-        continuousCcNo = reuseCc1 ? 1 : 11; // Wheel or touch strip
-        break;
-      case 37: 
-        // MIDI CC 38 does not work with macros on script-based Info pages
-        continuousCcNo = 28; 
-        break;
-      case 48:
-        continuousCcNo = 51; // Start of knob bank 3 
-        break;
-      case 58:
-        continuousCcNo = 61; // Start of knob bank 4 
-        break;
-      default:
-        continuousCcNo++;
-        break;
-    }
-    return continuousCcNo;
+    // Map toggle controller CC (e.g. button or foot switch) to toggle macro.
+    toggleCcNo = GetCcNoAfter(toggleCcNo, Midi.ToggleCcNos);
+    return toggleCcNo;
   }
 
   private XElement GetPropertiesElement() {

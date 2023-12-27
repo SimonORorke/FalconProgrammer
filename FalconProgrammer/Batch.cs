@@ -69,7 +69,7 @@ public class Batch {
         if (!string.IsNullOrEmpty(programName)) {
           Category = CreateCategory(categoryName);
           string programPath = Category.GetProgramFile(programName).FullName;
-          Program = new FalconProgram(programPath, Category);
+          Program = new FalconProgram(programPath, Category, Settings);
           ConfigureProgram();
         } else {
           ConfigureProgramsInCategory(categoryName);
@@ -167,7 +167,7 @@ public class Batch {
       return;
     }
     foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
-      Program = new FalconProgram(programFileToEdit.FullName, Category);
+      Program = new FalconProgram(programFileToEdit.FullName, Category, Settings);
       ConfigureProgram();
     }
   }

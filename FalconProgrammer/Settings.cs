@@ -1,11 +1,11 @@
-﻿using System.Xml.Serialization;
-using JetBrains.Annotations;
+﻿using System.Collections.Immutable;
+using System.Xml.Serialization;
 
 namespace FalconProgrammer;
 
 [XmlRoot(nameof(Settings))]
 public class Settings {
-  [PublicAPI] public const string DefaultSettingsFolderPath =
+  public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
   [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
@@ -18,12 +18,13 @@ public class Settings {
   [XmlArrayItem(nameof(ProgramCategory))]
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
-  [PublicAPI] [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
+  [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
+  [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static FileInfo GetSettingsFile(string settingsFolderPath) {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
-  
+
   public bool MustUseGuiScriptProcessor(
     string soundBankFolderName, string categoryName) {
     bool result = (
@@ -68,6 +69,42 @@ public class Settings {
 
   public class Folder {
     [XmlAttribute] public string Path { get; set; } = string.Empty;
+  }
+
+  public struct IntegerRange {
+    public int Start;
+    public int End;
+  }
+
+  public class MacrosMidi {
+    private ImmutableList<int>? _continuousCcNos;
+    private ImmutableList<int>? _toggleCcNos;
+    
+    [XmlAttribute] public int ModWheelReplacementCcNo { get; set; }
+
+    [XmlArray(nameof(ContinuousCcNoRanges))]
+    [XmlArrayItem("ContinuousCcNoRange")]
+    public List<IntegerRange> ContinuousCcNoRanges { get; set; } = [];
+
+    [XmlArray(nameof(ToggleCcNoRanges))]
+    [XmlArrayItem("ToggleCcNoRange")]
+    public List<IntegerRange> ToggleCcNoRanges { get; set; } = [];
+
+    internal ImmutableList<int> ContinuousCcNos =>
+      _continuousCcNos ??= CreateCcNoList(ContinuousCcNoRanges);
+
+    internal ImmutableList<int> ToggleCcNos =>
+      _toggleCcNos ??= CreateCcNoList(ToggleCcNoRanges);
+
+    private static ImmutableList<int> CreateCcNoList(List<IntegerRange> ranges) {
+      var list = new List<int>();
+      foreach (var range in ranges) {
+        for (int ccNo = range.Start; ccNo <= range.End; ccNo++) {
+          list.Add(ccNo);
+        }
+      }
+      return list.ToImmutableList();
+    }
   }
 
   public class ProgramCategory {

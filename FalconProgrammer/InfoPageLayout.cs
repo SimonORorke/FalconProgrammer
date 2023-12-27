@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
-public class InfoPageLayout {
+public class InfoPageLayout(FalconProgram program) {
   private const int MacroWidth = 60;
 
   // private const int MinHorizontalGapBetweenMacros = 5;
@@ -26,28 +26,7 @@ public class InfoPageLayout {
   /// </summary>
   private const int StandardRowHeight = 115;
 
-  public InfoPageLayout(FalconProgram program) {
-    Program = program;
-  }
-
-  /// <summary>
-  ///   Gets or sets the maximum number of continuous macros, in MIDI CC number order,
-  ///   there can be on the Info page before the MIDI CC number that is specified by
-  ///   <see cref="ModWheelReplacementCcNo" /> and used for the modulation wheel
-  ///   replacement macro that can be added to the layout by
-  ///   <see cref="ReplaceModWheelWithMacro" />.
-  /// </summary>
-  [PublicAPI]
-  public int MaxContinuousMacroCountBeforeWheelMacro { get; set; } = 3;
-
-  /// <summary>
-  ///   Gets or sets the MIDI CC number to be mapped to a program's new mod wheel
-  ///   replacement macro by <see cref="ReplaceModWheelWithMacro" />.
-  /// </summary>
-  [PublicAPI]
-  public int ModWheelReplacementCcNo { get; set; } = 34;
-
-  private FalconProgram Program { get; }
+  private FalconProgram Program { get; } = program;
 
   public void MoveMacrosToStandardLayout() {
     var visibleMacros = (
@@ -182,7 +161,7 @@ public class InfoPageLayout {
       // ReSharper disable once CommentTypo
       // Example: Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
       : 1;
-    var result = new Macro(Program.ProgramXml) {
+    var result = new Macro(Program.ProgramXml, Program.Settings.MidiForMacros) {
       MacroNo = wheelMacroNo,
       DisplayName = "Wheel",
       Bipolar = 0,
@@ -191,7 +170,7 @@ public class InfoPageLayout {
       Value = 0
     };
     result.AddModulation(new Modulation(Program.ProgramXml) {
-      CcNo = ModWheelReplacementCcNo
+      CcNo = Program.Settings.MidiForMacros.ModWheelReplacementCcNo
     });
     result.ChangeModWheelModulationSourcesToMacro();
     return result;

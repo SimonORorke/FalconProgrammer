@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests;
 
@@ -7,7 +6,7 @@ public static class SettingsTestHelper {
   public const string BatchScriptsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Batch";
 
-  public const string DefaultSettingsFolderPath =
+  private const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
   public const string DefaultTemplateSubPath = @"Factory\Keys\DX Mania.uvip";
@@ -47,7 +46,7 @@ public static class SettingsTestHelper {
     }
     // Restore production settings location.
     var location = SettingsFolderLocation.Read(); // Default application name
-    location.Path = SettingsTestHelper.DefaultSettingsFolderPath;
+    location.Path = DefaultSettingsFolderPath;
     location.Write(); // Default application name
   }
 
@@ -56,7 +55,7 @@ public static class SettingsTestHelper {
   }
 
   /// <summary>
-  ///   This should generate the required production settings.
+  ///   If kept up to date, this should generate the required production settings.
   /// </summary>
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void WriteSettings(Settings settings) {
@@ -92,6 +91,19 @@ public static class SettingsTestHelper {
       new Settings.ProgramCategory {
         SoundBank = "Voklm"
       });
+    settings.MidiForMacros.ModWheelReplacementCcNo = 34;
+    settings.MidiForMacros.ContinuousCcNoRanges = [
+      new Settings.IntegerRange { Start = 31, End = 34 },
+      new Settings.IntegerRange { Start = 11, End = 11 },
+      new Settings.IntegerRange { Start = 36, End = 37 },
+      new Settings.IntegerRange { Start = 28, End = 28 },
+      new Settings.IntegerRange { Start = 41, End = 48 },
+      new Settings.IntegerRange { Start = 51, End = 58 },
+      new Settings.IntegerRange { Start = 61, End = 68 }
+    ];
+    settings.MidiForMacros.ToggleCcNoRanges = [
+      new Settings.IntegerRange { Start = 112, End = 112 }
+    ];
     settings.Write();
   }
 }

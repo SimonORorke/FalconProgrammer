@@ -153,11 +153,6 @@ public class ProgramXml(Category category) : EntityBase {
   ///   Returns a list of all the Modulation elements in the program whose source
   ///   indicates the specified MIDI CC number.
   /// </summary>
-  /// <remarks>
-  ///   The Linq For XML data structure has to be searched because the deserialised
-  ///   data structure does not include <see cref="Modulation" />s that are owned
-  ///   by effects.
-  /// </remarks>
   public List<XElement> GetModulationElementsWithCcNo(int ccNo) {
     string source = $"@MIDI CC {ccNo}";
     return (

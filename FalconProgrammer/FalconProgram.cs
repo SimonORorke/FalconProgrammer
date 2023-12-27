@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
-public class FalconProgram(string path, Category category) {
+public class FalconProgram(string path, Category category, Settings settings) {
   private InfoPageLayout? _infoPageLayout;
   [PublicAPI] public Category Category { get; } = category;
 
@@ -53,6 +53,7 @@ public class FalconProgram(string path, Category category) {
   private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } =
     ImmutableList<ScriptProcessor>.Empty;
 
+  public Settings Settings { get; } = settings;
   private string SoundBankName => Category.SoundBankFolder.Name;
 
   private void BypassDelayEffects() {
@@ -147,7 +148,7 @@ public class FalconProgram(string path, Category category) {
   private List<Macro> CreateMacrosFromElements() {
     var result = (
       from macroElement in ProgramXml.MacroElements
-      select new Macro(macroElement, ProgramXml)).ToList();
+      select new Macro(macroElement, ProgramXml, Settings.MidiForMacros)).ToList();
     foreach (var macro in result) {
       foreach (var modulation in macro.Modulations) {
         modulation.Owner = macro;
@@ -266,7 +267,7 @@ public class FalconProgram(string path, Category category) {
   ///   sound bank, the chevron delimiters of the DAHDSR Controller script CDATA will
   ///   have been incorrectly written as their corresponding HTML substitutes.
   ///   To fix that, the batch needs to call this method after the Save for
-  ///   InitialiseLayout.  
+  ///   InitialiseLayout.
   /// </summary>
   public void FixCData() {
     if (SoundBankName != "Organic Pads") {
@@ -284,14 +285,14 @@ public class FalconProgram(string path, Category category) {
 
   /// <summary>
   ///   Returns a dictionary of macros for the standard envelope parameters
-  ///   Attack, Decay, Sustain and Release. 
+  ///   Attack, Decay, Sustain and Release.
   /// </summary>
   /// <remarks>
   ///   Examples where there are all four:
   ///   many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
   /// </remarks>
   public Dictionary<string, Macro> GetAdsrMacros() {
-    string[] displayNames = { "Attack",  "Decay", "Sustain", "Release"};
+    string[] displayNames = { "Attack", "Decay", "Sustain", "Release" };
     var result = new Dictionary<string, Macro>();
     foreach (string displayName in displayNames) {
       var macro = FindContinuousMacro(displayName);
@@ -493,7 +494,7 @@ public class FalconProgram(string path, Category category) {
   public void InitialiseValuesAndMoveMacros() {
     var macrosToMove = new List<Macro>();
     var adsrMacros = GetAdsrMacros();
-    if (adsrMacros.Count < 4 
+    if (adsrMacros.Count < 4
         && adsrMacros.TryGetValue("Release", out var releaseMacro)) {
       ZeroMacro(releaseMacro);
       if (GuiScriptProcessor == null) {
@@ -857,24 +858,43 @@ public class FalconProgram(string path, Category category) {
   ///   </para>
   /// </summary>
   public void ReuseCc1() {
-    if (GuiScriptProcessor != null // See paragraph in summary.
-        || ContinuousMacros.Count < 5
-        || (ProgramXml.GetModulationElementsWithCcNo(1)
-              .Count > 0
-            && !WheelMacroExists())) {
+    if (GuiScriptProcessor != null) {
+      // See paragraph in summary.
+      return;
+    }
+    if (ProgramXml.GetModulationElementsWithCcNo(1).Count > 0
+        && !WheelMacroExists()) {
+      // There are modulations whose MIDI CC number is 1, but they have not been
+      // assigned to a wheel macro. If anything, that should be done instead of
+      // assigning MIDI CC 1 to a different macro. 
+      return;
+    }
+    var macroBeforeCc1Macro = (
+      from macro in ContinuousMacros
+      where macro.FindModulationWithCcNo(
+        Settings.MidiForMacros.ModWheelReplacementCcNo) != null
+      select macro).FirstOrDefault();
+    if (macroBeforeCc1Macro == null) {
       return;
     }
     var continuousMacrosByLocation = (
       from continuousMacro in GetMacrosSortedByLocation(MacroCcLocationOrder)
       where continuousMacro.IsContinuous
       select continuousMacro).ToList();
-    if (continuousMacrosByLocation.Count < 5) {
+    // There needs to be at least one macro after the macro before the macro whose
+    // MIDI CC number is to be changed to 1!
+    int minVisibleContinuousMacrosCount =
+      continuousMacrosByLocation.IndexOf(macroBeforeCc1Macro) + 2; 
+    if (ContinuousMacros.Count < minVisibleContinuousMacrosCount) {
       // Allow for macros with invalid locations: see GetMacrosSortedByLocation. 
       return;
     }
-    CurrentContinuousCcNo = 34; // Required for first call of GetNextCcNo to return 1.
+    // Required for first call of GetNextCcNo to return 1.
+    CurrentContinuousCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
+    // CurrentContinuousCcNo = 34; // Required for first call of GetNextCcNo to return 1.
     CurrentToggleCcNo = 0; // Required by GetNextCcNo but won't be used in this case.
-    for (int i = 4; i < continuousMacrosByLocation.Count; i++) {
+    for (int i = minVisibleContinuousMacrosCount - 1; 
+         i < continuousMacrosByLocation.Count; i++) {
       var macro = continuousMacrosByLocation[i];
       int newCcNo = GetNextCcNo(macro, true);
       macro.ChangeCcNoTo(newCcNo);
