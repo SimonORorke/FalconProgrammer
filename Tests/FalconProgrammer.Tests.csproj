@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Batch\FalconProgrammer.Batch.csproj" />
       <ProjectReference Include="..\FalconProgrammer\FalconProgrammer.csproj" />
     </ItemGroup>
 

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.XmlLinq;
+namespace FalconProgrammer.Batch.XmlLinq;
 
 public class ScriptProgramXml(Category category) : ProgramXml(category) {
   protected override XElement GetTemplateModulationElement() {

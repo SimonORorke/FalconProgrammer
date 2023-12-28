@@ -1,7 +1,6 @@
-﻿using FalconProgrammer.XmlLinq;
-using JetBrains.Annotations;
+﻿using FalconProgrammer.Batch.XmlLinq;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.Batch;
 
 public class InfoPageLayout(FalconProgram program) {
   private const int MacroWidth = 60;

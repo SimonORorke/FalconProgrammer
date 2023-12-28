@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using FalconProgrammer.XmlLinq;
+using FalconProgrammer.Batch.XmlLinq;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.Batch;
 
 public class FalconProgram(string path, Category category, Settings settings) {
   private InfoPageLayout? _infoPageLayout;

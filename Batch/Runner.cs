@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.Batch;
 
 public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]

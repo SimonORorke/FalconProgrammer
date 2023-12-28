@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.XmlLinq; 
+namespace FalconProgrammer.Batch.XmlLinq; 
 
 public abstract class EntityBase {
   private XElement? _element;

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace FalconProgrammer; 
+namespace FalconProgrammer.Batch; 
 
 [XmlRoot(nameof(SettingsFolderLocation))] public class SettingsFolderLocation {
   public const string DefaultApplicationName = "FalconProgrammer"; 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using FalconProgrammer.Batch;
 
 namespace FalconProgrammer.Tests;
 
@@ -9,19 +10,19 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.QueryReverbTypes)
+          Name = nameof(Batch.Batch.ConfigTask.QueryReverbTypes)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.InitialiseLayout)
+          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P2"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
@@ -40,13 +41,13 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.InitialiseLayout)
+          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout)
         }]
     };
     Assert.DoesNotThrow(()=> batchScript.Validate());

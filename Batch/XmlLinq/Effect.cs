@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.XmlLinq;
+namespace FalconProgrammer.Batch.XmlLinq;
 
 public class Effect(XElement element, ProgramXml programXml)
   : ConnectionsParent(element, programXml) {

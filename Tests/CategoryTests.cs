@@ -1,5 +1,8 @@
-﻿namespace FalconProgrammer.Tests;
+﻿using FalconProgrammer.Batch;
 
+namespace FalconProgrammer.Tests;
+
+#pragma warning disable NUnit2005 // Consider using Assert.That(actual, Is.EqualTo(expected)) instead of Assert.AreEqual(expected, actual)
 [TestFixture]
 public class CategoryTests {
   [Test]

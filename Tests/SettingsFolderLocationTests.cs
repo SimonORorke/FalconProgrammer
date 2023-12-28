@@ -1,3 +1,5 @@
+using FalconProgrammer.Batch;
+
 namespace FalconProgrammer.Tests;
 
 public class SettingsFolderLocationTests {

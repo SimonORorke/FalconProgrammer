@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer", "FalconP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Tests", "Tests\FalconProgrammer.Tests.csproj", "{DAC589BB-8BF6-4E7F-B773-95E37D8D0DAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Batch", "Batch\FalconProgrammer.Batch.csproj", "{05EAC216-6049-4C35-9B95-AC78EA54CFD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{DAC589BB-8BF6-4E7F-B773-95E37D8D0DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC589BB-8BF6-4E7F-B773-95E37D8D0DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC589BB-8BF6-4E7F-B773-95E37D8D0DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05EAC216-6049-4C35-9B95-AC78EA54CFD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05EAC216-6049-4C35-9B95-AC78EA54CFD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05EAC216-6049-4C35-9B95-AC78EA54CFD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05EAC216-6049-4C35-9B95-AC78EA54CFD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

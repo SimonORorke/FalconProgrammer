@@ -1,7 +1,7 @@
-﻿using FalconProgrammer.XmlLinq;
+﻿using FalconProgrammer.Batch.XmlLinq;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.Batch;
 
 /// <summary>
 ///   A category of Falcon programs, with the program files stored in a folder with the

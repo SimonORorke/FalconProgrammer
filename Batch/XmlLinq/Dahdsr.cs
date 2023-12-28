@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.XmlLinq; 
+namespace FalconProgrammer.Batch.XmlLinq; 
 
 /// <summary>
 ///   A Delay Attack Hold Decay Sustain Release modulator.

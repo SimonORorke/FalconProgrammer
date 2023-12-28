@@ -1,13 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using FalconProgrammer.Batch;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer;
 
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-internal class Program {
+[PublicAPI] internal class Program {
   private static void Main(string[] args) {
     try {
       if (args.Length > 0) {
-        new Batch().RunScript(args[0]);
+        new Batch.Batch().RunScript(args[0]);
       } else {
         Runner.Run();
       }
