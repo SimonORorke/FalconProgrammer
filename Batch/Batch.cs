@@ -420,6 +420,9 @@ public class Batch {
   }
 
   public void RunScript(string batchScriptPath) {
+    if (!Path.HasExtension(batchScriptPath)) {
+      batchScriptPath += ".xml";
+    }
     var batchScript = BatchScript.Read(batchScriptPath);
     batchScript.Validate();
     foreach (var batchTask in batchScript.SequenceTasks()) {
