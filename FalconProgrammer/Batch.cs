@@ -10,6 +10,7 @@ public class Batch {
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
+
   private static Settings Settings => _settings ??= Settings.Read();
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
@@ -418,6 +419,23 @@ public class Batch {
     ReuseCc1(soundBankName, categoryName, programName);
   }
 
+  public void RunScript(string batchScriptPath) {
+    var batchScript = BatchScript.Read(batchScriptPath);
+    batchScript.Validate();
+    foreach (var batchTask in batchScript.SequenceTasks()) {
+      Task = batchTask.ConfigTask; 
+      Console.WriteLine(
+        $"Task = {batchTask.Name}, SoundBank = '{batchTask.SoundBank}', " +
+        $"Category = '{batchTask.Category}', " + 
+        $"Program = '{batchTask.Program}'");
+      foreach (var parameter in batchTask.Parameters) {
+        Console.WriteLine($"    {parameter.Name} = {parameter.Value}");
+      }
+      ConfigurePrograms(
+        batchTask.SoundBank, batchTask.Category, batchTask.Program);
+    }
+  }
+
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
     foreach (string effectType in effectTypes.Where(effectType =>
                !EffectTypes.Contains(effectType))) {
@@ -449,29 +467,7 @@ public class Batch {
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
-  public void RunScript(string batchScriptPath) {
-    var batchScript = BatchScript.Read(batchScriptPath);
-    foreach (var batchScriptTask in batchScript.Tasks) {
-      try {
-        Task = (ConfigTask)Enum.Parse(typeof(ConfigTask), batchScriptTask.Name);
-      } catch (ArgumentException ex) {
-        throw new ApplicationException(
-          $"Reading '{batchScript.BatchScriptPath}', " +
-          $"'{batchScriptTask.Name}' is not a valid task name.", ex);
-      }
-      Console.WriteLine(
-        $"Task = {batchScriptTask.Name}, SoundBank = '{batchScriptTask.SoundBank}', " +
-        $"Category = '{batchScriptTask.Category}', " + 
-        $"Program = '{batchScriptTask.Program}'");
-      foreach (var parameter in batchScriptTask.Parameters) {
-        Console.WriteLine($"    {parameter.Name} = {parameter.Value}");
-      }
-      ConfigurePrograms(
-        batchScriptTask.SoundBank, batchScriptTask.Category, batchScriptTask.Program);
-    }
-  }
-
-  private enum ConfigTask {
+  public enum ConfigTask {
     ChangeMacroCcNo,
     CountMacros,
     InitialiseLayout,
