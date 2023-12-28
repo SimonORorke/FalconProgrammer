@@ -40,7 +40,6 @@ public class BatchScript {
   private static ImmutableList<Batch.ConfigTask> SequenceConfigTasks() {
     return [
       Batch.ConfigTask.RestoreOriginal, 
-      Batch.ConfigTask.PrependPathLineToDescription,
       Batch.ConfigTask.InitialiseLayout,
       Batch.ConfigTask.UpdateMacroCcs,
       Batch.ConfigTask.RemoveDelayEffectsAndMacros,

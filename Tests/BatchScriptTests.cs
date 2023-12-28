@@ -10,19 +10,19 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.QueryReverbTypes)
+          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout)
+          Name = nameof(Batch.Batch.ConfigTask.UpdateMacroCcs)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P2"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
