@@ -10,19 +10,19 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription)
+          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.UpdateMacroCcs)
+          Name = nameof(Batch.ConfigTask.UpdateMacroCcs)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout),
+          Name = nameof(Batch.ConfigTask.InitialiseLayout),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P2"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout),
+          Name = nameof(Batch.ConfigTask.InitialiseLayout),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
@@ -41,13 +41,13 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.Batch.ConfigTask.InitialiseLayout)
+          Name = nameof(Batch.ConfigTask.InitialiseLayout)
         }]
     };
     Assert.DoesNotThrow(()=> batchScript.Validate());

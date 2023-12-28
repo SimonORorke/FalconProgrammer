@@ -21,7 +21,7 @@ public class Settings {
   [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
-  internal static FileInfo GetSettingsFile(string settingsFolderPath) {
+  public static FileInfo GetSettingsFile(string settingsFolderPath) {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
 

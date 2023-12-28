@@ -6,7 +6,7 @@ namespace FalconProgrammer.Batch;
 
 [XmlRoot("Batch")]
 public class BatchScript {
-  private static ImmutableList<Batch.ConfigTask>? _sequencedConfigTasks;
+  private static ImmutableList<ConfigTask>? _sequencedConfigTasks;
   
   [XmlArray(nameof(Tasks))]
   [XmlArrayItem("Task")]
@@ -14,7 +14,7 @@ public class BatchScript {
 
   [XmlIgnore] public string BatchScriptPath { get; set; } = string.Empty;
   
-  private static ImmutableList<Batch.ConfigTask> SequencedConfigTasks => 
+  private static ImmutableList<ConfigTask> SequencedConfigTasks => 
     _sequencedConfigTasks ??= SequenceConfigTasks();
 
   public static BatchScript Read(string batchScriptPath) {
@@ -37,15 +37,15 @@ public class BatchScript {
     return result;
   }
 
-  private static ImmutableList<Batch.ConfigTask> SequenceConfigTasks() {
+  private static ImmutableList<ConfigTask> SequenceConfigTasks() {
     return [
-      Batch.ConfigTask.RestoreOriginal, 
-      Batch.ConfigTask.InitialiseLayout,
-      Batch.ConfigTask.UpdateMacroCcs,
-      Batch.ConfigTask.RemoveDelayEffectsAndMacros,
-      Batch.ConfigTask.InitialiseValuesAndMoveMacros,
-      Batch.ConfigTask.ReplaceModWheelWithMacro,
-      Batch.ConfigTask.ReuseCc1,
+      ConfigTask.RestoreOriginal, 
+      ConfigTask.InitialiseLayout,
+      ConfigTask.UpdateMacroCcs,
+      ConfigTask.RemoveDelayEffectsAndMacros,
+      ConfigTask.InitialiseValuesAndMoveMacros,
+      ConfigTask.ReplaceModWheelWithMacro,
+      ConfigTask.ReuseCc1,
     ];
   }
 
@@ -97,7 +97,7 @@ public class BatchScript {
   }
 
   public class BatchTask {
-    private Batch.ConfigTask? _configTask;
+    private ConfigTask? _configTask;
     [XmlAttribute] public string Name { get; set; } = string.Empty;
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
@@ -108,11 +108,11 @@ public class BatchScript {
     [PublicAPI]
     public List<BatchTaskParameter> Parameters { get; set; } = [];
 
-    internal Batch.ConfigTask ConfigTask => _configTask ??= GetConfigTask();
+    [XmlIgnore] public ConfigTask ConfigTask => _configTask ??= GetConfigTask();
 
-    private Batch.ConfigTask GetConfigTask() {
+    private ConfigTask GetConfigTask() {
       try {
-        return (Batch.ConfigTask)Enum.Parse(typeof(Batch.ConfigTask), Name);
+        return (ConfigTask)Enum.Parse(typeof(ConfigTask), Name);
       } catch (ArgumentException ex) {
         throw new ApplicationException($"'{Name}' is not a valid task name.", ex);
       }
