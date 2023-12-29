@@ -1,4 +1,4 @@
-﻿namespace FalconProgrammer.Batch;
+﻿namespace FalconProgrammer.Model;
 
 public enum ConfigTask {
   ChangeMacroCcNo,

@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer.Batch.XmlLinq;
+namespace FalconProgrammer.Model.XmlLinq;
 
 /// <summary>
 ///   Called ConstantModulation in the program XML but corresponds to a macro,

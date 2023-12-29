@@ -1,4 +1,4 @@
-﻿using FalconProgrammer.Batch;
+﻿using FalconProgrammer.Model;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.Console;
@@ -7,7 +7,7 @@ namespace FalconProgrammer.Console;
   private static void Main(string[] args) {
     try {
       if (args.Length > 0) {
-        new Batch.Batch().RunScript(args[0]);
+        new Batch().RunScript(args[0]);
       } else {
         Runner.Run();
       }

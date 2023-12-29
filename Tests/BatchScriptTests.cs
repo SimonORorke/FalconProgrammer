@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using FalconProgrammer.Batch;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests;
 
@@ -10,19 +10,19 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription)
+          Name = nameof(ConfigTask.PrependPathLineToDescription)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.UpdateMacroCcs)
+          Name = nameof(ConfigTask.UpdateMacroCcs)
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.InitialiseLayout),
+          Name = nameof(ConfigTask.InitialiseLayout),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P2"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.InitialiseLayout),
+          Name = nameof(ConfigTask.InitialiseLayout),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
@@ -41,13 +41,13 @@ public class BatchScriptTests {
     var batchScript = new BatchScript {
       Tasks = [
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.PrependPathLineToDescription),
+          Name = nameof(ConfigTask.PrependPathLineToDescription),
           SoundBank = "SB",
           Category = "Cat",
           Program = "P1"
         },
         new BatchScript.BatchTask {
-          Name = nameof(Batch.ConfigTask.InitialiseLayout)
+          Name = nameof(ConfigTask.InitialiseLayout)
         }]
     };
     Assert.DoesNotThrow(()=> batchScript.Validate());

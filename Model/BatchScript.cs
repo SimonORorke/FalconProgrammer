@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer.Batch;
+namespace FalconProgrammer.Model;
 
 [XmlRoot("Batch")]
 public class BatchScript {

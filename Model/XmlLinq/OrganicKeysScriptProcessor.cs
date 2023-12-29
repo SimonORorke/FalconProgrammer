@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.Batch.XmlLinq;
+namespace FalconProgrammer.Model.XmlLinq;
 
 /// <summary>
 ///   ScriptProcessor for the "Organic Keys" sound bank.

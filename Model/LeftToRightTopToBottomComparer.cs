@@ -1,6 +1,6 @@
-﻿using FalconProgrammer.Batch.XmlLinq;
+﻿using FalconProgrammer.Model.XmlLinq;
 
-namespace FalconProgrammer.Batch; 
+namespace FalconProgrammer.Model; 
 
 /// <summary>
 ///   Orders the macros left to right, top to bottom.

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.Batch.XmlLinq;
+namespace FalconProgrammer.Model.XmlLinq;
 
 /// <summary>
 ///   Called SignalConnection in the program XML but corresponds to a modulation,

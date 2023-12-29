@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using FalconProgrammer.Batch;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests;
 

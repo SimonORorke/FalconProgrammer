@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer", "Console\FalconProgrammer.Console.csproj", "{703E9A38-C1F0-49E7-B762-4355C7D5B4B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Tests", "Tests\FalconProgrammer.Tests.csproj", "{DAC589BB-8BF6-4E7F-B773-95E37D8D0DAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Model", "Model\FalconProgrammer.Model.csproj", "{05EAC216-6049-4C35-9B95-AC78EA54CFD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Batch", "Batch\FalconProgrammer.Batch.csproj", "{05EAC216-6049-4C35-9B95-AC78EA54CFD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Tests", "Tests\FalconProgrammer.Tests.csproj", "{DAC589BB-8BF6-4E7F-B773-95E37D8D0DAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.Batch.XmlLinq;
+namespace FalconProgrammer.Model.XmlLinq;
 
 public class ScriptProcessor : ModulationsOwner {
   private XElement? _scriptElement;

@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace FalconProgrammer.Batch;
+namespace FalconProgrammer.Model;
 
 public class Batch {
   public const string ProgramExtension = ".uvip";

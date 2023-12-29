@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
-namespace FalconProgrammer.Batch.XmlLinq;
+namespace FalconProgrammer.Model.XmlLinq;
 
 public class ProgramXml(Category category) : EntityBase {
   private ImmutableList<XElement>? _scriptProcessorElements;

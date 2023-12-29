@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Xml.Linq;
 
-namespace FalconProgrammer.Batch.XmlLinq;
+namespace FalconProgrammer.Model.XmlLinq;
 
 public class ConnectionsParent : EntityBase {
   private ImmutableList<Modulation>? _modulations;

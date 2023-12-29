@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Xml.Serialization;
 
-namespace FalconProgrammer.Batch;
+namespace FalconProgrammer.Model;
 
 [XmlRoot(nameof(Settings))]
 public class Settings {
