@@ -33,11 +33,14 @@ namespace FalconProgrammer.Model;
     Directory.CreateDirectory(Path);
   }
 
+  public static string? AppDataFolderPathMaui { get; set; }
+
   internal static DirectoryInfo GetAppDataFolder(
     string applicationName = DefaultApplicationName) {
-    var result = new DirectoryInfo(System.IO.Path.Combine(
-      Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-      applicationName));
+    string appDataFolderPath = AppDataFolderPathMaui ?? System.IO.Path.Combine(
+      Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+      applicationName); 
+    var result = new DirectoryInfo(appDataFolderPath);
     return result;
   }
 
