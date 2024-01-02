@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class ConnectionsParent : EntityBase {
+internal class ConnectionsParent : EntityBase {
   private ImmutableList<Modulation>? _modulations;
 
   public ConnectionsParent(XElement element, ProgramXml programXml) : base(programXml) {

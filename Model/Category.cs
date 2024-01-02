@@ -54,7 +54,7 @@ public class Category {
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public string Path { get; }
-  public ProgramXml ProgramXml { get; set; } = null!;
+  internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   // private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
@@ -72,7 +72,7 @@ public class Category {
   ///   ScriptProcessor contains the Modulations that map the macros to MIDI CC
   ///   numbers.
   /// </summary>
-  public ScriptProcessor? TemplateScriptProcessor { get; private set; }
+  internal ScriptProcessor? TemplateScriptProcessor { get; private set; }
 
   [PublicAPI]
   public string TemplateSoundBankName => 

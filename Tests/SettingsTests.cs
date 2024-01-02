@@ -43,4 +43,19 @@ public class SettingsTests {
       SettingsTestHelper.DeleteAnyData();
     }
   }
+
+  [Test]
+  public void Update() {
+    SettingsTestHelper.DeleteAnyData();
+    try {
+      var settings = SettingsTestHelper.ReadSettings();
+      Assert.That(!File.Exists(settings.SettingsPath));
+      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(string.Empty));
+      settings.ProgramsFolder.Path = SettingsTestHelper.ProgramsFolderPath;
+      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(
+        SettingsTestHelper.ProgramsFolderPath));
+    } finally {
+      SettingsTestHelper.DeleteAnyData();
+    }
+  }
 }

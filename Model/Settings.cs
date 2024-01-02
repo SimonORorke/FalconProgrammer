@@ -61,14 +61,18 @@ public class Settings {
     return result;
   }
 
-  public void Write() {
+  public void Write(string? settingsPath = null) {
+    if (settingsPath!= null) {
+      SettingsPath = settingsPath;
+    }
     var serializer = new XmlSerializer(typeof(Settings));
     using var writer = new StreamWriter(SettingsPath);
     serializer.Serialize(writer, this);
   }
 
   public class Folder {
-    [XmlAttribute] public string Path { get; set; } = string.Empty;
+    [XmlAttribute]
+    public string Path { get; set; } = string.Empty;
   }
 
   public struct IntegerRange {

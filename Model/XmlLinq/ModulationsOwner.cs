@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class ModulationsOwner : EntityBase {
+internal class ModulationsOwner : EntityBase {
   private ImmutableList<Modulation>? _modulations;
 
   public ModulationsOwner(XElement element, ProgramXml programXml) : base(programXml) {

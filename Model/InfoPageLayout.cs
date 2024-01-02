@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Model;
 
-public class InfoPageLayout(FalconProgram program) {
+internal class InfoPageLayout(FalconProgram program) {
   private const int MacroWidth = 60;
 
   // private const int MinHorizontalGapBetweenMacros = 5;

@@ -5,7 +5,7 @@ namespace FalconProgrammer.Model;
 /// <summary>
 ///   Orders the macros top to bottom, left to right.
 /// </summary>
-public class TopToBottomLeftToRightComparer : Comparer<Macro> {
+internal class TopToBottomLeftToRightComparer : Comparer<Macro> {
   public override int Compare(Macro? a, Macro? b) {
     // We need to judge macros whose tops are close together as being in the same row.
     // The vertical clearance is 95, so this should be safe.

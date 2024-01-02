@@ -7,7 +7,7 @@ namespace FalconProgrammer.Model.XmlLinq;
 ///   as in the user interface and manual. Among other things, this can map a macro to
 ///   a MIDI CC number.
 /// </summary>
-public class Modulation : EntityBase {
+internal class Modulation : EntityBase {
   public Modulation(ProgramXml programXml) : base(programXml, true) {
     Ratio = 1;
     Source = string.Empty;

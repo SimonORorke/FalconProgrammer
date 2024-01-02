@@ -5,7 +5,7 @@ namespace FalconProgrammer.Model.XmlLinq;
 /// <summary>
 ///   A Delay Attack Hold Decay Sustain Release modulator.
 /// </summary>
-public class Dahdsr(XElement element, ProgramXml programXml)
+internal class Dahdsr(XElement element, ProgramXml programXml)
   : Effect(element, programXml) {
   public float AttackTime {
     get => Convert.ToSingle(GetAttributeValue(nameof(AttackTime)));

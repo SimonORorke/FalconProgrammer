@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
 
-public class FalconProgram(string path, Category category, Settings settings) {
+internal class FalconProgram(string path, Category category, Settings settings) {
   private InfoPageLayout? _infoPageLayout;
   [PublicAPI] public Category Category { get; } = category;
 
@@ -291,7 +291,7 @@ public class FalconProgram(string path, Category category, Settings settings) {
   ///   Examples where there are all four:
   ///   many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
   /// </remarks>
-  public Dictionary<string, Macro> GetAdsrMacros() {
+  internal Dictionary<string, Macro> GetAdsrMacros() {
     string[] displayNames = { "Attack", "Decay", "Sustain", "Release" };
     var result = new Dictionary<string, Macro>();
     foreach (string displayName in displayNames) {
