@@ -138,13 +138,13 @@ public class Category {
         return templateFile;
       }
     }
-    if (string.IsNullOrEmpty(Settings.DefaultTemplate.SubPath)) {
+    if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
       throw new InvalidOperationException(
         $"Category {Path}: A default Template must be specified the " + 
         "Settings file, to specify TemplateScriptProcessor.");
     }
     string defaultTemplatePath = System.IO.Path.Combine(
-      templatesFolderPath, Settings.DefaultTemplate.SubPath);
+      templatesFolderPath, Settings.DefaultTemplate.Path);
     var defaultTemplateFile = new FileInfo(defaultTemplatePath);
     if (!defaultTemplateFile.Exists) {
       throw new InvalidOperationException(

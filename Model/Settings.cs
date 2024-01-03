@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model;
@@ -117,6 +117,6 @@ public class Settings {
   }
 
   public class Template {
-    [XmlAttribute] public string SubPath { get; set; } = string.Empty;
+    [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 }
