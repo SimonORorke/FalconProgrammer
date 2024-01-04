@@ -140,15 +140,18 @@ public class Category {
     }
     if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
       throw new InvalidOperationException(
-        $"Category {Path}: A default Template must be specified the " + 
+        $"Category {Path}: A default Template must be specified in the " + 
         "Settings file, to specify TemplateScriptProcessor.");
     }
-    string defaultTemplatePath = System.IO.Path.Combine(
-      templatesFolderPath, Settings.DefaultTemplate.Path);
-    var defaultTemplateFile = new FileInfo(defaultTemplatePath);
+    // string defaultTemplatePath = System.IO.Path.Combine(
+    //   templatesFolderPath, Settings.DefaultTemplate.Path);
+    // var defaultTemplateFile = new FileInfo(defaultTemplatePath);
+    var defaultTemplateFile = new FileInfo(Settings.DefaultTemplate.Path);
     if (!defaultTemplateFile.Exists) {
       throw new InvalidOperationException(
-        $"Category {Path}: Cannot find default template file '{defaultTemplatePath}'.");
+        $"Category {Path}: Cannot find default template file " + 
+        $"'{Settings.DefaultTemplate.Path}'.");
+        // $"Category {Path}: Cannot find default template file '{defaultTemplatePath}'.");
     }
     return defaultTemplateFile;
   }

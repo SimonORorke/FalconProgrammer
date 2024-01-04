@@ -10,7 +10,8 @@ public static class SettingsTestHelper {
   private const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
-  public const string DefaultTemplateSubPath = @"Factory\Keys\DX Mania.uvip";
+  public static string DefaultTemplatePath => Path.Combine(
+    TemplateProgramsFolderPath, @"Factory\Keys\DX Mania.uvip");
 
   public const string OriginalProgramsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Original Programs";
@@ -73,7 +74,7 @@ public static class SettingsTestHelper {
       Path = TemplateProgramsFolderPath
     };
     settings.DefaultTemplate = new Settings.Template {
-      SubPath = DefaultTemplateSubPath
+      Path = DefaultTemplatePath
     };
     settings.MustUseGuiScriptProcessorCategories.Add(
       new Settings.ProgramCategory {

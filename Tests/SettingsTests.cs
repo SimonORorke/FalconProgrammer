@@ -21,8 +21,8 @@ public class SettingsTests {
         SettingsTestHelper.OriginalProgramsFolderPath));
       Assert.That(settings.TemplateProgramsFolder.Path, Is.EqualTo(
         SettingsTestHelper.TemplateProgramsFolderPath));
-      Assert.That(settings.DefaultTemplate.SubPath, Is.EqualTo(
-        SettingsTestHelper.DefaultTemplateSubPath));
+      Assert.That(settings.DefaultTemplate.Path, Is.EqualTo(
+        SettingsTestHelper.DefaultTemplatePath));
       Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
       Assert.That(!settings.MustUseGuiScriptProcessor(
         "Factory", "Bass-Sub"));
