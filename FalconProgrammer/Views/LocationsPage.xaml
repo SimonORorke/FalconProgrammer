@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
+             x:Class="FalconProgrammer.Views.LocationsPage">
+    <ContentPage.BindingContext>
+        <viewModel:LocationsViewModel />
+    </ContentPage.BindingContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="EmptyRow0" Height="10" />
+            <RowDefinition x:Name="SettingsRow" Height="Auto" />
+            <RowDefinition x:Name="EmptyRow2" Height="10" />
+            <RowDefinition x:Name="ProgramsRow" Height="Auto" />
+            <RowDefinition x:Name="EmptyRow4" Height="10" />
+            <RowDefinition x:Name="OriginalProgramsRow" Height="Auto" />
+            <RowDefinition x:Name="EmptyRow6" Height="10" />
+            <RowDefinition x:Name="TemplateProgramsRow" Height="Auto" />
+            <RowDefinition x:Name="EmptyRow8" Height="10" />
+            <RowDefinition x:Name="DefaultTemplateRow" Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="EmptyColumn0" Width="10" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition x:Name="EmptyColumn2" Width="10" />
+            <ColumnDefinition Width="800" />
+            <ColumnDefinition x:Name="EmptyColumn4" Width="10" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="1" Grid.Column="1"
+               Text="Settings Folder"
+               VerticalTextAlignment="Center" />
+        <Entry Grid.Row="1" Grid.Column="3"
+               Text="{Binding SettingsFolderPath}"
+               Placeholder="Full path of folder" />
+        <Button Grid.Row="1" Grid.Column="5" Text="Browse..."
+                Command="{Binding BrowseForSettingsFolderCommand}" />
+        <Label Grid.Row="3" Grid.Column="1"
+               Text="Programs Folder"
+               VerticalTextAlignment="Center" />
+        <Entry Grid.Row="3" Grid.Column="3"
+               Text="{Binding ProgramsFolderPath}"
+               Placeholder="Full path of folder" />
+        <Button Grid.Row="3" Grid.Column="5" Text="Browse..."
+                Command="{Binding BrowseForProgramsFolderCommand}" />
+        <Label Grid.Row="5" Grid.Column="1"
+               Text="Original Programs Folder"
+               VerticalTextAlignment="Center" />
+        <Entry Grid.Row="5" Grid.Column="3"
+               Text="{Binding OriginalProgramsFolderPath}"
+               Placeholder="Full path of folder" />
+        <Button Grid.Row="5" Grid.Column="5" Text="Browse..."
+                Command="{Binding BrowseForOriginalProgramsFolderCommand}" />
+        <Label Grid.Row="7" Grid.Column="1"
+               Text="Template Programs Folder"
+               VerticalTextAlignment="Center" />
+        <Entry Grid.Row="7" Grid.Column="3"
+               Text="{Binding TemplateProgramsFolderPath}"
+               Placeholder="Full path of folder" />
+        <Button Grid.Row="7" Grid.Column="5" Text="Browse..."
+                Command="{Binding BrowseForTemplateProgramsFolderCommand}" />
+        <Label Grid.Row="9" Grid.Column="1"
+               Text="Default Template File"
+               VerticalTextAlignment="Center" />
+        <Entry Grid.Row="9" Grid.Column="3"
+               Text="{Binding DefaultTemplatePath}"
+               Placeholder="Full path of template Falcon program file" />
+        <Button Grid.Row="9" Grid.Column="5" Text="Browse..."
+                Command="{Binding BrowseForDefaultTemplateCommand}" />
+    </Grid>
+</ContentPage>

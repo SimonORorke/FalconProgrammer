@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Shell
+    x:Class="FalconProgrammer.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:FalconProgrammer.Views"
+    FlyoutBehavior="Disabled"
+    Width="1155"
+    Title="Falcon Programmer">
+
+    <TabBar>
+        <ShellContent
+            Title="Locations"
+            ContentTemplate="{DataTemplate views:LocationsPage}" />
+
+        <ShellContent
+            Title="Batch Script"
+            ContentTemplate="{DataTemplate views:BatchScriptPage}" />
+    </TabBar>
+
+</Shell>
