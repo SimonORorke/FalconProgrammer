@@ -34,6 +34,8 @@ namespace FalconProgrammer.Model;
   }
 
   public static string? AppDataFolderPathMaui { get; set; }
+  // public static string? AppDataFolderPathMaui { get; set; } = 
+  //   @"C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState";
 
   internal static DirectoryInfo GetAppDataFolder(
     string applicationName = DefaultApplicationName) {

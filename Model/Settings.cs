@@ -6,7 +6,7 @@ namespace FalconProgrammer.Model;
 [XmlRoot(nameof(Settings))]
 public class Settings {
   public const string DefaultSettingsFolderPath =
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\MauiSettings";
+    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
   [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();

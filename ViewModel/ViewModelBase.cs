@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Storage;
+﻿using System.Diagnostics;
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
@@ -40,6 +41,12 @@ public abstract class ViewModelBase : ObservableObject {
     get {
       if (_settingsFolderLocation == null) {
         SettingsFolderLocation.AppDataFolderPathMaui = FileSystem.AppDataDirectory;
+        Debug.WriteLine("====================================================");
+        Debug.WriteLine(
+          "SettingsFolderLocation.AppDataFolderPathMaui = " + 
+          $"'{SettingsFolderLocation.AppDataFolderPathMaui}'");
+        // C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
+        Debug.WriteLine("====================================================");
         _settingsFolderLocation = SettingsFolderLocation.Read();
       }
       return _settingsFolderLocation;
