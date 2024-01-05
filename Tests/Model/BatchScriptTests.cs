@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using FalconProgrammer.Model;
 
-namespace FalconProgrammer.Tests;
+namespace FalconProgrammer.Tests.Model;
 
 [TestFixture]
 public class BatchScriptTests {

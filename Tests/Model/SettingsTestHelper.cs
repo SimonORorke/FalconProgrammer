@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
 
-namespace FalconProgrammer.Tests;
+namespace FalconProgrammer.Tests.Model;
 
 public static class SettingsTestHelper {
   public const string BatchScriptsFolderPath =

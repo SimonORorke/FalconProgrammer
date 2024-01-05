@@ -1,6 +1,6 @@
 ﻿using FalconProgrammer.Model;
 
-namespace FalconProgrammer.Tests;
+namespace FalconProgrammer.Tests.Model;
 
 #pragma warning disable NUnit2005 // Consider using Assert.That(actual, Is.EqualTo(expected)) instead of Assert.AreEqual(expected, actual)
 [TestFixture]

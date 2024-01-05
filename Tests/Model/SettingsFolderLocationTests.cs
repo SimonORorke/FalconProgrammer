@@ -1,6 +1,6 @@
 using FalconProgrammer.Model;
 
-namespace FalconProgrammer.Tests;
+namespace FalconProgrammer.Tests.Model;
 
 public class SettingsFolderLocationTests {
   [Test]

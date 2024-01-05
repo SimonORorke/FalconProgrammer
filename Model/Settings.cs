@@ -61,13 +61,17 @@ public class Settings {
     return result;
   }
 
+  protected virtual void Serialize() {
+    var serializer = new XmlSerializer(typeof(Settings));
+    using var writer = new StreamWriter(SettingsPath);
+    serializer.Serialize(writer, this);
+  }
+
   public void Write(string? settingsPath = null) {
     if (settingsPath!= null) {
       SettingsPath = settingsPath;
     }
-    var serializer = new XmlSerializer(typeof(Settings));
-    using var writer = new StreamWriter(SettingsPath);
-    serializer.Serialize(writer, this);
+    Serialize();
   }
 
   public class Folder {

@@ -1,4 +1,4 @@
-﻿namespace FalconProgrammer.Tests;
+﻿namespace FalconProgrammer.Tests.Model;
 
 [TestFixture]
 public class SettingsTests {
@@ -45,17 +45,13 @@ public class SettingsTests {
   }
 
   [Test]
-  public void Update() {
-    SettingsTestHelper.DeleteAnyData();
-    try {
-      var settings = SettingsTestHelper.ReadSettings();
-      Assert.That(!File.Exists(settings.SettingsPath));
-      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(string.Empty));
-      settings.ProgramsFolder.Path = SettingsTestHelper.ProgramsFolderPath;
-      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(
-        SettingsTestHelper.ProgramsFolderPath));
-    } finally {
-      SettingsTestHelper.DeleteAnyData();
-    }
+  public void WriteSettingsPath() {
+    var settings = new TestSettings {
+      SettingsPath = @"C:\Libraries"
+    };
+    const string newSettingsPath = @"C:\Markup";
+    settings.Write(newSettingsPath);
+    Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
+    Assert.That(settings.SerializeCount, Is.EqualTo(1));
   }
 }
