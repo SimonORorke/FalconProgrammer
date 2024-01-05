@@ -8,6 +8,10 @@ namespace FalconProgrammer.ViewModel;
 public abstract class SettingsWriterViewModelBase : ViewModelBase {
   private SettingsFolderLocation? _settingsFolderLocation;
   private string? _settingsFolderPath = string.Empty;
+
+  protected SettingsWriterViewModelBase() {
+    SettingsFolderPath = SettingsFolderLocation.Path;
+  }
   
   private bool HaveSettingsBeenUpdated { get; set; }
 
