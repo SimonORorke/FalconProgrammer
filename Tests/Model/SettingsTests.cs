@@ -45,12 +45,13 @@ public class SettingsTests {
   }
 
   [Test]
-  public void WriteSettingsPath() {
+  public void WriteToNewSettingsFolder() {
     var settings = new TestSettings {
-      SettingsPath = @"C:\Libraries"
+      SettingsPath = @"C:\Libraries\Settings.xml"
     };
-    const string newSettingsPath = @"C:\Markup";
-    settings.Write(newSettingsPath);
+    const string newSettingsFolderPath = @"C:\Markup";
+    const string newSettingsPath = @"C:\Markup\Settings.xml";
+    settings.Write(newSettingsFolderPath);
     Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
     Assert.That(settings.SerializeCount, Is.EqualTo(1));
   }

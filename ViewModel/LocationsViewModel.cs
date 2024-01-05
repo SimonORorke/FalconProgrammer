@@ -168,6 +168,7 @@ public class LocationsViewModel : ViewModelBase {
     } else {
       SettingsFolderLocation.Path = SettingsFolderPath;
       SettingsFolderLocation.Write();
+      Settings.Write(SettingsFolderPath);
     }
   }
 }

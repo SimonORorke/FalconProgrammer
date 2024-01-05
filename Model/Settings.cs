@@ -21,7 +21,7 @@ public class Settings {
   [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
-  public static FileInfo GetSettingsFile(string settingsFolderPath) {
+  internal static FileInfo GetSettingsFile(string settingsFolderPath) {
     return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
   }
 
@@ -67,9 +67,10 @@ public class Settings {
     serializer.Serialize(writer, this);
   }
 
-  public void Write(string? settingsPath = null) {
-    if (settingsPath!= null) {
-      SettingsPath = settingsPath;
+  public void Write(string? settingsFolderPath = null) {
+    if (settingsFolderPath!= null) {
+      var settingsFile = GetSettingsFile(settingsFolderPath);
+      SettingsPath = settingsFile.FullName;
     }
     Serialize();
   }
