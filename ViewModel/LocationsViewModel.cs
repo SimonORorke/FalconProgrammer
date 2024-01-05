@@ -1,13 +1,10 @@
-﻿using System.ComponentModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
-public class LocationsViewModel : ViewModelBase {
-  private string _settingsFolderPath = string.Empty;
-
+public class LocationsViewModel : SettingsWriterViewModelBase {
   public LocationsViewModel() {
     BrowseForDefaultTemplateCommand = new AsyncRelayCommand(BrowseForDefaultTemplate);
     BrowseForOriginalProgramsFolderCommand = 
@@ -15,7 +12,6 @@ public class LocationsViewModel : ViewModelBase {
     BrowseForProgramsFolderCommand = new AsyncRelayCommand(BrowseForProgramsFolder);
     BrowseForSettingsFolderCommand = new AsyncRelayCommand(BrowseForSettingsFolder);
     BrowseForTemplateProgramsFolderCommand = new AsyncRelayCommand(BrowseForTemplateProgramsFolder);
-    SettingsFolderPath = SettingsFolderLocation.Path;
   }
 
   public ICommand BrowseForDefaultTemplateCommand { get; }
@@ -23,7 +19,6 @@ public class LocationsViewModel : ViewModelBase {
   public ICommand BrowseForProgramsFolderCommand { get; }
   public ICommand BrowseForSettingsFolderCommand { get; }
   public ICommand BrowseForTemplateProgramsFolderCommand { get; }
-  private bool HaveSettingsBeenUpdated { get; set; }
 
   public string DefaultTemplatePath {
     get => Settings.DefaultTemplate.Path;
@@ -50,16 +45,6 @@ public class LocationsViewModel : ViewModelBase {
     set {
       if (Settings.ProgramsFolder.Path != value) {
         Settings.ProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
-
-  public string SettingsFolderPath {
-    get => _settingsFolderPath;
-    set {
-      if (_settingsFolderPath != value) {
-        _settingsFolderPath = value;
         OnPropertyChanged();
       }
     }
@@ -134,41 +119,6 @@ public class LocationsViewModel : ViewModelBase {
     var result = await BrowseForFolder();
     if (result.IsSuccessful) {
       TemplateProgramsFolderPath = result.Folder.Path;
-    }
-  }
-
-  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-    base.OnPropertyChanged(e);
-    if (IsVisible) {
-      HaveSettingsBeenUpdated = true;
-      if (string.IsNullOrEmpty(SettingsFolderPath)) {
-        AlertService.ShowAlert("Error", 
-          "Settings cannot be saved: a settings folder has not been specified.");
-        return;
-      }
-      if (!FileSystemService.FolderExists(SettingsFolderPath)) {
-        AlertService.ShowAlert("Error", 
-          "Settings cannot be saved: cannot find settings folder '"
-          + $"'{SettingsFolderPath}'.");
-      }
-    }
-  }
-
-  public override void OnDisappearing() {
-    base.OnDisappearing();
-    if (HaveSettingsBeenUpdated) {
-      SaveSettings();
-      HaveSettingsBeenUpdated = false;
-    }
-  }
-
-  private void SaveSettings() {
-    if (SettingsFolderPath == SettingsFolderLocation.Path) {
-      Settings.Write();
-    } else {
-      SettingsFolderLocation.Path = SettingsFolderPath;
-      SettingsFolderLocation.Write();
-      Settings.Write(SettingsFolderPath);
     }
   }
 }
