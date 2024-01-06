@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model; 
 
@@ -40,9 +41,11 @@ namespace FalconProgrammer.Model;
   /// <summary>
   ///   Can be dispensed with once all settings can be specified via the GUI.
   /// </summary>
+  /// <remarks>
+  ///   C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
+  /// </remarks>
+  [SuppressMessage("ReSharper", "CommentTypo")]
   public static string? AppDataFolderPathMaui { get; set; }
-  // public static string? AppDataFolderPathMaui { get; set; } = 
-  //   @"C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState";
 
   internal static DirectoryInfo GetAppDataFolder(
     string applicationName = DefaultApplicationName) {
