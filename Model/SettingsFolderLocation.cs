@@ -33,6 +33,9 @@ namespace FalconProgrammer.Model;
     Directory.CreateDirectory(Path);
   }
 
+  /// <summary>
+  ///   Can be dispensed with once all settings can be specified via the GUI.
+  /// </summary>
   public static string? AppDataFolderPathMaui { get; set; }
   // public static string? AppDataFolderPathMaui { get; set; } = 
   //   @"C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState";

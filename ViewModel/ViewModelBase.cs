@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Storage;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
@@ -12,13 +13,13 @@ public abstract class ViewModelBase : ObservableObject {
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
 
-  protected IAlertService AlertService =>
+  internal IAlertService AlertService =>
     _alertService ??= ServiceHelper.GetService<IAlertService>();
 
-  protected IFilePicker FilePicker =>
+  internal IFilePicker FilePicker =>
     _filePicker ??= ServiceHelper.GetService<IFilePicker>();
 
-  protected IFileSystemService FileSystemService =>
+  internal IFileSystemService FileSystemService =>
     _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>();
 
   protected IFolderPicker FolderPicker =>
@@ -27,9 +28,8 @@ public abstract class ViewModelBase : ObservableObject {
   protected bool IsVisible { get; private set; }
 
   internal ServiceHelper ServiceHelper {
-    get => _serviceHelper ??= ServiceHelper.Default;
+    [ExcludeFromCodeCoverage] get => _serviceHelper ??= ServiceHelper.Default;
     // For unit testing.
-    // ReSharper disable once UnusedMember.Global
     set => _serviceHelper = value;
   }
 

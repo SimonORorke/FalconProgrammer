@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Model\FalconProgrammer.Model.csproj" />
+      <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj" />
     </ItemGroup>
 
 </Project>
