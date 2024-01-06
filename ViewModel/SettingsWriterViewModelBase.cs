@@ -29,7 +29,14 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   }
 
   public string SettingsFolderPath {
-    get => _settingsFolderPath ??= GetSettingsFolderPath();
+    get {
+      if (_settingsFolderPath == null) {
+        SettingsFolderLocation.AppDataFolderPathMaui =
+          FileSystemService.AppDataFolderPathMaui;
+        _settingsFolderPath = SettingsFolderLocation.Path;
+      }
+      return _settingsFolderPath;
+    }
     set {
       if (_settingsFolderPath != value) {
         _settingsFolderPath = value;
@@ -52,12 +59,6 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
       return false;
     }
     return true;
-  }
-
-  private string GetSettingsFolderPath() {
-    SettingsFolderLocation.AppDataFolderPathMaui =
-      FileSystemService.AppDataFolderPathMaui;
-    return SettingsFolderLocation.Path;
   }
   
   public override void OnDisappearing() {
