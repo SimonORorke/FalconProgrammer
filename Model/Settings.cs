@@ -43,7 +43,8 @@ public class Settings {
   }
 
   public static Settings Read(
-    string defaultSettingsFolderPath = DefaultSettingsFolderPath,
+    string defaultSettingsFolderPath = "",
+    // string defaultSettingsFolderPath = DefaultSettingsFolderPath,
     string applicationName = SettingsFolderLocation.DefaultApplicationName) {
     var settingsFolderLocation = SettingsFolderLocation.Read(applicationName);
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {

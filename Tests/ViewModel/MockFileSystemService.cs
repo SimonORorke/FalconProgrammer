@@ -5,7 +5,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 public class MockFileSystemService : IFileSystemService {
   internal bool ExpectedFileExists { get; set; } = true;
   internal bool ExpectedFolderExists { get; set; } = true;
-  public string AppDataFolderPathMaui { get; set; } = string.Empty;
+  public string AppDataFolderPathMaui { get; set; } = @"C:\MockAppData";
 
   public bool FileExists(string path) {
     return ExpectedFileExists;

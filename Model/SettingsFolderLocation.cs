@@ -16,7 +16,9 @@ namespace FalconProgrammer.Model;
     using var reader = new StreamReader(locationFile.FullName);
     var serializer = new XmlSerializer(typeof(SettingsFolderLocation));
     var result = (SettingsFolderLocation)serializer.Deserialize(reader)!;
-    Directory.CreateDirectory(result.Path);
+    if (!string.IsNullOrWhiteSpace(result.Path)) {
+      Directory.CreateDirectory(result.Path);
+    }
     return result;
   }
 
@@ -30,7 +32,9 @@ namespace FalconProgrammer.Model;
     var serializer = new XmlSerializer(typeof(SettingsFolderLocation));
     using var writer = new StreamWriter(locationFile.FullName);
     serializer.Serialize(writer, this);
-    Directory.CreateDirectory(Path);
+    if (!string.IsNullOrWhiteSpace(Path)) {
+      Directory.CreateDirectory(Path);
+    }
   }
 
   /// <summary>

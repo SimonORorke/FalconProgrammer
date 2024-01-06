@@ -7,16 +7,15 @@ namespace FalconProgrammer.ViewModel;
 
 public abstract class SettingsWriterViewModelBase : ViewModelBase {
   private SettingsFolderLocation? _settingsFolderLocation;
-  private string? _settingsFolderPath = string.Empty;
-  
+  private string? _settingsFolderPath;
   private bool HaveSettingsBeenUpdated { get; set; }
 
   private SettingsFolderLocation SettingsFolderLocation {
     [SuppressMessage("ReSharper", "CommentTypo")]
     get {
       if (_settingsFolderLocation == null) {
-        SettingsFolderLocation.AppDataFolderPathMaui = 
-          FileSystemService.AppDataFolderPathMaui;
+        // SettingsFolderLocation.AppDataFolderPathMaui = 
+        //   FileSystemService.AppDataFolderPathMaui;
         Debug.WriteLine("====================================================");
         Debug.WriteLine(
           "SettingsFolderLocation.AppDataFolderPathMaui = " + 
@@ -30,7 +29,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   }
 
   public string SettingsFolderPath {
-    get => _settingsFolderPath ??= SettingsFolderLocation.Path;
+    get => _settingsFolderPath ??= GetSettingsFolderPath();
     set {
       if (_settingsFolderPath != value) {
         _settingsFolderPath = value;
@@ -39,28 +38,46 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     }
   }
 
+  private bool CanSaveSettings() {
+    // The alerts won't show if the application is closing.
+    if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
+      AlertService.ShowAlert("Error", 
+        "Settings cannot be saved: a settings folder has not been specified.");
+      return false;
+    }
+    if (!FileSystemService.FolderExists(SettingsFolderPath)) {
+      AlertService.ShowAlert("Error", 
+        "Settings cannot be saved: cannot find settings folder "
+        + $"'{SettingsFolderPath}'.");
+      return false;
+    }
+    return true;
+  }
+
+  private string GetSettingsFolderPath() {
+    SettingsFolderLocation.AppDataFolderPathMaui =
+      FileSystemService.AppDataFolderPathMaui;
+    return SettingsFolderLocation.Path;
+  }
+  
+  public override void OnDisappearing() {
+    base.OnDisappearing();
+    if (HaveSettingsBeenUpdated && CanSaveSettings()) {
+      SaveSettings();
+      HaveSettingsBeenUpdated = false;
+    }
+  }
+
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
     base.OnPropertyChanged(e);
     if (IsVisible) {
       HaveSettingsBeenUpdated = true;
-      if (string.IsNullOrEmpty(SettingsFolderPath)) {
-        AlertService.ShowAlert("Error", 
-          "Settings cannot be saved: a settings folder has not been specified.");
-        return;
+      // We don't want to show setting folder error messages if the user is in the
+      // process of specifying the settings folder.
+      if (e.PropertyName != nameof(SettingsFolderPath)) {
+        // We just want to see any settings folder error message box at this stage.
+        bool dummy = CanSaveSettings(); 
       }
-      if (!FileSystemService.FolderExists(SettingsFolderPath)) {
-        AlertService.ShowAlert("Error", 
-          "Settings cannot be saved: cannot find settings folder '"
-          + $"'{SettingsFolderPath}'.");
-      }
-    }
-  }
-
-  public override void OnDisappearing() {
-    base.OnDisappearing();
-    if (HaveSettingsBeenUpdated) {
-      SaveSettings();
-      HaveSettingsBeenUpdated = false;
     }
   }
 
