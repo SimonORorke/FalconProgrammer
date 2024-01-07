@@ -11,7 +11,8 @@ public class Batch {
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
 
-  private static Settings Settings => _settings ??= Settings.Read();
+  private static Settings Settings => 
+    _settings ??= Settings.Read(FileSystemService.Default, Serializer.Default);
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 

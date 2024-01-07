@@ -15,7 +15,7 @@ namespace FalconProgrammer.Model;
   ///   <see cref="FileSystemService" />. Can be set to a mock for testing. 
   /// </summary>
   [XmlIgnore] public IFileSystemService FileSystemService {
-    get => _fileSystemService ??= new FileSystemService();
+    get => _fileSystemService ??= Model.FileSystemService.Default;
     set => _fileSystemService = value;
   }
 
@@ -24,31 +24,36 @@ namespace FalconProgrammer.Model;
   ///   <see cref="Serializer" />. Can be set to a mock serializer for testing. 
   /// </summary>
   [XmlIgnore] public ISerializer Serializer {
-    get => _serializer ??= new Serializer();
+    get => _serializer ??= Model.Serializer.Default;
     set => _serializer = value;
   }
 
   public static SettingsFolderLocation Read(
     IFileSystemService fileSystemService,
+    ISerializer writeSerializer,
     string applicationName = DefaultApplicationName) {
     var locationFile = GetSettingsFolderLocationFile(applicationName);
-    if (!locationFile.Exists) {
-      return new SettingsFolderLocation();
+    SettingsFolderLocation result;
+    if (locationFile.Exists) {
+      using var reader = new StreamReader(locationFile.FullName);
+      var readSerializer = new XmlSerializer(typeof(SettingsFolderLocation));
+      result = (SettingsFolderLocation)readSerializer.Deserialize(reader)!;
+      if (!string.IsNullOrWhiteSpace(result.Path)) {
+        fileSystemService.CreateFolder(result.Path);
+      }
+    } else {
+      result = new SettingsFolderLocation();
     }
-    using var reader = new StreamReader(locationFile.FullName);
-    var serializer = new XmlSerializer(typeof(SettingsFolderLocation));
-    var result = (SettingsFolderLocation)serializer.Deserialize(reader)!;
-    if (!string.IsNullOrWhiteSpace(result.Path)) {
-      fileSystemService.CreateFolder(result.Path);
-    }
+    result.FileSystemService = fileSystemService;
+    result.Serializer = writeSerializer;
     return result;
   }
 
   public void Write(
     string applicationName = DefaultApplicationName) {
-    var appDataFolder = GetAppDataFolder(applicationName);
-    if (!appDataFolder.Exists) {
-      appDataFolder.Create();
+    string appDataFolderPath = GetAppDataFolderPath(applicationName);
+    if (!FileSystemService.FolderExists(appDataFolderPath)) {
+      FileSystemService.CreateFolder(appDataFolderPath);
     }
     var locationFile = GetSettingsFolderLocationFile(applicationName);
     Serializer.Serialize(
@@ -67,18 +72,18 @@ namespace FalconProgrammer.Model;
   [SuppressMessage("ReSharper", "CommentTypo")]
   public static string? AppDataFolderPathMaui { get; set; }
 
-  internal static DirectoryInfo GetAppDataFolder(
+  internal static string GetAppDataFolderPath(
     string applicationName = DefaultApplicationName) {
     string appDataFolderPath = AppDataFolderPathMaui ?? System.IO.Path.Combine(
       Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
       applicationName); 
-    var result = new DirectoryInfo(appDataFolderPath);
-    return result;
+    return appDataFolderPath;
   }
 
   internal static FileInfo GetSettingsFolderLocationFile(
     string applicationName = DefaultApplicationName) {
-    return new FileInfo(System.IO.Path.Combine(
-      GetAppDataFolder(applicationName).FullName, "SettingsFolderLocation.xml"));
+    return new FileInfo(
+      System.IO.Path.Combine(GetAppDataFolderPath(applicationName), 
+        "SettingsFolderLocation.xml"));
   }
 }

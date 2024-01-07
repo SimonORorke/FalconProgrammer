@@ -7,6 +7,7 @@ namespace FalconProgrammer.Model;
 /// </summary>
 public class Serializer : ISerializer {
   private static ISerializer? _default;
+  private Serializer() { }
   public static ISerializer Default => _default ??= new Serializer();
 
   public void Serialize(Type type, object objectToSerialise, string outputPath) {

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 

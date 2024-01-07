@@ -45,10 +45,12 @@ public abstract class ViewModelBase : ObservableObject {
 
   protected bool IsVisible { get; private set; }
 
-  internal ISerializer Serializer =>
+  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+  protected ISerializer Serializer =>
     // The MauiProgram won't be providing an ISerializer to ServiceHelper.
     // But tests may.
-    _serializer ??= new Serializer();
+    _serializer ??= ServiceHelper.GetService<ISerializer>() ??
+                    Model.Serializer.Default;
 
   internal ServiceHelper ServiceHelper {
     [ExcludeFromCodeCoverage] get => _serviceHelper ??= ServiceHelper.Default;
@@ -56,15 +58,8 @@ public abstract class ViewModelBase : ObservableObject {
     set => _serviceHelper = value;
   }
 
-  protected Settings Settings {
-    get {
-      if (_settings == null) {
-        _settings = Settings.Read(FileSystemService);
-        _settings.Serializer = Serializer;
-      }
-      return _settings;
-    }
-  }
+  protected Settings Settings => 
+    _settings ??= Settings.Read(FileSystemService, Serializer);
 
   public virtual void OnAppearing() {
     IsVisible = true;

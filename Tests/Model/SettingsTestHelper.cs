@@ -41,20 +41,22 @@ public static class SettingsTestHelper {
     if (locationFile.Exists) {
       locationFile.Delete();
     }
-    var appDataFolder = SettingsFolderLocation.GetAppDataFolder(
+    string appDataFolderPath = SettingsFolderLocation.GetAppDataFolderPath(
       TestApplicationName);
-    if (appDataFolder.Exists) {
-      appDataFolder.Delete();
+    if (Directory.Exists(appDataFolderPath)) {
+      Directory.Delete(appDataFolderPath);
     }
     // Restore production settings location. Default application name.
-    var location = SettingsFolderLocation.Read(FileSystemService.Default);
+    var location = SettingsFolderLocation.Read(
+      FileSystemService.Default, Serializer.Default);
     location.Path = DefaultSettingsFolderPath;
     location.Write(); // Default application name
   }
 
   public static Settings ReadSettings() {
     return Settings.Read(
-      FileSystemService.Default, TestSettingsFolderPath, TestApplicationName);
+      FileSystemService.Default, Serializer.Default,
+      TestSettingsFolderPath, TestApplicationName);
   }
 
   /// <summary>

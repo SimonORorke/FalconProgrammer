@@ -26,7 +26,7 @@ public class Settings {
   ///   <see cref="Serializer" />. Can be set to a mock serializer for unit testing. 
   /// </summary>
   [XmlIgnore] public ISerializer Serializer {
-    get => _serializer ??= new Serializer();
+    get => _serializer ??= Model.Serializer.Default;
     set => _serializer = value;
   }
   
@@ -54,24 +54,27 @@ public class Settings {
   }
 
   public static Settings Read(
-    IFileSystemService? fileSystemService = null,
+    IFileSystemService fileSystemService,
+    ISerializer writeSerializer,
     string defaultSettingsFolderPath = "",
-    // string defaultSettingsFolderPath = DefaultSettingsFolderPath,
     string applicationName = SettingsFolderLocation.DefaultApplicationName) {
     var settingsFolderLocation = SettingsFolderLocation.Read(
-      fileSystemService, applicationName);
+      fileSystemService, writeSerializer, applicationName);
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = defaultSettingsFolderPath;
       settingsFolderLocation.Write();
     }
     var settingsFile = GetSettingsFile(settingsFolderLocation.Path);
-    if (!settingsFile.Exists) {
-      return new Settings { SettingsPath = settingsFile.FullName };
+    Settings result;
+    if (settingsFile.Exists) {
+      using var reader = new StreamReader(settingsFile.FullName);
+      var readSerializer = new XmlSerializer(typeof(Settings));
+      result = (Settings)readSerializer.Deserialize(reader)!;
+      result.SettingsPath = settingsFile.FullName;
+    } else {
+      result = new Settings { SettingsPath = settingsFile.FullName };
     }
-    using var reader = new StreamReader(settingsFile.FullName);
-    var serializer = new XmlSerializer(typeof(Settings));
-    var result = (Settings)serializer.Deserialize(reader)!;
-    result.SettingsPath = settingsFile.FullName;
+    result.Serializer = writeSerializer;
     return result;
   }
 

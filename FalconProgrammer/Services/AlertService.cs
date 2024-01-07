@@ -6,6 +6,7 @@ namespace FalconProgrammer.Services;
 // https://stackoverflow.com/questions/72429055/how-to-displayalert-in-a-net-maui-viewmodel
 public class AlertService : IAlertService {
   private static IAlertService? _default;
+  private AlertService() { }
   public static IAlertService Default => _default ??= new AlertService();
 
   /// <summary>

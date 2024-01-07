@@ -23,7 +23,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
         // C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
         Debug.WriteLine("====================================================");
         _settingsFolderLocation =
-          SettingsFolderLocation.Read(Model.FileSystemService.Default);
+          SettingsFolderLocation.Read(FileSystemService, Serializer);
       }
       return _settingsFolderLocation;
     }
