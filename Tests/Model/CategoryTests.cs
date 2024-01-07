@@ -91,7 +91,7 @@ public class CategoryTests {
   }
 
   private static Settings ReadSettings() {
-    var settingsFolderLocation = SettingsFolderLocation.Read();
+    var settingsFolderLocation = SettingsFolderLocation.Read(FileSystemService.Default);
     settingsFolderLocation.Path = Settings.DefaultSettingsFolderPath;
     settingsFolderLocation.Write();
     return Settings.Read();

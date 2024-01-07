@@ -17,10 +17,23 @@ public class MockFolderPicker : IFolderPicker {
 
   public async Task<FolderPickerResult> PickAsync(
     CancellationToken cancellationToken = new CancellationToken()) {
-    var folder = Cancel 
-      ? null 
-      : new Folder(ExpectedPath, Path.GetFileName(ExpectedPath));
-    var folderPickerResult = new FolderPickerResult(folder, null);
+    Folder? folder;
+    Exception? exception;
+    if (Cancel) {
+      // Set the folder and exception such that FolderPickerResult.IsSuccessful will be
+      // set to false.
+      folder = null;
+      exception = new OperationCanceledException();
+    } else {
+      // Set the folder and exception such that FolderPickerResult.IsSuccessful will be
+      // set to true.
+      folder = !string.IsNullOrWhiteSpace(ExpectedPath)
+        ? new Folder(ExpectedPath, Path.GetFileName(ExpectedPath))
+        : throw new InvalidOperationException(
+          "MockFolderPicker.ExpectedPath has not been specified.");
+      exception = null;
+    }
+    var folderPickerResult = new FolderPickerResult(folder, exception);
     await Task.Delay(0, cancellationToken);
     return folderPickerResult;
   }

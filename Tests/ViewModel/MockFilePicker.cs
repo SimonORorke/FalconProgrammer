@@ -5,12 +5,15 @@ namespace FalconProgrammer.Tests.ViewModel;
 public class MockFilePicker : IFilePicker {
   internal bool Cancel { get; set; }
   internal string ExpectedPath { get; set; } = string.Empty;
-  // internal int PickAsyncCount { get; set; }
 
   public async Task<FileResult?> PickAsync(PickOptions? options = null) {
-    // PickAsyncCount++;
     await Task.Delay(0);
-    var fileResult = Cancel ? null : new FileResult(ExpectedPath); 
+    var fileResult = Cancel 
+      ? null 
+      : !string.IsNullOrWhiteSpace(ExpectedPath) 
+        ? new FileResult(ExpectedPath)
+        : throw new InvalidOperationException(
+          "MockFilePicker.ExpectedPath has not been specified."); 
     return fileResult;
   }
 

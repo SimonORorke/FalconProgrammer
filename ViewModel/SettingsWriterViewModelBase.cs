@@ -18,11 +18,12 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
         //   FileSystemService.AppDataFolderPathMaui;
         Debug.WriteLine("====================================================");
         Debug.WriteLine(
-          "SettingsFolderLocation.AppDataFolderPathMaui = " + 
+          "SettingsFolderLocation.AppDataFolderPathMaui = " +
           $"'{SettingsFolderLocation.AppDataFolderPathMaui}'");
         // C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
         Debug.WriteLine("====================================================");
-        _settingsFolderLocation = SettingsFolderLocation.Read();
+        _settingsFolderLocation =
+          SettingsFolderLocation.Read(Model.FileSystemService.Default);
       }
       return _settingsFolderLocation;
     }
@@ -32,7 +33,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     get {
       if (_settingsFolderPath == null) {
         SettingsFolderLocation.AppDataFolderPathMaui =
-          FileSystemService.AppDataFolderPathMaui;
+          AppDataFolderService.AppDataFolderPathMaui;
         _settingsFolderPath = SettingsFolderLocation.Path;
       }
       return _settingsFolderPath;
@@ -48,19 +49,19 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   private bool CanSaveSettings() {
     // The alerts won't show if the application is closing.
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
-      AlertService.ShowAlert("Error", 
+      AlertService.ShowAlert("Error",
         "Settings cannot be saved: a settings folder has not been specified.");
       return false;
     }
     if (!FileSystemService.FolderExists(SettingsFolderPath)) {
-      AlertService.ShowAlert("Error", 
+      AlertService.ShowAlert("Error",
         "Settings cannot be saved: cannot find settings folder "
         + $"'{SettingsFolderPath}'.");
       return false;
     }
     return true;
   }
-  
+
   public override void OnDisappearing() {
     base.OnDisappearing();
     if (HaveSettingsBeenUpdated && CanSaveSettings()) {
@@ -77,7 +78,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
       // process of specifying the settings folder.
       if (e.PropertyName != nameof(SettingsFolderPath)) {
         // We just want to see any settings folder error message box at this stage.
-        bool dummy = CanSaveSettings(); 
+        bool dummy = CanSaveSettings();
       }
     }
   }

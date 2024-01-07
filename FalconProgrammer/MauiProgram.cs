@@ -18,7 +18,7 @@ public static class MauiProgram {
       });
     builder.Services.AddSingleton(AlertService.Default);
     builder.Services.AddSingleton(FilePicker.Default);
-    builder.Services.AddSingleton(FileSystemService.Default);
+    builder.Services.AddSingleton(AppDataFolderService.Default);
     builder.Services.AddSingleton(FolderPicker.Default);
     // As we are only going to use services in the view model, accessed via
     // ServiceHelper, we don't need to register Pages to Services. 

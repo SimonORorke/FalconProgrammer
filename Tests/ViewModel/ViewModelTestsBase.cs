@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Tests.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -17,11 +18,13 @@ public abstract class ViewModelTestsBase {
     mockServiceProvider.Services.Add(MockFolderPicker);
     ServiceHelper = new ServiceHelper();
     ServiceHelper.Initialise(mockServiceProvider);
+    MockSerializer = new MockSerializer();
   }
   
   protected MockAlertService MockAlertService { get; private set; } = null!;
   protected MockFilePicker MockFilePicker { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockFolderPicker MockFolderPicker { get; private set; } = null!;
+  protected MockSerializer MockSerializer { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;
 }

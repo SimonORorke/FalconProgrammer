@@ -1,12 +1,15 @@
-﻿using FalconProgrammer.ViewModel;
+﻿namespace FalconProgrammer.Model;
 
-namespace FalconProgrammer.Services;
-
+/// <summary>
+///   A utility for accessing and updating the file system.
+/// </summary>
 public class FileSystemService : IFileSystemService {
   private static IFileSystemService? _default;
   public static IFileSystemService Default => _default ??= new FileSystemService();
 
-  public string AppDataFolderPathMaui { get; set; } = FileSystem.AppDataDirectory;
+  public void CreateFolder(string path) {
+    Directory.CreateDirectory(path);
+  }
 
   public bool FileExists(string path) {
     return File.Exists(path);

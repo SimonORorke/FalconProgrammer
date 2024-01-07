@@ -3,6 +3,7 @@ using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class MockAlertService : IAlertService {
   internal string LastMessage { get; set; } = string.Empty;
   internal string LastTitle { get; set; } = string.Empty;

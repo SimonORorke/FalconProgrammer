@@ -8,6 +8,7 @@ public class Settings {
   public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
+  private ISerializer? _serializer;
   [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
@@ -19,6 +20,16 @@ public class Settings {
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
   [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
+
+  /// <summary>
+  ///   A utility that can serialize an object to a file. The default is a real
+  ///   <see cref="Serializer" />. Can be set to a mock serializer for unit testing. 
+  /// </summary>
+  [XmlIgnore] public ISerializer Serializer {
+    get => _serializer ??= new Serializer();
+    set => _serializer = value;
+  }
+  
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static FileInfo GetSettingsFile(string settingsFolderPath) {
@@ -43,10 +54,12 @@ public class Settings {
   }
 
   public static Settings Read(
+    IFileSystemService? fileSystemService = null,
     string defaultSettingsFolderPath = "",
     // string defaultSettingsFolderPath = DefaultSettingsFolderPath,
     string applicationName = SettingsFolderLocation.DefaultApplicationName) {
-    var settingsFolderLocation = SettingsFolderLocation.Read(applicationName);
+    var settingsFolderLocation = SettingsFolderLocation.Read(
+      fileSystemService, applicationName);
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = defaultSettingsFolderPath;
       settingsFolderLocation.Write();
@@ -62,23 +75,16 @@ public class Settings {
     return result;
   }
 
-  protected virtual void Serialize() {
-    var serializer = new XmlSerializer(typeof(Settings));
-    using var writer = new StreamWriter(SettingsPath);
-    serializer.Serialize(writer, this);
-  }
-
   public void Write(string? settingsFolderPath = null) {
-    if (settingsFolderPath!= null) {
+    if (settingsFolderPath != null) {
       var settingsFile = GetSettingsFile(settingsFolderPath);
       SettingsPath = settingsFile.FullName;
     }
-    Serialize();
+    Serializer.Serialize(typeof(Settings), this, SettingsPath);
   }
 
   public class Folder {
-    [XmlAttribute]
-    public string Path { get; set; } = string.Empty;
+    [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
   public struct IntegerRange {
@@ -89,7 +95,6 @@ public class Settings {
   public class MacrosMidi {
     private ImmutableList<int>? _continuousCcNos;
     private ImmutableList<int>? _toggleCcNos;
-    
     [XmlAttribute] public int ModWheelReplacementCcNo { get; set; }
 
     [XmlArray(nameof(ContinuousCcNoRanges))]

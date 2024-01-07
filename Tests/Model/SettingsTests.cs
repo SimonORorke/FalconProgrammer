@@ -1,4 +1,6 @@
-﻿namespace FalconProgrammer.Tests.Model;
+﻿using FalconProgrammer.Model;
+
+namespace FalconProgrammer.Tests.Model;
 
 [TestFixture]
 public class SettingsTests {
@@ -46,13 +48,18 @@ public class SettingsTests {
 
   [Test]
   public void WriteToNewSettingsFolder() {
-    var settings = new TestSettings {
+    var mockSerializer = new MockSerializer();
+    var settings = new Settings {
+      Serializer = mockSerializer,
       SettingsPath = @"C:\Libraries\Settings.xml"
     };
     const string newSettingsFolderPath = @"C:\Markup";
     const string newSettingsPath = @"C:\Markup\Settings.xml";
     settings.Write(newSettingsFolderPath);
     Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
-    Assert.That(settings.SerializeCount, Is.EqualTo(1));
+    Assert.That(mockSerializer.SerializeCount, Is.EqualTo(1));
+    Assert.That(mockSerializer.LastType, Is.EqualTo(typeof(Settings)));
+    Assert.That(mockSerializer.LastObjectSerialised, Is.SameAs(settings));
+    Assert.That(mockSerializer.LastOutputPath, Is.EqualTo(newSettingsPath));
   }
 }

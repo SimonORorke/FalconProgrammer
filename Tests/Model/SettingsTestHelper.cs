@@ -46,14 +46,15 @@ public static class SettingsTestHelper {
     if (appDataFolder.Exists) {
       appDataFolder.Delete();
     }
-    // Restore production settings location.
-    var location = SettingsFolderLocation.Read(); // Default application name
+    // Restore production settings location. Default application name.
+    var location = SettingsFolderLocation.Read(FileSystemService.Default);
     location.Path = DefaultSettingsFolderPath;
     location.Write(); // Default application name
   }
 
   public static Settings ReadSettings() {
-    return Settings.Read(TestSettingsFolderPath, TestApplicationName);
+    return Settings.Read(
+      FileSystemService.Default, TestSettingsFolderPath, TestApplicationName);
   }
 
   /// <summary>

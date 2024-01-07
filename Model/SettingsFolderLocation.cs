@@ -6,9 +6,30 @@ namespace FalconProgrammer.Model;
 [XmlRoot(nameof(SettingsFolderLocation))] public class SettingsFolderLocation {
   public const string DefaultApplicationName = "FalconProgrammer"; 
   
+  private IFileSystemService? _fileSystemService;
+  private ISerializer? _serializer;
   [XmlAttribute] public string Path { get; set; } = string.Empty;
 
+  /// <summary>
+  ///   A utility that can serialize an object to a file. The default is a real
+  ///   <see cref="FileSystemService" />. Can be set to a mock for testing. 
+  /// </summary>
+  [XmlIgnore] public IFileSystemService FileSystemService {
+    get => _fileSystemService ??= new FileSystemService();
+    set => _fileSystemService = value;
+  }
+
+  /// <summary>
+  ///   A utility that can serialize an object to a file. The default is a real
+  ///   <see cref="Serializer" />. Can be set to a mock serializer for testing. 
+  /// </summary>
+  [XmlIgnore] public ISerializer Serializer {
+    get => _serializer ??= new Serializer();
+    set => _serializer = value;
+  }
+
   public static SettingsFolderLocation Read(
+    IFileSystemService fileSystemService,
     string applicationName = DefaultApplicationName) {
     var locationFile = GetSettingsFolderLocationFile(applicationName);
     if (!locationFile.Exists) {
@@ -18,7 +39,7 @@ namespace FalconProgrammer.Model;
     var serializer = new XmlSerializer(typeof(SettingsFolderLocation));
     var result = (SettingsFolderLocation)serializer.Deserialize(reader)!;
     if (!string.IsNullOrWhiteSpace(result.Path)) {
-      Directory.CreateDirectory(result.Path);
+      fileSystemService.CreateFolder(result.Path);
     }
     return result;
   }
@@ -30,11 +51,10 @@ namespace FalconProgrammer.Model;
       appDataFolder.Create();
     }
     var locationFile = GetSettingsFolderLocationFile(applicationName);
-    var serializer = new XmlSerializer(typeof(SettingsFolderLocation));
-    using var writer = new StreamWriter(locationFile.FullName);
-    serializer.Serialize(writer, this);
+    Serializer.Serialize(
+      typeof(SettingsFolderLocation), this, locationFile.FullName);
     if (!string.IsNullOrWhiteSpace(Path)) {
-      Directory.CreateDirectory(Path);
+      FileSystemService.CreateFolder(Path);
     }
   }
 

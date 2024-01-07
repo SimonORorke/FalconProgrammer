@@ -14,7 +14,7 @@ public class ServiceHelper {
     Services = serviceProvider;
   }
 
-  public T GetService<T>() {
-    return Services.GetService<T>()!;
+  public T? GetService<T>() {
+    return Services.GetService<T>();
   }
 }

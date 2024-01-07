@@ -7,25 +7,48 @@ namespace FalconProgrammer.ViewModel;
 
 public abstract class ViewModelBase : ObservableObject {
   private IAlertService? _alertService;
+  private IAppDataFolderService? _appDataFolderService;
   private IFilePicker? _filePicker;
   private IFileSystemService? _fileSystemService;
   private IFolderPicker? _folderPicker;
+  private ISerializer? _serializer;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
 
   internal IAlertService AlertService =>
-    _alertService ??= ServiceHelper.GetService<IAlertService>();
+    _alertService ??=
+      ServiceHelper.GetService<IAlertService>()
+      ?? throw new InvalidOperationException(
+        "ServiceHelper does not have an IAlertService");
+
+  internal IAppDataFolderService AppDataFolderService =>
+    _appDataFolderService ??=
+      ServiceHelper.GetService<IAppDataFolderService>()
+      ?? throw new InvalidOperationException(
+        "ServiceHelper does not have an IAppDataFolderService");
 
   internal IFilePicker FilePicker =>
-    _filePicker ??= ServiceHelper.GetService<IFilePicker>();
+    _filePicker ??= ServiceHelper.GetService<IFilePicker>()
+                    ?? throw new InvalidOperationException(
+                      "ServiceHelper does not have an IFilePicker");
 
   internal IFileSystemService FileSystemService =>
-    _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>();
+    // The MauiProgram won't be providing an IFileSystemService to ServiceHelper.
+    // But tests may.
+    _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>() ??
+                           Model.FileSystemService.Default;
 
   protected IFolderPicker FolderPicker =>
-    _folderPicker ??= ServiceHelper.GetService<IFolderPicker>();
+    _folderPicker ??= ServiceHelper.GetService<IFolderPicker>()
+                      ?? throw new InvalidOperationException(
+                        "ServiceHelper does not have an IFilePicker");
 
   protected bool IsVisible { get; private set; }
+
+  internal ISerializer Serializer =>
+    // The MauiProgram won't be providing an ISerializer to ServiceHelper.
+    // But tests may.
+    _serializer ??= new Serializer();
 
   internal ServiceHelper ServiceHelper {
     [ExcludeFromCodeCoverage] get => _serviceHelper ??= ServiceHelper.Default;
@@ -33,7 +56,15 @@ public abstract class ViewModelBase : ObservableObject {
     set => _serviceHelper = value;
   }
 
-  protected Settings Settings => _settings ??= Settings.Read();
+  protected Settings Settings {
+    get {
+      if (_settings == null) {
+        _settings = Settings.Read(FileSystemService);
+        _settings.Serializer = Serializer;
+      }
+      return _settings;
+    }
+  }
 
   public virtual void OnAppearing() {
     IsVisible = true;
