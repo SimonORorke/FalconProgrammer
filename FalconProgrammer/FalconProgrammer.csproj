@@ -40,10 +40,12 @@
 
     <ItemGroup>
         <!-- App Icon -->
+        <!-- If the icon SVG file does not have the original file name appicon.svg, 
+        the icon is not shown on the task bar. So there are two copies of the icon SVG file.
+        The unused/commented out SVG file is the  one with the name of the new icon as 
+        downloaded. -->
+<!--        <MauiIcon Include="Resources\AppIcon\falcon_svgrepo_com.svg" />-->
         <MauiIcon Include="Resources\AppIcon\appicon.svg" />
-<!--        <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#111111" />-->
-<!--        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" />-->
-        <!--<MauiIcon Include="Resources\Raw\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
 
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -60,6 +62,7 @@
 
     <ItemGroup>
       <None Remove="Resources\AppIcon\appicon.svg" />
+      <None Remove="Resources\AppIcon\falcon_svgrepo_com.svg" />
     </ItemGroup>
 
     <ItemGroup>
