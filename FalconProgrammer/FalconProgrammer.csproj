@@ -45,7 +45,7 @@
         The unused/commented out SVG file is the  one with the name of the new icon as 
         downloaded. -->
 <!--        <MauiIcon Include="Resources\AppIcon\falcon_svgrepo_com.svg" />-->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" />
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#0a0345"/>
 
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
