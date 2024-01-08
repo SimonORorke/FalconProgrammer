@@ -58,8 +58,15 @@ public abstract class ViewModelBase : ObservableObject {
     set => _serviceHelper = value;
   }
 
-  protected Settings Settings => 
-    _settings ??= Settings.Read(FileSystemService, Serialiser);
+  protected Settings Settings {
+    get {
+      if (_settings == null) {
+        var settingsReader = new SettingsReader(FileSystemService, Serialiser);
+        _settings = settingsReader.Read();
+      }
+      return _settings;
+    }
+  }
 
   public virtual void OnAppearing() {
     IsVisible = true;

@@ -20,8 +20,10 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
           $"'{SettingsFolderLocation.AppDataFolderPathMaui}'");
         // C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
         Debug.WriteLine("====================================================");
+        var settingsFolderLocationReader = new SettingsFolderLocationReader(
+          FileSystemService, Serialiser);
         _settingsFolderLocation =
-          SettingsFolderLocation.Read(FileSystemService, Serialiser);
+          settingsFolderLocationReader.Read();
       }
       return _settingsFolderLocation;
     }

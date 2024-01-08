@@ -28,16 +28,16 @@ public static class SettingsTestHelper {
     TestContext.CurrentContext.TestDirectory, TestApplicationName);
 
   public static void DeleteAnyData() {
-    var settingsFile = Settings.GetSettingsFile(
-      TestSettingsFolderPath);
+    var settingsFile = new FileInfo(
+      Settings.GetSettingsPath(TestSettingsFolderPath));
     if (settingsFile.Exists) {
       settingsFile.Delete();
     }
     if (Directory.Exists(TestSettingsFolderPath)) {
       Directory.Delete(TestSettingsFolderPath);
     }
-    var locationFile =
-      SettingsFolderLocation.GetSettingsFolderLocationFile(TestApplicationName);
+    var locationFile = new FileInfo(
+      SettingsFolderLocation.GetSettingsFolderLocationPath(TestApplicationName));
     if (locationFile.Exists) {
       locationFile.Delete();
     }
@@ -47,16 +47,19 @@ public static class SettingsTestHelper {
       Directory.Delete(appDataFolderPath);
     }
     // Restore production settings location. Default application name.
-    var location = SettingsFolderLocation.Read(
+    var settingsFolderLocationReader = new SettingsFolderLocationReader(
       FileSystemService.Default, Serialiser.Default);
+    var location = settingsFolderLocationReader.Read();
     location.Path = DefaultSettingsFolderPath;
-    location.Write(); // Default application name
+    location.Write();
   }
 
   public static Settings ReadSettings() {
-    return Settings.Read(
-      FileSystemService.Default, Serialiser.Default,
-      TestSettingsFolderPath, TestApplicationName);
+    var settingsReader = new SettingsReader(
+      FileSystemService.Default, Serialiser.Default, TestApplicationName) {
+      DefaultSettingsFolderPath = TestSettingsFolderPath 
+    };
+    return settingsReader.Read();
   }
 
   /// <summary>

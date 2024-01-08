@@ -22,8 +22,8 @@ public class Settings : SerialisableBase {
   
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
-  internal static FileInfo GetSettingsFile(string settingsFolderPath) {
-    return new FileInfo(Path.Combine(settingsFolderPath, "Settings.xml"));
+  internal static string GetSettingsPath(string settingsFolderPath) {
+    return Path.Combine(settingsFolderPath, "Settings.xml");
   }
 
   public bool MustUseGuiScriptProcessor(
@@ -43,35 +43,34 @@ public class Settings : SerialisableBase {
     return result;
   }
 
-  public static Settings Read(
-    IFileSystemService fileSystemService,
-    ISerialiser writeSerialiser,
-    string defaultSettingsFolderPath = "",
-    string applicationName = Global.ApplicationName) {
-    var settingsFolderLocation = SettingsFolderLocation.Read(
-      fileSystemService, writeSerialiser, applicationName);
-    if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
-      settingsFolderLocation.Path = defaultSettingsFolderPath;
-      settingsFolderLocation.Write();
-    }
-    var settingsFile = GetSettingsFile(settingsFolderLocation.Path);
-    Settings result;
-    if (settingsFile.Exists) {
-      using var reader = new StreamReader(settingsFile.FullName);
-      var readSerializer = new XmlSerializer(typeof(Settings));
-      result = (Settings)readSerializer.Deserialize(reader)!;
-      result.SettingsPath = settingsFile.FullName;
-    } else {
-      result = new Settings { SettingsPath = settingsFile.FullName };
-    }
-    result.Serialiser = writeSerialiser;
-    return result;
-  }
+  // public static Settings Read(
+  //   IFileSystemService fileSystemService,
+  //   ISerialiser writeSerialiser,
+  //   string defaultSettingsFolderPath = "",
+  //   string applicationName = Global.ApplicationName) {
+  //   var settingsFolderLocation = SettingsFolderLocation.Read(
+  //     fileSystemService, writeSerialiser, applicationName);
+  //   if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
+  //     settingsFolderLocation.Path = defaultSettingsFolderPath;
+  //     settingsFolderLocation.Write();
+  //   }
+  //   var settingsFile = GetSettingsPath(settingsFolderLocation.Path);
+  //   Settings result;
+  //   if (settingsFile.Exists) {
+  //     using var reader = new StreamReader(settingsFile.FullName);
+  //     var readSerializer = new XmlSerializer(typeof(Settings));
+  //     result = (Settings)readSerializer.Deserialize(reader)!;
+  //     result.SettingsPath = settingsFile.FullName;
+  //   } else {
+  //     result = new Settings { SettingsPath = settingsFile.FullName };
+  //   }
+  //   result.Serialiser = writeSerialiser;
+  //   return result;
+  // }
 
   public void Write(string? settingsFolderPath = null) {
     if (settingsFolderPath != null) {
-      var settingsFile = GetSettingsFile(settingsFolderPath);
-      SettingsPath = settingsFile.FullName;
+      SettingsPath = GetSettingsPath(settingsFolderPath);
     }
     Serialiser.Serialise(typeof(Settings), this, SettingsPath);
   }

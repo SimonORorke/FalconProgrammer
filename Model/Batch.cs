@@ -11,8 +11,17 @@ public class Batch {
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
 
-  private static Settings Settings => 
-    _settings ??= Settings.Read(FileSystemService.Default, Serialiser.Default);
+  private static Settings Settings {
+    get {
+      if (_settings == null) {
+        var settingsReader = new SettingsReader(
+          FileSystemService.Default, Serialiser.Default);
+        _settings = settingsReader.Read();
+      }
+      return _settings;
+    }
+  }
+  
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
@@ -210,7 +219,7 @@ public class Batch {
         "The batch folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
         "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
     }
     var result = new DirectoryInfo(Settings.BatchScriptsFolder.Path);
     if (!result.Exists) {
@@ -226,7 +235,7 @@ public class Batch {
         "The original programs folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
         "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath}'.");
     }
     var result = new DirectoryInfo(Settings.OriginalProgramsFolder.Path);
     if (!result.Exists) {
@@ -242,7 +251,7 @@ public class Batch {
         "The programs folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
         "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath}'.");
     }
     var result = new DirectoryInfo(Settings.ProgramsFolder.Path);
     if (!result.Exists) {
@@ -270,7 +279,7 @@ public class Batch {
         "The template programs folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
         "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationFile().FullName}'.");
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
     }
     var result = new DirectoryInfo(Settings.TemplateProgramsFolder.Path);
     if (!result.Exists) {

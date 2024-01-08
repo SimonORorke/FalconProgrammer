@@ -2,19 +2,24 @@
 
 namespace FalconProgrammer.Model;
 
-internal abstract class DeserialiserBase(
+public abstract class DeserialiserBase<T>(
   IFileSystemService fileSystemService,
   ISerialiser serialiser,
-  string applicationName = Global.ApplicationName) {
+  string applicationName = Global.ApplicationName) where T : SerialisableBase {
   
-  private string ApplicationName { get; } = applicationName;
-  private IFileSystemService FileSystemService { get; } = fileSystemService;
-  private ISerialiser Serialiser { get; } = serialiser;
+  protected string ApplicationName { get; } = applicationName;
+  protected IFileSystemService FileSystemService { get; } = fileSystemService;
+  protected ISerialiser Serialiser { get; } = serialiser;
 
-  protected SerialisableBase Deserialise(string inputPath, Type type) {
-    using var reader = new StreamReader(inputPath);
-    var deserializer = new XmlSerializer(type);
-    var result = (SerialisableBase)deserializer.Deserialize(reader)!;
+  protected T Deserialise(string inputPath) {
+    T result;
+    if (FileSystemService.FileExists(inputPath)) {
+      using var reader = new StreamReader(inputPath);
+      var deserializer = new XmlSerializer(typeof(T));
+      result = (T)deserializer.Deserialize(reader)!;
+    } else {
+      result = (T)Activator.CreateInstance(typeof(T))!;
+    }
     result.ApplicationName = ApplicationName;
     result.FileSystemService = FileSystemService;
     result.Serialiser = Serialiser;
