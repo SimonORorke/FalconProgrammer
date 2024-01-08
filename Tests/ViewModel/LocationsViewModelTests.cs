@@ -65,10 +65,10 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.DefaultTemplatePath,
       Is.EqualTo(MockFilePicker.ExpectedPath));
     ViewModel.OnDisappearing();
-    Assert.That(MockSerializer.LastOutputPath,
+    Assert.That(MockSerialiser.LastOutputPath,
       Is.EqualTo(@"C:\FalconProgrammer\Settings\Settings.xml"));
-    Assert.That(MockSerializer.LastType, Is.EqualTo(typeof(Settings)));
-    var settings = (Settings)MockSerializer.LastObjectSerialised;
+    Assert.That(MockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
+    var settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.SettingsPath,
       Is.EqualTo(Path.Combine(ViewModel.SettingsFolderPath, "Settings.xml")));
     Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(ViewModel.ProgramsFolderPath));
@@ -83,7 +83,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel.OnAppearing();
     ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
     ViewModel.OnDisappearing();
-    settings = (Settings)MockSerializer.LastObjectSerialised;
+    settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.DefaultTemplate.Path, 
       Is.EqualTo(ViewModel.DefaultTemplatePath));
   }

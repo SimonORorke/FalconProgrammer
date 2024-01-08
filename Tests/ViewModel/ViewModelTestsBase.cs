@@ -12,7 +12,7 @@ public abstract class ViewModelTestsBase {
     MockFilePicker = new MockFilePicker();
     MockFileSystemService = new MockFileSystemService();
     MockFolderPicker = new MockFolderPicker();
-    MockSerializer = new MockSerializer();
+    MockSerialiser = new MockSerialiser();
     var mockServiceProvider = new MockServiceProvider();
     mockServiceProvider.Services.Add(MockAlertService);
     mockServiceProvider.Services.Add(MockAppDataFolderService);
@@ -20,7 +20,7 @@ public abstract class ViewModelTestsBase {
     mockServiceProvider.Services.Add(MockFolderPicker);
     // These are model-based services, so not provided by the MauiProgram.
     mockServiceProvider.Services.Add(MockFileSystemService);
-    mockServiceProvider.Services.Add(MockSerializer);
+    mockServiceProvider.Services.Add(MockSerialiser);
     ServiceHelper = new ServiceHelper();
     ServiceHelper.Initialise(mockServiceProvider);
   }
@@ -30,6 +30,6 @@ public abstract class ViewModelTestsBase {
   protected MockFilePicker MockFilePicker { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockFolderPicker MockFolderPicker { get; private set; } = null!;
-  protected MockSerializer MockSerializer { get; private set; } = null!;
+  protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;
 }

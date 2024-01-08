@@ -4,11 +4,10 @@ using System.Xml.Serialization;
 namespace FalconProgrammer.Model;
 
 [XmlRoot(nameof(Settings))]
-public class Settings {
+public class Settings : SerialisableBase {
   public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
-  private ISerializer? _serializer;
   [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
@@ -20,15 +19,6 @@ public class Settings {
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
   [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
-
-  /// <summary>
-  ///   A utility that can serialize an object to a file. The default is a real
-  ///   <see cref="Serializer" />. Can be set to a mock serializer for unit testing. 
-  /// </summary>
-  [XmlIgnore] public ISerializer Serializer {
-    get => _serializer ??= Model.Serializer.Default;
-    set => _serializer = value;
-  }
   
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
@@ -55,11 +45,11 @@ public class Settings {
 
   public static Settings Read(
     IFileSystemService fileSystemService,
-    ISerializer writeSerializer,
+    ISerialiser writeSerialiser,
     string defaultSettingsFolderPath = "",
-    string applicationName = SettingsFolderLocation.DefaultApplicationName) {
+    string applicationName = Global.ApplicationName) {
     var settingsFolderLocation = SettingsFolderLocation.Read(
-      fileSystemService, writeSerializer, applicationName);
+      fileSystemService, writeSerialiser, applicationName);
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = defaultSettingsFolderPath;
       settingsFolderLocation.Write();
@@ -74,7 +64,7 @@ public class Settings {
     } else {
       result = new Settings { SettingsPath = settingsFile.FullName };
     }
-    result.Serializer = writeSerializer;
+    result.Serialiser = writeSerialiser;
     return result;
   }
 
@@ -83,7 +73,7 @@ public class Settings {
       var settingsFile = GetSettingsFile(settingsFolderPath);
       SettingsPath = settingsFile.FullName;
     }
-    Serializer.Serialize(typeof(Settings), this, SettingsPath);
+    Serialiser.Serialise(typeof(Settings), this, SettingsPath);
   }
 
   public class Folder {

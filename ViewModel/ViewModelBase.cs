@@ -11,7 +11,7 @@ public abstract class ViewModelBase : ObservableObject {
   private IFilePicker? _filePicker;
   private IFileSystemService? _fileSystemService;
   private IFolderPicker? _folderPicker;
-  private ISerializer? _serializer;
+  private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
 
@@ -46,11 +46,11 @@ public abstract class ViewModelBase : ObservableObject {
   protected bool IsVisible { get; private set; }
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-  protected ISerializer Serializer =>
-    // The MauiProgram won't be providing an ISerializer to ServiceHelper.
+  protected ISerialiser Serialiser =>
+    // The MauiProgram won't be providing an ISerialiser to ServiceHelper.
     // But tests may.
-    _serializer ??= ServiceHelper.GetService<ISerializer>() ??
-                    Model.Serializer.Default;
+    _serialiser ??= ServiceHelper.GetService<ISerialiser>() ??
+                    Model.Serialiser.Default;
 
   internal ServiceHelper ServiceHelper {
     [ExcludeFromCodeCoverage] get => _serviceHelper ??= ServiceHelper.Default;
@@ -59,7 +59,7 @@ public abstract class ViewModelBase : ObservableObject {
   }
 
   protected Settings Settings => 
-    _settings ??= Settings.Read(FileSystemService, Serializer);
+    _settings ??= Settings.Read(FileSystemService, Serialiser);
 
   public virtual void OnAppearing() {
     IsVisible = true;

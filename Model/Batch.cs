@@ -12,7 +12,7 @@ public class Batch {
   private FalconProgram Program { get; set; } = null!;
 
   private static Settings Settings => 
-    _settings ??= Settings.Read(FileSystemService.Default, Serializer.Default);
+    _settings ??= Settings.Read(FileSystemService.Default, Serialiser.Default);
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 

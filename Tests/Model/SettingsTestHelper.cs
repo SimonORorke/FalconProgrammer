@@ -48,14 +48,14 @@ public static class SettingsTestHelper {
     }
     // Restore production settings location. Default application name.
     var location = SettingsFolderLocation.Read(
-      FileSystemService.Default, Serializer.Default);
+      FileSystemService.Default, Serialiser.Default);
     location.Path = DefaultSettingsFolderPath;
     location.Write(); // Default application name
   }
 
   public static Settings ReadSettings() {
     return Settings.Read(
-      FileSystemService.Default, Serializer.Default,
+      FileSystemService.Default, Serialiser.Default,
       TestSettingsFolderPath, TestApplicationName);
   }
 

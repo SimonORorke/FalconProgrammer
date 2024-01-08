@@ -48,9 +48,9 @@ public class SettingsTests {
 
   [Test]
   public void WriteToNewSettingsFolder() {
-    var mockSerializer = new MockSerializer();
+    var mockSerializer = new MockSerialiser();
     var settings = new Settings {
-      Serializer = mockSerializer,
+      Serialiser = mockSerializer,
       SettingsPath = @"C:\Libraries\Settings.xml"
     };
     const string newSettingsFolderPath = @"C:\Markup";
