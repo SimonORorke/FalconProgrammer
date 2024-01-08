@@ -15,6 +15,10 @@
             ContentTemplate="{DataTemplate views:LocationsPage}" />
 
         <ShellContent
+            Title="Script Processor"
+            ContentTemplate="{DataTemplate views:ScriptProcessorPage}" />
+
+        <ShellContent
             Title="Batch Script"
             ContentTemplate="{DataTemplate views:BatchScriptPage}" />
     </TabBar>
