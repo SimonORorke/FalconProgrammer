@@ -14,8 +14,6 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     [SuppressMessage("ReSharper", "CommentTypo")]
     get {
       if (_settingsFolderLocation == null) {
-        // SettingsFolderLocation.AppDataFolderPathMaui = 
-        //   FileSystemService.AppDataFolderPathMaui;
         Debug.WriteLine("====================================================");
         Debug.WriteLine(
           "SettingsFolderLocation.AppDataFolderPathMaui = " +

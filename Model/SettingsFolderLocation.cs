@@ -36,8 +36,8 @@ namespace FalconProgrammer.Model;
     SettingsFolderLocation result;
     if (locationFile.Exists) {
       using var reader = new StreamReader(locationFile.FullName);
-      var readSerializer = new XmlSerializer(typeof(SettingsFolderLocation));
-      result = (SettingsFolderLocation)readSerializer.Deserialize(reader)!;
+      var deserializer = new XmlSerializer(typeof(SettingsFolderLocation));
+      result = (SettingsFolderLocation)deserializer.Deserialize(reader)!;
       if (!string.IsNullOrWhiteSpace(result.Path)) {
         fileSystemService.CreateFolder(result.Path);
       }
