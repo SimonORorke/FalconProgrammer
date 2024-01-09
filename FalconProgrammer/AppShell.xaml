@@ -8,6 +8,17 @@
     FlyoutBehavior="Disabled"
     Width="1155"
     Title="Falcon Programmer">
+    
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Image Source="falcon_svg_repo_com.png"
+                   HeightRequest="50"/>
+            <Label x:Name="NavigationLabel"
+                   Text="Test"
+                   Margin="10,0"
+                   VerticalTextAlignment="Center"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
 
     <TabBar>
         <ShellContent
