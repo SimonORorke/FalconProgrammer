@@ -1,11 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ViewModelBase : ObservableObject {
+public abstract class ViewModelBase(string title) : ObservableObject {
   private IAlertService? _alertService;
   private IAppDataFolderService? _appDataFolderService;
   private IFilePicker? _filePicker;
@@ -14,6 +15,17 @@ public abstract class ViewModelBase : ObservableObject {
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
+  // private string _title = title;
+  //
+  // public string Title {
+  //   get => _title;
+  //   set {
+  //     _title = value;
+  //     OnPropertyChanged();
+  //   }
+  // }
+
+  public string Title { get; } = title;
 
   internal IAlertService AlertService =>
     _alertService ??=
@@ -70,6 +82,8 @@ public abstract class ViewModelBase : ObservableObject {
 
   public virtual void OnAppearing() {
     IsVisible = true;
+    ServiceHelper.CurrentPageTitle = Title;
+    Debug.WriteLine($"{GetType().Name}.OnAppearing: {ServiceHelper.CurrentPageTitle}");
   }
 
   public virtual void OnDisappearing() {

@@ -5,16 +5,25 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:FalconProgrammer.Views"
+    xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
     FlyoutBehavior="Disabled"
     Width="1155"
     Title="Falcon Programmer">
     
+    <ContentPage.BindingContext>
+        <viewModel:AppShellViewModel />
+    </ContentPage.BindingContext>
+
+    <!-- Unfortunately, it is apparently impossible, for now, to remove the three dots menu
+    that appears at the right end of the title bar when TitleView is added. 
+    See https://github.com/dotnet/maui/issues/7034. -->
     <Shell.TitleView>
-        <HorizontalStackLayout>
+        <HorizontalStackLayout  VerticalOptions="Fill">
             <Image Source="falcon_svg_repo_com.png"
                    HeightRequest="50"/>
-            <Label x:Name="NavigationLabel"
-                   Text="Test"
+            <Label x:Name="CurrentPageTitleLabel"
+                   Text="{Binding CurrentPageTitle}"
+                   FontSize="24"
                    Margin="10,0"
                    VerticalTextAlignment="Center"/>
         </HorizontalStackLayout>

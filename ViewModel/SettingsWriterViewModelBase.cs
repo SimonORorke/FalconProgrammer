@@ -5,7 +5,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class SettingsWriterViewModelBase : ViewModelBase {
+public abstract class SettingsWriterViewModelBase(string title) : ViewModelBase(title) {
   private SettingsFolderLocation? _settingsFolderLocation;
   private string? _settingsFolderPath;
   private bool HaveSettingsBeenUpdated { get; set; }

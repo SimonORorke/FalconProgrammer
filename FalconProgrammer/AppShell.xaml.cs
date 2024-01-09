@@ -1,32 +1,24 @@
-﻿namespace FalconProgrammer;
+﻿using FalconProgrammer.ViewModel;
+
+namespace FalconProgrammer;
 
 public partial class AppShell : Shell {
+  private AppShellViewModel? _viewModel;
+  
   public AppShell() {
     InitializeComponent();
   }
-  
-  protected override void OnNavigated(ShellNavigatedEventArgs args)
-  {
+
+  private AppShellViewModel ViewModel => 
+    _viewModel ??= (AppShellViewModel)BindingContext;
+
+  protected override void OnNavigated(ShellNavigatedEventArgs args) {
     base.OnNavigated(args);
-
-    var shellItem = Shell.Current?.CurrentItem;
-    string title = shellItem?.Title!;
-    int iterationCount = 0;
-    while (shellItem != null
-           && title == null)
-    {
-      title = shellItem.Title;
-      shellItem = shellItem.CurrentItem;
-
-      if (iterationCount > 10)
-        break;  // max nesting reached
-
-      iterationCount++;
-    }
-
-    NavigationLabel.Text = title;
+    ViewModel.OnNavigated();
+    // NavigationLabel.Text = $"{CurrentPage.Title}";
+    // NavigationLabel.Text = $"{DateTime.Now}";
   }
-  
+
   // Something like this commented out code could be useful if we persist window size and
   // position.
   // protected override void OnAppearing() {
