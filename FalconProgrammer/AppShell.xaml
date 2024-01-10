@@ -21,8 +21,7 @@
         <HorizontalStackLayout  VerticalOptions="Fill">
             <Image Source="falcon_svg_repo_com.png"
                    HeightRequest="50"/>
-            <Label x:Name="CurrentPageTitleLabel"
-                   Text="{Binding CurrentPageTitle}"
+            <Label Text="{Binding CurrentPageTitle}"
                    FontSize="24"
                    Margin="10,0"
                    VerticalTextAlignment="Center"/>
