@@ -7,10 +7,9 @@
     <ContentPage.BindingContext>
         <viewModel:ScriptProcessorViewModel />
     </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <Label x:Name="CurrentPageTitleLabel"
-               Text="{Binding Title}"
-               Margin="10,0"
-               VerticalTextAlignment="Center"/>
-    </ContentPage.Content>
+    <Grid x:Name="HorizontalSplitterGrid" RowDefinitions="*, 150">
+        <Grid Grid.Row="1" x:Name="BottomGrid" RowDefinitions="5, *">
+            <Label Grid.Row="0" x:Name="HorizontalLineLabel" BackgroundColor="Black"  />
+        </Grid>
+    </Grid>
 </ContentPage>
