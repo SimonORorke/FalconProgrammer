@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class AppShellViewModel() : ViewModelBase("Shell") {
+public class AppShellViewModel() : ViewModelBase(Global.ApplicationTitle) {
   private string _currentPageTitle = string.Empty;
 
   public string CurrentPageTitle {
@@ -15,8 +15,6 @@ public class AppShellViewModel() : ViewModelBase("Shell") {
   
   public void OnNavigated() {
     CurrentPageTitle = ServiceHelper.CurrentPageTitle;
-    Debug.WriteLine($"{GetType().Name}.OnNavigated: {CurrentPageTitle}");
-    // CurrentPageTitle = $"{DateTime.Now}";
-    // Debug.WriteLine("OnNavigated");
+    // Debug.WriteLine($"AppShellViewModel.OnNavigated: {CurrentPageTitle}");
   }
 }

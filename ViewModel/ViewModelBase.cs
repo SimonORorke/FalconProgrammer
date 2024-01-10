@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
@@ -15,15 +14,6 @@ public abstract class ViewModelBase(string title) : ObservableObject {
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
-  // private string _title = title;
-  //
-  // public string Title {
-  //   get => _title;
-  //   set {
-  //     _title = value;
-  //     OnPropertyChanged();
-  //   }
-  // }
 
   public string Title { get; } = title;
 
@@ -83,7 +73,7 @@ public abstract class ViewModelBase(string title) : ObservableObject {
   public virtual void OnAppearing() {
     IsVisible = true;
     ServiceHelper.CurrentPageTitle = Title;
-    Debug.WriteLine($"{GetType().Name}.OnAppearing: {ServiceHelper.CurrentPageTitle}");
+    // Debug.WriteLine($"{GetType().Name}.OnAppearing: {ServiceHelper.CurrentPageTitle}");
   }
 
   public virtual void OnDisappearing() {

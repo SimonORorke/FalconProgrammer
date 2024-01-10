@@ -15,8 +15,6 @@ public partial class AppShell : Shell {
   protected override void OnNavigated(ShellNavigatedEventArgs args) {
     base.OnNavigated(args);
     ViewModel.OnNavigated();
-    // NavigationLabel.Text = $"{CurrentPage.Title}";
-    // NavigationLabel.Text = $"{DateTime.Now}";
   }
 
   // Something like this commented out code could be useful if we persist window size and

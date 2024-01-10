@@ -15,11 +15,6 @@ public partial class LocationsPage : ContentPage {
   protected override void OnAppearing() {
     base.OnAppearing();
     ViewModel.OnAppearing();
-    // Failed attempts to fix wait cursor on start.
-    // Dispatcher.DispatchDelayed(
-    //   new TimeSpan(0, 0, 1),
-    //   ()=> SettingsFolderPath.Focus());
-    // Dispatcher.Dispatch(()=> SettingsFolderPath.Focus());
   }
 
   protected override void OnDisappearing() {
