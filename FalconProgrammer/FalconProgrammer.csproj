@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <!-- If TargetFrameworks is replaced with TargetFramework, as inspection suggests, there
-         are compiler errors: cannot find Application, Shell, MauiApp, MauiUIApplicationDelegate. -->
-        <!--suppress MsbuildTargetFrameworkTagInspection -->
+        <!-- The error indented below is no longer happening.
+        So now Mac Catalyst should only be run if the operating system is macOs. -->
+            <!-- If TargetFrameworks is replaced with TargetFramework, as inspection suggests, there
+             are compiler errors: cannot find Application, Shell, MauiApp, MauiUIApplicationDelegate. -->
+            <!--suppress MsbuildTargetFrameworkTagInspection -->
 <!--        <TargetFrameworks>net8.0-windows10.0.19041.0</TargetFrameworks>-->
-<!--        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('macOs'))">$(TargetFrameworks);net8.0-maccatalyst</TargetFrameworks>-->
-        <TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('macOs'))">$(TargetFrameworks);net8.0-maccatalyst</TargetFrameworks>
+        <!--<TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>-->
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 
         <!-- Note for MacCatalyst:
