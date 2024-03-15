@@ -7,6 +7,10 @@
              are compiler errors: cannot find Application, Shell, MauiApp, MauiUIApplicationDelegate. -->
             <!--suppress MsbuildTargetFrameworkTagInspection -->
 <!--        <TargetFrameworks>net8.0-windows10.0.19041.0</TargetFrameworks>-->
+        <!-- This also fixes this new compiler error:
+                NU1012  Platform version is not present for one or more target frameworks, 
+                even though they have specified a platform: net8.0-maccatalyst 
+         -->
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('macOs'))">$(TargetFrameworks);net8.0-maccatalyst</TargetFrameworks>
         <!--<TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>-->
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
