@@ -13,7 +13,6 @@
     <ContentPage.BindingContext>
         <viewModel:AppShellViewModel />
     </ContentPage.BindingContext>
-
     <!-- Unfortunately, it is apparently impossible, for now, to remove the three dots menu
     that appears at the right end of the title bar when TitleView is added. 
     See https://github.com/dotnet/maui/issues/7034. -->
@@ -30,15 +29,15 @@
 
     <TabBar>
         <ShellContent
-            Title="Locations"
+            Title="{x:Static views:LocationsPage.ContentPageTitle}"
             ContentTemplate="{DataTemplate views:LocationsPage}" />
 
         <ShellContent
-            Title="Script Processors"
+            Title="{x:Static views:ScriptProcessorsPage.ContentPageTitle}"
             ContentTemplate="{DataTemplate views:ScriptProcessorsPage}" />
 
         <ShellContent
-            Title="Batch Script"
+            Title="{x:Static views:BatchScriptPage.ContentPageTitle}"
             ContentTemplate="{DataTemplate views:BatchScriptPage}" />
     </TabBar>
 

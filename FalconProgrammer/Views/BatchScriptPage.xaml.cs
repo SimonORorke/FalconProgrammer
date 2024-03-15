@@ -1,24 +1,9 @@
-﻿using FalconProgrammer.ViewModel;
-
-namespace FalconProgrammer.Views;
+﻿namespace FalconProgrammer.Views;
 
 public partial class BatchScriptPage : ContentPageBase {
-  // private BatchScriptViewModel? _viewModel;
-
-  public BatchScriptPage() : base("Batch Script") {
+  public BatchScriptPage() : base(ContentPageTitle) {
     InitializeComponent();
   }
 
-  // private BatchScriptViewModel ViewModel =>
-  //   _viewModel ??= (BatchScriptViewModel)BindingContext;
-  //
-  // protected override void OnAppearing() {
-  //   base.OnAppearing();
-  //   ViewModel.OnAppearing();
-  // }
-  //
-  // protected override void OnDisappearing() {
-  //   base.OnDisappearing();
-  //   ViewModel.OnDisappearing();
-  // }
+  public static string ContentPageTitle => "Batch Script";
 }

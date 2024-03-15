@@ -3,9 +3,11 @@
 public partial class ScriptProcessorsPage : ContentPageBase {
   // private ScriptProcessorsViewModel? _viewModel;
 
-  public ScriptProcessorsPage() : base("Script Processors") {
+  public ScriptProcessorsPage() : base(ContentPageTitle) {
     InitializeComponent();
   }
+
+  public static string ContentPageTitle => "Script Processors";
 
   // private ScriptProcessorsViewModel ViewModel =>
   //   _viewModel ??= (ScriptProcessorsViewModel)BindingContext;
