@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
-             x:Class="FalconProgrammer.Views.ScriptProcessorPage">
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
+    xmlns:views="using:FalconProgrammer.Views"
+    x:Class="FalconProgrammer.Views.ScriptProcessorsPage">
     <ContentPage.BindingContext>
-        <viewModel:ScriptProcessorViewModel />
+        <viewModel:ScriptProcessorsViewModel />
     </ContentPage.BindingContext>
     <Grid RowDefinitions="*, 150">
         <CollectionView
@@ -17,8 +19,8 @@
             constructor of Platforms\Windows\App.xaml.cs. -->
             <CollectionView.Header>
                 <Grid Padding="10"
-                      RowDefinitions="Auto" 
-                      ColumnDefinitions = "*, *"
+                      RowDefinitions="Auto"
+                      ColumnDefinitions="*, *"
                       BackgroundColor="Gray">
                     <Label Grid.Column="0"
                            Text="Sound Bank"
@@ -28,14 +30,14 @@
                     <Label Grid.Column="1"
                            Text="Category, or blank for all"
                            FontAttributes="Bold"
-                           VerticalTextAlignment="Center" 
+                           VerticalTextAlignment="Center"
                            Margin="10,0, 0, 0" />
                 </Grid>
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10, 0" 
-                          RowDefinitions="Auto" ColumnDefinitions = "*, *">
+                    <Grid Padding="10, 0"
+                          RowDefinitions="Auto" ColumnDefinitions="*, *">
                         <Picker Grid.Column="0" />
                         <!-- <Entry Grid.Column="0" -->
                         <!--        Text="{Binding SoundBank}" -->
@@ -53,4 +55,4 @@
             <Label Grid.Row="0" BackgroundColor="Black" />
         </Grid>
     </Grid>
-</ContentPage>
+</views:ContentPageBase>

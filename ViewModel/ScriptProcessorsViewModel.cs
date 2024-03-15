@@ -3,8 +3,8 @@ using CommunityToolkit.Maui.Core.Extensions;
 
 namespace FalconProgrammer.ViewModel;
 
-public class ScriptProcessorViewModel()
-  : SettingsWriterViewModelBase("Script Processor") {
+public class ScriptProcessorsViewModel()
+  : SettingsWriterViewModelBase("Script Processors") {
   private ObservableCollection<SoundBankCategory>? _soundBankCategories;
   private ObservableCollection<string>? _soundBanks;
 

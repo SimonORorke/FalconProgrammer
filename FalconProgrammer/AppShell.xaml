@@ -35,7 +35,7 @@
 
         <ShellContent
             Title="Script Processor"
-            ContentTemplate="{DataTemplate views:ScriptProcessorPage}" />
+            ContentTemplate="{DataTemplate views:ScriptProcessorsPage}" />
 
         <ShellContent
             Title="Batch Script"

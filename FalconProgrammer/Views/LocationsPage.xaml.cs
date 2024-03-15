@@ -1,24 +1,22 @@
-﻿using FalconProgrammer.ViewModel;
+﻿namespace FalconProgrammer.Views;
 
-namespace FalconProgrammer.Views;
-
-public partial class LocationsPage : ContentPage {
-  private LocationsViewModel? _viewModel;
+public partial class LocationsPage : ContentPageBase {
+  // private LocationsViewModel? _viewModel;
   
-  public LocationsPage() {
+  public LocationsPage() : base("Locations") {
     InitializeComponent();
   }
 
-  private LocationsViewModel ViewModel => 
-    _viewModel ??= (LocationsViewModel)BindingContext;
-
-  protected override void OnAppearing() {
-    base.OnAppearing();
-    ViewModel.OnAppearing();
-  }
-
-  protected override void OnDisappearing() {
-    base.OnDisappearing();
-    ViewModel.OnDisappearing();
-  }
+  // private LocationsViewModel ViewModel => 
+  //   _viewModel ??= (LocationsViewModel)BindingContext;
+  //
+  // protected override void OnAppearing() {
+  //   base.OnAppearing();
+  //   ViewModel.OnAppearing();
+  // }
+  //
+  // protected override void OnDisappearing() {
+  //   base.OnDisappearing();
+  //   ViewModel.OnDisappearing();
+  // }
 }
