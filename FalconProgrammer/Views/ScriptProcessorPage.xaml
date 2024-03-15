@@ -34,7 +34,7 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10" RowDefinitions="Auto" ColumnDefinitions = "*, *">
+                    <Grid Padding="10, 0, 10, 0" RowDefinitions="Auto" ColumnDefinitions = "*, *">
                         <Entry Grid.Column="0"
                                Text="{Binding SoundBank}"
                                Placeholder="Sound bank" />
