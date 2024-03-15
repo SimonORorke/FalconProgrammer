@@ -34,7 +34,7 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10, 0, 10, 0" 
+                    <Grid Padding="10, 0" 
                           RowDefinitions="Auto" ColumnDefinitions = "*, *">
                         <Picker Grid.Column="0" />
                         <!-- <Entry Grid.Column="0" -->
