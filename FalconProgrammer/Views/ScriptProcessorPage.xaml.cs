@@ -14,8 +14,27 @@ public partial class ScriptProcessorPage : ContentPage {
 
   protected override void OnAppearing() {
     base.OnAppearing();
-    ViewModel.OnAppearing();
+    Application.Current!.MainPage!.Dispatcher.Dispatch(() => {
+      ViewModel.OnAppearing();
+      if (!ViewModel.CanUpdateScriptProcessors) {
+        Shell.Current.GoToAsync(nameof(LocationsPage));
+        // Application.Current.MainPage!.Dispatcher.Dispatch(() => {
+        //   Shell.Current.GoToAsync(nameof(LocationsPage));
+        // });
+      }
+    });
+    // ViewModel.OnAppearing();
+    // if (!ViewModel.CanUpdateScriptProcessors) {
+    //   Shell.Current.GoToAsync(nameof(LocationsPage));
+    // }
   }
+
+  // private Task OnAppearingAsync() {
+  //   ViewModel.OnAppearing();
+  //   if (!ViewModel.CanUpdateScriptProcessors) {
+  //     Shell.Current.GoToAsync(nameof(LocationsPage));
+  //   }
+  // }
 
   protected override void OnDisappearing() {
     base.OnDisappearing();
