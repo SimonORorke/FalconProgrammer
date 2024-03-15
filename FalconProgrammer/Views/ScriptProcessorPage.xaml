@@ -17,7 +17,7 @@
             constructor of Platforms\Windows\App.xaml.cs. -->
             <CollectionView.Header>
                 <Grid Padding="10"
-                      RowDefinitions="Auto"
+                      RowDefinitions="Auto" 
                       ColumnDefinitions = "*, *"
                       BackgroundColor="Gray">
                     <Label Grid.Column="0"
@@ -34,10 +34,12 @@
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10, 0, 10, 0" RowDefinitions="Auto" ColumnDefinitions = "*, *">
-                        <Entry Grid.Column="0"
-                               Text="{Binding SoundBank}"
-                               Placeholder="Sound bank" />
+                    <Grid Padding="10, 0, 10, 0" 
+                          RowDefinitions="Auto" ColumnDefinitions = "*, *">
+                        <Picker Grid.Column="0" />
+                        <!-- <Entry Grid.Column="0" -->
+                        <!--        Text="{Binding SoundBank}" -->
+                        <!--        Placeholder="Sound bank" /> -->
                         <Entry Grid.Column="1"
                                Text="{Binding Category}"
                                Placeholder="Category, or blank for all" />
