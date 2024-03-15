@@ -33,5 +33,4 @@ public partial class ScriptProcessorsPage : ContentPageBase {
   //     Shell.Current.GoToAsync(nameof(LocationsPage));
   //   }
   // }
-
 }

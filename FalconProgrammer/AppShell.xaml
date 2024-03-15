@@ -34,7 +34,7 @@
             ContentTemplate="{DataTemplate views:LocationsPage}" />
 
         <ShellContent
-            Title="Script Processor"
+            Title="Script Processors"
             ContentTemplate="{DataTemplate views:ScriptProcessorsPage}" />
 
         <ShellContent

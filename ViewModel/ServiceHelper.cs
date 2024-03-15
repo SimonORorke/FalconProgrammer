@@ -8,7 +8,7 @@ public class ServiceHelper {
   [ExcludeFromCodeCoverage]
   public static ServiceHelper Default => _default ??= new ServiceHelper();
 
-  internal string CurrentPageTitle { get; set; } = string.Empty;
+  public string CurrentPageTitle { get; set; } = string.Empty;
   private IServiceProvider Services { get; set; } = null!;
 
   public void Initialise(IServiceProvider serviceProvider) {

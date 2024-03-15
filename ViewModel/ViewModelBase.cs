@@ -5,7 +5,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ViewModelBase(string title) : ObservableObject {
+public abstract class ViewModelBase : ObservableObject {
   private IAlertService? _alertService;
   private IAppDataFolderService? _appDataFolderService;
   private IFilePicker? _filePicker;
@@ -14,8 +14,6 @@ public abstract class ViewModelBase(string title) : ObservableObject {
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
-
-  public string Title { get; } = title;
 
   internal IAlertService AlertService =>
     _alertService ??=
@@ -54,10 +52,10 @@ public abstract class ViewModelBase(string title) : ObservableObject {
     _serialiser ??= ServiceHelper.GetService<ISerialiser>() ??
                     Model.Serialiser.Default;
 
-  internal ServiceHelper ServiceHelper {
+  public ServiceHelper ServiceHelper {
     [ExcludeFromCodeCoverage] get => _serviceHelper ??= ServiceHelper.Default;
     // For unit testing.
-    set => _serviceHelper = value;
+    internal set => _serviceHelper = value;
   }
 
   protected Settings Settings {
@@ -72,8 +70,6 @@ public abstract class ViewModelBase(string title) : ObservableObject {
 
   public virtual void OnAppearing() {
     IsVisible = true;
-    ServiceHelper.CurrentPageTitle = Title;
-    // Debug.WriteLine($"{GetType().Name}.OnAppearing: {ServiceHelper.CurrentPageTitle}");
   }
 
   public virtual void OnDisappearing() {

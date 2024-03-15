@@ -11,6 +11,7 @@ public abstract class ContentPageBase : ContentPage {
 
   protected override void OnAppearing() {
     base.OnAppearing();
+    ViewModel.ServiceHelper.CurrentPageTitle = Title!;
     ViewModel.OnAppearing();
   }
 

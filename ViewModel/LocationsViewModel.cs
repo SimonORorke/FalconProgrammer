@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 namespace FalconProgrammer.ViewModel;
 
 public class LocationsViewModel : SettingsWriterViewModelBase {
-  public LocationsViewModel() : base("Locations") {
+  public LocationsViewModel() {
     BrowseForDefaultTemplateCommand = new AsyncRelayCommand(BrowseForDefaultTemplate);
     BrowseForOriginalProgramsFolderCommand = 
       new AsyncRelayCommand(BrowseForOriginalProgramsFolder);
