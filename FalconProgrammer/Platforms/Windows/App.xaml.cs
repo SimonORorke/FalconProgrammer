@@ -20,7 +20,8 @@ public partial class App : MauiWinUIApplication {
     // are not shown. See https://github.com/dotnet/maui/issues/14557, 
     // where this workaround is provided.
     // The issue is supposed to have been fixed.
-    // See https://github.com/dotnet/maui/pull/16870. But I still need this workaround. 
+    // See https://github.com/dotnet/maui/pull/16870. But I still need this workaround.
+    // So I've raised a new issue: https://github.com/dotnet/maui/issues/21224.
     CollectionViewHandler.Mapper.AppendToMapping("HeaderAndFooterFix",
       (_, collectionView) => {
         collectionView.AddLogicalChild(collectionView.Header as Element);
