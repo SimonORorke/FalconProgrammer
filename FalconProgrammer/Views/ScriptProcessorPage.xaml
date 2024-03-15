@@ -7,9 +7,48 @@
     <ContentPage.BindingContext>
         <viewModel:ScriptProcessorViewModel />
     </ContentPage.BindingContext>
-    <Grid x:Name="HorizontalSplitterGrid" RowDefinitions="*, 150">
-        <Grid Grid.Row="1" x:Name="BottomGrid" RowDefinitions="5, *">
-            <Label Grid.Row="0" x:Name="HorizontalLineLabel" BackgroundColor="Black"  />
+    <Grid RowDefinitions="*, 150">
+        <CollectionView
+            Grid.Row="0"
+            ItemsSource="{Binding SoundBankCategories}">
+            <!-- For Windows, there is a known issue where a CollectionView's Header and Footer 
+            are not shown. See https://github.com/dotnet/maui/issues/14557, 
+            where a workaround is provided. I have implemented the workaround in the 
+            constructor of Platforms\Windows\App.xaml.cs. -->
+            <CollectionView.Header>
+                <Grid Padding="10"
+                      RowDefinitions="Auto"
+                      ColumnDefinitions = "*, *"
+                      BackgroundColor="Gray">
+                    <Label Grid.Column="0"
+                           Text="Sound Bank"
+                           FontAttributes="Bold"
+                           VerticalTextAlignment="Center"
+                           Margin="10,0, 0, 0" />
+                    <Label Grid.Column="1"
+                           Text="Category, or blank for all"
+                           FontAttributes="Bold"
+                           VerticalTextAlignment="Center" 
+                           Margin="10,0, 0, 0" />
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" RowDefinitions="Auto" ColumnDefinitions = "*, *">
+                        <Entry Grid.Column="0"
+                               Text="{Binding SoundBank}"
+                               Placeholder="Sound bank" />
+                        <Entry Grid.Column="1"
+                               Text="{Binding Category}"
+                               Placeholder="Category, or blank for all" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <!-- Bottom Grid -->
+        <Grid Grid.Row="1" RowDefinitions="5, *">
+            <!-- Horizontal line Label -->
+            <Label Grid.Row="0" BackgroundColor="Black" />
         </Grid>
     </Grid>
 </ContentPage>

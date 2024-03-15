@@ -11,7 +11,8 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
       new AsyncRelayCommand(BrowseForOriginalProgramsFolder);
     BrowseForProgramsFolderCommand = new AsyncRelayCommand(BrowseForProgramsFolder);
     BrowseForSettingsFolderCommand = new AsyncRelayCommand(BrowseForSettingsFolder);
-    BrowseForTemplateProgramsFolderCommand = new AsyncRelayCommand(BrowseForTemplateProgramsFolder);
+    BrowseForTemplateProgramsFolderCommand = 
+      new AsyncRelayCommand(BrowseForTemplateProgramsFolder);
   }
 
   public ICommand BrowseForDefaultTemplateCommand { get; }

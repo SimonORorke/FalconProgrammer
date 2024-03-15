@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.Maui.Controls.Handlers.Items;
+using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -14,7 +15,17 @@ public partial class App : MauiWinUIApplication {
   ///   executed, and as such is the logical equivalent of main() or WinMain().
   /// </summary>
   public App() {
-    this.InitializeComponent();
+    InitializeComponent();
+    // For Windows, there is a known issue where a CollectionView's Header and Footer 
+    // are not shown. See https://github.com/dotnet/maui/issues/14557, 
+    // where this workaround is provided.
+    // The issue is supposed to have been fixed.
+    // See https://github.com/dotnet/maui/pull/16870. But I still need this workaround. 
+    CollectionViewHandler.Mapper.AppendToMapping("HeaderAndFooterFix",
+      (_, collectionView) => {
+        collectionView.AddLogicalChild(collectionView.Header as Element);
+        collectionView.AddLogicalChild(collectionView.Footer as Element);
+      });
   }
 
   protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
