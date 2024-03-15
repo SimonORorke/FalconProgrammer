@@ -5,7 +5,10 @@ public partial class App : Application {
     InitializeComponent();
     MainPage = new AppShell();
   }
-
+// This problem is a known Issue for Windows App SDK (WASDK):
+// https://github.com/microsoft/microsoft-ui-xaml/issues/8689
+// where it says there is a fix for it "in the [WASDK version] 1.5 timeframe".
+// See also my own answer to my stackoverflow question referenced below. 
 // #if WINDOWS 
 //   /// <summary>
 //   ///   This was proposed at
