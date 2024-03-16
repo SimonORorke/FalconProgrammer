@@ -1,4 +1,6 @@
-﻿namespace FalconProgrammer.Model;
+﻿using System.Collections.Immutable;
+
+namespace FalconProgrammer.Model;
 
 /// <summary>
 ///   A utility for accessing and updating the file system.
@@ -7,4 +9,5 @@ public interface IFileSystemService {
   void CreateFolder(string path);
   bool FileExists(string path);
   bool FolderExists(string path);
+  ImmutableList<string> GetSubfolderNames(string path);
 }

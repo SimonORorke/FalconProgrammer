@@ -27,17 +27,20 @@
         </HorizontalStackLayout>
     </Shell.TitleView>
 
-    <TabBar>
+    <TabBar Route="tabBar" >
         <ShellContent
             Title="{x:Static views:LocationsPage.ContentPageTitle}"
+            Route="locationsPage"
             ContentTemplate="{DataTemplate views:LocationsPage}" />
 
         <ShellContent
             Title="{x:Static views:ScriptProcessorsPage.ContentPageTitle}"
+            Route="scriptProcessorsPage"
             ContentTemplate="{DataTemplate views:ScriptProcessorsPage}" />
 
         <ShellContent
             Title="{x:Static views:BatchScriptPage.ContentPageTitle}"
+            Route="batchScriptPage"
             ContentTemplate="{DataTemplate views:BatchScriptPage}" />
     </TabBar>
 

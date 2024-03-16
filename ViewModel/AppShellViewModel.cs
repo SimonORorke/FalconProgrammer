@@ -13,6 +13,5 @@ public class AppShellViewModel : ViewModelBase {
   
   public void OnNavigated() {
     CurrentPageTitle = ServiceHelper.CurrentPageTitle;
-    // Debug.WriteLine($"AppShellViewModel.OnNavigated: {CurrentPageTitle}");
   }
 }

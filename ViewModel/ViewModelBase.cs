@@ -68,6 +68,8 @@ public abstract class ViewModelBase : ObservableObject {
     }
   }
 
+  public IContentPageBase View { get; set; }
+
   public virtual void OnAppearing() {
     IsVisible = true;
   }

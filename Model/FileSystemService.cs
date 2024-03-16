@@ -1,4 +1,6 @@
-﻿namespace FalconProgrammer.Model;
+﻿using System.Collections.Immutable;
+
+namespace FalconProgrammer.Model;
 
 /// <summary>
 ///   A utility for accessing and updating the file system.
@@ -18,5 +20,12 @@ public class FileSystemService : IFileSystemService {
 
   public bool FolderExists(string path) {
     return Directory.Exists(path);
+  }
+
+  public ImmutableList<string> GetSubfolderNames(string path) {
+    if (FolderExists(path)) {
+      return Directory.GetDirectories(path).ToImmutableList();
+    }
+    throw new DirectoryNotFoundException($"Cannot find folder '{path}'.");
   }
 }

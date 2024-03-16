@@ -1,24 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Core.Extensions;
 
 namespace FalconProgrammer.ViewModel;
 
 public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
   private ObservableCollection<SoundBankCategory>? _soundBankCategories;
-  private ObservableCollection<string>? _soundBanks;
 
-  public bool CanUpdateScriptProcessors { get; private set; }
-
-  public ObservableCollection<string> SoundBanks =>
-    _soundBanks ??= CreateSoundBanks();
+  public ImmutableList<string> SoundBanks { get; private set; } = [];
 
   public ObservableCollection<SoundBankCategory> SoundBankCategories =>
     _soundBankCategories ??= CreateSoundBankCategories();
-
-  private ObservableCollection<string> CreateSoundBanks() {
-    // Settings.ProgramsFolder.Path
-    return [];
-  }
 
   private ObservableCollection<SoundBankCategory> CreateSoundBankCategories() {
     var result = (
@@ -33,17 +25,23 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
   public override void OnAppearing() {
     base.OnAppearing();
     if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
-      // AlertService.ShowAlert("Error",
-      //   "Script processors cannot be updated: a programs folder has not been specified.");
-      CanUpdateScriptProcessors = false;
+      AlertService.ShowAlert("Error",
+        "Script processors cannot be updated: a programs folder has not been specified.");
+      View.GoToLocationsPage();
       return;
     }
-    // if (!FileSystemService.FolderExists(Settings.ProgramsFolder.Path)) {
-    //   AlertService.ShowAlert("Error",
-    //     "Settings cannot be saved: cannot find settings folder "
-    //     + $"'{SettingsFolderPath}'.");
-    //   return false;
-    // }
-    CanUpdateScriptProcessors = true;
+    if (!FileSystemService.FolderExists(Settings.ProgramsFolder.Path)) {
+      AlertService.ShowAlert("Error",
+        "Script processors cannot be updated: cannot find programs folder "
+        + $"'{Settings.ProgramsFolder.Path}'.");
+      View.GoToLocationsPage();
+    }
+    SoundBanks = FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path);
+    if (SoundBanks.Count == 0) {
+      AlertService.ShowAlert("Error",
+        "Script processors cannot be updated: programs folder "
+        + $"'{Settings.ProgramsFolder.Path}' contains no sound bank subfolders.");
+      View.GoToLocationsPage();
+    }
   }
 }
