@@ -1,26 +1,13 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
-using CommunityToolkit.Maui.Core.Extensions;
+using System.Diagnostics;
 
 namespace FalconProgrammer.ViewModel;
 
 public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
-  private ObservableCollection<SoundBankCategory>? _soundBankCategories;
 
-  public ImmutableList<string> SoundBanks { get; private set; } = [];
-
-  public ObservableCollection<SoundBankCategory> SoundBankCategories =>
-    _soundBankCategories ??= CreateSoundBankCategories();
-
-  private ObservableCollection<SoundBankCategory> CreateSoundBankCategories() {
-    var result = (
-      from category in Settings.MustUseGuiScriptProcessorCategories
-      select new SoundBankCategory {
-        SoundBank = category.SoundBank,
-        Category = category.Category
-      }).ToObservableCollection();
-    return result;
-  }
+  private ImmutableList<string> SoundBanks { get; set; } = [];
+  public ObservableCollection<SoundBankCategory> SoundBankCategories { get; } = [];
 
   public override void Initialise() {
     // Debug.WriteLine("ScriptProcessorsViewModel.Initialise");
@@ -43,6 +30,15 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
         "Script processors cannot be updated: programs folder "
         + $"'{Settings.ProgramsFolder.Path}' contains no sound bank subfolders.");
       View.GoToLocationsPage();
+    }
+    SoundBankCategories.Clear();
+    foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
+      SoundBankCategories.Add( new SoundBankCategory {
+        SoundBanks = SoundBanks,
+        SoundBank = category.SoundBank,
+        Category = category.Category
+      });
+      Debug.WriteLine(SoundBankCategories.Count);
     }
   }
 

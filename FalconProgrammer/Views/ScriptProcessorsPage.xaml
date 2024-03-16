@@ -38,10 +38,9 @@
                 <DataTemplate>
                     <Grid Padding="10, 0"
                           RowDefinitions="Auto" ColumnDefinitions="*, *">
-                        <Picker Grid.Column="0" />
-                        <!-- <Entry Grid.Column="0" -->
-                        <!--        Text="{Binding SoundBank}" -->
-                        <!--        Placeholder="Sound bank" /> -->
+                        <Picker Grid.Column="0"
+                                ItemsSource="{Binding SoundBanks}" 
+                                SelectedItem="{Binding SoundBank}" />
                         <Entry Grid.Column="1"
                                Text="{Binding Category}"
                                Placeholder="Category, or blank for all" />

@@ -7,11 +7,11 @@ namespace FalconProgrammer.ViewModel;
 public class LocationsViewModel : SettingsWriterViewModelBase {
   public LocationsViewModel() {
     BrowseForDefaultTemplateCommand = new AsyncRelayCommand(BrowseForDefaultTemplate);
-    BrowseForOriginalProgramsFolderCommand = 
+    BrowseForOriginalProgramsFolderCommand =
       new AsyncRelayCommand(BrowseForOriginalProgramsFolder);
     BrowseForProgramsFolderCommand = new AsyncRelayCommand(BrowseForProgramsFolder);
     BrowseForSettingsFolderCommand = new AsyncRelayCommand(BrowseForSettingsFolder);
-    BrowseForTemplateProgramsFolderCommand = 
+    BrowseForTemplateProgramsFolderCommand =
       new AsyncRelayCommand(BrowseForTemplateProgramsFolder);
   }
 
@@ -33,6 +33,8 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
 
   public string OriginalProgramsFolderPath {
     get => Settings.OriginalProgramsFolder.Path;
+    // Updated by XAML
+    // ReSharper disable once MemberCanBePrivate.Global
     set {
       if (Settings.OriginalProgramsFolder.Path != value) {
         Settings.OriginalProgramsFolder.Path = value;
@@ -43,6 +45,8 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
 
   public string ProgramsFolderPath {
     get => Settings.ProgramsFolder.Path;
+    // Updated by XAML
+    // ReSharper disable once MemberCanBePrivate.Global
     set {
       if (Settings.ProgramsFolder.Path != value) {
         Settings.ProgramsFolder.Path = value;
@@ -53,6 +57,8 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
 
   public string TemplateProgramsFolderPath {
     get => Settings.TemplateProgramsFolder.Path;
+    // Updated by XAML
+    // ReSharper disable once MemberCanBePrivate.Global
     set {
       if (Settings.TemplateProgramsFolder.Path != value) {
         Settings.TemplateProgramsFolder.Path = value;
@@ -93,7 +99,7 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     // return await FolderPicker.PickAsync(initialPath);
 #pragma warning disable CA1416 // This call site is reachable on ...
     return await FolderPicker.PickAsync();
- }
+  }
 
   private async Task BrowseForOriginalProgramsFolder() {
     var result = await BrowseForFolder();

@@ -24,7 +24,10 @@ public class FileSystemService : IFileSystemService {
 
   public ImmutableList<string> GetSubfolderNames(string path) {
     if (FolderExists(path)) {
-      return Directory.GetDirectories(path).ToImmutableList();
+      var subfolderNames = (
+        from subfolderPath in Directory.GetDirectories(path)
+        select Path.GetFileName(subfolderPath)).ToImmutableList();
+      return subfolderNames;
     }
     throw new DirectoryNotFoundException($"Cannot find folder '{path}'.");
   }
