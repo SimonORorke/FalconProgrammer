@@ -84,6 +84,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   }
 
   private void SaveSettings() {
+    // Debug.WriteLine($"SettingsWriterViewModelBase.SaveSettings: {GetType().Name}");
     if (SettingsFolderPath == SettingsFolderLocation.Path) {
       Settings.Write();
     } else {

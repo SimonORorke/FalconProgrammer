@@ -59,22 +59,29 @@ public abstract class ViewModelBase : ObservableObject {
   }
 
   protected Settings Settings {
-    get {
-      if (_settings == null) {
-        var settingsReader = new SettingsReader(FileSystemService, Serialiser);
-        _settings = settingsReader.Read();
-      }
-      return _settings;
-    }
+    get => _settings ??= ReadSettings();
+    private set => _settings = value;
   }
 
-  public IContentPageBase View { get; set; }
+  public IContentPageBase View { get; set; } = null!;
+
+  public virtual void Initialise() {
+    Settings = ReadSettings();
+  }
 
   public virtual void OnAppearing() {
+    // Debug.WriteLine($"ViewModelBase.OnAppearing: {GetType().Name}");
     IsVisible = true;
   }
 
   public virtual void OnDisappearing() {
+    // Debug.WriteLine($"ViewModelBase.OnDisappearing: {GetType().Name}");
     IsVisible = false;
+  }
+
+  private Settings ReadSettings() {
+    // Debug.WriteLine($"ViewModelBase.ReadSettings: {GetType().Name}");
+    var settingsReader = new SettingsReader(FileSystemService, Serialiser);
+    return settingsReader.Read();
   }
 }

@@ -17,6 +17,7 @@ public class AlertService : IAlertService {
   /// <param name="message">The body text of the alert dialog.</param>
   /// <param name="cancel">Text to be displayed on the 'Cancel' button.</param>
   public Task ShowAlertAsync(string title, string message, string cancel = "OK") {
+    // Debug.WriteLine($"AlertService.ShowAlertAsync: {message}");
     return Application.Current!.MainPage!.DisplayAlert(title, message, cancel);
   }
 

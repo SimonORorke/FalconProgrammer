@@ -22,8 +22,9 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
     return result;
   }
 
-  public override void OnAppearing() {
-    base.OnAppearing();
+  public override void Initialise() {
+    // Debug.WriteLine("ScriptProcessorsViewModel.Initialise");
+    base.Initialise();
     if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
       AlertService.ShowAlert("Error",
         "Script processors cannot be updated: a programs folder has not been specified.");
@@ -43,5 +44,10 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
         + $"'{Settings.ProgramsFolder.Path}' contains no sound bank subfolders.");
       View.GoToLocationsPage();
     }
+  }
+
+  public override void OnAppearing() {
+    base.OnAppearing();
+    View.InitialiseAsync();
   }
 }
