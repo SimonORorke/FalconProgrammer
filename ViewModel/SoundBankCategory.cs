@@ -7,16 +7,17 @@ namespace FalconProgrammer.ViewModel;
 
 public class SoundBankCategory(
   Settings settings, IFileSystemService fileSystemService) : ObservableObject {
-  private string _soundBank = "";
-  private string _category = "";
+
+  internal Settings.ProgramCategory ProgramCategory { get; } =
+    new Settings.ProgramCategory();
 
   public string SoundBank {
-    get => _soundBank;
+    get => ProgramCategory.SoundBank;
     set {
-      if (value == _soundBank) {
+      if (value == ProgramCategory.SoundBank) {
         return;
       }
-      _soundBank = value;
+      ProgramCategory.SoundBank = value;
       OnPropertyChanged();
       PopulateCategories();
     }
@@ -25,12 +26,12 @@ public class SoundBankCategory(
   public ImmutableList<string> SoundBanks { get; set; } = [];
 
   public string Category {
-    get => _category;
+    get => ProgramCategory.Category;
     set {
-      if (value == _category) {
+      if (value == ProgramCategory.Category) {
         return;
       }
-      _category = value;
+      ProgramCategory.Category = value;
       OnPropertyChanged();
     }
   }

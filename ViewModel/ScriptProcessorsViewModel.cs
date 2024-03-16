@@ -1,11 +1,10 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Collections.Specialized;
 
 namespace FalconProgrammer.ViewModel;
 
 public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
-
   private ImmutableList<string> SoundBanks { get; set; } = [];
   public ObservableCollection<SoundBankCategory> SoundBankCategories { get; } = [];
 
@@ -38,12 +37,26 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
         SoundBank = category.SoundBank,
         Category = category.Category
       });
-      Debug.WriteLine(SoundBankCategories.Count);
     }
   }
 
   public override void OnAppearing() {
     base.OnAppearing();
     View.InitialiseAsync();
+  }
+
+  public override void OnDisappearing() {
+    Settings.MustUseGuiScriptProcessorCategories.Clear();
+    foreach (var soundBankCategory in SoundBankCategories) {
+      Settings.MustUseGuiScriptProcessorCategories.Add(
+        soundBankCategory.ProgramCategory);
+    }
+    // It's too hard to detect all changes to SoundBankCategories:
+    // we could handle SoundBankCategories,CollectionChanged to detect when an item has
+    // been added or removed; but we would have to inherit ObservableCollection to
+    // detect when properties of existing items have changed.
+    // So force Settings to be saved regardless.
+    OnPropertyChanged(); 
+    base.OnDisappearing(); // Saves settings if changed
   }
 }
