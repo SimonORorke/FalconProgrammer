@@ -33,7 +33,7 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
     }
     SoundBankCategories.Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
-      SoundBankCategories.Add( new SoundBankCategory {
+      SoundBankCategories.Add(new SoundBankCategory(Settings, FileSystemService) {
         SoundBanks = SoundBanks,
         SoundBank = category.SoundBank,
         Category = category.Category

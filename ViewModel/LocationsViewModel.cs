@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -31,10 +32,9 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [PublicAPI]
   public string OriginalProgramsFolderPath {
     get => Settings.OriginalProgramsFolder.Path;
-    // Updated by XAML
-    // ReSharper disable once MemberCanBePrivate.Global
     set {
       if (Settings.OriginalProgramsFolder.Path != value) {
         Settings.OriginalProgramsFolder.Path = value;
@@ -43,10 +43,9 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [PublicAPI]
   public string ProgramsFolderPath {
     get => Settings.ProgramsFolder.Path;
-    // Updated by XAML
-    // ReSharper disable once MemberCanBePrivate.Global
     set {
       if (Settings.ProgramsFolder.Path != value) {
         Settings.ProgramsFolder.Path = value;
@@ -55,10 +54,9 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [PublicAPI]
   public string TemplateProgramsFolderPath {
     get => Settings.TemplateProgramsFolder.Path;
-    // Updated by XAML
-    // ReSharper disable once MemberCanBePrivate.Global
     set {
       if (Settings.TemplateProgramsFolder.Path != value) {
         Settings.TemplateProgramsFolder.Path = value;

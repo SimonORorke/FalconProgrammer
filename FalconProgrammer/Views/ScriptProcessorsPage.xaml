@@ -41,9 +41,10 @@
                         <Picker Grid.Column="0"
                                 ItemsSource="{Binding SoundBanks}" 
                                 SelectedItem="{Binding SoundBank}" />
-                        <Entry Grid.Column="1"
-                               Text="{Binding Category}"
-                               Placeholder="Category, or blank for all" />
+                        <Picker Grid.Column="1"
+                                ItemsSource="{Binding Categories}" 
+                                SelectedItem="{Binding Category}">
+                        </Picker>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

@@ -1,9 +1,12 @@
 ﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class SoundBankCategory : ObservableObject {
+public class SoundBankCategory(
+  Settings settings, IFileSystemService fileSystemService) : ObservableObject {
   private string _soundBank = "";
   private string _category = "";
 
@@ -15,9 +18,10 @@ public class SoundBankCategory : ObservableObject {
       }
       _soundBank = value;
       OnPropertyChanged();
+      PopulateCategories();
     }
   }
-
+  
   public ImmutableList<string> SoundBanks { get; set; } = [];
 
   public string Category {
@@ -28,6 +32,19 @@ public class SoundBankCategory : ObservableObject {
       }
       _category = value;
       OnPropertyChanged();
+    }
+  }
+  public ObservableCollection<string> Categories { get; } = [];
+  private IFileSystemService FileSystemService { get; } = fileSystemService;
+  private Settings Settings { get; } = settings;
+
+  private void PopulateCategories() {
+    string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
+    var categoryFolderNames = 
+      FileSystemService.GetSubfolderNames(soundBankFolderPath);
+    Categories.Clear();
+    foreach (string categoryFolderName in categoryFolderNames) {
+      Categories.Add(categoryFolderName);
     }
   }
 }
