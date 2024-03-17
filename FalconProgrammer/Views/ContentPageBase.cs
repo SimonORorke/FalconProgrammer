@@ -13,8 +13,8 @@ public abstract class ContentPageBase : ContentPage, IContentPageBase {
     Shell.Current.GoToAsync("//tabBar/locationsPage");
   }
 
-  public void InitialiseAsync() {
-    Dispatcher.Dispatch(ViewModel.Initialise);
+  public void InvokeAsync(Action action) {
+    Dispatcher.Dispatch(action);
   }
 
   protected override void OnAppearing() {

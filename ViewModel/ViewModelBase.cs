@@ -65,7 +65,7 @@ public abstract class ViewModelBase : ObservableObject {
 
   public IContentPageBase View { get; set; } = null!;
 
-  public virtual void Initialise() {
+  protected virtual void Initialise() {
     Settings = ReadSettings();
   }
 

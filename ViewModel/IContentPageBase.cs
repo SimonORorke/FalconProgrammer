@@ -2,5 +2,5 @@
 
 public interface IContentPageBase {
   void GoToLocationsPage();
-  void InitialiseAsync();
+  void InvokeAsync(Action action);
 }
