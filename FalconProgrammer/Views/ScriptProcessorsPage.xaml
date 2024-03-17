@@ -20,7 +20,7 @@
             <CollectionView.Header>
                 <Grid Padding="10"
                       RowDefinitions="Auto"
-                      ColumnDefinitions="*, *"
+                      ColumnDefinitions="*, *, 90"
                       BackgroundColor="Gray">
                     <Label Grid.Column="0"
                            Text="{x:Static viewModel:ScriptProcessorsViewModel.SoundBankHeader}"
@@ -32,12 +32,17 @@
                            FontAttributes="Bold"
                            VerticalTextAlignment="Center"
                            Margin="10,0, 0, 0" />
+                    <Label Grid.Column="2"
+                           Text="Action"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
                 </Grid>
             </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10, 0"
-                          RowDefinitions="Auto" ColumnDefinitions="*, *">
+                          RowDefinitions="Auto" ColumnDefinitions="*, *, 90">
                         <Picker Grid.Column="0"
                                 ItemsSource="{Binding SoundBanks}" 
                                 SelectedItem="{Binding SoundBank}" />
@@ -45,6 +50,12 @@
                                 ItemsSource="{Binding Categories}" 
                                 SelectedItem="{Binding Category}">
                         </Picker>
+                        <Button Grid.Column="2" 
+                                Text="{Binding ActionButtonText}"
+                                Command="{Binding ActionCommand}"
+                                Margin="0, 5" 
+                                MinimumHeightRequest="35" 
+                                HeightRequest="35" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

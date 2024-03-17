@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
@@ -8,10 +9,12 @@ namespace FalconProgrammer.ViewModel;
 public class SoundBankCategory(
   Settings settings, IFileSystemService fileSystemService, 
   Action appendAdditionItem, Action<SoundBankCategory> removeItem) : ObservableObject {
-
+  private string _actionButtonText = RemoveButtonText;
+  public const string AddButtonText = "Add";
   public const string AdditionCaption = "Add a new sound bank category here";
   public const string AllCaption = "All";
   public const string RemovalCaption = "** Remove this sound bank category";
+  public const string RemoveButtonText = "Remove";
   
   internal Settings.ProgramCategory ProgramCategory { get; } =
     new Settings.ProgramCategory {SoundBank = RemovalCaption, Category = AllCaption};
@@ -40,6 +43,7 @@ public class SoundBankCategory(
       // out of ignorance, selected for the addition row.
       if (isAdding) {
         Category = AllCaption;
+        ActionButtonText = RemoveButtonText;
         // The user has used up the addition item, the one at the end with the blank
         // sound bank and category. So we need to append another addition item to the
         // collection.
@@ -54,9 +58,6 @@ public class SoundBankCategory(
   public string Category {
     get => ProgramCategory.Category;
     set {
-      // Bug: Can freeze when trying to select All for existing item.
-      // Bug: When All is selected for existing item, the update may not happen.
-      // Bug: When All is selected for existing item, the Category attribute may be missing from XML.
       if (value == ProgramCategory.Category) {
         return;
       }
@@ -64,6 +65,19 @@ public class SoundBankCategory(
       OnPropertyChanged();
     }
   }
+
+  public string ActionButtonText {
+    get => _actionButtonText;
+    set {
+      if (value == _actionButtonText) {
+        return;
+      }
+      _actionButtonText = value;
+      OnPropertyChanged();
+    }
+  }
+
+  public ICommand ActionCommand { get; private set; } = null!;
   public ObservableCollection<string> Categories { get; } = [];
   private IFileSystemService FileSystemService { get; } = fileSystemService;
   private Settings Settings { get; } = settings;

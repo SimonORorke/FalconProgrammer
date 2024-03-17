@@ -21,14 +21,16 @@ public class SoundBankCategoryCollection(
 
   private Settings Settings { get; } = settings;
   private ImmutableList<string> SoundBanks { get; set; } = [];
-  internal Action<Action> InvokeAsync { get; set; } = null!;
+  private Action<Action> InvokeAsync { get; set; } = null!;
 
-  private void AddItem(string soundBank, string category) {
+  private void AddItem(string soundBank, string category,
+    string actionButtonText = SoundBankCategory.RemoveButtonText) {
     Add(new SoundBankCategory(
       Settings, FileSystemService, AppendAdditionItem, RemoveItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
-      Category = category
+      Category = category,
+      ActionButtonText = actionButtonText
     });
   }
 
@@ -40,7 +42,8 @@ public class SoundBankCategoryCollection(
       return;
     }
     // AddItem(string.Empty, string.Empty);
-    AddItem(SoundBankCategory.AdditionCaption, SoundBankCategory.AdditionCaption);
+    AddItem(SoundBankCategory.AdditionCaption, SoundBankCategory.AdditionCaption,
+      SoundBankCategory.AddButtonText);
   }
 
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
@@ -70,7 +73,7 @@ public class SoundBankCategoryCollection(
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
       string categoryToDisplay = string.IsNullOrWhiteSpace(category.Category)
         ? SoundBankCategory.AllCaption
-        : category.Category;  
+        : category.Category;
       AddItem(category.SoundBank, categoryToDisplay);
     }
     ForceAppendAdditionItem = true;
