@@ -8,13 +8,11 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public class SoundBankCategory : ObservableObject {
-  public const string AddButtonText = "Add";
-  public const string AdditionCaption = "Add a new sound bank category here";
-  public const string AllCaption = "All";
-  // public const string RemovalCaption = "** Remove this sound bank category";
-  public const string RemoveButtonText = "Remove";
-  private string _actionButtonText = RemoveButtonText;
-  // private ICommand? _actionCommand;
+  public const string AllCategoriesCaption = "All";
+  
+  private bool _canRemove;
+  private string _category = "";
+  private string _soundBank = "";
 
   public SoundBankCategory(Settings settings, IFileSystemService fileSystemService,
     Action appendAdditionItem, Action<SoundBankCategory> removeItem) {
@@ -22,50 +20,29 @@ public class SoundBankCategory : ObservableObject {
     FileSystemService = fileSystemService;
     AppendAdditionItem = appendAdditionItem;
     RemoveItem = removeItem;
-    ActionCommand = new RelayCommand(OnActionRequired);
-    // AddCommand = new RelayCommand(Add);
-    // RemoveCommand = new RelayCommand(Remove);
+    RemoveCommand = new RelayCommand(Remove);
   }
-
-  private void OnActionRequired() {
-    if (ActionButtonText == RemoveButtonText) {
-      // We need to remove this item from the collection.
-      RemoveItem(this);
-      return;
-    }
-    // We need to add this item to the collection.
-  }
-
-  internal Settings.ProgramCategory ProgramCategory { get; } =
-    new Settings.ProgramCategory { SoundBank = string.Empty, Category = AllCaption };
-    // new Settings.ProgramCategory { SoundBank = RemovalCaption, Category = AllCaption };
 
   public string SoundBank {
-    get => ProgramCategory.SoundBank;
+    get => _soundBank;
     set {
-      // On addition after removal, the new sound bank is null.
-      // This fixes it.
-      if (string.IsNullOrWhiteSpace(value)) {
+      if (value == _soundBank 
+          // On addition after removal, the new sound bank is null.
+          // This fixes it.
+          || string.IsNullOrWhiteSpace(value)) {
         return;
       }
-      if (value == ProgramCategory.SoundBank) {
-        return;
-      }
-      // bool isAdding = string.IsNullOrWhiteSpace(ProgramCategory.SoundBank);
-      bool isAdding = ProgramCategory.SoundBank == AdditionCaption;
-      ProgramCategory.SoundBank = value;
+      bool isAdding = IsAdditionItem;
+      _soundBank = value;
       OnPropertyChanged();
       PopulateCategories();
-      // Not mutually exclusive with removal, which the user might, accidentally or
-      // out of ignorance, selected for the addition row.
+      CanRemove = true;
       if (isAdding) {
-        Category = AllCaption;
-        ActionButtonText = RemoveButtonText;
+        Category = AllCategoriesCaption;
         // The user has used up the addition item, the one at the end with the blank
         // sound bank and category. So we need to append another addition item to the
         // collection.
         AppendAdditionItem();
-        // } else if (string.IsNullOrWhiteSpace(value)) {
       }
     }
   }
@@ -73,41 +50,30 @@ public class SoundBankCategory : ObservableObject {
   public ImmutableList<string> SoundBanks { get; set; } = [];
 
   public string Category {
-    get => ProgramCategory.Category;
+    get => _category;
     set {
-      if (value == ProgramCategory.Category) {
+      if (value == _category) {
         return;
       }
-      ProgramCategory.Category = value;
+      _category = value;
       OnPropertyChanged();
     }
   }
 
-  public string ActionButtonText {
-    get => _actionButtonText;
+  public bool CanRemove {
+    get => _canRemove;
     set {
-      if (value == _actionButtonText) {
+      if (value == _canRemove) {
         return;
       }
-      _actionButtonText = value;
+      _canRemove = value;
       OnPropertyChanged();
     }
   }
 
-  public ICommand ActionCommand { get; }
-  // public ICommand ActionCommand {
-  //   get => _actionCommand ??= RemoveCommand;
-  //   internal set {
-  //     if (Equals(value, _actionCommand)) {
-  //       return;
-  //     }
-  //     _actionCommand = value;
-  //     OnPropertyChanged();
-  //   }
-  // }
-
-  // public ICommand AddCommand { get; }
-  // public ICommand RemoveCommand { get; }
+  public bool IsAdditionItem => SoundBank == string.Empty;
+  public bool IsForAllCategories => Category == AllCategoriesCaption;
+  public ICommand RemoveCommand { get; }
   public ObservableCollection<string> Categories { get; } = [];
   private IFileSystemService FileSystemService { get; }
   private Settings Settings { get; }
@@ -116,18 +82,22 @@ public class SoundBankCategory : ObservableObject {
 
   private void PopulateCategories() {
     Categories.Clear();
-    // if (string.IsNullOrWhiteSpace(SoundBank)) { // Addition item
-    // if (SoundBank is AdditionCaption or RemovalCaption) {
-    if (SoundBank is AdditionCaption) {
+    if (IsAdditionItem) {
       return;
     }
-    // Categories.Add(string.Empty);
-    Categories.Add(AllCaption);
+    Categories.Add(AllCategoriesCaption);
     string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
     var categoryFolderNames =
       FileSystemService.GetSubfolderNames(soundBankFolderPath);
     foreach (string categoryFolderName in categoryFolderNames) {
       Categories.Add(categoryFolderName);
     }
+  }
+
+  /// <summary>
+  ///   Removes this item from the collection.
+  /// </summary>
+  private void Remove() {
+    RemoveItem(this);
   }
 }

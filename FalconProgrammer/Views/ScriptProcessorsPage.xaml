@@ -9,61 +9,54 @@
     <ContentPage.BindingContext>
         <viewModel:ScriptProcessorsViewModel />
     </ContentPage.BindingContext>
-    <Grid RowDefinitions="*, 150">
-        <CollectionView
-            Grid.Row="0"
-            ItemsSource="{Binding SoundBankCategories}">
-            <!-- For Windows, there is a known issue where a CollectionView's Header and Footer 
+    <CollectionView
+        ItemsSource="{Binding SoundBankCategories}">
+        <!-- For Windows, there is a known issue where a CollectionView's Header and Footer 
             are not shown. See https://github.com/dotnet/maui/issues/14557, 
             where a workaround is provided. I have implemented the workaround in the 
             constructor of Platforms\Windows\App.xaml.cs. -->
-            <CollectionView.Header>
-                <Grid Padding="10"
-                      RowDefinitions="Auto"
-                      ColumnDefinitions="*, *, 90"
-                      BackgroundColor="Gray">
-                    <Label Grid.Column="0"
-                           Text="{x:Static viewModel:ScriptProcessorsViewModel.SoundBankHeader}"
-                           FontAttributes="Bold"
-                           VerticalTextAlignment="Center"
-                           Margin="10,0, 0, 0" />
-                    <Label Grid.Column="1"
-                           Text="{x:Static viewModel:ScriptProcessorsViewModel.CategoryHeader}"
-                           FontAttributes="Bold"
-                           VerticalTextAlignment="Center"
-                           Margin="10,0, 0, 0" />
-                    <Label Grid.Column="2"
-                           Text="Action"
-                           FontAttributes="Bold"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
+        <CollectionView.Header>
+            <Grid Padding="10"
+                  RowDefinitions="Auto"
+                  ColumnDefinitions="*, *, 90"
+                  BackgroundColor="Gray">
+                <Label Grid.Column="0"
+                       Text="Sound Bank"
+                       FontAttributes="Bold"
+                       VerticalTextAlignment="Center"
+                       Margin="10,0, 0, 0" />
+                <Label Grid.Column="1"
+                       Text="Category or 'All'"
+                       FontAttributes="Bold"
+                       VerticalTextAlignment="Center"
+                       Margin="10,0, 0, 0" />
+                <Label Grid.Column="2"
+                       Text="Action"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center" />
+            </Grid>
+        </CollectionView.Header>
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Grid Padding="10, 0"
+                      RowDefinitions="Auto" ColumnDefinitions="*, *, 90">
+                    <Picker Grid.Column="0"
+                            ItemsSource="{Binding SoundBanks}"
+                            SelectedItem="{Binding SoundBank}" />
+                    <Picker Grid.Column="1"
+                            ItemsSource="{Binding Categories}"
+                            SelectedItem="{Binding Category}" />
+                    <Button Grid.Column="2"
+                            Text="Remove"
+                            Command="{Binding RemoveCommand}"
+                            IsEnabled="{Binding CanRemove}"
+                            IsVisible="{Binding CanRemove}"
+                            Margin="0, 5"
+                            MinimumHeightRequest="35"
+                            HeightRequest="35" />
                 </Grid>
-            </CollectionView.Header>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10, 0"
-                          RowDefinitions="Auto" ColumnDefinitions="*, *, 90">
-                        <Picker Grid.Column="0"
-                                ItemsSource="{Binding SoundBanks}" 
-                                SelectedItem="{Binding SoundBank}" />
-                        <Picker Grid.Column="1"
-                                ItemsSource="{Binding Categories}" 
-                                SelectedItem="{Binding Category}">
-                        </Picker>
-                        <Button Grid.Column="2" 
-                                Text="{Binding ActionButtonText}"
-                                Command="{Binding ActionCommand}"
-                                Margin="0, 5" 
-                                MinimumHeightRequest="35" 
-                                HeightRequest="35" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <!-- Bottom Grid -->
-        <Grid Grid.Row="1" RowDefinitions="5, *">
-            <!-- Horizontal line Label -->
-            <Label Grid.Row="0" BackgroundColor="Black" />
-        </Grid>
-    </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 </views:ContentPageBase>

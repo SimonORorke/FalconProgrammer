@@ -1,16 +1,11 @@
-﻿namespace FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+
+namespace FalconProgrammer.ViewModel;
 
 public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
   private SoundBankCategoryCollection? _soundBankCategories;
-  
-  public static string SoundBankHeader => 
-    "Sound Bank";
-    // $"Sound Bank or '{SoundBankCategory.RemovalCaption}'";
 
-  public static string CategoryHeader => 
-    $"Category or '{SoundBankCategory.AllCaption}'";
-
-  public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories 
+  public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(Settings, FileSystemService);
 
   protected override void Initialise() {
@@ -29,9 +24,8 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
       View.GoToLocationsPage();
       return;
     }
-    var soundBanks = 
+    var soundBanks =
       FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path);
-      // FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path).ToList();
     if (soundBanks.Count == 0) {
       AlertService.ShowAlert("Error",
         "Script processors cannot be updated: programs folder "
@@ -51,20 +45,18 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
     if (SoundBankCategories.HasBeenChanged) {
       Settings.MustUseGuiScriptProcessorCategories.Clear();
       foreach (var soundBankCategory in SoundBankCategories) {
-        // if (!string.IsNullOrWhiteSpace(soundBankCategory.SoundBank)) {
-        // if (soundBankCategory.SoundBank != SoundBankCategory.AdditionCaption 
-        //     && soundBankCategory.SoundBank != SoundBankCategory.RemovalCaption) {
-        if (soundBankCategory.SoundBank != SoundBankCategory.AdditionCaption) {
-          if (soundBankCategory.ProgramCategory.Category ==
-              SoundBankCategory.AllCaption) {
-            soundBankCategory.ProgramCategory.Category = string.Empty;
-          }
+        if (!soundBankCategory.IsAdditionItem) {
           Settings.MustUseGuiScriptProcessorCategories.Add(
-            soundBankCategory.ProgramCategory);
+            new Settings.ProgramCategory {
+              SoundBank = soundBankCategory.SoundBank,
+              Category = soundBankCategory.IsForAllCategories
+                ? string.Empty
+                : soundBankCategory.Category
+            });
         }
       }
       // Notify change, so that Settings will be saved.
-      OnPropertyChanged(); 
+      OnPropertyChanged();
     }
     base.OnDisappearing(); // Saves settings if changed.
   }

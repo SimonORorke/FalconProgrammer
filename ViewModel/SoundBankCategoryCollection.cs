@@ -23,16 +23,13 @@ public class SoundBankCategoryCollection(
   private ImmutableList<string> SoundBanks { get; set; } = [];
   private Action<Action> InvokeAsync { get; set; } = null!;
 
-  private void AddItem(string soundBank, string category) {
-    // string actionButtonText = SoundBankCategory.RemoveButtonText) {
+  private void AddItem(string soundBank = "", string category = "") {
     Add(new SoundBankCategory(
       Settings, FileSystemService, AppendAdditionItem, RemoveItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category,
-      ActionButtonText = IsPopulating
-        ? SoundBankCategory.RemoveButtonText
-        : SoundBankCategory.AddButtonText
+      CanRemove = IsPopulating && !ForceAppendAdditionItem 
     });
   }
 
@@ -43,8 +40,7 @@ public class SoundBankCategoryCollection(
     if (IsPopulating & !ForceAppendAdditionItem) {
       return;
     }
-    // AddItem(string.Empty, string.Empty);
-    AddItem(SoundBankCategory.AdditionCaption, SoundBankCategory.AdditionCaption);
+    AddItem();
   }
 
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
@@ -67,17 +63,13 @@ public class SoundBankCategoryCollection(
   }
 
   internal void Populate(IEnumerable<string> soundBanks, Action<Action> invokeAsync) {
-    // internal void Populate(List<string> soundBanks, Action<Action> invokeAsync) {
     InvokeAsync = invokeAsync;
     IsPopulating = true;
-    // // Allow a SoundBankCategory to be removed.
-    // // soundBanks.Insert(0, string.Empty);
-    // soundBanks.Insert(0, SoundBankCategory.RemovalCaption);
     SoundBanks = soundBanks.ToImmutableList();
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
       string categoryToDisplay = string.IsNullOrWhiteSpace(category.Category)
-        ? SoundBankCategory.AllCaption
+        ? SoundBankCategory.AllCategoriesCaption
         : category.Category;
       AddItem(category.SoundBank, categoryToDisplay);
     }
