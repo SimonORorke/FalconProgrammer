@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:FalconProgrammer.Views"
     xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
+    x:DataType="viewModel:AppShellViewModel"
     FlyoutBehavior="Disabled"
     Width="1155"
     Title="Falcon Programmer">

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
     xmlns:views="using:FalconProgrammer.Views"
+    x:DataType="viewModel:BatchScriptViewModel"
     x:Class="FalconProgrammer.Views.BatchScriptPage">
     <ContentPage.BindingContext>
         <viewModel:BatchScriptViewModel />

@@ -47,7 +47,7 @@ public class SoundBankCategory : ObservableObject {
     }
   }
 
-  public ImmutableList<string> SoundBanks { get; set; } = [];
+  public ImmutableList<string> SoundBanks { get; internal set; } = [];
 
   public string Category {
     get => _category;
