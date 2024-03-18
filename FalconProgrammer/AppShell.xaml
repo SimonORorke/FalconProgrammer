@@ -35,9 +35,9 @@
             ContentTemplate="{DataTemplate views:LocationsPage}" />
 
         <ShellContent
-            Title="{x:Static views:ScriptProcessorsPage.ContentPageTitle}"
+            Title="{x:Static views:GuiScriptProcessorPage.TabTitle}"
             Route="scriptProcessorsPage"
-            ContentTemplate="{DataTemplate views:ScriptProcessorsPage}" />
+            ContentTemplate="{DataTemplate views:GuiScriptProcessorPage}" />
 
         <ShellContent
             Title="{x:Static views:BatchScriptPage.ContentPageTitle}"

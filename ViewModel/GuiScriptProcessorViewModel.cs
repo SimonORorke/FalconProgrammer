@@ -2,14 +2,14 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
+public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   private SoundBankCategoryCollection? _soundBankCategories;
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(Settings, FileSystemService);
 
   protected override void Initialise() {
-    // Debug.WriteLine("ScriptProcessorsViewModel.Initialise");
+    // Debug.WriteLine("GuiScriptProcessorViewModel.Initialise");
     base.Initialise(); // Reads Settings.
     if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
       AlertService.ShowAlert("Error",

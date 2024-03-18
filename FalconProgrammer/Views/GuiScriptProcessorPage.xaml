@@ -5,10 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
     xmlns:views="using:FalconProgrammer.Views"
-    x:DataType="viewModel:ScriptProcessorsViewModel"
-    x:Class="FalconProgrammer.Views.ScriptProcessorsPage">
+    x:DataType="viewModel:GuiScriptProcessorViewModel"
+    x:Class="FalconProgrammer.Views.GuiScriptProcessorPage">
     <ContentPage.BindingContext>
-        <viewModel:ScriptProcessorsViewModel />
+        <viewModel:GuiScriptProcessorViewModel />
     </ContentPage.BindingContext>
     <CollectionView
         ItemsSource="{Binding SoundBankCategories}">
