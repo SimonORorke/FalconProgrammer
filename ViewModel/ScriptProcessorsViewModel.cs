@@ -4,7 +4,8 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
   private SoundBankCategoryCollection? _soundBankCategories;
   
   public static string SoundBankHeader => 
-    $"Sound Bank or '{SoundBankCategory.RemovalCaption}'";
+    "Sound Bank";
+    // $"Sound Bank or '{SoundBankCategory.RemovalCaption}'";
 
   public static string CategoryHeader => 
     $"Category or '{SoundBankCategory.AllCaption}'";
@@ -29,7 +30,8 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
       return;
     }
     var soundBanks = 
-      FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path).ToList();
+      FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path);
+      // FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path).ToList();
     if (soundBanks.Count == 0) {
       AlertService.ShowAlert("Error",
         "Script processors cannot be updated: programs folder "
@@ -50,8 +52,9 @@ public class ScriptProcessorsViewModel : SettingsWriterViewModelBase {
       Settings.MustUseGuiScriptProcessorCategories.Clear();
       foreach (var soundBankCategory in SoundBankCategories) {
         // if (!string.IsNullOrWhiteSpace(soundBankCategory.SoundBank)) {
-        if (soundBankCategory.SoundBank != SoundBankCategory.AdditionCaption 
-            && soundBankCategory.SoundBank != SoundBankCategory.RemovalCaption) {
+        // if (soundBankCategory.SoundBank != SoundBankCategory.AdditionCaption 
+        //     && soundBankCategory.SoundBank != SoundBankCategory.RemovalCaption) {
+        if (soundBankCategory.SoundBank != SoundBankCategory.AdditionCaption) {
           if (soundBankCategory.ProgramCategory.Category ==
               SoundBankCategory.AllCaption) {
             soundBankCategory.ProgramCategory.Category = string.Empty;
