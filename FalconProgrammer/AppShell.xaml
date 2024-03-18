@@ -17,7 +17,7 @@
     that appears at the right end of the title bar when TitleView is added. 
     See https://github.com/dotnet/maui/issues/7034. -->
     <Shell.TitleView>
-        <HorizontalStackLayout  VerticalOptions="Fill">
+        <HorizontalStackLayout VerticalOptions="Fill">
             <Image Source="falcon_svg_repo_com.png"
                    HeightRequest="50"/>
             <Label Text="{Binding CurrentPageTitle}"

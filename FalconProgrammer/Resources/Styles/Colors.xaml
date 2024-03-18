@@ -9,11 +9,14 @@
 
     <Color x:Key="Primary">#060357</Color>
     <Color x:Key="PrimaryDark">#3C9C59</Color>
-    <!-- <Color x:Key="PrimaryDark">#3C9C59</Color> -->
     <!-- <Color x:Key="PrimaryDark">#0B03FF</Color> -->
     <!-- <Color x:Key="PrimaryDark">#CF8426</Color> -->
     <!-- <Color x:Key="PrimaryDark">#84CF26</Color> -->
     <Color x:Key="PrimaryDarkText">#0a0345</Color>
+    <Color x:Key="Secondary">#fca326</Color>
+    <!-- <Color x:Key="Secondary">#CF8426</Color> -->
+    <!-- <Color x:Key="Secondary">#e24329</Color> -->
+    <Color x:Key="SecondaryDarkText">#0a0345</Color>
     <!-- Falcon image: -->
     <!--    Background dark blue -->
     <!-- <Color x:Key="Primary">#0a0345</Color> -->
@@ -25,8 +28,8 @@
     <!-- <Color x:Key="Primary">#512BD4</Color> -->
     <!-- <Color x:Key="PrimaryDark">#ac99ea</Color> -->
     <!-- <Color x:Key="PrimaryDarkText">#242424</Color> -->
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
+    <!-- <Color x:Key="Secondary">#DFD8F7</Color> -->
+    <!-- <Color x:Key="SecondaryDarkText">#9880e5</Color> -->
     <Color x:Key="Tertiary">#2B0B98</Color>
 
     <Color x:Key="White">White</Color>
