@@ -94,7 +94,7 @@ public class CategoryTests {
     var settingsFolderLocationReader = new SettingsFolderLocationReader(
       FileSystemService.Default, Serialiser.Default);
     var settingsFolderLocation = settingsFolderLocationReader.Read();
-    settingsFolderLocation.Path = Settings.DefaultSettingsFolderPath;
+    settingsFolderLocation.Path = SettingsTestHelper.DefaultSettingsFolderPath;
     settingsFolderLocation.Write();
     var settingsReader = new SettingsReader(
       FileSystemService.Default, Serialiser.Default);

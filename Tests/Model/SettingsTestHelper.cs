@@ -7,7 +7,7 @@ public static class SettingsTestHelper {
   public const string BatchScriptsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Batch";
 
-  private const string DefaultSettingsFolderPath =
+  public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
   public static string DefaultTemplatePath => Path.Combine(
