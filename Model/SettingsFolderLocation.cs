@@ -7,27 +7,6 @@ namespace FalconProgrammer.Model;
 public class SettingsFolderLocation : SerialisableBase {
   [XmlAttribute] public string Path { get; set; } = string.Empty;
 
-  // public static SettingsFolderLocation Read(
-  //   IFileSystemService fileSystemService,
-  //   ISerialiser writeSerialiser,
-  //   string applicationName = Global.ApplicationName) {
-  //   var locationFile = GetSettingsFolderLocationPath(applicationName);
-  //   SettingsFolderLocation result;
-  //   if (locationFile.Exists) {
-  //     using var reader = new StreamReader(locationFile.FullName);
-  //     var deserializer = new XmlSerializer(typeof(SettingsFolderLocation));
-  //     result = (SettingsFolderLocation)deserializer.Deserialize(reader)!;
-  //     if (!string.IsNullOrWhiteSpace(result.Path)) {
-  //       fileSystemService.CreateFolder(result.Path);
-  //     }
-  //   } else {
-  //     result = new SettingsFolderLocation();
-  //   }
-  //   result.FileSystemService = fileSystemService;
-  //   result.Serialiser = writeSerialiser;
-  //   return result;
-  // }
-
   public void Write() {
     string appDataFolderPath = GetAppDataFolderPath(ApplicationName);
     if (!FileSystemService.FolderExists(appDataFolderPath)) {
@@ -47,6 +26,7 @@ public class SettingsFolderLocation : SerialisableBase {
   /// <remarks>
   ///   C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
   /// </remarks>
+  [ExcludeFromCodeCoverage]
   [SuppressMessage("ReSharper", "CommentTypo")]
   public static string? AppDataFolderPathMaui { get; set; }
 

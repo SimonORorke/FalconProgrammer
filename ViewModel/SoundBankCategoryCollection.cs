@@ -7,7 +7,6 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public class SoundBankCategoryCollection(
-  Settings settings,
   IFileSystemService fileSystemService)
   : ObservableCollection<SoundBankCategory> {
   private IFileSystemService FileSystemService { get; } = fileSystemService;
@@ -19,7 +18,7 @@ public class SoundBankCategoryCollection(
   /// </summary>
   internal bool HasBeenChanged { get; private set; }
 
-  private Settings Settings { get; } = settings;
+  private Settings Settings { get; set; } = null!;
   private ImmutableList<string> SoundBanks { get; set; } = [];
   private Action<Action> InvokeAsync { get; set; } = null!;
 
@@ -62,9 +61,10 @@ public class SoundBankCategoryCollection(
     }
   }
 
-  internal void Populate(IEnumerable<string> soundBanks, Action<Action> invokeAsync) {
-    InvokeAsync = invokeAsync;
+  internal void Populate(Settings settings, IEnumerable<string> soundBanks, Action<Action> invokeAsync) {
     IsPopulating = true;
+    Settings = settings;
+    InvokeAsync = invokeAsync;
     SoundBanks = soundBanks.ToImmutableList();
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {

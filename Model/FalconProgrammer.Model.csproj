@@ -15,5 +15,10 @@
             <_Parameter1>FalconProgrammer.Tests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
+    
+    <ItemGroup>
+      <None Remove="DefaultSettings.xml" />
+      <EmbeddedResource Include="DefaultSettings.xml" />
+    </ItemGroup>
 
 </Project>

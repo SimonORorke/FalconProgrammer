@@ -20,9 +20,20 @@ public abstract class DeserialiserBase<T>(
     } else {
       result = (T)Activator.CreateInstance(typeof(T))!;
     }
-    result.ApplicationName = ApplicationName;
-    result.FileSystemService = FileSystemService;
-    result.Serialiser = Serialiser;
+    PopulateUtilityProperties(result);
     return result;
+  }
+
+  protected T Deserialise(Stream stream) {
+    var deserializer = new XmlSerializer(typeof(T));
+    var result = (T)deserializer.Deserialize(stream)!;
+    PopulateUtilityProperties(result);
+    return result;
+  }
+
+  private void PopulateUtilityProperties(T deserialisedObject) {
+    deserialisedObject.ApplicationName = ApplicationName;
+    deserialisedObject.FileSystemService = FileSystemService;
+    deserialisedObject.Serialiser = Serialiser;
   }
 }

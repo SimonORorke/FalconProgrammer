@@ -13,6 +13,7 @@ public abstract class ViewModelTestsBase {
     MockFileSystemService = new MockFileSystemService();
     MockFolderPicker = new MockFolderPicker();
     MockSerialiser = new MockSerialiser();
+    MockView = new MockContentPageBase();
     var mockServiceProvider = new MockServiceProvider();
     mockServiceProvider.Services.Add(MockAlertService);
     mockServiceProvider.Services.Add(MockAppDataFolderService);
@@ -31,5 +32,6 @@ public abstract class ViewModelTestsBase {
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockFolderPicker MockFolderPicker { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
+  protected MockContentPageBase MockView { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;
 }

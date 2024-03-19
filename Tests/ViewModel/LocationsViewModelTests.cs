@@ -10,6 +10,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     ViewModel = new LocationsViewModel {
+      View = MockView,
       ServiceHelper = ServiceHelper
     };
     ViewModel.OnAppearing();

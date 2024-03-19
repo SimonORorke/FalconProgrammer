@@ -5,7 +5,7 @@ namespace FalconProgrammer.Tests.Model;
 [TestFixture]
 public class SettingsTests {
   [Test]
-  public void Test1() {
+  public void RealTestSettingsFile() {
     SettingsTestHelper.DeleteAnyData();
     try {
       var settings = SettingsTestHelper.ReadSettings();
@@ -44,6 +44,17 @@ public class SettingsTests {
     } finally {
       SettingsTestHelper.DeleteAnyData();
     }
+  }
+
+  [Test]
+  public void UseDefault() {
+    var mockFileSystemService = new MockFileSystemService {
+      ExpectedFileExists = false
+    };
+    var settingsReader = new SettingsReader(mockFileSystemService, Serialiser.Default);
+    var settings = settingsReader.Read(true);
+    Assert.That(settings.ProgramsFolder.Path, Is.Empty);
+    Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
   }
 
   [Test]

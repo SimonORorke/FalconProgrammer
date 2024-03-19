@@ -3,6 +3,9 @@ using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model;
 
+/// <summary>
+///   To read the settings, use <see cref="SettingsReader"/>.
+/// </summary>
 [XmlRoot(nameof(Settings))]
 public class Settings : SerialisableBase {
   [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
@@ -39,31 +42,6 @@ public class Settings : SerialisableBase {
     }
     return result;
   }
-
-  // public static Settings Read(
-  //   IFileSystemService fileSystemService,
-  //   ISerialiser writeSerialiser,
-  //   string defaultSettingsFolderPath = "",
-  //   string applicationName = Global.ApplicationName) {
-  //   var settingsFolderLocation = SettingsFolderLocation.Read(
-  //     fileSystemService, writeSerialiser, applicationName);
-  //   if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
-  //     settingsFolderLocation.Path = defaultSettingsFolderPath;
-  //     settingsFolderLocation.Write();
-  //   }
-  //   var settingsFile = GetSettingsPath(settingsFolderLocation.Path);
-  //   Settings result;
-  //   if (settingsFile.Exists) {
-  //     using var reader = new StreamReader(settingsFile.FullName);
-  //     var readSerializer = new XmlSerializer(typeof(Settings));
-  //     result = (Settings)readSerializer.Deserialize(reader)!;
-  //     result.SettingsPath = settingsFile.FullName;
-  //   } else {
-  //     result = new Settings { SettingsPath = settingsFile.FullName };
-  //   }
-  //   result.Serialiser = writeSerialiser;
-  //   return result;
-  // }
 
   public void Write(string? settingsFolderPath = null) {
     if (settingsFolderPath != null) {

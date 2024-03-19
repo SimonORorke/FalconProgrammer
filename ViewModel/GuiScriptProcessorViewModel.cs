@@ -6,7 +6,7 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   private SoundBankCategoryCollection? _soundBankCategories;
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
-    ??= new SoundBankCategoryCollection(Settings, FileSystemService);
+    ??= new SoundBankCategoryCollection(FileSystemService);
 
   protected override void Initialise() {
     // Debug.WriteLine("GuiScriptProcessorViewModel.Initialise");
@@ -33,12 +33,7 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
       View.GoToLocationsPage();
       return;
     }
-    SoundBankCategories.Populate(soundBanks, View.InvokeAsync);
-  }
-
-  public override void OnAppearing() {
-    base.OnAppearing();
-    View.InvokeAsync(Initialise);
+    SoundBankCategories.Populate(Settings, soundBanks, View.InvokeAsync);
   }
 
   public override void OnDisappearing() {
