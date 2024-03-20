@@ -11,6 +11,10 @@ public abstract class DeserialiserBase<T>(
   protected IFileSystemService FileSystemService { get; } = fileSystemService;
   protected ISerialiser Serialiser { get; } = serialiser;
 
+  /// <summary>
+  /// TODO: Mock Deserialise(string inputPath)
+  /// maybe with embedded resource XML files.
+  /// </summary>
   protected T Deserialise(string inputPath) {
     T result;
     if (FileSystemService.FileExists(inputPath)) {
