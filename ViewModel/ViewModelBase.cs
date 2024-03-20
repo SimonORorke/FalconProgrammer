@@ -72,10 +72,10 @@ public abstract class ViewModelBase : ObservableObject {
   public virtual void OnAppearing() {
     // Debug.WriteLine($"ViewModelBase.OnAppearing: {GetType().Name}");
     IsVisible = true;
-    // Reads Settings asynchronously so that any updates to Settings made on the previous
-    // page will be available on this one.
-    // TODO: Use a Task instead of View.InvokeAsync? 
-    View.InvokeAsync(Initialise);
+    // Reads Settings on the Dispatcher thread so that any updates to Settings made on
+    // the previous page will be available on this one.
+    View.Dispatch(Initialise);
+    // new Thread(Initialise).Start(); // Does not work, needs Dispatcher.
   }
 
   public virtual void OnDisappearing() {
@@ -86,7 +86,7 @@ public abstract class ViewModelBase : ObservableObject {
   private Settings ReadSettings() {
     // Debug.WriteLine($"ViewModelBase.ReadSettings: {GetType().Name}");
     var settingsReader = new SettingsReader(FileSystemService, Serialiser);
-    // return settingsReader.Read(true);
-    return settingsReader.Read();
+    return settingsReader.Read(true);
+    // return settingsReader.Read();
   }
 }

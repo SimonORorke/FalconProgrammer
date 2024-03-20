@@ -13,7 +13,7 @@ public abstract class ContentPageBase : ContentPage, IContentPageBase {
     Shell.Current.GoToAsync("//tabBar/locationsPage");
   }
 
-  public void InvokeAsync(Action action) {
+  public void Dispatch(Action action) {
     Dispatcher.Dispatch(action);
   }
 

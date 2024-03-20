@@ -33,7 +33,7 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
       View.GoToLocationsPage();
       return;
     }
-    SoundBankCategories.Populate(Settings, soundBanks, View.InvokeAsync);
+    SoundBankCategories.Populate(Settings, soundBanks, View.Dispatch);
   }
 
   public override void OnDisappearing() {

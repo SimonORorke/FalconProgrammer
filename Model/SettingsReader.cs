@@ -10,8 +10,10 @@ public class SettingsReader(
     fileSystemService, serialiser, applicationName) {
   
   /// <summary>
-  ///   Only used in test LocationsViewModelTests.CancelBrowseForDefaultTemplate.
-  ///   There has to be a better way.
+  ///   Currently only used in test
+  ///   LocationsViewModelTests.CancelBrowseForDefaultTemplate.
+  ///   There are better ways.
+  ///   TODO: Replace SettingsReader.DefaultSettingsFolderPath.
   /// </summary>
   public string DefaultSettingsFolderPath { get; set; } = 
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
