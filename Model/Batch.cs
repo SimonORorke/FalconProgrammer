@@ -14,8 +14,7 @@ public class Batch {
   private static Settings Settings {
     get {
       if (_settings == null) {
-        var settingsReader = new SettingsReader(
-          FileSystemService.Default, Serialiser.Default);
+        var settingsReader = new SettingsReader();
         _settings = settingsReader.Read();
       }
       return _settings;

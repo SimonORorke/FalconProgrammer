@@ -47,16 +47,15 @@ public static class SettingsTestHelper {
       Directory.Delete(appDataFolderPath);
     }
     // Restore production settings location. Default application name.
-    var settingsFolderLocationReader = new SettingsFolderLocationReader(
-      FileSystemService.Default, Serialiser.Default);
+    var settingsFolderLocationReader = new SettingsFolderLocationReader();
     var location = settingsFolderLocationReader.Read();
     location.Path = DefaultSettingsFolderPath;
     location.Write();
   }
 
   public static Settings ReadSettings() {
-    var settingsReader = new SettingsReader(
-      FileSystemService.Default, Serialiser.Default, TestApplicationName) {
+    var settingsReader = new SettingsReader {
+      ApplicationName = TestApplicationName,
       DefaultSettingsFolderPath = TestSettingsFolderPath 
     };
     return settingsReader.Read();

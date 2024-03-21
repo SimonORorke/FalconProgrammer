@@ -2,10 +2,10 @@
 
 namespace FalconProgrammer.Model;
 
-public abstract class SerialisableBase {
+public abstract class SerialisationBase {
   private IFileSystemService? _fileSystemService;
   private ISerialiser? _serialiser;
-  [XmlIgnore] public string ApplicationName { get; set; } = Global.ApplicationName;
+  internal string ApplicationName { get; set; } = Global.ApplicationName;
 
   /// <summary>
   ///   A utility that can access the file system. The default is a real

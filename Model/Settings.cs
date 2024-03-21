@@ -7,7 +7,7 @@ namespace FalconProgrammer.Model;
 ///   To read the settings, use <see cref="SettingsReader"/>.
 /// </summary>
 [XmlRoot(nameof(Settings))]
-public class Settings : SerialisableBase {
+public class Settings : SerialisationBase {
   [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();

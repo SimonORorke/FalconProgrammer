@@ -51,7 +51,7 @@ public class SettingsTests {
     var mockFileSystemService = new MockFileSystemService {
       ExpectedFileExists = false
     };
-    var settingsReader = new SettingsReader(mockFileSystemService, Serialiser.Default);
+    var settingsReader = new SettingsReader { FileSystemService = mockFileSystemService};
     var settings = settingsReader.Read(true);
     Assert.That(settings.ProgramsFolder.Path, Is.Empty);
     Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));

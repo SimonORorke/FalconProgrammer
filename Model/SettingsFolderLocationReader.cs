@@ -1,11 +1,7 @@
 ﻿namespace FalconProgrammer.Model;
 
-public class SettingsFolderLocationReader(
-  IFileSystemService fileSystemService,
-  ISerialiser serialiser,
-  string applicationName = Global.ApplicationName)
-  : DeserialiserBase<SettingsFolderLocation>(
-    fileSystemService, serialiser, applicationName) {
+public class SettingsFolderLocationReader
+  : DeserialiserBase<SettingsFolderLocation> {
   public SettingsFolderLocation Read() {
     var result = Deserialise(
       SettingsFolderLocation.GetSettingsFolderLocationPath(ApplicationName));

@@ -85,8 +85,10 @@ public abstract class ViewModelBase : ObservableObject {
 
   private Settings ReadSettings() {
     // Debug.WriteLine($"ViewModelBase.ReadSettings: {GetType().Name}");
-    var settingsReader = new SettingsReader(FileSystemService, Serialiser);
+    var settingsReader = new SettingsReader {
+      FileSystemService = FileSystemService,
+      Serialiser = Serialiser
+    };
     return settingsReader.Read(true);
-    // return settingsReader.Read();
   }
 }

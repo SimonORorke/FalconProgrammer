@@ -2,14 +2,7 @@
 
 namespace FalconProgrammer.Model;
 
-public abstract class DeserialiserBase<T>(
-  IFileSystemService fileSystemService,
-  ISerialiser serialiser,
-  string applicationName = Global.ApplicationName) where T : SerialisableBase {
-  
-  protected string ApplicationName { get; } = applicationName;
-  protected IFileSystemService FileSystemService { get; } = fileSystemService;
-  protected ISerialiser Serialiser { get; } = serialiser;
+public abstract class DeserialiserBase<T> : SerialisationBase where T : SerialisationBase {
 
   /// <summary>
   /// TODO: Mock Deserialise(string inputPath)

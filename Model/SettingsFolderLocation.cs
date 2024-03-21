@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace FalconProgrammer.Model; 
 
 [XmlRoot(nameof(SettingsFolderLocation))] 
-public class SettingsFolderLocation : SerialisableBase {
+public class SettingsFolderLocation : SerialisationBase {
   [XmlAttribute] public string Path { get; set; } = string.Empty;
 
   public void Write() {
