@@ -8,7 +8,7 @@ public abstract class SerialisableBase {
   [XmlIgnore] public string ApplicationName { get; set; } = Global.ApplicationName;
 
   /// <summary>
-  ///   A utility that can serialise an object to a file. The default is a real
+  ///   A utility that can access the file system. The default is a real
   ///   <see cref="FileSystemService" />. Can be set to a mock for testing. 
   /// </summary>
   [XmlIgnore] public IFileSystemService FileSystemService {
