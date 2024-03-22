@@ -4,7 +4,7 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 [TestFixture]
-public abstract class ViewModelTestsBase {
+public abstract class ViewModelTestsBaseOld {
   [SetUp]
   public virtual void Setup() {
     MockAlertService = new MockAlertService();
@@ -14,7 +14,6 @@ public abstract class ViewModelTestsBase {
     MockFolderPicker = new MockFolderPicker();
     MockSerialiser = new MockSerialiser();
     MockView = new MockContentPageBase();
-    TestSettingsReader = new TestSettingsReader();
     var mockServiceProvider = new MockServiceProvider();
     mockServiceProvider.Services.Add(MockAlertService);
     mockServiceProvider.Services.Add(MockAppDataFolderService);
@@ -35,5 +34,4 @@ public abstract class ViewModelTestsBase {
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected MockContentPageBase MockView { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;
-  protected TestSettingsReader TestSettingsReader { get; private set; } = null!;
 }

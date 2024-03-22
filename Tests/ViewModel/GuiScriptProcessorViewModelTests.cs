@@ -1,23 +1,30 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Tests.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class GuiScriptProcessorViewModelTests  : ViewModelTestsBase{
+public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
+  private GuiScriptProcessorViewModel ViewModel { get; set; } = null!;
+
   [SetUp]
   public override void Setup() {
     base.Setup();
-    MockView.ExecuteInvokeAsyncAction = true;
+    MockView.ExecuteDispatchAction = true;
     ViewModel = new GuiScriptProcessorViewModel {
       View = MockView,
-      ServiceHelper = ServiceHelper
+      ServiceHelper = ServiceHelper,
+      SettingsReader = TestSettingsReader
     };
   }
 
-  private GuiScriptProcessorViewModel ViewModel { get; set; } = null!;
-
   [Test]
-  public void Test1() {
+  public void NoProgramsFolder() {
+    TestSettingsReader.TestDeserialiser.EmbeddedResourceFileName = 
+      "DefaultAlreadySettings";
     ViewModel.OnAppearing();
+    Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(1));
+    Assert.That(MockAlertService.LastMessage, Is.EqualTo(
+      "Script processors cannot be updated: a programs folder has not been specified."));
     Assert.That(MockView.DispatchCount, Is.EqualTo(1));
   }
 }

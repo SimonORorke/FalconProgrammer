@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
@@ -24,9 +25,11 @@ internal class TestDeserialiser<T> : Deserialiser<T>
       return base.Deserialise(inputPath);
     }
     var assembly = Assembly.GetExecutingAssembly();
-    // var temp = assembly.GetManifestResourceNames();
-    string resourceName = assembly.GetManifestResourceNames()
-      .Single(resourcePath => resourcePath.EndsWith($".{EmbeddedResourceFileName}"));
+    string[] resourceNames = assembly.GetManifestResourceNames();
+    string resourceName = resourceNames.Single(
+      resourcePath => resourcePath.Contains($".{EmbeddedResourceFileName}"));
+    // For unknown reason, EndsWith does not work here. It used to.
+    //   .First(resourcePath => resourcePath.EndsWith($".{EmbeddedResourceFileName}"));
     return Deserialise(assembly.GetManifestResourceStream(resourceName)!);
   }
 }

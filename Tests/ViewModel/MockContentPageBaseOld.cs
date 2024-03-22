@@ -2,8 +2,8 @@
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class MockContentPageBase : IContentPageBase {
-  internal bool ExecuteDispatchAction { get; set; }
+public class MockContentPageBaseOld : IContentPageBase {
+  internal bool ExecuteInvokeAsyncAction { get; set; }
   internal int GoToLocationsPageCount { get; set; }
   internal int DispatchCount { get; set; }
 
@@ -13,7 +13,7 @@ public class MockContentPageBase : IContentPageBase {
 
   public void Dispatch(Action action) {
     DispatchCount++;
-    if (ExecuteDispatchAction) {
+    if (ExecuteInvokeAsyncAction) {
       action();
     }
   }

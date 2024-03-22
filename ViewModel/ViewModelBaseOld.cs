@@ -5,7 +5,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ViewModelBase : ObservableObject {
+public abstract class ViewModelBaseOld : ObservableObject {
   private IAlertService? _alertService;
   private IAppDataFolderService? _appDataFolderService;
   private IFilePicker? _filePicker;
@@ -14,7 +14,6 @@ public abstract class ViewModelBase : ObservableObject {
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
-  private SettingsReader? _settingsReader;
 
   internal IAlertService AlertService =>
     _alertService ??=
@@ -64,11 +63,6 @@ public abstract class ViewModelBase : ObservableObject {
     private set => _settings = value;
   }
 
-  internal SettingsReader SettingsReader {
-    get => _settingsReader ??= new SettingsReader();
-    set => _settingsReader = value;
-  }
-
   public IContentPageBase View { get; set; } = null!;
 
   protected virtual void Initialise() {
@@ -91,8 +85,10 @@ public abstract class ViewModelBase : ObservableObject {
 
   private Settings ReadSettings() {
     // Debug.WriteLine($"ViewModelBase.ReadSettings: {GetType().Name}");
-    // SettingsReader.FileSystemService = FileSystemService;
-    // SettingsReader.Serialiser = Serialiser;
-    return SettingsReader.Read(true);
+    var settingsReader = new SettingsReader {
+      FileSystemService = FileSystemService,
+      Serialiser = Serialiser
+    };
+    return settingsReader.Read(true);
   }
 }
