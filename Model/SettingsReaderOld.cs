@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Model;
 
-public class SettingsReader : XmlReaderBase<Settings> {
+public class SettingsReaderOld : DeserialiserBase<Settings> {
   
   /// <summary>
   ///   Currently only used in test
@@ -14,7 +14,11 @@ public class SettingsReader : XmlReaderBase<Settings> {
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
   public Settings Read(bool useDefaultIfNotFound = false) {
-    var settingsFolderLocationReader = CreateSettingsFolderLocationReader();
+    var settingsFolderLocationReader = new SettingsFolderLocationReader {
+      ApplicationName = ApplicationName,
+      FileSystemService = FileSystemService,
+      Serialiser = Serialiser
+    };
     var settingsFolderLocation = settingsFolderLocationReader.Read();
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = DefaultSettingsFolderPath;
@@ -23,18 +27,10 @@ public class SettingsReader : XmlReaderBase<Settings> {
     string settingsPath = Settings.GetSettingsPath(settingsFolderLocation.Path);
     var result =
       FileSystemService.FileExists(settingsPath) || !useDefaultIfNotFound
-        ? Deserialiser.Deserialise(settingsPath)
-        : Deserialiser.Deserialise(GetDefaultSettingsStream());
+        ? Deserialise(settingsPath)
+        : Deserialise(GetDefaultSettingsStream());
     result.SettingsPath = settingsPath;
     return result;
-  }
-
-  protected virtual SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
-    return new SettingsFolderLocationReader {
-      ApplicationName = ApplicationName,
-      FileSystemService = FileSystemService,
-      Serialiser = Serialiser
-    };
   }
 
   private static Stream GetDefaultSettingsStream() {

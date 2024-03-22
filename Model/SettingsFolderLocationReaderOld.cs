@@ -1,9 +1,9 @@
 ﻿namespace FalconProgrammer.Model;
 
-public class SettingsFolderLocationReader
-  : XmlReaderBase<SettingsFolderLocation> {
+public class SettingsFolderLocationReaderOld
+  : DeserialiserBase<SettingsFolderLocation> {
   public SettingsFolderLocation Read() {
-    var result = Deserialiser.Deserialise(
+    var result = Deserialise(
       SettingsFolderLocation.GetSettingsFolderLocationPath(ApplicationName));
     if (!string.IsNullOrWhiteSpace(result.Path)) {
       FileSystemService.CreateFolder(result.Path);

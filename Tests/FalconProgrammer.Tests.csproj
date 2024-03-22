@@ -23,4 +23,11 @@
       <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Model\Xml\DefaultAlreadySettings.xml" />
+      <EmbeddedResource Include="Model\Xml\DefaultAlreadySettings.xml" />
+      <None Remove="Model\Xml\SettingsFolderLocation.xml" />
+      <EmbeddedResource Include="Model\Xml\SettingsFolderLocation.xml" />
+    </ItemGroup>
+
 </Project>

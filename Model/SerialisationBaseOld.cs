@@ -2,16 +2,16 @@
 
 namespace FalconProgrammer.Model;
 
-public abstract class SerialisationBase {
+public abstract class SerialisationBaseOld {
   private IFileSystemService? _fileSystemService;
   private ISerialiser? _serialiser;
-  internal virtual string ApplicationName { get; set; } = Global.ApplicationName;
+  internal string ApplicationName { get; set; } = Global.ApplicationName;
 
   /// <summary>
   ///   A utility that can access the file system. The default is a real
   ///   <see cref="FileSystemService" />. Can be set to a mock for testing. 
   /// </summary>
-  [XmlIgnore] public virtual IFileSystemService FileSystemService {
+  [XmlIgnore] public IFileSystemService FileSystemService {
     get => _fileSystemService ??= Model.FileSystemService.Default;
     set => _fileSystemService = value;
   }
@@ -20,7 +20,7 @@ public abstract class SerialisationBase {
   ///   A utility that can serialise an object to a file. The default is a real
   ///   <see cref="Serialiser" />. Can be set to a mock serialiser for testing. 
   /// </summary>
-  [XmlIgnore] public virtual ISerialiser Serialiser {
+  [XmlIgnore] public ISerialiser Serialiser {
     get => _serialiser ??= Model.Serialiser.Default;
     set => _serialiser = value;
   }
