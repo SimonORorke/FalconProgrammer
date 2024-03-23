@@ -11,8 +11,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     base.Setup();
     ViewModel = new LocationsViewModel {
       View = MockView,
-      ServiceHelper = ServiceHelper,
-      SettingsReader = TestSettingsReader
+      ServiceHelper = ServiceHelper
     };
     ViewModel.OnAppearing();
   }

@@ -29,6 +29,7 @@ public abstract class ViewModelTestsBase {
     // These are model-based services, so not provided by the MauiProgram.
     mockServiceProvider.Services.Add(MockFileSystemService);
     mockServiceProvider.Services.Add(MockSerialiser);
+    mockServiceProvider.Services.Add(TestSettingsReader);
     ServiceHelper = new ServiceHelper();
     ServiceHelper.Initialise(mockServiceProvider);
   }

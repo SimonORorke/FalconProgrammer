@@ -64,10 +64,11 @@ public abstract class ViewModelBase : ObservableObject {
     private set => _settings = value;
   }
 
-  internal SettingsReader SettingsReader {
-    get => _settingsReader ??= new SettingsReader();
-    set => _settingsReader = value;
-  }
+  internal SettingsReader SettingsReader =>
+    // The MauiProgram won't be providing a SettingsReader to ServiceHelper.
+    // But tests may.
+    _settingsReader ??= ServiceHelper.GetService<SettingsReader>() ??
+                        new SettingsReader();
 
   public IContentPageBase View { get; set; } = null!;
 

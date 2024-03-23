@@ -12,8 +12,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     MockView.ExecuteDispatchAction = true;
     ViewModel = new GuiScriptProcessorViewModel {
       View = MockView,
-      ServiceHelper = ServiceHelper,
-      SettingsReader = TestSettingsReader
+      ServiceHelper = ServiceHelper
     };
   }
 
