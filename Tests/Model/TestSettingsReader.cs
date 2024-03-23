@@ -5,9 +5,19 @@ namespace FalconProgrammer.Tests.Model;
 public class TestSettingsReader : SettingsReader {
   private Deserialiser<Settings>? _deserialiser;
   private MockSerialiser? _mockSerialiserForSettings;
+  private MockFileSystemService? _mockFileSystemService;
+
+  internal MockFileSystemService MockFileSystemService {
+    get => _mockFileSystemService ??= new MockFileSystemService();
+    set {
+      _mockFileSystemService = value;
+      FileSystemService = value;
+    }
+  }
 
   protected override SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
     return new TestSettingsFolderLocationReader {
+      FileSystemService = MockFileSystemService,
       TestDeserialiser = {
         EmbeddedResourceFileName = "SettingsFolderLocation.xml"
       }
@@ -33,6 +43,7 @@ public class TestSettingsReader : SettingsReader {
 
   public override Settings Read(bool useDefaultIfNotFound = false) {
     var result = base.Read(useDefaultIfNotFound);
+    result.FileSystemService = FileSystemService;
     result.Serialiser = MockSerialiserForSettings;
     return result;
   }

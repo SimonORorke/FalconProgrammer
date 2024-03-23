@@ -16,7 +16,7 @@ public abstract class ViewModelTestsBase {
     MockSerialiser = new MockSerialiser();
     MockView = new MockContentPageBase();
     TestSettingsReader = new TestSettingsReader {
-      // MockFileSystemServiceForSettings = MockFileSystemService,
+      MockFileSystemService = MockFileSystemService,
       MockSerialiserForSettings = MockSerialiser,
       TestDeserialiser = {
         EmbeddedResourceFileName = "DefaultAlreadySettings.xml"

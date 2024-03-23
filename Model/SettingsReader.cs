@@ -5,9 +5,6 @@ namespace FalconProgrammer.Model;
 public class SettingsReader : XmlReaderBase<Settings> {
   
   /// <summary>
-  ///   Currently only used in test
-  ///   LocationsViewModelTests.CancelBrowseForDefaultTemplate.
-  ///   There are better ways.
   ///   TODO: Replace SettingsReader.DefaultSettingsFolderPath.
   /// </summary>
   public string DefaultSettingsFolderPath { get; set; } = 
@@ -25,9 +22,6 @@ public class SettingsReader : XmlReaderBase<Settings> {
       FileSystemService.FileExists(settingsPath) || !useDefaultIfNotFound
         ? Deserialiser.Deserialise(settingsPath)
         : Deserialiser.Deserialise(GetDefaultSettingsStream());
-    // result.ApplicationName = ApplicationName;
-    // result.FileSystemService = FileSystemService;
-    // result.Serialiser = Serialiser;
     result.SettingsPath = settingsPath;
     return result;
   }
