@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -15,10 +16,12 @@ public class SoundBankCategory : ObservableObject {
   private string _soundBank = "";
 
   public SoundBankCategory(Settings settings, IFileSystemService fileSystemService,
-    Action appendAdditionItem, Action<SoundBankCategory> removeItem) {
+    Action appendAdditionItem, Action onItemChanged, 
+    Action<SoundBankCategory> removeItem) {
     Settings = settings;
     FileSystemService = fileSystemService;
     AppendAdditionItem = appendAdditionItem;
+    OnItemChanged = onItemChanged;
     RemoveItem = removeItem;
     RemoveCommand = new RelayCommand(Remove);
   }
@@ -37,8 +40,8 @@ public class SoundBankCategory : ObservableObject {
       OnPropertyChanged();
       PopulateCategories();
       CanRemove = true;
+      Category = AllCategoriesCaption;
       if (isAdding) {
-        Category = AllCategoriesCaption;
         // The user has used up the addition item, the one at the end with the blank
         // sound bank and category. So we need to append another addition item to the
         // collection.
@@ -78,6 +81,7 @@ public class SoundBankCategory : ObservableObject {
   private IFileSystemService FileSystemService { get; }
   private Settings Settings { get; }
   private Action AppendAdditionItem { get; }
+  private Action OnItemChanged { get; }
   private Action<SoundBankCategory> RemoveItem { get; }
 
   private void PopulateCategories() {
@@ -88,6 +92,14 @@ public class SoundBankCategory : ObservableObject {
       FileSystemService.GetSubfolderNames(soundBankFolderPath);
     foreach (string categoryFolderName in categoryFolderNames) {
       Categories.Add(categoryFolderName);
+    }
+  }
+
+  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
+    base.OnPropertyChanged(e);
+    if (e.PropertyName is nameof(SoundBankCategory.SoundBank)
+        or nameof(SoundBankCategory.Category)) {
+      OnItemChanged();
     }
   }
 

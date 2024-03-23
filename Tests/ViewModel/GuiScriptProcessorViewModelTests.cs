@@ -61,7 +61,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
       Path.Combine(settings.ProgramsFolder.Path, "Spectre"), SpectreCategories);
     MockFileSystemService.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
-    ViewModel.OnAppearing();
+    ViewModel.OnAppearing(); // Reads settings to populate the page.
     Assert.That(MockView.DispatchCount, Is.EqualTo(1));
     Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
@@ -85,6 +85,40 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories[4].Category, Is.Empty);
     Assert.That(ViewModel.SoundBankCategories[4].CanRemove, Is.False);
     Assert.That(ViewModel.SoundBankCategories[4].IsAdditionItem, Is.True);
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
+    // Add item
+    ViewModel.SoundBankCategories[4].SoundBank = "Spectre";
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
+    Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(6));
+    Assert.That(ViewModel.SoundBankCategories[5].IsAdditionItem, Is.True);
+    // Reset to test that sound bank change will be detected
+    ViewModel.OnAppearing();
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
+    // Change sound bank
+    ViewModel.SoundBankCategories[0].SoundBank = "Spectre";
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
+    Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo("All"));
+    // Reset to test that category change will be detected
+    ViewModel.OnAppearing();
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
+    // Change category
+    ViewModel.SoundBankCategories[0].Category = "Keys";
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
+    // Reset to test that item removal will be detected
+    ViewModel.OnAppearing();
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
+    ViewModel.SoundBankCategories[3].RemoveCommand.Execute(null);
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
+    Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(4));
+    Assert.That(ViewModel.SoundBankCategories[3].IsAdditionItem, Is.True);
+    ViewModel.OnDisappearing(); // Updates and saves settings
+    Assert.That(
+      ViewModel.Settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(3));
+    Assert.That(ViewModel.Settings.MustUseGuiScriptProcessorCategories[0].Category,
+      Is.EqualTo("Organic Texture 2.8"));
+    // Check that Category 'All' on the page has ben saved as empty in Settings. 
+    Assert.That(
+      ViewModel.Settings.MustUseGuiScriptProcessorCategories[1].Category, Is.Empty);
   }
 
   [Test]

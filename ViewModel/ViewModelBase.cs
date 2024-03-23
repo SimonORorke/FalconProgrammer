@@ -59,7 +59,7 @@ public abstract class ViewModelBase : ObservableObject {
     internal set => _serviceHelper = value;
   }
 
-  protected Settings Settings {
+  internal Settings Settings {
     get => _settings ??= ReadSettings();
     private set => _settings = value;
   }

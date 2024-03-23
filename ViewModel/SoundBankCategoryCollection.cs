@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
@@ -24,7 +23,7 @@ public class SoundBankCategoryCollection(
 
   private void AddItem(string soundBank = "", string category = "") {
     Add(new SoundBankCategory(
-      Settings, FileSystemService, AppendAdditionItem, RemoveItem) {
+      Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category,
@@ -50,15 +49,8 @@ public class SoundBankCategoryCollection(
     HasBeenChanged = true;
   }
 
-  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-    base.OnPropertyChanged(e);
-    if (IsPopulating) {
-      return;
-    }
-    if (e.PropertyName is nameof(SoundBankCategory.SoundBank)
-        or nameof(SoundBankCategory.Category)) {
-      HasBeenChanged = true;
-    }
+  private void OnItemChanged() {
+    HasBeenChanged = true;
   }
 
   internal void Populate(Settings settings, IEnumerable<string> soundBanks, Action<Action> dispatch) {
