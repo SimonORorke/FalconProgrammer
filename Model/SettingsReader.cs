@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace FalconProgrammer.Model;
 
@@ -14,7 +15,8 @@ public class SettingsReader : XmlReaderBase<Settings> {
     var settingsFolderLocationReader = CreateSettingsFolderLocationReader();
     var settingsFolderLocation = settingsFolderLocationReader.Read();
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
-      settingsFolderLocation.Path = DefaultSettingsFolderPath;
+      settingsFolderLocation.Path = GetDefaultSettingsFolderPath();
+      // settingsFolderLocation.Path = DefaultSettingsFolderPath;
       settingsFolderLocation.Write();
     }
     string settingsPath = Settings.GetSettingsPath(settingsFolderLocation.Path);
@@ -24,6 +26,11 @@ public class SettingsReader : XmlReaderBase<Settings> {
         : Deserialiser.Deserialise(GetDefaultSettingsStream());
     result.SettingsPath = settingsPath;
     return result;
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual string GetDefaultSettingsFolderPath() {
+    throw new InvalidOperationException("Cannot find settings folder path.");
   }
 
   protected virtual SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
