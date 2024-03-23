@@ -19,8 +19,6 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void NoProgramsFolder() {
-    TestSettingsReader.TestDeserialiser.EmbeddedResourceFileName = 
-      "DefaultAlreadySettings";
     ViewModel.OnAppearing();
     Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(1));
     Assert.That(MockAlertService.LastMessage, Is.EqualTo(

@@ -15,10 +15,10 @@ public class TestSettingsReader : SettingsReader {
     };
   }
 
-  internal MockFileSystemService MockFileSystemServiceForSettings {
-    get => _mockFileSystemServiceForSettings ??= new MockFileSystemService();
-    set => _mockFileSystemServiceForSettings = value;
-  }
+  // internal MockFileSystemService MockFileSystemServiceForSettings {
+  //   get => _mockFileSystemServiceForSettings ??= new MockFileSystemService();
+  //   set => _mockFileSystemServiceForSettings = value;
+  // }
 
   internal MockSerialiser MockSerialiserForSettings {
     get => _mockSerialiserForSettings ??= new MockSerialiser();
@@ -39,7 +39,7 @@ public class TestSettingsReader : SettingsReader {
 
   public override Settings Read(bool useDefaultIfNotFound = false) {
     var result = base.Read(useDefaultIfNotFound);
-    result.FileSystemService = MockFileSystemServiceForSettings;
+    // result.FileSystemService = MockFileSystemServiceForSettings;
     result.Serialiser = MockSerialiserForSettings;
     return result;
   }
