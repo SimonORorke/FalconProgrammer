@@ -5,18 +5,11 @@ namespace FalconProgrammer.Model;
 
 public class SettingsReader : XmlReaderBase<Settings> {
   
-  /// <summary>
-  ///   TODO: Replace SettingsReader.DefaultSettingsFolderPath.
-  /// </summary>
-  public string DefaultSettingsFolderPath { get; set; } = 
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
-
   public virtual Settings Read(bool useDefaultIfNotFound = false) {
     var settingsFolderLocationReader = CreateSettingsFolderLocationReader();
     var settingsFolderLocation = settingsFolderLocationReader.Read();
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = GetDefaultSettingsFolderPath();
-      // settingsFolderLocation.Path = DefaultSettingsFolderPath;
       settingsFolderLocation.Write();
     }
     string settingsPath = Settings.GetSettingsPath(settingsFolderLocation.Path);
