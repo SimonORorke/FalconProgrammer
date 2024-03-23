@@ -6,7 +6,7 @@ namespace FalconProgrammer.Tests.Model;
 public class MockFileSystemService : IFileSystemService {
   internal bool ExpectedFileExists { get; set; } = true;
   internal bool ExpectedFolderExists { get; set; } = true;
-  internal List<string> ExpectedSubfolderNames { get; } = [];
+  internal Dictionary<string, IEnumerable<string>> ExpectedSubfolderNames { get; } = [];
   
   public void CreateFolder(string path) {
   }
@@ -20,6 +20,6 @@ public class MockFileSystemService : IFileSystemService {
   }
 
   public ImmutableList<string> GetSubfolderNames(string path) {
-    return ExpectedSubfolderNames.ToImmutableList();
+    return ExpectedSubfolderNames[path].ToImmutableList();
   }
 }

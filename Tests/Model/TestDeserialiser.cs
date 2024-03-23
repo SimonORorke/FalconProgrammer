@@ -26,10 +26,19 @@ internal class TestDeserialiser<T> : Deserialiser<T>
     }
     var assembly = Assembly.GetExecutingAssembly();
     string[] resourceNames = assembly.GetManifestResourceNames();
-    string resourceName = resourceNames.Single(
-      resourcePath => resourcePath.Contains($".{EmbeddedResourceFileName}"));
-    // For unknown reason, EndsWith does not work here. It used to.
-    //   .First(resourcePath => resourcePath.EndsWith($".{EmbeddedResourceFileName}"));
+    string resourceName;
+    try {
+      resourceName = resourceNames.Single(
+        resourcePath => resourcePath.Contains($".{EmbeddedResourceFileName}"));
+      // For unknown reason, EndsWith does not work here. It used to.
+      //   .First(resourcePath => resourcePath.EndsWith($".{EmbeddedResourceFileName}"));
+    } catch (InvalidOperationException exception) {
+      // Exception message is 'Sequence contains no matching element'
+      throw new InvalidOperationException(
+        $"'{EmbeddedResourceFileName}' is not in assembly " + 
+        $"{assembly.GetName().Name}, or it is not an EmbeddedResource file.", 
+        exception);
+    }
     return Deserialise(assembly.GetManifestResourceStream(resourceName)!);
   }
 }

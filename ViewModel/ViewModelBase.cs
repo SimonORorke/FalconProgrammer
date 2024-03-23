@@ -64,7 +64,7 @@ public abstract class ViewModelBase : ObservableObject {
     private set => _settings = value;
   }
 
-  internal SettingsReader SettingsReader =>
+  private SettingsReader SettingsReader =>
     // The MauiProgram won't be providing a SettingsReader to ServiceHelper.
     // But tests may.
     _settingsReader ??= ServiceHelper.GetService<SettingsReader>() ??
@@ -92,8 +92,6 @@ public abstract class ViewModelBase : ObservableObject {
 
   private Settings ReadSettings() {
     // Debug.WriteLine($"ViewModelBase.ReadSettings: {GetType().Name}");
-    // SettingsReader.FileSystemService = FileSystemService;
-    // SettingsReader.Serialiser = Serialiser;
     return SettingsReader.Read(true);
   }
 }

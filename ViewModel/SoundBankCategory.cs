@@ -82,9 +82,6 @@ public class SoundBankCategory : ObservableObject {
 
   private void PopulateCategories() {
     Categories.Clear();
-    if (IsAdditionItem) {
-      return;
-    }
     Categories.Add(AllCategoriesCaption);
     string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
     var categoryFolderNames =

@@ -9,6 +9,7 @@ namespace FalconProgrammer.ViewModel;
 public class SoundBankCategoryCollection(
   IFileSystemService fileSystemService)
   : ObservableCollection<SoundBankCategory> {
+  private Action<Action> Dispatch { get; set; } = null!;
   private IFileSystemService FileSystemService { get; } = fileSystemService;
   private bool ForceAppendAdditionItem { get; set; }
   private bool IsPopulating { get; set; }
@@ -20,7 +21,6 @@ public class SoundBankCategoryCollection(
 
   private Settings Settings { get; set; } = null!;
   private ImmutableList<string> SoundBanks { get; set; } = [];
-  private Action<Action> InvokeAsync { get; set; } = null!;
 
   private void AddItem(string soundBank = "", string category = "") {
     Add(new SoundBankCategory(
@@ -61,10 +61,10 @@ public class SoundBankCategoryCollection(
     }
   }
 
-  internal void Populate(Settings settings, IEnumerable<string> soundBanks, Action<Action> invokeAsync) {
+  internal void Populate(Settings settings, IEnumerable<string> soundBanks, Action<Action> dispatch) {
     IsPopulating = true;
     Settings = settings;
-    InvokeAsync = invokeAsync;
+    Dispatch = dispatch;
     SoundBanks = soundBanks.ToImmutableList();
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
@@ -81,6 +81,6 @@ public class SoundBankCategoryCollection(
   }
 
   private void RemoveItem(SoundBankCategory itemToRemove) {
-    InvokeAsync(() => Remove(itemToRemove));
+    Dispatch(() => Remove(itemToRemove));
   }
 }
