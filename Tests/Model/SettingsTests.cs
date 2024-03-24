@@ -7,8 +7,9 @@ public class SettingsTests {
   [Test]
   public void RealTestSettingsFile() {
     SettingsTestHelper.DeleteAnyData();
+    Settings? settings = null;
     try {
-      var settings = SettingsTestHelper.ReadSettings();
+      settings = SettingsTestHelper.ReadSettings();
       Assert.That(!File.Exists(settings.SettingsPath));
       SettingsTestHelper.WriteSettings(settings);
       settings = SettingsTestHelper.ReadSettings();
@@ -41,8 +42,25 @@ public class SettingsTests {
       Assert.That(settings.MidiForMacros.ToggleCcNoRanges, Has.Count.EqualTo(1));
       Assert.That(settings.MidiForMacros.ToggleCcNoRanges[0].Start, Is.EqualTo(112));
       Assert.That(settings.MidiForMacros.ToggleCcNoRanges[0].End, Is.EqualTo(112));
+      // Test FileSystemService.GetSubfolderNames
+      const string subfolderName = "Test";
+      var subfolder =
+        Directory.CreateDirectory(
+          Path.Combine(SettingsTestHelper.TestSettingsFolderPath, subfolderName));
+      Assert.That(
+        settings.FileSystemService.GetSubfolderNames(
+          SettingsTestHelper.TestSettingsFolderPath), Has.Count.EqualTo(1));
+      Assert.That(
+        settings.FileSystemService.GetSubfolderNames(
+          SettingsTestHelper.TestSettingsFolderPath)[0], Is.EqualTo(subfolderName));
+      subfolder.Delete();
     } finally {
       SettingsTestHelper.DeleteAnyData();
+      if (settings != null) {
+        Assert.Throws<DirectoryNotFoundException>(
+          () => settings.FileSystemService.GetSubfolderNames(
+            SettingsTestHelper.TestSettingsFolderPath));
+      }
     }
   }
 
@@ -51,7 +69,8 @@ public class SettingsTests {
     var mockFileSystemService = new MockFileSystemService {
       ExpectedFileExists = false
     };
-    var settingsReader = new TestSettingsReaderReal { FileSystemService = mockFileSystemService};
+    var settingsReader = new TestSettingsReaderReal
+      { FileSystemService = mockFileSystemService };
     var settings = settingsReader.Read(true);
     Assert.That(settings.ProgramsFolder.Path, Is.Empty);
     Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
