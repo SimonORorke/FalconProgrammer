@@ -2,7 +2,10 @@
 
 namespace FalconProgrammer.Tests.Model;
 
-public class TestSettingsReader : SettingsReader {
+/// <summary>
+///   A test Settings reader that reads embedded files. 
+/// </summary>
+public class TestSettingsReaderEmbedded : SettingsReader {
   private Deserialiser<Settings>? _deserialiser;
   private MockSerialiser? _mockSerialiserForSettings;
   private MockFileSystemService? _mockFileSystemService;

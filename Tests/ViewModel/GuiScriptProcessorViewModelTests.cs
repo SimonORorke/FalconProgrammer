@@ -44,9 +44,9 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void Main() {
-    TestSettingsReader.TestDeserialiser.EmbeddedResourceFileName =
+    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
-    var settings = TestSettingsReader.Read();
+    var settings = TestSettingsReaderEmbedded.Read();
     MockFileSystemService.ExpectedSubfolderNames.Add(
       settings.ProgramsFolder.Path, SoundBanks);
     MockFileSystemService.ExpectedSubfolderNames.Add(
@@ -132,9 +132,9 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void ProgramsFolderEmpty() {
-    TestSettingsReader.TestDeserialiser.EmbeddedResourceFileName =
+    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
-    var settings = TestSettingsReader.Read();
+    var settings = TestSettingsReaderEmbedded.Read();
     MockFileSystemService.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path, []);
     ViewModel.OnAppearing();
     Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(1));
@@ -145,7 +145,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void ProgramsFolderNotFound() {
-    TestSettingsReader.TestDeserialiser.EmbeddedResourceFileName =
+    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     MockFileSystemService.ExpectedFolderExists = false;
     ViewModel.OnAppearing();

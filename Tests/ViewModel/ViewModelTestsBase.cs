@@ -1,5 +1,4 @@
-﻿using FalconProgrammer.Model;
-using FalconProgrammer.Tests.Model;
+﻿using FalconProgrammer.Tests.Model;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -15,7 +14,7 @@ public abstract class ViewModelTestsBase {
     MockFolderPicker = new MockFolderPicker();
     MockSerialiser = new MockSerialiser();
     MockView = new MockContentPageBase();
-    TestSettingsReader = new TestSettingsReader {
+    TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
       MockFileSystemService = MockFileSystemService,
       MockSerialiserForSettings = MockSerialiser,
       TestDeserialiser = {
@@ -30,7 +29,7 @@ public abstract class ViewModelTestsBase {
     // These are model-based services, so not provided by the MauiProgram.
     mockServiceProvider.Services.Add(MockFileSystemService);
     mockServiceProvider.Services.Add(MockSerialiser);
-    mockServiceProvider.Services.Add(TestSettingsReader);
+    mockServiceProvider.Services.Add(TestSettingsReaderEmbedded);
     ServiceHelper = new ServiceHelper();
     ServiceHelper.Initialise(mockServiceProvider);
   }
@@ -46,5 +45,7 @@ public abstract class ViewModelTestsBase {
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected MockContentPageBase MockView { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;
-  protected TestSettingsReader TestSettingsReader { get; private set; } = null!;
+
+  protected TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; private set; } =
+    null!;
 }

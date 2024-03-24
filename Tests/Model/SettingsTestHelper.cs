@@ -54,7 +54,7 @@ public static class SettingsTestHelper {
   }
 
   public static Settings ReadSettings() {
-    var settingsReader = new TestSettingsReader2 {
+    var settingsReader = new TestSettingsReaderReal {
       ApplicationName = TestApplicationName,
       DefaultSettingsFolderPath = TestSettingsFolderPath 
     };
