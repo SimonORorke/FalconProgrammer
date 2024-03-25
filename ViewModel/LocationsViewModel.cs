@@ -1,26 +1,12 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Maui.Storage;
+﻿using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.Input;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
 
-public class LocationsViewModel : SettingsWriterViewModelBase {
-  public LocationsViewModel() {
-    BrowseForDefaultTemplateCommand = new AsyncRelayCommand(BrowseForDefaultTemplate);
-    BrowseForOriginalProgramsFolderCommand =
-      new AsyncRelayCommand(BrowseForOriginalProgramsFolder);
-    BrowseForProgramsFolderCommand = new AsyncRelayCommand(BrowseForProgramsFolder);
-    BrowseForSettingsFolderCommand = new AsyncRelayCommand(BrowseForSettingsFolder);
-    BrowseForTemplateProgramsFolderCommand =
-      new AsyncRelayCommand(BrowseForTemplateProgramsFolder);
-  }
-
-  public ICommand BrowseForDefaultTemplateCommand { get; }
-  public ICommand BrowseForOriginalProgramsFolderCommand { get; }
-  public ICommand BrowseForProgramsFolderCommand { get; }
-  public ICommand BrowseForSettingsFolderCommand { get; }
-  public ICommand BrowseForTemplateProgramsFolderCommand { get; }
+public partial class LocationsViewModel : SettingsWriterViewModelBase {
+  // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
+  // and RelayCommand attributes.
 
   public string DefaultTemplatePath {
     get => Settings.DefaultTemplate.Path;
@@ -65,6 +51,7 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
     var result = await BrowseForFalconProgramFile(
       "Select the default template Falcon program");
@@ -99,6 +86,7 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     return await FolderPicker.PickAsync();
   }
 
+  [RelayCommand]
   private async Task BrowseForOriginalProgramsFolder() {
     var result = await BrowseForFolder();
     if (result.IsSuccessful) {
@@ -106,6 +94,7 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [RelayCommand]
   private async Task BrowseForProgramsFolder() {
     var result = await BrowseForFolder();
     if (result.IsSuccessful) {
@@ -113,6 +102,7 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [RelayCommand]
   private async Task BrowseForSettingsFolder() {
     var result = await BrowseForFolder();
     if (result.IsSuccessful) {
@@ -120,6 +110,7 @@ public class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  [RelayCommand]
   private async Task BrowseForTemplateProgramsFolder() {
     var result = await BrowseForFolder();
     if (result.IsSuccessful) {

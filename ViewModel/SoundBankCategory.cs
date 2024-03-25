@@ -1,35 +1,30 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class SoundBankCategory : ObservableObject {
+public partial class SoundBankCategory(
+  // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
+  // and RelayCommand attributes.
+  Settings settings,
+  IFileSystemService fileSystemService,
+  Action appendAdditionItem,
+  Action onItemChanged,
+  Action<SoundBankCategory> removeItem)
+  : ObservableObject {
   public const string AllCategoriesCaption = "All";
-  
-  private bool _canRemove;
-  private string _category = "";
+  [ObservableProperty] private bool _canRemove; // Generates CanRemove property
+  [ObservableProperty] private string _category = ""; // Generates Category property
   private string _soundBank = "";
-
-  public SoundBankCategory(Settings settings, IFileSystemService fileSystemService,
-    Action appendAdditionItem, Action onItemChanged, 
-    Action<SoundBankCategory> removeItem) {
-    Settings = settings;
-    FileSystemService = fileSystemService;
-    AppendAdditionItem = appendAdditionItem;
-    OnItemChanged = onItemChanged;
-    RemoveItem = removeItem;
-    RemoveCommand = new RelayCommand(Remove);
-  }
 
   public string SoundBank {
     get => _soundBank;
     set {
-      if (value == _soundBank 
+      if (value == _soundBank
           // On addition after removal, the new sound bank is null.
           // This fixes it.
           || string.IsNullOrWhiteSpace(value)) {
@@ -51,38 +46,14 @@ public class SoundBankCategory : ObservableObject {
   }
 
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
-
-  public string Category {
-    get => _category;
-    set {
-      if (value == _category) {
-        return;
-      }
-      _category = value;
-      OnPropertyChanged();
-    }
-  }
-
-  public bool CanRemove {
-    get => _canRemove;
-    set {
-      if (value == _canRemove) {
-        return;
-      }
-      _canRemove = value;
-      OnPropertyChanged();
-    }
-  }
-
-  public bool IsAdditionItem => SoundBank == string.Empty;
-  public bool IsForAllCategories => Category == AllCategoriesCaption;
-  public ICommand RemoveCommand { get; }
+  internal bool IsAdditionItem => SoundBank == string.Empty;
+  internal bool IsForAllCategories => Category == AllCategoriesCaption;
   public ObservableCollection<string> Categories { get; } = [];
-  private IFileSystemService FileSystemService { get; }
-  private Settings Settings { get; }
-  private Action AppendAdditionItem { get; }
-  private Action OnItemChanged { get; }
-  private Action<SoundBankCategory> RemoveItem { get; }
+  private IFileSystemService FileSystemService { get; } = fileSystemService;
+  private Settings Settings { get; } = settings;
+  private Action AppendAdditionItem { get; } = appendAdditionItem;
+  private Action OnItemChanged { get; } = onItemChanged;
+  private Action<SoundBankCategory> RemoveItem { get; } = removeItem;
 
   private void PopulateCategories() {
     Categories.Clear();
@@ -97,8 +68,8 @@ public class SoundBankCategory : ObservableObject {
 
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
     base.OnPropertyChanged(e);
-    if (e.PropertyName is nameof(SoundBankCategory.SoundBank)
-        or nameof(SoundBankCategory.Category)) {
+    if (e.PropertyName is nameof(SoundBank)
+        or nameof(Category)) {
       OnItemChanged();
     }
   }
@@ -106,6 +77,7 @@ public class SoundBankCategory : ObservableObject {
   /// <summary>
   ///   Removes this item from the collection.
   /// </summary>
+  [RelayCommand] // Generates RemoveCommand
   private void Remove() {
     RemoveItem(this);
   }
