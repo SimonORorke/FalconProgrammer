@@ -18,34 +18,14 @@ public partial class SoundBankCategory(
   : ObservableObject {
   public const string AllCategoriesCaption = "All";
   [ObservableProperty] private bool _canRemove; // Generates CanRemove property
-  [ObservableProperty] private string _category = ""; // Generates Category property
-  private string _soundBank = "";
 
-  public string SoundBank {
-    get => _soundBank;
-    set {
-      if (value == _soundBank
-          // On addition after removal, the new sound bank is null.
-          // This fixes it.
-          || string.IsNullOrWhiteSpace(value)) {
-        return;
-      }
-      bool isAdding = IsAdditionItem;
-      _soundBank = value;
-      OnPropertyChanged();
-      PopulateCategories();
-      CanRemove = true;
-      Category = AllCategoriesCaption;
-      if (isAdding) {
-        // The user has used up the addition item, the one at the end with the blank
-        // sound bank and category. So we need to append another addition item to the
-        // collection.
-        AppendAdditionItem();
-      }
-    }
-  }
+  [ObservableProperty]
+  private string _category = string.Empty; // Generates Category property
 
+  [ObservableProperty]
+  private string _soundBank = string.Empty; // Generates SoundBank property
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
+  private bool IsAdding { get; set; }
   internal bool IsAdditionItem => SoundBank == string.Empty;
   internal bool IsForAllCategories => Category == AllCategoriesCaption;
   public ObservableCollection<string> Categories { get; } = [];
@@ -54,6 +34,30 @@ public partial class SoundBankCategory(
   private Action AppendAdditionItem { get; } = appendAdditionItem;
   private Action OnItemChanged { get; } = onItemChanged;
   private Action<SoundBankCategory> RemoveItem { get; } = removeItem;
+  
+  // Code coverage highlighting does not work for these partial methods.
+  partial void OnSoundBankChanged(string value) {
+    // On addition after removal, the new sound bank is null.
+    // This fixes it.
+    if (string.IsNullOrWhiteSpace(value)) {
+      return;
+    }
+    PopulateCategories();
+    CanRemove = true;
+    Category = AllCategoriesCaption;
+    if (IsAdding) {
+      // The user has used up the addition item, the one at the end with the blank
+      // sound bank and category. So we need to append another addition item to the
+      // collection.
+      AppendAdditionItem();
+      IsAdding = false;
+    }
+  }
+
+  // ReSharper disable once UnusedParameterInPartialMethod
+  partial void OnSoundBankChanging(string value) {
+    IsAdding = IsAdditionItem;
+  }
 
   private void PopulateCategories() {
     Categories.Clear();
