@@ -1,6 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <!-- This stops the following compiler error, which occurs for Release configuration only:
+            Error	NETSDK1096	Optimizing assemblies for performance failed. 
+            You can either exclude the failing assemblies from being optimized, 
+            or set the PublishReadyToRun property to false.
+        Now, if the program compiles but will not run in Release,
+        try running in Debug to find out what the startup error is. -->
+        <PublishReadyToRun>false</PublishReadyToRun>
+        
         <!-- The error indented below is no longer happening.
         So now Mac Catalyst should only be run if the operating system is macOs. -->
             <!-- If TargetFrameworks is replaced with TargetFramework, as inspection suggests, there
