@@ -34,6 +34,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   public string SettingsFolderPath {
     get {
       if (_settingsFolderPath == null) {
+        // TODO: Allow for missing or invalid settings folder location file.
         SettingsFolderLocation.AppDataFolderPathMaui =
           AppDataFolderService.AppDataFolderPathMaui;
         _settingsFolderPath = SettingsFolderLocation.Path;
