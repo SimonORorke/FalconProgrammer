@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
@@ -8,9 +7,9 @@ namespace FalconProgrammer.ViewModel;
 public abstract class ViewModelBase : ObservableObject {
   private IAlertService? _alertService;
   private IAppDataFolderService? _appDataFolderService;
-  private IFilePicker? _filePicker;
+  private IFileChooser? _fileChooser;
   private IFileSystemService? _fileSystemService;
-  private IFolderPicker? _folderPicker;
+  private IFolderChooser? _folderChooser;
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
@@ -28,10 +27,10 @@ public abstract class ViewModelBase : ObservableObject {
       ?? throw new InvalidOperationException(
         "ServiceHelper does not have an IAppDataFolderService");
 
-  internal IFilePicker FilePicker =>
-    _filePicker ??= ServiceHelper.GetService<IFilePicker>()
+  internal IFileChooser FileChooser =>
+    _fileChooser ??= ServiceHelper.GetService<IFileChooser>()
                     ?? throw new InvalidOperationException(
-                      "ServiceHelper does not have an IFilePicker");
+                      "ServiceHelper does not have an IFileChooser");
 
   internal IFileSystemService FileSystemService =>
     // The MauiProgram won't be providing an IFileSystemService to ServiceHelper.
@@ -39,10 +38,10 @@ public abstract class ViewModelBase : ObservableObject {
     _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>() ??
                            Model.FileSystemService.Default;
 
-  protected IFolderPicker FolderPicker =>
-    _folderPicker ??= ServiceHelper.GetService<IFolderPicker>()
+  protected IFolderChooser FolderChooser =>
+    _folderChooser ??= ServiceHelper.GetService<IFolderChooser>()
                       ?? throw new InvalidOperationException(
-                        "ServiceHelper does not have an IFilePicker");
+                        "ServiceHelper does not have an IFolderChooser");
 
   protected bool IsVisible { get; private set; }
 

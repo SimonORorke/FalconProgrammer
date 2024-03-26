@@ -11,7 +11,7 @@ public abstract class ViewModelTestsBase {
     MockAppDataFolderService = new MockAppDataFolderService();
     MockFilePicker = new MockFilePicker();
     MockFileSystemService = new MockFileSystemService();
-    MockFolderPicker = new MockFolderPicker();
+    MockFolderChooser = new MockFolderChooser();
     MockSerialiser = new MockSerialiser();
     MockView = new MockContentPageBase();
     TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
@@ -25,7 +25,7 @@ public abstract class ViewModelTestsBase {
     mockServiceProvider.Services.Add(MockAlertService);
     mockServiceProvider.Services.Add(MockAppDataFolderService);
     mockServiceProvider.Services.Add(MockFilePicker);
-    mockServiceProvider.Services.Add(MockFolderPicker);
+    mockServiceProvider.Services.Add(MockFolderChooser);
     // These are model-based services, so not provided by the MauiProgram.
     mockServiceProvider.Services.Add(MockFileSystemService);
     mockServiceProvider.Services.Add(MockSerialiser);
@@ -41,7 +41,7 @@ public abstract class ViewModelTestsBase {
 
   protected MockFilePicker MockFilePicker { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
-  protected MockFolderPicker MockFolderPicker { get; private set; } = null!;
+  protected MockFolderChooser MockFolderChooser { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected MockContentPageBase MockView { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;

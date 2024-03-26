@@ -20,13 +20,13 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CancelBrowseForSettingsFolder() {
-    MockFolderPicker.Cancel = true;
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Settings";
+    MockFolderChooser.Cancel = true;
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Settings";
     MockFileSystemService.ExpectedFileExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
-      Is.Not.EqualTo(MockFolderPicker.ExpectedPath));
+      Is.Not.EqualTo(MockFolderChooser.ExpectedPath));
   }
 
   [Test]
@@ -41,27 +41,27 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Settings";
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Settings";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
-      Is.EqualTo(MockFolderPicker.ExpectedPath));
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Programs";
+      Is.EqualTo(MockFolderChooser.ExpectedPath));
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Programs";
     MockFileSystemService.ExpectedFileExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
-      Is.EqualTo(MockFolderPicker.ExpectedPath));
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Original Programs";
+      Is.EqualTo(MockFolderChooser.ExpectedPath));
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Original Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForOriginalProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.OriginalProgramsFolderPath,
-      Is.EqualTo(MockFolderPicker.ExpectedPath));
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Template Programs";
+      Is.EqualTo(MockFolderChooser.ExpectedPath));
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Template Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForTemplateProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
-      Is.EqualTo(MockFolderPicker.ExpectedPath));
+      Is.EqualTo(MockFolderChooser.ExpectedPath));
     MockFilePicker.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
     command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
@@ -96,7 +96,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel.SettingsFolderPath = @"C:\FalconProgrammer\Settings";
     MockFileSystemService.ExpectedFileExists = false;
     MockFileSystemService.ExpectedFolderExists = false;
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Programs";
     var command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(1));
@@ -109,7 +109,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task SettingsFolderNotSpecified() {
     MockFileSystemService.ExpectedFileExists = false;
-    MockFolderPicker.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
     var command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
