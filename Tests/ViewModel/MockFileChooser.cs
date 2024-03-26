@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class MockFilePicker : IFileChooser {
+public class MockFileChooser : IFileChooser {
   internal bool Cancel { get; set; }
   internal string ExpectedPath { get; set; } = string.Empty;
 

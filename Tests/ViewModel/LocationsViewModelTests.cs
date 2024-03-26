@@ -31,12 +31,12 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CancelBrowseForDefaultTemplate() {
-    MockFilePicker.Cancel = true;
-    MockFilePicker.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
+    MockFileChooser.Cancel = true;
+    MockFileChooser.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
     var command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
-      Is.Not.EqualTo(MockFilePicker.ExpectedPath));
+      Is.Not.EqualTo(MockFileChooser.ExpectedPath));
   }
 
   [Test]
@@ -62,11 +62,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
       Is.EqualTo(MockFolderChooser.ExpectedPath));
-    MockFilePicker.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
+    MockFileChooser.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
     command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
-      Is.EqualTo(MockFilePicker.ExpectedPath));
+      Is.EqualTo(MockFileChooser.ExpectedPath));
     ViewModel.OnDisappearing();
     Assert.That(MockSerialiser.LastOutputPath,
       Is.EqualTo(@"C:\FalconProgrammer\Settings\Settings.xml"));
