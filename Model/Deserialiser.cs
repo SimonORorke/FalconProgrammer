@@ -12,14 +12,18 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
   }
 
   public virtual T Deserialise(string inputPath) {
-    T result;
+    T? result = null;
     if (FileSystemService.FileExists(inputPath)) {
       using var reader = new StreamReader(inputPath);
       var deserializer = new XmlSerializer(typeof(T));
-      result = (T)deserializer.Deserialize(reader)!;
-    } else {
-      result = (T)Activator.CreateInstance(typeof(T))!;
+      try {
+        result = (T)deserializer.Deserialize(reader)!;
+      } catch (Exception) { // XML error
+      }
     }
+    // If the XML file does not exist or contains an XML error,
+    // return a new object with just the utility properties populated.
+    result ??= (T)Activator.CreateInstance(typeof(T))!;
     PopulateUtilityProperties(result);
     return result;
   }

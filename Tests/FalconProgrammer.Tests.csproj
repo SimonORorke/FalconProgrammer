@@ -30,6 +30,7 @@
       <EmbeddedResource Include="Model\Xml\SettingsFolderLocation.xml" />
       <None Remove="Model\Xml\LocationsSettings.xml" />
       <EmbeddedResource Include="Model\Xml\LocationsSettings.xml" />
+      <None Remove="Model\Xml\XmlError.xml" />
     </ItemGroup>
 
 </Project>

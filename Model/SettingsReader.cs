@@ -10,7 +10,10 @@ public class SettingsReader : XmlReaderBase<Settings> {
     var settingsFolderLocation = settingsFolderLocationReader.Read();
     if (string.IsNullOrEmpty(settingsFolderLocation.Path)) {
       settingsFolderLocation.Path = GetDefaultSettingsFolderPath();
-      settingsFolderLocation.Write();
+      if (!string.IsNullOrEmpty(settingsFolderLocation.Path)) {
+        // Tests only
+        settingsFolderLocation.Write();
+      }
     }
     string settingsPath = Settings.GetSettingsPath(settingsFolderLocation.Path);
     var result =
@@ -21,9 +24,8 @@ public class SettingsReader : XmlReaderBase<Settings> {
     return result;
   }
 
-  [ExcludeFromCodeCoverage]
   protected virtual string GetDefaultSettingsFolderPath() {
-    throw new InvalidOperationException("Cannot find settings folder path.");
+    return string.Empty;
   }
 
   protected virtual SettingsFolderLocationReader CreateSettingsFolderLocationReader() {

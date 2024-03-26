@@ -4,7 +4,7 @@ namespace FalconProgrammer.Tests.Model;
 
 public class SettingsFolderLocationTests {
   [Test]
-  public void Test1() {
+  public void RealTestSettingsFolderLocationFile() {
     SettingsTestHelper.DeleteAnyData();
     try {
       var settingsFolderLocationReader = new SettingsFolderLocationReader {
