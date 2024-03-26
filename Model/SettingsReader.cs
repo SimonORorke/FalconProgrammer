@@ -24,6 +24,11 @@ public class SettingsReader : XmlReaderBase<Settings> {
     return result;
   }
 
+  /// <summary>
+  ///  The default is an empty string, indicating that the settings folder path has not
+  ///  been specified, i.e. settings folder location file does not exist or the path 
+  ///  cannot be read from it.  Can be overridden for testing.
+  /// </summary>
   protected virtual string GetDefaultSettingsFolderPath() {
     return string.Empty;
   }
