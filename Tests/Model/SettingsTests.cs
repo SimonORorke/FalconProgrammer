@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -70,19 +69,12 @@ public class SettingsTests {
     var mockFileSystemService = new MockFileSystemService {
       ExpectedFileExists = false
     };
-    var settingsReader = new TestSettingsReaderReal
-      { FileSystemService = mockFileSystemService };
-    try {
-      var settings = settingsReader.Read(true);
-      Assert.That(settings.ProgramsFolder.Path, Is.Empty);
-      Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
-    } catch (Exception ex) {
-      Debug.WriteLine(ex.Message);
-      throw;
-    }
-    // var settings = settingsReader.Read(true);
-    // Assert.That(settings.ProgramsFolder.Path, Is.Empty);
-    // Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
+    var settingsReader = new TestSettingsReaderReal {
+      FileSystemService = mockFileSystemService
+    };
+    var settings = settingsReader.Read(true);
+    Assert.That(settings.ProgramsFolder.Path, Is.Empty);
+    Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
   }
 
   [Test]
