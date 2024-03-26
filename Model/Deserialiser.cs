@@ -4,20 +4,12 @@ namespace FalconProgrammer.Model;
 
 internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
 
-  public T Deserialise(Stream stream) {
+  public T Deserialise(Stream? stream) {
     var deserializer = new XmlSerializer(typeof(T));
-    var result = (T)deserializer.Deserialize(stream)!;
-    PopulateUtilityProperties(result);
-    return result;
-  }
-
-  public virtual T Deserialise(string inputPath) {
     T? result = null;
-    if (FileSystemService.FileExists(inputPath)) {
-      using var reader = new StreamReader(inputPath);
-      var deserializer = new XmlSerializer(typeof(T));
+    if (stream != null) {
       try {
-        result = (T)deserializer.Deserialize(reader)!;
+        result = (T)deserializer.Deserialize(stream)!;
       } catch (Exception) { // XML error
       }
     }
@@ -26,6 +18,13 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
     result ??= (T)Activator.CreateInstance(typeof(T))!;
     PopulateUtilityProperties(result);
     return result;
+  }
+
+  public virtual T Deserialise(string inputPath) {
+    using var fileStream = FileSystemService.FileExists(inputPath)
+      ? File.OpenRead(inputPath)
+      : null;
+    return Deserialise(fileStream);
   }
 
   private void PopulateUtilityProperties(T deserialisedObject) {
