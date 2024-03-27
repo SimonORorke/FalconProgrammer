@@ -884,7 +884,7 @@ internal class FalconProgram(string path, Category category, Settings settings) 
     // There needs to be at least one macro after the macro before the macro whose
     // MIDI CC number is to be changed to 1!
     int minVisibleContinuousMacrosCount =
-      continuousMacrosByLocation.IndexOf(macroBeforeCc1Macro) + 2; 
+      continuousMacrosByLocation.IndexOf(macroBeforeCc1Macro) + 2;
     if (ContinuousMacros.Count < minVisibleContinuousMacrosCount) {
       // Allow for macros with invalid locations: see GetMacrosSortedByLocation. 
       return;
@@ -893,8 +893,9 @@ internal class FalconProgram(string path, Category category, Settings settings) 
     CurrentContinuousCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
     // CurrentContinuousCcNo = 34; // Required for first call of GetNextCcNo to return 1.
     CurrentToggleCcNo = 0; // Required by GetNextCcNo but won't be used in this case.
-    for (int i = minVisibleContinuousMacrosCount - 1; 
-         i < continuousMacrosByLocation.Count; i++) {
+    for (int i = minVisibleContinuousMacrosCount - 1;
+         i < continuousMacrosByLocation.Count;
+         i++) {
       var macro = continuousMacrosByLocation[i];
       int newCcNo = GetNextCcNo(macro, true);
       macro.ChangeCcNoTo(newCcNo);

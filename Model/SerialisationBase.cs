@@ -9,18 +9,20 @@ public abstract class SerialisationBase {
 
   /// <summary>
   ///   A utility that can access the file system. The default is a real
-  ///   <see cref="FileSystemService" />. Can be set to a mock for testing. 
+  ///   <see cref="FileSystemService" />. Can be set to a mock for testing.
   /// </summary>
-  [XmlIgnore] public virtual IFileSystemService FileSystemService {
+  [XmlIgnore]
+  public virtual IFileSystemService FileSystemService {
     get => _fileSystemService ??= Model.FileSystemService.Default;
     set => _fileSystemService = value;
   }
 
   /// <summary>
   ///   A utility that can serialise an object to a file. The default is a real
-  ///   <see cref="Serialiser" />. Can be set to a mock serialiser for testing. 
+  ///   <see cref="Serialiser" />. Can be set to a mock serialiser for testing.
   /// </summary>
-  [XmlIgnore] public virtual ISerialiser Serialiser {
+  [XmlIgnore]
+  public virtual ISerialiser Serialiser {
     get => _serialiser ??= Model.Serialiser.Default;
     set => _serialiser = value;
   }

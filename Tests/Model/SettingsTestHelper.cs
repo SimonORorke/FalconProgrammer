@@ -10,9 +10,6 @@ public static class SettingsTestHelper {
   public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
-  public static string DefaultTemplatePath => Path.Combine(
-    TemplateProgramsFolderPath, @"Factory\Keys\DX Mania.uvip");
-
   public const string OriginalProgramsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Original Programs";
 
@@ -23,6 +20,9 @@ public static class SettingsTestHelper {
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Template Programs";
 
   public const string TestApplicationName = "TestFalconProgrammer";
+
+  public static string DefaultTemplatePath => Path.Combine(
+    TemplateProgramsFolderPath, @"Factory\Keys\DX Mania.uvip");
 
   public static string TestSettingsFolderPath { get; } = Path.Combine(
     TestContext.CurrentContext.TestDirectory, TestApplicationName);
@@ -56,7 +56,7 @@ public static class SettingsTestHelper {
   public static Settings ReadSettings() {
     var settingsReader = new TestSettingsReaderReal {
       ApplicationName = TestApplicationName,
-      DefaultSettingsFolderPath = TestSettingsFolderPath 
+      DefaultSettingsFolderPath = TestSettingsFolderPath
     };
     return settingsReader.Read();
   }

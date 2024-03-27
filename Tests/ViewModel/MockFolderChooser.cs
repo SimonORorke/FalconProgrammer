@@ -5,7 +5,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 public class MockFolderChooser : IFolderChooser {
   internal bool Cancel { get; set; }
   internal string ExpectedPath { get; set; } = string.Empty;
-  
+
   // public async Task<FolderPickerResult> PickAsync(
   //   CancellationToken cancellationToken = new CancellationToken()) {
   //   Settings.Folder? folder;

@@ -1,13 +1,11 @@
 ﻿using System.Xml.Linq;
 
-namespace FalconProgrammer.Model.XmlLinq; 
+namespace FalconProgrammer.Model.XmlLinq;
 
 internal abstract class EntityBase {
   private XElement? _element;
-  
-  protected EntityBase() {
-  }
-  
+  protected EntityBase() { }
+
   protected EntityBase(ProgramXml programXml, bool mustAddNewElement = false) {
     ProgramXml = programXml;
     MustAddNewElement = mustAddNewElement;
@@ -17,7 +15,7 @@ internal abstract class EntityBase {
     get => GetAttributeValue(nameof(Bypass)) == "1";
     set => SetAttribute(nameof(Bypass), value ? "1" : "0");
   }
-  
+
   /// <summary>
   ///   Meaningful name.
   /// </summary>
@@ -36,9 +34,8 @@ internal abstract class EntityBase {
   }
 
   private bool MustAddNewElement { get; }
-
   protected ProgramXml ProgramXml { get; } = null!;
-  
+
   public virtual string Name {
     get => GetAttributeValue(nameof(Name));
     set => SetAttribute(nameof(Name), value);

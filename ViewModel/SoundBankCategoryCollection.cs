@@ -27,7 +27,7 @@ public class SoundBankCategoryCollection(
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category,
-      CanRemove = IsPopulating && !ForceAppendAdditionItem 
+      CanRemove = IsPopulating && !ForceAppendAdditionItem
     });
   }
 
@@ -53,7 +53,8 @@ public class SoundBankCategoryCollection(
     HasBeenChanged = true;
   }
 
-  internal void Populate(Settings settings, IEnumerable<string> soundBanks, Action<Action> dispatch) {
+  internal void Populate(Settings settings, IEnumerable<string> soundBanks,
+    Action<Action> dispatch) {
     IsPopulating = true;
     Settings = settings;
     Dispatch = dispatch;

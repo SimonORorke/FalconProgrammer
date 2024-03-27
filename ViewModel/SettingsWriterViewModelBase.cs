@@ -24,7 +24,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
           FileSystemService = FileSystemService,
           Serialiser = Serialiser
         };
-       _settingsFolderLocation =
+        _settingsFolderLocation =
           settingsFolderLocationReader.Read();
       }
       return _settingsFolderLocation;

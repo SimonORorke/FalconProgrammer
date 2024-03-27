@@ -4,9 +4,6 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 [TestFixture]
 public class AppShellViewModelTests : ViewModelTestsBase {
-
-  private AppShellViewModel ViewModel { get; set; } = null!;
-  
   [SetUp]
   public override void Setup() {
     base.Setup();
@@ -15,7 +12,9 @@ public class AppShellViewModelTests : ViewModelTestsBase {
       ServiceHelper = ServiceHelper
     };
   }
-  
+
+  private AppShellViewModel ViewModel { get; set; } = null!;
+
   [Test]
   public void Main() {
     ServiceHelper.CurrentPageTitle = "Locations";

@@ -53,7 +53,7 @@ internal class ProgramXml(Category category) : EntityBase {
     string name, string soundBankName, string scriptPath, string script) {
     var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
     if (eventProcessorsElement == null) {
-      eventProcessorsElement = new XElement("EventProcessors"); 
+      eventProcessorsElement = new XElement("EventProcessors");
       ControlSignalSourcesElement.AddAfterSelf(eventProcessorsElement);
     }
     var scriptProcessorElement = new XElement("ScriptProcessor");
@@ -146,7 +146,7 @@ internal class ProgramXml(Category category) : EntityBase {
     var layerElements = layersElement.Elements("Layer");
     return (
       from layerElement in layerElements
-      select new ModulationsOwner(layerElement,this)).ToImmutableList();
+      select new ModulationsOwner(layerElement, this)).ToImmutableList();
   }
 
   /// <summary>
@@ -277,7 +277,7 @@ internal class ProgramXml(Category category) : EntityBase {
 
   public void SetBackgroundImagePath(string path) {
     var propertiesElement = Element.Element("Properties")!;
-    var backgroundImagePathAttribute = 
+    var backgroundImagePathAttribute =
       propertiesElement.Attribute("BackgroundImagePath");
     if (backgroundImagePathAttribute != null) {
       backgroundImagePathAttribute.Value = path;
@@ -286,7 +286,7 @@ internal class ProgramXml(Category category) : EntityBase {
       // Insert BackgroundImagePath as the first attribute of the Properties element.
       var attributes = propertiesElement.Attributes().ToList();
       attributes.Insert(0, backgroundImagePathAttribute);
-      propertiesElement.ReplaceAttributes(attributes);      
+      propertiesElement.ReplaceAttributes(attributes);
       // AddFirst does not work for adding attributes!
       // propertiesElement.AddFirst(backgroundImagePathAttribute);
     }

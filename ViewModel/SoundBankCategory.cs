@@ -24,6 +24,7 @@ public partial class SoundBankCategory(
 
   [ObservableProperty]
   private string _soundBank = string.Empty; // Generates SoundBank property
+
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
   private bool IsAdding { get; set; }
   internal bool IsAdditionItem => SoundBank == string.Empty;
@@ -34,7 +35,7 @@ public partial class SoundBankCategory(
   private Action AppendAdditionItem { get; } = appendAdditionItem;
   private Action OnItemChanged { get; } = onItemChanged;
   private Action<SoundBankCategory> RemoveItem { get; } = removeItem;
-  
+
   // Code coverage highlighting does not work for these partial methods.
   partial void OnSoundBankChanged(string value) {
     // On addition after removal, the new sound bank is null.

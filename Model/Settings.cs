@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace FalconProgrammer.Model;
 
 /// <summary>
-///   To read the settings, use <see cref="SettingsReader"/>.
+///   To read the settings, use <see cref="SettingsReader" />.
 /// </summary>
 [XmlRoot(nameof(Settings))]
 public class Settings : SerialisationBase {
@@ -19,7 +19,6 @@ public class Settings : SerialisationBase {
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
   [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
-  
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static string GetSettingsPath(string settingsFolderPath) {

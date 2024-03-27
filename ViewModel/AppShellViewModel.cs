@@ -10,7 +10,7 @@ public class AppShellViewModel : ViewModelBase {
       OnPropertyChanged();
     }
   }
-  
+
   public void OnNavigated() {
     CurrentPageTitle = ServiceHelper.CurrentPageTitle;
   }

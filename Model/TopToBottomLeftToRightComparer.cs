@@ -1,6 +1,6 @@
 ﻿using FalconProgrammer.Model.XmlLinq;
 
-namespace FalconProgrammer.Model; 
+namespace FalconProgrammer.Model;
 
 /// <summary>
 ///   Orders the macros top to bottom, left to right.
@@ -24,8 +24,8 @@ internal class TopToBottomLeftToRightComparer : Comparer<Macro> {
       return 1;
     }
     throw new ApplicationException(
-      "Duplicate ConstantModulation.Properties location: X = " + 
-      $"{a.X}; Y = {a.Y}. " + 
+      "Duplicate ConstantModulation.Properties location: X = " +
+      $"{a.X}; Y = {a.Y}. " +
       $"a = {a}. b = {b}.");
   }
 }

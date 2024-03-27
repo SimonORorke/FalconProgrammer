@@ -13,7 +13,7 @@ public abstract class XmlReaderBase<T> : SerialisationBase where T : Serialisati
     set => Deserialiser.FileSystemService = base.FileSystemService = value;
   }
 
-  public override ISerialiser Serialiser { 
+  public override ISerialiser Serialiser {
     get => base.Serialiser;
     set => Deserialiser.Serialiser = base.Serialiser = value;
   }

@@ -9,7 +9,7 @@ internal class ModulationsOwner : EntityBase {
   public ModulationsOwner(XElement element, ProgramXml programXml) : base(programXml) {
     Element = element;
   }
-  
+
   protected ModulationsOwner(ProgramXml programXml,
     bool mustAddNewElement = false) : base(programXml, mustAddNewElement) { }
 
@@ -21,7 +21,7 @@ internal class ModulationsOwner : EntityBase {
   /// <summary>
   ///   For a Macro, modulations specifying MIDI CC numbers that modulate the macro.
   ///   For other modulation owners, modulations can also specify a MIDI CC number but
-  ///   usually specify a modulating macro. 
+  ///   usually specify a modulating macro.
   /// </summary>
   /// <remarks>
   ///   For a macro (ConstantModulation), there is 0 or 1 Modulation only, except

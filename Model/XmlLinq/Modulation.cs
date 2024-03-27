@@ -106,7 +106,7 @@ internal class Modulation : EntityBase {
   }
 
   public Macro? SourceMacro { get; set; }
-  
+
   protected override XElement CreateElementFromTemplate() {
     return new XElement(ProgramXml.TemplateModulationElement);
   }

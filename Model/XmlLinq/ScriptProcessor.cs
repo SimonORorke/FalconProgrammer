@@ -6,7 +6,7 @@ internal class ScriptProcessor : ModulationsOwner {
   private XElement? _scriptElement;
 
   /// <summary>
-  ///   Use the <see cref="Create"/> static method for public instantiation of the
+  ///   Use the <see cref="Create" /> static method for public instantiation of the
   ///   correct type of <see cref="ScriptProcessor" />.
   /// </summary>
   protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml) :

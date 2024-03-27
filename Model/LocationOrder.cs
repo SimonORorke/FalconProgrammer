@@ -1,4 +1,4 @@
-﻿namespace FalconProgrammer.Model; 
+﻿namespace FalconProgrammer.Model;
 
 public enum LocationOrder {
   LeftToRightTopToBottom,

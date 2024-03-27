@@ -7,14 +7,14 @@ namespace FalconProgrammer.Model;
 [XmlRoot("Batch")]
 public class BatchScript {
   private static ImmutableList<ConfigTask>? _sequencedConfigTasks;
-  
+
   [XmlArray(nameof(Tasks))]
   [XmlArrayItem("Task")]
   public List<BatchTask> Tasks { get; set; } = [];
 
   [XmlIgnore] public string BatchScriptPath { get; set; } = string.Empty;
-  
-  private static ImmutableList<ConfigTask> SequencedConfigTasks => 
+
+  private static ImmutableList<ConfigTask> SequencedConfigTasks =>
     _sequencedConfigTasks ??= SequenceConfigTasks();
 
   public static BatchScript Read(string batchScriptPath) {
@@ -39,13 +39,13 @@ public class BatchScript {
 
   private static ImmutableList<ConfigTask> SequenceConfigTasks() {
     return [
-      ConfigTask.RestoreOriginal, 
+      ConfigTask.RestoreOriginal,
       ConfigTask.InitialiseLayout,
       ConfigTask.UpdateMacroCcs,
       ConfigTask.RemoveDelayEffectsAndMacros,
       ConfigTask.InitialiseValuesAndMoveMacros,
       ConfigTask.ReplaceModWheelWithMacro,
-      ConfigTask.ReuseCc1,
+      ConfigTask.ReuseCc1
     ];
   }
 

@@ -75,11 +75,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(settings.SettingsPath,
       Is.EqualTo(Path.Combine(ViewModel.SettingsFolderPath, "Settings.xml")));
     Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(ViewModel.ProgramsFolderPath));
-    Assert.That(settings.OriginalProgramsFolder.Path, 
+    Assert.That(settings.OriginalProgramsFolder.Path,
       Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
-    Assert.That(settings.TemplateProgramsFolder.Path, 
+    Assert.That(settings.TemplateProgramsFolder.Path,
       Is.EqualTo(ViewModel.TemplateProgramsFolderPath));
-    Assert.That(settings.DefaultTemplate.Path, 
+    Assert.That(settings.DefaultTemplate.Path,
       Is.EqualTo(ViewModel.DefaultTemplatePath));
     // Test that the settings folder path when writing settings is now already as
     // specified in the settings folder location file. 
@@ -87,7 +87,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
     ViewModel.OnDisappearing();
     settings = (Settings)MockSerialiser.LastObjectSerialised;
-    Assert.That(settings.DefaultTemplate.Path, 
+    Assert.That(settings.DefaultTemplate.Path,
       Is.EqualTo(ViewModel.DefaultTemplatePath));
   }
 

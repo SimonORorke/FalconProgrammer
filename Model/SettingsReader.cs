@@ -1,10 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace FalconProgrammer.Model;
 
 public class SettingsReader : XmlReaderBase<Settings> {
-  
   public virtual Settings Read(bool useDefaultIfNotFound = false) {
     var settingsFolderLocationReader = CreateSettingsFolderLocationReader();
     var settingsFolderLocation = settingsFolderLocationReader.Read();
@@ -25,9 +23,9 @@ public class SettingsReader : XmlReaderBase<Settings> {
   }
 
   /// <summary>
-  ///  The default is an empty string, indicating that the settings folder path has not
-  ///  been specified, i.e. settings folder location file does not exist or the path 
-  ///  cannot be read from it.  Can be overridden for testing.
+  ///   The default is an empty string, indicating that the settings folder path has not
+  ///   been specified, i.e. settings folder location file does not exist or the path
+  ///   cannot be read from it.  Can be overridden for testing.
   /// </summary>
   protected virtual string GetDefaultSettingsFolderPath() {
     return string.Empty;

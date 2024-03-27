@@ -15,7 +15,8 @@ public class MockAlertService : IAlertService {
   }
 
   [ExcludeFromCodeCoverage]
-  public Task<bool> ShowConfirmationAsync(string title, string message, string accept = "Yes",
+  public Task<bool> ShowConfirmationAsync(string title, string message,
+    string accept = "Yes",
     string cancel = "No") {
     throw new NotImplementedException();
   }

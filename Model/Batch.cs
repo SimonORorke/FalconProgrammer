@@ -20,7 +20,7 @@ public class Batch {
       return _settings;
     }
   }
-  
+
   private DirectoryInfo SoundBankFolder { get; set; } = null!;
   private ConfigTask Task { get; set; }
 
@@ -435,10 +435,10 @@ public class Batch {
     var batchScript = BatchScript.Read(batchScriptPath);
     batchScript.Validate();
     foreach (var batchTask in batchScript.SequenceTasks()) {
-      Task = batchTask.ConfigTask; 
+      Task = batchTask.ConfigTask;
       Console.WriteLine(
         $"Task = {batchTask.Name}, SoundBank = '{batchTask.SoundBank}', " +
-        $"Category = '{batchTask.Category}', " + 
+        $"Category = '{batchTask.Category}', " +
         $"Program = '{batchTask.Program}'");
       foreach (var parameter in batchTask.Parameters) {
         Console.WriteLine($"    {parameter.Name} = {parameter.Value}");

@@ -49,13 +49,14 @@ public class Category {
   ///     per category.
   ///   </para>
   /// </remarks>
-  public bool MustUseGuiScriptProcessor => 
+  public bool MustUseGuiScriptProcessor =>
     Settings.MustUseGuiScriptProcessor(SoundBankFolder.Name, Name);
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public string Path { get; }
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
+
   // private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
   [PublicAPI] public string TemplateCategoryName => TemplateProgramFile.Directory!.Name;
@@ -75,7 +76,7 @@ public class Category {
   internal ScriptProcessor? TemplateScriptProcessor { get; private set; }
 
   [PublicAPI]
-  public string TemplateSoundBankName => 
+  public string TemplateSoundBankName =>
     Directory.GetParent(TemplateProgramFile.Directory!.FullName)?.Name!;
 
   private DirectoryInfo GetFolder(string categoryName) {
@@ -111,9 +112,9 @@ public class Category {
     }
     return result;
   }
-  
+
   private FileInfo GetTemplateProgramFile() {
-    string templatesFolderPath = Batch.GetTemplateProgramsFolder().FullName; 
+    string templatesFolderPath = Batch.GetTemplateProgramsFolder().FullName;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
       templatesFolderPath, SoundBankFolder.Name, Name);
     var folder = new DirectoryInfo(categoryTemplateFolderPath);
@@ -123,7 +124,7 @@ public class Category {
         templatesFolderPath, SoundBankFolder.Name);
       var soundBankTemplateFolder = new DirectoryInfo(soundBankTemplateFolderPath);
       if (soundBankTemplateFolder.Exists) {
-        var subFolders = 
+        var subFolders =
           soundBankTemplateFolder.EnumerateDirectories().ToList();
         if (subFolders.Count == 1) {
           folder = subFolders[0];
@@ -140,7 +141,7 @@ public class Category {
     }
     if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
       throw new InvalidOperationException(
-        $"Category {Path}: A default Template must be specified in the " + 
+        $"Category {Path}: A default Template must be specified in the " +
         "Settings file, to specify TemplateScriptProcessor.");
     }
     // string defaultTemplatePath = System.IO.Path.Combine(
@@ -149,9 +150,9 @@ public class Category {
     var defaultTemplateFile = new FileInfo(Settings.DefaultTemplate.Path);
     if (!defaultTemplateFile.Exists) {
       throw new InvalidOperationException(
-        $"Category {Path}: Cannot find default template file " + 
+        $"Category {Path}: Cannot find default template file " +
         $"'{Settings.DefaultTemplate.Path}'.");
-        // $"Category {Path}: Cannot find default template file '{defaultTemplatePath}'.");
+      // $"Category {Path}: Cannot find default template file '{defaultTemplatePath}'.");
     }
     return defaultTemplateFile;
   }
@@ -172,7 +173,7 @@ public class Category {
     if (templateXml.TemplateScriptProcessorElement != null) {
       return ScriptProcessor.Create(
         SoundBankFolder.Name, templateXml.TemplateScriptProcessorElement, ProgramXml);
-    } 
+    }
     if (!MustUseGuiScriptProcessor) {
       return null;
     }

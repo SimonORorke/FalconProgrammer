@@ -3,18 +3,35 @@
 namespace FalconProgrammer.Tests.Model;
 
 /// <summary>
-///   A test Settings reader that reads embedded files. 
+///   A test Settings reader that reads embedded files.
 /// </summary>
 public class TestSettingsReaderEmbedded : SettingsReader {
   private Deserialiser<Settings>? _deserialiser;
-  private MockSerialiser? _mockSerialiserForSettings;
   private MockFileSystemService? _mockFileSystemService;
+  private MockSerialiser? _mockSerialiserForSettings;
 
   internal MockFileSystemService MockFileSystemService {
     get => _mockFileSystemService ??= new MockFileSystemService();
     set {
       _mockFileSystemService = value;
       FileSystemService = value;
+    }
+  }
+
+  internal MockSerialiser MockSerialiserForSettings {
+    get => _mockSerialiserForSettings ??= new MockSerialiser();
+    set => _mockSerialiserForSettings = value;
+  }
+
+  internal TestDeserialiser<Settings> TestDeserialiser =>
+    (TestDeserialiser<Settings>)Deserialiser;
+
+  private new Deserialiser<Settings> Deserialiser {
+    get {
+      if (_deserialiser == null) {
+        base.Deserialiser = _deserialiser = new TestDeserialiser<Settings>();
+      }
+      return _deserialiser;
     }
   }
 
@@ -25,23 +42,6 @@ public class TestSettingsReaderEmbedded : SettingsReader {
         EmbeddedResourceFileName = "SettingsFolderLocation.xml"
       }
     };
-  }
-
-  internal MockSerialiser MockSerialiserForSettings {
-    get => _mockSerialiserForSettings ??= new MockSerialiser();
-    set => _mockSerialiserForSettings = value;
-  }
-
-  internal TestDeserialiser<Settings> TestDeserialiser =>
-    (TestDeserialiser<Settings>)Deserialiser;  
-
-  private new Deserialiser<Settings> Deserialiser {
-    get {
-      if (_deserialiser == null) {
-        base.Deserialiser = _deserialiser = new TestDeserialiser<Settings>(); 
-      }
-      return _deserialiser;
-    }
   }
 
   public override Settings Read(bool useDefaultIfNotFound = false) {

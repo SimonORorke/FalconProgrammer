@@ -112,7 +112,7 @@ internal class InfoPageLayout(FalconProgram program) {
             && macro.X < RightEdge
       select macro).ToList();
     int insertionIndex;
-    var adsrMacros = Program.GetAdsrMacros(); 
+    var adsrMacros = Program.GetAdsrMacros();
     if (adsrMacros.Count != 4) {
       insertionIndex = visibleContinuousMacros.Count switch {
         0 => 0, // First and only
@@ -121,7 +121,7 @@ internal class InfoPageLayout(FalconProgram program) {
           // Examples:
           // Devinity\Plucks-Leads\Pluck Sphere (reverb at end in original)
           // Eternal Funk\Brass\Back And Stride (reverb moved to end by ZeroAndMoveMacros)
-          ? Fourth() 
+          ? Fourth()
           : AtEnd(), // Example: Eternal Funk\Synths\Bell Shaka 
         _ => Fourth()
       };

@@ -10,13 +10,13 @@ namespace FalconProgrammer.Model.XmlLinq;
 /// </summary>
 internal class Macro : ModulationsOwner {
   private XElement? _propertiesElement;
-  
+
   public Macro(ProgramXml programXml, Settings.MacrosMidi midi)
     : base(programXml, true) {
     Midi = midi;
   }
 
-  public Macro(XElement macroElement, ProgramXml programXml, Settings.MacrosMidi midi) 
+  public Macro(XElement macroElement, ProgramXml programXml, Settings.MacrosMidi midi)
     : base(programXml) {
     Element = macroElement;
     Midi = midi;
@@ -29,7 +29,7 @@ internal class Macro : ModulationsOwner {
 
   /// <summary>
   ///   For non-ScriptProcessor macros, unless this is true, X and Y are ignored and the
-  ///   macro is given a default location. 
+  ///   macro is given a default location.
   /// </summary>
   public bool CustomPosition {
     get => GetAttributeValue(PropertiesElement, "customPosition") == "1";
@@ -72,9 +72,7 @@ internal class Macro : ModulationsOwner {
   }
 
   private Settings.MacrosMidi Midi { get; }
-
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
-
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
   public bool ModulatesEnabledEffects => (
@@ -220,8 +218,8 @@ internal class Macro : ModulationsOwner {
       where modulation.ModulatesMacro
       select modulation).ToImmutableList();
   }
-  
-  public int GetNextCcNo(ref int continuousCcNo, ref int toggleCcNo, 
+
+  public int GetNextCcNo(ref int continuousCcNo, ref int toggleCcNo,
     bool reuseCc1) {
     if (IsContinuous) {
       // Map continuous controller CC (e.g. knob or expression pedal) to continuous

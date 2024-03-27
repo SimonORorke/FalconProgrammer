@@ -7,9 +7,7 @@ public class MockFileSystemService : IFileSystemService {
   internal bool ExpectedFileExists { get; set; } = true;
   internal bool ExpectedFolderExists { get; set; } = true;
   internal Dictionary<string, IEnumerable<string>> ExpectedSubfolderNames { get; } = [];
-  
-  public void CreateFolder(string path) {
-  }
+  public void CreateFolder(string path) { }
 
   public bool FileExists(string path) {
     return ExpectedFileExists;

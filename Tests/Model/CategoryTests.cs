@@ -14,7 +14,7 @@ public class CategoryTests {
 
   [Test]
   public void FactoryCategorySpecificTemplate() {
-    var category = new Category(GetSoundBankFolder("Factory"), 
+    var category = new Category(GetSoundBankFolder("Factory"),
       "Organic Texture 2.8", ReadSettings());
     category.Initialise();
     Assert.IsTrue(category.MustUseGuiScriptProcessor);

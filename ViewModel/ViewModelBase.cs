@@ -29,8 +29,8 @@ public abstract class ViewModelBase : ObservableObject {
 
   internal IFileChooser FileChooser =>
     _fileChooser ??= ServiceHelper.GetService<IFileChooser>()
-                    ?? throw new InvalidOperationException(
-                      "ServiceHelper does not have an IFileChooser");
+                     ?? throw new InvalidOperationException(
+                       "ServiceHelper does not have an IFileChooser");
 
   internal IFileSystemService FileSystemService =>
     // The MauiProgram won't be providing an IFileSystemService to ServiceHelper.
@@ -40,8 +40,8 @@ public abstract class ViewModelBase : ObservableObject {
 
   protected IFolderChooser FolderChooser =>
     _folderChooser ??= ServiceHelper.GetService<IFolderChooser>()
-                      ?? throw new InvalidOperationException(
-                        "ServiceHelper does not have an IFolderChooser");
+                       ?? throw new InvalidOperationException(
+                         "ServiceHelper does not have an IFolderChooser");
 
   protected bool IsVisible { get; private set; }
 

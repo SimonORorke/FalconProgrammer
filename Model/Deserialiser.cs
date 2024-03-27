@@ -3,7 +3,6 @@
 namespace FalconProgrammer.Model;
 
 internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
-
   public T Deserialise(Stream? stream) {
     var deserializer = new XmlSerializer(typeof(T));
     T? result = null;
