@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
 
@@ -14,12 +13,6 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     [SuppressMessage("ReSharper", "CommentTypo")]
     get {
       if (_settingsFolderLocation == null) {
-        Debug.WriteLine("====================================================");
-        Debug.WriteLine(
-          "SettingsFolderLocation.AppDataFolderPathMaui = " +
-          $"'{SettingsFolderLocation.AppDataFolderPathMaui}'");
-        // C:\Users\Simon O'Rorke\AppData\Local\Packages\com.simonororke.falconprogrammer_9zz4h110yvjzm\LocalState
-        Debug.WriteLine("====================================================");
         var settingsFolderLocationReader = new SettingsFolderLocationReader {
           FileSystemService = FileSystemService,
           Serialiser = Serialiser
@@ -32,14 +25,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   }
 
   public string SettingsFolderPath {
-    get {
-      if (_settingsFolderPath == null) {
-        SettingsFolderLocation.AppDataFolderPathMaui =
-          AppDataFolderService.AppDataFolderPathMaui;
-        _settingsFolderPath = SettingsFolderLocation.Path;
-      }
-      return _settingsFolderPath;
-    }
+    get => _settingsFolderPath ??= SettingsFolderLocation.Path;
     set {
       if (_settingsFolderPath != value) {
         _settingsFolderPath = value;

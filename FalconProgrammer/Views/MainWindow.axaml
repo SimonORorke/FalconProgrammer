@@ -7,7 +7,7 @@
         x:Class="FalconProgrammer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="FalconProgrammer">
+        Title="Falcon Programmer">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,

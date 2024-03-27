@@ -6,7 +6,6 @@ namespace FalconProgrammer.ViewModel;
 
 public abstract class ViewModelBase : ObservableObject {
   private IAlertService? _alertService;
-  private IAppDataFolderService? _appDataFolderService;
   private IFileChooser? _fileChooser;
   private IFileSystemService? _fileSystemService;
   private IFolderChooser? _folderChooser;
@@ -21,19 +20,13 @@ public abstract class ViewModelBase : ObservableObject {
       ?? throw new InvalidOperationException(
         "ServiceHelper does not have an IAlertService");
 
-  internal IAppDataFolderService AppDataFolderService =>
-    _appDataFolderService ??=
-      ServiceHelper.GetService<IAppDataFolderService>()
-      ?? throw new InvalidOperationException(
-        "ServiceHelper does not have an IAppDataFolderService");
-
   internal IFileChooser FileChooser =>
     _fileChooser ??= ServiceHelper.GetService<IFileChooser>()
                      ?? throw new InvalidOperationException(
                        "ServiceHelper does not have an IFileChooser");
 
   internal IFileSystemService FileSystemService =>
-    // The MauiProgram won't be providing an IFileSystemService to ServiceHelper.
+    // The Avalonia UI App won't be providing an IFileSystemService to ServiceHelper.
     // But tests may.
     _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>() ??
                            Model.FileSystemService.Default;
@@ -47,7 +40,7 @@ public abstract class ViewModelBase : ObservableObject {
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   protected ISerialiser Serialiser =>
-    // The MauiProgram won't be providing an ISerialiser to ServiceHelper.
+    // The Avalonia UI App won't be providing an ISerialiser to ServiceHelper.
     // But tests may.
     _serialiser ??= ServiceHelper.GetService<ISerialiser>() ??
                     Model.Serialiser.Default;
@@ -64,7 +57,7 @@ public abstract class ViewModelBase : ObservableObject {
   }
 
   private SettingsReader SettingsReader =>
-    // The MauiProgram won't be providing a SettingsReader to ServiceHelper.
+    // The Avalonia UI App won't be providing a SettingsReader to ServiceHelper.
     // But tests may.
     _settingsReader ??= ServiceHelper.GetService<SettingsReader>() ??
                         new SettingsReader();

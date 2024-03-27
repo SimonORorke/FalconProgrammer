@@ -26,4 +26,8 @@
         <PackageReference Include="HanumanInstitute.MvvmDialogs.Avalonia.Fluent" Version="2.1.0"/>
         <PackageReference Include="HanumanInstitute.MvvmDialogs.Avalonia.MessageBox" Version="2.1.0"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj" />
+    </ItemGroup>
 </Project>

@@ -8,7 +8,6 @@ public abstract class ViewModelTestsBase {
   [SetUp]
   public virtual void Setup() {
     MockAlertService = new MockAlertService();
-    MockAppDataFolderService = new MockAppDataFolderService();
     MockFileChooser = new MockFileChooser();
     MockFileSystemService = new MockFileSystemService();
     MockFolderChooser = new MockFolderChooser();
@@ -23,10 +22,9 @@ public abstract class ViewModelTestsBase {
     };
     var mockServiceProvider = new MockServiceProvider();
     mockServiceProvider.Services.Add(MockAlertService);
-    mockServiceProvider.Services.Add(MockAppDataFolderService);
     mockServiceProvider.Services.Add(MockFileChooser);
     mockServiceProvider.Services.Add(MockFolderChooser);
-    // These are model-based services, so not provided by the MauiProgram.
+    // These are model-based services, so not provided by the Avalonia UI App.
     mockServiceProvider.Services.Add(MockFileSystemService);
     mockServiceProvider.Services.Add(MockSerialiser);
     mockServiceProvider.Services.Add(TestSettingsReaderEmbedded);
@@ -35,10 +33,6 @@ public abstract class ViewModelTestsBase {
   }
 
   protected MockAlertService MockAlertService { get; private set; } = null!;
-
-  protected MockAppDataFolderService MockAppDataFolderService { get; private set; } =
-    null!;
-
   protected MockFileChooser MockFileChooser { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockFolderChooser MockFolderChooser { get; private set; } = null!;
