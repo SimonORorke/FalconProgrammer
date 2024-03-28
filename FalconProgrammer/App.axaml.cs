@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Markup.Xaml;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
-using FalconProgrammer.ViewModels;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.Avalonia;
 using Microsoft.Extensions.Logging;
