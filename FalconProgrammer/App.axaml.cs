@@ -41,11 +41,6 @@ public class App : Application {
   public override void OnFrameworkInitializationCompleted() {
     GC.KeepAlive(typeof(DialogService));
     DialogService.Show(null, MainWindowViewModel);
-    // if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-    //   desktop.MainWindow = new MainWindow {
-    //     DataContext = new MainWindowViewModel()
-    //   };
-    // }
     base.OnFrameworkInitializationCompleted();
   }
 }
