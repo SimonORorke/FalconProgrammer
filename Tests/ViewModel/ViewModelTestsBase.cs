@@ -7,10 +7,8 @@ namespace FalconProgrammer.Tests.ViewModel;
 public abstract class ViewModelTestsBase {
   [SetUp]
   public virtual void Setup() {
-    MockAlertService = new MockAlertService();
-    MockFileChooser = new MockFileChooser();
+    MockDialogWrapper = new MockDialogWrapper();
     MockFileSystemService = new MockFileSystemService();
-    MockFolderChooser = new MockFolderChooser();
     MockSerialiser = new MockSerialiser();
     MockView = new MockContentPageBase();
     TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
@@ -21,9 +19,6 @@ public abstract class ViewModelTestsBase {
       }
     };
     var mockServiceProvider = new MockServiceProvider();
-    mockServiceProvider.Services.Add(MockAlertService);
-    mockServiceProvider.Services.Add(MockFileChooser);
-    mockServiceProvider.Services.Add(MockFolderChooser);
     // These are model-based services, so not provided by the Avalonia UI App.
     mockServiceProvider.Services.Add(MockFileSystemService);
     mockServiceProvider.Services.Add(MockSerialiser);
@@ -32,10 +27,8 @@ public abstract class ViewModelTestsBase {
     ServiceHelper.Initialise(mockServiceProvider);
   }
 
-  protected MockAlertService MockAlertService { get; private set; } = null!;
-  protected MockFileChooser MockFileChooser { get; private set; } = null!;
+  protected MockDialogWrapper MockDialogWrapper { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
-  protected MockFolderChooser MockFolderChooser { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected MockContentPageBase MockView { get; private set; } = null!;
   protected ServiceHelper ServiceHelper { get; private set; } = null!;

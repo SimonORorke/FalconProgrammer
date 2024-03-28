@@ -1,3 +1,4 @@
 ﻿namespace FalconProgrammer.ViewModel;
 
-public class BatchScriptViewModel : SettingsWriterViewModelBase;
+public class BatchScriptViewModel(IDialogWrapper dialogWrapper)
+  : SettingsWriterViewModelBase(dialogWrapper);

@@ -4,37 +4,19 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ViewModelBase : ObservableObject {
-  private IAlertService? _alertService;
-  private IFileChooser? _fileChooser;
+public abstract class ViewModelBase(IDialogWrapper dialogWrapper) : ObservableObject {
   private IFileSystemService? _fileSystemService;
-  private IFolderChooser? _folderChooser;
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
   private SettingsReader? _settingsReader;
-
-  internal IAlertService AlertService =>
-    _alertService ??=
-      ServiceHelper.GetService<IAlertService>()
-      ?? throw new InvalidOperationException(
-        "ServiceHelper does not have an IAlertService");
-
-  internal IFileChooser FileChooser =>
-    _fileChooser ??= ServiceHelper.GetService<IFileChooser>()
-                     ?? throw new InvalidOperationException(
-                       "ServiceHelper does not have an IFileChooser");
+  protected IDialogWrapper DialogWrapper { get; } = dialogWrapper;
 
   internal IFileSystemService FileSystemService =>
     // The Avalonia UI App won't be providing an IFileSystemService to ServiceHelper.
     // But tests may.
     _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>() ??
                            Model.FileSystemService.Default;
-
-  protected IFolderChooser FolderChooser =>
-    _folderChooser ??= ServiceHelper.GetService<IFolderChooser>()
-                       ?? throw new InvalidOperationException(
-                         "ServiceHelper does not have an IFolderChooser");
 
   protected bool IsVisible { get; private set; }
 

@@ -1,27 +1,25 @@
-using System;
-using Avalonia.Controls;
-using Avalonia.Controls.Templates;
-using FalconProgrammer.ViewModels;
+using System.Diagnostics;
+using HanumanInstitute.MvvmDialogs.Avalonia;
 
 namespace FalconProgrammer;
 
-public class ViewLocator : IDataTemplate {
-  public Control? Build(object? data) {
-    if (data is null) {
-      return null;
-    }
-    string name =
-      data.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-    var type = Type.GetType(name);
-    if (type != null) {
-      var control = (Control)Activator.CreateInstance(type)!;
-      control.DataContext = data;
-      return control;
-    }
-    return new TextBlock { Text = "Not Found: " + name };
-  }
-
-  public bool Match(object? data) {
-    return data is ViewModelBase;
+/// <summary>
+///   Maps view models to views in Avalonia.
+/// </summary>
+public class ViewLocator : ViewLocatorBase {
+  /// <inheritdoc />
+  protected override string GetViewName(object viewModel) {
+    // TODO: Fix ViewLocator as required.
+    // This works for the template MainWindowViewModel in the ViewModels folder of the
+    // FalconProgrammer assembly.
+    // It will need to be changed for view models in the FalconProgrammer.ViewModel
+    // assembly.
+    string viewModelName = viewModel.GetType().FullName!;
+    Debug.WriteLine(viewModelName);
+    string result = viewModelName
+      .Replace("ViewModels", "Views")
+      .Replace("ViewModel", string.Empty);
+    Debug.WriteLine(result);
+    return result;
   }
 }

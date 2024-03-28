@@ -9,7 +9,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new LocationsViewModel {
+    ViewModel = new LocationsViewModel(MockDialogWrapper) {
       View = MockView,
       ServiceHelper = ServiceHelper
     };
@@ -20,53 +20,55 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CancelBrowseForSettingsFolder() {
-    MockFolderChooser.Cancel = true;
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Settings";
+    MockDialogWrapper.Cancel = true;
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Settings";
     MockFileSystemService.ExpectedFileExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
-      Is.Not.EqualTo(MockFolderChooser.ExpectedPath));
+      Is.Not.EqualTo(MockDialogWrapper.ExpectedPath));
   }
 
   [Test]
   public async Task CancelBrowseForDefaultTemplate() {
-    MockFileChooser.Cancel = true;
-    MockFileChooser.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
+    MockDialogWrapper.Cancel = true;
+    MockDialogWrapper.ExpectedPath =
+      @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
     var command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
-      Is.Not.EqualTo(MockFileChooser.ExpectedPath));
+      Is.Not.EqualTo(MockDialogWrapper.ExpectedPath));
   }
 
   [Test]
   public async Task Main() {
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Settings";
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Settings";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
-      Is.EqualTo(MockFolderChooser.ExpectedPath));
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Programs";
+      Is.EqualTo(MockDialogWrapper.ExpectedPath));
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
     MockFileSystemService.ExpectedFileExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
-      Is.EqualTo(MockFolderChooser.ExpectedPath));
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Original Programs";
+      Is.EqualTo(MockDialogWrapper.ExpectedPath));
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Original Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForOriginalProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.OriginalProgramsFolderPath,
-      Is.EqualTo(MockFolderChooser.ExpectedPath));
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Template Programs";
+      Is.EqualTo(MockDialogWrapper.ExpectedPath));
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Template Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForTemplateProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
-      Is.EqualTo(MockFolderChooser.ExpectedPath));
-    MockFileChooser.ExpectedPath = @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
+      Is.EqualTo(MockDialogWrapper.ExpectedPath));
+    MockDialogWrapper.ExpectedPath =
+      @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
     command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
-      Is.EqualTo(MockFileChooser.ExpectedPath));
+      Is.EqualTo(MockDialogWrapper.ExpectedPath));
     ViewModel.OnDisappearing();
     Assert.That(MockSerialiser.LastOutputPath,
       Is.EqualTo(@"C:\FalconProgrammer\Settings\Settings.xml"));
@@ -96,12 +98,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel.SettingsFolderPath = @"C:\FalconProgrammer\Settings";
     MockFileSystemService.ExpectedFileExists = false;
     MockFileSystemService.ExpectedFolderExists = false;
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
     var command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
-    Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(1));
-    Assert.That(MockAlertService.LastTitle, Is.EqualTo("Error"));
-    Assert.That(MockAlertService.LastMessage, Is.EqualTo(
+    Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogWrapper.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: cannot find settings folder " +
       $"'{ViewModel.SettingsFolderPath}'."));
   }
@@ -109,13 +110,12 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task SettingsFolderNotSpecified() {
     MockFileSystemService.ExpectedFileExists = false;
-    MockFolderChooser.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
     var command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
-    Assert.That(MockAlertService.ShowAlertCount, Is.EqualTo(1));
-    Assert.That(MockAlertService.LastTitle, Is.EqualTo("Error"));
-    Assert.That(MockAlertService.LastMessage, Is.EqualTo(
+    Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogWrapper.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: a settings folder has not been specified."));
   }
 }

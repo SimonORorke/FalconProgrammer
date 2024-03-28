@@ -4,7 +4,8 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class SettingsWriterViewModelBase : ViewModelBase {
+public abstract class SettingsWriterViewModelBase(IDialogWrapper dialogWrapper)
+  : ViewModelBase(dialogWrapper) {
   private SettingsFolderLocation? _settingsFolderLocation;
   private string? _settingsFolderPath;
   private bool HaveSettingsBeenUpdated { get; set; }
@@ -35,14 +36,14 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   }
 
   private bool CanSaveSettings() {
-    // The alerts won't show if the application is closing.
+    // The message box won't show if the application is closing.
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
-      AlertService.ShowAlert("Error",
+      DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Settings cannot be saved: a settings folder has not been specified.");
       return false;
     }
     if (!FileSystemService.FolderExists(SettingsFolderPath)) {
-      AlertService.ShowAlert("Error",
+      DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Settings cannot be saved: cannot find settings folder "
         + $"'{SettingsFolderPath}'.");
       return false;

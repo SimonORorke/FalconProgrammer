@@ -1,4 +1,6 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.Tests.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -6,11 +8,11 @@ namespace FalconProgrammer.Tests.ViewModel;
 public class ServiceHelperTests {
   [Test]
   public void Main() {
-    var mockAlertService = new MockAlertService();
+    var mockService = new MockFileSystemService();
     var mockServiceProvider = new MockServiceProvider();
-    mockServiceProvider.Services.Add(mockAlertService);
+    mockServiceProvider.Services.Add(mockService);
     var serviceHelper = new ServiceHelper();
     serviceHelper.Initialise(mockServiceProvider);
-    Assert.That(serviceHelper.GetService<IAlertService>(), Is.SameAs(mockAlertService));
+    Assert.That(serviceHelper.GetService<IFileSystemService>(), Is.SameAs(mockService));
   }
 }

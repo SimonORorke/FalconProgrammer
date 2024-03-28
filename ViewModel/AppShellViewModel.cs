@@ -1,6 +1,7 @@
 ﻿namespace FalconProgrammer.ViewModel;
 
-public class AppShellViewModel : ViewModelBase {
+public class AppShellViewModel(IDialogWrapper dialogWrapper)
+  : ViewModelBase(dialogWrapper) {
   private string _currentPageTitle = string.Empty;
 
   public string CurrentPageTitle {

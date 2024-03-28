@@ -3,7 +3,8 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class LocationsViewModel : SettingsWriterViewModelBase {
+public partial class LocationsViewModel(IDialogWrapper dialogWrapper)
+  : SettingsWriterViewModelBase(dialogWrapper) {
   // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
   // and RelayCommand attributes.
 
@@ -52,8 +53,9 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
-    string? path = await FileChooser.ChooseAsync(
-      "Select the default template Falcon program", "*.uvip");
+    string? path = await DialogWrapper.BrowseForFileAsync(this,
+      "Select the default template Falcon program",
+      "Falcon Programs", "uvip");
     if (path != null) {
       DefaultTemplatePath = path;
     }
@@ -61,7 +63,8 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForOriginalProgramsFolder() {
-    string? path = await FolderChooser.ChooseAsync();
+    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+      "Select the Original Programs folder");
     if (path != null) {
       OriginalProgramsFolderPath = path;
     }
@@ -69,7 +72,8 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForProgramsFolder() {
-    string? path = await FolderChooser.ChooseAsync();
+    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+      "Select the Programs folder");
     if (path != null) {
       ProgramsFolderPath = path;
     }
@@ -77,7 +81,8 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForSettingsFolder() {
-    string? path = await FolderChooser.ChooseAsync();
+    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+      "Select the Settings folder");
     if (path != null) {
       SettingsFolderPath = path;
     }
@@ -85,7 +90,8 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForTemplateProgramsFolder() {
-    string? path = await FolderChooser.ChooseAsync();
+    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+      "Select the Template Programs folder");
     if (path != null) {
       TemplateProgramsFolderPath = path;
     }

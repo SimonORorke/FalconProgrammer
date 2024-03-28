@@ -1,22 +1,51 @@
+using System;
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using FalconProgrammer.Services;
+using FalconProgrammer.ViewModel;
 using FalconProgrammer.ViewModels;
-using FalconProgrammer.Views;
+using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.Avalonia;
+using Microsoft.Extensions.Logging;
+using Splat;
 
 namespace FalconProgrammer;
 
 public class App : Application {
+  private static IDialogService DialogService {
+    get {
+      var dialogWrapper = (DialogWrapper)Locator.Current.GetService<IDialogWrapper>()!;
+      return dialogWrapper.DialogService;
+    }
+  }
+
+  private static MainWindowViewModel MainWindowViewModel =>
+    Locator.Current.GetService<MainWindowViewModel>()!;
+
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
+    var build = Locator.CurrentMutable;
+    var loggerFactory = LoggerFactory.Create(
+      // ReSharper disable once UnusedParameter.Local
+      builder => builder.AddFilter(logLevel => true).AddDebug());
+    build.RegisterLazySingleton(
+      () => (IDialogWrapper)new DialogWrapper(loggerFactory));
+    SplatRegistrations.Register<MainWindowViewModel>();
+    SplatRegistrations.Register<AppShellViewModel>();
+    SplatRegistrations.Register<BatchScriptViewModel>();
+    SplatRegistrations.Register<GuiScriptProcessorViewModel>();
+    SplatRegistrations.Register<LocationsViewModel>();
+    SplatRegistrations.SetupIOC();
   }
 
   public override void OnFrameworkInitializationCompleted() {
-    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-      desktop.MainWindow = new MainWindow {
-        DataContext = new MainWindowViewModel()
-      };
-    }
+    GC.KeepAlive(typeof(DialogService));
+    DialogService.Show(null, MainWindowViewModel);
+    // if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+    //   desktop.MainWindow = new MainWindow {
+    //     DataContext = new MainWindowViewModel()
+    //   };
+    // }
     base.OnFrameworkInitializationCompleted();
   }
 }
