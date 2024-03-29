@@ -14,13 +14,13 @@ public class ServiceHelper {
   public static ServiceHelper Default => _default ??= new ServiceHelper();
 
   public string CurrentPageTitle { get; set; } = string.Empty;
-  private IServiceProvider Services { get; set; } = null!;
+  private IServiceProvider? Services { get; set; }
 
   public void Initialise(IServiceProvider serviceProvider) {
     Services = serviceProvider;
   }
 
   public T? GetService<T>() {
-    return Services.GetService<T>();
+    return Services != null ? Services.GetService<T>() : default;
   }
 }
