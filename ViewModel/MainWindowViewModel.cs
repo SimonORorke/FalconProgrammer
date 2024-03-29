@@ -2,7 +2,6 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class MainWindowViewModel(IDialogWrapper dialogWrapper)
-  : ViewModelBase(dialogWrapper) {
+public partial class MainWindowViewModel : ObservableObject {
   [ObservableProperty] private string _greeting = "Welcome to Avalonia!";
 }

@@ -3,6 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FalconProgrammer.ViewModel;
 
+/// <summary>
+///   TODO: ServiceHelper alternative? It's now only used for classes from the model.
+///   TODO: Can ServiceHelper.CurrentPageTitle be replaced with a message?
+/// </summary>
 public class ServiceHelper {
   private static ServiceHelper? _default;
 
