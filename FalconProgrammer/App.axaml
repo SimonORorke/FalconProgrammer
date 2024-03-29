@@ -11,11 +11,11 @@
 
     <Application.Styles>
         <FluentTheme />
-        <Style Selector="Button">
-            <Setter Property="FontSize" Value="18"/>
-        </Style>
-        <Style Selector="TextBlock">
-            <Setter Property="FontSize" Value="18"/>
-        </Style>
+        <!-- <Style Selector="Button"> -->
+        <!--     <Setter Property="FontSize" Value="18"/> -->
+        <!-- </Style> -->
+        <!-- <Style Selector="TextBlock"> -->
+        <!--     <Setter Property="FontSize" Value="18"/> -->
+        <!-- </Style> -->
     </Application.Styles>
 </Application>

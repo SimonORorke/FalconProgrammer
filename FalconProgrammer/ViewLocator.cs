@@ -21,18 +21,28 @@ public class ViewLocator : ViewLocatorBase {
   private string ViewsNameSpace => _viewsNameSpace ??=
     $"{ThisAssembly.GetName().Name!}.Views";
 
-  /// <inheritdoc />
+  internal ContentControl? ContentControlViewInstance { get; private set; }
+  
+  protected override object CreateViewInstance(Type viewType) {
+    object result = base.CreateViewInstance(viewType);
+    if (result is ContentControl contentControl) {
+      ContentControlViewInstance = contentControl;
+    }
+    return result;
+  }
+
   protected override string GetViewName(object viewModel) {
     string viewModelShortName = viewModel.GetType().Name;
     string viewShortName = viewModelShortName.EndsWith("WindowViewModel")
-      // E.g view model MainWindowViewModel, view MainWindow. 
+      // E.g. view model MainWindowViewModel, view MainWindow. 
       ? viewModelShortName.Replace("ViewModel", string.Empty)
-      // E.g view model LocationsViewModel, view LocationsView. 
+      // E.g. view model LocationsViewModel, view LocationsView. 
       : viewModelShortName.Replace("ViewModel", "View");
     string result = $"{ViewsNameSpace}.{viewShortName}";
     return result;
   }
 
+  /// <inheritdoc />
   public override ViewDefinition Locate(object viewModel) {
     // This override code is the same as in the base method, except that the base method
     // won't work for us because it assumes the view is in the same assembly as the view
