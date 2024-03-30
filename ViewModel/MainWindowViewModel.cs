@@ -23,17 +23,8 @@ public partial class MainWindowViewModel(IDialogWrapper dialogWrapper)
     return list.ToImmutableList();
   }
 
-  // public BatchScriptViewModel BatchScriptViewModel { get; } =
-  //   new BatchScriptViewModel(dialogWrapper);
-  //
-  // public GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; } =
-  //   new GuiScriptProcessorViewModel(dialogWrapper);
-  //
-  // public LocationsViewModel LocationsViewModel { get; } =
-  //   new LocationsViewModel(dialogWrapper);
-  //
-  // public void OnSelectedViewModelChanged(ViewModelBase toViewModel) {
-  //   Debug.WriteLine(
-  //     $"MainWindowViewModel.OnSelectedViewModelChanged: {toViewModel.GetType().Name}");
-  // }
+  public void OnSelectedTabChanged(TabItemViewModel tab) {
+    Console.WriteLine(
+      $"MainWindowViewModel.OnSelectedTabChanged: {tab.Header}; {tab.ViewModel.GetType().Name}");
+  }
 }
