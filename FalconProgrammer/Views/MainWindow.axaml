@@ -3,7 +3,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
-        xmlns:views="using:FalconProgrammer.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="FalconProgrammer.Views.MainWindow"
         x:DataType="viewModel:MainWindowViewModel"
@@ -11,8 +10,8 @@
         Title="Falcon Programmer">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <!-- This only sets the DataContext for the previewer in an IDE. -->
+        <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModel:MainWindowViewModel />
     </Design.DataContext>
 
@@ -24,17 +23,17 @@
                        VerticalAlignment="Center"
                        Margin="10,0" />
         </StackPanel>
-        <TabControl>
-            <TabItem Header="Locations">
-                <ContentControl Content="{Binding LocationsViewModel}" />
-            </TabItem>
-            <TabItem Header="Script Processor">
-                <TextBlock Margin="5">This is tab 2 content</TextBlock>
-            </TabItem>
-            <TabItem Header="Batch Script">
-                <TextBlock Margin="5">This is tab 3 content</TextBlock>
-            </TabItem>
+        <TabControl ItemsSource="{Binding TabItemViewModels}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="viewModel:TabItemViewModel" 
+                              Content="{Binding ViewModel}" >
+                </DataTemplate>
+            </TabControl.ContentTemplate>
         </TabControl>
     </DockPanel>
-
 </Window>
