@@ -48,7 +48,8 @@ public class ViewLocator : ViewLocatorBase {
     // won't work for us because it assumes the view is in the same assembly as the view
     // model.
     string viewName = GetViewName(viewModel);
-    var viewType = ThisAssembly.GetType(viewName);
+    // This is the line that differs from the base method.
+    var viewType = ThisAssembly.GetType(viewName); 
     return viewType != null
            && (typeof(Control).IsAssignableFrom(viewType) ||
                typeof(Window).IsAssignableFrom(viewType) ||
