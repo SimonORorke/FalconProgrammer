@@ -23,14 +23,9 @@
                        VerticalAlignment="Center"
                        Margin="10,0" />
         </StackPanel>
-        <!-- Binding TabControl.SelectedContent with Mode=OneWayToSource,
-        which is required for read-only properties, throws StackOverflowException.
-        This is a known issue in Avalonia UI. 
-        See https://github.com/AvaloniaUI/Avalonia/issues/4438
-        The workaround is to handle the TabControl.SelectionChanged event 
-        in code behind. -->
         <TabControl x:Name="TabControl" 
-                    ItemsSource="{Binding TabItemViewModels}">
+                    ItemsSource="{Binding Tabs}"
+                    SelectedItem="{Binding SelectedTab}" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Header}" />

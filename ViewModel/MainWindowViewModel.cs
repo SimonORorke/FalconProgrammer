@@ -6,11 +6,12 @@ namespace FalconProgrammer.ViewModel;
 public partial class MainWindowViewModel(IDialogWrapper dialogWrapper)
   : ViewModelBase(dialogWrapper) {
   [ObservableProperty] private string _currentPageTitle = "Welcome to Avalonia!";
+  [ObservableProperty] private TabItemViewModel? _selectedTab;
 
-  public ImmutableList<TabItemViewModel> TabItemViewModels { get; } = 
-    CreateTabItemModels(dialogWrapper);
+  public ImmutableList<TabItemViewModel> Tabs { get; } = 
+    CreateTabs(dialogWrapper);
 
-  private static ImmutableList<TabItemViewModel> CreateTabItemModels(
+  private static ImmutableList<TabItemViewModel> CreateTabs(
     IDialogWrapper dialogWrapper) {
     var list = new List<TabItemViewModel> {
       new TabItemViewModel(
@@ -22,9 +23,11 @@ public partial class MainWindowViewModel(IDialogWrapper dialogWrapper)
     };
     return list.ToImmutableList();
   }
-
-  public void OnSelectedTabChanged(TabItemViewModel tab) {
-    Console.WriteLine(
-      $"MainWindowViewModel.OnSelectedTabChanged: {tab.Header}; {tab.ViewModel.GetType().Name}");
+  
+  partial void OnSelectedTabChanged(TabItemViewModel? value) {
+    if (value != null) {
+      Console.WriteLine(
+        $"MainWindowViewModel.OnSelectedTabChanged: {value.Header}; {value.ViewModel.GetType().Name}");
+    }
   }
 }
