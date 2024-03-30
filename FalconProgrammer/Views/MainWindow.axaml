@@ -30,8 +30,8 @@
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
-                <DataTemplate DataType="viewModel:TabItemViewModel" 
-                              Content="{Binding ViewModel}" >
+                <DataTemplate DataType="viewModel:TabItemViewModel">
+                    <ContentControl Content="{Binding ViewModel}" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
