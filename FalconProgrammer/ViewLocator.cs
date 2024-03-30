@@ -27,6 +27,8 @@ public class ViewLocator : ViewLocatorBase {
     object result = base.CreateViewInstance(viewType);
     if (result is ContentControl contentControl) {
       ContentControlViewInstance = contentControl;
+    } else {
+      ContentControlViewInstance = null;
     }
     return result;
   }
