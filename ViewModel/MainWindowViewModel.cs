@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FalconProgrammer.ViewModel;
@@ -7,30 +6,22 @@ namespace FalconProgrammer.ViewModel;
 public partial class MainWindowViewModel(
   IDialogWrapper dialogWrapper,
   IDispatcherService dispatcherService)
-  : ViewModelBase(dialogWrapper, dispatcherService) {
-  
-  private ImmutableList<TabItemViewModel>? _tabs;
-  
+  : ObservableObject {
   [ObservableProperty] private string _currentPageTitle = string.Empty;
   [ObservableProperty] private TabItemViewModel? _selectedTab;
+  private ImmutableList<TabItemViewModel>? _tabs;
 
   internal BatchScriptViewModel BatchScriptViewModel { get; } =
-    new BatchScriptViewModel(dialogWrapper, dispatcherService); 
+    new BatchScriptViewModel(dialogWrapper, dispatcherService);
 
   internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; } =
-    new GuiScriptProcessorViewModel(dialogWrapper, dispatcherService); 
+    new GuiScriptProcessorViewModel(dialogWrapper, dispatcherService);
 
   internal LocationsViewModel LocationsViewModel { get; } =
-    new LocationsViewModel(dialogWrapper, dispatcherService); 
+    new LocationsViewModel(dialogWrapper, dispatcherService);
 
   public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
-  /// <summary>
-  ///   Not required, as the title of the current tab page will be shown.
-  /// </summary>
-  [ExcludeFromCodeCoverage]
-  public override string PageTitle => string.Empty;
-  
   private ImmutableList<TabItemViewModel> CreateTabs() {
     var list = new List<TabItemViewModel> {
       new TabItemViewModel(LocationsViewModel),
@@ -43,9 +34,7 @@ public partial class MainWindowViewModel(
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (value != null) {
       CurrentPageTitle = value.ViewModel.PageTitle;
-      // Console.WriteLine(
-      //   $"MainWindowViewModel.OnSelectedTabChanged: {value.Header}; {value.ViewModel.GetType().Name}");
-      // DispatcherService.Dispatch(()=>SelectedTab = Tabs[1]);
+      // DispatcherService.Dispatch(()=> SelectedTab = Tabs[1]);
     }
   }
 }

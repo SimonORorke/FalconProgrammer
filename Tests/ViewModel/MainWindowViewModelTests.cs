@@ -7,10 +7,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new MainWindowViewModel(MockDialogWrapper, MockDispatcherService) {
-      View = MockView,
-      ModelServices = ModelServices
-    };
+    ViewModel = new MainWindowViewModel(MockDialogWrapper, MockDispatcherService);
   }
 
   private MainWindowViewModel ViewModel { get; set; } = null!;
