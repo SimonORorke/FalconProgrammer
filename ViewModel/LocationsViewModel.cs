@@ -31,6 +31,8 @@ public partial class LocationsViewModel(
     }
   }
 
+  public override string PageTitle => "Locations";
+
   [PublicAPI]
   public string ProgramsFolderPath {
     get => Settings.ProgramsFolder.Path;
@@ -52,7 +54,7 @@ public partial class LocationsViewModel(
       }
     }
   }
-
+  
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
     string? path = await DialogWrapper.BrowseForFileAsync(this,

@@ -23,6 +23,18 @@ public abstract class ViewModelBase(
 
   protected bool IsVisible { get; private set; }
 
+  /// <summary>
+  ///   Title to be shown at the top of the main window when the page is selected and
+  ///   shown.
+  /// </summary>
+  public abstract string PageTitle { get; }
+
+  /// <summary>
+  ///   Title to be shown on the page's tab. Defaults to the same as
+  ///   <see cref="PageTitle" />.
+  /// </summary>
+  public virtual string TabTitle => PageTitle;
+
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   protected ISerialiser Serialiser =>
     // The Avalonia UI App won't be providing an ISerialiser to ServiceHelper.

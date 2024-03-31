@@ -11,6 +11,11 @@ public class GuiScriptProcessorViewModel(
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService);
 
+  public override string PageTitle => 
+    "Falcon program categories that must use a GUI script processor";
+  
+  public override string TabTitle => "GUI script processor";
+  
   protected override void Initialise() {
     // Debug.WriteLine("GuiScriptProcessorViewModel.Initialise");
     base.Initialise(); // Reads Settings.

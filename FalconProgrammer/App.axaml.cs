@@ -32,7 +32,6 @@ public class App : Application {
     build.RegisterLazySingleton(
       () => (IDispatcherService)new DispatcherService());
     SplatRegistrations.Register<MainWindowViewModel>();
-    SplatRegistrations.Register<AppShellViewModel>();
     SplatRegistrations.Register<BatchScriptViewModel>();
     SplatRegistrations.Register<GuiScriptProcessorViewModel>();
     SplatRegistrations.Register<LocationsViewModel>();
