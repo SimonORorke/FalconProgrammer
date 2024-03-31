@@ -16,13 +16,9 @@ public class ModelServices(params object[] services) {
     new SettingsReader());
   private IEnumerable<object> Services { get; } = services;
 
-  private object? GetService(Type serviceType) {
-    return (from service in Services
-      where serviceType.IsInstanceOfType(service)
-      select service).FirstOrDefault();
-  }
-
   public T GetService<T>() {
-    return (T)GetService(typeof(T))!;
+    return (T)(from service in Services
+      where service is T
+      select service).First();
   }
 }
