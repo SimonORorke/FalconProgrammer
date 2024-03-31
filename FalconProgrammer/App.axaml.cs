@@ -29,6 +29,8 @@ public class App : Application {
       builder => builder.AddFilter(logLevel => true).AddDebug());
     build.RegisterLazySingleton(
       () => (IDialogWrapper)new DialogWrapper(loggerFactory));
+    build.RegisterLazySingleton(
+      () => (IDispatcherService)new DispatcherService());
     SplatRegistrations.Register<MainWindowViewModel>();
     SplatRegistrations.Register<AppShellViewModel>();
     SplatRegistrations.Register<BatchScriptViewModel>();

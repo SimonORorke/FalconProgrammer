@@ -4,13 +4,16 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ViewModelBase(IDialogWrapper dialogWrapper) : ObservableObject {
+public abstract class ViewModelBase(
+  IDialogWrapper dialogWrapper,
+  IDispatcherService dispatcherService) : ObservableObject {
   private IFileSystemService? _fileSystemService;
   private ISerialiser? _serialiser;
   private ServiceHelper? _serviceHelper;
   private Settings? _settings;
   private SettingsReader? _settingsReader;
   protected IDialogWrapper DialogWrapper { get; } = dialogWrapper;
+  protected IDispatcherService DispatcherService { get; } = dispatcherService;
 
   internal IFileSystemService FileSystemService =>
     // The Avalonia UI App won't be providing an IFileSystemService to ServiceHelper.
@@ -55,7 +58,7 @@ public abstract class ViewModelBase(IDialogWrapper dialogWrapper) : ObservableOb
     IsVisible = true;
     // Reads Settings on the Dispatcher thread so that any updates to Settings made on
     // the previous page will be available on this one.
-    View.Dispatch(Initialise);
+    DispatcherService.Dispatch(Initialise);
     // new Thread(Initialise).Start(); // Does not work, needs Dispatcher.
   }
 

@@ -8,6 +8,7 @@ public abstract class ViewModelTestsBase {
   [SetUp]
   public virtual void Setup() {
     MockDialogWrapper = new MockDialogWrapper();
+    MockDispatcherService = new MockDispatcherService();
     MockFileSystemService = new MockFileSystemService();
     MockSerialiser = new MockSerialiser();
     MockView = new MockContentPageBase();
@@ -28,6 +29,7 @@ public abstract class ViewModelTestsBase {
   }
 
   protected MockDialogWrapper MockDialogWrapper { get; private set; } = null!;
+  protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected MockContentPageBase MockView { get; private set; } = null!;

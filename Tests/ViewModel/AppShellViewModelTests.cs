@@ -7,7 +7,7 @@ public class AppShellViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new AppShellViewModel(MockDialogWrapper) {
+    ViewModel = new AppShellViewModel(MockDialogWrapper, MockDispatcherService) {
       View = MockView,
       ServiceHelper = ServiceHelper
     };

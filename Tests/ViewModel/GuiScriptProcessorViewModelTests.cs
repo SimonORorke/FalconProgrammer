@@ -36,7 +36,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new GuiScriptProcessorViewModel(MockDialogWrapper) {
+    ViewModel = new GuiScriptProcessorViewModel(MockDialogWrapper, MockDispatcherService) {
       View = MockView,
       ServiceHelper = ServiceHelper
     };
@@ -62,7 +62,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     MockFileSystemService.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
     ViewModel.OnAppearing(); // Reads settings to populate the page.
-    Assert.That(MockView.DispatchCount, Is.EqualTo(1));
+    Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Factory"));

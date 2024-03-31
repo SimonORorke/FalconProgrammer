@@ -2,8 +2,10 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class GuiScriptProcessorViewModel(IDialogWrapper dialogWrapper)
-  : SettingsWriterViewModelBase(dialogWrapper) {
+public class GuiScriptProcessorViewModel(
+  IDialogWrapper dialogWrapper,
+  IDispatcherService dispatcherService)
+  : SettingsWriterViewModelBase(dialogWrapper, dispatcherService) {
   private SoundBankCategoryCollection? _soundBankCategories;
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
@@ -34,7 +36,7 @@ public class GuiScriptProcessorViewModel(IDialogWrapper dialogWrapper)
       View.GoToLocationsPage();
       return;
     }
-    SoundBankCategories.Populate(Settings, soundBanks, View.Dispatch);
+    SoundBankCategories.Populate(Settings, soundBanks, DispatcherService);
   }
 
   public override void OnDisappearing() {

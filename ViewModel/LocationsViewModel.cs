@@ -3,8 +3,10 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class LocationsViewModel(IDialogWrapper dialogWrapper)
-  : SettingsWriterViewModelBase(dialogWrapper) {
+public partial class LocationsViewModel(
+  IDialogWrapper dialogWrapper,
+  IDispatcherService dispatcherService)
+  : SettingsWriterViewModelBase(dialogWrapper, dispatcherService) {
   // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
   // and RelayCommand attributes.
 

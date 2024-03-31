@@ -4,8 +4,10 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class SettingsWriterViewModelBase(IDialogWrapper dialogWrapper)
-  : ViewModelBase(dialogWrapper) {
+public abstract class SettingsWriterViewModelBase(
+  IDialogWrapper dialogWrapper,
+  IDispatcherService dispatcherService)
+  : ViewModelBase(dialogWrapper, dispatcherService) {
   private SettingsFolderLocation? _settingsFolderLocation;
   private string? _settingsFolderPath;
   private bool HaveSettingsBeenUpdated { get; set; }

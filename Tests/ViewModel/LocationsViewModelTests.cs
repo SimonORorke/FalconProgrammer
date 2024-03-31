@@ -9,7 +9,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new LocationsViewModel(MockDialogWrapper) {
+    ViewModel = new LocationsViewModel(MockDialogWrapper, MockDispatcherService) {
       View = MockView,
       ServiceHelper = ServiceHelper
     };
