@@ -14,6 +14,8 @@ public partial class MainWindowViewModel(
   internal BatchScriptViewModel BatchScriptViewModel { get; } =
     new BatchScriptViewModel(dialogWrapper, dispatcherService);
 
+  private ViewModelBase? CurrentPageViewModel { get; set; }
+
   internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; } =
     new GuiScriptProcessorViewModel(dialogWrapper, dispatcherService);
 
@@ -31,9 +33,16 @@ public partial class MainWindowViewModel(
     return list.ToImmutableList();
   }
 
+  public void OnClosing() {
+    CurrentPageViewModel?.OnDisappearing();
+  }
+
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (value != null) {
-      CurrentPageTitle = value.ViewModel.PageTitle;
+      CurrentPageViewModel?.OnDisappearing();
+      CurrentPageViewModel = value.ViewModel;
+      CurrentPageTitle = CurrentPageViewModel.PageTitle;
+      CurrentPageViewModel.OnAppearing();
       // DispatcherService.Dispatch(()=> SelectedTab = Tabs[1]);
     }
   }
