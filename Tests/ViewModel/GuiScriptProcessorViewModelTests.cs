@@ -38,7 +38,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     base.Setup();
     ViewModel = new GuiScriptProcessorViewModel(MockDialogWrapper, MockDispatcherService) {
       View = MockView,
-      ServiceHelper = ServiceHelper
+      ModelServices = ModelServices
     };
   }
 

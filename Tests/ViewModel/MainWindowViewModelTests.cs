@@ -9,7 +9,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     base.Setup();
     ViewModel = new MainWindowViewModel(MockDialogWrapper, MockDispatcherService) {
       View = MockView,
-      ServiceHelper = ServiceHelper
+      ModelServices = ModelServices
     };
   }
 

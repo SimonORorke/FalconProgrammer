@@ -9,17 +9,14 @@ public abstract class ViewModelBase(
   IDispatcherService dispatcherService) : ObservableObject {
   private IFileSystemService? _fileSystemService;
   private ISerialiser? _serialiser;
-  private ServiceHelper? _serviceHelper;
+  private ModelServices? _modelServices;
   private Settings? _settings;
   private SettingsReader? _settingsReader;
   protected IDialogWrapper DialogWrapper { get; } = dialogWrapper;
   protected IDispatcherService DispatcherService { get; } = dispatcherService;
 
   internal IFileSystemService FileSystemService =>
-    // The Avalonia UI App won't be providing an IFileSystemService to ServiceHelper.
-    // But tests may.
-    _fileSystemService ??= ServiceHelper.GetService<IFileSystemService>() ??
-                           Model.FileSystemService.Default;
+    _fileSystemService ??= ModelServices.GetService<IFileSystemService>();
 
   protected bool IsVisible { get; private set; }
 
@@ -37,15 +34,12 @@ public abstract class ViewModelBase(
 
   [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
   protected ISerialiser Serialiser =>
-    // The Avalonia UI App won't be providing an ISerialiser to ServiceHelper.
-    // But tests may.
-    _serialiser ??= ServiceHelper.GetService<ISerialiser>() ??
-                    Model.Serialiser.Default;
+    _serialiser ??= ModelServices.GetService<ISerialiser>();
 
-  public ServiceHelper ServiceHelper {
-    [ExcludeFromCodeCoverage] get => _serviceHelper ??= ServiceHelper.Default;
+  internal ModelServices ModelServices {
+    [ExcludeFromCodeCoverage] get => _modelServices ??= ModelServices.Default;
     // For unit testing.
-    internal set => _serviceHelper = value;
+    set => _modelServices = value;
   }
 
   internal Settings Settings {
@@ -54,10 +48,7 @@ public abstract class ViewModelBase(
   }
 
   private SettingsReader SettingsReader =>
-    // The Avalonia UI App won't be providing a SettingsReader to ServiceHelper.
-    // But tests may.
-    _settingsReader ??= ServiceHelper.GetService<SettingsReader>() ??
-                        new SettingsReader();
+    _settingsReader ??= ModelServices.GetService<SettingsReader>(); 
 
   public IContentPageBase View { get; set; } = null!;
 
