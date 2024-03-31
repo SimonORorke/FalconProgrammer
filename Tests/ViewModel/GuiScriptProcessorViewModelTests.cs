@@ -37,8 +37,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     ViewModel = new GuiScriptProcessorViewModel(MockDialogWrapper, MockDispatcherService) {
-      View = MockView,
-      ModelServices = ModelServices
+      Navigator = MockView,
+      ModelServices = TestModelServices
     };
   }
 

@@ -1,5 +1,5 @@
 ﻿namespace FalconProgrammer.ViewModel;
 
-public interface IContentPageBase {
+public interface INavigator {
   void GoToLocationsPage();
 }

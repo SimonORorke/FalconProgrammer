@@ -10,8 +10,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     ViewModel = new LocationsViewModel(MockDialogWrapper, MockDispatcherService) {
-      View = MockView,
-      ModelServices = ModelServices
+      Navigator = MockView,
+      ModelServices = TestModelServices
     };
     ViewModel.OnAppearing();
   }

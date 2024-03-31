@@ -11,7 +11,7 @@ public abstract class ViewModelTestsBase {
     MockDispatcherService = new MockDispatcherService();
     MockFileSystemService = new MockFileSystemService();
     MockSerialiser = new MockSerialiser();
-    MockView = new MockContentPageBase();
+    MockView = new MockNavigator();
     TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
       MockFileSystemService = MockFileSystemService,
       MockSerialiserForSettings = MockSerialiser,
@@ -19,7 +19,7 @@ public abstract class ViewModelTestsBase {
         EmbeddedResourceFileName = "DefaultAlreadySettings.xml"
       }
     };
-    ModelServices = new ModelServices(MockFileSystemService, MockSerialiser,
+    TestModelServices = new ModelServices(MockFileSystemService, MockSerialiser,
       TestSettingsReaderEmbedded);
   }
 
@@ -27,8 +27,8 @@ public abstract class ViewModelTestsBase {
   protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
-  protected MockContentPageBase MockView { get; private set; } = null!;
-  protected ModelServices ModelServices { get; private set; } = null!;
+  protected MockNavigator MockView { get; private set; } = null!;
+  protected ModelServices TestModelServices { get; private set; } = null!;
 
   protected TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; private set; } =
     null!;

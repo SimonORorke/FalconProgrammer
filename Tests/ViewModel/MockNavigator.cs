@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class MockContentPageBase : IContentPageBase {
+public class MockNavigator : INavigator {
   [PublicAPI] internal int GoToLocationsPageCount { get; set; }
 
   public void GoToLocationsPage() {

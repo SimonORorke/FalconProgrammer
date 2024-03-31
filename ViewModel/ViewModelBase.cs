@@ -42,6 +42,8 @@ public abstract class ViewModelBase(
     set => _modelServices = value;
   }
 
+  internal INavigator Navigator { get; set; } = null!;
+
   internal Settings Settings {
     get => _settings ??= ReadSettings();
     private set => _settings = value;
@@ -49,8 +51,6 @@ public abstract class ViewModelBase(
 
   private SettingsReader SettingsReader =>
     _settingsReader ??= ModelServices.GetService<SettingsReader>(); 
-
-  public IContentPageBase View { get; set; } = null!;
 
   protected virtual void Initialise() {
     Settings = ReadSettings();
