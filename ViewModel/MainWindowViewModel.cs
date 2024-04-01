@@ -10,8 +10,17 @@ public partial class MainWindowViewModel(
   IDialogWrapper dialogWrapper,
   IDispatcherService dispatcherService)
   : ViewModelBase(dialogWrapper, dispatcherService), INavigator {
+  
+  /// <summary>
+  ///   Generates CurrentPageTitle property and partial OnCurrentPageTitleChanged method.
+  /// </summary>
   [ObservableProperty] private string _currentPageTitle = string.Empty;
+  
+  /// <summary>
+  ///   Generates SelectedTab property property and partial OnSelectedTabChanged method.
+  /// </summary>
   [ObservableProperty] private TabItemViewModel? _selectedTab;
+  
   private ImmutableList<TabItemViewModel>? _tabs;
 
   /// <summary>
