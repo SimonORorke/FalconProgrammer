@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace FalconProgrammer.ViewModel;
 
 [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
+[SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 public partial class MainWindowViewModel(
   IDialogWrapper dialogWrapper,
   IDispatcherService dispatcherService)
@@ -13,15 +14,26 @@ public partial class MainWindowViewModel(
   [ObservableProperty] private TabItemViewModel? _selectedTab;
   private ImmutableList<TabItemViewModel>? _tabs;
 
-  internal virtual BatchScriptViewModel BatchScriptViewModel { get; } =
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  internal virtual BatchScriptViewModel BatchScriptViewModel { get; set; } =
     new BatchScriptViewModel(dialogWrapper, dispatcherService);
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
-  internal virtual GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; } =
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  internal virtual GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; } =
     new GuiScriptProcessorViewModel(dialogWrapper, dispatcherService);
 
-  internal virtual LocationsViewModel LocationsViewModel { get; } =
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  internal virtual LocationsViewModel LocationsViewModel { get; set; } =
     new LocationsViewModel(dialogWrapper, dispatcherService);
 
   /// <summary>
@@ -43,6 +55,7 @@ public partial class MainWindowViewModel(
       new TabItemViewModel(BatchScriptViewModel)
     };
     foreach (var tab in list) {
+      tab.ViewModel.ModelServices = ModelServices;
       tab.ViewModel.Navigator = this;
     }
     return list.ToImmutableList();

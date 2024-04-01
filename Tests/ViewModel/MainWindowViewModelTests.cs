@@ -4,34 +4,56 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 [TestFixture]
 public class MainWindowViewModelTests : ViewModelTestsBase {
+  private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } = null!;
+  private MainWindowViewModel ViewModel { get; set; } = null!;
+
+  [SetUp]
+  public override void Setup() {
+    base.Setup();
+    TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(
+      MockDialogWrapper, MockDispatcherService);
+    ViewModel = new MainWindowViewModel(
+      MockDialogWrapper, MockDispatcherService) {
+      ModelServices = TestModelServices,
+      GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel 
+    };
+  }
+
   [Test]
   public void Main() {
-    var viewModel = new TestMainWindowViewModel(MockDialogWrapper, MockDispatcherService);
-    Assert.That(viewModel.Tabs[0].Header,
-      Is.EqualTo(viewModel.LocationsViewModel.TabTitle));
-    Assert.That(viewModel.Tabs[2].Header,
-      Is.EqualTo(viewModel.BatchScriptViewModel.TabTitle));
+    // Access tabs to emulate the initial display of the main window.
+    // That will cause the tabs to be created and their associated page view models are
+    // configured correctly.  In particular, the page view models will get the default
+    // settings from an embedded resource file rather than reading the real settings file
+    // from the file system.
+    Assert.That(ViewModel.Tabs[0].Header,
+      Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
+    Assert.That(ViewModel.Tabs[2].Header,
+      Is.EqualTo(ViewModel.BatchScriptViewModel.TabTitle));
+    ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations view model 
     // Skip the GUI Script Processor page's initial validation.
     // Otherwise the validation might fail, resulting in the page immediately being
-    // replaced with the Location page.
-    // viewModel.TestGuiScriptProcessorViewModel.SkipInitialisation = true;
-    // var selectedPageViewModel = viewModel.TestGuiScriptProcessorViewModel;
-    var selectedPageViewModel = viewModel.TestGuiScriptProcessorViewModel;
-    viewModel.SelectedTab = new TabItemViewModel(selectedPageViewModel);
-    Assert.That(viewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
-    Assert.That(viewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
-    viewModel.OnClosing();
+    // replaced with the Locations page.
+    TestGuiScriptProcessorViewModel.SkipInitialisation = true;
+    var selectedPageViewModel = TestGuiScriptProcessorViewModel;
+    ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
+    Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
+    Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
+    ViewModel.OnClosing();
     Assert.That(selectedPageViewModel.OnDisappearingCount, Is.EqualTo(1));
   }
 
   [Test]
-  public void GoToLocationPage() {
-    var viewModel = new MainWindowViewModel(MockDialogWrapper, MockDispatcherService);
-    viewModel.GuiScriptProcessorViewModel.Navigator = viewModel;
-    var selectedPageViewModel = viewModel.GuiScriptProcessorViewModel;
+  public void GoToLocationsPage() {
+    // Access at least one tab to emulate the initial display of the main window.
+    // That will cause the tabs to be created and their associated page view models are
+    // configured correctly.  In particular, the page view models will get the default
+    // settings from an embedded resource file rather than reading the real settings file
+    // from the file system.
+    ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations view model 
     // The GUI Script Processor page's initial validation will fail, resulting in the
-    // page immediately being replaced with the Location page.
-    viewModel.SelectedTab = new TabItemViewModel(selectedPageViewModel);
-    Assert.That(viewModel.SelectedTab.ViewModel, Is.SameAs(viewModel.LocationsViewModel));
+    // page immediately being replaced with the Locations page.
+    ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
+    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
   }
 }

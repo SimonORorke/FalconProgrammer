@@ -10,15 +10,15 @@ public class TestGuiScriptProcessorViewModel(
   internal int OnDisappearingCount { get; set; }
   internal bool SkipInitialisation { get; set; }
 
-  // [ExcludeFromCodeCoverage]
-  // protected override void Initialise() {
-  //   if (!SkipInitialisation) {
-  //     base.Initialise();
-  //   }
-  // }
-  //
-  // public override void OnDisappearing() {
-  //   base.OnDisappearing();
-  //   OnDisappearingCount++;
-  // }
+  [ExcludeFromCodeCoverage]
+  protected override void Initialise() {
+    if (!SkipInitialisation) {
+      base.Initialise();
+    }
+  }
+  
+  public override void OnDisappearing() {
+    base.OnDisappearing();
+    OnDisappearingCount++;
+  }
 }
