@@ -22,7 +22,10 @@ public class Settings : SerialisationBase {
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static string GetSettingsPath(string settingsFolderPath) {
-    return Path.Combine(settingsFolderPath, "Settings.xml");
+    return !string.IsNullOrWhiteSpace(settingsFolderPath)
+      ? Path.Combine(settingsFolderPath, "Settings.xml")
+      : string.Empty;
+    // return Path.Combine(settingsFolderPath, "Settings.xml");
   }
 
   public bool MustUseGuiScriptProcessor(
