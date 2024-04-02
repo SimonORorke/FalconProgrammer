@@ -22,7 +22,7 @@ public class ViewLocator : ViewLocatorBase {
     $"{ThisAssembly.GetName().Name!}.Views";
 
   internal ContentControl? ContentControlViewInstance { get; private set; }
-  
+
   protected override object CreateViewInstance(Type viewType) {
     object result = base.CreateViewInstance(viewType);
     if (result is ContentControl contentControl) {
@@ -51,7 +51,7 @@ public class ViewLocator : ViewLocatorBase {
     // model.
     string viewName = GetViewName(viewModel);
     // This is the line that differs from the base method.
-    var viewType = ThisAssembly.GetType(viewName); 
+    var viewType = ThisAssembly.GetType(viewName);
     return viewType != null
            && (typeof(Control).IsAssignableFrom(viewType) ||
                typeof(Window).IsAssignableFrom(viewType) ||

@@ -4,9 +4,6 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 [TestFixture]
 public class MainWindowViewModelTests : ViewModelTestsBase {
-  private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } = null!;
-  private MainWindowViewModel ViewModel { get; set; } = null!;
-
   [SetUp]
   public override void Setup() {
     base.Setup();
@@ -15,9 +12,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel = new MainWindowViewModel(
       MockDialogWrapper, MockDispatcherService) {
       ModelServices = TestModelServices,
-      GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel 
+      GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
   }
+
+  private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
+    null!;
+
+  private MainWindowViewModel ViewModel { get; set; } = null!;
 
   [Test]
   public void Main() {
@@ -40,7 +42,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
     Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
     ViewModel.OnClosing();
-    Assert.That(selectedPageViewModel.OnDisappearingCount, Is.EqualTo(1));
+    Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
   }
 
   [Test]
@@ -55,5 +57,6 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // page immediately being replaced with the Locations page.
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
+    Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
   }
 }

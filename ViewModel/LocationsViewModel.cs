@@ -54,7 +54,7 @@ public partial class LocationsViewModel(
       }
     }
   }
-  
+
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
     string? path = await DialogWrapper.BrowseForFileAsync(this,

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.ViewModel;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -7,18 +8,21 @@ public class TestGuiScriptProcessorViewModel(
   IDialogWrapper dialogWrapper,
   IDispatcherService dispatcherService)
   : GuiScriptProcessorViewModel(dialogWrapper, dispatcherService) {
-  internal int OnDisappearingCount { get; set; }
+  [PublicAPI] internal int ClosedCount { get; set; }
   internal bool SkipInitialisation { get; set; }
 
   [ExcludeFromCodeCoverage]
-  protected override void Initialise() {
+  public override void Open() {
     if (!SkipInitialisation) {
-      base.Initialise();
+      base.Open();
     }
   }
-  
-  public override void OnDisappearing() {
-    base.OnDisappearing();
-    OnDisappearingCount++;
+
+  public override bool QueryClose() {
+    bool result = base.QueryClose();
+    if (result) {
+      ClosedCount++;
+    }
+    return result;
   }
 }

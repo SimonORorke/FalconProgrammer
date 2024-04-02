@@ -40,6 +40,8 @@ public abstract class SettingsWriterViewModelBase(
   private bool CanSaveSettings() {
     // The message box won't show if the application is closing.
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
+      // Console.WriteLine(
+      //   $"SettingsWriterViewModelBase.CanSaveSettings ({GetType().Name}): A settings folder has not been specified.");
       DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Settings cannot be saved: a settings folder has not been specified.");
       return false;
@@ -53,25 +55,23 @@ public abstract class SettingsWriterViewModelBase(
     return true;
   }
 
-  public override void OnDisappearing() {
-    base.OnDisappearing();
-    if (HaveSettingsBeenUpdated && CanSaveSettings()) {
-      SaveSettings();
-      HaveSettingsBeenUpdated = false;
-    }
-  }
-
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
     base.OnPropertyChanged(e);
     if (IsVisible) {
       HaveSettingsBeenUpdated = true;
-      // We don't want to show setting folder error messages if the user is in the
-      // process of specifying the settings folder.
-      if (e.PropertyName != nameof(SettingsFolderPath)) {
-        // We just want to see any settings folder error message box at this stage.
-        bool dummy = CanSaveSettings();
+    }
+  }
+
+  public override bool QueryClose() {
+    if (HaveSettingsBeenUpdated) {
+      if (CanSaveSettings()) {
+        SaveSettings();
+        HaveSettingsBeenUpdated = false;
+      } else {
+        return false;
       }
     }
+    return base.QueryClose();
   }
 
   private void SaveSettings() {

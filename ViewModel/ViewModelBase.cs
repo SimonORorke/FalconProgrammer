@@ -1,15 +1,16 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
 public abstract class ViewModelBase(
   IDialogWrapper dialogWrapper,
-  IDispatcherService dispatcherService) : ObservableObject {
+  IDispatcherService dispatcherService) : ObservableRecipient {
   private IFileSystemService? _fileSystemService;
-  private ISerialiser? _serialiser;
   private ModelServices? _modelServices;
+  private ISerialiser? _serialiser;
   private Settings? _settings;
   private SettingsReader? _settingsReader;
   protected IDialogWrapper DialogWrapper { get; } = dialogWrapper;
@@ -42,32 +43,32 @@ public abstract class ViewModelBase(
     set => _modelServices = value;
   }
 
-  internal INavigator Navigator { get; set; } = null!;
-
   internal Settings Settings {
     get => _settings ??= ReadSettings();
     private set => _settings = value;
   }
 
   private SettingsReader SettingsReader =>
-    _settingsReader ??= ModelServices.GetService<SettingsReader>(); 
+    _settingsReader ??= ModelServices.GetService<SettingsReader>();
 
-  protected virtual void Initialise() {
+  protected void GoToLocationsPage() {
+    // using CommunityToolkit.Mvvm.Messaging is needed to provide this Send extension
+    // method.
+    Messenger.Send(new GoToLocationsPageMessage());
+  }
+
+  public virtual void Open() {
+    // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
+    IsVisible = true;
+    IsActive = true; // Start listening for ObservableRecipient messages.
     Settings = ReadSettings();
   }
 
-  public virtual void OnAppearing() {
-    // Debug.WriteLine($"ViewModelBase.OnAppearing: {GetType().Name}");
-    IsVisible = true;
-    // Reads Settings on the Dispatcher thread so that any updates to Settings made on
-    // the previous page will be available on this one.
-    DispatcherService.Dispatch(Initialise);
-    // new Thread(Initialise).Start(); // Does not work, needs Dispatcher.
-  }
-
-  public virtual void OnDisappearing() {
-    // Debug.WriteLine($"ViewModelBase.OnDisappearing: {GetType().Name}");
+  public virtual bool QueryClose() {
+    // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
     IsVisible = false;
+    IsActive = false; // Stop listening for ObservableRecipient messages.
+    return true;
   }
 
   private Settings ReadSettings() {

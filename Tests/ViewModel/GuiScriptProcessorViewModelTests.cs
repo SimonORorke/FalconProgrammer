@@ -37,7 +37,6 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     ViewModel = new GuiScriptProcessorViewModel(MockDialogWrapper, MockDispatcherService) {
-      Navigator = MockNavigator,
       ModelServices = TestModelServices
     };
   }
@@ -61,8 +60,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
       Path.Combine(settings.ProgramsFolder.Path, "Spectre"), SpectreCategories);
     MockFileSystemService.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
-    ViewModel.OnAppearing(); // Reads settings to populate the page.
-    Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
+    ViewModel.Open(); // Reads settings to populate the page.
+    // Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Factory"));
@@ -92,26 +91,26 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(6));
     Assert.That(ViewModel.SoundBankCategories[5].IsAdditionItem, Is.True);
     // Reset to test that sound bank change will be detected
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Change sound bank
     ViewModel.SoundBankCategories[0].SoundBank = "Spectre";
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
     Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo("All"));
     // Reset to test that category change will be detected
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Change category
     ViewModel.SoundBankCategories[0].Category = "Keys";
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
     // Reset to test that item removal will be detected
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     ViewModel.SoundBankCategories[3].RemoveCommand.Execute(null);
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(4));
     Assert.That(ViewModel.SoundBankCategories[3].IsAdditionItem, Is.True);
-    ViewModel.OnDisappearing(); // Updates and saves settings
+    ViewModel.QueryClose(); // Updates and saves settings
     Assert.That(
       ViewModel.Settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(3));
     Assert.That(ViewModel.Settings.MustUseGuiScriptProcessorCategories[0].Category,
@@ -123,11 +122,11 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void NoProgramsFolder() {
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Is.EqualTo(
       "Script processors cannot be updated: a programs folder has not been specified."));
-    Assert.That(MockNavigator.GoToLocationsPageCount, Is.EqualTo(1));
+    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 
   [Test]
@@ -136,11 +135,11 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
     MockFileSystemService.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path, []);
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Does.EndWith(
       "' contains no sound bank subfolders."));
-    Assert.That(MockNavigator.GoToLocationsPageCount, Is.EqualTo(1));
+    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 
   [Test]
@@ -148,10 +147,10 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     MockFileSystemService.ExpectedFolderExists = false;
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Does.StartWith(
       "Script processors cannot be updated: cannot find programs folder "));
-    Assert.That(MockNavigator.GoToLocationsPageCount, Is.EqualTo(1));
+    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 }

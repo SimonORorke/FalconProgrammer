@@ -11,40 +11,42 @@ public class GuiScriptProcessorViewModel(
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService);
 
-  public override string PageTitle => 
+  public override string PageTitle =>
     "Falcon program categories that must use a GUI script processor";
-  
+
   public override string TabTitle => "GUI Script Processor";
-  
-  protected override void Initialise() {
-    // Debug.WriteLine("GuiScriptProcessorViewModel.Initialise");
-    base.Initialise(); // Reads Settings.
+
+  public override void Open() {
+    // Debug.WriteLine("GuiScriptProcessorViewModel.Open");
+    base.Open();
     if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
       DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Script processors cannot be updated: a programs folder has not been specified.");
-      Navigator.GoToLocationsPage();
+      GoToLocationsPage();
       return;
     }
     if (!FileSystemService.FolderExists(Settings.ProgramsFolder.Path)) {
       DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Script processors cannot be updated: cannot find programs folder "
         + $"'{Settings.ProgramsFolder.Path}'.");
-      Navigator.GoToLocationsPage();
+      GoToLocationsPage();
       return;
     }
     var soundBanks =
       FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path);
     if (soundBanks.Count == 0) {
+      // Console.WriteLine(
+      //   "GuiScriptProcessorViewModel.Open: No sound bank subfolders.");
       DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Script processors cannot be updated: programs folder "
         + $"'{Settings.ProgramsFolder.Path}' contains no sound bank subfolders.");
-      Navigator.GoToLocationsPage();
+      GoToLocationsPage();
       return;
     }
     SoundBankCategories.Populate(Settings, soundBanks, DispatcherService);
   }
 
-  public override void OnDisappearing() {
+  public override bool QueryClose() {
     if (SoundBankCategories.HasBeenChanged) {
       Settings.MustUseGuiScriptProcessorCategories.Clear();
       foreach (var soundBankCategory in SoundBankCategories) {
@@ -61,6 +63,6 @@ public class GuiScriptProcessorViewModel(
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
-    base.OnDisappearing(); // Saves settings if changed.
+    return base.QueryClose(); // Saves settings if changed.
   }
 }

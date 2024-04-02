@@ -10,10 +10,9 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     ViewModel = new LocationsViewModel(MockDialogWrapper, MockDispatcherService) {
-      Navigator = MockNavigator,
       ModelServices = TestModelServices
     };
-    ViewModel.OnAppearing();
+    ViewModel.Open();
   }
 
   private LocationsViewModel ViewModel { get; set; } = null!;
@@ -69,7 +68,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
       Is.EqualTo(MockDialogWrapper.ExpectedPath));
-    ViewModel.OnDisappearing();
+    ViewModel.QueryClose();
     Assert.That(MockSerialiser.LastOutputPath,
       Is.EqualTo(@"C:\FalconProgrammer\Settings\Settings.xml"));
     Assert.That(MockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
@@ -85,22 +84,21 @@ public class LocationsViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.DefaultTemplatePath));
     // Test that the settings folder path when writing settings is now already as
     // specified in the settings folder location file. 
-    ViewModel.OnAppearing();
+    ViewModel.Open();
     ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
-    ViewModel.OnDisappearing();
+    ViewModel.QueryClose();
     settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.DefaultTemplate.Path,
       Is.EqualTo(ViewModel.DefaultTemplatePath));
   }
 
   [Test]
-  public async Task SettingsFolderDoesNotExist() {
+  public void SettingsFolderDoesNotExist() {
     ViewModel.SettingsFolderPath = @"C:\FalconProgrammer\Settings";
     MockFileSystemService.ExpectedFileExists = false;
     MockFileSystemService.ExpectedFolderExists = false;
     MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
-    var command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
-    await command.ExecuteAsync(null);
+    Assert.That(ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: cannot find settings folder " +
@@ -108,12 +106,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task SettingsFolderNotSpecified() {
+  public void SettingsFolderNotSpecified() {
     MockFileSystemService.ExpectedFileExists = false;
     MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
-    var command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
-    await command.ExecuteAsync(null);
+    Assert.That(ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: a settings folder has not been specified."));

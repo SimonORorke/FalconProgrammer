@@ -23,9 +23,9 @@
                        VerticalAlignment="Center"
                        Margin="10,0" />
         </StackPanel>
-        <TabControl x:Name="TabControl" 
+        <TabControl x:Name="TabControl"
                     ItemsSource="{Binding Tabs}"
-                    SelectedItem="{Binding SelectedTab}" >
+                    SelectedItem="{Binding SelectedTab}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Header}" />

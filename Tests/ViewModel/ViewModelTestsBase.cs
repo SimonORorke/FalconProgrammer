@@ -10,7 +10,7 @@ public abstract class ViewModelTestsBase {
     MockDialogWrapper = new MockDialogWrapper();
     MockDispatcherService = new MockDispatcherService();
     MockFileSystemService = new MockFileSystemService();
-    MockNavigator = new MockNavigator();
+    MockMessageRecipient = new MockMessageRecipient();
     MockSerialiser = new MockSerialiser();
     TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
       MockFileSystemService = MockFileSystemService,
@@ -26,7 +26,7 @@ public abstract class ViewModelTestsBase {
   protected MockDialogWrapper MockDialogWrapper { get; private set; } = null!;
   protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
-  protected MockNavigator MockNavigator { get; private set; } = null!;
+  protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
   protected ModelServices TestModelServices { get; private set; } = null!;
 
