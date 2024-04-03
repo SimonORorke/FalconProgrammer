@@ -21,7 +21,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public async Task CancelBrowseForSettingsFolder() {
     MockDialogWrapper.Cancel = true;
     MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Settings";
-    MockFileSystemService.ExpectedFileExists = false;
+    MockFileSystemService.File.ExpectedExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
@@ -47,7 +47,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SettingsFolderPath,
       Is.EqualTo(MockDialogWrapper.ExpectedPath));
     MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
-    MockFileSystemService.ExpectedFileExists = false;
+    MockFileSystemService.File.ExpectedExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
@@ -95,8 +95,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public void SettingsFolderDoesNotExist() {
     ViewModel.SettingsFolderPath = @"C:\FalconProgrammer\Settings";
-    MockFileSystemService.ExpectedFileExists = false;
-    MockFileSystemService.ExpectedFolderExists = false;
+    MockFileSystemService.File.ExpectedExists = false;
+    MockFileSystemService.Folder.ExpectedExists = false;
     MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
     Assert.That(ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
@@ -107,7 +107,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void SettingsFolderNotSpecified() {
-    MockFileSystemService.ExpectedFileExists = false;
+    MockFileSystemService.File.ExpectedExists = false;
     MockDialogWrapper.ExpectedPath = @"C:\FalconProgrammer\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
     Assert.That(ViewModel.QueryClose(), Is.False);

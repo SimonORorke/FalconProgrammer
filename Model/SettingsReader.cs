@@ -15,7 +15,7 @@ public class SettingsReader : XmlReaderBase<Settings> {
     }
     string settingsPath = Settings.GetSettingsPath(settingsFolderLocation.Path);
     var result =
-      FileSystemService.FileExists(settingsPath) || !useDefaultIfNotFound
+      FileSystemService.File.Exists(settingsPath) || !useDefaultIfNotFound
         ? Deserialiser.Deserialise(settingsPath)
         : Deserialiser.Deserialise(GetDefaultSettingsStream());
     result.SettingsPath = settingsPath;

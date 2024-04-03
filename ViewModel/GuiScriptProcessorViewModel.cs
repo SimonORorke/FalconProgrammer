@@ -25,7 +25,7 @@ public class GuiScriptProcessorViewModel(
       GoToLocationsPage();
       return;
     }
-    if (!FileSystemService.FolderExists(Settings.ProgramsFolder.Path)) {
+    if (!FileSystemService.Folder.Exists(Settings.ProgramsFolder.Path)) {
       DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Script processors cannot be updated: cannot find programs folder "
         + $"'{Settings.ProgramsFolder.Path}'.");
@@ -33,7 +33,7 @@ public class GuiScriptProcessorViewModel(
       return;
     }
     var soundBanks =
-      FileSystemService.GetSubfolderNames(Settings.ProgramsFolder.Path);
+      FileSystemService.Folder.GetSubfolderNames(Settings.ProgramsFolder.Path);
     if (soundBanks.Count == 0) {
       // Console.WriteLine(
       //   "GuiScriptProcessorViewModel.Open: No sound bank subfolders.");

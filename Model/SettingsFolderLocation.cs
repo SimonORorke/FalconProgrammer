@@ -8,14 +8,14 @@ public class SettingsFolderLocation : SerialisationBase {
 
   public void Write() {
     string appDataFolderPath = GetAppDataFolderPath(ApplicationName);
-    if (!FileSystemService.FolderExists(appDataFolderPath)) {
-      FileSystemService.CreateFolder(appDataFolderPath);
+    if (!FileSystemService.Folder.Exists(appDataFolderPath)) {
+      FileSystemService.Folder.Create(appDataFolderPath);
     }
     Serialiser.Serialise(
       typeof(SettingsFolderLocation), this,
       GetSettingsFolderLocationPath(ApplicationName));
     if (!string.IsNullOrWhiteSpace(Path)) {
-      FileSystemService.CreateFolder(Path);
+      FileSystemService.Folder.Create(Path);
     }
   }
 

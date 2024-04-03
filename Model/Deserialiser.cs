@@ -20,7 +20,7 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
   }
 
   public virtual T Deserialise(string inputPath) {
-    using var fileStream = FileSystemService.FileExists(inputPath)
+    using var fileStream = FileSystemService.File.Exists(inputPath)
       ? File.OpenRead(inputPath)
       : null;
     return Deserialise(fileStream);

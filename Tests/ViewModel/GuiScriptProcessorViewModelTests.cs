@@ -46,19 +46,19 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       settings.ProgramsFolder.Path, SoundBanks);
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Ether Fields"), EtherFieldsCategories);
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Factory"), FactoryCategories);
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Organic Keys"), OrganicKeysCategories);
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Pulsar"), PulsarCategories);
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Spectre"), SpectreCategories);
-    MockFileSystemService.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
     ViewModel.Open(); // Reads settings to populate the page.
     // Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
@@ -134,7 +134,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
-    MockFileSystemService.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path, []);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path, []);
     ViewModel.Open();
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Does.EndWith(
@@ -146,7 +146,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   public void ProgramsFolderNotFound() {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
-    MockFileSystemService.ExpectedFolderExists = false;
+    MockFileSystemService.Folder.ExpectedExists = false;
     ViewModel.Open();
     Assert.That(MockDialogWrapper.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogWrapper.LastErrorMessage, Does.StartWith(

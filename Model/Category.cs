@@ -88,7 +88,7 @@ public class Category {
 
   private string GetFolderPath(string categoryName) {
     string result = System.IO.Path.Combine(SoundBankFolder.FullName, categoryName);
-    if (!FileSystemService.FolderExists(result)) {
+    if (!FileSystemService.Folder.Exists(result)) {
       throw new ApplicationException(
         $"Category {Path}: Cannot find category folder '{result}'.");
     }
@@ -96,7 +96,7 @@ public class Category {
   }
 
   public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
-    var programPaths = FileSystemService.GetPathsOfFilesInFolder(
+    var programPaths = FileSystemService.Folder.GetFilePaths(
       FolderPath, "*" + Batch.ProgramExtension);
     var result = (
       from programPath in programPaths
@@ -111,7 +111,7 @@ public class Category {
 
   public string GetProgramPath(string programName) {
     string result = System.IO.Path.Combine(FolderPath, $"{programName}.uvip");
-    if (!FileSystemService.FileExists(result)) {
+    if (!FileSystemService.File.Exists(result)) {
       throw new ApplicationException(
         $"Category {Path}: Cannot find program file '{result}'.");
     }
@@ -124,13 +124,13 @@ public class Category {
     string categoryTemplateFolderPath = System.IO.Path.Combine(
       templatesFolderPath, SoundBankFolder.Name, Name);
     string folderPath = categoryTemplateFolderPath;
-    if (!FileSystemService.FolderExists(folderPath)) {
+    if (!FileSystemService.Folder.Exists(folderPath)) {
       folderPath = string.Empty;
       string soundBankTemplateFolderPath = System.IO.Path.Combine(
         templatesFolderPath, SoundBankFolder.Name);
-      if (FileSystemService.FolderExists(soundBankTemplateFolderPath)) {
+      if (FileSystemService.Folder.Exists(soundBankTemplateFolderPath)) {
         var subfolderNames =
-          FileSystemService.GetSubfolderNames(soundBankTemplateFolderPath);
+          FileSystemService.Folder.GetSubfolderNames(soundBankTemplateFolderPath);
         if (subfolderNames.Count == 1) {
           folderPath =
             System.IO.Path.Combine(soundBankTemplateFolderPath, subfolderNames[0]);
@@ -139,7 +139,7 @@ public class Category {
     }
     if (folderPath != string.Empty) {
       string? templatePath = (
-        from programPath in FileSystemService.GetPathsOfFilesInFolder(
+        from programPath in FileSystemService.Folder.GetFilePaths(
           folderPath, "*.uvip")
         select programPath).FirstOrDefault();
       if (templatePath != null) {
@@ -151,7 +151,7 @@ public class Category {
         $"Category {Path}: A default Template must be specified in the " +
         "Settings file, to specify TemplateScriptProcessor.");
     }
-    if (!FileSystemService.FileExists(Settings.DefaultTemplate.Path)) {
+    if (!FileSystemService.File.Exists(Settings.DefaultTemplate.Path)) {
       throw new ApplicationException(
         $"Category {Path}: Cannot find default template file " +
         $"'{Settings.DefaultTemplate.Path}'.");
@@ -198,7 +198,7 @@ public class Category {
         "change the settings folder path in " +
         $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
     }
-    if (!FileSystemService.FolderExists(Settings.TemplateProgramsFolder.Path)) {
+    if (!FileSystemService.Folder.Exists(Settings.TemplateProgramsFolder.Path)) {
       throw new ApplicationException(
         "Cannot find template programs folder " + 
         $"'{Settings.TemplateProgramsFolder.Path}'.");

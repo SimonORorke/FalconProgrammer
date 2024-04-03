@@ -22,10 +22,12 @@ public class CategoryTests {
     var category =
       new TestCategory(GetSoundBankFolder("Pulsar"), "DoesNotExist", Settings) {
         MockFileSystemService = {
-          ExpectedFolderExists = false
+          Folder = {
+            ExpectedExists = false
+          }
         }
       };
-    Assert.Throws<InvalidOperationException>(() => category.Initialise());
+    Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
   [Test]
@@ -61,7 +63,7 @@ public class CategoryTests {
       new TestCategory(GetSoundBankFolder("Fluidity"), "Electronic", Settings);
     category.ConfigureMockFileSystemService(
       @"Fluidity\Strings", "Guitar Stream.uvip");
-    category.MockFileSystemService.ExpectedPathsOfFilesInFolder.Add(
+    category.MockFileSystemService.Folder.ExpectedFilePaths.Add(
       category.CategoryFolderPath, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     category.Initialise();
     Assert.IsFalse(category.MustUseGuiScriptProcessor);
@@ -110,10 +112,12 @@ public class CategoryTests {
     var category =
       new TestCategory(GetSoundBankFolder("DoesNotExist"), "Bass", Settings) {
         MockFileSystemService = {
-          ExpectedFolderExists = false
+          Folder = {
+            ExpectedExists = false
+          }
         }
       };
-    Assert.Throws<InvalidOperationException>(() => category.Initialise());
+    Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
   private DirectoryInfo GetSoundBankFolder(string soundBankName) {

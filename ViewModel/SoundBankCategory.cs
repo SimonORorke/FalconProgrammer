@@ -65,7 +65,7 @@ public partial class SoundBankCategory(
     Categories.Add(AllCategoriesCaption);
     string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
     var categoryFolderNames =
-      FileSystemService.GetSubfolderNames(soundBankFolderPath);
+      FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);
     foreach (string categoryFolderName in categoryFolderNames) {
       Categories.Add(categoryFolderName);
     }

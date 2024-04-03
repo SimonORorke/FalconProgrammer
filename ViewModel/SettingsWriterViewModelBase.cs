@@ -46,7 +46,7 @@ public abstract class SettingsWriterViewModelBase(
         "Settings cannot be saved: a settings folder has not been specified.");
       return false;
     }
-    if (!FileSystemService.FolderExists(SettingsFolderPath)) {
+    if (!FileSystemService.Folder.Exists(SettingsFolderPath)) {
       DialogWrapper.ShowErrorMessageBoxAsync(this,
         "Settings cannot be saved: cannot find settings folder "
         + $"'{SettingsFolderPath}'.");

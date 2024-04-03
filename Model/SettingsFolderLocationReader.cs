@@ -6,7 +6,7 @@ public class SettingsFolderLocationReader
     var result = Deserialiser.Deserialise(
       SettingsFolderLocation.GetSettingsFolderLocationPath(ApplicationName));
     if (!string.IsNullOrWhiteSpace(result.Path)) {
-      FileSystemService.CreateFolder(result.Path);
+      FileSystemService.Folder.Create(result.Path);
     }
     return result;
   }
