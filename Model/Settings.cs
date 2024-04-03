@@ -25,7 +25,6 @@ public class Settings : SerialisationBase {
     return !string.IsNullOrWhiteSpace(settingsFolderPath)
       ? Path.Combine(settingsFolderPath, "Settings.xml")
       : string.Empty;
-    // return Path.Combine(settingsFolderPath, "Settings.xml");
   }
 
   public bool MustUseGuiScriptProcessor(
