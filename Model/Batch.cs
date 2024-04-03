@@ -272,22 +272,6 @@ public class Batch {
     return result;
   }
 
-  // public static DirectoryInfo GetTemplateProgramsFolder() {
-  //   if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
-  //     throw new ApplicationException(
-  //       "The template programs folder is not specified in settings file " +
-  //       $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-  //       "change the settings folder path in " +
-  //       $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
-  //   }
-  //   var result = new DirectoryInfo(Settings.TemplateProgramsFolder.Path);
-  //   if (!result.Exists) {
-  //     throw new ApplicationException(
-  //       $"Cannot find template programs folder '{result.FullName}'.");
-  //   }
-  //   return result;
-  // }
-
   [PublicAPI]
   public void InitialiseLayout(
     string? soundBankName, string? categoryName = null, string? programName = null) {

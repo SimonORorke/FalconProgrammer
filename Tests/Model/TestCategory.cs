@@ -24,6 +24,7 @@ public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings s
       templateFolderPath, templateProgramFileName);
     string templateParentFolderPath = Directory.GetParent(templateFolderPath)!.FullName;
     string templateFolderName = System.IO.Path.GetFileName(templateFolderPath);
+    MockFileSystemService.ExistingFolderPaths.Add(Settings.TemplateProgramsFolder.Path);
     MockFileSystemService.ExistingFolderPaths.Add(CategoryFolderPath);
     MockFileSystemService.ExistingFolderPaths.Add(templateFolderPath);
     MockFileSystemService.ExpectedSubfolderNames.Add(

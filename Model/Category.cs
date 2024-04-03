@@ -89,7 +89,7 @@ public class Category {
   private string GetFolderPath(string categoryName) {
     string result = System.IO.Path.Combine(SoundBankFolder.FullName, categoryName);
     if (!FileSystemService.FolderExists(result)) {
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"Category {Path}: Cannot find category folder '{result}'.");
     }
     return result;
@@ -103,7 +103,7 @@ public class Category {
       where programPath != TemplateProgramPath
       select programPath).ToList();
     if (result.Count == 0) {
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"Category {Path}: There are no program files to edit in folder '{FolderPath}'.");
     }
     return result;
@@ -112,13 +112,14 @@ public class Category {
   public string GetProgramPath(string programName) {
     string result = System.IO.Path.Combine(FolderPath, $"{programName}.uvip");
     if (!FileSystemService.FileExists(result)) {
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"Category {Path}: Cannot find program file '{result}'.");
     }
     return result;
   }
 
   private string GetTemplateProgramPath() {
+    ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
       templatesFolderPath, SoundBankFolder.Name, Name);
@@ -146,12 +147,12 @@ public class Category {
       }
     }
     if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"Category {Path}: A default Template must be specified in the " +
         "Settings file, to specify TemplateScriptProcessor.");
     }
     if (!FileSystemService.FileExists(Settings.DefaultTemplate.Path)) {
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"Category {Path}: Cannot find default template file " +
         $"'{Settings.DefaultTemplate.Path}'.");
     }
@@ -179,7 +180,7 @@ public class Category {
     if (!MustUseGuiScriptProcessor) {
       return null;
     }
-    throw new InvalidOperationException(
+    throw new ApplicationException(
       $"Category {Path}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
   }
 
@@ -187,5 +188,20 @@ public class Category {
     FolderPath = GetFolderPath(Name);
     TemplateProgramPath = GetTemplateProgramPath();
     TemplateScriptProcessor = GetTemplateScriptProcessor();
+  }
+
+  private void ValidateTemplateProgramsFolderPath() {
+    if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
+      throw new ApplicationException(
+        "The template programs folder is not specified in settings file " +
+        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+        "change the settings folder path in " +
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
+    }
+    if (!FileSystemService.FolderExists(Settings.TemplateProgramsFolder.Path)) {
+      throw new ApplicationException(
+        "Cannot find template programs folder " + 
+        $"'{Settings.TemplateProgramsFolder.Path}'.");
+    }
   }
 }
