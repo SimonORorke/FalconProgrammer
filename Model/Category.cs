@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.Model.XmlLinq;
+﻿using System.Diagnostics.CodeAnalysis;
+using FalconProgrammer.Model.XmlLinq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
@@ -8,6 +9,8 @@ namespace FalconProgrammer.Model;
 ///   category name.
 /// </summary>
 public class Category {
+  private IFileSystemService? _fileSystemService;
+
   public Category(DirectoryInfo soundBankFolder, string name, Settings settings) {
     SoundBankFolder = soundBankFolder;
     Name = name;
@@ -15,7 +18,11 @@ public class Category {
     Path = $"{SoundBankFolder.Name}\\{Name}";
   }
 
-  private DirectoryInfo Folder { get; set; } = null!;
+  [ExcludeFromCodeCoverage]
+  protected virtual IFileSystemService FileSystemService =>
+    _fileSystemService ??= Model.FileSystemService.Default;
+
+  private string FolderPath { get; set; } = null!;
 
   /// <summary>
   ///   I think the only categories where the GUI script processor cannot be
@@ -56,17 +63,17 @@ public class Category {
   [PublicAPI] public string Path { get; }
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
-
-  // private Settings.ProgramCategory SettingsCategory { get; set; } = null!;
   public DirectoryInfo SoundBankFolder { get; }
-  [PublicAPI] public string TemplateCategoryName => TemplateProgramFile.Directory!.Name;
+
+  [PublicAPI]
+  public string TemplateCategoryName => System.IO.Path.GetFileName(  
+    System.IO.Path.GetDirectoryName(TemplateProgramPath)!);
 
   [PublicAPI]
   public string TemplateProgramName =>
     System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
-  private FileInfo TemplateProgramFile { get; set; } = null!;
-  public string TemplateProgramPath => TemplateProgramFile.FullName;
+  public string TemplateProgramPath { get; private set; } = null!;
 
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
@@ -77,66 +84,65 @@ public class Category {
 
   [PublicAPI]
   public string TemplateSoundBankName =>
-    Directory.GetParent(TemplateProgramFile.Directory!.FullName)?.Name!;
+    Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
 
-  private DirectoryInfo GetFolder(string categoryName) {
-    var result = new DirectoryInfo(
-      System.IO.Path.Combine(SoundBankFolder.FullName, categoryName));
-    if (!result.Exists) {
+  private string GetFolderPath(string categoryName) {
+    string result = System.IO.Path.Combine(SoundBankFolder.FullName, categoryName);
+    if (!FileSystemService.FolderExists(result)) {
       throw new InvalidOperationException(
-        $"Category {Path}: Cannot find category folder '{result.FullName}'.");
+        $"Category {Path}: Cannot find category folder '{result}'.");
     }
     return result;
   }
 
-  public IEnumerable<FileInfo> GetProgramFilesToEdit() {
-    var programFiles = Folder.GetFiles(
-      "*" + Batch.ProgramExtension);
+  public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
+    var programPaths = FileSystemService.GetPathsOfFilesInFolder(
+      FolderPath, "*" + Batch.ProgramExtension);
     var result = (
-      from programFile in programFiles
-      where programFile.FullName != TemplateProgramPath
-      select programFile).ToList();
+      from programPath in programPaths
+      where programPath != TemplateProgramPath
+      select programPath).ToList();
     if (result.Count == 0) {
       throw new InvalidOperationException(
-        $"Category {Path}: There are no program files to edit in folder '{Folder.FullName}'.");
+        $"Category {Path}: There are no program files to edit in folder '{FolderPath}'.");
     }
     return result;
   }
 
-  public FileInfo GetProgramFile(string programName) {
-    var result = new FileInfo(
-      System.IO.Path.Combine(Folder.FullName, $"{programName}.uvip"));
-    if (!result.Exists) {
+  public string GetProgramPath(string programName) {
+    string result = System.IO.Path.Combine(FolderPath, $"{programName}.uvip");
+    if (!FileSystemService.FileExists(result)) {
       throw new InvalidOperationException(
-        $"Category {Path}: Cannot find program file '{result.FullName}'.");
+        $"Category {Path}: Cannot find program file '{result}'.");
     }
     return result;
   }
 
-  private FileInfo GetTemplateProgramFile() {
-    string templatesFolderPath = Batch.GetTemplateProgramsFolder().FullName;
+  private string GetTemplateProgramPath() {
+    string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
       templatesFolderPath, SoundBankFolder.Name, Name);
-    var folder = new DirectoryInfo(categoryTemplateFolderPath);
-    if (!folder.Exists) {
-      folder = null;
+    string folderPath = categoryTemplateFolderPath;
+    if (!FileSystemService.FolderExists(folderPath)) {
+      folderPath = string.Empty;
       string soundBankTemplateFolderPath = System.IO.Path.Combine(
         templatesFolderPath, SoundBankFolder.Name);
-      var soundBankTemplateFolder = new DirectoryInfo(soundBankTemplateFolderPath);
-      if (soundBankTemplateFolder.Exists) {
-        var subFolders =
-          soundBankTemplateFolder.EnumerateDirectories().ToList();
-        if (subFolders.Count == 1) {
-          folder = subFolders[0];
+      if (FileSystemService.FolderExists(soundBankTemplateFolderPath)) {
+        var subfolderNames =
+          FileSystemService.GetSubfolderNames(soundBankTemplateFolderPath);
+        if (subfolderNames.Count == 1) {
+          folderPath =
+            System.IO.Path.Combine(soundBankTemplateFolderPath, subfolderNames[0]);
         }
       }
     }
-    if (folder != null) {
-      var templateFile = (
-        from programFile in folder.EnumerateFiles("*.uvip")
-        select programFile).FirstOrDefault();
-      if (templateFile != null) {
-        return templateFile;
+    if (folderPath != string.Empty) {
+      string? templatePath = (
+        from programPath in FileSystemService.GetPathsOfFilesInFolder(
+          folderPath, "*.uvip")
+        select programPath).FirstOrDefault();
+      if (templatePath != null) {
+        return templatePath;
       }
     }
     if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
@@ -144,17 +150,12 @@ public class Category {
         $"Category {Path}: A default Template must be specified in the " +
         "Settings file, to specify TemplateScriptProcessor.");
     }
-    // string defaultTemplatePath = System.IO.Path.Combine(
-    //   templatesFolderPath, Settings.DefaultTemplate.Path);
-    // var defaultTemplateFile = new FileInfo(defaultTemplatePath);
-    var defaultTemplateFile = new FileInfo(Settings.DefaultTemplate.Path);
-    if (!defaultTemplateFile.Exists) {
+    if (!FileSystemService.FileExists(Settings.DefaultTemplate.Path)) {
       throw new InvalidOperationException(
         $"Category {Path}: Cannot find default template file " +
         $"'{Settings.DefaultTemplate.Path}'.");
-      // $"Category {Path}: Cannot find default template file '{defaultTemplatePath}'.");
     }
-    return defaultTemplateFile;
+    return Settings.DefaultTemplate.Path;
   }
 
   /// <summary>
@@ -162,7 +163,8 @@ public class Category {
   ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
   ///   case the template program.
   /// </summary>
-  private ScriptProcessor? GetTemplateScriptProcessor() {
+  [ExcludeFromCodeCoverage]
+  protected virtual ScriptProcessor? GetTemplateScriptProcessor() {
     var templateXml = new ProgramXml(this);
     templateXml.LoadFromFile(TemplateProgramPath);
     // Testing for macro-modulating Modulations might be more reliable than
@@ -182,9 +184,8 @@ public class Category {
   }
 
   public void Initialise() {
-    Folder = GetFolder(Name);
-    // SettingsCategory = Settings.MustUseGuiScriptProcessor(SoundBankFolder.Name, Name);
-    TemplateProgramFile = GetTemplateProgramFile();
+    FolderPath = GetFolderPath(Name);
+    TemplateProgramPath = GetTemplateProgramPath();
     TemplateScriptProcessor = GetTemplateScriptProcessor();
   }
 }

@@ -78,7 +78,7 @@ public class Batch {
       if (!string.IsNullOrEmpty(categoryName)) {
         if (!string.IsNullOrEmpty(programName)) {
           Category = CreateCategory(categoryName);
-          string programPath = Category.GetProgramFile(programName).FullName;
+          string programPath = Category.GetProgramPath(programName);
           Program = new FalconProgram(programPath, Category, Settings);
           ConfigureProgram();
         } else {
@@ -176,8 +176,8 @@ public class Batch {
       //   "because the category's Info page layout has to be defined in a script.");
       return;
     }
-    foreach (var programFileToEdit in Category.GetProgramFilesToEdit()) {
-      Program = new FalconProgram(programFileToEdit.FullName, Category, Settings);
+    foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {
+      Program = new FalconProgram(programPath, Category, Settings);
       ConfigureProgram();
     }
   }
@@ -272,21 +272,21 @@ public class Batch {
     return result;
   }
 
-  public static DirectoryInfo GetTemplateProgramsFolder() {
-    if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
-      throw new ApplicationException(
-        "The template programs folder is not specified in settings file " +
-        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-        "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
-    }
-    var result = new DirectoryInfo(Settings.TemplateProgramsFolder.Path);
-    if (!result.Exists) {
-      throw new ApplicationException(
-        $"Cannot find template programs folder '{result.FullName}'.");
-    }
-    return result;
-  }
+  // public static DirectoryInfo GetTemplateProgramsFolder() {
+  //   if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
+  //     throw new ApplicationException(
+  //       "The template programs folder is not specified in settings file " +
+  //       $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
+  //       "change the settings folder path in " +
+  //       $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
+  //   }
+  //   var result = new DirectoryInfo(Settings.TemplateProgramsFolder.Path);
+  //   if (!result.Exists) {
+  //     throw new ApplicationException(
+  //       $"Cannot find template programs folder '{result.FullName}'.");
+  //   }
+  //   return result;
+  // }
 
   [PublicAPI]
   public void InitialiseLayout(

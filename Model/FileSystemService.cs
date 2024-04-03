@@ -22,6 +22,13 @@ public class FileSystemService : IFileSystemService {
     return Directory.Exists(path);
   }
 
+  public IEnumerable<string> GetPathsOfFilesInFolder(string path, string searchPattern) {
+    if (FolderExists(path)) {
+      return Directory.GetFiles(path, searchPattern);
+    }
+    throw new DirectoryNotFoundException($"Cannot find folder '{path}'.");
+  }
+
   public ImmutableList<string> GetSubfolderNames(string path) {
     if (FolderExists(path)) {
       var subfolderNames = (

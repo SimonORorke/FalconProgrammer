@@ -8,7 +8,7 @@ namespace FalconProgrammer.Model.XmlLinq;
 ///   Called ConstantModulation in the program XML but corresponds to a macro,
 ///   as shown the Info page.
 /// </summary>
-internal class Macro : ModulationsOwner {
+public class Macro : ModulationsOwner {
   private XElement? _propertiesElement;
 
   public Macro(ProgramXml programXml, Settings.MacrosMidi midi)

@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-internal abstract class EntityBase {
+public abstract class EntityBase {
   private XElement? _element;
   protected EntityBase() { }
 

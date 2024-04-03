@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-internal class ProgramXml(Category category) : EntityBase {
+public class ProgramXml(Category category) : EntityBase {
   private ImmutableList<XElement>? _scriptProcessorElements;
   private XElement? _templateMacroElement;
   private XElement? _templateModulationElement;

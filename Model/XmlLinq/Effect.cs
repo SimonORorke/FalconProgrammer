@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-internal class Effect(XElement element, ProgramXml programXml)
+public class Effect(XElement element, ProgramXml programXml)
   : ConnectionsParent(element, programXml) {
   private bool? _isDelay;
   private bool? _isReverb;
