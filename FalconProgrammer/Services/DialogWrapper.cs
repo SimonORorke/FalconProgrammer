@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Avalonia;
 using FalconProgrammer.ViewModel;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.Avalonia;
@@ -60,7 +61,8 @@ public class DialogWrapper : IDialogWrapper {
 
   public async Task ShowErrorMessageBoxAsync(
     INotifyPropertyChanged? ownerViewModel, string text) {
-    await DialogService.ShowMessageBoxAsync(ownerViewModel, text, "Error",
+    await DialogService.ShowMessageBoxAsync(ownerViewModel, text,
+      Application.Current!.Name!,
       MessageBoxButton.Ok,
       MessageBoxImage.Error);
   }

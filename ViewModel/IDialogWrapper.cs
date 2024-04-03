@@ -29,7 +29,7 @@ public interface IDialogWrapper {
     string dialogTitle);
 
   /// <summary>
-  ///   Asynchronously shows an error message box with title "Error".
+  ///   Asynchronously shows an error message box.
   /// </summary>
   /// <param name="ownerViewModel">Owner view model.</param>
   /// <param name="text">The message text to be shown.</param>
