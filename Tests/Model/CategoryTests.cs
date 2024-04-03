@@ -5,6 +5,7 @@ namespace FalconProgrammer.Tests.Model;
 #pragma warning disable NUnit2005 // Consider using Assert.That(actual, Is.EqualTo(expected)) instead of Assert.AreEqual(expected, actual)
 [TestFixture]
 public class CategoryTests {
+  // TODO: Remove CategoryTests dependency on a real settings file. 
   [Test]
   public void CategoryFolderDoesNotExist() {
     var category =

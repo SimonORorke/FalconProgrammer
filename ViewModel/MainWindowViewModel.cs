@@ -71,7 +71,12 @@ public partial class MainWindowViewModel(
   }
 
   public void OnClosing() {
-    // TODO: On closing main window, allow cancel close if settings cannot be saved.
+    // Ideally, if settings cannot be saved on closing the main window
+    // (settings folder is not specified or does not exist), we would like to be able to
+    // show a question message box giving the user the option to cancel the close.
+    // The problem is that message boxes, like all dialogs, have to be shown
+    // asynchronously in Avalonia UI.  The workarounds I've tried led to either
+    // a stack overflow or the window closing without the message box staying open.
     CurrentPageViewModel?.QueryClose();
     QueryClose();
   }
