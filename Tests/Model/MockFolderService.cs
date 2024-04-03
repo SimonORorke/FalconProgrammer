@@ -24,7 +24,7 @@ public class MockFolderService : IFolderService {
     }
     return (
       from folderPath in ExistingPaths
-      where Directory.GetParent(folderPath).FullName == path
+      where Directory.GetParent(folderPath)?.FullName == path
       select folderPath).Any();
   }
 

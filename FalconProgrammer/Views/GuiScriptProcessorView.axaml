@@ -11,5 +11,49 @@
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModel:GuiScriptProcessorViewModel />
     </Design.DataContext>
-    GuiScriptProcessorView
+    <DataGrid
+        ItemsSource="{Binding SoundBankCategories}">
+        <DataGrid.Columns>
+            <DataGridTemplateColumn Header="Sound Bank" Width="*">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate DataType="viewModel:SoundBankCategory" >
+                        <TextBlock Text="{Binding SoundBank}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate DataType="viewModel:SoundBankCategory" >
+                        <ComboBox ItemsSource="{Binding SoundBanks}"
+                                  SelectedItem="{Binding SoundBanks}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="Category or 'All'" Width="*">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate DataType="viewModel:SoundBankCategory" >
+                        <TextBlock Text="{Binding Category}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate DataType="viewModel:SoundBankCategory" >
+                        <ComboBox ItemsSource="{Binding Categories}"
+                                  SelectedItem="{Binding Category}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="Action" 
+                                    Width="90">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate DataType="viewModel:SoundBankCategory" >
+                        <Button Content="Remove"
+                                Command="{Binding RemoveCommand}"
+                                IsEnabled="{Binding CanRemove}"
+                                IsVisible="{Binding CanRemove}"
+                                Margin="0, 5"
+                                MinHeight="35"
+                                Height="35" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
 </UserControl>

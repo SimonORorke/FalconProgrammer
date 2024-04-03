@@ -6,7 +6,7 @@ namespace FalconProgrammer.Tests.Model;
 public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings settings)
   : Category(soundBankFolder, name, settings) {
   private MockFileSystemService? _mockFileSystemService;
-  internal string CategoryFolderPath { get; private set; }
+  internal string CategoryFolderPath { get; private set; } = string.Empty;
 
   internal MockFileSystemService MockFileSystemService =>
     _mockFileSystemService ??= new MockFileSystemService();
