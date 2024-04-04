@@ -14,40 +14,35 @@
     <Grid ColumnDefinitions="10,200,10,800,10,100"
           RowDefinitions="10,Auto,10,Auto,10,Auto,10,Auto,10,Auto">
         <Label Grid.Row="1" Grid.Column="1"
-               Content="Settings Folder"
-               VerticalContentAlignment="Center" />
+               Content="Settings Folder" />
         <TextBox Grid.Row="1" Grid.Column="3"
                  Text="{Binding SettingsFolderPath}"
                  Watermark="Full path of folder to contain the settings for this application" />
         <Button Grid.Row="1" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForSettingsFolderCommand}" />
         <Label Grid.Row="3" Grid.Column="1"
-               Content="Programs Folder"
-               VerticalContentAlignment="Center" />
+               Content="Programs Folder" />
         <TextBox Grid.Row="3" Grid.Column="3"
                  Text="{Binding ProgramsFolderPath}"
                  Watermark="Full path of folder containing Falcon programs to be modified" />
         <Button Grid.Row="3" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForProgramsFolderCommand}" />
         <Label Grid.Row="5" Grid.Column="1"
-               Content="Original Programs Folder"
-               VerticalContentAlignment="Center" />
+               Content="Original Programs Folder" />
         <TextBox Grid.Row="5" Grid.Column="3"
                  Text="{Binding OriginalProgramsFolderPath}"
                  Watermark="Full path of folder containing unmodified Falcon programs" />
         <Button Grid.Row="5" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForOriginalProgramsFolderCommand}" />
         <Label Grid.Row="7" Grid.Column="1"
-               Content="Template Programs Folder"
-               VerticalContentAlignment="Center" />
+               Content="Template Programs Folder" />
         <TextBox Grid.Row="7" Grid.Column="3"
                  Text="{Binding TemplateProgramsFolderPath}"
                  Watermark="Full path of folder" />
         <Button Grid.Row="7" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForTemplateProgramsFolderCommand}" />
         <Label Grid.Row="9" Grid.Column="1"
-               Content="Default Template File"
-               VerticalContentAlignment="Center" />
+               Content="Default Template File" />
         <TextBox Grid.Row="9" Grid.Column="3"
                  Text="{Binding DefaultTemplatePath}"
                  Watermark="Full path of template Falcon program file" />

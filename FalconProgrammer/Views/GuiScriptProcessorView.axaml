@@ -14,10 +14,19 @@
     <DataGrid
         ItemsSource="{Binding SoundBankCategories}">
         <DataGrid.Columns>
-            <DataGridTemplateColumn Header="Sound Bank" Width="*">
+            <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Sound Bank"
+                                   FontSize="20"
+                                   FontWeight="Bold" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory" >
-                        <TextBlock Text="{Binding SoundBank}" />
+                        <TextBlock Text="{Binding SoundBank}"
+                                   FontSize="16"
+                                   Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
@@ -27,10 +36,19 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Header="Category or 'All'" Width="*">
+            <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Category or 'All'"
+                                   FontSize="20"
+                                   FontWeight="Bold" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory" >
-                        <TextBlock Text="{Binding Category}" />
+                        <TextBlock Text="{Binding Category}"
+                                   FontSize="16"
+                                   Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
@@ -40,15 +58,21 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Header="Action" 
-                                    Width="90">
+            <DataGridTemplateColumn Width="110">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Action"
+                                   FontSize="20"
+                                   FontWeight="Bold" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory" >
                         <Button Content="Remove"
                                 Command="{Binding RemoveCommand}"
                                 IsEnabled="{Binding CanRemove}"
                                 IsVisible="{Binding CanRemove}"
-                                Margin="0, 5"
+                                Margin="13,5, 5, 5"
                                 MinHeight="35"
                                 Height="35" />
                     </DataTemplate>
