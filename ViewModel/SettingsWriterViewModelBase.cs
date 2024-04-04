@@ -65,7 +65,12 @@ public abstract class SettingsWriterViewModelBase(
   public override bool QueryClose() {
     if (HaveSettingsBeenUpdated) {
       if (CanSaveSettings()) {
-        SaveSettings();
+        try {
+          SaveSettings();
+        } catch (IOException) {
+          Console.WriteLine($"SettingsWriterViewModelBase.QueryClose {GetType().Name}: SaveSettings throwing IOException.");
+          throw;
+        }
         HaveSettingsBeenUpdated = false;
       } else {
         return false;
@@ -77,7 +82,12 @@ public abstract class SettingsWriterViewModelBase(
   private void SaveSettings() {
     // Debug.WriteLine($"SettingsWriterViewModelBase.SaveSettings: {GetType().Name}");
     if (SettingsFolderPath == SettingsFolderLocation.Path) {
-      Settings.Write();
+      try {
+        Settings.Write();
+      } catch (IOException) {
+        Console.WriteLine($"SettingsWriterViewModelBase.SaveSettings {GetType().Name}: Settings.Write throwing IOException.");
+        throw;
+      }
     } else {
       SettingsFolderLocation.Path = SettingsFolderPath;
       SettingsFolderLocation.Write();

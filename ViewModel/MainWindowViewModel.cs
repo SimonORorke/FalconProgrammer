@@ -87,20 +87,27 @@ public partial class MainWindowViewModel(
         // Start listening for ObservableRecipient messages. Set IsVisible to true.  
         Open();
       }
-      if (CurrentPageViewModel != null
-          // If a return to the same page has been forced because of errors,
-          // the error message that was shown by QueryClose should not be shown again.
-          && !CurrentPageViewModel.Equals(value.ViewModel)
-          // If there is an errors on the previous selected tab's page,
-          // QueryClose will show a error message box and return false.
-          && !CurrentPageViewModel.QueryClose()) {
-        // Go back to the previous tab.
-        DispatcherService.Dispatch(() =>
-          SelectedTab = (
-            from tab in Tabs
-            where tab.ViewModel == CurrentPageViewModel
-            select tab).Single());
-        return;
+      try {
+        if (CurrentPageViewModel != null
+            // If a return to the same page has been forced because of errors,
+            // the error message that was shown by QueryClose should not be shown again.
+            && !CurrentPageViewModel.Equals(value.ViewModel)
+            // If there is an errors on the previous selected tab's page,
+            // QueryClose will show a error message box and return false.
+            && !CurrentPageViewModel.QueryClose()) {
+          // Go back to the previous tab.
+          DispatcherService.Dispatch(() =>
+            SelectedTab = (
+              from tab in Tabs
+              where tab.ViewModel == CurrentPageViewModel
+              select tab).Single());
+          return;
+        }
+      } catch (IOException) {
+        Console.WriteLine(
+          "MainWindowViewModel.OnSelectedTabChanged: Throwing IOException on " + 
+          $"changing from {CurrentPageViewModel!.TabTitle} to {value.ViewModel.TabTitle}.");
+        throw;
       }
       CurrentPageViewModel = value.ViewModel;
       CurrentPageTitle = CurrentPageViewModel.PageTitle;
