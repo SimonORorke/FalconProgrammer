@@ -68,13 +68,16 @@
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory" >
-                        <Button Content="Remove"
-                                Command="{Binding RemoveCommand}"
+                        <Button Command="{Binding RemoveCommand}"
                                 IsEnabled="{Binding CanRemove}"
                                 IsVisible="{Binding CanRemove}"
                                 Margin="13,5, 5, 5"
                                 MinHeight="35"
-                                Height="35" />
+                                Height="35">
+                            <Button.Content>
+                                <TextBlock Text="Remove" />
+                            </Button.Content>
+                        </Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
