@@ -23,7 +23,7 @@
                 <DataGridTemplateColumn.CellEditingTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory" >
                         <ComboBox ItemsSource="{Binding SoundBanks}"
-                                  SelectedItem="{Binding SoundBanks}" />
+                                  SelectedItem="{Binding SoundBank}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellEditingTemplate>
             </DataGridTemplateColumn>
