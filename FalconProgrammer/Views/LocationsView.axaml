@@ -11,7 +11,7 @@
         <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModel:LocationsViewModel />
     </Design.DataContext>
-    <Grid ColumnDefinitions="10,200,10,800,10,100"
+    <Grid ColumnDefinitions="10,205,10,795,10,100"
           RowDefinitions="10,Auto,10,Auto,10,Auto,10,Auto,10,Auto">
         <Label Grid.Row="1" Grid.Column="1"
                Content="Settings Folder" />
