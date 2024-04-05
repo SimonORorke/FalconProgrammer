@@ -26,7 +26,7 @@ namespace FalconProgrammer.Services;
 /// </remarks>
 public class DialogWrapper : IDialogWrapper {
   public DialogWrapper(ILoggerFactory loggerFactory) {
-    var customDialogManager = new CustomDialogManager(
+    var customDialogManager = new DialogManager(
       new ViewLocator(),
       new DialogFactory().AddMessageBox(),
       loggerFactory.CreateLogger<DialogManager>());
