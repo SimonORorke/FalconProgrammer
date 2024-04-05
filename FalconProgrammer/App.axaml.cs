@@ -65,9 +65,72 @@ public class App : Application {
     var dark = new ColorPaletteResources();
     fluentTheme.Palettes.Add(lightKey, light);
     fluentTheme.Palettes.Add(darkKey, dark);
+    // SelectDefaultColourScheme(light, dark);
     SelectForestColourScheme(light, dark);
     // SelectLavenderColourScheme(light, dark);
     // SelectNighttimeColourScheme(light, dark);
+  }
+
+  /// <summary>
+  ///   Default palette preset from the online Fluent Editor https://theme.xaml.live/.
+  /// </summary>
+  private static void SelectDefaultColourScheme(
+    ColorPaletteResources light,
+    ColorPaletteResources dark) {
+    light.Accent = Color.Parse("#ff0073cf");
+    light.AltHigh = Color.Parse("White");
+    light.AltLow = Color.Parse("White");
+    light.AltMedium = Color.Parse("White");
+    light.AltMediumHigh = Color.Parse("White");
+    light.AltMediumLow = Color.Parse("White");
+    light.BaseHigh = Color.Parse("Black");
+    light.BaseLow = Color.Parse("#ffcccccc");
+    light.BaseMedium = Color.Parse("#ff898989");
+    light.BaseMediumHigh = Color.Parse("#ff5d5d5d");
+    light.BaseMediumLow = Color.Parse("#ff737373");
+    light.ChromeAltLow = Color.Parse("#ff5d5d5d");
+    light.ChromeBlackHigh = Color.Parse("Black");
+    light.ChromeBlackLow = Color.Parse("#ffcccccc");
+    light.ChromeBlackMedium = Color.Parse("#ff5d5d5d");
+    light.ChromeBlackMediumLow = Color.Parse("#ff898989");
+    light.ChromeDisabledHigh = Color.Parse("#ffcccccc");
+    light.ChromeDisabledLow = Color.Parse("#ff898989");
+    light.ChromeGray = Color.Parse("#ff737373");
+    light.ChromeHigh = Color.Parse("#ffcccccc");
+    light.ChromeLow = Color.Parse("#ffececec");
+    light.ChromeMedium = Color.Parse("#ffe6e6e6");
+    light.ChromeMediumLow = Color.Parse("#ffececec");
+    light.ChromeWhite = Color.Parse("White");
+    light.ListLow = Color.Parse("#ffe6e6e6");
+    light.ListMedium = Color.Parse("#ffcccccc");
+    light.RegionColor = Color.Parse("White");
+    dark.Accent = Color.Parse("#ff0073cf");
+    dark.AltHigh = Color.Parse("Black");
+    dark.AltLow = Color.Parse("Black");
+    dark.AltMedium = Color.Parse("Black");
+    dark.AltMediumHigh = Color.Parse("Black");
+    dark.AltMediumLow = Color.Parse("Black");
+    dark.BaseHigh = Color.Parse("White");
+    dark.BaseLow = Color.Parse("#ff333333");
+    dark.BaseMedium = Color.Parse("#ff9a9a9a");
+    dark.BaseMediumHigh = Color.Parse("#ffb4b4b4");
+    dark.BaseMediumLow = Color.Parse("#ff676767");
+    dark.ChromeAltLow = Color.Parse("#ffb4b4b4");
+    dark.ChromeBlackHigh = Color.Parse("Black");
+    dark.ChromeBlackLow = Color.Parse("#ffb4b4b4");
+    dark.ChromeBlackMedium = Color.Parse("Black");
+    dark.ChromeBlackMediumLow = Color.Parse("Black");
+    dark.ChromeDisabledHigh = Color.Parse("#ff333333");
+    dark.ChromeDisabledLow = Color.Parse("#ff9a9a9a");
+    dark.ChromeGray = Color.Parse("Gray");
+    dark.ChromeHigh = Color.Parse("Gray");
+    dark.ChromeLow = Color.Parse("#ff151515");
+    dark.ChromeMedium = Color.Parse("#ff1d1d1d");
+    dark.ChromeMediumLow = Color.Parse("#ff2c2c2c");
+    dark.ChromeWhite = Color.Parse("White");
+    dark.ListLow = Color.Parse("#ff1d1d1d");
+    dark.ListMedium = Color.Parse("#ff333333");
+    dark.RegionColor = Color.Parse("Black");
   }
 
   /// <summary>
