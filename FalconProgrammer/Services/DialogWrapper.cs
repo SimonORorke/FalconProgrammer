@@ -25,7 +25,7 @@ namespace FalconProgrammer.Services;
 ///   https://youtrack.jetbrains.com/issue/RIDER-97620/unit-tests-failed-when-using-microsoft-fakes.
 ///   <para>
 ///     To be fair, HanumanInstitute does explain a way to mock
-///     <see cref="DialogWrapper" /> directly, using <see cref="IDialogWrapper" />. See
+///     <see cref="DialogService" /> directly, using <see cref="IDialogService" />. See
 ///     https://github.com/mysteryx93/HanumanInstitute.MvvmDialogs?tab=readme-ov-file#unit-testing.
 ///     However, I still think the use of a wrapper has benefits for this application,
 ///     as the application's dialog requirements are simple, and the wrapper approach
