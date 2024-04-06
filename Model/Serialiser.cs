@@ -13,6 +13,8 @@ public class Serialiser : ISerialiser {
   public void Serialise(Type type, object objectToSerialise, string outputPath) {
     var serializer = new XmlSerializer(type);
     using var writer = new StreamWriter(outputPath);
+    // Perhaps the intermittent IOException thrown by Serialize won't happen any more,
+    // now that HanumanInstitute.MvvmDialogs is no longer used.
     serializer.Serialize(writer, objectToSerialise);
     // try {
     //   serializer.Serialize(writer, objectToSerialise);
