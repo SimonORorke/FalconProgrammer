@@ -1,6 +1,6 @@
 ﻿using FalconProgrammer.Services;
-using Microsoft.Extensions.DependencyInjection;
 using FalconProgrammer.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FalconProgrammer;
 

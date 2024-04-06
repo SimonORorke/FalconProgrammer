@@ -66,7 +66,7 @@ public class Category {
   public DirectoryInfo SoundBankFolder { get; }
 
   [PublicAPI]
-  public string TemplateCategoryName => System.IO.Path.GetFileName(  
+  public string TemplateCategoryName => System.IO.Path.GetFileName(
     System.IO.Path.GetDirectoryName(TemplateProgramPath)!);
 
   [PublicAPI]
@@ -200,7 +200,7 @@ public class Category {
     }
     if (!FileSystemService.Folder.Exists(Settings.TemplateProgramsFolder.Path)) {
       throw new ApplicationException(
-        "Cannot find template programs folder " + 
+        "Cannot find template programs folder " +
         $"'{Settings.TemplateProgramsFolder.Path}'.");
     }
   }

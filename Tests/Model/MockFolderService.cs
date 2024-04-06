@@ -6,14 +6,12 @@ namespace FalconProgrammer.Tests.Model;
 public class MockFolderService : IFolderService {
   internal bool ExpectedExists { get; set; } = true;
   internal List<string> ExistingPaths { get; } = [];
-  
+
   internal Dictionary<string, IEnumerable<string>> ExpectedFilePaths { get; } =
     [];
 
   internal Dictionary<string, IEnumerable<string>> ExpectedSubfolderNames { get; } = [];
-  
-  public void Create(string path) {
-  }
+  public void Create(string path) { }
 
   public bool Exists(string path) {
     if (ExistingPaths.Count == 0) {

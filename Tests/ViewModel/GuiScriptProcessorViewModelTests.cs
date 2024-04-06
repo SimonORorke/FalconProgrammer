@@ -134,7 +134,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path, []);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path,
+      []);
     ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.EndWith(

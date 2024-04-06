@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-
-namespace FalconProgrammer.Model;
+﻿namespace FalconProgrammer.Model;
 
 /// <summary>
 ///   A utility for accessing and updating the file system.

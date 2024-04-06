@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FalconProgrammer;
 
 public class App : Application {
-
   public MainWindow MainWindow { get; set; } = null!;
 
   public override void Initialize() {
