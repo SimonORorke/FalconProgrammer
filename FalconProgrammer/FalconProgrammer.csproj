@@ -6,6 +6,8 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <!-- Problems with StrongViewLocator are not related to 
+        whether assemblies are trimmed or not. -->
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 

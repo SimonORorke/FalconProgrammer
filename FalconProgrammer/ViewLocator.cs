@@ -22,9 +22,24 @@ namespace FalconProgrammer;
 [SuppressMessage("ReSharper", "CommentTypo")]
 public class ViewLocator : StrongViewLocator {
   public ViewLocator() {
+    Register<MainWindowViewModel, MainWindow>();
+    // Ommitting the third type parameter when registering the user control views
+    // causes failure to show the message box when automatically returning from the
+    // GUI Script Processor page to the Locations page.
+    // Also, when clicking attempting to open an open dialog by clicking a browse button,
+    // it throws System.ArgumentException:
+    // "No view found with specified ownerViewModel of type
+    // FalconProgrammer.ViewModel.LocationsViewModel."
     Register<BatchScriptViewModel, BatchScriptView>();
     Register<GuiScriptProcessorViewModel, GuiScriptProcessorView>();
     Register<LocationsViewModel, LocationsView>();
-    Register<MainWindowViewModel, MainWindow>();
+    //
+    // Adding the third type parameter when registering the user control views throws
+    // InvalidCastException:
+    // "Unable to cast object of type 'FalconProgrammer.ViewModel.LocationsViewModel' to
+    // type 'FalconProgrammer.ViewModel.MainWindowViewModel"
+    // Register<BatchScriptViewModel, BatchScriptView, MainWindow>();
+    // Register<GuiScriptProcessorViewModel, GuiScriptProcessorView, MainWindow>();
+    // Register<LocationsViewModel, LocationsView, MainWindow>();
   }
 }
