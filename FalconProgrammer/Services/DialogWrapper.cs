@@ -34,12 +34,12 @@ namespace FalconProgrammer.Services;
 /// </remarks>
 public class DialogWrapper : IDialogWrapper {
   public DialogWrapper(ILoggerFactory loggerFactory) {
-    var dialogManager = new DialogManager(
+    var customDialogManager = new CustomDialogManager(
       new ViewLocator(),
       new DialogFactory().AddMessageBox(),
       loggerFactory.CreateLogger<DialogManager>());
     DialogService = new DialogService(
-      dialogManager,
+      customDialogManager,
       x => Locator.Current.GetService(x));
   }
 
