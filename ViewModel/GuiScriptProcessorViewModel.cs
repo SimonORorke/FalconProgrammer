@@ -22,6 +22,9 @@ public class GuiScriptProcessorViewModel(
       "Titanium"
     };
     if (soundBanks.Count == 0) {
+      DialogWrapper.ShowErrorMessageBoxAsync(this,
+        "Script processors cannot be updated: programs folder "
+        + "'[folder path goes here]' contains no sound bank subfolders.");
       GoToLocationsPage();
       return;
     }
