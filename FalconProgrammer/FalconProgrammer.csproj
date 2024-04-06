@@ -6,9 +6,11 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <!-- Problems with StrongViewLocator are not related to 
-        whether assemblies are trimmed or not. -->
-        <PublishTrimmed>true</PublishTrimmed>
+        <!-- We will not be able to implement assembly trimming till the problems with
+        HanumanInstitute.MvvmDialogs.Avalonia.StrongViewLocator are sorted out or, more 
+        likely, we abandon use of HanumanInstitute.MvvmDialogs for showing dialogs. 
+        See comments in ViewLocator. -->
+        <!--<PublishTrimmed>true</PublishTrimmed>-->
     </PropertyGroup>
 
     <ItemGroup>
