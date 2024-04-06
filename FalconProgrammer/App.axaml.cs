@@ -1,56 +1,42 @@
-using System;
 using System.Linq;
 using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
-using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
-using HanumanInstitute.MvvmDialogs;
-using HanumanInstitute.MvvmDialogs.Avalonia;
-using Microsoft.Extensions.Logging;
-using Splat;
+using FalconProgrammer.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FalconProgrammer;
 
 public class App : Application {
-  private static IDialogService DialogService {
-    get {
-      var dialogWrapper = (DialogWrapper)Locator.Current.GetService<IDialogWrapper>()!;
-      return dialogWrapper.DialogService;
-    }
-  }
-
-  private static MainWindowViewModel MainWindowViewModel =>
-    Locator.Current.GetService<MainWindowViewModel>()!;
-
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
-    RegisterServicesAndViewModels();
     SelectColourScheme();
   }
 
   public override void OnFrameworkInitializationCompleted() {
-    GC.KeepAlive(typeof(DialogService));
-    DialogService.Show(null, MainWindowViewModel);
+    // Register all the services needed for the application to run
+    var collection = new ServiceCollection();
+    collection.AddCommonServices();
+    // Creates a ServiceProvider containing services from the provided IServiceCollection
+    var services = collection.BuildServiceProvider();
+    var viewModel = services.GetRequiredService<MainWindowViewModel>();
+    switch (ApplicationLifetime) {
+      case IClassicDesktopStyleApplicationLifetime desktop:
+        desktop.MainWindow = new MainWindow {
+          DataContext = viewModel
+        };
+        break;
+      case ISingleViewApplicationLifetime singleViewPlatform:
+        singleViewPlatform.MainView = new MainWindow {
+          DataContext = viewModel
+        };
+        break;
+    }
     base.OnFrameworkInitializationCompleted();
-  }
-
-  private static void RegisterServicesAndViewModels() {
-    var build = Locator.CurrentMutable;
-    var loggerFactory = LoggerFactory.Create(
-      // ReSharper disable once UnusedParameter.Local
-      builder => builder.AddFilter(logLevel => true).AddDebug());
-    build.RegisterLazySingleton(
-      () => (IDialogWrapper)new DialogWrapper(loggerFactory));
-    build.RegisterLazySingleton(
-      () => (IDispatcherService)new DispatcherService());
-    SplatRegistrations.Register<MainWindowViewModel>();
-    SplatRegistrations.Register<BatchScriptViewModel>();
-    SplatRegistrations.Register<GuiScriptProcessorViewModel>();
-    SplatRegistrations.Register<LocationsViewModel>();
-    SplatRegistrations.SetupIOC();
   }
 
   private void SelectColourScheme() {
