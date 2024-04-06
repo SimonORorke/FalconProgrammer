@@ -3,15 +3,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
 public partial class SoundBankCategory(
   // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
   // and RelayCommand attributes.
-  Settings settings,
-  IFileSystemService fileSystemService,
   Action appendAdditionItem,
   Action onItemChanged,
   Action<SoundBankCategory> removeItem)
@@ -30,8 +27,6 @@ public partial class SoundBankCategory(
   internal bool IsAdditionItem => SoundBank == string.Empty;
   internal bool IsForAllCategories => Category == AllCategoriesCaption;
   public ObservableCollection<string> Categories { get; } = [];
-  private IFileSystemService FileSystemService { get; } = fileSystemService;
-  private Settings Settings { get; } = settings;
   private Action AppendAdditionItem { get; } = appendAdditionItem;
   private Action OnItemChanged { get; } = onItemChanged;
   private Action<SoundBankCategory> RemoveItem { get; } = removeItem;
@@ -63,9 +58,7 @@ public partial class SoundBankCategory(
   private void PopulateCategories() {
     Categories.Clear();
     Categories.Add(AllCategoriesCaption);
-    string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
-    var categoryFolderNames =
-      FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);
+    string[] categoryFolderNames = ["Bass", "Lead", "Pad", "Pluck"];
     foreach (string categoryFolderName in categoryFolderNames) {
       Categories.Add(categoryFolderName);
     }

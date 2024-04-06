@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using JetBrains.Annotations;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -7,53 +7,12 @@ public partial class LocationsViewModel(
   IDialogWrapper dialogWrapper,
   IDispatcherService dispatcherService)
   : SettingsWriterViewModelBase(dialogWrapper, dispatcherService) {
-  // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
-  // and RelayCommand attributes.
-
-  public string DefaultTemplatePath {
-    get => Settings.DefaultTemplate.Path;
-    set {
-      if (Settings.DefaultTemplate.Path != value) {
-        Settings.DefaultTemplate.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
-
-  [PublicAPI]
-  public string OriginalProgramsFolderPath {
-    get => Settings.OriginalProgramsFolder.Path;
-    set {
-      if (Settings.OriginalProgramsFolder.Path != value) {
-        Settings.OriginalProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
+  [ObservableProperty] private string _defaultTemplatePath = string.Empty;
+  [ObservableProperty] private string _originalProgramsFolderPath = string.Empty;
+  [ObservableProperty] private string _programsFolderPath = string.Empty;
+  [ObservableProperty] private string _templateProgramsFolderPath = string.Empty;
 
   public override string PageTitle => "Locations";
-
-  [PublicAPI]
-  public string ProgramsFolderPath {
-    get => Settings.ProgramsFolder.Path;
-    set {
-      if (Settings.ProgramsFolder.Path != value) {
-        Settings.ProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
-
-  [PublicAPI]
-  public string TemplateProgramsFolderPath {
-    get => Settings.TemplateProgramsFolder.Path;
-    set {
-      if (Settings.TemplateProgramsFolder.Path != value) {
-        Settings.TemplateProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
 
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
