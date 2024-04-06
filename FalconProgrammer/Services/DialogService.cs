@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using FalconProgrammer.ViewModel;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace FalconProgrammer.Services;
 
@@ -10,7 +12,9 @@ namespace FalconProgrammer.Services;
 ///   A service that can show different types of dialog windows.
 /// </summary>
 public class DialogService : IDialogService {
+  private string? _applicationTitle;
   private TopLevel? _topLevel;
+  private string ApplicationTitle => _applicationTitle ??= Application.Current!.Name!;
   private TopLevel TopLevel => _topLevel ??= ((App)Application.Current!).MainWindow;
 
   public async Task<string?> BrowseForFileAsync(
@@ -44,10 +48,8 @@ public class DialogService : IDialogService {
   }
 
   public async Task ShowErrorMessageBoxAsync(string text) {
-    await Task.Delay(0);
-    // await DialogService.ShowMessageBoxAsync(ownerViewModel, text,
-    //   Application.Current!.Name!,
-    //   MessageBoxButton.Ok,
-    //   MessageBoxImage.Error);
+    var messageBox = MessageBoxManager.GetMessageBoxStandard(
+      ApplicationTitle, text, ButtonEnum.Ok, Icon.Error);
+    await messageBox.ShowAsync();
   }
 }
