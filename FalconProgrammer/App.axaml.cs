@@ -13,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FalconProgrammer;
 
 public class App : Application {
+
+  public MainWindow MainWindow { get; set; } = null!;
+
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
     SelectColourScheme();
@@ -25,16 +28,15 @@ public class App : Application {
     // Creates a ServiceProvider containing services from the provided IServiceCollection
     var services = collection.BuildServiceProvider();
     var viewModel = services.GetRequiredService<MainWindowViewModel>();
+    MainWindow = new MainWindow {
+      DataContext = viewModel
+    };
     switch (ApplicationLifetime) {
       case IClassicDesktopStyleApplicationLifetime desktop:
-        desktop.MainWindow = new MainWindow {
-          DataContext = viewModel
-        };
+        desktop.MainWindow = MainWindow;
         break;
       case ISingleViewApplicationLifetime singleViewPlatform:
-        singleViewPlatform.MainView = new MainWindow {
-          DataContext = viewModel
-        };
+        singleViewPlatform.MainView = MainWindow;
         break;
     }
     base.OnFrameworkInitializationCompleted();

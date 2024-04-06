@@ -1,15 +1,14 @@
-﻿using System.ComponentModel;
-using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class MockDialogWrapper : IDialogWrapper {
+public class MockDialogService : IDialogService {
   internal bool Cancel { get; set; }
   internal string ExpectedPath { get; set; } = string.Empty;
   internal string LastErrorMessage { get; set; } = string.Empty;
   internal int ShowErrorMessageBoxCount { get; set; }
 
-  public async Task<string?> BrowseForFileAsync(INotifyPropertyChanged? ownerViewModel,
+  public async Task<string?> BrowseForFileAsync(
     string dialogTitle,
     string filterName, string fileExtension) {
     if (Cancel) {
@@ -19,8 +18,7 @@ public class MockDialogWrapper : IDialogWrapper {
     return ExpectedPath;
   }
 
-  public async Task<string?> BrowseForFolderAsync(INotifyPropertyChanged? ownerViewModel,
-    string dialogTitle) {
+  public async Task<string?> BrowseForFolderAsync(string dialogTitle) {
     if (Cancel) {
       return null;
     }
@@ -28,8 +26,7 @@ public class MockDialogWrapper : IDialogWrapper {
     return ExpectedPath;
   }
 
-  public async Task ShowErrorMessageBoxAsync(INotifyPropertyChanged? ownerViewModel,
-    string text) {
+  public async Task ShowErrorMessageBoxAsync(string text) {
     await Task.Delay(0);
     ShowErrorMessageBoxCount++;
     LastErrorMessage = text;

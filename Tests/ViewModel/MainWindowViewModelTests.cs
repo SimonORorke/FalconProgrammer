@@ -8,9 +8,9 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(
-      MockDialogWrapper, MockDispatcherService);
+      MockDialogService, MockDispatcherService);
     ViewModel = new MainWindowViewModel(
-      MockDialogWrapper, MockDispatcherService) {
+      MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };

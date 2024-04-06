@@ -8,9 +8,9 @@ namespace FalconProgrammer.ViewModel;
 [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 public partial class MainWindowViewModel(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService)
-  : ViewModelBase(dialogWrapper, dispatcherService),
+  : ViewModelBase(dialogService, dispatcherService),
     IRecipient<GoToLocationsPageMessage> {
   /// <summary>
   ///   Generates CurrentPageTitle property and partial OnCurrentPageTitleChanged method.
@@ -29,7 +29,7 @@ public partial class MainWindowViewModel(
   /// </summary>
   [ExcludeFromCodeCoverage]
   internal virtual BatchScriptViewModel BatchScriptViewModel { get; set; } =
-    new BatchScriptViewModel(dialogWrapper, dispatcherService);
+    new BatchScriptViewModel(dialogService, dispatcherService);
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
@@ -37,14 +37,14 @@ public partial class MainWindowViewModel(
   ///   The setter is only for tests.
   /// </summary>
   internal virtual GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; } =
-    new GuiScriptProcessorViewModel(dialogWrapper, dispatcherService);
+    new GuiScriptProcessorViewModel(dialogService, dispatcherService);
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
   internal virtual LocationsViewModel LocationsViewModel { get; set; } =
-    new LocationsViewModel(dialogWrapper, dispatcherService);
+    new LocationsViewModel(dialogService, dispatcherService);
 
   /// <summary>
   ///   Not used because this is not a page but the owner of pages.

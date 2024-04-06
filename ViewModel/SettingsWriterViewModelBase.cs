@@ -5,9 +5,9 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class SettingsWriterViewModelBase(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService)
-  : ViewModelBase(dialogWrapper, dispatcherService) {
+  : ViewModelBase(dialogService, dispatcherService) {
   private SettingsFolderLocation? _settingsFolderLocation;
   private string? _settingsFolderPath;
   private bool HaveSettingsBeenUpdated { get; set; }
@@ -42,12 +42,12 @@ public abstract class SettingsWriterViewModelBase(
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
       // Console.WriteLine(
       //   $"SettingsWriterViewModelBase.CanSaveSettings ({GetType().Name}): A settings folder has not been specified.");
-      DialogWrapper.ShowErrorMessageBoxAsync(this,
+      DialogService.ShowErrorMessageBoxAsync(
         "Settings cannot be saved: a settings folder has not been specified.");
       return false;
     }
     if (!FileSystemService.Folder.Exists(SettingsFolderPath)) {
-      DialogWrapper.ShowErrorMessageBoxAsync(this,
+      DialogService.ShowErrorMessageBoxAsync(
         "Settings cannot be saved: cannot find settings folder "
         + $"'{SettingsFolderPath}'.");
       return false;

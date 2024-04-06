@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.ViewModel;
 
 public partial class LocationsViewModel(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService)
-  : SettingsWriterViewModelBase(dialogWrapper, dispatcherService) {
+  : SettingsWriterViewModelBase(dialogService, dispatcherService) {
   // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
   // and RelayCommand attributes.
 
@@ -57,7 +57,7 @@ public partial class LocationsViewModel(
 
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
-    string? path = await DialogWrapper.BrowseForFileAsync(this,
+    string? path = await DialogService.BrowseForFileAsync(
       "Select the default template Falcon program",
       "Falcon Programs", "uvip");
     if (path != null) {
@@ -67,7 +67,7 @@ public partial class LocationsViewModel(
 
   [RelayCommand]
   private async Task BrowseForOriginalProgramsFolder() {
-    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+    string? path = await DialogService.BrowseForFolderAsync(
       "Select the Original Programs folder");
     if (path != null) {
       OriginalProgramsFolderPath = path;
@@ -76,7 +76,7 @@ public partial class LocationsViewModel(
 
   [RelayCommand]
   private async Task BrowseForProgramsFolder() {
-    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+    string? path = await DialogService.BrowseForFolderAsync(
       "Select the Programs folder");
     if (path != null) {
       ProgramsFolderPath = path;
@@ -85,7 +85,7 @@ public partial class LocationsViewModel(
 
   [RelayCommand]
   private async Task BrowseForSettingsFolder() {
-    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+    string? path = await DialogService.BrowseForFolderAsync(
       "Select the Settings folder");
     if (path != null) {
       SettingsFolderPath = path;
@@ -94,7 +94,7 @@ public partial class LocationsViewModel(
 
   [RelayCommand]
   private async Task BrowseForTemplateProgramsFolder() {
-    string? path = await DialogWrapper.BrowseForFolderAsync(this,
+    string? path = await DialogService.BrowseForFolderAsync(
       "Select the Template Programs folder");
     if (path != null) {
       TemplateProgramsFolderPath = path;

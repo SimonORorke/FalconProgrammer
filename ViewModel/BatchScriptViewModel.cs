@@ -1,8 +1,8 @@
 ﻿namespace FalconProgrammer.ViewModel;
 
 public class BatchScriptViewModel(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService)
-  : SettingsWriterViewModelBase(dialogWrapper, dispatcherService) {
+  : SettingsWriterViewModelBase(dialogService, dispatcherService) {
   public override string PageTitle => "Batch Script";
 }

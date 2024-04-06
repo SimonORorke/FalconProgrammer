@@ -6,14 +6,14 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class ViewModelBase(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService) : ObservableRecipient {
   private IFileSystemService? _fileSystemService;
   private ModelServices? _modelServices;
   private ISerialiser? _serialiser;
   private Settings? _settings;
   private SettingsReader? _settingsReader;
-  protected IDialogWrapper DialogWrapper { get; } = dialogWrapper;
+  protected IDialogService DialogService { get; } = dialogService;
   protected IDispatcherService DispatcherService { get; } = dispatcherService;
 
   internal IFileSystemService FileSystemService =>

@@ -7,7 +7,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 public abstract class ViewModelTestsBase {
   [SetUp]
   public virtual void Setup() {
-    MockDialogWrapper = new MockDialogWrapper();
+    MockDialogService = new MockDialogService();
     MockDispatcherService = new MockDispatcherService();
     MockFileSystemService = new MockFileSystemService();
     MockMessageRecipient = new MockMessageRecipient();
@@ -23,7 +23,7 @@ public abstract class ViewModelTestsBase {
       TestSettingsReaderEmbedded);
   }
 
-  protected MockDialogWrapper MockDialogWrapper { get; private set; } = null!;
+  protected MockDialogService MockDialogService { get; private set; } = null!;
   protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;

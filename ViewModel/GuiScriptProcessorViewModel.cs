@@ -3,9 +3,9 @@
 namespace FalconProgrammer.ViewModel;
 
 public class GuiScriptProcessorViewModel(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService)
-  : SettingsWriterViewModelBase(dialogWrapper, dispatcherService) {
+  : SettingsWriterViewModelBase(dialogService, dispatcherService) {
   private SoundBankCategoryCollection? _soundBankCategories;
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
@@ -20,13 +20,13 @@ public class GuiScriptProcessorViewModel(
     // Debug.WriteLine("GuiScriptProcessorViewModel.Open");
     base.Open();
     if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
-      DialogWrapper.ShowErrorMessageBoxAsync(this,
+      DialogService.ShowErrorMessageBoxAsync(
         "Script processors cannot be updated: a programs folder has not been specified.");
       GoToLocationsPage();
       return;
     }
     if (!FileSystemService.Folder.Exists(Settings.ProgramsFolder.Path)) {
-      DialogWrapper.ShowErrorMessageBoxAsync(this,
+      DialogService.ShowErrorMessageBoxAsync(
         "Script processors cannot be updated: cannot find programs folder "
         + $"'{Settings.ProgramsFolder.Path}'.");
       GoToLocationsPage();
@@ -37,7 +37,7 @@ public class GuiScriptProcessorViewModel(
     if (soundBanks.Count == 0) {
       // Console.WriteLine(
       //   "GuiScriptProcessorViewModel.Open: No sound bank subfolders.");
-      DialogWrapper.ShowErrorMessageBoxAsync(this,
+      DialogService.ShowErrorMessageBoxAsync(
         "Script processors cannot be updated: programs folder "
         + $"'{Settings.ProgramsFolder.Path}' contains no sound bank subfolders.");
       GoToLocationsPage();

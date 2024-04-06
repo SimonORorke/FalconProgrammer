@@ -5,9 +5,9 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Tests.ViewModel;
 
 public class TestGuiScriptProcessorViewModel(
-  IDialogWrapper dialogWrapper,
+  IDialogService dialogService,
   IDispatcherService dispatcherService)
-  : GuiScriptProcessorViewModel(dialogWrapper, dispatcherService) {
+  : GuiScriptProcessorViewModel(dialogService, dispatcherService) {
   [PublicAPI] internal int ClosedCount { get; set; }
   internal bool SkipInitialisation { get; set; }
 
