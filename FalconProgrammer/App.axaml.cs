@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -60,6 +61,7 @@ public class App : Application {
   /// <summary>
   ///   Default palette preset from the online Fluent Editor https://theme.xaml.live/.
   /// </summary>
+  [SuppressMessage("ReSharper", "UnusedMember.Local")]
   private static void SelectDefaultColourScheme(
     ColorPaletteResources light,
     ColorPaletteResources dark) {
@@ -122,6 +124,7 @@ public class App : Application {
   /// <summary>
   ///   Forest palette preset from the online Fluent Editor https://theme.xaml.live/.
   /// </summary>
+  [SuppressMessage("ReSharper", "UnusedMember.Local")]
   private static void SelectForestColourScheme(
     ColorPaletteResources light,
     ColorPaletteResources dark) {
@@ -184,6 +187,7 @@ public class App : Application {
   /// <summary>
   ///   Lavender palette preset from the online Fluent Editor https://theme.xaml.live/.
   /// </summary>
+  [SuppressMessage("ReSharper", "UnusedMember.Local")]
   private static void SelectLavenderColourScheme(
     ColorPaletteResources light,
     ColorPaletteResources dark) {
@@ -246,6 +250,7 @@ public class App : Application {
   /// <summary>
   ///   Nighttime palette preset from the online Fluent Editor https://theme.xaml.live/.
   /// </summary>
+  [SuppressMessage("ReSharper", "UnusedMember.Local")]
   private static void SelectNighttimeColourScheme(
     ColorPaletteResources light,
     ColorPaletteResources dark) {
