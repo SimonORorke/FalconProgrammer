@@ -1,8 +1,8 @@
-using System;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using FalconProgrammer.ViewModel;
+using FalconProgrammer.Views;
 
 namespace FalconProgrammer;
 
@@ -25,13 +25,12 @@ public class ViewLocator : IDataTemplate {
     if (viewModel is null) {
       return null;
     }
-    string viewName = GetViewName(viewModel);
-    var viewType = Type.GetType(viewName);
-    if (viewType != null) {
-      var control = (Control)Activator.CreateInstance(viewType)!;
-      control.DataContext = viewModel;
-      return control;
+    var view = CreateView(viewModel);
+    if (view != null) {
+      view.DataContext = viewModel;
+      return view;
     }
+    string viewName = GetViewName(viewModel);
     return new TextBlock { Text = "Not Found: " + viewName };
   }
 
@@ -39,6 +38,24 @@ public class ViewLocator : IDataTemplate {
     return viewModel is ViewModelBase;
   }
 
+  /// <summary>
+  ///   Strongly-typed view creation is required for assembly trimming, which is
+  ///   specified by the PublishTrimmed property in the project file.
+  /// </summary>
+  private static Control? CreateView(object viewModel) {
+    return viewModel switch {
+      MainWindowViewModel => new MainWindow(),
+      BatchScriptViewModel => new BatchScriptView(),
+      GuiScriptProcessorViewModel => new GuiScriptProcessorView(),
+      LocationsViewModel => new LocationsView(),
+      _ => null
+    };
+  }
+
+  /// <summary>
+  ///   As view creation is strongly typed, getting a view name is only used for
+  ///   error messages.
+  /// </summary>
   private string GetViewName(object viewModel) {
     string viewModelShortName = viewModel.GetType().Name;
     string viewShortName = viewModelShortName.EndsWith("WindowViewModel")
