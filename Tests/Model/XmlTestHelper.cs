@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace FalconProgrammer.Tests;
+namespace FalconProgrammer.Tests.Model;
 
 public static class XmlTestHelper {
 

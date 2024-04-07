@@ -2,7 +2,6 @@
 
 namespace FalconProgrammer.Tests.Model;
 
-#pragma warning disable NUnit2005 // Consider using Assert.That(actual, Is.EqualTo(expected)) instead of Assert.AreEqual(expected, actual)
 [TestFixture]
 public class CategoryTests {
   [SetUp]
@@ -52,10 +51,10 @@ public class CategoryTests {
       @"Factory\Organic Texture 2.8",
       "BAS Biggy.uvip");
     category.Initialise();
-    Assert.IsTrue(category.MustUseGuiScriptProcessor);
-    Assert.AreEqual("Factory", category.TemplateSoundBankName);
-    Assert.AreEqual("Organic Texture 2.8", category.TemplateCategoryName);
-    Assert.AreEqual("BAS Biggy", category.TemplateProgramName);
+    Assert.That(category.MustUseGuiScriptProcessor);
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
+    Assert.That(category.TemplateCategoryName, Is.EqualTo("Organic Texture 2.8"));
+    Assert.That(category.TemplateProgramName, Is.EqualTo("BAS Biggy"));
   }
 
   [Test]
@@ -65,33 +64,34 @@ public class CategoryTests {
     category.ConfigureMockFileSystemService(
       @"Factory\Keys", "DX Mania.uvip");
     category.Initialise();
-    Assert.IsFalse(category.MustUseGuiScriptProcessor);
-    Assert.AreEqual("Factory", category.TemplateSoundBankName);
-    Assert.AreEqual("Keys", category.TemplateCategoryName);
-    Assert.AreEqual("DX Mania", category.TemplateProgramName);
+    Assert.That(!category.MustUseGuiScriptProcessor);
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
+    Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
+    Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
   }
 
   [Test]
   public void Main() {
     var category =
-      new TestCategory(GetSoundBankFolder("Fluidity"), "Electronic", Settings);
+      new TestCategory(GetSoundBankFolder("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      };
     category.ConfigureMockFileSystemService(
       @"Fluidity\Strings", "Guitar Stream.uvip");
     category.MockFileSystemService.Folder.ExpectedFilePaths.Add(
       category.CategoryFolderPath, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     category.Initialise();
-    Assert.IsFalse(category.MustUseGuiScriptProcessor);
-    Assert.AreEqual("Electronic", category.Name);
-    Assert.AreEqual("Fluidity", category.SoundBankFolder.Name);
-    Assert.AreEqual("Fluidity", category.TemplateSoundBankName);
-    Assert.AreEqual("Strings", category.TemplateCategoryName);
-    Assert.AreEqual("Guitar Stream", category.TemplateProgramName);
-    Assert.AreEqual(
-      Path.Combine(
-        Settings.TemplateProgramsFolder.Path, "Fluidity", "Strings",
-        "Guitar Stream.uvip"),
-      category.TemplateProgramPath);
+    Assert.That(!category.MustUseGuiScriptProcessor);
+    Assert.That(category.Name, Is.EqualTo("Electronic"));
+    Assert.That(category.SoundBankFolder.Name, Is.EqualTo("Fluidity"));
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Fluidity"));
+    Assert.That(category.TemplateCategoryName, Is.EqualTo("Strings"));
+    Assert.That(category.TemplateProgramName, Is.EqualTo("Guitar Stream"));
+    Assert.That(category.TemplateProgramPath, Is.EqualTo(Path.Combine(
+      Settings.TemplateProgramsFolder.Path, "Fluidity", "Strings",
+      "Guitar Stream.uvip")));
     Assert.That(category.GetPathsOfProgramFilesToEdit().Any());
+    Assert.That(category.TemplateScriptProcessor, Is.Not.Null);
     // Assert.IsNotNull(category.TemplateScriptProcessor);
   }
 
@@ -103,10 +103,10 @@ public class CategoryTests {
     category.ConfigureMockFileSystemService(
       @"Factory\Keys", "DX Mania.uvip");
     category.Initialise();
-    Assert.IsFalse(category.MustUseGuiScriptProcessor);
-    Assert.AreEqual("Factory", category.TemplateSoundBankName);
-    Assert.AreEqual("Keys", category.TemplateCategoryName);
-    Assert.AreEqual("DX Mania", category.TemplateProgramName);
+    Assert.That(!category.MustUseGuiScriptProcessor);
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
+    Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
+    Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
   }
 
   [Test]
@@ -117,10 +117,10 @@ public class CategoryTests {
     category.ConfigureMockFileSystemService(
       @"Pulsar\Bass", "Warped.uvip");
     category.Initialise();
-    Assert.IsTrue(category.MustUseGuiScriptProcessor);
-    Assert.AreEqual("Pulsar", category.TemplateSoundBankName);
-    Assert.AreEqual("Bass", category.TemplateCategoryName);
-    Assert.AreEqual("Warped", category.TemplateProgramName);
+    Assert.That(category.MustUseGuiScriptProcessor);
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Pulsar"));
+    Assert.That(category.TemplateCategoryName, Is.EqualTo("Bass"));
+    Assert.That(category.TemplateProgramName, Is.EqualTo("Warped"));
   }
 
   [Test]
