@@ -92,7 +92,6 @@ public class CategoryTests {
       "Guitar Stream.uvip")));
     Assert.That(category.GetPathsOfProgramFilesToEdit().Any());
     Assert.That(category.TemplateScriptProcessor, Is.Not.Null);
-    // Assert.IsNotNull(category.TemplateScriptProcessor);
   }
 
   [Test]
