@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="DX Mania" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Falcon Factory.ufs/Presets/Keys/DX Mania.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Properties BackgroundImagePath="$Falcon Factory.ufs/Artwork/ffs_bkg_wavetable.png" description="PATH: Factory\Keys\DX Mania&#xD;&#xA;Falcon Factory  Covering everything from classic synthesis, percussion, physical modeling, sample-driven granular and multi granular soundscapes to multi-oscillator hybrids—the Falcon Factory sound bank provides instant gratification with hundreds of high-quality, ready to perform patches.  " />
+        <ControlSignalSources>
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Filter Cutoff" Bipolar="1" Style="0" Value="0.5">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="91" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Filter Resonance" Bipolar="1" Style="0" Value="0.5">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 32" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="242" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 5" Bypass="0" DisplayName="SparkVerb On/Off" Bipolar="0" Style="1" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 112" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="393" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 6" Bypass="0" DisplayName="SparkVerb Mix" Bipolar="0" Style="0" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 33" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="544" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 7" Bypass="0" DisplayName="Wheel" Bipolar="0" Style="0" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 34" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="91" y="235" />
+            </ConstantModulation>
+        </ControlSignalSources>
+        <Inserts>
+            <Exciter Name="InsertFX0" Bypass="0" InputGain="0" Amount="2" Mix="100" Mode="1" OutputGain="0" Oversampling="0" />
+            <ThreeBandShelves Name="InsertFX2" Bypass="0" FreqLowMid="179.99998" FreqMidHigh="4000.0002" GainLow="2" GainMid="-3" GainHigh="10">
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/3 Band Shelf/Super Hi-Fi.preset" />
+            </ThreeBandShelves>
+            <DualDelay Name="InsertFX4" Bypass="1" SyncToHost="1" DelayTime="1.5" LowCut="20" HighCut="6967.3472" PeakFreq="1000" PeakGain="0" PeakQ="1" Feedback="0.19999999" Mix="0.049999997" Rotation="90" InputWidth="1" OutputWidth="1" DelayRatio="0.50399995" FeedbackRatio="0" InputRotation="0" OutputRotation="0" ModDepth="6.5345125" ModRate="1" ModChannelOffset="1" Interpolation="1" DualDelayVersion="1">
+                <Properties PresetPath="C:/Users/Michael/Documents/UVI/Falcon/User Presets/FXs/Dual Delay/MK_PingPongA.preset" />
+            </DualDelay>
+            <SparkVerb Name="InsertFX1" Bypass="1" ModDepth="10.616" ModRate="0.473584" Diffusion="0.530267" DiffusionStart="4.13796" Width="1" RoomSize="20.716999" DecayTime="1.9621491" DecayLow="0.55433673" DecayHigh="0.41666701" FreqLow="241.82001" FreqHigh="4666.916" Shape="0.81606901" Mix="0" Quality="4" Mode="2" HiCut="1" LowCut="0" Rolloff="5560.5718" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 5" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="/uvi/Part 0/Program/Macro 6" Destination="Mix" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+            </SparkVerb>
+            <Maximizer Name="InsertFX3" Bypass="0" Threshold="-4" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20" />
+        </Inserts>
+        <Layers>
+            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Layer 1" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffff0000" />
+                <ControlSignalSources />
+                <BusRouters />
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1" Pan="0" DisplayName="Keygroup 1" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="-0.5" Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="$Keygroup/DAHDSR 2" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                        <ControlSignalSources>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="1.0075473" Freq="4.3880358" Depth="0" Phase="0" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0" />
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0" RiseTime="0" Freq="5.6279464" Depth="1" Phase="0" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Depth" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </LFO>
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0" AttackCurve="0" HoldTime="0" DecayTime="5.7312431" DecayCurve="-0.97127229" SustainLevel="0" ReleaseTime="2.0585372" ReleaseCurve="0" DisplayName="Fil.Env" VelocityAmount="0.49997404" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0" />
+                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="0" AttackCurve="0" HoldTime="0" DecayTime="4.6381021" DecayCurve="-0.86889976" SustainLevel="0.044389203" ReleaseTime="0.40994227" ReleaseCurve="-0.98222685" DisplayName="DAHDSR 2" VelocityAmount="0.79999995" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0" ShouldFakeMachFiveReleaseTriggerBug="1">
+                                <Properties PresetPath="/Users/alainjetchart/Documents/UVI/Falcon/User Presets/Modulations/DAHDSR/Piano.preset" />
+                            </DAHDSR>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <XpanderFilter Name="InsertFX3" Bypass="0" Freq="395.39395" Q="0" KeyTracking="0" Mode="3" DistortionType="2" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.5" Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0.51724136" Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Program/Macro 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </XpanderFilter>
+                            <OnePole Name="InsertFX0" Bypass="0" Freq="119.99999" KeyTracking="0" Mode="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </OnePole>
+                        </Inserts>
+                        <BusRouters />
+                        <Oscillators>
+                            <WaveTableOscillator Name="Oscillator 3" Bypass="0" WavetablePath="$FalconResources.ufs/Samples/Wavetables/Digital/EPiano 2.wav" StartPhase="0" PhaseDistortionAmount="0.5" PhaseDistortionMode="0" Spread="0.23999999" DetuneMode="0" WaveIndex="0" WaveIndexSpread="0" StereoSpread="1" StereoSpreadMode="1" NumOscs="3" FadeMipMap="0" FadeWaveIndex="1" Stereo="1" PhaseSpread="1" EnableFM="0" FMDepth="0.1" FMRatio="0" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="0" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="72" DisplayName="Oscillator 3">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.5" Source="$Program/Macro 7" Destination="PhaseDistortionAmount" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Keygroup/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </WaveTableOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="C:/ProgramData/UVI/Falcon/FalconResources.ufs" />
+    <NeededFS Source="D:/Libraries/UVI/Falcon Factory.ufs" />
+</UVI4>

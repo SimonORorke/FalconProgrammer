@@ -7,11 +7,23 @@ public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings s
   : Category(soundBankFolder, name, settings) {
   private MockFileSystemService? _mockFileSystemService;
   internal string CategoryFolderPath { get; private set; } = string.Empty;
+  
+  /// <summary>
+  ///   <see cref="CreateTemplateXml" /> will read the embedded resource file
+  ///   with this name in the Tests assembly, ignoring its inputPath parameter.
+  /// </summary>
+  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
 
   internal MockFileSystemService MockFileSystemService =>
     _mockFileSystemService ??= new MockFileSystemService();
 
   protected override IFileSystemService FileSystemService => MockFileSystemService;
+  
+  protected override ProgramXml CreateTemplateXml() {
+    return new TestProgramXml(this) {
+      EmbeddedProgramFileName = EmbeddedTemplateFileName
+    };
+  }
 
   internal void ConfigureMockFileSystemService(
     string templateSubfolderPath, string templateProgramFileName) {
@@ -31,9 +43,5 @@ public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings s
       templateParentFolderPath, [templateFolderName]);
     MockFileSystemService.Folder.ExpectedFilePaths.Add(
       templateFolderPath, [templateProgramPath]);
-  }
-
-  protected override ScriptProcessor? GetTemplateScriptProcessor() {
-    return null;
   }
 }

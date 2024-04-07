@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Linq;
 using JetBrains.Annotations;
@@ -41,7 +42,7 @@ public class ProgramXml(Category category) : EntityBase {
     _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
-    _templateRootElement ??= XElement.Load(Category.TemplateProgramPath);
+    _templateRootElement ??= ReadRootElementFromFile(Category.TemplateProgramPath);
 
   public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
@@ -230,21 +231,27 @@ public class ProgramXml(Category category) : EntityBase {
     return result;
   }
 
-  private static XElement ReadRootElementFromFile(string programPath) {
+  protected static XElement ReadRootElementFromStream(Stream programStream) {
     // In the following newer way of loading the XML to an object hierarchy,
     // there's no way to stop line breaks from being replaced by spaces.
     // But line breaks are correct when inserting or removing elements.
-    return XElement.Load(programPath);
+    return XElement.Load(programStream);
     // This way of loading the XML to an object hierarchy
     // stops line breaks from being replaced by spaces in Description
     // when PrependPathLineToDescription updates it.
     // However, formatting is messed up when inserting or removing elements:
     // an inserted element does not start on a new line;
     // and removing an element leaves a blank line.
-    // using var reader = new XmlTextReader(programPath);
+    // using var reader = new XmlTextReader(programStream);
     // reader.Normalization = false;
     // var document = XDocument.Load(reader);
     // return document.Root!;
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual XElement ReadRootElementFromFile(string programPath) {
+    using var programStream = File.OpenRead(programPath);
+    return ReadRootElementFromStream(programStream);
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {

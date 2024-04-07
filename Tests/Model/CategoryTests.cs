@@ -18,6 +18,18 @@ public class CategoryTests {
   private Settings Settings { get; set; } = null!;
 
   [Test]
+  public void CannotFindTemplateScriptProcessor() {
+    var category = new TestCategory(GetSoundBankFolder("Factory"),
+      "Organic Texture 2.8", Settings) {
+      EmbeddedTemplateFileName = "NoGuiScriptProcessor.uvip"
+    };
+    category.ConfigureMockFileSystemService(
+      @"Factory\Organic Texture 2.8",
+      "BAS Biggy.uvip");
+    Assert.Throws<ApplicationException>(()=> category.Initialise());
+  }
+
+  [Test]
   public void CategoryFolderDoesNotExist() {
     var category =
       new TestCategory(GetSoundBankFolder("Pulsar"), "DoesNotExist", Settings) {
@@ -33,7 +45,9 @@ public class CategoryTests {
   [Test]
   public void FactoryCategorySpecificTemplate() {
     var category = new TestCategory(GetSoundBankFolder("Factory"),
-      "Organic Texture 2.8", Settings);
+      "Organic Texture 2.8", Settings) {
+      EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+    };
     category.ConfigureMockFileSystemService(
       @"Factory\Organic Texture 2.8",
       "BAS Biggy.uvip");
@@ -97,7 +111,9 @@ public class CategoryTests {
 
   [Test]
   public void PulsarHasCategorySpecificTemplates() {
-    var category = new TestCategory(GetSoundBankFolder("Pulsar"), "Bass", Settings);
+    var category = new TestCategory(GetSoundBankFolder("Pulsar"), "Bass", Settings) {
+      EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+    };
     category.ConfigureMockFileSystemService(
       @"Pulsar\Bass", "Warped.uvip");
     category.Initialise();

@@ -159,14 +159,18 @@ public class Category {
     return Settings.DefaultTemplate.Path;
   }
 
+  [ExcludeFromCodeCoverage]
+  protected virtual ProgramXml CreateTemplateXml() {
+    return new ProgramXml(this);
+  }
+
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
   ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
   ///   case the template program.
   /// </summary>
-  [ExcludeFromCodeCoverage]
-  protected virtual ScriptProcessor? GetTemplateScriptProcessor() {
-    var templateXml = new ProgramXml(this);
+  private ScriptProcessor? GetTemplateScriptProcessor() {
+    var templateXml = CreateTemplateXml();
     templateXml.LoadFromFile(TemplateProgramPath);
     // Testing for macro-modulating Modulations might be more reliable than
     // assuming the last ScriptProcessor.  But I think I tried that and there was 

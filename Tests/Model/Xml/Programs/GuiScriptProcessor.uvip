@@ -1,0 +1,471 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="Caffeine" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="1" NotePolyphony="0" ProgramPath="$Pulsar.ufs/Presets/Bass/Caffeine.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Properties description="PATH: Pulsar\Bass\Caffeine&#xD;&#xA;Pulsar Futuristic Electronic Sounds  • Expand Falcon with futuristic basses, leads, atmospheres, pads, fx and more • Tweak and perform patches on-the-fly with macro controls • Deep editing capabilities of Falcon allow limitless customization  A deep and futuristic collection of sounds perfect for modern electronic producers, composers and sound designers - Pulsar delivers powerful bass, electrifying leads, sunken and winding atmospheres, otherworldly pads, effects and more.  Designed and developed by Richard Gale and Carlo de Gregorio, the sounds of Pulsar are rich, detailed and unabashedly modern with electronic timbres ranging from flowing analog-inspired leads to immersive granular soundscapes. Pulsar delivers powerful fundamentals and charactered sounds in categories including atmospheres, bass, effects, leads, pads, plucks, sequences and arps.  Each of the sounds in Pulsar is designed to be expressive and playable, providing unique controls and macros allowing you to sculpt your sound and create dynamic performances. Dedicated ADSR envelopes, filter and effect macros and more make it quick and easy to perfectly dial-in your sound.  The versatility and clarity made possible by Falcon is evident throughout this collection, utilizing numerous synthesis techniques including wavetable, va and physical modeling, as well as robust use of effects and modulators. Sounds can all be quickly previewed, edited, layered or performed with nearly limitless variation thanks to Falcon's semi-modular architecture." />
+        <ControlSignalSources>
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Osc 1 (on/off)" Bipolar="0" Style="1" Value="1">
+                <Properties customPosition="1" showLabel="0" x="225" y="390" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Osc 2 (on/off)" Bipolar="0" Style="1" Value="1">
+                <Properties customPosition="1" showLabel="0" x="310" y="390" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="Osc 3 (on/off)" Bipolar="0" Style="1" Value="1">
+                <Properties customPosition="1" showLabel="0" x="395" y="390" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 4" Bypass="0" DisplayName="\" Bipolar="0" Style="0" Value="0.89999998">
+                <Properties customPosition="1" showValue="0" x="225" y="345" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 5" Bypass="0" DisplayName="-" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="1" showValue="0" x="310" y="345" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 6" Bypass="0" DisplayName="/" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="1" showValue="0" x="395" y="345" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 30" Bypass="0" DisplayName="Grain Density" Bipolar="1" Style="0" Value="0.5">
+                <Properties customPosition="1" showValue="0" x="20" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 31" Bypass="0" DisplayName="Phase Distortion" Bipolar="0" Style="0" Value="0.67203122">
+                <Properties customPosition="1" showValue="0" x="95" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 27" Bypass="0" DisplayName="Cutoff" Bipolar="0" Style="0" Value="0">
+                <Properties customPosition="1" showValue="0" x="170" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 29" Bypass="0" DisplayName="Warmth" Bipolar="0" Style="0" Value="0.79999995">
+                <Properties customPosition="1" showValue="0" x="620" y="220" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 15" Bypass="0" DisplayName="Reverb" Bipolar="0" Style="0" Value="0">
+                <Properties customPosition="1" showValue="0" x="620" y="300" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 16" Bypass="0" DisplayName="Delay" Bipolar="0" Style="0" Value="0.099999994">
+                <Properties customPosition="1" showValue="0" x="620" y="380" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 7" Bypass="0" DisplayName="A" Bipolar="0" Style="0" Value="0.32379687">
+                <Properties customPosition="1" showValue="0" x="395" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 8" Bypass="0" DisplayName="D" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="1" showLabel="1" showValue="0" x="470" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 9" Bypass="0" DisplayName="S" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="1" showValue="0" x="545" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 10" Bypass="0" DisplayName="R" Bipolar="0" Style="0" Value="0.29999998">
+                <Properties customPosition="1" showValue="0" x="620" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 11" Bypass="0" DisplayName="(F)A" Bipolar="0" Style="0" Value="0.19999999">
+                <Properties customPosition="1" showValue="0" x="395" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 12" Bypass="0" DisplayName="(F)D" Bipolar="0" Style="0" Value="0.46612504">
+                <Properties customPosition="1" showLabel="1" showValue="0" x="470" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 13" Bypass="0" DisplayName="(F)S" Bipolar="0" Style="0" Value="0.96476561">
+                <Properties customPosition="1" showValue="0" x="545" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 14" Bypass="0" DisplayName="(F)R" Bipolar="0" Style="0" Value="0.59999996">
+                <Properties customPosition="1" showValue="0" x="620" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 28" Bypass="0" DisplayName="Resonance" Bipolar="0" Style="0" Value="0">
+                <Properties customPosition="1" showValue="0" x="245" y="100" />
+            </ConstantModulation>
+            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO (Vib)" DelayTime="0" RiseTime="0" Freq="3.2621124" Depth="0.59999996" Phase="0" WaveFormType="0" Retrigger="1" Bipolar="1" Smooth="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.15000001" Source="@MIDI CC 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 1" Destination="Depth" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                </Connections>
+            </LFO>
+            <ConstantModulation Name="Macro 18" Bypass="0" DisplayName="(F) Env Amount" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="1" showValue="0" x="320" y="100" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 17" Bypass="0" DisplayName="Vel Scale" Bipolar="0" Style="0" Value="0.5">
+                <Properties customPosition="1" showLabel="1" showValue="0" x="320" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 32" Bypass="0" DisplayName="Thorus" Bipolar="0" Style="0" Value="0">
+                <Properties customPosition="1" showValue="0" x="20" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 19" Bypass="0" DisplayName="Feedback" Bipolar="0" Style="0" Value="0.20726563">
+                <Properties customPosition="1" showValue="0" x="560" y="380" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 21" Bypass="0" DisplayName="Decay" Bipolar="0" Style="0" Value="0.29999998">
+                <Properties customPosition="1" showValue="0" x="560" y="300" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 33" Bypass="0" DisplayName="Glide Time" Bipolar="0" Style="0" Value="0.27199998">
+                <Properties customPosition="1" showValue="0" x="95" y="20" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 34" Bypass="0" DisplayName="WT-Pos" Bipolar="0" Style="0" Value="0.24109375">
+                <Properties customPosition="1" showValue="0" x="95" y="180" />
+            </ConstantModulation>
+            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="M.LFO" DelayTime="0" RiseTime="0" Freq="0" Depth="1" Phase="0" WaveFormType="0" Retrigger="1" Bipolar="0" Smooth="0" />
+            <MultiEnvelope Name="Multi Envelope 1" Bypass="1" SyncToHost="1" DisplayName="M.Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="2" NumSteps="5" Speed="0.1" Smooth="0.021870056" Bipolar="0" NoteOffRetrigger="0" LoopStart="0" LoopEnd="4">
+                <Steps>
+                    <Step Time="0" DestLevel="0" Curve="0" />
+                    <Step Time="3" DestLevel="0.296875" Curve="0.43827042" />
+                    <Step Time="1" DestLevel="0.36213237" Curve="-0.87023979" />
+                    <Step Time="4" DestLevel="0.53125" Curve="0.73642772" />
+                    <Step Time="4.5" DestLevel="0" Curve="-0.015625" />
+                </Steps>
+                <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Envelopes Looped/Env 05.preset" />
+            </MultiEnvelope>
+            <ConstantModulation Name="Macro 22" Bypass="0" DisplayName="Pre-delay" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="1" showValue="0" x="500" y="300" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 20" Bypass="0" DisplayName="Time (Sync)" Bipolar="0" Style="0" Value="0.40959376">
+                <Properties customPosition="1" showValue="0" x="500" y="380" />
+            </ConstantModulation>
+        </ControlSignalSources>
+        <EventProcessors>
+            <ScriptProcessor Name="EventProcessor0" Bypass="0" API_version="17">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 112" Destination="LowEnabled" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 56" Destination="LowLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 113" Destination="MidEnabled" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 57" Destination="MidLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 114" Destination="HighEnabled" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 58" Destination="HighLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 51" Destination="AmpAttack" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 52" Destination="AmpDecay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 53" Destination="AmpSustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 54" Destination="AmpRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 55" Destination="VelAmount" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 61" Destination="FilterAttack" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 62" Destination="FilterDecay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 63" Destination="FilterSustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 64" Destination="FilterRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 65" Destination="FilterDepth" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Cutoff" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 32" Destination="Custom1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 33" Destination="Custom2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 34" Destination="Custom3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 11" Destination="Custom4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 36" Destination="Custom5" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 37" Destination="Custom6" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 28" Destination="Custom7" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 41" Destination="Delay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 43" Destination="DelayCustom1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 45" Destination="DelayCustom2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 42" Destination="Reverb" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 44" Destination="ReverbCustom1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 46" Destination="ReverbCustom2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties OriginalProgramPath="$Pulsar.ufs/Presets/Bass/Caffeine.uvip" PresetPath="./../../Scripts/stub.lua" ScriptPath="$Pulsar.ufs/Scripts/stub.lua" />
+                <script><![CDATA[categorie = "bass"
+require("main")]]></script>
+                <ScriptData />
+            </ScriptProcessor>
+        </EventProcessors>
+        <Inserts>
+            <XpanderFilter Name="InsertFX3" Bypass="0" Freq="20000" Q="0" KeyTracking="0" Mode="1" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@MIDI CC 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                </Connections>
+            </XpanderFilter>
+            <WhiteChorus Name="InsertFX2" Bypass="0" Speed="0.2" Depth="5" Edge="0" Tone="22050" Crossover="20" LowGain="1" Mix="0" Trim="0" NumVoices="4" Mode="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 32" Destination="Mix" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+            </WhiteChorus>
+            <DualDelay Name="InsertFX4" Bypass="1" SyncToHost="1" DelayTime="2.6666667" LowCut="763.50983" HighCut="6011.146" PeakFreq="1000" PeakGain="0" PeakQ="1" Feedback="0.20726563" Mix="0.049999997" Rotation="90" InputWidth="1" OutputWidth="0.5" DelayRatio="0.5" FeedbackRatio="-0.32776874" InputRotation="0" OutputRotation="0" ModDepth="7.4371934" ModRate="1" ModChannelOffset="1" Interpolation="1" DualDelayVersion="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 20" Destination="DelayTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 19" Destination="Feedback" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.5" Source="$Program/Macro 16" Destination="Mix" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/01 - Delay/07 - Dual Delay/1 Stereo Delay/Alter Echo.preset" />
+            </DualDelay>
+            <SparkVerb Name="InsertFX5" Bypass="0" ModDepth="6.4217901" ModRate="0.976237" Diffusion="0.52654701" DiffusionStart="5.47963" Width="1" RoomSize="5.3038139" DecayTime="0" DecayLow="1.27473" DecayHigh="0.28178501" FreqLow="10" FreqHigh="20000" Shape="0.74172801" Mix="0" Quality="4" Mode="2" HiCut="0" LowCut="0" Rolloff="20000" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 21" Destination="DecayTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 15" Destination="Mix" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 22" Destination="PreDelay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/05 - Room/VRoom.preset" />
+            </SparkVerb>
+            <ParametricEQ Name="InsertFX0" Bypass="0" Freq1="20" Q1="0.69999999" Gain1="0" Enable1="1" Freq2="70" Q2="12" Gain2="0" Enable2="0" Freq3="180" Q3="0.69999999" Gain3="0" Enable3="0" Freq4="520" Q4="0.69999999" Gain4="0" Enable4="0" Freq5="1870" Q5="0.69999999" Gain5="0" Enable5="0" Freq6="3900" Q6="0.69999999" Gain6="0" Enable6="0" Freq7="7400" Q7="12" Gain7="0" Enable7="0" Freq8="16000" Q8="0.69999999" Gain8="0" Enable8="1" />
+            <BrickwallLimiter Name="InsertFX1" Bypass="0" Threshold="-6" Margin="-0.5" Release="100" Mix="1" />
+        </Inserts>
+        <Auxs>
+            <AuxEffect Name="Aux0" Bypass="0" Gain="1" Pan="0" PreInsert="1" DisplayName="Aux 1">
+                <Properties FXMultiPath="C:/Users/Carlo de Gregorio/Documents/UVI/Falcon/User Presets/MultiFX/NY - Compression 1.fxm" />
+                <Inserts>
+                    <ParametricEQ Name="InsertFX0" Bypass="0" Freq1="30" Q1="0.69999999" Gain1="0" Enable1="0" Freq2="70" Q2="12" Gain2="0" Enable2="0" Freq3="778.27545" Q3="1.0296875" Gain3="-30" Enable3="1" Freq4="304.71909" Q4="1.0296875" Gain4="-30" Enable4="1" Freq5="1870" Q5="0.69999999" Gain5="0" Enable5="0" Freq6="3900" Q6="0.69999999" Gain6="0" Enable6="0" Freq7="7400" Q7="12" Gain7="0" Enable7="0" Freq8="2688.7974" Q8="0.69999999" Gain8="0" Enable8="0" />
+                    <CompExp Name="InsertFX1" Bypass="0" AutoMakeUp="0" MakeUpGain="-0.17812347" CompThreshold="-6" CompRatio="4" CompAttack="0.00097117905" CompRelease="163.11516" GateThreshold="-55.682655" GateRatio="1" GateAttack="10" GateRelease="100" Mix="1" />
+                </Inserts>
+            </AuxEffect>
+        </Auxs>
+        <Layers>
+            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Sub " OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="4" PortamentoTime="0" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 4" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Mute" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 33" Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                </Connections>
+                <Properties Color="ffbe88cc" />
+                <ControlSignalSources />
+                <Inserts>
+                    <EffectRack Name="InsertFX0" Bypass="0">
+                        <Properties PresetPath="C:/Users/Carlo de Gregorio/Documents/UVI/Falcon/User Presets/FXs/Effect Rack/Bass Channel.preset" />
+                        <ControlSignalSources>
+                            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Verb Mix" Bipolar="0" Style="0" Value="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 15" Destination="Value" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                                <Properties customPosition="0" x="90" y="25" />
+                            </ConstantModulation>
+                            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Decay" Bipolar="0" Style="0" Value="0.49999997">
+                                <Properties customPosition="0" x="215" y="25" />
+                            </ConstantModulation>
+                            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="Delay Mix" Bipolar="0" Style="0" Value="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 16" Destination="Value" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                                <Properties customPosition="0" x="340" y="25" />
+                            </ConstantModulation>
+                            <ConstantModulation Name="Macro 4" Bypass="0" DisplayName="Delay Feed" Bipolar="0" Style="0" Value="0.184">
+                                <Properties customPosition="0" x="465" y="25" />
+                            </ConstantModulation>
+                            <ConstantModulation Name="Macro 5" Bypass="0" DisplayName="Width" Bipolar="1" Style="0" Value="0">
+                                <Properties customPosition="0" x="590" y="25" />
+                            </ConstantModulation>
+                        </ControlSignalSources>
+                        <Chains>
+                            <AuxEffect Name="Chain1" Bypass="0" Gain="1" Pan="0" PreInsert="1" DisplayName="Chain1">
+                                <Inserts>
+                                    <Widener Name="InsertFX3" Bypass="0" Delay="0" Width="0" HighShelfFreqSide="10000" HighSelfGainSide="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 5" Destination="Width" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                        </Connections>
+                                    </Widener>
+                                    <BrickwallFilter Name="InsertFX0" Bypass="0" Freq="250.00002" Type="0" Slope="2" SoftBypass="0" />
+                                </Inserts>
+                            </AuxEffect>
+                        </Chains>
+                    </EffectRack>
+                </Inserts>
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="1.9952623" Destination="../../Aux0" PreFader="0" BusRouterVersion="1">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 29" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                    </BusRouter>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.7079457" Pan="0" DisplayName="Sub" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.0049999999" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="AmpEnv1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 7" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 8" Destination="DecayTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 17" Destination="DynamicRange" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 9" Destination="SustainLevel" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 10" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 1" Bypass="0" AttackTime="9.9999997e-05" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0.25" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="F.Env (Sub)">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 11" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 12" Destination="DecayTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 13" Destination="SustainLevel" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 14" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 2" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0.25" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0.5" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Env (Sub)" />
+                        </ControlSignalSources>
+                        <Inserts>
+                            <Drive Name="InsertFX1" Bypass="0" DriveAmount="0" Mode="0" Oversampling="0" />
+                            <XpanderFilter Name="InsertFX0" Bypass="0" Freq="20" Q="1" KeyTracking="0" Mode="3" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 27" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Keygroup/Analog ADSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 18" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                        </Connections>
+                                    </SignalConnection>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 28" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </XpanderFilter>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1" />
+                        </BusRouters>
+                        <Oscillators>
+                            <WaveTableOscillator Name="Oscillator" Bypass="0" WavetablePath="$FalconResources.ufs/Samples/Wavetables/Sine/CS70 Sine.wav" StartPhase="0" PhaseDistortionAmount="0.33798438" PhaseDistortionMode="1" Spread="0.26526561" DetuneMode="0" WaveIndex="0" WaveIndexSpread="0" StereoSpread="0.66272914" StereoSpreadMode="1" NumOscs="1" FadeMipMap="0" FadeWaveIndex="1" Stereo="0" PhaseSpread="0" EnableFM="0" FMDepth="0.1" FMRatio="0" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="-24" FineTune="0" Gain="1.9952623" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0" Source="$Program/LFO 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="PitchBendMod" Ratio="12" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.49999803" Source="$Program/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </WaveTableOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 2" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Mid " OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="4" PortamentoTime="0" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 5" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Mute" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 33" Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                </Connections>
+                <Properties Color="ffca7d6d" />
+                <ControlSignalSources />
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="1.9952623" Destination="../../Aux0" PreFader="0" BusRouterVersion="1">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 29" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                    </BusRouter>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.7079457" Pan="0" DisplayName="Mid" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.0049999999" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="AmpEnv2">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 7" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 8" Destination="DecayTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 17" Destination="DynamicRange" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 9" Destination="SustainLevel" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 10" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 1" Bypass="0" AttackTime="9.9999997e-05" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0.25" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="F.Env (Mid)">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 11" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 12" Destination="DecayTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 13" Destination="SustainLevel" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 14" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 2" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0.25" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0.5" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Env (Mid)" />
+                            <AnalogADSR Name="Analog ADSR 3" Bypass="0" AttackTime="2.0900633" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="1" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Analog ADSR 3" />
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="1" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="4" Depth="0.29999998" Phase="0" WaveFormType="0" Retrigger="1" Bipolar="1" Smooth="0" />
+                        </ControlSignalSources>
+                        <Inserts>
+                            <XpanderFilter Name="InsertFX0" Bypass="0" Freq="20" Q="0" KeyTracking="0" Mode="3" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 27" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Keygroup/Analog ADSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 18" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                        </Connections>
+                                    </SignalConnection>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 28" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </XpanderFilter>
+                            <XpanderFilter Name="InsertFX1" Bypass="0" Freq="650.00012" Q="0" KeyTracking="0" Mode="13" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.5" Source="$Keygroup/LFO 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </XpanderFilter>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1" />
+                        </BusRouters>
+                        <Oscillators>
+                            <WaveTableOscillator Name="Oscillator" Bypass="0" WavetablePath="$FalconResources.ufs/Samples/Wavetables/X-Bass/Insect_900.wav" StartPhase="0" PhaseDistortionAmount="0" PhaseDistortionMode="0" Spread="0" DetuneMode="0" WaveIndex="1" WaveIndexSpread="0.41373438" StereoSpread="0" StereoSpreadMode="1" NumOscs="3" FadeMipMap="0" FadeWaveIndex="1" Stereo="1" PhaseSpread="0" EnableFM="0" FMDepth="0.1" FMRatio="0" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="-24" FineTune="0" Gain="1.9952623" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 31" Destination="PhaseDistortionAmount" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.30000001" Source="$Keygroup/Analog ADSR 3" Destination="Spread" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 34" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-1" Source="$Keygroup/Analog ADSR 3" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/Analog ADSR 3" Destination="StereoSpread" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0" Source="$Program/Multi Envelope 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="1" />
+                                    <SignalConnection Name="PitchBendMod" Ratio="12" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.49999803" Source="$Program/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </WaveTableOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 4" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="High" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="4" PortamentoTime="0" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 3" Destination="Mute" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 33" Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                </Connections>
+                <Properties Color="ff9fc36c" />
+                <ControlSignalSources />
+                <Inserts>
+                    <Ensemble Name="InsertFX2" Bypass="0" Mode="0" Tone="7005.3691" Mix="1" />
+                    <ParametricEQ Name="InsertFX1" Bypass="0" Freq1="30" Q1="0.69999999" Gain1="0" Enable1="0" Freq2="70" Q2="12" Gain2="0" Enable2="0" Freq3="180" Q3="0.69999999" Gain3="0" Enable3="0" Freq4="520" Q4="0.69999999" Gain4="0" Enable4="0" Freq5="1445.3743" Q5="0.69999999" Gain5="-9.2651157" Enable5="1" Freq6="4112.543" Q6="2.8122001" Gain6="-14.623257" Enable6="1" Freq7="7400" Q7="12" Gain7="0" Enable7="0" Freq8="5999.999" Q8="0.69999999" Gain8="0" Enable8="1">
+                        <Properties PresetPath="" />
+                    </ParametricEQ>
+                </Inserts>
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="1.9952623" Destination="../../Aux0" PreFader="0" BusRouterVersion="1">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 29" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                    </BusRouter>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.7079457" Pan="0" DisplayName="High" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.0049999999" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="AmpEnv3">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 7" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 8" Destination="DecayTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 17" Destination="DynamicRange" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 9" Destination="SustainLevel" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 10" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 1" Bypass="0" AttackTime="9.9999997e-05" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0.25" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="F.Env (High)">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 11" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 12" Destination="DecayTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 13" Destination="SustainLevel" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 14" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 2" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0.25" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0.5" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Env (High)" />
+                            <MultiEnvelope Name="Multi Envelope 1" Bypass="0" SyncToHost="0" DisplayName="Multi Env 1" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NumSteps="4" Speed="1" Smooth="0" Bipolar="0" NoteOffRetrigger="0" LoopStart="1" LoopEnd="2" ReleaseStep="3">
+                                <Steps>
+                                    <Step Time="0" DestLevel="1" Curve="0" />
+                                    <Step Time="0" DestLevel="1" Curve="0" />
+                                    <Step Time="1" DestLevel="1" Curve="0" />
+                                    <Step Time="0.0099999998" DestLevel="0" Curve="0" />
+                                </Steps>
+                            </MultiEnvelope>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="1" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="8" Depth="1" Phase="0" WaveFormType="0" Retrigger="1" Bipolar="1" Smooth="0" />
+                        </ControlSignalSources>
+                        <Inserts>
+                            <XpanderFilter Name="InsertFX0" Bypass="0" Freq="20" Q="0" KeyTracking="0" Mode="3" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 27" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Keygroup/Analog ADSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 18" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                        </Connections>
+                                    </SignalConnection>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 28" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </XpanderFilter>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1" />
+                        </BusRouters>
+                        <Oscillators>
+                            <GranularOscillator Name="Oscillator" Bypass="0" CoarseTune="16" FineTune="50" Gain="1.9952623" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1" SamplePath="$Pulsar.ufs/Samples/Caffeine Samples/Found_CoffeeMachine.wav" Direction="1" Speed="7.9999995" GrainSize="118.46529" GrainSymmetry="0.5" GrainFade="1" Density="2.0000002" Jitter="0" Position="0.25" PositionVariation="0" PitchVariation="0" LoopMode="2" PitchCompMode="1" Window="0" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="12" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.49999803" Source="$Program/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1" Destination="GrainSize" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.30000001" Source="$Program/Macro 30" Destination="Density" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </GranularOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="C:/ProgramData/UVI/Falcon/FalconResources.ufs" />
+    <NeededFS Source="D:/Libraries/UVI/Pulsar.ufs" />
+</UVI4>
