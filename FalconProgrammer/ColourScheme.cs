@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -176,7 +175,6 @@ public class ColourScheme {
   /// <summary>
   ///   Lavender palette preset from the online Fluent Editor https://theme.xaml.live/.
   /// </summary>
-  [SuppressMessage("ReSharper", "UnusedMember.Local")]
   private static void SelectLavenderColourScheme(
     ColorPaletteResources light,
     ColorPaletteResources dark) {
