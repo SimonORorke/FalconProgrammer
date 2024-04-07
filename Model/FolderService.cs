@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FalconProgrammer.Model;
 
@@ -11,6 +12,7 @@ public class FolderService : IFolderService {
     return Directory.Exists(path);
   }
 
+  [ExcludeFromCodeCoverage]
   public IEnumerable<string> GetFilePaths(string path, string searchPattern) {
     if (Exists(path)) {
       return Directory.GetFiles(path, searchPattern);

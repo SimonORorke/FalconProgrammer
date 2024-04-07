@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model;
@@ -16,6 +17,7 @@ public class Settings : SerialisationBase {
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(ProgramCategory))]
+  [ExcludeFromCodeCoverage]
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
   [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
