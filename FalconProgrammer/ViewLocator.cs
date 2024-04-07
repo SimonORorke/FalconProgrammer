@@ -47,6 +47,7 @@ public class ViewLocator : IDataTemplate {
       MainWindowViewModel => new MainWindow(),
       BatchScriptViewModel => new BatchScriptView(),
       GuiScriptProcessorViewModel => new GuiScriptProcessorView(),
+      MidiForMacrosViewModel => new MidiForMacrosView(),
       LocationsViewModel => new LocationsView(),
       _ => null
     };

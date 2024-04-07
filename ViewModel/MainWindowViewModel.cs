@@ -43,6 +43,13 @@ public partial class MainWindowViewModel(
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
+  internal virtual MidiForMacrosViewModel MidiForMacrosViewModel { get; set; } =
+    new MidiForMacrosViewModel(dialogService, dispatcherService);
+
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
   internal virtual LocationsViewModel LocationsViewModel { get; set; } =
     new LocationsViewModel(dialogService, dispatcherService);
 
@@ -62,6 +69,7 @@ public partial class MainWindowViewModel(
     var list = new List<TabItemViewModel> {
       new TabItemViewModel(LocationsViewModel),
       new TabItemViewModel(GuiScriptProcessorViewModel),
+      new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BatchScriptViewModel)
     };
     foreach (var tab in list) {

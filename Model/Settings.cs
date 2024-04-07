@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
@@ -20,7 +19,7 @@ public class Settings : SerialisationBase {
   [ExcludeFromCodeCoverage]
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
-  [XmlElement] public MacrosMidi MidiForMacros { get; set; } = new MacrosMidi();
+  [XmlElement] public MidiForMacros MidiForMacros { get; set; } = new MidiForMacros();
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static string GetSettingsPath(string settingsFolderPath) {
@@ -60,36 +59,6 @@ public class Settings : SerialisationBase {
   public struct IntegerRange {
     public int Start;
     public int End;
-  }
-
-  public class MacrosMidi {
-    private ImmutableList<int>? _continuousCcNos;
-    private ImmutableList<int>? _toggleCcNos;
-    [XmlAttribute] public int ModWheelReplacementCcNo { get; set; }
-
-    [XmlArray(nameof(ContinuousCcNoRanges))]
-    [XmlArrayItem("ContinuousCcNoRange")]
-    public List<IntegerRange> ContinuousCcNoRanges { get; set; } = [];
-
-    [XmlArray(nameof(ToggleCcNoRanges))]
-    [XmlArrayItem("ToggleCcNoRange")]
-    public List<IntegerRange> ToggleCcNoRanges { get; set; } = [];
-
-    internal ImmutableList<int> ContinuousCcNos =>
-      _continuousCcNos ??= CreateCcNoList(ContinuousCcNoRanges);
-
-    internal ImmutableList<int> ToggleCcNos =>
-      _toggleCcNos ??= CreateCcNoList(ToggleCcNoRanges);
-
-    private static ImmutableList<int> CreateCcNoList(List<IntegerRange> ranges) {
-      var list = new List<int>();
-      foreach (var range in ranges) {
-        for (int ccNo = range.Start; ccNo <= range.End; ccNo++) {
-          list.Add(ccNo);
-        }
-      }
-      return list.ToImmutableList();
-    }
   }
 
   public class ProgramCategory {

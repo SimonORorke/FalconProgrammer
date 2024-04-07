@@ -11,12 +11,12 @@ namespace FalconProgrammer.Model.XmlLinq;
 public class Macro : ModulationsOwner {
   private XElement? _propertiesElement;
 
-  public Macro(ProgramXml programXml, Settings.MacrosMidi midi)
+  public Macro(ProgramXml programXml, MidiForMacros midi)
     : base(programXml, true) {
     Midi = midi;
   }
 
-  public Macro(XElement macroElement, ProgramXml programXml, Settings.MacrosMidi midi)
+  public Macro(XElement macroElement, ProgramXml programXml, MidiForMacros midi)
     : base(programXml) {
     Element = macroElement;
     Midi = midi;
@@ -71,7 +71,7 @@ public class Macro : ModulationsOwner {
     set => Name = $"Macro {value}";
   }
 
-  private Settings.MacrosMidi Midi { get; }
+  private MidiForMacros Midi { get; }
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 

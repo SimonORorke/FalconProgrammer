@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FalconProgrammer.Views.BatchScriptView"
+             x:Class="FalconProgrammer.Views.MidiForMacrosView"
              x:DataType="viewModel:BatchScriptViewModel">
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE -->
         <viewModel:BatchScriptViewModel />
     </Design.DataContext>
-    BatchScriptView
+    MidiForMacrosView
 </UserControl>

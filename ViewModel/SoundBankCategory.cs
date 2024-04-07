@@ -15,10 +15,9 @@ public partial class SoundBankCategory(
   Action appendAdditionItem,
   Action onItemChanged,
   Action<SoundBankCategory> removeItem)
-  : ObservableObject {
+  : DataGridItem<SoundBankCategory>(appendAdditionItem,
+    onItemChanged, removeItem) {
   public const string AllCategoriesCaption = "All";
-  [ObservableProperty] private bool _canRemove; // Generates CanRemove property
-
   [ObservableProperty]
   private string _category = string.Empty; // Generates Category property
 
@@ -32,9 +31,6 @@ public partial class SoundBankCategory(
   public ObservableCollection<string> Categories { get; } = [];
   private IFileSystemService FileSystemService { get; } = fileSystemService;
   private Settings Settings { get; } = settings;
-  private Action AppendAdditionItem { get; } = appendAdditionItem;
-  private Action OnItemChanged { get; } = onItemChanged;
-  private Action<SoundBankCategory> RemoveItem { get; } = removeItem;
 
   // Code coverage highlighting does not work for these partial methods.
   partial void OnSoundBankChanged(string value) {
