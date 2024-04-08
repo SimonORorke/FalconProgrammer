@@ -52,6 +52,9 @@ public abstract class DataGridItemCollection<T>(
     HasBeenChanged = true;
   }
 
+  // This looks like a false suggestion we are having to suppress.
+  // AppendAdditionItem does not get the suggestion. Why does this method?
+  // ReSharper disable once UnusedMemberInSuper.Global
   protected abstract void RemoveItem(ObservableObject itemToRemove);
 
   protected void RemoveItemTyped(T itemToRemove) {
