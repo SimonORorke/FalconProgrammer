@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
@@ -75,7 +76,7 @@ public class SoundBankCategoryCollection(
     HasBeenChanged = false;
   }
 
-  private void RemoveItem(SoundBankCategory itemToRemove) {
-    DispatcherService.Dispatch(() => Remove(itemToRemove));
+  private void RemoveItem(ObservableObject itemToRemove) {
+    DispatcherService.Dispatch(() => Remove((SoundBankCategory)itemToRemove));
   }
 }
