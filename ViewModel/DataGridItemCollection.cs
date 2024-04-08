@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
@@ -24,7 +25,7 @@ public abstract class DataGridItemCollection<T>(
         ForceAppendAdditionItem = false;
       } else {
         ForceAppendAdditionItem = true;
-        AppendAdditionItem();
+        AppendAdditionItem(); 
         ForceAppendAdditionItem = false;
         HasBeenChanged = false;
       }
@@ -39,16 +40,6 @@ public abstract class DataGridItemCollection<T>(
   /// </summary>
   protected abstract void AppendAdditionItem();
   
-  // /// <summary>
-  // ///   Appends an addition item.
-  // /// </summary>
-  // protected void AppendAdditionItem() {
-  //   if (IsPopulating && !ForceAppendAdditionItem) {
-  //     return;
-  //   }
-  //   AddAdditionItem();
-  // }
-
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
     base.OnCollectionChanged(e);
     if (IsPopulating) {
@@ -60,6 +51,8 @@ public abstract class DataGridItemCollection<T>(
   protected void OnItemChanged() {
     HasBeenChanged = true;
   }
+
+  protected abstract void RemoveItem(ObservableObject itemToRemove);
 
   protected void RemoveItemTyped(T itemToRemove) {
     DispatcherService.Dispatch(() => Remove(itemToRemove));

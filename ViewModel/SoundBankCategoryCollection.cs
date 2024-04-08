@@ -40,7 +40,7 @@ public class SoundBankCategoryCollection(
     IsPopulating = false;
   }
 
-  private void RemoveItem(ObservableObject itemToRemove) {
+  protected override void RemoveItem(ObservableObject itemToRemove) {
     RemoveItemTyped((SoundBankCategory)itemToRemove);
   }
 }
