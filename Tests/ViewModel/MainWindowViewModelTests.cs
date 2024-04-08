@@ -31,6 +31,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Tabs[0].Header,
       Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
     Assert.That(ViewModel.Tabs[2].Header,
+      Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
+    Assert.That(ViewModel.Tabs[3].Header,
       Is.EqualTo(ViewModel.BatchScriptViewModel.TabTitle));
     ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations view model 
     // Skip the GUI Script Processor page's initial validation.

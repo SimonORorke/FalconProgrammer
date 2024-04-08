@@ -22,12 +22,14 @@ public class SoundBankCategoryCollection(
   private ImmutableList<string> SoundBanks { get; set; } = [];
 
   private void AddItem(string soundBank = "", string category = "") {
+    bool isAdditionItem = !IsPopulating || ForceAppendAdditionItem; 
     Add(new SoundBankCategory(
       Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category,
-      CanRemove = IsPopulating && !ForceAppendAdditionItem
+      IsAdditionItem = isAdditionItem, 
+      CanRemove = !isAdditionItem
     });
   }
 
@@ -35,7 +37,7 @@ public class SoundBankCategoryCollection(
   ///   Appends an addition item.
   /// </summary>
   private void AppendAdditionItem() {
-    if (IsPopulating & !ForceAppendAdditionItem) {
+    if (IsPopulating && !ForceAppendAdditionItem) {
       return;
     }
     AddItem();

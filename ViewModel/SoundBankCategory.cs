@@ -26,7 +26,7 @@ public partial class SoundBankCategory(
 
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
   private bool IsAdding { get; set; }
-  internal bool IsAdditionItem => SoundBank == string.Empty;
+  // internal bool IsAdditionItem => SoundBank == string.Empty;
   internal bool IsForAllCategories => Category == AllCategoriesCaption;
   public ObservableCollection<string> Categories { get; } = [];
   private IFileSystemService FileSystemService { get; } = fileSystemService;
@@ -74,7 +74,7 @@ public partial class SoundBankCategory(
       OnItemChanged();
     }
   }
-
+  
   /// <summary>
   ///   Removes this item from the collection.
   /// </summary>
