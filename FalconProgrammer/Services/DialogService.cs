@@ -26,7 +26,7 @@ public class DialogService : IDialogService {
         AllowMultiple = false,
         // For macOS, we may need to specify
         // FilePickerOpenOptions.AppleUniformTypeIdentifiers either as well as or instead
-        // of FilePickerOpenOptions.FileTypeFilter, which is required for windows.
+        // of FilePickerOpenOptions.FileTypeFilter, which is required for Windows.
         FileTypeFilter = [
           new FilePickerFileType(filterName) {
             Patterns = [pattern]

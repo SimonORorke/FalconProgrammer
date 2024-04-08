@@ -13,7 +13,7 @@ public class SoundBankCategoryCollection(
 
   private ImmutableList<string> SoundBanks { get; set; } = [];
 
-  protected override void AddAdditionItem() {
+  protected override void AppendAdditionItem() {
     AddItem();
   }
 

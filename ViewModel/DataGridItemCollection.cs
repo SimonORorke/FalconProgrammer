@@ -34,17 +34,20 @@ public abstract class DataGridItemCollection<T>(
 
   protected Settings Settings { get; } = settings;
 
-  protected abstract void AddAdditionItem();
-  
   /// <summary>
   ///   Appends an addition item.
   /// </summary>
-  protected void AppendAdditionItem() {
-    if (IsPopulating && !ForceAppendAdditionItem) {
-      return;
-    }
-    AddAdditionItem();
-  }
+  protected abstract void AppendAdditionItem();
+  
+  // /// <summary>
+  // ///   Appends an addition item.
+  // /// </summary>
+  // protected void AppendAdditionItem() {
+  //   if (IsPopulating && !ForceAppendAdditionItem) {
+  //     return;
+  //   }
+  //   AddAdditionItem();
+  // }
 
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
     base.OnCollectionChanged(e);
