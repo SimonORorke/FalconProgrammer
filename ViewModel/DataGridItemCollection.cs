@@ -10,26 +10,22 @@ public abstract class DataGridItemCollection<T>(
   IDispatcherService dispatcherService) : ObservableCollection<T> where T : DataGridItem {
   private bool _isPopulating;
   private IDispatcherService DispatcherService { get; } = dispatcherService;
-  private bool ForceAppendAdditionItem { get; set; }
 
   /// <summary>
-  ///   Gets whether the collection has changed being populated.
+  ///   Gets whether the collection has changed since being populated.
   /// </summary>
   internal bool HasBeenChanged { get; private set; }
-  protected bool IsAddingAdditionItem => !IsPopulating || ForceAppendAdditionItem;
+
+  protected bool IsAddingAdditionItem => !IsPopulating;
 
   protected bool IsPopulating {
     get => _isPopulating;
     set {
-      if (value) {
-        ForceAppendAdditionItem = false;
-      } else {
-        ForceAppendAdditionItem = true;
-        AppendAdditionItem(); 
-        ForceAppendAdditionItem = false;
+      _isPopulating = value;
+      if (!value) {
+        AppendAdditionItem();
         HasBeenChanged = false;
       }
-      _isPopulating = value;
     }
   }
 
@@ -39,7 +35,7 @@ public abstract class DataGridItemCollection<T>(
   ///   Appends an addition item.
   /// </summary>
   protected abstract void AppendAdditionItem();
-  
+
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
     base.OnCollectionChanged(e);
     if (IsPopulating) {
