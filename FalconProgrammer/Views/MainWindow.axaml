@@ -11,7 +11,6 @@
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE. -->
-        <!-- ReSharper disable once Xaml.ConstructorWarning -->
         <viewModel:MainWindowViewModel />
     </Design.DataContext>
 
