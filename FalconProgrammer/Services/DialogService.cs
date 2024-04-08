@@ -25,15 +25,15 @@ public class DialogService : IDialogService {
         Title = dialogTitle,
         AllowMultiple = false,
         // For macOS, we may need to specify
-        // FilePickerOpenOptions.AppleUniformTypeIdentifiers in addition to 
-        // FilePickerOpenOptions.FileTypeFilter, which is required for windows.
+        // FilePickerOpenOptions.AppleUniformTypeIdentifiers either as well as or instead
+        // of FilePickerOpenOptions.FileTypeFilter, which is required for windows.
         FileTypeFilter = [
           new FilePickerFileType(filterName) {
             Patterns = [pattern]
           }
         ]
       });
-    return files.Count == 1 ? files[0].Path.AbsolutePath : null;
+    return files.Count == 1 ? files[0].Path.LocalPath : null;
   }
 
   public async Task<string?> BrowseForFolderAsync(string dialogTitle) {
@@ -44,7 +44,7 @@ public class DialogService : IDialogService {
           AllowMultiple = false
         }
       );
-    return folders.Count == 1 ? folders[0].Path.AbsolutePath : null;
+    return folders.Count == 1 ? folders[0].Path.LocalPath : null;
   }
 
   public async Task ShowErrorMessageBoxAsync(string text) {

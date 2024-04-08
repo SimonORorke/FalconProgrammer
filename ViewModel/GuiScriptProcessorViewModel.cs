@@ -9,7 +9,7 @@ public class GuiScriptProcessorViewModel(
   private SoundBankCategoryCollection? _soundBankCategories;
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
-    ??= new SoundBankCategoryCollection(FileSystemService);
+    ??= new SoundBankCategoryCollection(Settings, FileSystemService, DispatcherService);
 
   public override string PageTitle =>
     "Falcon program categories that must use a GUI script processor";
@@ -43,7 +43,7 @@ public class GuiScriptProcessorViewModel(
       GoToLocationsPage();
       return;
     }
-    SoundBankCategories.Populate(Settings, soundBanks, DispatcherService);
+    SoundBankCategories.Populate(soundBanks);
   }
 
   public override bool QueryClose() {

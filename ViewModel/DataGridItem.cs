@@ -4,22 +4,39 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract partial class DataGridItem(
-  Action appendAdditionItem,
-  Action onItemChanged,
-  Action<ObservableObject> removeItem) : ObservableObject {
-  [ObservableProperty] private bool _canRemove; // Generates CanRemove property
-  private Action AppendAdditionItem { get; } = appendAdditionItem;
-  private Action OnItemChanged { get; } = onItemChanged;
-  private Action<ObservableObject> RemoveItem { get; } = removeItem;
+public abstract partial class DataGridItem : ObservableObject {
+  private bool _canRemove;
+
+  protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
+    Action<ObservableObject> removeItem, bool isAdditionItem) {
+    AppendAdditionItem = appendAdditionItem;
+    OnItemChanged = onItemChanged;
+    RemoveItem = removeItem;
+    IsAdditionItem = isAdditionItem;
+    CanRemove = !isAdditionItem;
+  }
+
+  private Action AppendAdditionItem { get; } 
+  private Action OnItemChanged { get; }
+  private Action<ObservableObject> RemoveItem { get; }
   private bool HasNewAdditionItemBeenRequested { get; set; }
   private bool IsAdding { get; set; }
-  internal bool IsAdditionItem { get; set; }
+  internal bool IsAdditionItem { get; private set; }
+
+  public bool CanRemove {
+    get => _canRemove;
+    protected set {
+      if (_canRemove != value) {
+        _canRemove = value;
+        OnPropertyChanged();
+      }
+    }
+  }
 
   protected override void OnPropertyChanging(PropertyChangingEventArgs e) {
     base.OnPropertyChanging(e);
     // Likely to occur twice, including when CanRemove is set to true.
-    IsAdding = IsAdditionItem; 
+    IsAdding = IsAdditionItem;
   }
 
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
@@ -34,6 +51,7 @@ public abstract partial class DataGridItem(
       AppendAdditionItem();
       IsAdding = false;
       HasNewAdditionItemBeenRequested = true;
+      IsAdditionItem = false;
     }
     base.OnPropertyChanged(e);
     OnItemChanged();

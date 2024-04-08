@@ -12,9 +12,10 @@ public partial class SoundBankCategory(
   IFileSystemService fileSystemService,
   Action appendAdditionItem,
   Action onItemChanged,
-  Action<ObservableObject> removeItem)
+  Action<ObservableObject> removeItem,
+  bool isAdditionItem)
   : DataGridItem(appendAdditionItem,
-    onItemChanged, removeItem) {
+    onItemChanged, removeItem, isAdditionItem) {
   public const string AllCategoriesCaption = "All";
   [ObservableProperty]
   private string _category = string.Empty; // Generates Category property
@@ -23,7 +24,6 @@ public partial class SoundBankCategory(
   private string _soundBank = string.Empty; // Generates SoundBank property
 
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
-  // private bool IsAdding { get; set; }
   internal bool IsForAllCategories => Category == AllCategoriesCaption;
   public ObservableCollection<string> Categories { get; } = [];
   private IFileSystemService FileSystemService { get; } = fileSystemService;
