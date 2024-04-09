@@ -7,7 +7,7 @@ public class ContinuousCcNoRangeCollection(
   IDispatcherService dispatcherService)
   : CcNoRangeCollection(settings, dispatcherService) {
   
-  protected override IEnumerable<Settings.IntegerRange> GetRangesFromSettings() {
+  protected override List<Settings.IntegerRange> GetRangesFromSettings() {
     return Settings.MidiForMacros.ContinuousCcNoRanges;
   }
 }

@@ -31,31 +31,16 @@ public class MidiForMacrosViewModel(
     bool haveCollectionsBeenChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
       haveCollectionsBeenChanged = true;
-      UpdateSettingsRanges(ContinuousCcNoRanges,
-        Settings.MidiForMacros.ContinuousCcNoRanges);
+      ContinuousCcNoRanges.UpdateSettings();
     }
     if (ToggleCcNoRanges.HasBeenChanged) {
       haveCollectionsBeenChanged = true;
-      UpdateSettingsRanges(ToggleCcNoRanges,
-        Settings.MidiForMacros.ToggleCcNoRanges);
+      ToggleCcNoRanges.UpdateSettings();
     }
     if (haveCollectionsBeenChanged) {
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
     return base.QueryClose(); // Saves settings if changed.
-  }
-
-  private static void UpdateSettingsRanges(
-    CcNoRangeCollection viewModelRanges,
-    List<Settings.IntegerRange> settingsRanges) {
-    settingsRanges.Clear();
-    settingsRanges.AddRange(
-      from range in viewModelRanges
-      where !range.IsAdditionItem
-      select new Settings.IntegerRange {
-        Start = range.Start, 
-        End = range.End
-      });
   }
 }
