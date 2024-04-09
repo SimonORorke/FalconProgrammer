@@ -56,14 +56,14 @@ public abstract class ViewModelBase(
   public virtual void Open() {
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
-    IsActive = true; // Start listening for ObservableRecipient messages.
+    // IsActive = true; // Start listening for ObservableRecipient messages.
     Settings = SettingsReader.Read(true);
   }
 
   public virtual bool QueryClose() {
     // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
     IsVisible = false;
-    IsActive = false; // Stop listening for ObservableRecipient messages.
+    // IsActive = false; // Stop listening for ObservableRecipient messages.
     return true;
   }
 }
