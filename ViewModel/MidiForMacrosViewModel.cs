@@ -28,6 +28,7 @@ public class MidiForMacrosViewModel(
   }
 
   public override bool QueryClose() {
+    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacement.CcNo; 
     bool haveCollectionsBeenChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
       haveCollectionsBeenChanged = true;
