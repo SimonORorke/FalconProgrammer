@@ -1,6 +1,4 @@
-﻿using FalconProgrammer.Model;
-
-namespace FalconProgrammer.ViewModel;
+﻿namespace FalconProgrammer.ViewModel;
 
 public class GuiScriptProcessorViewModel(
   IDialogService dialogService,
@@ -9,7 +7,7 @@ public class GuiScriptProcessorViewModel(
   private SoundBankCategoryCollection? _soundBankCategories;
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
-    ??= new SoundBankCategoryCollection(Settings, FileSystemService, DispatcherService);
+    ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
 
   public override string PageTitle =>
     "Falcon program categories that must use a GUI script processor";
@@ -43,23 +41,12 @@ public class GuiScriptProcessorViewModel(
       GoToLocationsPage();
       return;
     }
-    SoundBankCategories.Populate(soundBanks);
+    SoundBankCategories.Populate(Settings, soundBanks);
   }
 
   public override bool QueryClose() {
     if (SoundBankCategories.HasBeenChanged) {
-      Settings.MustUseGuiScriptProcessorCategories.Clear();
-      foreach (var soundBankCategory in SoundBankCategories) {
-        if (!soundBankCategory.IsAdditionItem) {
-          Settings.MustUseGuiScriptProcessorCategories.Add(
-            new Settings.ProgramCategory {
-              SoundBank = soundBankCategory.SoundBank,
-              Category = soundBankCategory.IsForAllCategories
-                ? string.Empty
-                : soundBankCategory.Category
-            });
-        }
-      }
+      SoundBankCategories.UpdateSettings();
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }

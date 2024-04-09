@@ -10,7 +10,7 @@ public class MidiForMacrosViewModel(
   private ToggleCcNoRangeCollection? _toggleCcNoRanges;
 
   public ContinuousCcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
-    ??= new ContinuousCcNoRangeCollection(Settings, DispatcherService);
+    ??= new ContinuousCcNoRangeCollection(DispatcherService);
 
   public CcNoViewModel ModWheelReplacement { get; } = new CcNoViewModel(
     "_Mod Wheel Replacement CC No");
@@ -18,13 +18,13 @@ public class MidiForMacrosViewModel(
   public override string PageTitle => "MIDI for Macros";
 
   public ToggleCcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
-    ??= new ToggleCcNoRangeCollection(Settings, DispatcherService);
+    ??= new ToggleCcNoRangeCollection(DispatcherService);
 
   public override void Open() {
     base.Open();
     ModWheelReplacement.CcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
-    ContinuousCcNoRanges.Populate();
-    ToggleCcNoRanges.Populate();
+    ContinuousCcNoRanges.Populate(Settings);
+    ToggleCcNoRanges.Populate(Settings);
   }
 
   public override bool QueryClose() {

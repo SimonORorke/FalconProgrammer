@@ -4,9 +4,8 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class CcNoRangeCollection(
-  Settings settings,
   IDispatcherService dispatcherService)
-  : DataGridItemCollection<CcNoRangeViewModel>(settings, dispatcherService) {
+  : DataGridItemCollection<CcNoRangeViewModel>(dispatcherService) {
   protected override void AppendAdditionItem() {
     AddItem();
   }
@@ -22,8 +21,9 @@ public abstract class CcNoRangeCollection(
 
   protected abstract List<Settings.IntegerRange> GetRangesFromSettings();
   
-  internal void Populate() {
+  internal void Populate(Settings settings) {
     IsPopulating = true;
+    Settings = settings;
     Clear();
     foreach (var settingsRange in GetRangesFromSettings()) {
       AddItem(settingsRange.Start, settingsRange.End);

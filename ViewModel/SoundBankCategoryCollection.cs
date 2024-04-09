@@ -5,10 +5,9 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public class SoundBankCategoryCollection(
-  Settings settings,
   IFileSystemService fileSystemService,
   IDispatcherService dispatcherService)
-  : DataGridItemCollection<SoundBankCategory>(settings, dispatcherService) {
+  : DataGridItemCollection<SoundBankCategory>(dispatcherService) {
   private IFileSystemService FileSystemService { get; } = fileSystemService;
 
   private ImmutableList<string> SoundBanks { get; set; } = [];
@@ -27,8 +26,9 @@ public class SoundBankCategoryCollection(
     });
   }
 
-  internal void Populate(IEnumerable<string> soundBanks) {
+  internal void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
+    Settings = settings;
     SoundBanks = soundBanks.ToImmutableList();
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
@@ -42,5 +42,21 @@ public class SoundBankCategoryCollection(
 
   protected override void RemoveItem(ObservableObject itemToRemove) {
     RemoveItemTyped((SoundBankCategory)itemToRemove);
+  }
+
+  internal void UpdateSettings() {
+    Settings.MustUseGuiScriptProcessorCategories.Clear();
+    foreach (var soundBankCategory in this) {
+      if (!soundBankCategory.IsAdditionItem) {
+        Settings.MustUseGuiScriptProcessorCategories.Add(
+          new Settings.ProgramCategory {
+            SoundBank = soundBankCategory.SoundBank,
+            Category = soundBankCategory.IsForAllCategories
+              ? string.Empty
+              : soundBankCategory.Category
+          });
+      }
+    }
+    Settings.Write();
   }
 }

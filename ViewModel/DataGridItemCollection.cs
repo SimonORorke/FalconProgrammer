@@ -6,7 +6,6 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class DataGridItemCollection<T>(
-  Settings settings,
   IDispatcherService dispatcherService) : ObservableCollection<T> where T : DataGridItem {
   private bool _isPopulating;
   private IDispatcherService DispatcherService { get; } = dispatcherService;
@@ -29,7 +28,7 @@ public abstract class DataGridItemCollection<T>(
     }
   }
 
-  protected Settings Settings { get; } = settings;
+  protected Settings Settings { get; set; } = null!;
 
   /// <summary>
   ///   Appends an addition item.

@@ -3,9 +3,8 @@
 namespace FalconProgrammer.ViewModel;
 
 public class ContinuousCcNoRangeCollection(
-  Settings settings,
   IDispatcherService dispatcherService)
-  : CcNoRangeCollection(settings, dispatcherService) {
+  : CcNoRangeCollection(dispatcherService) {
   
   protected override List<Settings.IntegerRange> GetRangesFromSettings() {
     return Settings.MidiForMacros.ContinuousCcNoRanges;

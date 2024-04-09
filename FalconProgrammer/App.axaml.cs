@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -24,9 +23,8 @@ public class App : Application {
     // facility in Community Toolkit MVVM. See 'Data Validation' in Avalonia's
     // documentation.
     var dataValidationPluginsToRemove =
-      BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>();
+      BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
     foreach (var plugin in dataValidationPluginsToRemove) {
-      Console.WriteLine(plugin);
       BindingPlugins.DataValidators.Remove(plugin);
     }
     // Register all the services needed for the application to run
