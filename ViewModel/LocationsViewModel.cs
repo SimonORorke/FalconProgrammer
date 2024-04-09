@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using JetBrains.Annotations;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -9,51 +9,28 @@ public partial class LocationsViewModel(
   : SettingsWriterViewModelBase(dialogService, dispatcherService) {
   // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
   // and RelayCommand attributes.
-
-  public string DefaultTemplatePath {
-    get => Settings.DefaultTemplate.Path;
-    set {
-      if (Settings.DefaultTemplate.Path != value) {
-        Settings.DefaultTemplate.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
-
-  [PublicAPI]
-  public string OriginalProgramsFolderPath {
-    get => Settings.OriginalProgramsFolder.Path;
-    set {
-      if (Settings.OriginalProgramsFolder.Path != value) {
-        Settings.OriginalProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
+  
+  /// <summary>
+  ///   Generates the DefaultTemplatePath property.
+  /// </summary>
+  [ObservableProperty] private string _defaultTemplatePath = string.Empty;
+  
+  /// <summary>
+  ///   Generates the OriginalProgramsFolderPath property.
+  /// </summary>
+  [ObservableProperty] private string _originalProgramsFolderPath = string.Empty;
+  
+  /// <summary>
+  ///   Generates the ProgramsFolderPath property.
+  /// </summary>
+  [ObservableProperty] private string _programsFolderPath = string.Empty;
+  
+  /// <summary>
+  ///   Generates the TemplateProgramsFolderPath property.
+  /// </summary>
+  [ObservableProperty] private string _templateProgramsFolderPath = string.Empty;
 
   public override string PageTitle => "Locations";
-
-  [PublicAPI]
-  public string ProgramsFolderPath {
-    get => Settings.ProgramsFolder.Path;
-    set {
-      if (Settings.ProgramsFolder.Path != value) {
-        Settings.ProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
-
-  [PublicAPI]
-  public string TemplateProgramsFolderPath {
-    get => Settings.TemplateProgramsFolder.Path;
-    set {
-      if (Settings.TemplateProgramsFolder.Path != value) {
-        Settings.TemplateProgramsFolder.Path = value;
-        OnPropertyChanged();
-      }
-    }
-  }
 
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
@@ -99,5 +76,21 @@ public partial class LocationsViewModel(
     if (path != null) {
       TemplateProgramsFolderPath = path;
     }
+  }
+  
+  public override void Open() {
+    base.Open();
+    DefaultTemplatePath = Settings.DefaultTemplate.Path;
+    OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
+    ProgramsFolderPath = Settings.ProgramsFolder.Path;
+    TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path; 
+  }
+
+  public override bool QueryClose() {
+    Settings.DefaultTemplate.Path = DefaultTemplatePath;
+    Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
+    Settings.ProgramsFolder.Path = ProgramsFolderPath;
+    Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath; 
+    return base.QueryClose(); // Saves settings if changed.
   }
 }

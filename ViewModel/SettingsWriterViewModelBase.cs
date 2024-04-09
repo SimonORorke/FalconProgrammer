@@ -1,15 +1,21 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class SettingsWriterViewModelBase(
+public abstract partial class SettingsWriterViewModelBase(
   IDialogService dialogService,
   IDispatcherService dispatcherService)
   : ViewModelBase(dialogService, dispatcherService) {
   private SettingsFolderLocation? _settingsFolderLocation;
-  private string? _settingsFolderPath;
+
+  /// <summary>
+  ///   Generates the SettingsFolderPath property.
+  /// </summary>
+  [ObservableProperty] private string _settingsFolderPath = string.Empty;
+
   private bool HaveSettingsBeenUpdated { get; set; }
 
   private SettingsFolderLocation SettingsFolderLocation {
@@ -24,16 +30,6 @@ public abstract class SettingsWriterViewModelBase(
           settingsFolderLocationReader.Read();
       }
       return _settingsFolderLocation;
-    }
-  }
-
-  public string SettingsFolderPath {
-    get => _settingsFolderPath ??= SettingsFolderLocation.Path;
-    set {
-      if (_settingsFolderPath != value) {
-        _settingsFolderPath = value;
-        OnPropertyChanged();
-      }
     }
   }
 
@@ -60,6 +56,11 @@ public abstract class SettingsWriterViewModelBase(
     if (IsVisible) {
       HaveSettingsBeenUpdated = true;
     }
+  }
+
+  public override void Open() {
+    base.Open();
+    SettingsFolderPath = SettingsFolderLocation.Path;
   }
 
   public override bool QueryClose() {

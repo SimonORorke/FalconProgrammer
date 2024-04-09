@@ -11,7 +11,6 @@ public abstract class ViewModelBase(
   private IFileSystemService? _fileSystemService;
   private ModelServices? _modelServices;
   private ISerialiser? _serialiser;
-  private Settings? _settings;
   private SettingsReader? _settingsReader;
   protected IDialogService DialogService { get; } = dialogService;
   protected IDispatcherService DispatcherService { get; } = dispatcherService;
@@ -43,10 +42,7 @@ public abstract class ViewModelBase(
     set => _modelServices = value;
   }
 
-  internal Settings Settings {
-    get => _settings ??= ReadSettings();
-    private set => _settings = value;
-  }
+  internal Settings Settings { get; private set; } = null!;
 
   private SettingsReader SettingsReader =>
     _settingsReader ??= ModelServices.GetService<SettingsReader>();
@@ -61,7 +57,7 @@ public abstract class ViewModelBase(
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
     IsActive = true; // Start listening for ObservableRecipient messages.
-    Settings = ReadSettings();
+    Settings = SettingsReader.Read(true);
   }
 
   public virtual bool QueryClose() {
@@ -69,10 +65,5 @@ public abstract class ViewModelBase(
     IsVisible = false;
     IsActive = false; // Stop listening for ObservableRecipient messages.
     return true;
-  }
-
-  private Settings ReadSettings() {
-    // Debug.WriteLine($"ViewModelBase.ReadSettings: {GetType().Name}");
-    return SettingsReader.Read(true);
   }
 }
