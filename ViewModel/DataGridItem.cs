@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract partial class DataGridItem : ObservableObject {
+public abstract partial class DataGridItem : ObservableValidator {
   private bool _canRemove;
 
   protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
@@ -49,10 +49,11 @@ public abstract partial class DataGridItem : ObservableObject {
       // The user has used up the addition item. So we need to append another addition
       // item to the collection.
       AppendAdditionItem();
-      IsAdding = false;
+      // IsAdding = false;
       HasNewAdditionItemBeenRequested = true;
       IsAdditionItem = false;
     }
+    IsAdding = false;
     base.OnPropertyChanged(e);
     OnItemChanged();
   }
