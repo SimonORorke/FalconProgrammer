@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
@@ -9,12 +10,16 @@ public partial class LocationsViewModel(
   : SettingsWriterViewModelBase(dialogService, dispatcherService) {
   // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
   // and RelayCommand attributes.
+  private string _defaultTemplatePath = string.Empty;
   
-  /// <summary>
-  ///   Generates the DefaultTemplatePath property.
-  /// </summary>
-  [ObservableProperty] private string _defaultTemplatePath = string.Empty;
-  
+  [Required]
+  [CustomValidation(typeof(LocationsViewModel),
+    nameof(ValidateDefaultTemplatePath))]
+  public string DefaultTemplatePath {
+    get => _defaultTemplatePath;
+    set => SetProperty(ref _defaultTemplatePath, value, true);
+  }
+
   /// <summary>
   ///   Generates the OriginalProgramsFolderPath property.
   /// </summary>
@@ -92,5 +97,10 @@ public partial class LocationsViewModel(
     Settings.ProgramsFolder.Path = ProgramsFolderPath;
     Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath; 
     return base.QueryClose(); // Saves settings if changed.
+  }
+
+  public static ValidationResult ValidateDefaultTemplatePath(
+    string filePath, ValidationContext context) {
+    return ValidateFilePath(nameof(DefaultTemplatePath), filePath, context);
   }
 }
