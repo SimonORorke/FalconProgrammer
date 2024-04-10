@@ -13,7 +13,7 @@ public partial class MainWindowViewModel(
   : ViewModelBase(dialogService, dispatcherService),
     IRecipient<GoToLocationsPageMessage> {
   /// <summary>
-  ///   Generates CurrentPageTitle property and partial OnCurrentPageTitleChanged method.
+  ///   Generates CurrentPageTitle property.
   /// </summary>
   [ObservableProperty] private string _currentPageTitle = string.Empty;
 

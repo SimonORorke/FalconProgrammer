@@ -37,7 +37,7 @@ public abstract class SettingsWriterViewModelBase(
   }
 
   private bool CanSaveSettings() {
-    // The message box won't show if the application is closing.
+    // The message box will show if the application is closing.
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
       // Console.WriteLine(
       //   $"SettingsWriterViewModelBase.CanSaveSettings ({GetType().Name}): A settings folder has not been specified.");
@@ -76,6 +76,11 @@ public abstract class SettingsWriterViewModelBase(
         //   Console.WriteLine($"SettingsWriterViewModelBase.QueryClose {GetType().Name}: SaveSettings throwing IOException.");
         //   throw;
         // }
+        if (GetErrors().Any()) {
+          DialogService.ShowErrorMessageBoxAsync(
+            $"You must fix the error(s) on the {TabTitle} page before continuing.");
+          return false;
+        }
         HaveSettingsBeenUpdated = false;
       } else {
         return false;

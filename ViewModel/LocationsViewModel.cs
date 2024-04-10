@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
@@ -8,9 +7,11 @@ public partial class LocationsViewModel(
   IDialogService dialogService,
   IDispatcherService dispatcherService)
   : SettingsWriterViewModelBase(dialogService, dispatcherService) {
-  // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
-  // and RelayCommand attributes.
+  // 'partial' allows CommunityToolkit.Mvvm code generation.
   private string _defaultTemplatePath = string.Empty;
+  private string _originalProgramsFolderPath = string.Empty;
+  private string _programsFolderPath = string.Empty;
+  private string _templateProgramsFolderPath = string.Empty;
   
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
@@ -19,21 +20,30 @@ public partial class LocationsViewModel(
     get => _defaultTemplatePath;
     set => SetProperty(ref _defaultTemplatePath, value, true);
   }
-
-  /// <summary>
-  ///   Generates the OriginalProgramsFolderPath property.
-  /// </summary>
-  [ObservableProperty] private string _originalProgramsFolderPath = string.Empty;
   
-  /// <summary>
-  ///   Generates the ProgramsFolderPath property.
-  /// </summary>
-  [ObservableProperty] private string _programsFolderPath = string.Empty;
+  [Required]
+  [CustomValidation(typeof(LocationsViewModel),
+    nameof(ValidateOriginalProgramsFolderPath))]
+  public string OriginalProgramsFolderPath {
+    get => _originalProgramsFolderPath;
+    set => SetProperty(ref _originalProgramsFolderPath, value, true);
+  }
   
-  /// <summary>
-  ///   Generates the TemplateProgramsFolderPath property.
-  /// </summary>
-  [ObservableProperty] private string _templateProgramsFolderPath = string.Empty;
+  [Required]
+  [CustomValidation(typeof(LocationsViewModel),
+    nameof(ValidateProgramsFolderPath))]
+  public string ProgramsFolderPath {
+    get => _programsFolderPath;
+    set => SetProperty(ref _programsFolderPath, value, true);
+  }
+  
+  [Required]
+  [CustomValidation(typeof(LocationsViewModel),
+    nameof(ValidateTemplateProgramsFolderPath))]
+  public string TemplateProgramsFolderPath {
+    get => _templateProgramsFolderPath;
+    set => SetProperty(ref _templateProgramsFolderPath, value, true);
+  }
 
   public override string PageTitle => "Locations";
 
@@ -102,5 +112,20 @@ public partial class LocationsViewModel(
   public static ValidationResult ValidateDefaultTemplatePath(
     string filePath, ValidationContext context) {
     return ValidateFilePath(nameof(DefaultTemplatePath), filePath, context);
+  }
+
+  public static ValidationResult ValidateOriginalProgramsFolderPath(
+    string folderPath, ValidationContext context) {
+    return ValidateFolderPath(nameof(OriginalProgramsFolderPath), folderPath, context);
+  }
+
+  public static ValidationResult ValidateProgramsFolderPath(
+    string folderPath, ValidationContext context) {
+    return ValidateFolderPath(nameof(ProgramsFolderPath), folderPath, context);
+  }
+
+  public static ValidationResult ValidateTemplateProgramsFolderPath(
+    string folderPath, ValidationContext context) {
+    return ValidateFolderPath(nameof(TemplateProgramsFolderPath), folderPath, context);
   }
 }
