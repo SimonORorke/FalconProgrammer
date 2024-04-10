@@ -1,4 +1,4 @@
-﻿using FalconProgrammer.Model;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -7,13 +7,17 @@ public class MidiForMacrosViewModel(
   IDispatcherService dispatcherService)
   : SettingsWriterViewModelBase(dialogService, dispatcherService) {
   private ContinuousCcNoRangeCollection? _continuousCcNoRanges;
+  private int _modWheelReplacementCcNo;
   private ToggleCcNoRangeCollection? _toggleCcNoRanges;
 
   public ContinuousCcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
     ??= new ContinuousCcNoRangeCollection(DispatcherService);
 
-  public CcNoViewModel ModWheelReplacement { get; } = new CcNoViewModel(
-    "_Mod Wheel Replacement CC No");
+  [Range(0, 127)]
+  public int ModWheelReplacementCcNo {
+    get => _modWheelReplacementCcNo;
+    set => SetProperty(ref _modWheelReplacementCcNo, value, true);
+  }
 
   public override string PageTitle => "MIDI for Macros";
 
@@ -22,13 +26,13 @@ public class MidiForMacrosViewModel(
 
   public override void Open() {
     base.Open();
-    ModWheelReplacement.CcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
+    ModWheelReplacementCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
     ContinuousCcNoRanges.Populate(Settings);
     ToggleCcNoRanges.Populate(Settings);
   }
 
   public override bool QueryClose() {
-    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacement.CcNo; 
+    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo; 
     bool haveCollectionsBeenChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
       haveCollectionsBeenChanged = true;

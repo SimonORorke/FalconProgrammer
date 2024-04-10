@@ -18,7 +18,7 @@ public partial class MainWindowViewModel(
   [ObservableProperty] private string _currentPageTitle = string.Empty;
 
   /// <summary>
-  ///   Generates SelectedTab property property and partial OnSelectedTabChanged method.
+  ///   Generates SelectedTab property and partial OnSelectedTabChanged method.
   /// </summary>
   [ObservableProperty] private TabItemViewModel? _selectedTab;
 
@@ -100,7 +100,7 @@ public partial class MainWindowViewModel(
           // the error message that was shown by QueryClose should not be shown again.
           && !CurrentPageViewModel.Equals(value.ViewModel)
           // If there is an errors on the previous selected tab's page,
-          // QueryClose will show a error message box and return false.
+          // QueryClose will show am error message box and return false.
           && !CurrentPageViewModel.QueryClose()) {
         // Go back to the previous tab.
         DispatcherService.Dispatch(() =>
@@ -116,7 +116,7 @@ public partial class MainWindowViewModel(
       //       // the error message that was shown by QueryClose should not be shown again.
       //       && !CurrentPageViewModel.Equals(value.ViewModel)
       //       // If there is an errors on the previous selected tab's page,
-      //       // QueryClose will show a error message box and return false.
+      //       // QueryClose will show an error message box and return false.
       //       && !CurrentPageViewModel.QueryClose()) {
       //     // Go back to the previous tab.
       //     DispatcherService.Dispatch(() =>
@@ -136,5 +136,15 @@ public partial class MainWindowViewModel(
       CurrentPageTitle = CurrentPageViewModel.PageTitle;
       CurrentPageViewModel.Open();
     }
+  }
+
+  public override void Open() {
+    base.Open();
+    Messenger.RegisterAll(this);
+  }
+
+  public override bool QueryClose() {
+    Messenger.UnregisterAll(this);
+    return base.QueryClose();
   }
 }

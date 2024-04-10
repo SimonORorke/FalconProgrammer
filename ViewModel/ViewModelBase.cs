@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
 
@@ -7,7 +6,7 @@ namespace FalconProgrammer.ViewModel;
 
 public abstract class ViewModelBase(
   IDialogService dialogService,
-  IDispatcherService dispatcherService) : ObservableRecipient {
+  IDispatcherService dispatcherService) : ObservableRecipientWithValidation {
   private IFileSystemService? _fileSystemService;
   private ModelServices? _modelServices;
   private ISerialiser? _serialiser;
