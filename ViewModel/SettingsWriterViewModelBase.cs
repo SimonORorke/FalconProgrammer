@@ -36,21 +36,21 @@ public abstract class SettingsWriterViewModelBase(
     set => SetProperty(ref _settingsFolderPath, value, true);
   }
 
-  private bool CanSaveSettings() {
-    // The message box will show if the application is closing.
+  private bool CanSaveSettings(out string errorMessage) {
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
       // Console.WriteLine(
       //   $"SettingsWriterViewModelBase.CanSaveSettings ({GetType().Name}): A settings folder has not been specified.");
-      DialogService.ShowErrorMessageBoxAsync(
-        "Settings cannot be saved: a settings folder has not been specified.");
+      errorMessage =
+        "Settings cannot be saved: a settings folder has not been specified.";
       return false;
     }
     if (!FileSystemService.Folder.Exists(SettingsFolderPath)) {
-      DialogService.ShowErrorMessageBoxAsync(
+      errorMessage =
         "Settings cannot be saved: cannot find settings folder "
-        + $"'{SettingsFolderPath}'.");
+        + $"'{SettingsFolderPath}'.";
       return false;
     }
+    errorMessage = string.Empty;
     return true;
   }
 
@@ -66,27 +66,26 @@ public abstract class SettingsWriterViewModelBase(
     SettingsFolderPath = SettingsFolderLocation.Path;
   }
 
-  public override bool QueryClose() {
+  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (HaveSettingsBeenUpdated) {
-      if (CanSaveSettings()) {
+      if (CanSaveSettings(out string errorMessage)) {
         SaveSettings();
-        // try {
-        //   SaveSettings();
-        // } catch (IOException) {
-        //   Console.WriteLine($"SettingsWriterViewModelBase.QueryClose {GetType().Name}: SaveSettings throwing IOException.");
-        //   throw;
-        // }
-        if (GetErrors().Any()) {
-          DialogService.ShowErrorMessageBoxAsync(
-            $"You must fix the error(s) on the {TabTitle} page before continuing.");
-          return false;
-        }
         HaveSettingsBeenUpdated = false;
+      } else if (isClosingWindow) {
+        errorMessage += 
+          $"\r\n\r\nClick Yes to close {Global.ApplicationTitle}, No to resume.";
+        return await DialogService.AskYesNoQuestionAsync(errorMessage);
       } else {
+        await DialogService.ShowErrorMessageBoxAsync(errorMessage);
         return false;
       }
     }
-    return base.QueryClose();
+    // if (GetErrors().Any()) {
+    //   await DialogService.ShowErrorMessageBoxAsync(
+    //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
+    //   return false;
+    // }
+    return await base.QueryClose(isClosingWindow);
   }
 
   private void SaveSettings() {

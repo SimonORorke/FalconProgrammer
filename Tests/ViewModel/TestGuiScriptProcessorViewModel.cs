@@ -18,8 +18,8 @@ public class TestGuiScriptProcessorViewModel(
     }
   }
 
-  public override bool QueryClose() {
-    bool result = base.QueryClose();
+  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
+    bool result = await base.QueryClose(isClosingWindow);
     if (result) {
       ClosedCount++;
     }

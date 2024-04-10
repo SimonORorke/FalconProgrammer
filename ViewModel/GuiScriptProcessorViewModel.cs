@@ -44,12 +44,12 @@ public class GuiScriptProcessorViewModel(
     SoundBankCategories.Populate(Settings, soundBanks);
   }
 
-  public override bool QueryClose() {
+  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (SoundBankCategories.HasBeenChanged) {
       SoundBankCategories.UpdateSettings();
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
-    return base.QueryClose(); // Saves settings if changed.
+    return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 }

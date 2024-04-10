@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using FalconProgrammer.ViewModel;
@@ -11,11 +12,20 @@ public partial class MainWindow : Window {
     Closing += OnClosing;
   }
 
+  private bool ForceClose { get; set; }
   private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
 
   private void OnClosing(object? sender, WindowClosingEventArgs e) {
-    // e.Cancel = !ViewModel.CanClose;
-    // ViewModel.OnClosing();
-    e.Cancel = !ViewModel.OnClosing();
+    if (!ForceClose) {
+      e.Cancel = true;
+      ViewModel.OnClosing().ContinueWith(
+        task => {
+          if (task.Result) {
+            ForceClose = true;
+            Close();
+          }
+        },
+        TaskScheduler.FromCurrentSynchronizationContext());
+    }
   }
 }

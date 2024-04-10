@@ -4,9 +4,15 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 public class MockDialogService : IDialogService {
   internal bool Cancel { get; set; }
+  internal bool ExpectedAnswer { get; set; }
   internal string ExpectedPath { get; set; } = string.Empty;
   internal string LastErrorMessage { get; set; } = string.Empty;
   internal int ShowErrorMessageBoxCount { get; set; }
+  
+  public async Task<bool> AskYesNoQuestionAsync(string text) {
+    await Task.Delay(0);
+    return ExpectedAnswer;
+  }
 
   public async Task<string?> BrowseForFileAsync(
     string dialogTitle,

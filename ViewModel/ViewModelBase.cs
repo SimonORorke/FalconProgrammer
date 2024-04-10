@@ -55,16 +55,17 @@ public abstract class ViewModelBase(
   public virtual void Open() {
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
-    Messenger.RegisterAll(this);
-    // IsActive = true; // Start listening for ObservableRecipient messages.
+    // Start listening for ObservableRecipient messages.
+    Messenger.RegisterAll(this); 
     Settings = SettingsReader.Read(true);
   }
 
-  public virtual bool QueryClose() {
+  public virtual async Task<bool> QueryClose(bool isClosingWindow = false) {
     // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
     IsVisible = false;
+    // Stop listening for ObservableRecipient messages.
     Messenger.UnregisterAll(this);
-    // IsActive = false; // Stop listening for ObservableRecipient messages.
+    await Task.Delay(0);
     return true;
   }
 }

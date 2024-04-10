@@ -17,6 +17,13 @@ public class DialogService : IDialogService {
   private string ApplicationTitle => _applicationTitle ??= Application.Current!.Name!;
   private TopLevel TopLevel => _topLevel ??= ((App)Application.Current!).MainWindow;
 
+  public async Task<bool> AskYesNoQuestionAsync(string text) {
+    var messageBox = MessageBoxManager.GetMessageBoxStandard(
+      ApplicationTitle, text, ButtonEnum.YesNo, Icon.Question);
+    var result = await messageBox.ShowAsync();
+    return result == ButtonResult.Yes;
+  }
+
   public async Task<string?> BrowseForFileAsync(
     string dialogTitle, string filterName, string fileExtension) {
     string pattern = $"*.{fileExtension}";

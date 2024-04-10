@@ -12,11 +12,6 @@ public partial class MainWindowViewModel(
   IDispatcherService dispatcherService)
   : ViewModelBase(dialogService, dispatcherService),
     IRecipient<GoToLocationsPageMessage> {
-  // /// <summary>
-  // ///   Generates CanClose property.
-  // /// </summary>
-  // [ObservableProperty] private bool _canClose;
-
   /// <summary>
   ///   Generates CurrentPageTitle property.
   /// </summary>
@@ -83,68 +78,45 @@ public partial class MainWindowViewModel(
     return list.ToImmutableList();
   }
 
-  public bool OnClosing() {
-    // Ideally, if settings cannot be saved on closing the main window
-    // (settings folder is not specified or does not exist), we would like to be able to
-    // show a question message box giving the user the option to cancel the close.
-    // The problem is that message boxes, like all dialogs, have to be shown
-    // asynchronously in Avalonia UI.  The workarounds I've tried led to either
-    // a stack overflow or the window closing without the message box staying open.
-    // CanClose = false;
-    if (CurrentPageViewModel != null && !CurrentPageViewModel.QueryClose()) {
-      return false;
-      // DispatcherService.Dispatch(() => CanClose = true);
+  public async Task<bool> OnClosing() {
+    if (CurrentPageViewModel != null) {
+      if (!await CurrentPageViewModel.QueryClose(true)) {
+        return false;
+      }
     }
-    QueryClose();
-    return true;
+    return await QueryClose();
   }
 
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
-    if (value != null) {
-      if (!IsVisible) {
-        // Start listening for ObservableRecipient messages. Set IsVisible to true.  
-        Open();
-      }
-      if (CurrentPageViewModel != null
-          // If a return to the same page has been forced because of errors,
-          // the error message that was shown by QueryClose should not be shown again.
-          && !CurrentPageViewModel.Equals(value.ViewModel)
-          // If there is an errors on the previous selected tab's page,
-          // QueryClose will show am error message box and return false.
-          && !CurrentPageViewModel.QueryClose()) {
+    if (value == null) {
+      return;
+    }
+    if (!IsVisible) {
+      // Start listening for ObservableRecipient messages. Set IsVisible to true.  
+      Open();
+    }
+    DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value));
+  }
+
+  private async void OnSelectedTabChangedAsync(TabItemViewModel value) {
+    if (CurrentPageViewModel != null
+        // If a return to the same page has been forced because of errors,
+        // the error message that was shown by QueryClose should not be shown again.
+        && !CurrentPageViewModel.Equals(value.ViewModel)) {
+      // If there is an error on the previous selected tab's page,
+      // QueryClose will show an error message box and return false.
+      bool canChangeTab = await CurrentPageViewModel.QueryClose();
+      if (!canChangeTab) {
         // Go back to the previous tab.
-        DispatcherService.Dispatch(() =>
-          SelectedTab = (
-            from tab in Tabs
-            where tab.ViewModel == CurrentPageViewModel
-            select tab).Single());
+        SelectedTab = (
+          from tab in Tabs
+          where tab.ViewModel == CurrentPageViewModel
+          select tab).Single();
         return;
       }
-      // try {
-      //   if (CurrentPageViewModel != null
-      //       // If a return to the same page has been forced because of errors,
-      //       // the error message that was shown by QueryClose should not be shown again.
-      //       && !CurrentPageViewModel.Equals(value.ViewModel)
-      //       // If there is an errors on the previous selected tab's page,
-      //       // QueryClose will show an error message box and return false.
-      //       && !CurrentPageViewModel.QueryClose()) {
-      //     // Go back to the previous tab.
-      //     DispatcherService.Dispatch(() =>
-      //       SelectedTab = (
-      //         from tab in Tabs
-      //         where tab.ViewModel == CurrentPageViewModel
-      //         select tab).Single());
-      //     return;
-      //   }
-      // } catch (IOException) {
-      //   Console.WriteLine(
-      //     "MainWindowViewModel.OnSelectedTabChanged: Throwing IOException on " + 
-      //     $"changing from {CurrentPageViewModel!.TabTitle} to {value.ViewModel.TabTitle}.");
-      //   throw;
-      // }
-      CurrentPageViewModel = value.ViewModel;
-      CurrentPageTitle = CurrentPageViewModel.PageTitle;
-      CurrentPageViewModel.Open();
     }
+    CurrentPageViewModel = value.ViewModel;
+    CurrentPageTitle = CurrentPageViewModel.PageTitle;
+    CurrentPageViewModel.Open();
   }
 }
