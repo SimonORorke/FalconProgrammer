@@ -137,14 +137,4 @@ public partial class MainWindowViewModel(
       CurrentPageViewModel.Open();
     }
   }
-
-  public override void Open() {
-    base.Open();
-    Messenger.RegisterAll(this);
-  }
-
-  public override bool QueryClose() {
-    Messenger.UnregisterAll(this);
-    return base.QueryClose();
-  }
 }

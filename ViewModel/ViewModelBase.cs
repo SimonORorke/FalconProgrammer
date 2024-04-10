@@ -55,6 +55,7 @@ public abstract class ViewModelBase(
   public virtual void Open() {
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
+    Messenger.RegisterAll(this);
     // IsActive = true; // Start listening for ObservableRecipient messages.
     Settings = SettingsReader.Read(true);
   }
@@ -62,6 +63,7 @@ public abstract class ViewModelBase(
   public virtual bool QueryClose() {
     // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
     IsVisible = false;
+    Messenger.UnregisterAll(this);
     // IsActive = false; // Stop listening for ObservableRecipient messages.
     return true;
   }

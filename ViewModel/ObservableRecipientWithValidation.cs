@@ -14,19 +14,10 @@ namespace FalconProgrammer.ViewModel;
 /// </param>
 /// <remarks>
 ///   As we have not implemented the functionality of
-///   <see cref="ObservableRecipient.IsActive" />, recipient view models, which implement
-///   IRecipient for one or more message types, must register and unregister with the
-///   <see cref="Messenger" />.
-///   <example>
-///     public override void Open() {
-///     base.Open();
-///     Messenger.RegisterAll(this);
-///     }
-///     public override bool QueryClose() {
-///     Messenger.UnregisterAll(this);
-///     return base.QueryClose();
-///     }
-///   </example>
+///   <see cref="ObservableRecipient.IsActive" />, <see cref="ViewModelBase" />
+///   registers and unregisters with the <see cref="Messenger" />. So recipient view
+///   models, which implement IRecipient for one or more message types, don't have to
+///   do that individually.
 /// </remarks>
 public abstract class ObservableRecipientWithValidation(IMessenger messenger)
   : ObservableValidator {
