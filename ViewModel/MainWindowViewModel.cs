@@ -12,6 +12,11 @@ public partial class MainWindowViewModel(
   IDispatcherService dispatcherService)
   : ViewModelBase(dialogService, dispatcherService),
     IRecipient<GoToLocationsPageMessage> {
+  // /// <summary>
+  // ///   Generates CanClose property.
+  // /// </summary>
+  // [ObservableProperty] private bool _canClose;
+
   /// <summary>
   ///   Generates CurrentPageTitle property.
   /// </summary>
@@ -78,15 +83,20 @@ public partial class MainWindowViewModel(
     return list.ToImmutableList();
   }
 
-  public void OnClosing() {
+  public bool OnClosing() {
     // Ideally, if settings cannot be saved on closing the main window
     // (settings folder is not specified or does not exist), we would like to be able to
     // show a question message box giving the user the option to cancel the close.
     // The problem is that message boxes, like all dialogs, have to be shown
     // asynchronously in Avalonia UI.  The workarounds I've tried led to either
     // a stack overflow or the window closing without the message box staying open.
-    CurrentPageViewModel?.QueryClose();
+    // CanClose = false;
+    if (CurrentPageViewModel != null && !CurrentPageViewModel.QueryClose()) {
+      return false;
+      // DispatcherService.Dispatch(() => CanClose = true);
+    }
     QueryClose();
+    return true;
   }
 
   partial void OnSelectedTabChanged(TabItemViewModel? value) {

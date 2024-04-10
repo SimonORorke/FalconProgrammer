@@ -14,6 +14,8 @@ public partial class MainWindow : Window {
   private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
 
   private void OnClosing(object? sender, WindowClosingEventArgs e) {
-    ViewModel.OnClosing();
+    // e.Cancel = !ViewModel.CanClose;
+    // ViewModel.OnClosing();
+    e.Cancel = !ViewModel.OnClosing();
   }
 }
