@@ -12,7 +12,6 @@ public class ModelServices(params object[] services) {
   [ExcludeFromCodeCoverage]
   public static ModelServices Default => _default ??= new ModelServices(
     FileSystemService.Default,
-    Serialiser.Default,
     new SettingsReader(),
     new SettingsFolderLocationReader());
 

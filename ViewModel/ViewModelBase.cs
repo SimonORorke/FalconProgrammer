@@ -9,7 +9,6 @@ public abstract class ViewModelBase(
   IDispatcherService dispatcherService) : ObservableRecipientWithValidation {
   private IFileSystemService? _fileSystemService;
   private ModelServices? _modelServices;
-  private ISerialiser? _serialiser;
   private SettingsFolderLocationReader? _settingsFolderLocationReader;
   private SettingsReader? _settingsReader;
   protected IDialogService DialogService { get; } = dialogService;
@@ -31,10 +30,6 @@ public abstract class ViewModelBase(
   ///   <see cref="PageTitle" />.
   /// </summary>
   public virtual string TabTitle => PageTitle;
-
-  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-  protected ISerialiser Serialiser =>
-    _serialiser ??= ModelServices.GetService<ISerialiser>();
 
   internal ModelServices ModelServices {
     [ExcludeFromCodeCoverage] get => _modelServices ??= ModelServices.Default;

@@ -6,9 +6,9 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 /// <summary>
 ///   An unrealistic drive letter, different from the one in embedded test settings
-///   files, has been chosen in the tests, as they are all expected to access a mock file
-///   system. A test will throw an exception if it attempts to write to the real file
-///   system, provided it is run on a computer that does not have that drive. -->
+///   files, has been chosen in these tests, as they are all expected to access a mock
+///   file system. A test will throw an exception if it attempts to write to the real
+///   file system, provided it is run on a computer that does not have that drive. -->
 /// </summary>
 [TestFixture]
 public class LocationsViewModelTests : ViewModelTestsBase {

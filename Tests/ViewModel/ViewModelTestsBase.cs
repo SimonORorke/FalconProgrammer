@@ -27,7 +27,7 @@ public abstract class ViewModelTestsBase {
         EmbeddedResourceFileName = "DefaultAlreadySettings.xml"
       }
     };
-    TestModelServices = new ModelServices(MockFileSystemService, MockSerialiser,
+    TestModelServices = new ModelServices(MockFileSystemService, 
       MockSettingsFolderLocationReader, TestSettingsReaderEmbedded);
   }
 
