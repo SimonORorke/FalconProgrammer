@@ -13,6 +13,8 @@ public abstract class ViewModelTestsBase {
     MockMessageRecipient = new MockMessageRecipient();
     MockSerialiser = new MockSerialiser();
     TestSettingsFolderLocationReader = new TestSettingsFolderLocationReader {
+      FileSystemService = MockFileSystemService,
+      Serialiser = MockSerialiser,
       TestDeserialiser = {
         EmbeddedResourceFileName = "SettingsFolderLocation.xml"
       }

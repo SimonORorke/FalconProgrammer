@@ -2,11 +2,15 @@
 
 public class SettingsFolderLocationReader
   : XmlReaderBase<SettingsFolderLocation> {
-  public SettingsFolderLocation Read() {
+  public virtual ISettingsFolderLocation Read() {
     var result = Deserialiser.Deserialise(
       SettingsFolderLocation.GetSettingsFolderLocationPath(ApplicationName));
     if (!string.IsNullOrWhiteSpace(result.Path)) {
-      FileSystemService.Folder.Create(result.Path);
+      try {
+        FileSystemService.Folder.Create(result.Path);
+      } catch (DirectoryNotFoundException e) {
+        // Invalid parent folder
+      }
     }
     return result;
   }

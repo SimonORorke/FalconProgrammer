@@ -8,11 +8,11 @@ public abstract class SettingsWriterViewModelBase(
   IDialogService dialogService,
   IDispatcherService dispatcherService)
   : ViewModelBase(dialogService, dispatcherService) {
-  private SettingsFolderLocation? _settingsFolderLocation;
+  private ISettingsFolderLocation? _settingsFolderLocation;
   private string _settingsFolderPath = string.Empty;
   private bool HaveSettingsBeenUpdated { get; set; }
 
-  private SettingsFolderLocation SettingsFolderLocation => 
+  private ISettingsFolderLocation SettingsFolderLocation => 
     _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
 
   [Required]

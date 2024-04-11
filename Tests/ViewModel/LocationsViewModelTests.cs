@@ -20,7 +20,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task CancelBrowseForSettingsFolder() {
     MockDialogService.Cancel = true;
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Settings";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
     MockFileSystemService.File.ExpectedExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
@@ -32,7 +32,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public async Task CancelBrowseForDefaultTemplate() {
     MockDialogService.Cancel = true;
     MockDialogService.ExpectedPath =
-      @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
+      @"K:\NewLeaf\Program Templates\My Sound.uvip";
     var command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
@@ -41,36 +41,36 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Settings";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
       Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
     MockFileSystemService.File.ExpectedExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
       Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Original Programs";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Original Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForOriginalProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.OriginalProgramsFolderPath,
       Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Template Programs";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Template Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForTemplateProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
       Is.EqualTo(MockDialogService.ExpectedPath));
     MockDialogService.ExpectedPath =
-      @"C:\FalconProgrammer\Program Templates\My Sound.uvip";
+      @"K:\NewLeaf\Program Templates\My Sound.uvip";
     command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
       Is.EqualTo(MockDialogService.ExpectedPath));
     await ViewModel.QueryClose();
     Assert.That(MockSerialiser.LastOutputPath,
-      Is.EqualTo(@"C:\FalconProgrammer\Settings\Settings.xml"));
+      Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
     Assert.That(MockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
     var settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.SettingsPath,
@@ -94,10 +94,10 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task SettingsFolderDoesNotExist() {
-    ViewModel.SettingsFolderPath = @"C:\FalconProgrammer\Settings";
+    ViewModel.SettingsFolderPath = @"K:\NewLeaf\Settings";
     MockFileSystemService.File.ExpectedExists = false;
     MockFileSystemService.Folder.ExpectedExists = false;
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
     Assert.That(await ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
@@ -108,7 +108,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task SettingsFolderNotSpecified() {
     MockFileSystemService.File.ExpectedExists = false;
-    MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Programs";
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
     Assert.That(await ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));

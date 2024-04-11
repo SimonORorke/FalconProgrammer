@@ -68,5 +68,6 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // page immediately being replaced with the Locations page.
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
+    Assert.That(ViewModel.SelectedTab, Is.SameAs(ViewModel.Tabs[0]));
   }
 }

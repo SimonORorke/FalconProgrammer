@@ -17,4 +17,8 @@ public class TestSettingsFolderLocationReader : SettingsFolderLocationReader {
       return _deserialiser;
     }
   }
+
+  public override ISettingsFolderLocation Read() {
+    return new MockSettingsFolderLocation();
+  }
 }

@@ -3,7 +3,7 @@
 namespace FalconProgrammer.Model;
 
 [XmlRoot(nameof(SettingsFolderLocation))]
-public class SettingsFolderLocation : SerialisationBase {
+public class SettingsFolderLocation : SerialisationBase, ISettingsFolderLocation {
   [XmlAttribute] public string Path { get; set; } = string.Empty;
 
   public void Write() {
