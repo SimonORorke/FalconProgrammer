@@ -4,7 +4,7 @@ public class SettingsFolderLocationReader
   : XmlReaderBase<SettingsFolderLocation> {
   public virtual ISettingsFolderLocation Read() {
     var result = Deserialiser.Deserialise(
-      SettingsFolderLocation.GetSettingsFolderLocationPath(ApplicationName));
+      SettingsFolderLocation.GetSettingsFolderLocationPath(AppDataFolderName));
     if (!string.IsNullOrWhiteSpace(result.Path)) {
       try {
         FileSystemService.Folder.Create(result.Path);

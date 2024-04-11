@@ -33,7 +33,7 @@ public class SettingsReader : XmlReaderBase<Settings> {
 
   protected virtual SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
     return new SettingsFolderLocationReader {
-      ApplicationName = ApplicationName,
+      AppDataFolderName = AppDataFolderName,
       FileSystemService = FileSystemService,
       Serialiser = Serialiser
     };

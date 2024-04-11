@@ -3,9 +3,9 @@
 public abstract class XmlReaderBase<T> : SerialisationBase where T : SerialisationBase {
   private Deserialiser<T>? _deserialiser;
 
-  internal override string ApplicationName {
-    get => base.ApplicationName;
-    set => Deserialiser.ApplicationName = base.ApplicationName = value;
+  internal override string AppDataFolderName {
+    get => base.AppDataFolderName;
+    set => Deserialiser.AppDataFolderName = base.AppDataFolderName = value;
   }
 
   public override IFileSystemService FileSystemService {

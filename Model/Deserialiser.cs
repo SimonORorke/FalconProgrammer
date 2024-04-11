@@ -27,7 +27,7 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
   }
 
   private void PopulateUtilityProperties(T deserialisedObject) {
-    deserialisedObject.ApplicationName = ApplicationName;
+    deserialisedObject.AppDataFolderName = AppDataFolderName;
     deserialisedObject.FileSystemService = FileSystemService;
     deserialisedObject.Serialiser = Serialiser;
   }

@@ -19,13 +19,13 @@ public static class SettingsTestHelper {
   public const string TemplateProgramsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Template Programs";
 
-  public const string TestApplicationName = "TestFalconProgrammer";
+  public const string TestAppDataFolderName = "TestFalconProgrammer";
 
   public static string DefaultTemplatePath => Path.Combine(
     TemplateProgramsFolderPath, @"Factory\Keys\DX Mania.uvip");
 
   public static string TestSettingsFolderPath { get; } = Path.Combine(
-    TestContext.CurrentContext.TestDirectory, TestApplicationName);
+    TestContext.CurrentContext.TestDirectory, TestAppDataFolderName);
 
   public static void DeleteAnyData() {
     var settingsFile = new FileInfo(
@@ -37,12 +37,12 @@ public static class SettingsTestHelper {
       Directory.Delete(TestSettingsFolderPath);
     }
     var locationFile = new FileInfo(
-      SettingsFolderLocation.GetSettingsFolderLocationPath(TestApplicationName));
+      SettingsFolderLocation.GetSettingsFolderLocationPath(TestAppDataFolderName));
     if (locationFile.Exists) {
       locationFile.Delete();
     }
     string appDataFolderPath = SettingsFolderLocation.GetAppDataFolderPath(
-      TestApplicationName);
+      TestAppDataFolderName);
     if (Directory.Exists(appDataFolderPath)) {
       Directory.Delete(appDataFolderPath);
     }
@@ -55,7 +55,7 @@ public static class SettingsTestHelper {
 
   public static Settings ReadSettings() {
     var settingsReader = new TestSettingsReaderReal {
-      ApplicationName = TestApplicationName,
+      AppDataFolderName = TestAppDataFolderName,
       DefaultSettingsFolderPath = TestSettingsFolderPath
     };
     return settingsReader.Read();

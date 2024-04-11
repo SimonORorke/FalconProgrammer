@@ -7,29 +7,29 @@ public class SettingsFolderLocation : SerialisationBase, ISettingsFolderLocation
   [XmlAttribute] public string Path { get; set; } = string.Empty;
 
   public void Write() {
-    string appDataFolderPath = GetAppDataFolderPath(ApplicationName);
+    string appDataFolderPath = GetAppDataFolderPath(AppDataFolderName);
     if (!FileSystemService.Folder.Exists(appDataFolderPath)) {
       FileSystemService.Folder.Create(appDataFolderPath);
     }
     Serialiser.Serialise(
       typeof(SettingsFolderLocation), this,
-      GetSettingsFolderLocationPath(ApplicationName));
+      GetSettingsFolderLocationPath(AppDataFolderName));
     if (!string.IsNullOrWhiteSpace(Path)) {
       FileSystemService.Folder.Create(Path);
     }
   }
 
   internal static string GetAppDataFolderPath(
-    string applicationName = Global.ApplicationName) {
+    string appDataFolderName = Global.AppDataFolderName) {
     string appDataFolderPath = System.IO.Path.Combine(
       Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-      applicationName);
+      appDataFolderName);
     return appDataFolderPath;
   }
 
   internal static string GetSettingsFolderLocationPath(
-    string applicationName = Global.ApplicationName) {
-    return System.IO.Path.Combine(GetAppDataFolderPath(applicationName),
+    string appDataFolderName = Global.AppDataFolderName) {
+    return System.IO.Path.Combine(GetAppDataFolderPath(appDataFolderName),
       "SettingsFolderLocation.xml");
   }
 }

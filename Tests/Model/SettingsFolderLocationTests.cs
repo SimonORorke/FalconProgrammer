@@ -8,7 +8,7 @@ public class SettingsFolderLocationTests {
     SettingsTestHelper.DeleteAnyData();
     try {
       var settingsFolderLocationReader = new SettingsFolderLocationReader {
-        ApplicationName = SettingsTestHelper.TestApplicationName
+        AppDataFolderName = SettingsTestHelper.TestAppDataFolderName
       };
       var location1 = settingsFolderLocationReader.Read();
       Assert.That(location1.Path, Is.Empty);
