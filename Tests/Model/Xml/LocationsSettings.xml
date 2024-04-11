@@ -2,8 +2,8 @@
 <Settings>
     <!-- The unrealistic drive letter has been chosen 
     for tests that are expected to use a mock file system. 
-    Tests will fail if they attempt to access the real file system, 
-    provided they are run on a computer that does not have that drive. -->
+    A test will throw an exception if it attempts to access the real file system, 
+    provided it is run on a computer that does not have that drive. -->
     <BatchScriptsFolder Path="J:\FalconProgrammer\Batch"/>
     <ProgramsFolder Path="J:\FalconProgrammer\Programs"/>
     <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
