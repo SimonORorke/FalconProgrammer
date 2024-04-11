@@ -15,6 +15,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       ModelServices = TestModelServices,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
+    // Show Locations tab initially.
+    ViewModel.SelectedTab = ViewModel.Tabs[0]; 
   }
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
@@ -30,13 +32,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void DisallowChangePage() {
-    // Access at least one tab to emulate the initial display of the main window.
-    // That will cause the tabs to be created and their associated page view models are
-    // configured correctly.  In particular, the page view models will get the default
-    // settings from an embedded resource file rather than reading the real settings file
-    // from the file system.
-    ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations view model
-    // Empty SettingsFolderPath is an error condition that should force the user to
+    // Unspecified settings folder is an error condition that should force the user to
     // stay on the Locations page.
     ViewModel.LocationsViewModel.SettingsFolderPath = string.Empty;
     // Try going to another page.
@@ -50,18 +46,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    // Access tabs to emulate the initial display of the main window.
-    // That will cause the tabs to be created and their associated page view models are
-    // configured correctly.  In particular, the page view models will get the default
-    // settings from an embedded resource file rather than reading the real settings file
-    // from the file system.
     Assert.That(ViewModel.Tabs[0].Header,
       Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
+    Assert.That(ViewModel.Tabs[1].Header,
+      Is.EqualTo(ViewModel.GuiScriptProcessorViewModel.TabTitle));
     Assert.That(ViewModel.Tabs[2].Header,
       Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
     Assert.That(ViewModel.Tabs[3].Header,
       Is.EqualTo(ViewModel.BatchScriptViewModel.TabTitle));
-    ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations view model 
     // Skip the GUI Script Processor page's initial validation.
     // Otherwise the validation might fail, resulting in the page immediately being
     // replaced with the Locations page.
@@ -76,12 +68,6 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void GoToLocationsPage() {
-    // Access at least one tab to emulate the initial display of the main window.
-    // That will cause the tabs to be created and their associated page view models are
-    // configured correctly.  In particular, the page view models will get the default
-    // settings from an embedded resource file rather than reading the real settings file
-    // from the file system.
-    ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations view model 
     // The GUI Script Processor page's initial validation will fail, resulting in the
     // page immediately being replaced with the Locations page.
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
@@ -93,8 +79,9 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public async Task UserConfirmsCloseWindowWhenError() {
     ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations
     // Error condition: settings folder not found.
+    // So the user should be prompted to confirm closing the window.
     MockFileSystemService.Folder.ExpectedExists = false;
-    // User confirms that the window should be closed, even though there is a error.
+    // User will confirm that the window should be closed, even though there is a error.
     MockDialogService.ExpectedAnswer = true;
     bool canClose = await ViewModel.QueryCloseWindow();
     // Question message box shown.
@@ -106,8 +93,9 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public async Task UserCancelsCloseWindowWhenError() {
     ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations
     // Error condition: settings folder not found.
+    // So the user should be prompted to confirm closing the window.
     MockFileSystemService.Folder.ExpectedExists = false;
-    // User declines to close the window, so that the error can be fixed.
+    // User will decline to close the window, so that the error can be fixed.
     MockDialogService.ExpectedAnswer = false;
     bool canClose = await ViewModel.QueryCloseWindow();
     // Question message box shown.
