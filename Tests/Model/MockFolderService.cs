@@ -4,6 +4,7 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.Tests.Model;
 
 public class MockFolderService : IFolderService {
+  internal bool CanCreate { get; set; } = true;
   internal bool ExpectedExists { get; set; } = true;
   internal List<string> ExistingPaths { get; } = [];
 
@@ -11,7 +12,12 @@ public class MockFolderService : IFolderService {
     [];
 
   internal Dictionary<string, IEnumerable<string>> ExpectedSubfolderNames { get; } = [];
-  public void Create(string path) { }
+
+  public void Create(string path) {
+    if (!CanCreate) {
+      throw new DirectoryNotFoundException();
+    }
+  }
 
   public bool Exists(string path) {
     if (ExistingPaths.Count == 0) {

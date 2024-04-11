@@ -8,7 +8,7 @@ public class SettingsFolderLocationReader
     if (!string.IsNullOrWhiteSpace(result.Path)) {
       try {
         FileSystemService.Folder.Create(result.Path);
-      } catch (DirectoryNotFoundException e) {
+      } catch (DirectoryNotFoundException) {
         // Invalid parent folder
       }
     }
