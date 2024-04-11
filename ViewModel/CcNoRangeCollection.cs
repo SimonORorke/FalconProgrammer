@@ -12,7 +12,7 @@ public abstract class CcNoRangeCollection(
 
   private void AddItem(int start = 0, int end = 127) {
     Add(new CcNoRangeViewModel(
-      AppendAdditionItem, OnItemChanged, RemoveItem, 
+      AppendAdditionItem, OnItemChanged, RemoveItem,
       IsAddingAdditionItem) {
       Start = start,
       End = end
@@ -20,7 +20,7 @@ public abstract class CcNoRangeCollection(
   }
 
   protected abstract List<Settings.IntegerRange> GetRangesFromSettings();
-  
+
   internal void Populate(Settings settings) {
     IsPopulating = true;
     Settings = settings;
@@ -38,7 +38,7 @@ public abstract class CcNoRangeCollection(
       from range in this
       where !range.IsAdditionItem
       select new Settings.IntegerRange {
-        Start = range.Start, 
+        Start = range.Start,
         End = range.End
       });
   }

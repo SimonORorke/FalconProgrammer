@@ -9,8 +9,8 @@ public class CcNoRangeViewModel(
   Action<ObservableObject> removeItem,
   bool isAdditionItem) : DataGridItem(appendAdditionItem,
   onItemChanged, removeItem, isAdditionItem) {
-  private int _start;
   private int _end = 127;
+  private int _start;
 
   [Required]
   [Range(0, 127)]

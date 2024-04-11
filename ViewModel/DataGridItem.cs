@@ -16,7 +16,7 @@ public abstract partial class DataGridItem : ObservableValidator {
     CanRemove = !isAdditionItem;
   }
 
-  private Action AppendAdditionItem { get; } 
+  private Action AppendAdditionItem { get; }
   private Action OnItemChanged { get; }
   private Action<ObservableObject> RemoveItem { get; }
   private bool HasNewAdditionItemBeenRequested { get; set; }

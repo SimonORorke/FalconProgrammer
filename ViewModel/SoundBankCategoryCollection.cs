@@ -18,7 +18,7 @@ public class SoundBankCategoryCollection(
 
   private void AddItem(string soundBank = "", string category = "") {
     Add(new SoundBankCategory(
-      Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem, 
+      Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem,
       IsAddingAdditionItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,

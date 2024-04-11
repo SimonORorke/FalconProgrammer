@@ -4,7 +4,6 @@
 ///   A service that can show different types of dialog windows.
 /// </summary>
 public interface IDialogService {
-  
   /// <summary>
   ///   Asynchronously shows a question message box with Yes and No buttons,
   ///   returning whether Yes has been clicked.
@@ -12,7 +11,7 @@ public interface IDialogService {
   /// <param name="text">The message text to be shown.</param>
   /// <returns>True if Yes, false if No.</returns>
   Task<bool> AskYesNoQuestionAsync(string text);
-  
+
   /// <summary>
   ///   Asynchronously shows an open file dialog, returning the path of the selected file
   ///   or, if the user cancels the dialog, null.

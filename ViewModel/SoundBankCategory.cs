@@ -17,6 +17,7 @@ public partial class SoundBankCategory(
   : DataGridItem(appendAdditionItem,
     onItemChanged, removeItem, isAdditionItem) {
   public const string AllCategoriesCaption = "All";
+
   [ObservableProperty]
   private string _category = string.Empty; // Generates Category property
 

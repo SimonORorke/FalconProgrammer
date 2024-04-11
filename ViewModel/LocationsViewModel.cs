@@ -12,7 +12,7 @@ public partial class LocationsViewModel(
   private string _originalProgramsFolderPath = string.Empty;
   private string _programsFolderPath = string.Empty;
   private string _templateProgramsFolderPath = string.Empty;
-  
+
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateDefaultTemplatePath))]
@@ -20,7 +20,7 @@ public partial class LocationsViewModel(
     get => _defaultTemplatePath;
     set => SetProperty(ref _defaultTemplatePath, value, true);
   }
-  
+
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateOriginalProgramsFolderPath))]
@@ -28,7 +28,7 @@ public partial class LocationsViewModel(
     get => _originalProgramsFolderPath;
     set => SetProperty(ref _originalProgramsFolderPath, value, true);
   }
-  
+
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateProgramsFolderPath))]
@@ -36,7 +36,7 @@ public partial class LocationsViewModel(
     get => _programsFolderPath;
     set => SetProperty(ref _programsFolderPath, value, true);
   }
-  
+
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateTemplateProgramsFolderPath))]
@@ -92,20 +92,20 @@ public partial class LocationsViewModel(
       TemplateProgramsFolderPath = path;
     }
   }
-  
+
   internal override void Open() {
     base.Open();
     DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
     ProgramsFolderPath = Settings.ProgramsFolder.Path;
-    TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path; 
+    TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path;
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     Settings.DefaultTemplate.Path = DefaultTemplatePath;
     Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
     Settings.ProgramsFolder.Path = ProgramsFolderPath;
-    Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath; 
+    Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 

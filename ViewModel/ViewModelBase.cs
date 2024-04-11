@@ -45,7 +45,7 @@ public abstract class ViewModelBase(
   internal Settings Settings { get; private set; } = null!;
 
   protected SettingsFolderLocationReader SettingsFolderLocationReader =>
-    _settingsFolderLocationReader ??= 
+    _settingsFolderLocationReader ??=
       ModelServices.GetService<SettingsFolderLocationReader>();
 
   private SettingsReader SettingsReader =>
@@ -61,7 +61,7 @@ public abstract class ViewModelBase(
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
     // Start listening for ObservableRecipient messages.
-    Messenger.RegisterAll(this); 
+    Messenger.RegisterAll(this);
     Settings = SettingsReader.Read(true);
   }
 

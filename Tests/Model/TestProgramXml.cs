@@ -11,7 +11,7 @@ public class TestProgramXml(Category category) : ProgramXml(category) {
   ///   with this name in the Tests assembly, ignoring its programPath parameter.
   /// </summary>
   public string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
-  
+
   /// <summary>
   ///   The file specified by <paramref name="programPath" /> will not be accessed or
   ///   deserialised. Instead, the embedded resource file specified by

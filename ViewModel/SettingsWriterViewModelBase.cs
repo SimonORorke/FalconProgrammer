@@ -12,7 +12,7 @@ public abstract class SettingsWriterViewModelBase(
   private string _settingsFolderPath = string.Empty;
   private bool HaveSettingsBeenUpdated { get; set; }
 
-  private ISettingsFolderLocation SettingsFolderLocation => 
+  private ISettingsFolderLocation SettingsFolderLocation =>
     _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
 
   [Required]
@@ -39,14 +39,14 @@ public abstract class SettingsWriterViewModelBase(
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
         if (isClosingWindow) {
-          errorMessage += 
-            $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " + 
+          errorMessage +=
+            $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " +
             "No (Esc) to resume.";
           return await DialogService.AskYesNoQuestionAsync(errorMessage);
         }
         await DialogService.ShowErrorMessageBoxAsync(errorMessage);
         return false;
-      } 
+      }
     }
     // I'm not sure whether insisting that all errors on the page are fixed is a good
     // idea. A specific check for prerequisites is made when attempting to open

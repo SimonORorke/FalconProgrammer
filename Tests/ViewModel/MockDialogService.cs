@@ -9,7 +9,7 @@ public class MockDialogService : IDialogService {
   internal string ExpectedPath { get; set; } = string.Empty;
   internal string LastErrorMessage { get; set; } = string.Empty;
   internal int ShowErrorMessageBoxCount { get; set; }
-  
+
   public async Task<bool> AskYesNoQuestionAsync(string text) {
     await Task.Delay(0);
     AskYesNoQuestionCount++;

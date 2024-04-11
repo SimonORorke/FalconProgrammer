@@ -7,7 +7,7 @@ public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings s
   : Category(soundBankFolder, name, settings) {
   private MockFileSystemService? _mockFileSystemService;
   internal string CategoryFolderPath { get; private set; } = string.Empty;
-  
+
   /// <summary>
   ///   <see cref="CreateTemplateXml" /> will read the embedded resource file
   ///   with this name in the Tests assembly, ignoring its inputPath parameter.
@@ -18,7 +18,7 @@ public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings s
     _mockFileSystemService ??= new MockFileSystemService();
 
   protected override IFileSystemService FileSystemService => MockFileSystemService;
-  
+
   protected override ProgramXml CreateTemplateXml() {
     return new TestProgramXml(this) {
       EmbeddedProgramFileName = EmbeddedTemplateFileName

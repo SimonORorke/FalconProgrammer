@@ -4,7 +4,6 @@ using System.Reflection;
 namespace FalconProgrammer.Tests.Model;
 
 public static class XmlTestHelper {
-
   [ExcludeFromCodeCoverage]
   public static string GetEmbeddedResourceName(
     string embeddedResourceFileName, Assembly assembly) {

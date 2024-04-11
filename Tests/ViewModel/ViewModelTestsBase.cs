@@ -37,7 +37,8 @@ public abstract class ViewModelTestsBase {
   protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
 
-  [PublicAPI] protected MockSettingsFolderLocationReader MockSettingsFolderLocationReader {
+  [PublicAPI]
+  protected MockSettingsFolderLocationReader MockSettingsFolderLocationReader {
     get;
     private set;
   } = null!;

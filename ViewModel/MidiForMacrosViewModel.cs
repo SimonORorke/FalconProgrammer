@@ -32,7 +32,7 @@ public class MidiForMacrosViewModel(
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
-    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo; 
+    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
     bool haveCollectionsBeenChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
       haveCollectionsBeenChanged = true;

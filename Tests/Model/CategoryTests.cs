@@ -25,7 +25,7 @@ public class CategoryTests {
     category.ConfigureMockFileSystemService(
       @"Factory\Organic Texture 2.8",
       "BAS Biggy.uvip");
-    Assert.Throws<ApplicationException>(()=> category.Initialise());
+    Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
   [Test]
