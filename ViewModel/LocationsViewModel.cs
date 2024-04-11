@@ -93,7 +93,7 @@ public partial class LocationsViewModel(
     }
   }
   
-  public override void Open() {
+  internal override void Open() {
     base.Open();
     DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
@@ -101,7 +101,7 @@ public partial class LocationsViewModel(
     TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path; 
   }
 
-  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     Settings.DefaultTemplate.Path = DefaultTemplatePath;
     Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
     Settings.ProgramsFolder.Path = ProgramsFolderPath;

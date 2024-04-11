@@ -68,7 +68,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
       Is.EqualTo(MockDialogService.ExpectedPath));
-    ViewModel.QueryClose();
+    await ViewModel.QueryClose();
     Assert.That(MockSerialiser.LastOutputPath,
       Is.EqualTo(@"C:\FalconProgrammer\Settings\Settings.xml"));
     Assert.That(MockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
@@ -86,19 +86,19 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     // specified in the settings folder location file. 
     ViewModel.Open();
     ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
-    ViewModel.QueryClose();
+    await ViewModel.QueryClose();
     settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.DefaultTemplate.Path,
       Is.EqualTo(ViewModel.DefaultTemplatePath));
   }
 
   [Test]
-  public void SettingsFolderDoesNotExist() {
+  public async Task SettingsFolderDoesNotExist() {
     ViewModel.SettingsFolderPath = @"C:\FalconProgrammer\Settings";
     MockFileSystemService.File.ExpectedExists = false;
     MockFileSystemService.Folder.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Programs";
-    Assert.That(ViewModel.QueryClose(), Is.False);
+    Assert.That(await ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: cannot find settings folder " +
@@ -106,11 +106,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public void SettingsFolderNotSpecified() {
+  public async Task SettingsFolderNotSpecified() {
     MockFileSystemService.File.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"C:\FalconProgrammer\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
-    Assert.That(ViewModel.QueryClose(), Is.False);
+    Assert.That(await ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: a settings folder has not been specified."));

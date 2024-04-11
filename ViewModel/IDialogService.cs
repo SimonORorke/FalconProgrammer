@@ -6,8 +6,8 @@
 public interface IDialogService {
   
   /// <summary>
-  ///   Asynchronously shows a question message box with Yes and No button,
-  ///   returning whether Yes was clicked.
+  ///   Asynchronously shows a question message box with Yes and No buttons,
+  ///   returning whether Yes has been clicked.
   /// </summary>
   /// <param name="text">The message text to be shown.</param>
   /// <returns>True if Yes, false if No.</returns>

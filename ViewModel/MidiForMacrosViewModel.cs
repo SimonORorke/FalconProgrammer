@@ -24,14 +24,14 @@ public class MidiForMacrosViewModel(
   public ToggleCcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
     ??= new ToggleCcNoRangeCollection(DispatcherService);
 
-  public override void Open() {
+  internal override void Open() {
     base.Open();
     ModWheelReplacementCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
     ContinuousCcNoRanges.Populate(Settings);
     ToggleCcNoRanges.Populate(Settings);
   }
 
-  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo; 
     bool haveCollectionsBeenChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {

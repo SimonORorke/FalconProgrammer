@@ -14,7 +14,7 @@ public class GuiScriptProcessorViewModel(
 
   public override string TabTitle => "GUI Script Processor";
 
-  public override void Open() {
+  internal override void Open() {
     // Debug.WriteLine("GuiScriptProcessorViewModel.Open");
     base.Open();
     if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
@@ -44,7 +44,7 @@ public class GuiScriptProcessorViewModel(
     SoundBankCategories.Populate(Settings, soundBanks);
   }
 
-  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (SoundBankCategories.HasBeenChanged) {
       SoundBankCategories.UpdateSettings();
       // Notify change, so that Settings will be saved.

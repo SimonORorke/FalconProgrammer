@@ -13,7 +13,8 @@ public class ModelServices(params object[] services) {
   public static ModelServices Default => _default ??= new ModelServices(
     FileSystemService.Default,
     Serialiser.Default,
-    new SettingsReader());
+    new SettingsReader(),
+    new SettingsFolderLocationReader());
 
   private IEnumerable<object> Services { get; } = services;
 

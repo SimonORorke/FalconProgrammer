@@ -12,13 +12,13 @@ public class TestGuiScriptProcessorViewModel(
   internal bool SkipInitialisation { get; set; }
 
   [ExcludeFromCodeCoverage]
-  public override void Open() {
+  internal override void Open() {
     if (!SkipInitialisation) {
       base.Open();
     }
   }
 
-  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     bool result = await base.QueryClose(isClosingWindow);
     if (result) {
       ClosedCount++;

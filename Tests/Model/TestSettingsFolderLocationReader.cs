@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Tests.Model;
 
-internal class TestSettingsFolderLocationReader : SettingsFolderLocationReader {
+public class TestSettingsFolderLocationReader : SettingsFolderLocationReader {
   private Deserialiser<SettingsFolderLocation>? _deserialiser;
 
   internal TestDeserialiser<SettingsFolderLocation> TestDeserialiser =>

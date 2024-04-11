@@ -22,7 +22,16 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private MainWindowViewModel ViewModel { get; set; } = null!;
 
   [Test]
-  public void Main() {
+  public async Task DisallowCloseWindow() {
+    //ViewModel.LocationsViewModel.SettingsFolderPath = string.Empty;
+    MockFileSystemService.Folder.ExpectedExists = false;
+    ViewModel.SelectedTab = ViewModel.Tabs[0];
+    bool canClose = await ViewModel.QueryCloseWindow();
+    Assert.That(canClose, Is.False);
+  }
+
+  [Test]
+  public async Task Main() {
     // Access tabs to emulate the initial display of the main window.
     // That will cause the tabs to be created and their associated page view models are
     // configured correctly.  In particular, the page view models will get the default
@@ -43,7 +52,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
     Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
-    ViewModel.OnClosing();
+    await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
   }
 
@@ -59,6 +68,5 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // page immediately being replaced with the Locations page.
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
-    Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
   }
 }

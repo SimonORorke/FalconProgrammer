@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
@@ -13,20 +12,8 @@ public abstract class SettingsWriterViewModelBase(
   private string _settingsFolderPath = string.Empty;
   private bool HaveSettingsBeenUpdated { get; set; }
 
-  private SettingsFolderLocation SettingsFolderLocation {
-    [SuppressMessage("ReSharper", "CommentTypo")]
-    get {
-      if (_settingsFolderLocation == null) {
-        var settingsFolderLocationReader = new SettingsFolderLocationReader {
-          FileSystemService = FileSystemService,
-          Serialiser = Serialiser
-        };
-        _settingsFolderLocation =
-          settingsFolderLocationReader.Read();
-      }
-      return _settingsFolderLocation;
-    }
-  }
+  private SettingsFolderLocation SettingsFolderLocation => 
+    _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
 
   [Required]
   [CustomValidation(typeof(SettingsWriterViewModelBase),
@@ -36,10 +23,48 @@ public abstract class SettingsWriterViewModelBase(
     set => SetProperty(ref _settingsFolderPath, value, true);
   }
 
-  private bool CanSaveSettings(out string errorMessage) {
+  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
+    base.OnPropertyChanged(e);
+    if (IsVisible) {
+      HaveSettingsBeenUpdated = true;
+    }
+  }
+
+  internal override void Open() {
+    base.Open();
+    SettingsFolderPath = SettingsFolderLocation.Path;
+  }
+
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
+    if (HaveSettingsBeenUpdated) {
+      if (!TrySaveSettings(out string errorMessage)) {
+        if (isClosingWindow) {
+          errorMessage += 
+            $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " + 
+            "No (Esc) to resume.";
+          return await DialogService.AskYesNoQuestionAsync(errorMessage);
+        }
+        await DialogService.ShowErrorMessageBoxAsync(errorMessage);
+        return false;
+      } 
+    }
+    // I'm not sure whether insisting that all errors on the page are fixed is a good
+    // idea. A specific check for prerequisites is made when attempting to open
+    // the GUI Script Processor page.
+    // If implemented, this needs to allow for window closing, as with the
+    // TrySaveSettings error message above.
+    // if (GetErrors().Any()) {
+    //   await DialogService.ShowErrorMessageBoxAsync(
+    //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
+    //   return false;
+    // }
+    return await base.QueryClose(isClosingWindow);
+  }
+
+  private bool TrySaveSettings(out string errorMessage) {
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
       // Console.WriteLine(
-      //   $"SettingsWriterViewModelBase.CanSaveSettings ({GetType().Name}): A settings folder has not been specified.");
+      //   $"SettingsWriterViewModelBase.TrySaveSettings ({GetType().Name}): A settings folder has not been specified.");
       errorMessage =
         "Settings cannot be saved: a settings folder has not been specified.";
       return false;
@@ -51,58 +76,16 @@ public abstract class SettingsWriterViewModelBase(
       return false;
     }
     errorMessage = string.Empty;
-    return true;
-  }
-
-  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-    base.OnPropertyChanged(e);
-    if (IsVisible) {
-      HaveSettingsBeenUpdated = true;
-    }
-  }
-
-  public override void Open() {
-    base.Open();
-    SettingsFolderPath = SettingsFolderLocation.Path;
-  }
-
-  public override async Task<bool> QueryClose(bool isClosingWindow = false) {
-    if (HaveSettingsBeenUpdated) {
-      if (CanSaveSettings(out string errorMessage)) {
-        SaveSettings();
-        HaveSettingsBeenUpdated = false;
-      } else if (isClosingWindow) {
-        errorMessage += 
-          $"\r\n\r\nClick Yes to close {Global.ApplicationTitle}, No to resume.";
-        return await DialogService.AskYesNoQuestionAsync(errorMessage);
-      } else {
-        await DialogService.ShowErrorMessageBoxAsync(errorMessage);
-        return false;
-      }
-    }
-    // if (GetErrors().Any()) {
-    //   await DialogService.ShowErrorMessageBoxAsync(
-    //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
-    //   return false;
-    // }
-    return await base.QueryClose(isClosingWindow);
-  }
-
-  private void SaveSettings() {
-    // Debug.WriteLine($"SettingsWriterViewModelBase.SaveSettings: {GetType().Name}");
+    // Save settings
     if (SettingsFolderPath == SettingsFolderLocation.Path) {
       Settings.Write();
-      // try {
-      //   Settings.Write();
-      // } catch (IOException) {
-      //   Console.WriteLine($"SettingsWriterViewModelBase.SaveSettings {GetType().Name}: Settings.Write throwing IOException.");
-      //   throw;
-      // }
     } else {
       SettingsFolderLocation.Path = SettingsFolderPath;
       SettingsFolderLocation.Write();
       Settings.Write(SettingsFolderPath);
     }
+    HaveSettingsBeenUpdated = false;
+    return true;
   }
 
   protected static ValidationResult ValidateFilePath(

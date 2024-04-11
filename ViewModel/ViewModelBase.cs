@@ -10,6 +10,7 @@ public abstract class ViewModelBase(
   private IFileSystemService? _fileSystemService;
   private ModelServices? _modelServices;
   private ISerialiser? _serialiser;
+  private SettingsFolderLocationReader? _settingsFolderLocationReader;
   private SettingsReader? _settingsReader;
   protected IDialogService DialogService { get; } = dialogService;
   protected IDispatcherService DispatcherService { get; } = dispatcherService;
@@ -43,6 +44,10 @@ public abstract class ViewModelBase(
 
   internal Settings Settings { get; private set; } = null!;
 
+  protected SettingsFolderLocationReader SettingsFolderLocationReader =>
+    _settingsFolderLocationReader ??= 
+      ModelServices.GetService<SettingsFolderLocationReader>();
+
   private SettingsReader SettingsReader =>
     _settingsReader ??= ModelServices.GetService<SettingsReader>();
 
@@ -52,7 +57,7 @@ public abstract class ViewModelBase(
     Messenger.Send(new GoToLocationsPageMessage());
   }
 
-  public virtual void Open() {
+  internal virtual void Open() {
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
     // Start listening for ObservableRecipient messages.
@@ -60,7 +65,7 @@ public abstract class ViewModelBase(
     Settings = SettingsReader.Read(true);
   }
 
-  public virtual async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal virtual async Task<bool> QueryClose(bool isClosingWindow = false) {
     // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
     IsVisible = false;
     // Stop listening for ObservableRecipient messages.

@@ -2,5 +2,5 @@
 
 public static class Global {
   public const string ApplicationName = "FalconProgrammer";
-  public const string ApplicationTitle = "Falcon Programmer";
+  public static string ApplicationTitle { get; set; } = string.Empty;
 }

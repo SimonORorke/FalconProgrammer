@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -23,6 +24,17 @@ public partial class MainWindowViewModel(
   [ObservableProperty] private TabItemViewModel? _selectedTab;
 
   private ImmutableList<TabItemViewModel>? _tabs;
+
+#pragma warning disable CA1822
+  // ReSharper disable once MemberCanBeMadeStatic.Global
+  // Notwithstanding the warnings from both ReSharper and the compiler that this property
+  // should be static, App.OnFrameworkInitializationCompleted cannot access it if it is
+  // static: "Cannot access static property 'ApplicationTitle' in non-static context".
+  public string ApplicationTitle {
+#pragma warning restore CA1822
+    get => Global.ApplicationTitle;
+    set => Global.ApplicationTitle = value;
+  }
 
   /// <summary>
   ///   The setter is only for tests.
@@ -78,15 +90,6 @@ public partial class MainWindowViewModel(
     return list.ToImmutableList();
   }
 
-  public async Task<bool> OnClosing() {
-    if (CurrentPageViewModel != null) {
-      if (!await CurrentPageViewModel.QueryClose(true)) {
-        return false;
-      }
-    }
-    return await QueryClose();
-  }
-
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (value == null) {
       return;
@@ -118,5 +121,14 @@ public partial class MainWindowViewModel(
     CurrentPageViewModel = value.ViewModel;
     CurrentPageTitle = CurrentPageViewModel.PageTitle;
     CurrentPageViewModel.Open();
+  }
+
+  public async Task<bool> QueryCloseWindow() {
+    if (CurrentPageViewModel != null) {
+      if (!await CurrentPageViewModel.QueryClose(true)) {
+        return false;
+      }
+    }
+    return await base.QueryClose(true);
   }
 }
