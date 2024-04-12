@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 using FalconProgrammer.ViewModel;
 
@@ -15,6 +17,11 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   private Settings Settings { get; set; } = null!;
 
   [Test]
+  public async Task DisallowOverlappingContinuousCcNoRange() {
+    await DisallowOverlappingRange<ContinuousCcNoRangeCollection>();
+  }
+
+  [Test]
   public void PopulateContinuousCcNoRanges() {
     Populate<ContinuousCcNoRangeCollection>(Settings.MidiForMacros.ContinuousCcNoRanges);
   }
@@ -25,13 +32,31 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   }
 
   [Test]
-  public void UpdateContinuousCcNoRanges() {
-    Update<ContinuousCcNoRangeCollection>(Settings.MidiForMacros.ContinuousCcNoRanges);
+  public async Task UpdateContinuousCcNoRanges() {
+    await Update<ContinuousCcNoRangeCollection>(Settings.MidiForMacros.ContinuousCcNoRanges);
   }
 
   [Test]
-  public void UpdateToggleCcNoRanges() {
-    Update<ToggleCcNoRangeCollection>(Settings.MidiForMacros.ToggleCcNoRanges);
+  public async Task UpdateToggleCcNoRanges() {
+    // Check that there is only one, as we want to test removing the last one.
+    Assert.That(Settings.MidiForMacros.ToggleCcNoRanges, Has.Count.EqualTo(1));
+    await Update<ToggleCcNoRangeCollection>(Settings.MidiForMacros.ToggleCcNoRanges);
+  }
+
+  private async Task DisallowOverlappingRange<T>()
+    where T : CcNoRangeCollection {
+    var ranges = CreateRanges<T>();
+    ranges.Populate(Settings);
+    var lastRange = ranges[^1];
+    var overlappingRange = new CcNoRangeViewModel(
+      AppendAdditionItem, OnItemChanged, RemoveItem, false) {
+      Start = lastRange.Start,
+      End = lastRange.End + 1
+    };
+    ranges.Add(overlappingRange);
+    var updateResult = await ranges.UpdateSettingsAsync(false);
+    Assert.That(!updateResult.Success);
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
   }
 
   private void Populate<T>(ICollection rangesInSettings)
@@ -43,18 +68,28 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
       rangesInSettings.Count + 1));
   }
 
-  private void Update<T>(List<Settings.IntegerRange> rangesInSettings)
+  private async Task Update<T>(List<Settings.IntegerRange> rangesInSettings)
     where T : CcNoRangeCollection {
     int originalCountInSettings = rangesInSettings.Count;
     var ranges = CreateRanges<T>();
     ranges.Populate(Settings);
     ranges[0].RemoveCommand.Execute(null);
-    ranges.UpdateSettings();
+    await ranges.UpdateSettingsAsync(false);
     Assert.That(rangesInSettings, Has.Count.EqualTo(
       originalCountInSettings - 1));
   }
 
-  private CcNoRangeCollection CreateRanges<T>() where T : CcNoRangeCollection {
-    return (T)Activator.CreateInstance(typeof(T), [MockDispatcherService])!;
+  private CcNoRangeCollection CreateRanges<T>()
+    where T : CcNoRangeCollection {
+    return (T)Activator.CreateInstance(typeof(T),
+      [MockDialogService, MockDispatcherService])!;
   }
+
+  [ExcludeFromCodeCoverage]
+  private static void AppendAdditionItem() { }
+
+  private static void OnItemChanged() { }
+
+  [ExcludeFromCodeCoverage]
+  private static void RemoveItem(ObservableObject itemToRemove) { }
 }

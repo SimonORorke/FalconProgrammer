@@ -38,14 +38,8 @@ public abstract class SettingsWriterViewModelBase(
   internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
-        if (isClosingWindow) {
-          errorMessage +=
-            $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " +
-            "No (Esc) to resume.";
-          return await DialogService.AskYesNoQuestionAsync(errorMessage);
-        }
-        await DialogService.ShowErrorMessageBoxAsync(errorMessage);
-        return false;
+        var errorReporter = new ErrorReporter(DialogService);
+        return await errorReporter.CanCloseWindowOnErrorAsync(errorMessage, isClosingWindow);
       }
     }
     // I'm not sure whether insisting that all errors on the page are fixed is a good

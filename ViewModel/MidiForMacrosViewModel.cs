@@ -11,7 +11,7 @@ public class MidiForMacrosViewModel(
   private ToggleCcNoRangeCollection? _toggleCcNoRanges;
 
   public ContinuousCcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
-    ??= new ContinuousCcNoRangeCollection(DispatcherService);
+    ??= new ContinuousCcNoRangeCollection(DialogService, DispatcherService);
 
   [Range(0, 127)]
   public int ModWheelReplacementCcNo {
@@ -22,7 +22,16 @@ public class MidiForMacrosViewModel(
   public override string PageTitle => "MIDI for Macros";
 
   public ToggleCcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
-    ??= new ToggleCcNoRangeCollection(DispatcherService);
+    ??= new ToggleCcNoRangeCollection(DialogService, DispatcherService);
+
+  private static void InterpretUpdateResult(InteractiveValidationResult updateResult,
+    ref bool haveRangesChanged, ref bool canCloseWindow) {
+    if (updateResult.Success) {
+      haveRangesChanged = true;
+    } else if (!updateResult.CanCloseWindow) {
+      canCloseWindow = false;
+    }
+  }
 
   internal override void Open() {
     base.Open();
@@ -32,20 +41,29 @@ public class MidiForMacrosViewModel(
   }
 
   internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
+    // bass.QueryCloseAsync will automatically save this setting, if it has changed, as
+    // it is a property of this view model.
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
-    bool haveCollectionsBeenChanged = false;
+    bool canCloseWindow = true;
+    bool haveRangesChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
-      haveCollectionsBeenChanged = true;
-      ContinuousCcNoRanges.UpdateSettings();
+      InterpretUpdateResult(
+        await ContinuousCcNoRanges.UpdateSettingsAsync(isClosingWindow), 
+        ref haveRangesChanged, ref canCloseWindow);
     }
     if (ToggleCcNoRanges.HasBeenChanged) {
-      haveCollectionsBeenChanged = true;
-      ToggleCcNoRanges.UpdateSettings();
+      InterpretUpdateResult(
+        await ToggleCcNoRanges.UpdateSettingsAsync(isClosingWindow), 
+        ref haveRangesChanged, ref canCloseWindow);
     }
-    if (haveCollectionsBeenChanged) {
+    if (haveRangesChanged) {
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
-    return await base.QueryCloseAsync(isClosingWindow); // Saves settings if changed.
+    // Attempt to save settings if changed.
+    if (!await base.QueryCloseAsync(isClosingWindow)) {
+      canCloseWindow = false;
+    }
+    return canCloseWindow;
   }
 }
