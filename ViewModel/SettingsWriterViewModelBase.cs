@@ -35,7 +35,7 @@ public abstract class SettingsWriterViewModelBase(
     SettingsFolderPath = SettingsFolderLocation.Path;
   }
 
-  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
         if (isClosingWindow) {
@@ -58,7 +58,7 @@ public abstract class SettingsWriterViewModelBase(
     //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
     //   return false;
     // }
-    return await base.QueryClose(isClosingWindow);
+    return await base.QueryCloseAsync(isClosingWindow);
   }
 
   private bool TrySaveSettings(out string errorMessage) {

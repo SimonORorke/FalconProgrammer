@@ -104,11 +104,11 @@ public partial class MainWindowViewModel(
   private async void OnSelectedTabChangedAsync(TabItemViewModel value) {
     if (CurrentPageViewModel != null
         // If a return to the same page has been forced because of errors,
-        // the error message that was shown by QueryClose should not be shown again.
+        // the error message that was shown by QueryCloseAsync should not be shown again.
         && !CurrentPageViewModel.Equals(value.ViewModel)) {
       // If there is an error on the previous selected tab's page,
-      // QueryClose will show an error message box and return false.
-      bool canChangeTab = await CurrentPageViewModel.QueryClose();
+      // QueryCloseAsync will show an error message box and return false.
+      bool canChangeTab = await CurrentPageViewModel.QueryCloseAsync();
       if (!canChangeTab) {
         // Go back to the previous tab.
         SelectedTab = (
@@ -123,12 +123,12 @@ public partial class MainWindowViewModel(
     CurrentPageViewModel.Open();
   }
 
-  public async Task<bool> QueryCloseWindow() {
+  public async Task<bool> QueryCloseWindowAsync() {
     if (CurrentPageViewModel != null) {
-      if (!await CurrentPageViewModel.QueryClose(true)) {
+      if (!await CurrentPageViewModel.QueryCloseAsync(true)) {
         return false;
       }
     }
-    return await base.QueryClose(true);
+    return await base.QueryCloseAsync(true);
   }
 }

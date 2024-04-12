@@ -60,8 +60,8 @@ public abstract class ViewModelBase(
     Settings = SettingsReader.Read(true);
   }
 
-  internal virtual async Task<bool> QueryClose(bool isClosingWindow = false) {
-    // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
+  internal virtual async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
+    // Debug.WriteLine($"ViewModelBase.QueryCloseAsync: {GetType().Name}");
     IsVisible = false;
     // Stop listening for ObservableRecipient messages.
     Messenger.UnregisterAll(this);

@@ -31,7 +31,7 @@ public class MidiForMacrosViewModel(
     ToggleCcNoRanges.Populate(Settings);
   }
 
-  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
     bool haveCollectionsBeenChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
@@ -46,6 +46,6 @@ public class MidiForMacrosViewModel(
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
-    return await base.QueryClose(isClosingWindow); // Saves settings if changed.
+    return await base.QueryCloseAsync(isClosingWindow); // Saves settings if changed.
   }
 }

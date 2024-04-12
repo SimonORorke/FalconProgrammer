@@ -101,12 +101,12 @@ public partial class LocationsViewModel(
     TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path;
   }
 
-  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
     Settings.DefaultTemplate.Path = DefaultTemplatePath;
     Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
     Settings.ProgramsFolder.Path = ProgramsFolderPath;
     Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath;
-    return await base.QueryClose(isClosingWindow); // Saves settings if changed.
+    return await base.QueryCloseAsync(isClosingWindow); // Saves settings if changed.
   }
 
   public static ValidationResult ValidateDefaultTemplatePath(

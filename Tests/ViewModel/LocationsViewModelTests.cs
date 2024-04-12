@@ -74,7 +74,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
       Is.EqualTo(MockDialogService.ExpectedPath));
-    await ViewModel.QueryClose();
+    await ViewModel.QueryCloseAsync();
     Assert.That(MockSerialiser.LastOutputPath,
       Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
     Assert.That(MockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
@@ -92,7 +92,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     // specified in the settings folder location file. 
     ViewModel.Open();
     ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
-    await ViewModel.QueryClose();
+    await ViewModel.QueryCloseAsync();
     settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.DefaultTemplate.Path,
       Is.EqualTo(ViewModel.DefaultTemplatePath));
@@ -104,7 +104,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockFileSystemService.File.ExpectedExists = false;
     MockFileSystemService.Folder.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
-    Assert.That(await ViewModel.QueryClose(), Is.False);
+    Assert.That(await ViewModel.QueryCloseAsync(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: cannot find settings folder " +
@@ -116,7 +116,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockFileSystemService.File.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
-    Assert.That(await ViewModel.QueryClose(), Is.False);
+    Assert.That(await ViewModel.QueryCloseAsync(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: a settings folder has not been specified."));

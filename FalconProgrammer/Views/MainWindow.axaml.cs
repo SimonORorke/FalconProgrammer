@@ -18,7 +18,7 @@ public partial class MainWindow : Window {
   private void OnClosing(object? sender, WindowClosingEventArgs e) {
     if (!ForceClose) {
       e.Cancel = true;
-      ViewModel.QueryCloseWindow().ContinueWith(
+      ViewModel.QueryCloseWindowAsync().ContinueWith(
         task => {
           if (task.Result) {
             ForceClose = true;

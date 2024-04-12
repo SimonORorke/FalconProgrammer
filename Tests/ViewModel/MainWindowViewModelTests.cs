@@ -62,7 +62,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
     Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
-    await ViewModel.QueryCloseWindow();
+    await ViewModel.QueryCloseWindowAsync();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
   }
 
@@ -83,7 +83,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockFileSystemService.Folder.ExpectedExists = false;
     // User will confirm that the window should be closed, even though there is a error.
     MockDialogService.ExpectedAnswer = true;
-    bool canClose = await ViewModel.QueryCloseWindow();
+    bool canClose = await ViewModel.QueryCloseWindowAsync();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
     Assert.That(canClose, Is.True);
@@ -97,7 +97,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockFileSystemService.Folder.ExpectedExists = false;
     // User will decline to close the window, so that the error can be fixed.
     MockDialogService.ExpectedAnswer = false;
-    bool canClose = await ViewModel.QueryCloseWindow();
+    bool canClose = await ViewModel.QueryCloseWindowAsync();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
     Assert.That(canClose, Is.False);

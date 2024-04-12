@@ -110,7 +110,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(4));
     Assert.That(ViewModel.SoundBankCategories[3].IsAdditionItem, Is.True);
-    await ViewModel.QueryClose(); // Updates and saves settings
+    await ViewModel.QueryCloseAsync(); // Updates and saves settings
     Assert.That(
       ViewModel.Settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(3));
     Assert.That(ViewModel.Settings.MustUseGuiScriptProcessorCategories[0].Category,
