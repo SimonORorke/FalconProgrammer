@@ -10,9 +10,19 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     ViewModel = new MidiForMacrosViewModel(MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
+    ViewModel.Open();
   }
 
   private MidiForMacrosViewModel ViewModel { get; set; } = null!;
+
+  [Test]
+  public async Task UpdateModWheelReplacementCcNo() {
+    const int newCcNo = 18;
+    ViewModel.ModWheelReplacementCcNo = newCcNo;
+    Assert.That(await ViewModel.QueryCloseAsync(), Is.True);
+    Assert.That(ViewModel.Settings.MidiForMacros.ModWheelReplacementCcNo,
+      Is.EqualTo(newCcNo));
+  }
 
   [Test]
   public void ValidateModWheelReplacementCcNo() {
