@@ -8,7 +8,6 @@ public abstract class CcNoRangeCollection(
   IDialogService dialogService,
   IDispatcherService dispatcherService)
   : DataGridItemCollection<CcNoRangeViewModel>(dispatcherService) {
-  
   protected override void AppendAdditionItem() {
     AddItem();
   }
@@ -24,21 +23,6 @@ public abstract class CcNoRangeCollection(
 
   protected abstract List<Settings.IntegerRange> GetRangesFromSettings();
 
-  private static List<CcNoRangeViewModel> GetSortedRanges(
-    IEnumerable<CcNoRangeViewModel> ranges) {
-    var result = new List<CcNoRangeViewModel>(ranges);
-    result.Sort((range1, range2) => {
-      // Compare Starts first.
-      int startComparison = range1.Start.CompareTo(range2.Start);
-      return startComparison != 0 
-        ? startComparison
-        // Starts are same. (This is not allowed, but will be validated afterwards.)
-        // So compare Ends. 
-        : range1.End.CompareTo(range2.End);
-    });
-    return result;
-  }
-
   internal void Populate(Settings settings) {
     IsPopulating = true;
     Settings = settings;
@@ -49,52 +33,56 @@ public abstract class CcNoRangeCollection(
     IsPopulating = false;
   }
 
-  internal async Task<InteractiveValidationResult> UpdateSettingsAsync(
+  internal async Task<ClosingValidationResult> UpdateSettingsAsync(
     bool isClosingWindow) {
-    var sortedRanges = GetSortedRanges(
-      from range in this
+    var ranges = (from range in this
       where !range.IsAdditionItem
-      select range);
-    var validation = await ValidateAsync(sortedRanges, isClosingWindow); 
+      select range).ToList();
+    var validation = await ValidateAsync(ranges,
+      isClosingWindow);
     if (!validation.Success) {
       return validation;
     }
     var settingsRanges = GetRangesFromSettings();
     settingsRanges.Clear();
     settingsRanges.AddRange(
-      from range in sortedRanges
+      from range in ranges
       select new Settings.IntegerRange {
         Start = range.Start,
         End = range.End
       });
-    return new InteractiveValidationResult(true, true);
+    return new ClosingValidationResult(true, true);
   }
 
   protected override void RemoveItem(ObservableObject itemToRemove) {
     RemoveItemTyped((CcNoRangeViewModel)itemToRemove);
   }
 
-  private async Task<InteractiveValidationResult> ValidateAsync(
-    IReadOnlyList<CcNoRangeViewModel> sortedRanges, bool isClosingWindow) {
-    if (sortedRanges.Count == 0) {
-      return new InteractiveValidationResult(true, true);
+  private async Task<ClosingValidationResult> ValidateAsync(
+    IReadOnlyCollection<CcNoRangeViewModel> ranges, bool isClosingWindow) {
+    if (ranges.Count == 0) {
+      return new ClosingValidationResult(true, true);
     }
     bool isValid = true;
-    var previousRange = sortedRanges[0];
-    for (int i = 1; i < sortedRanges.Count; i++) {
-      var range = sortedRanges[i];
-      if (range.Start == previousRange.Start || range.End <= previousRange.End) {
+    foreach (var range in ranges) {
+      var otherRanges =
+        from otherRange in ranges
+        where otherRange != range
+        select otherRange;
+      if (otherRanges.Select(otherRange =>
+            otherRange.Start <= range.End && range.Start <= otherRange.End)
+          .Any(overlap => overlap)) {
         isValid = false;
-        break;
       }
     }
     if (isValid) {
-      return new InteractiveValidationResult(true, true);
+      return new ClosingValidationResult(true, true);
     }
     var errorReporter = new ErrorReporter(dialogService);
-    bool canCloseWindow = await errorReporter.CanCloseWindowOnErrorAsync(
-      $"{rangeType} CC No settings cannot be saved because their ranges overlap.", 
+    bool canClosePage = await errorReporter.CanClosePageOnErrorAsync(
+      $"MIDI for Macros settings cannot be saved because {rangeType} CC No ranges " +
+      "include overlapping ranges.",
       isClosingWindow);
-    return new InteractiveValidationResult(false, canCloseWindow);
+    return new ClosingValidationResult(false, canClosePage);
   }
 }

@@ -24,12 +24,12 @@ public class MidiForMacrosViewModel(
   public ToggleCcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
     ??= new ToggleCcNoRangeCollection(DialogService, DispatcherService);
 
-  private static void InterpretUpdateResult(InteractiveValidationResult updateResult,
-    ref bool haveRangesChanged, ref bool canCloseWindow) {
+  private static void InterpretClosingUpdateResult(ClosingValidationResult updateResult,
+    ref bool haveRangesChanged, ref bool canClosePage) {
     if (updateResult.Success) {
       haveRangesChanged = true;
-    } else if (!updateResult.CanCloseWindow) {
-      canCloseWindow = false;
+    } else if (!updateResult.CanClosePage) {
+      canClosePage = false;
     }
   }
 
@@ -41,29 +41,33 @@ public class MidiForMacrosViewModel(
   }
 
   internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
-    // bass.QueryCloseAsync will automatically save this setting, if it has changed, as
-    // it is a property of this view model.
+    // Provided there are no validation errors for either of the two collections of
+    // ranges, base.QueryCloseAsync will automatically save this setting, if it has
+    // changed, as it is a property of this view model.
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
-    bool canCloseWindow = true;
+    bool canClosePage = true;
     bool haveRangesChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
-      InterpretUpdateResult(
+      InterpretClosingUpdateResult(
         await ContinuousCcNoRanges.UpdateSettingsAsync(isClosingWindow), 
-        ref haveRangesChanged, ref canCloseWindow);
+        ref haveRangesChanged, ref canClosePage);
+      if (!canClosePage) {
+        return false;
+      }
     }
     if (ToggleCcNoRanges.HasBeenChanged) {
-      InterpretUpdateResult(
+      InterpretClosingUpdateResult(
         await ToggleCcNoRanges.UpdateSettingsAsync(isClosingWindow), 
-        ref haveRangesChanged, ref canCloseWindow);
+        ref haveRangesChanged, ref canClosePage);
+      if (!canClosePage) {
+        return false;
+      }
     }
     if (haveRangesChanged) {
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
     // Attempt to save settings if changed.
-    if (!await base.QueryCloseAsync(isClosingWindow)) {
-      canCloseWindow = false;
-    }
-    return canCloseWindow;
+    return await base.QueryCloseAsync(isClosingWindow);
   }
 }

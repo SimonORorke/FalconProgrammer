@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 using FalconProgrammer.ViewModel;
 
@@ -48,11 +46,8 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     var ranges = CreateRanges<T>();
     ranges.Populate(Settings);
     var lastRange = ranges[^1];
-    var overlappingRange = new CcNoRangeViewModel(
-      AppendAdditionItem, OnItemChanged, RemoveItem, false) {
-      Start = lastRange.Start,
-      End = lastRange.End + 1
-    };
+    var overlappingRange = TestHelper.CreateCcNoRangeAdditionItem(
+      lastRange.Start, lastRange.End + 1);
     ranges.Add(overlappingRange);
     var updateResult = await ranges.UpdateSettingsAsync(false);
     Assert.That(!updateResult.Success);
@@ -84,12 +79,4 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     return (T)Activator.CreateInstance(typeof(T),
       [MockDialogService, MockDispatcherService])!;
   }
-
-  [ExcludeFromCodeCoverage]
-  private static void AppendAdditionItem() { }
-
-  private static void OnItemChanged() { }
-
-  [ExcludeFromCodeCoverage]
-  private static void RemoveItem(ObservableObject itemToRemove) { }
 }

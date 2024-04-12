@@ -39,7 +39,7 @@ public abstract class SettingsWriterViewModelBase(
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
         var errorReporter = new ErrorReporter(DialogService);
-        return await errorReporter.CanCloseWindowOnErrorAsync(errorMessage, isClosingWindow);
+        return await errorReporter.CanClosePageOnErrorAsync(errorMessage, isClosingWindow);
       }
     }
     // I'm not sure whether insisting that all errors on the page are fixed is a good
