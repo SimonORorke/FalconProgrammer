@@ -3,13 +3,12 @@
 namespace FalconProgrammer.ViewModel;
 
 internal class ErrorReporter(IDialogService dialogService) {
-  
   /// <summary>
   ///   For use when there is an error message to show when the user attempts to close
   ///   current tab page, either by selecting another tab or by closing the main window.
   ///   If the window is closing, the error message is shown in a question message box
   ///   asking whether the window should still be closed. Otherwise the error message
-  ///   is shown in a message box with OK button only. 
+  ///   is shown in a message box with OK button only.
   /// </summary>
   /// <param name="errorMessage">The error message to show.</param>
   /// <param name="isClosingWindow">

@@ -6,12 +6,13 @@ public class MidiForMacrosViewModel(
   IDialogService dialogService,
   IDispatcherService dispatcherService)
   : SettingsWriterViewModelBase(dialogService, dispatcherService) {
-  private ContinuousCcNoRangeCollection? _continuousCcNoRanges;
+  private CcNoRangeCollection? _continuousCcNoRanges;
   private int _modWheelReplacementCcNo;
-  private ToggleCcNoRangeCollection? _toggleCcNoRanges;
+  private CcNoRangeCollection? _toggleCcNoRanges;
 
-  public ContinuousCcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
-    ??= new ContinuousCcNoRangeCollection(DialogService, DispatcherService);
+  public CcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
+    ??= new CcNoRangeCollection("Continuous",
+      DialogService, DispatcherService);
 
   [Range(0, 127)]
   public int ModWheelReplacementCcNo {
@@ -21,8 +22,9 @@ public class MidiForMacrosViewModel(
 
   public override string PageTitle => "MIDI for Macros";
 
-  public ToggleCcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
-    ??= new ToggleCcNoRangeCollection(DialogService, DispatcherService);
+  public CcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
+    ??= new CcNoRangeCollection("Toggle",
+      DialogService, DispatcherService);
 
   private static void InterpretClosingUpdateResult(ClosingValidationResult updateResult,
     ref bool haveRangesChanged, ref bool canClosePage) {
@@ -36,8 +38,8 @@ public class MidiForMacrosViewModel(
   internal override void Open() {
     base.Open();
     ModWheelReplacementCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
-    ContinuousCcNoRanges.Populate(Settings);
-    ToggleCcNoRanges.Populate(Settings);
+    ContinuousCcNoRanges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
+    ToggleCcNoRanges.Populate(Settings.MidiForMacros.ToggleCcNoRanges);
   }
 
   internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
@@ -49,7 +51,7 @@ public class MidiForMacrosViewModel(
     bool haveRangesChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
       InterpretClosingUpdateResult(
-        await ContinuousCcNoRanges.UpdateSettingsAsync(isClosingWindow), 
+        await ContinuousCcNoRanges.UpdateSettingsAsync(isClosingWindow),
         ref haveRangesChanged, ref canClosePage);
       if (!canClosePage) {
         return false;
@@ -57,7 +59,7 @@ public class MidiForMacrosViewModel(
     }
     if (ToggleCcNoRanges.HasBeenChanged) {
       InterpretClosingUpdateResult(
-        await ToggleCcNoRanges.UpdateSettingsAsync(isClosingWindow), 
+        await ToggleCcNoRanges.UpdateSettingsAsync(isClosingWindow),
         ref haveRangesChanged, ref canClosePage);
       if (!canClosePage) {
         return false;

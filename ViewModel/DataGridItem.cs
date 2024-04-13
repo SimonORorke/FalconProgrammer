@@ -12,7 +12,7 @@ public abstract partial class DataGridItem : ObservableValidator {
 
   protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
     Action<DataGridItem> removeItem, bool isAdditionItem,
-    Action<DataGridItem> cutItem, 
+    Action<DataGridItem> cutItem,
     Action<DataGridItem> pasteBeforeItem) {
     AppendAdditionItem = appendAdditionItem;
     OnItemChanged = onItemChanged;
@@ -35,7 +35,7 @@ public abstract partial class DataGridItem : ObservableValidator {
     private set {
       CanCut = !value;
       _isAdditionItem = value;
-    } 
+    }
   }
 
   private Action<DataGridItem> PasteBeforeItem { get; }

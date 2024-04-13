@@ -7,7 +7,7 @@ public class CcNoRangeViewModel(
   Action onItemChanged,
   Action<DataGridItem> removeItem,
   bool isAdditionItem,
-  Action<DataGridItem> cutItem, 
+  Action<DataGridItem> cutItem,
   Action<DataGridItem> pasteBeforeItem) : DataGridItem(appendAdditionItem,
   onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
   private int _end = 127;

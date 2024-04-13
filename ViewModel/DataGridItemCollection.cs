@@ -29,14 +29,14 @@ public abstract class DataGridItemCollection<T>(
 
   protected Settings Settings { get; set; } = null!;
 
+  private T? BeenCut { get; set; }
+
   /// <summary>
   ///   Appends an addition item.
   /// </summary>
   protected abstract void AppendAdditionItem();
 
-  private T? BeenCut { get; set; }
-
-  protected abstract void CutItem(DataGridItem itemToCut); 
+  protected abstract void CutItem(DataGridItem itemToCut);
 
   protected void CutItemTyped(T itemToCut) {
     BeenCut = itemToCut;

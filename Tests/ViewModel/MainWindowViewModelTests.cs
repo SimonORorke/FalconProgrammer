@@ -16,7 +16,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
     // Show Locations tab initially.
-    ViewModel.SelectedTab = ViewModel.Tabs[0]; 
+    ViewModel.SelectedTab = ViewModel.Tabs[0];
   }
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =

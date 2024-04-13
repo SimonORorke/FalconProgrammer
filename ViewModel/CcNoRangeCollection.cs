@@ -1,13 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class CcNoRangeCollection(
+public class CcNoRangeCollection(
   string rangeType,
   IDialogService dialogService,
   IDispatcherService dispatcherService)
   : DataGridItemCollection<CcNoRangeViewModel>(dispatcherService) {
+  private List<Settings.IntegerRange> SettingsRanges { get; set; } = null!;
+
   protected override void AppendAdditionItem() {
     AddItem();
   }
@@ -25,13 +26,11 @@ public abstract class CcNoRangeCollection(
     CutItemTyped((CcNoRangeViewModel)itemToCut);
   }
 
-  protected abstract List<Settings.IntegerRange> GetRangesFromSettings();
-
-  internal void Populate(Settings settings) {
+  internal void Populate(List<Settings.IntegerRange> settingsRanges) {
     IsPopulating = true;
-    Settings = settings;
+    SettingsRanges = settingsRanges;
     Clear();
-    foreach (var settingsRange in GetRangesFromSettings()) {
+    foreach (var settingsRange in SettingsRanges) {
       AddItem(settingsRange.Start, settingsRange.End);
     }
     IsPopulating = false;
@@ -55,9 +54,8 @@ public abstract class CcNoRangeCollection(
     if (!validation.Success) {
       return validation;
     }
-    var settingsRanges = GetRangesFromSettings();
-    settingsRanges.Clear();
-    settingsRanges.AddRange(
+    SettingsRanges.Clear();
+    SettingsRanges.AddRange(
       from range in ranges
       select new Settings.IntegerRange {
         Start = range.Start,
