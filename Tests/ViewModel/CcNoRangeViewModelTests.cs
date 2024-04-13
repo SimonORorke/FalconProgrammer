@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Mvvm.ComponentModel;
-using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -8,8 +6,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 public class CcNoRangeViewModelTests {
   [SetUp]
   public void Setup() {
-    ViewModel = new CcNoRangeViewModel(
-      AppendAdditionItem, OnItemChanged, RemoveItem, false);
+    ViewModel = TestHelper.CreateCcNoRangeAdditionItem(0, 127);
   }
 
   private CcNoRangeViewModel ViewModel { get; set; } = null!;
@@ -35,12 +32,4 @@ public class CcNoRangeViewModelTests {
     Assert.That(memberNames, Has.Count.EqualTo(1));
     Assert.That(memberNames[0], Is.EqualTo(nameof(ViewModel.End)));
   }
-
-  [ExcludeFromCodeCoverage]
-  private static void AppendAdditionItem() { }
-
-  private static void OnItemChanged() { }
-
-  [ExcludeFromCodeCoverage]
-  private static void RemoveItem(ObservableObject itemToRemove) { }
 }

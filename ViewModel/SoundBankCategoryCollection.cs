@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
@@ -40,7 +39,7 @@ public class SoundBankCategoryCollection(
     IsPopulating = false;
   }
 
-  protected override void RemoveItem(ObservableObject itemToRemove) {
+  protected override void RemoveItem(DataGridItem itemToRemove) {
     RemoveItemTyped((SoundBankCategory)itemToRemove);
   }
 

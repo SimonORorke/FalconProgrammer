@@ -5,32 +5,53 @@ using CommunityToolkit.Mvvm.Input;
 namespace FalconProgrammer.ViewModel;
 
 public abstract partial class DataGridItem : ObservableValidator {
+  private bool _canCut;
+  private bool _canPasteBefore;
   private bool _canRemove;
 
   protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
-    Action<ObservableObject> removeItem, bool isAdditionItem) {
+    Action<DataGridItem> removeItem, bool isAdditionItem,
+    Action<DataGridItem>? cutItem = null, 
+    Action<DataGridItem>? pasteBeforeItem = null) {
     AppendAdditionItem = appendAdditionItem;
     OnItemChanged = onItemChanged;
     RemoveItem = removeItem;
     IsAdditionItem = isAdditionItem;
     CanRemove = !isAdditionItem;
+    CutItem = cutItem;
+    PasteBeforeItem = pasteBeforeItem;
   }
 
   private Action AppendAdditionItem { get; }
+  private Action<DataGridItem>? CutItem { get; }
   private Action OnItemChanged { get; }
-  private Action<ObservableObject> RemoveItem { get; }
+  private Action<DataGridItem> RemoveItem { get; }
   private bool HasNewAdditionItemBeenRequested { get; set; }
   private bool IsAdding { get; set; }
   internal bool IsAdditionItem { get; private set; }
+  private Action<DataGridItem>? PasteBeforeItem { get; }
+
+  public bool CanCut {
+    get => _canCut;
+    private set => SetProperty(ref _canCut, value);
+  }
+
+  public bool CanPasteBefore {
+    get => _canPasteBefore;
+    internal set => SetProperty(ref _canPasteBefore, value);
+  }
 
   public bool CanRemove {
     get => _canRemove;
-    protected set {
-      if (_canRemove != value) {
-        _canRemove = value;
-        OnPropertyChanged();
-      }
-    }
+    protected set => SetProperty(ref _canRemove, value);
+  }
+
+  /// <summary>
+  ///   Cuts this item from the collection for potential pasting back in.
+  /// </summary>
+  [RelayCommand(CanExecute = nameof(CanCut))] // Generates CutCommand
+  private void Cut() {
+    CutItem?.Invoke(this);
   }
 
   protected override void OnPropertyChanging(PropertyChangingEventArgs e) {
@@ -59,9 +80,18 @@ public abstract partial class DataGridItem : ObservableValidator {
   }
 
   /// <summary>
+  ///   Cuts this item from the collection for potential pasting back in, otherwise
+  ///   removal.
+  /// </summary>
+  [RelayCommand(CanExecute = nameof(CanPasteBefore))] // Generates PasteBeforeCommand
+  private void PasteBefore() {
+    PasteBeforeItem?.Invoke(this);
+  }
+
+  /// <summary>
   ///   Removes this item from the collection.
   /// </summary>
-  [RelayCommand] // Generates RemoveCommand
+  [RelayCommand(CanExecute = nameof(CanRemove))] // Generates RemoveCommand
   private void Remove() {
     RemoveItem(this);
   }

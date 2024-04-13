@@ -15,7 +15,7 @@ public abstract class CcNoRangeCollection(
   private void AddItem(int start = 0, int end = 127) {
     Add(new CcNoRangeViewModel(
       AppendAdditionItem, OnItemChanged, RemoveItem,
-      IsAddingAdditionItem) {
+      IsAddingAdditionItem, CutItem, PasteBeforeItem) {
       Start = start,
       End = end
     });
@@ -54,7 +54,7 @@ public abstract class CcNoRangeCollection(
     return new ClosingValidationResult(true, true);
   }
 
-  protected override void RemoveItem(ObservableObject itemToRemove) {
+  protected override void RemoveItem(DataGridItem itemToRemove) {
     RemoveItemTyped((CcNoRangeViewModel)itemToRemove);
   }
 

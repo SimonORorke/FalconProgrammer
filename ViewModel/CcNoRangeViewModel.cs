@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FalconProgrammer.ViewModel;
 
 public class CcNoRangeViewModel(
   Action appendAdditionItem,
   Action onItemChanged,
-  Action<ObservableObject> removeItem,
-  bool isAdditionItem) : DataGridItem(appendAdditionItem,
-  onItemChanged, removeItem, isAdditionItem) {
+  Action<DataGridItem> removeItem,
+  bool isAdditionItem,
+  Action<DataGridItem> cutItem, 
+  Action<DataGridItem> pasteBeforeItem) : DataGridItem(appendAdditionItem,
+  onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
   private int _end = 127;
   private int _start;
 

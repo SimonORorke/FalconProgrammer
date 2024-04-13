@@ -12,7 +12,7 @@ public partial class SoundBankCategory(
   IFileSystemService fileSystemService,
   Action appendAdditionItem,
   Action onItemChanged,
-  Action<ObservableObject> removeItem,
+  Action<DataGridItem> removeItem,
   bool isAdditionItem)
   : DataGridItem(appendAdditionItem,
     onItemChanged, removeItem, isAdditionItem) {

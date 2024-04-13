@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
@@ -35,6 +34,18 @@ public abstract class DataGridItemCollection<T>(
   /// </summary>
   protected abstract void AppendAdditionItem();
 
+  private DataGridItem? BeenCut { get; set; }
+
+  protected void CutItem(DataGridItem itemToCut) {
+    BeenCut = itemToCut;
+    RemoveItem(itemToCut);
+    DispatcherService.Dispatch(() => {
+      foreach (var item in this) {
+        item.CanPasteBefore = true;
+      }
+    });
+  }
+
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
     base.OnCollectionChanged(e);
     if (IsPopulating) {
@@ -47,10 +58,13 @@ public abstract class DataGridItemCollection<T>(
     HasBeenChanged = true;
   }
 
+  protected void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  }
+
   // This looks like a false suggestion we are having to suppress.
   // AppendAdditionItem does not get the suggestion. Why does this method?
   // ReSharper disable once UnusedMemberInSuper.Global
-  protected abstract void RemoveItem(ObservableObject itemToRemove);
+  protected abstract void RemoveItem(DataGridItem itemToRemove);
 
   protected void RemoveItemTyped(T itemToRemove) {
     DispatcherService.Dispatch(() => Remove(itemToRemove));

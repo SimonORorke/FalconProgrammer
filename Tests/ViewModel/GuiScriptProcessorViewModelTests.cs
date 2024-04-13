@@ -72,6 +72,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories[0].Categories[0], Is.EqualTo("All"));
     Assert.That(ViewModel.SoundBankCategories[0].Categories[1], Is.EqualTo("Bass-Sub"));
     Assert.That(ViewModel.SoundBankCategories[0].CanRemove, Is.True);
+    Assert.That(ViewModel.SoundBankCategories[0].RemoveCommand.CanExecute(
+      null), Is.True);
     Assert.That(ViewModel.SoundBankCategories[0].IsAdditionItem, Is.False);
     Assert.That(ViewModel.SoundBankCategories[0].IsForAllCategories, Is.False);
     Assert.That(ViewModel.SoundBankCategories[1].SoundBank, Is.EqualTo("Organic Keys"));
@@ -83,6 +85,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories[4].Categories, Has.Count.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories[4].Category, Is.Empty);
     Assert.That(ViewModel.SoundBankCategories[4].CanRemove, Is.False);
+    Assert.That(ViewModel.SoundBankCategories[4].RemoveCommand.CanExecute(
+      null), Is.False);
     Assert.That(ViewModel.SoundBankCategories[4].IsAdditionItem, Is.True);
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Add item
