@@ -24,8 +24,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     Assert.That(rangesInSettings[0].Start, Is.EqualTo(31));
     Assert.That(rangesInSettings[0].End, Is.EqualTo(34));
     await DisallowOverlappingCcNoRange(
-      32, 35, ViewModel.ContinuousCcNoRanges,
-      rangesInSettings);
+      32, 35, ViewModel.ContinuousCcNoRanges);
   }
 
   [Test]
@@ -36,8 +35,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     Assert.That(rangesInSettings[0].Start, Is.EqualTo(112));
     Assert.That(rangesInSettings[0].End, Is.EqualTo(112));
     await DisallowOverlappingCcNoRange(
-      112, 113, ViewModel.ToggleCcNoRanges,
-      rangesInSettings);
+      112, 113, ViewModel.ToggleCcNoRanges);
   }
 
   [Test]
@@ -76,8 +74,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   }
 
   private async Task DisallowOverlappingCcNoRange(
-    int newRangeStart, int newRangeEnd,
-    CcNoRangeCollection ranges, List<Settings.IntegerRange> rangesInSettings) {
+    int newRangeStart, int newRangeEnd, CcNoRangeCollection ranges) {
     // Add a new range.
     var newRange = TestHelper.CreateCcNoRangeAdditionItem(newRangeStart, newRangeEnd);
     ranges.Add(newRange);
