@@ -8,11 +8,12 @@ public abstract partial class DataGridItem : ObservableValidator {
   private bool _canCut;
   private bool _canPasteBefore;
   private bool _canRemove;
+  private bool _isAdditionItem;
 
   protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
     Action<DataGridItem> removeItem, bool isAdditionItem,
-    Action<DataGridItem>? cutItem = null, 
-    Action<DataGridItem>? pasteBeforeItem = null) {
+    Action<DataGridItem> cutItem, 
+    Action<DataGridItem> pasteBeforeItem) {
     AppendAdditionItem = appendAdditionItem;
     OnItemChanged = onItemChanged;
     RemoveItem = removeItem;
@@ -23,13 +24,21 @@ public abstract partial class DataGridItem : ObservableValidator {
   }
 
   private Action AppendAdditionItem { get; }
-  private Action<DataGridItem>? CutItem { get; }
+  private Action<DataGridItem> CutItem { get; }
   private Action OnItemChanged { get; }
   private Action<DataGridItem> RemoveItem { get; }
   private bool HasNewAdditionItemBeenRequested { get; set; }
   private bool IsAdding { get; set; }
-  internal bool IsAdditionItem { get; private set; }
-  private Action<DataGridItem>? PasteBeforeItem { get; }
+
+  internal bool IsAdditionItem {
+    get => _isAdditionItem;
+    private set {
+      CanCut = !value;
+      _isAdditionItem = value;
+    } 
+  }
+
+  private Action<DataGridItem> PasteBeforeItem { get; }
 
   public bool CanCut {
     get => _canCut;
@@ -51,7 +60,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanCut))] // Generates CutCommand
   private void Cut() {
-    CutItem?.Invoke(this);
+    CutItem(this);
   }
 
   protected override void OnPropertyChanging(PropertyChangingEventArgs e) {
@@ -85,7 +94,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanPasteBefore))] // Generates PasteBeforeCommand
   private void PasteBefore() {
-    PasteBeforeItem?.Invoke(this);
+    PasteBeforeItem(this);
   }
 
   /// <summary>

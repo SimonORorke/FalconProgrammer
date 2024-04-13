@@ -13,9 +13,11 @@ public partial class SoundBankCategory(
   Action appendAdditionItem,
   Action onItemChanged,
   Action<DataGridItem> removeItem,
-  bool isAdditionItem)
+  bool isAdditionItem,
+  Action<DataGridItem> cutItem, 
+  Action<DataGridItem> pasteBeforeItem)
   : DataGridItem(appendAdditionItem,
-    onItemChanged, removeItem, isAdditionItem) {
+    onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
   public const string AllCategoriesCaption = "All";
 
   [ObservableProperty]

@@ -21,6 +21,10 @@ public abstract class CcNoRangeCollection(
     });
   }
 
+  protected override void CutItem(DataGridItem itemToCut) {
+    CutItemTyped((CcNoRangeViewModel)itemToCut);
+  }
+
   protected abstract List<Settings.IntegerRange> GetRangesFromSettings();
 
   internal void Populate(Settings settings) {
@@ -31,6 +35,14 @@ public abstract class CcNoRangeCollection(
       AddItem(settingsRange.Start, settingsRange.End);
     }
     IsPopulating = false;
+  }
+
+  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+    PasteBeforeItemTyped((CcNoRangeViewModel)itemBeforeWhichToPaste);
+  }
+
+  protected override void RemoveItem(DataGridItem itemToRemove) {
+    RemoveItemTyped((CcNoRangeViewModel)itemToRemove);
   }
 
   internal async Task<ClosingValidationResult> UpdateSettingsAsync(
@@ -52,10 +64,6 @@ public abstract class CcNoRangeCollection(
         End = range.End
       });
     return new ClosingValidationResult(true, true);
-  }
-
-  protected override void RemoveItem(DataGridItem itemToRemove) {
-    RemoveItemTyped((CcNoRangeViewModel)itemToRemove);
   }
 
   private async Task<ClosingValidationResult> ValidateAsync(

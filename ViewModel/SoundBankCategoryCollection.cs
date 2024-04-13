@@ -15,10 +15,14 @@ public class SoundBankCategoryCollection(
     AddItem();
   }
 
+  protected override void CutItem(DataGridItem itemToCut) {
+    CutItemTyped((SoundBankCategory)itemToCut);
+  }
+
   private void AddItem(string soundBank = "", string category = "") {
     Add(new SoundBankCategory(
       Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem,
-      IsAddingAdditionItem) {
+      IsAddingAdditionItem, CutItem, PasteBeforeItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category
@@ -37,6 +41,10 @@ public class SoundBankCategoryCollection(
       AddItem(category.SoundBank, categoryToDisplay);
     }
     IsPopulating = false;
+  }
+
+  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+    PasteBeforeItemTyped((SoundBankCategory)itemBeforeWhichToPaste);
   }
 
   protected override void RemoveItem(DataGridItem itemToRemove) {

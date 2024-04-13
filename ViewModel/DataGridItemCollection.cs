@@ -34,12 +34,14 @@ public abstract class DataGridItemCollection<T>(
   /// </summary>
   protected abstract void AppendAdditionItem();
 
-  private DataGridItem? BeenCut { get; set; }
+  private T? BeenCut { get; set; }
 
-  protected void CutItem(DataGridItem itemToCut) {
+  protected abstract void CutItem(DataGridItem itemToCut); 
+
+  protected void CutItemTyped(T itemToCut) {
     BeenCut = itemToCut;
-    RemoveItem(itemToCut);
     DispatcherService.Dispatch(() => {
+      Remove(itemToCut);
       foreach (var item in this) {
         item.CanPasteBefore = true;
       }
@@ -58,7 +60,17 @@ public abstract class DataGridItemCollection<T>(
     HasBeenChanged = true;
   }
 
-  protected void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected abstract void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste);
+
+  protected void PasteBeforeItemTyped(T itemBeforeWhichToPaste) {
+    if (BeenCut != null) {
+      DispatcherService.Dispatch(() => {
+        Insert(IndexOf(itemBeforeWhichToPaste), BeenCut);
+        foreach (var item in this) {
+          item.CanPasteBefore = false;
+        }
+      });
+    }
   }
 
   // This looks like a false suggestion we are having to suppress.
