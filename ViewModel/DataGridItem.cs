@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -38,18 +39,35 @@ public abstract partial class DataGridItem : ObservableValidator {
     }
   }
 
+  /// <summary>
+  ///   If true when updating a property of the addition item, prevents the addition item
+  ///   from being turned into a regular item and another addition item being added.
+  ///   Useful for automatic batch updates of command can execute properties such as
+  ///   <see cref="CanPasteBefore" /> Default: false.
+  /// </summary>
+  internal bool IsBatchUpdate { get; set; }
+
   private Action<DataGridItem> PasteBeforeItem { get; }
 
+  /// <summary>
+  ///   Gets or sets CanExecute for <see cref="CutCommand" />.
+  /// </summary>
   public bool CanCut {
     get => _canCut;
-    private set => SetProperty(ref _canCut, value);
+    set => SetProperty(ref _canCut, value);
   }
 
+  /// <summary>
+  ///   Gets or sets CanExecute for <see cref="PasteBeforeCommand" />.
+  /// </summary>
   public bool CanPasteBefore {
     get => _canPasteBefore;
     internal set => SetProperty(ref _canPasteBefore, value);
   }
 
+  /// <summary>
+  ///   Gets or sets CanExecute for <see cref="RemoveCommand" />.
+  /// </summary>
   public bool CanRemove {
     get => _canRemove;
     protected set => SetProperty(ref _canRemove, value);
@@ -66,7 +84,10 @@ public abstract partial class DataGridItem : ObservableValidator {
   protected override void OnPropertyChanging(PropertyChangingEventArgs e) {
     base.OnPropertyChanging(e);
     // Likely to occur twice, including when CanRemove is set to true.
-    IsAdding = IsAdditionItem;
+    IsAdding = IsAdditionItem && !IsBatchUpdate;
+    if (IsAdding) {
+      Debug.Assert(true);
+    }
   }
 
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {

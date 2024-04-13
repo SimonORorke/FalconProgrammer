@@ -36,15 +36,24 @@ public abstract class DataGridItemCollection<T>(
   /// </summary>
   protected abstract void AppendAdditionItem();
 
+  // This looks like a false suggestion we are having to suppress.
+  // AppendAdditionItem does not get the suggestion. Why does this method?
+  // ReSharper disable once UnusedMemberInSuper.Global
   protected abstract void CutItem(DataGridItem itemToCut);
+
+  private void UpdateCanPasteBeforeForAllItems(bool value) {
+    for (int i = 0; i < Count; i++) {
+      this[i].IsBatchUpdate = true;
+      this[i].CanPasteBefore = value;
+      this[i].IsBatchUpdate = false;
+    }
+  }
 
   protected void CutItemTyped(T itemToCut) {
     BeenCut = itemToCut;
     DispatcherService.Dispatch(() => {
       Remove(itemToCut);
-      foreach (var item in this) {
-        item.CanPasteBefore = true;
-      }
+      UpdateCanPasteBeforeForAllItems(true);
     });
   }
 
@@ -60,15 +69,17 @@ public abstract class DataGridItemCollection<T>(
     HasBeenChanged = true;
   }
 
+  // This looks like a false suggestion we are having to suppress.
+  // AppendAdditionItem does not get the suggestion. Why does this method?
+  // ReSharper disable once UnusedMemberInSuper.Global
   protected abstract void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste);
 
   protected void PasteBeforeItemTyped(T itemBeforeWhichToPaste) {
     if (BeenCut != null) {
       DispatcherService.Dispatch(() => {
         Insert(IndexOf(itemBeforeWhichToPaste), BeenCut);
-        foreach (var item in this) {
-          item.CanPasteBefore = false;
-        }
+        BeenCut = null;
+        UpdateCanPasteBeforeForAllItems(false);
       });
     }
   }

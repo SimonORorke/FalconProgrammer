@@ -15,10 +15,6 @@ public class SoundBankCategoryCollection(
     AddItem();
   }
 
-  protected override void CutItem(DataGridItem itemToCut) {
-    CutItemTyped((SoundBankCategory)itemToCut);
-  }
-
   private void AddItem(string soundBank = "", string category = "") {
     Add(new SoundBankCategory(
       Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem,
@@ -27,6 +23,10 @@ public class SoundBankCategoryCollection(
       SoundBank = soundBank,
       Category = category
     });
+  }
+
+  protected override void CutItem(DataGridItem itemToCut) {
+    CutItemTyped((SoundBankCategory)itemToCut);
   }
 
   internal void Populate(Settings settings, IEnumerable<string> soundBanks) {

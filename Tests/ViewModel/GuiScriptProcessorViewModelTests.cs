@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -42,26 +43,50 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task CutAndPaste() {
+    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+      "LocationsSettings.xml";
+    var settings = TestSettingsReaderEmbedded.Read();
+    ConfigureMockFileSystemService(settings);
+    var settingsCategories =
+      settings.MustUseGuiScriptProcessorCategories;
+    int initialSettingsCategoriesCount = settingsCategories.Count;
+    // Check that the test data is as expected
+    Assert.That(initialSettingsCategoriesCount, Is.EqualTo(4));
+    var initialFirstSettingsCategory = settingsCategories[0];
+    var initialLastSettingsCategory = settingsCategories[3];
+    // Populate
+    ViewModel.Open(); // Reads settings to populate the page.
+    var collection = ViewModel.SoundBankCategories;
+    int initialCategoriesCount = collection.Count;
+    Assert.That(initialCategoriesCount, Is.EqualTo(initialSettingsCategoriesCount + 1));
+    // Cut
+    collection[3].CutCommand.Execute(null); // Last before addition item
+    Assert.That(collection, Has.Count.EqualTo(initialCategoriesCount - 1));
+    // Paste
+    collection[0].PasteBeforeCommand.Execute(null);
+    Assert.That(collection, Has.Count.EqualTo(initialCategoriesCount));
+    // Update settings
+    await ViewModel.QueryCloseAsync(); // Updates and saves settings
+    settingsCategories = ViewModel.Settings.MustUseGuiScriptProcessorCategories;
+    Assert.That(settingsCategories, Has.Count.EqualTo(initialSettingsCategoriesCount));
+    Assert.That(settingsCategories[0].SoundBank,
+      Is.EqualTo(initialLastSettingsCategory.SoundBank));
+    Assert.That(settingsCategories[0].Category,
+      Is.EqualTo(initialLastSettingsCategory.Category));
+    Assert.That(settingsCategories[1].SoundBank,
+      Is.EqualTo(initialFirstSettingsCategory.SoundBank));
+    Assert.That(settingsCategories[1].Category,
+      Is.EqualTo(initialFirstSettingsCategory.Category));
+  }
+
+  [Test]
   public async Task Main() {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      settings.ProgramsFolder.Path, SoundBanks);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Ether Fields"), EtherFieldsCategories);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Factory"), FactoryCategories);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Organic Keys"), OrganicKeysCategories);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Pulsar"), PulsarCategories);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Spectre"), SpectreCategories);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
+    ConfigureMockFileSystemService(settings);
     ViewModel.Open(); // Reads settings to populate the page.
-    // Assert.That(MockDispatcherService.DispatchCount, Is.EqualTo(1));
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Factory"));
@@ -157,5 +182,22 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
       "Script processors cannot be updated: cannot find programs folder "));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+  }
+
+  private void ConfigureMockFileSystemService(Settings settings) {
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      settings.ProgramsFolder.Path, SoundBanks);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Ether Fields"), EtherFieldsCategories);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Factory"), FactoryCategories);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Organic Keys"), OrganicKeysCategories);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Pulsar"), PulsarCategories);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Spectre"), SpectreCategories);
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
   }
 }

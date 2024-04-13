@@ -8,10 +8,48 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    Settings = TestSettingsReaderEmbedded.Read(true);
+    Settings = TestSettingsReaderEmbedded.Read();
   }
 
   private Settings Settings { get; set; } = null!;
+
+  [Test]
+  public async Task CutAndPaste() {
+    var settingsRanges = Settings.MidiForMacros.ContinuousCcNoRanges;
+    int initialSettingsRangesCount = settingsRanges.Count;
+    // Check that the test data is as expected
+    Assert.That(initialSettingsRangesCount, Is.EqualTo(7));
+    var initialFirstSettingsRange = settingsRanges[0];
+    var initialLastSettingsRange = settingsRanges[6];
+    var ranges = CreateContinuousCcNoRanges();
+    // Populate
+    ranges.Populate(settingsRanges);
+    int initialRangesCount = ranges.Count;
+    Assert.That(initialRangesCount, Is.EqualTo(initialSettingsRangesCount + 1));
+    Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
+    Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.False);
+    Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
+    Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.False);
+    // Cut
+    ranges[6].CutCommand.Execute(null); // Last before addition item
+    Assert.That(ranges, Has.Count.EqualTo(initialRangesCount - 1));
+    Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
+    Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.True);
+    Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
+    Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.True);
+    // Paste
+    ranges[0].PasteBeforeCommand.Execute(null);
+    Assert.That(ranges, Has.Count.EqualTo(initialRangesCount));
+    Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
+    Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.False);
+    Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
+    Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.False);
+    // Update settings
+    await ranges.UpdateSettingsAsync(false);
+    Assert.That(settingsRanges, Has.Count.EqualTo(initialSettingsRangesCount));
+    Assert.That(settingsRanges[0], Is.EqualTo(initialLastSettingsRange));
+    Assert.That(settingsRanges[1], Is.EqualTo(initialFirstSettingsRange));
+  }
 
   [Test]
   public async Task DisallowOverlappingRange() {
@@ -48,14 +86,14 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     await Update(Settings.MidiForMacros.ToggleCcNoRanges, CreateToggleCcNoRanges());
   }
 
-  private async Task Update(
+  private static async Task Update(
     List<Settings.IntegerRange> settingsRanges, CcNoRangeCollection ranges) {
-    int originalCountInSettings = settingsRanges.Count;
+    int initialSettingsRangesCount = settingsRanges.Count;
     ranges.Populate(settingsRanges);
     ranges[0].RemoveCommand.Execute(null);
     await ranges.UpdateSettingsAsync(false);
     Assert.That(settingsRanges, Has.Count.EqualTo(
-      originalCountInSettings - 1));
+      initialSettingsRangesCount - 1));
   }
 
   private CcNoRangeCollection CreateContinuousCcNoRanges() {
