@@ -4,40 +4,16 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
-  private static readonly string[] EtherFieldsCategories = [
-    "Granular", "Hybrid"
-  ];
-
-  private static readonly string[] FactoryCategories = [
-    "Bass-Sub", "Keys", "Organic Texture 2.8"
-  ];
-
-  private static readonly string[] OrganicKeysCategories = [
-    "Acoustic Mood", "Lo-Fi"
-  ];
-
-  private static readonly string[] PulsarCategories = [
-    "Bass", "Leads"
-  ];
-
-  private static readonly string[] SoundBanks = [
-    "Ether Fields", "Factory", "Organic Keys", "Pulsar", "Spectre", "Voklm"
-  ];
-
-  private static readonly string[] SpectreCategories = [
-    "Bells", "Chords"
-  ];
-
-  private static readonly string[] VoklmCategories = [
-    "Synth Choirs", "Vox Instruments"
-  ];
-
+  
+  // Why in this test fixture but not others does code cleanup insist on moving
+  // properties to before SetUp?
   private GuiScriptProcessorViewModel ViewModel { get; set; } = null!;
 
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new GuiScriptProcessorViewModel(MockDialogService, MockDispatcherService) {
+    ViewModel = new GuiScriptProcessorViewModel(
+      MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
   }
@@ -186,18 +162,32 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   private void ConfigureMockFileSystemService(Settings settings) {
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      settings.ProgramsFolder.Path, SoundBanks);
+      settings.ProgramsFolder.Path, [
+        "Ether Fields", "Factory", "Organic Keys", "Pulsar", "Spectre", "Voklm"
+      ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Ether Fields"), EtherFieldsCategories);
+      Path.Combine(settings.ProgramsFolder.Path, "Ether Fields"), [
+        "Granular", "Hybrid"
+      ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Factory"), FactoryCategories);
+      Path.Combine(settings.ProgramsFolder.Path, "Factory"), [
+        "Bass-Sub", "Keys", "Organic Texture 2.8"
+      ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Organic Keys"), OrganicKeysCategories);
+      Path.Combine(settings.ProgramsFolder.Path, "Organic Keys"), [
+        "Acoustic Mood", "Lo-Fi"
+      ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Pulsar"), PulsarCategories);
+      Path.Combine(settings.ProgramsFolder.Path, "Pulsar"), [
+        "Bass", "Leads"
+      ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Spectre"), SpectreCategories);
+      Path.Combine(settings.ProgramsFolder.Path, "Spectre"), [
+        "Bells", "Chords"
+      ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Voklm"), VoklmCategories);
+      Path.Combine(settings.ProgramsFolder.Path, "Voklm"), [
+        "Synth Choirs", "Vox Instruments"
+      ]);
   }
 }
