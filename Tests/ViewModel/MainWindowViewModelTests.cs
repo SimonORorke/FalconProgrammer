@@ -82,7 +82,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // So the user should be prompted to confirm closing the window.
     MockFileSystemService.Folder.ExpectedExists = false;
     // User will confirm that the window should be closed, even though there is a error.
-    MockDialogService.ExpectedAnswer = true;
+    MockDialogService.ExpectedYesNoAnswer = true;
     bool canClose = await ViewModel.QueryCloseWindowAsync();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
@@ -96,7 +96,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // So the user should be prompted to confirm closing the window.
     MockFileSystemService.Folder.ExpectedExists = false;
     // User will decline to close the window, so that the error can be fixed.
-    MockDialogService.ExpectedAnswer = false;
+    MockDialogService.ExpectedYesNoAnswer = false;
     bool canClose = await ViewModel.QueryCloseWindowAsync();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));

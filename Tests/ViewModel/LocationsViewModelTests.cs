@@ -46,6 +46,21 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task LoadSettingsFromAnotherSettingsFile() {
+    MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.ExpectedYesNoAnswer = true;
+    string newSettingsPath = Path.Combine(MockDialogService.ExpectedPath, "Settings.xml");
+    Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
+    TestSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
+      "SettingsFolderLocationK.xml";
+    var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
+    await command.ExecuteAsync(null);
+    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastYesNoAnswer, Is.True);
+    Assert.That(ViewModel.Settings.SettingsPath, Is.EqualTo(newSettingsPath));
+  }
+
+  [Test]
   public async Task Main() {
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;

@@ -35,6 +35,8 @@
         <EmbeddedResource Include="Model\Xml\Programs\NoGuiScriptProcessor.uvip"/>
         <None Remove="Model\Xml\Programs\GuiScriptProcessor.uvip"/>
         <EmbeddedResource Include="Model\Xml\Programs\GuiScriptProcessor.uvip"/>
+        <None Remove="Model\Xml\SettingsFolderLocationK.xml" />
+        <EmbeddedResource Include="Model\Xml\SettingsFolderLocationK.xml" />
     </ItemGroup>
 
 </Project>

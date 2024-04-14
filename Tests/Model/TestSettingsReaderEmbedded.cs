@@ -10,6 +10,9 @@ public class TestSettingsReaderEmbedded : SettingsReader {
   private MockFileSystemService? _mockFileSystemService;
   private MockSerialiser? _mockSerialiserForSettings;
 
+  internal string EmbeddedSettingsFolderLocationFileName { get; set; } =
+    "SettingsFolderLocation.xml";
+
   internal MockFileSystemService MockFileSystemService {
     get => _mockFileSystemService ??= new MockFileSystemService();
     set {
@@ -39,7 +42,7 @@ public class TestSettingsReaderEmbedded : SettingsReader {
     return new TestSettingsFolderLocationReader {
       FileSystemService = MockFileSystemService,
       TestDeserialiser = {
-        EmbeddedResourceFileName = "SettingsFolderLocation.xml"
+        EmbeddedResourceFileName = EmbeddedSettingsFolderLocationFileName
       }
     };
   }

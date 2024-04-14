@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- The unrealistic drive letter has been chosen 
+for tests that are expected to access a mock file system. 
+A test will throw an exception if it attempts to write to the real file system, 
+provided it is run on a computer that does not have that drive. -->
+<SettingsFolderLocation Path="K:\NewLeaf\Settings"/>
