@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml;
+using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model;
 
@@ -10,6 +11,7 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
       try {
         result = (T)deserializer.Deserialize(stream)!;
       } catch (Exception) { // XML error
+        throw new XmlException();
       }
     }
     // If the XML file does not exist or contains an XML error,
@@ -23,7 +25,11 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
     using var fileStream = FileSystemService.File.Exists(inputPath)
       ? File.OpenRead(inputPath)
       : null;
-    return Deserialise(fileStream);
+    try {
+      return Deserialise(fileStream);
+    } catch (XmlException) {
+      throw new XmlException($"Invalid XML was found in '{inputPath}'.");
+    }
   }
 
   private void PopulateUtilityProperties(T deserialisedObject) {

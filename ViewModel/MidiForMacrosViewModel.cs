@@ -35,8 +35,8 @@ public class MidiForMacrosViewModel(
     }
   }
 
-  internal override void Open() {
-    base.Open();
+  internal override async Task Open() {
+    await base.Open();
     ModWheelReplacementCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
     ContinuousCcNoRanges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
     ToggleCcNoRanges.Populate(Settings.MidiForMacros.ToggleCcNoRanges);

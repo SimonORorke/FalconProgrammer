@@ -1,10 +1,17 @@
-﻿namespace FalconProgrammer.Model;
+﻿using System.Xml;
+
+namespace FalconProgrammer.Model;
 
 public class SettingsFolderLocationReader
   : XmlReaderBase<SettingsFolderLocation> {
   public virtual ISettingsFolderLocation Read() {
-    var result = Deserialiser.Deserialise(
-      SettingsFolderLocation.GetSettingsFolderLocationPath(AppDataFolderName));
+    SettingsFolderLocation? result = null;
+    try {
+      result = Deserialiser.Deserialise(
+        SettingsFolderLocation.GetSettingsFolderLocationPath(AppDataFolderName));
+    } catch (XmlException) {
+      result = new SettingsFolderLocation();
+    }
     if (!string.IsNullOrWhiteSpace(result.Path)) {
       try {
         FileSystemService.Folder.Create(result.Path);

@@ -12,9 +12,9 @@ public class TestGuiScriptProcessorViewModel(
   internal bool SkipInitialisation { get; set; }
 
   [ExcludeFromCodeCoverage]
-  internal override void Open() {
+  internal override async Task Open() {
     if (!SkipInitialisation) {
-      base.Open();
+      await base.Open();
     }
   }
 

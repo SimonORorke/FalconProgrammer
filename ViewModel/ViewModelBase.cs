@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
 
@@ -52,12 +53,12 @@ public abstract class ViewModelBase(
     Messenger.Send(new GoToLocationsPageMessage());
   }
 
-  internal virtual void Open() {
+  internal virtual async Task Open() {
     // Debug.WriteLine($"ViewModelBase.Open: {GetType().Name}");
     IsVisible = true;
     // Start listening for ObservableRecipient messages.
     Messenger.RegisterAll(this);
-    ReadSettings();
+    await ReadSettingsAsync();
   }
 
   internal virtual async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
@@ -69,7 +70,16 @@ public abstract class ViewModelBase(
     return true;
   }
 
-  protected void ReadSettings() {
-    Settings = SettingsReader.Read(true);
+  protected async Task ReadSettingsAsync() {
+    try {
+      Settings = SettingsReader.Read(true);
+    } catch (XmlException exception) {
+      // Settings = new Settings();
+      if (this is LocationsViewModel) {
+        await DialogService.ShowErrorMessageBoxAsync(exception.Message);
+      } else {
+        GoToLocationsPage();
+      }
+    }
   }
 }

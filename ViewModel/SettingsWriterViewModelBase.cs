@@ -30,8 +30,8 @@ public abstract class SettingsWriterViewModelBase(
     }
   }
 
-  internal override void Open() {
-    base.Open();
+  internal override async Task Open() {
+    await base.Open();
     SettingsFolderPath = SettingsFolderLocation.Path;
   }
 
@@ -72,7 +72,9 @@ public abstract class SettingsWriterViewModelBase(
     }
     errorMessage = string.Empty;
     // Save settings
-    if (SettingsFolderPath == SettingsFolderLocation.Path) {
+    // if (SettingsFolderPath == SettingsFolderLocation.Path) {
+    if (SettingsFolderPath == SettingsFolderLocation.Path &&
+        Settings.SettingsPath != string.Empty) {
       Settings.Write();
     } else {
       UpdateSettingsFolderLocation();

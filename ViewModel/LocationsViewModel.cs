@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml;
 using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
@@ -91,7 +92,8 @@ public partial class LocationsViewModel(
             $"Settings file '{FoundSettingsPath}' already exists. " + 
             "Do you want to load the settings from that file?");
           if (load) {
-            DispatcherService.Dispatch(LoadSettingsFromNewFile);
+            await LoadSettingsFromNewFile();
+            // DispatcherService.Dispatch(async () => { await LoadSettingsFromNewFile(); });
           }
         }
       }
@@ -122,14 +124,17 @@ public partial class LocationsViewModel(
       : string.Empty;
   }
 
-  private void LoadSettingsFromNewFile() {
-    UpdateSettingsFolderLocation();
-    ReadSettings();
-    ShowPathSettings();
+  private async Task LoadSettingsFromNewFile() {
+    try {
+      UpdateSettingsFolderLocation();
+      await ReadSettingsAsync();
+      ShowPathSettings();
+    } catch (XmlException) {
+    }
   }
 
-  internal override void Open() {
-    base.Open();
+  internal override async Task Open() {
+    await base.Open();
     ShowPathSettings();
     FoundSettingsPath = FindSettingsFile(); 
   }
