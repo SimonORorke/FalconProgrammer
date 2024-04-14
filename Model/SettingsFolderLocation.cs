@@ -20,15 +20,15 @@ public class SettingsFolderLocation : SerialisationBase, ISettingsFolderLocation
   }
 
   internal static string GetAppDataFolderPath(
-    string appDataFolderName = Global.AppDataFolderName) {
+    string? appDataFolderName = null) {
     string appDataFolderPath = System.IO.Path.Combine(
       Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-      appDataFolderName);
+      appDataFolderName ?? Global.ApplicationTitle);
     return appDataFolderPath;
   }
 
   internal static string GetSettingsFolderLocationPath(
-    string appDataFolderName = Global.AppDataFolderName) {
+    string? appDataFolderName = null) {
     return System.IO.Path.Combine(GetAppDataFolderPath(appDataFolderName),
       "SettingsFolderLocation.xml");
   }

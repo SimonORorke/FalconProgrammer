@@ -5,7 +5,7 @@ namespace FalconProgrammer.Model;
 public abstract class SerialisationBase {
   private IFileSystemService? _fileSystemService;
   private ISerialiser? _serialiser;
-  internal virtual string AppDataFolderName { get; set; } = Global.AppDataFolderName;
+  internal virtual string AppDataFolderName { get; set; } = Global.ApplicationTitle;
 
   /// <summary>
   ///   A utility that can access the file system. The default is a real
