@@ -20,6 +20,8 @@ public partial class LocationsViewModel(
     get => _defaultTemplatePath;
     set => SetProperty(ref _defaultTemplatePath, value, true);
   }
+  
+  private string FoundSettingsPath { get; set; } = string.Empty;
 
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
@@ -81,6 +83,18 @@ public partial class LocationsViewModel(
       "Select the Settings folder");
     if (path != null) {
       SettingsFolderPath = path;
+      string newFoundSettingsPath = FindSettingsFile();
+      if (newFoundSettingsPath != FoundSettingsPath) {
+        FoundSettingsPath = newFoundSettingsPath;
+        if (FoundSettingsPath != string.Empty) {
+          bool load = await DialogService.AskYesNoQuestionAsync(
+            $"Settings file '{FoundSettingsPath}' already exists. " + 
+            "Do you want to load the settings from that file?");
+          if (load) {
+            DispatcherService.Dispatch(LoadSettingsFromNewFile);
+          }
+        }
+      }
     }
   }
 
@@ -93,8 +107,34 @@ public partial class LocationsViewModel(
     }
   }
 
+  /// <summary>
+  ///   If a settings folder has been specified and is a folder containing the settings
+  ///   file Settings.xml, returns the path of the file. Otherwise returns an empty
+  ///   string.
+  /// </summary>
+  private string FindSettingsFile() {
+    if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
+      return string.Empty;
+    }
+    string settingsPath = Path.Combine(SettingsFolderPath, "Settings.xml");
+    return FileSystemService.File.Exists(settingsPath)
+      ? settingsPath
+      : string.Empty;
+  }
+
+  private void LoadSettingsFromNewFile() {
+    UpdateSettingsFolderLocation();
+    ReadSettings();
+    ShowPathSettings();
+  }
+
   internal override void Open() {
     base.Open();
+    ShowPathSettings();
+    FoundSettingsPath = FindSettingsFile(); 
+  }
+
+  private void ShowPathSettings() {
     DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
     ProgramsFolderPath = Settings.ProgramsFolder.Path;

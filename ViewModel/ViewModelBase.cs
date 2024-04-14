@@ -57,7 +57,7 @@ public abstract class ViewModelBase(
     IsVisible = true;
     // Start listening for ObservableRecipient messages.
     Messenger.RegisterAll(this);
-    Settings = SettingsReader.Read(true);
+    ReadSettings();
   }
 
   internal virtual async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
@@ -67,5 +67,9 @@ public abstract class ViewModelBase(
     Messenger.UnregisterAll(this);
     await Task.Delay(0);
     return true;
+  }
+
+  protected void ReadSettings() {
+    Settings = SettingsReader.Read(true);
   }
 }

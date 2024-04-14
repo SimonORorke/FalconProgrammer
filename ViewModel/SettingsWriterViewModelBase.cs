@@ -75,12 +75,16 @@ public abstract class SettingsWriterViewModelBase(
     if (SettingsFolderPath == SettingsFolderLocation.Path) {
       Settings.Write();
     } else {
-      SettingsFolderLocation.Path = SettingsFolderPath;
-      SettingsFolderLocation.Write();
+      UpdateSettingsFolderLocation();
       Settings.Write(SettingsFolderPath);
     }
     HaveSettingsBeenUpdated = false;
     return true;
+  }
+
+  protected void UpdateSettingsFolderLocation() {
+    SettingsFolderLocation.Path = SettingsFolderPath;
+    SettingsFolderLocation.Write();
   }
 
   protected static ValidationResult ValidateFilePath(
