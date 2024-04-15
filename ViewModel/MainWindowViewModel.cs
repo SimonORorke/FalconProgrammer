@@ -84,9 +84,9 @@ public partial class MainWindowViewModel(
       new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BatchScriptViewModel)
     };
-    foreach (var tab in list) {
-      tab.ViewModel.ModelServices = ModelServices;
-    }
+    // foreach (var tab in list) {
+    //   tab.ViewModel.ModelServices = ModelServices;
+    // }
     return list.ToImmutableList();
   }
 
@@ -95,8 +95,8 @@ public partial class MainWindowViewModel(
       return;
     }
     if (!IsVisible) {
-      // Start listening for ObservableRecipient messages. Set IsVisible to true.  
-      Open();
+      // Start listening for ObservableRecipient messages. Set IsVisible to true.
+      Task.Run(async ()=>await Open()).Wait();
     }
     DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value));
   }
@@ -120,7 +120,14 @@ public partial class MainWindowViewModel(
     }
     CurrentPageViewModel = value.ViewModel;
     CurrentPageTitle = CurrentPageViewModel.PageTitle;
-    CurrentPageViewModel.Open();
+    await CurrentPageViewModel.Open();
+  }
+
+  internal override async Task Open() {
+    await base.Open();
+    foreach (var tab in Tabs) {
+      tab.ViewModel.ModelServices = ModelServices;
+    }
   }
 
   public async Task<bool> QueryCloseWindowAsync() {
@@ -129,6 +136,8 @@ public partial class MainWindowViewModel(
         return false;
       }
     }
+    // // Stop listening for ObservableRecipient messages.
+    // Messenger.UnregisterAll(this);
     return await base.QueryCloseAsync(true);
   }
 }

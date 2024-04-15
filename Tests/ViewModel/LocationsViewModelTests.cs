@@ -18,7 +18,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel = new LocationsViewModel(MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
-    ViewModel.Open();
+    Task.Run(async ()=> await ViewModel.Open()).Wait();
   }
 
   private LocationsViewModel ViewModel { get; set; } = null!;
@@ -105,7 +105,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.DefaultTemplatePath));
     // Test that the settings folder path when writing settings is now already as
     // specified in the settings folder location file. 
-    ViewModel.Open();
+    await ViewModel.Open();
     ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
     await ViewModel.QueryCloseAsync();
     settings = (Settings)MockSerialiser.LastObjectSerialised;
@@ -119,6 +119,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockFileSystemService.File.ExpectedExists = false;
     MockFileSystemService.Folder.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
+    // Make a property change to require saving settings.
+    ViewModel.ProgramsFolderPath += "X"; 
     Assert.That(await ViewModel.QueryCloseAsync(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(

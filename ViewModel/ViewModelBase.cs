@@ -16,7 +16,7 @@ public abstract class ViewModelBase(
   protected IDispatcherService DispatcherService { get; } = dispatcherService;
 
   internal IFileSystemService FileSystemService =>
-    _fileSystemService ??= ModelServices.GetService<IFileSystemService>();
+    _fileSystemService ??= ModelServices.FileSystemService;
 
   protected bool IsVisible { get; private set; }
 
@@ -33,19 +33,17 @@ public abstract class ViewModelBase(
   public virtual string TabTitle => PageTitle;
 
   internal ModelServices ModelServices {
-    [ExcludeFromCodeCoverage] get => _modelServices ??= ModelServices.Default;
-    // For unit testing.
-    set => _modelServices = value;
+    [ExcludeFromCodeCoverage] get => _modelServices ??= new ModelServices();
+    set => _modelServices = value; // For tests
   }
 
   internal Settings Settings { get; private set; } = null!;
 
   protected SettingsFolderLocationReader SettingsFolderLocationReader =>
-    _settingsFolderLocationReader ??=
-      ModelServices.GetService<SettingsFolderLocationReader>();
+    _settingsFolderLocationReader ??= ModelServices.SettingsFolderLocationReader;
 
-  private SettingsReader SettingsReader =>
-    _settingsReader ??= ModelServices.GetService<SettingsReader>();
+  private SettingsReader SettingsReader => 
+    _settingsReader ??= ModelServices.SettingsReader;
 
   protected void GoToLocationsPage() {
     // using CommunityToolkit.Mvvm.Messaging is needed to provide this Send extension
@@ -70,16 +68,25 @@ public abstract class ViewModelBase(
     return true;
   }
 
+  /// <summary>
+  ///   Handles an XML error in a settings file.
+  /// </summary>
+  protected virtual async Task OnSettingsXmlErrorAsync(string errorMessage) {
+    await Task.Delay(0);
+    // One way the user can fix the problem is by choosing a different settings folder
+    // on the Locations page. LocationsViewModel will attempt to read settings on opening
+    // and get the same error, which it will report in an error message box.
+    GoToLocationsPage();
+  }
+
   protected async Task ReadSettingsAsync() {
     try {
       Settings = SettingsReader.Read(true);
     } catch (XmlException exception) {
-      // Settings = new Settings();
-      if (this is LocationsViewModel) {
-        await DialogService.ShowErrorMessageBoxAsync(exception.Message);
-      } else {
-        GoToLocationsPage();
-      }
+      Settings = new Settings();
+      // This must be an error in the settings file, not the settings folder locations
+      // file. See the comment in SettingsFolderLocationReader.Read.
+      await OnSettingsXmlErrorAsync(exception.Message);
     }
   }
 }

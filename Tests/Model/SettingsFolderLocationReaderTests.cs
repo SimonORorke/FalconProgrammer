@@ -17,4 +17,15 @@ public class SettingsFolderLocationReaderTests {
     };
     Assert.DoesNotThrow(() => reader.Read());
   }
+
+  [Test]
+  public void XmlError() {
+    var reader = new TestSettingsFolderLocationReader {
+      FileSystemService = new MockFileSystemService(),
+      TestDeserialiser = {
+        EmbeddedResourceFileName = "InvalidXmlSettingsFolderLocation.xml"
+      }
+    };
+    Assert.DoesNotThrow(() => reader.Read());
+  }
 }

@@ -6,20 +6,25 @@ namespace FalconProgrammer.ViewModel;
 /// <summary>
 ///   Services defined in the model that are used in the view model.
 /// </summary>
-public class ModelServices(params object[] services) {
-  private static ModelServices? _default;
+public class ModelServices {
+  private IFileSystemService? _fileSystemService;
+  private SettingsFolderLocationReader? _settingsFolderLocationReader;
+  private SettingsReader? _settingsReader;
 
-  [ExcludeFromCodeCoverage]
-  public static ModelServices Default => _default ??= new ModelServices(
-    FileSystemService.Default,
-    new SettingsReader(),
-    new SettingsFolderLocationReader());
+  public IFileSystemService FileSystemService {
+    [ExcludeFromCodeCoverage]
+    get => _fileSystemService ??= Model.FileSystemService.Default;
+    set => _fileSystemService = value; // For tests
+  }
 
-  private IEnumerable<object> Services { get; } = services;
+  public SettingsFolderLocationReader SettingsFolderLocationReader {
+    [ExcludeFromCodeCoverage]
+    get => _settingsFolderLocationReader ??= new SettingsFolderLocationReader();
+    set => _settingsFolderLocationReader = value; // For tests
+  }
 
-  public T GetService<T>() {
-    return (T)(from service in Services
-      where service is T
-      select service).First();
+  public SettingsReader SettingsReader {
+    [ExcludeFromCodeCoverage] get => _settingsReader ??= new SettingsReader();
+    set => _settingsReader = value; // For tests
   }
 }

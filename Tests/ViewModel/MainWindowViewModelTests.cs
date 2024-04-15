@@ -15,8 +15,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       ModelServices = TestModelServices,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
-    // Show Locations tab initially.
-    ViewModel.SelectedTab = ViewModel.Tabs[0];
+    // // Show Locations tab initially.
+    // ViewModel.SelectedTab = ViewModel.Tabs[0];
   }
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
@@ -32,6 +32,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void DisallowChangePage() {
+    // Show Locations tab initially.
+    ViewModel.SelectedTab = ViewModel.Tabs[0];
     // Unspecified settings folder is an error condition that should force the user to
     // stay on the Locations page.
     ViewModel.LocationsViewModel.SettingsFolderPath = string.Empty;
@@ -46,6 +48,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
+    // Show Locations tab initially.
+    ViewModel.SelectedTab = ViewModel.Tabs[0];
     Assert.That(ViewModel.Tabs[0].Header,
       Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
     Assert.That(ViewModel.Tabs[1].Header,
@@ -68,11 +72,24 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void GoToLocationsPage() {
+    // Show Locations tab initially.
+    ViewModel.SelectedTab = ViewModel.Tabs[0];
     // The GUI Script Processor page's initial validation will fail, resulting in the
     // page immediately being replaced with the Locations page.
     ViewModel.SelectedTab = ViewModel.Tabs[1]; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
     Assert.That(ViewModel.SelectedTab, Is.SameAs(ViewModel.Tabs[0]));
+  }
+
+  [Test]
+  public void SettingsXmlError() {
+    MockSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
+      "InvalidXmlSettings.xml";
+    ViewModel.ModelServices.SettingsReader = MockSettingsReaderEmbedded;
+    ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations
+    Assert.That(ViewModel.LocationsViewModel.ModelServices.SettingsReader,
+      Is.EqualTo(MockSettingsReaderEmbedded));
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
   }
 
   [Test]
@@ -83,6 +100,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockFileSystemService.Folder.ExpectedExists = false;
     // User will confirm that the window should be closed, even though there is a error.
     MockDialogService.ExpectedYesNoAnswer = true;
+    // Make a property change to require saving settings.
+    ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
     bool canClose = await ViewModel.QueryCloseWindowAsync();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
@@ -97,6 +116,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockFileSystemService.Folder.ExpectedExists = false;
     // User will decline to close the window, so that the error can be fixed.
     MockDialogService.ExpectedYesNoAnswer = false;
+    // Make a property change to require saving settings.
+    ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
     bool canClose = await ViewModel.QueryCloseWindowAsync();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));

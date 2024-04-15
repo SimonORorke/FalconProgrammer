@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Xml;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
@@ -6,11 +7,10 @@ namespace FalconProgrammer.Tests.Model;
 [TestFixture]
 public class DeserialiserTests {
   [Test]
-  public void XmlError() {
+  public void XmlErrorInStream() {
     var deserialiser = new Deserialiser<SettingsFolderLocation>();
     using var invalidXmlStream = GenerateStreamFromString("This is not valid XML.");
-    var settingsFolderLocation = deserialiser.Deserialise(invalidXmlStream);
-    Assert.That(settingsFolderLocation.Path, Is.Empty);
+    Assert.Throws<XmlException>(() => deserialiser.Deserialise(invalidXmlStream));
   }
 
   private static MemoryStream GenerateStreamFromString(string value) {

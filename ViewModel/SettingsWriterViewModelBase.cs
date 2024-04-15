@@ -10,11 +10,22 @@ public abstract class SettingsWriterViewModelBase(
   : ViewModelBase(dialogService, dispatcherService) {
   private ISettingsFolderLocation? _settingsFolderLocation;
   private string _settingsFolderPath = string.Empty;
+  protected bool ArePropertyChangedNotificationsEnabled { get; set; } = true;
   private bool HaveSettingsBeenUpdated { get; set; }
 
   private ISettingsFolderLocation SettingsFolderLocation =>
     _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
 
+  /// <summary>
+  ///   Gets or set the path of the settings folder, where a settings will be stored in a
+  ///   settings file with the invariant name 'Settings.xml'
+  /// </summary>
+  /// <remarks>
+  ///   Specification of the settings file name is not supported because the application
+  ///   saves settings automatically, without prompting the user for the file path.
+  ///   The path of a file that does not yet exist cannot be specified in advance,
+  ///   whereas the path of its containing folder can. 
+  /// </remarks>
   [Required]
   [CustomValidation(typeof(SettingsWriterViewModelBase),
     nameof(ValidateSettingsFolderPath))]
@@ -25,8 +36,12 @@ public abstract class SettingsWriterViewModelBase(
 
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
     base.OnPropertyChanged(e);
-    if (IsVisible) {
-      HaveSettingsBeenUpdated = true;
+    if (IsVisible
+        // We don't want to indicate that settings need to be saved when a new settings
+        // file has just been read.
+        && e.PropertyName != nameof(SettingsFolderPath) 
+        && ArePropertyChangedNotificationsEnabled) {
+        HaveSettingsBeenUpdated = true;
     }
   }
 
@@ -44,7 +59,7 @@ public abstract class SettingsWriterViewModelBase(
       }
     }
     // I'm not sure whether insisting that all errors on the page are fixed is a good
-    // idea. A specific check for prerequisites is made when attempting to open
+    // idea. A specific check for prerequisites is instead made when attempting to open
     // the GUI Script Processor page.
     // If implemented, this needs to allow for window closing, as with the
     // TrySaveSettings error message above.
@@ -72,8 +87,9 @@ public abstract class SettingsWriterViewModelBase(
     }
     errorMessage = string.Empty;
     // Save settings
-    // if (SettingsFolderPath == SettingsFolderLocation.Path) {
     if (SettingsFolderPath == SettingsFolderLocation.Path &&
+        // Empty Settings.SettingsPath is the consequence of an XML error in the
+        // settings folder location file.
         Settings.SettingsPath != string.Empty) {
       Settings.Write();
     } else {

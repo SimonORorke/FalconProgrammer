@@ -32,7 +32,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     var initialFirstSettingsCategory = settingsCategories[0];
     var initialLastSettingsCategory = settingsCategories[3];
     // Populate
-    ViewModel.Open(); // Reads settings to populate the page.
+    await ViewModel.Open(); // Reads settings to populate the page.
     var collection = ViewModel.SoundBankCategories;
     int initialCategoriesCount = collection.Count;
     Assert.That(initialCategoriesCount, Is.EqualTo(initialSettingsCategoriesCount + 1));
@@ -62,7 +62,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
     ConfigureMockFileSystemService(settings);
-    ViewModel.Open(); // Reads settings to populate the page.
+    await ViewModel.Open(); // Reads settings to populate the page.
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Factory"));
@@ -96,20 +96,20 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(6));
     Assert.That(ViewModel.SoundBankCategories[5].IsAdditionItem, Is.True);
     // Reset to test that sound bank change will be detected
-    ViewModel.Open();
+    await ViewModel.Open();
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Change sound bank
     ViewModel.SoundBankCategories[0].SoundBank = "Spectre";
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
     Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo("All"));
     // Reset to test that category change will be detected
-    ViewModel.Open();
+    await ViewModel.Open();
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Change category
     ViewModel.SoundBankCategories[0].Category = "Keys";
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
     // Reset to test that item removal will be detected
-    ViewModel.Open();
+    await ViewModel.Open();
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     ViewModel.SoundBankCategories[3].RemoveCommand.Execute(null);
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.True);
@@ -126,8 +126,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public void NoProgramsFolder() {
-    ViewModel.Open();
+  public async Task NoProgramsFolder() {
+    await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Script processors cannot be updated: a programs folder has not been specified."));
@@ -135,13 +135,13 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public void ProgramsFolderEmpty() {
+  public async Task ProgramsFolderEmpty() {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     var settings = TestSettingsReaderEmbedded.Read();
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path,
       []);
-    ViewModel.Open();
+    await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.EndWith(
       "' contains no sound bank subfolders."));
@@ -149,11 +149,11 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public void ProgramsFolderNotFound() {
+  public async Task ProgramsFolderNotFound() {
     TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     MockFileSystemService.Folder.ExpectedExists = false;
-    ViewModel.Open();
+    await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
       "Script processors cannot be updated: cannot find programs folder "));

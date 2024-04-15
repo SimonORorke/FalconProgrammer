@@ -20,6 +20,13 @@ public abstract class ViewModelTestsBase {
         EmbeddedResourceFileName = "SettingsFolderLocation.xml"
       }
     };
+    MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
+      MockFileSystemService = MockFileSystemService,
+      MockSerialiserForSettings = MockSerialiser,
+      TestDeserialiser = {
+        EmbeddedResourceFileName = "DefaultAlreadySettings.xml"
+      }
+    };
     TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
       MockFileSystemService = MockFileSystemService,
       MockSerialiserForSettings = MockSerialiser,
@@ -27,8 +34,11 @@ public abstract class ViewModelTestsBase {
         EmbeddedResourceFileName = "DefaultAlreadySettings.xml"
       }
     };
-    TestModelServices = new ModelServices(MockFileSystemService,
-      MockSettingsFolderLocationReader, TestSettingsReaderEmbedded);
+    TestModelServices = new ModelServices {
+      FileSystemService = MockFileSystemService,
+      SettingsFolderLocationReader = MockSettingsFolderLocationReader,
+      SettingsReader = TestSettingsReaderEmbedded
+    };
   }
 
   protected MockDialogService MockDialogService { get; private set; } = null!;
@@ -42,6 +52,9 @@ public abstract class ViewModelTestsBase {
     get;
     private set;
   } = null!;
+  
+  protected MockSettingsReaderEmbedded MockSettingsReaderEmbedded { get; private set; } =
+    null!;
 
   protected ModelServices TestModelServices { get; private set; } = null!;
 

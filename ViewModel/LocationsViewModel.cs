@@ -133,6 +133,11 @@ public partial class LocationsViewModel(
     }
   }
 
+  protected override async Task OnSettingsXmlErrorAsync(string errorMessage) {
+    await base.OnSettingsXmlErrorAsync(errorMessage);
+    await DialogService.ShowErrorMessageBoxAsync(errorMessage);
+  }
+
   internal override async Task Open() {
     await base.Open();
     ShowPathSettings();
@@ -140,10 +145,14 @@ public partial class LocationsViewModel(
   }
 
   private void ShowPathSettings() {
+    // We don't want to indicate that settings need to be saved when a new settings
+    // file has just been read.
+    ArePropertyChangedNotificationsEnabled = false;
     DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
     ProgramsFolderPath = Settings.ProgramsFolder.Path;
     TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path;
+    ArePropertyChangedNotificationsEnabled = true;
   }
 
   internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {

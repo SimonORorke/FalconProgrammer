@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model;
@@ -25,6 +26,11 @@ internal class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
     using var fileStream = FileSystemService.File.Exists(inputPath)
       ? File.OpenRead(inputPath)
       : null;
+    return DeserialiseFileStream(inputPath, fileStream);
+  }
+
+  [ExcludeFromCodeCoverage]
+  private T DeserialiseFileStream(string inputPath, Stream? fileStream) {
     try {
       return Deserialise(fileStream);
     } catch (XmlException) {
