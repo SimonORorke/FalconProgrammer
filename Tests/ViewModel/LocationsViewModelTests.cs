@@ -18,13 +18,14 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel = new LocationsViewModel(MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
-    Task.Run(async ()=> await ViewModel.Open()).Wait();
+    // Task.Run(async ()=> await ViewModel.Open()).Wait();
   }
 
   private LocationsViewModel ViewModel { get; set; } = null!;
 
   [Test]
   public async Task CancelBrowseForSettingsFolder() {
+    await ViewModel.Open();
     MockDialogService.Cancel = true;
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
     MockFileSystemService.File.ExpectedExists = false;
@@ -36,6 +37,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CancelBrowseForDefaultTemplate() {
+    await ViewModel.Open();
     MockDialogService.Cancel = true;
     MockDialogService.ExpectedPath =
       @"K:\NewLeaf\Program Templates\My Sound.uvip";
@@ -47,11 +49,13 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task LoadSettingsFromAnotherSettingsFile() {
+    await ViewModel.Open();
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
     MockDialogService.ExpectedYesNoAnswer = true;
     string newSettingsPath = Path.Combine(MockDialogService.ExpectedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
-    TestSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
+    MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedResourceFileName =
+    // TestSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
       "SettingsFolderLocationK.xml";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
@@ -62,6 +66,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
+    await ViewModel.Open();
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
@@ -114,13 +119,21 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task NoSettingsFolderLocation() {
+    MockSettingsFolderLocationReader.ExpectedFileExists = false;
+    // TestSettingsReaderEmbedded.ExpectedSettingsFolderLocationFileExists = false;
+    await ViewModel.Open();
+  }
+
+  [Test]
   public async Task SettingsFolderDoesNotExist() {
+    await ViewModel.Open();
     ViewModel.SettingsFolderPath = @"K:\NewLeaf\Settings";
     MockFileSystemService.File.ExpectedExists = false;
     MockFileSystemService.Folder.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
     // Make a property change to require saving settings.
-    ViewModel.ProgramsFolderPath += "X"; 
+    ViewModel.ProgramsFolderPath += "X";
     Assert.That(await ViewModel.QueryCloseAsync(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
@@ -130,6 +143,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task SettingsFolderNotSpecified() {
+    await ViewModel.Open();
     MockFileSystemService.File.ExpectedExists = false;
     MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
