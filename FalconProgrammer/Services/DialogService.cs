@@ -33,11 +33,13 @@ public class DialogService : IDialogService {
         AllowMultiple = false,
         // FileTypeFilter is for Windows only. MacOS open file dialogs, at least the ones
         // I've seen, don't display file type filters. Instead, they have a pattern
-        // search box. So AppleUniformTypeIdentifiers, the macOS equivalent of
-        // FileTypeFilter, has presumably already applied its filter when the dialog is
-        // shown. I don't know whether it's possible to define a uniform type identifier
-        // for Falcon programs. Even if it is, it does not seem worth it, as the user is
-        // very probably browsing a folder that contains nothing but Falcon programs. 
+        // search box.
+        //
+        // So I think FilePickerOpenOptions.AppleUniformTypeIdentifiers must instead be 
+        // used for the "Kind" sort option on macOS open file dialogs. I don't know
+        // whether it's possible to define a uniform type identifier for Falcon programs.
+        // Even if it is, there would seem to be little point in implementing it, as the
+        // user is very probably browsing a folder that contains nothing but Falcon programs. 
         FileTypeFilter = [
           new FilePickerFileType(filterName) {
             Patterns = [pattern]
