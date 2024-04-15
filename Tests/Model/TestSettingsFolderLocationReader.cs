@@ -2,6 +2,9 @@
 
 namespace FalconProgrammer.Tests.Model;
 
+/// <summary>
+///   For model tests.
+/// </summary>
 public class TestSettingsFolderLocationReader : SettingsFolderLocationReader {
   private Deserialiser<SettingsFolderLocation>? _deserialiser;
 

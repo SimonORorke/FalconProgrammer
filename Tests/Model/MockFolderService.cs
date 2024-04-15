@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
@@ -13,6 +14,7 @@ public class MockFolderService : IFolderService {
 
   internal Dictionary<string, IEnumerable<string>> ExpectedSubfolderNames { get; } = [];
 
+  [ExcludeFromCodeCoverage]
   public void Create(string path) {
     if (!CanCreate) {
       throw new DirectoryNotFoundException();

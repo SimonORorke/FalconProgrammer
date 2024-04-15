@@ -39,7 +39,7 @@ public class TestSettingsReaderEmbedded : SettingsReader {
   }
 
   protected override SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
-    return new TestSettingsFolderLocationReader {
+    return new MockSettingsFolderLocationReader {
       FileSystemService = MockFileSystemService,
       TestDeserialiser = {
         EmbeddedResourceFileName = EmbeddedSettingsFolderLocationFileName

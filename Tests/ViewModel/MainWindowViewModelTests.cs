@@ -15,8 +15,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       ModelServices = TestModelServices,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
-    // // Show Locations tab initially.
-    // ViewModel.SelectedTab = ViewModel.Tabs[0];
+    // Do not show the Locations tab initially at this stage: the SettingsXmlError test
+    // requires prior configuration.
   }
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
@@ -83,12 +83,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void SettingsXmlError() {
-    MockSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
+    TestSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
       "InvalidXmlSettings.xml";
-    ViewModel.ModelServices.SettingsReader = MockSettingsReaderEmbedded;
     ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations
     Assert.That(ViewModel.LocationsViewModel.ModelServices.SettingsReader,
-      Is.EqualTo(MockSettingsReaderEmbedded));
+      Is.EqualTo(TestSettingsReaderEmbedded));
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
   }
 
