@@ -18,7 +18,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel = new LocationsViewModel(MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
-    // Task.Run(async ()=> await ViewModel.Open()).Wait();
+    // Do not ViewModel.Open this stage: the NoSettingsFolderLocation test
+    // requires prior configuration.
   }
 
   private LocationsViewModel ViewModel { get; set; } = null!;
@@ -55,7 +56,6 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     string newSettingsPath = Path.Combine(MockDialogService.ExpectedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
     MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedResourceFileName =
-    // TestSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
       "SettingsFolderLocationK.xml";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
@@ -121,8 +121,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task NoSettingsFolderLocation() {
     MockSettingsFolderLocationReader.ExpectedFileExists = false;
-    // TestSettingsReaderEmbedded.ExpectedSettingsFolderLocationFileExists = false;
     await ViewModel.Open();
+    Assert.That(ViewModel.SettingsFolderPath, Is.Empty);
   }
 
   [Test]

@@ -3,7 +3,8 @@
 namespace FalconProgrammer.Tests.Model;
 
 /// <summary>
-///   A test Settings reader that reads embedded files.
+///   A test Settings reader that reads embedded files, but with a mock settings folder
+///   location reader.
 ///   For view model tests.
 /// </summary>
 public class MockSettingsReaderEmbedded : TestSettingsReaderEmbedded {

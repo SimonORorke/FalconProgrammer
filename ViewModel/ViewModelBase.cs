@@ -86,7 +86,11 @@ public abstract class ViewModelBase(
       Settings = new Settings();
       // This must be an error in the settings file, not the settings folder locations
       // file. See the comment in SettingsFolderLocationReader.Read.
-      await OnSettingsXmlErrorAsync(exception.Message);
+      // So make the error message "Invalid XML was found in '{inputPath}'." more
+      // specific.
+      string errorMessage = 
+        exception.Message.Replace(" in '", " in settings file '");
+      await OnSettingsXmlErrorAsync(errorMessage);
     }
   }
 }
