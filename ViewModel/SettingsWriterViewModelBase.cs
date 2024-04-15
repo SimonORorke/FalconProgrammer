@@ -10,8 +10,8 @@ public abstract class SettingsWriterViewModelBase(
   : ViewModelBase(dialogService, dispatcherService) {
   private ISettingsFolderLocation? _settingsFolderLocation;
   private string _settingsFolderPath = string.Empty;
-  protected bool ArePropertyChangedNotificationsEnabled { get; set; } = true;
   private bool HaveSettingsBeenUpdated { get; set; }
+  protected bool IsPropertyChangedNotificationEnabled { get; set; } = true;
 
   private ISettingsFolderLocation SettingsFolderLocation =>
     _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
@@ -40,7 +40,7 @@ public abstract class SettingsWriterViewModelBase(
         // We don't want to indicate that settings need to be saved when a new settings
         // file has just been read.
         && e.PropertyName != nameof(SettingsFolderPath) 
-        && ArePropertyChangedNotificationsEnabled) {
+        && IsPropertyChangedNotificationEnabled) {
         HaveSettingsBeenUpdated = true;
     }
   }

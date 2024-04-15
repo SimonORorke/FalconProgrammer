@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml;
 using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
@@ -93,7 +92,6 @@ public partial class LocationsViewModel(
             "Do you want to load the settings from that file?");
           if (load) {
             await LoadSettingsFromNewFile();
-            // DispatcherService.Dispatch(async () => { await LoadSettingsFromNewFile(); });
           }
         }
       }
@@ -125,12 +123,9 @@ public partial class LocationsViewModel(
   }
 
   private async Task LoadSettingsFromNewFile() {
-    try {
-      UpdateSettingsFolderLocation();
-      await ReadSettingsAsync();
-      ShowPathSettings();
-    } catch (XmlException) {
-    }
+    UpdateSettingsFolderLocation();
+    await ReadSettingsAsync();
+    ShowPathSettings();
   }
 
   protected override async Task OnSettingsXmlErrorAsync(string errorMessage) {
@@ -147,12 +142,12 @@ public partial class LocationsViewModel(
   private void ShowPathSettings() {
     // We don't want to indicate that settings need to be saved when a new settings
     // file has just been read.
-    ArePropertyChangedNotificationsEnabled = false;
+    IsPropertyChangedNotificationEnabled = false;
     DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
     ProgramsFolderPath = Settings.ProgramsFolder.Path;
     TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path;
-    ArePropertyChangedNotificationsEnabled = true;
+    IsPropertyChangedNotificationEnabled = true;
   }
 
   internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
