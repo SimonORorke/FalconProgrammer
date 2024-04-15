@@ -1,6 +1,5 @@
 ﻿using FalconProgrammer.Tests.Model;
 using FalconProgrammer.ViewModel;
-using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -20,7 +19,7 @@ public abstract class ViewModelTestsBase {
         EmbeddedResourceFileName = "SettingsFolderLocation.xml"
       }
     };
-    TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
+    MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
       MockFileSystemService = MockFileSystemService,
       MockSerialiserForSettings = MockSerialiser,
       MockSettingsFolderLocationReader = MockSettingsFolderLocationReader, 
@@ -31,7 +30,7 @@ public abstract class ViewModelTestsBase {
     TestModelServices = new ModelServices {
       FileSystemService = MockFileSystemService,
       SettingsFolderLocationReader = MockSettingsFolderLocationReader,
-      SettingsReader = TestSettingsReaderEmbedded
+      SettingsReader = MockSettingsReaderEmbedded
     };
   }
 
@@ -41,14 +40,13 @@ public abstract class ViewModelTestsBase {
   protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;
   protected MockSerialiser MockSerialiser { get; private set; } = null!;
 
-  [PublicAPI]
   protected MockSettingsFolderLocationReader MockSettingsFolderLocationReader {
     get;
     private set;
   } = null!;
+
+  protected MockSettingsReaderEmbedded MockSettingsReaderEmbedded { get; private set; } =
+    null!;
   
   protected ModelServices TestModelServices { get; private set; } = null!;
-
-  protected TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; private set; } =
-    null!;
 }

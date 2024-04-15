@@ -84,11 +84,10 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   [Test]
   public void SettingsXmlError() {
     MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedResourceFileName =
-    // TestSettingsReaderEmbedded.EmbeddedSettingsFolderLocationFileName =
       "InvalidXmlSettings.xml";
     ViewModel.SelectedTab = ViewModel.Tabs[0]; // Locations
     Assert.That(ViewModel.LocationsViewModel.ModelServices.SettingsReader,
-      Is.EqualTo(TestSettingsReaderEmbedded));
+      Is.EqualTo(MockSettingsReaderEmbedded));
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
   }
 

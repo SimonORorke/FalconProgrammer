@@ -8,7 +8,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    Settings = TestSettingsReaderEmbedded.Read();
+    Settings = MockSettingsReaderEmbedded.Read();
   }
 
   private Settings Settings { get; set; } = null!;

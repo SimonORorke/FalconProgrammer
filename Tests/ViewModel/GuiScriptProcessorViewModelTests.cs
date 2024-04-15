@@ -20,9 +20,9 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CutAndPaste() {
-    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
-    var settings = TestSettingsReaderEmbedded.Read();
+    var settings = MockSettingsReaderEmbedded.Read();
     ConfigureMockFileSystemService(settings);
     var settingsCategories =
       settings.MustUseGuiScriptProcessorCategories;
@@ -58,9 +58,9 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
-    var settings = TestSettingsReaderEmbedded.Read();
+    var settings = MockSettingsReaderEmbedded.Read();
     ConfigureMockFileSystemService(settings);
     await ViewModel.Open(); // Reads settings to populate the page.
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
@@ -136,9 +136,9 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderEmpty() {
-    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
-    var settings = TestSettingsReaderEmbedded.Read();
+    var settings = MockSettingsReaderEmbedded.Read();
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path,
       []);
     await ViewModel.Open();
@@ -150,7 +150,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderNotFound() {
-    TestSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
       "LocationsSettings.xml";
     MockFileSystemService.Folder.ExpectedExists = false;
     await ViewModel.Open();
