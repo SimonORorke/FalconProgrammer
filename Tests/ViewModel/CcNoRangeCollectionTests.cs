@@ -28,15 +28,19 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     Assert.That(initialRangesCount, Is.EqualTo(initialSettingsRangesCount + 1));
     Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
     Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.False);
+    Assert.That(ranges[0].RemoveCommand.CanExecute(null), Is.True);
     Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
     Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.False);
+    Assert.That(ranges[^1].RemoveCommand.CanExecute(null), Is.False);
     // Cut
     ranges[6].CutCommand.Execute(null); // Last before addition item
     Assert.That(ranges, Has.Count.EqualTo(initialRangesCount - 1));
     Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
     Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.True);
+    Assert.That(ranges[0].RemoveCommand.CanExecute(null), Is.True);
     Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
     Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.True);
+    Assert.That(ranges[^1].RemoveCommand.CanExecute(null), Is.False);
     // Paste
     ranges[0].PasteBeforeCommand.Execute(null);
     Assert.That(ranges, Has.Count.EqualTo(initialRangesCount));

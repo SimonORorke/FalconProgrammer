@@ -91,7 +91,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   }
 
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-    if (e.PropertyName != nameof(CanRemove)) {
+    if (e.PropertyName != nameof(CanRemove) && !IsAdditionItem) {
       CanRemove = true;
     }
     if (IsAdding &&

@@ -69,15 +69,37 @@
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory">
-                        <Button Command="{Binding RemoveCommand}"
-                                IsEnabled="{Binding CanRemove}"
-                                IsVisible="{Binding CanRemove}"
-                                Margin="13,0, 0, 0"
+                        <Button Margin="13,0, 0, 0"
                                 MinHeight="25"
                                 Height="25">
                             <Button.Content>
-                                <TextBlock Text="Remove" />
+                                <TextBlock Text="Action..." />
                             </Button.Content>
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuItem 
+                                        Command="{Binding CutCommand}">
+                                        <MenuItem.Header>
+                                            <AccessText Text="_Cut"
+                                                        ShowAccessKey="True" />
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem 
+                                        Command="{Binding PasteBeforeCommand}">
+                                        <MenuItem.Header>
+                                            <AccessText Text="_Paste Before"
+                                                        ShowAccessKey="True" />
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                    <MenuItem 
+                                        Command="{Binding RemoveCommand}">
+                                        <MenuItem.Header>
+                                            <AccessText Text="_Remove"
+                                                        ShowAccessKey="True" />
+                                        </MenuItem.Header>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </Button.Flyout>
                         </Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
