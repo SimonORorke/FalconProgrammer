@@ -39,7 +39,8 @@ public class DialogService : IDialogService {
         // used for the "Kind" sort option on macOS open file dialogs. I don't know
         // whether it's possible to define a uniform type identifier for Falcon programs.
         // Even if it is, there would seem to be little point in implementing it, as the
-        // user is very probably browsing a folder that contains nothing but Falcon programs. 
+        // user is very probably browsing a folder that contains nothing but Falcon
+        // programs. 
         FileTypeFilter = [
           new FilePickerFileType(filterName) {
             Patterns = [pattern]
