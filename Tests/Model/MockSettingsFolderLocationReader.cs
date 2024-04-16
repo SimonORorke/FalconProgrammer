@@ -3,7 +3,8 @@
 namespace FalconProgrammer.Tests.Model;
 
 /// <summary>
-///   For view model tests.
+///   For view model tests. Use <see cref="MockSettingsFolderLocationReader" /> for model
+///   tests.
 /// </summary>
 public class MockSettingsFolderLocationReader : TestSettingsFolderLocationReader {
   internal bool ExpectedFileExists { get; set; } = true;

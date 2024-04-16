@@ -5,7 +5,6 @@ namespace FalconProgrammer.Tests.Model;
 
 public class MockSettingsFolderLocation : ISettingsFolderLocation {
   private string _path = string.Empty;
-  internal int WriteCount { get; set; }
 
   public string Path {
     get => _path;
@@ -18,6 +17,5 @@ public class MockSettingsFolderLocation : ISettingsFolderLocation {
   }
 
   public void Write() {
-    WriteCount++;
   }
 }
