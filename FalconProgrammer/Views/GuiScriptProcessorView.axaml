@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel"
+             xmlns:controls="clr-namespace:FalconProgrammer.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.GuiScriptProcessorView"
              x:DataType="viewModel:GuiScriptProcessorViewModel">
@@ -69,38 +70,10 @@
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="viewModel:SoundBankCategory">
-                        <Button Margin="13,0, 0, 0"
-                                MinHeight="25"
-                                Height="25">
-                            <Button.Content>
-                                <TextBlock Text="Action..." />
-                            </Button.Content>
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuItem 
-                                        Command="{Binding CutCommand}">
-                                        <MenuItem.Header>
-                                            <AccessText Text="_Cut"
-                                                        ShowAccessKey="True" />
-                                        </MenuItem.Header>
-                                    </MenuItem>
-                                    <MenuItem 
-                                        Command="{Binding PasteBeforeCommand}">
-                                        <MenuItem.Header>
-                                            <AccessText Text="_Paste Before"
-                                                        ShowAccessKey="True" />
-                                        </MenuItem.Header>
-                                    </MenuItem>
-                                    <MenuItem 
-                                        Command="{Binding RemoveCommand}">
-                                        <MenuItem.Header>
-                                            <AccessText Text="_Remove"
-                                                        ShowAccessKey="True" />
-                                        </MenuItem.Header>
-                                    </MenuItem>
-                                </MenuFlyout>
-                            </Button.Flyout>
-                        </Button>
+                        <controls:ItemActionButton
+                            CutCommand="{Binding CutCommand}"
+                            PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                            RemoveCommand="{Binding RemoveCommand}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
