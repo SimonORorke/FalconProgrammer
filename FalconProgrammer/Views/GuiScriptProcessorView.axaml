@@ -2,16 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModel="using:FalconProgrammer.ViewModel"
-             xmlns:controls="using:FalconProgrammer.Controls"
+             xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:ct="using:FalconProgrammer.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.GuiScriptProcessorView"
-             x:DataType="viewModel:GuiScriptProcessorViewModel">
-    <!-- xmlns:viewModel="clr-namespace:FalconProgrammer.ViewModel;assembly=FalconProgrammer.ViewModel" -->
-    <!-- xmlns:controls="clr-namespace:FalconProgrammer.Controls" -->
+             x:DataType="vm:GuiScriptProcessorViewModel">
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE -->
-        <viewModel:GuiScriptProcessorViewModel />
+        <vm:GuiScriptProcessorViewModel />
     </Design.DataContext>
     <DataGrid
         ItemsSource="{Binding SoundBankCategories}"
@@ -27,14 +25,14 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:SoundBankCategory">
+                    <DataTemplate DataType="vm:SoundBankCategory">
                         <TextBlock Text="{Binding SoundBank}"
                                    FontSize="16"
                                    Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate DataType="viewModel:SoundBankCategory">
+                    <DataTemplate DataType="vm:SoundBankCategory">
                         <ComboBox ItemsSource="{Binding SoundBanks}"
                                   SelectedItem="{Binding SoundBank}" />
                     </DataTemplate>
@@ -49,14 +47,14 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:SoundBankCategory">
+                    <DataTemplate DataType="vm:SoundBankCategory">
                         <TextBlock Text="{Binding Category}"
                                    FontSize="16"
                                    Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate DataType="viewModel:SoundBankCategory">
+                    <DataTemplate DataType="vm:SoundBankCategory">
                         <ComboBox ItemsSource="{Binding Categories}"
                                   SelectedItem="{Binding Category}" />
                     </DataTemplate>
@@ -71,8 +69,8 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:SoundBankCategory">
-                        <controls:ItemActionButton
+                    <DataTemplate DataType="vm:SoundBankCategory">
+                        <ct:ItemActionButton
                             CutCommand="{Binding CutCommand}"
                             PasteBeforeCommand="{Binding PasteBeforeCommand}"
                             RemoveCommand="{Binding RemoveCommand}" />
