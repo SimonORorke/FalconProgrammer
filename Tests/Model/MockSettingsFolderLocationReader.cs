@@ -3,7 +3,7 @@
 namespace FalconProgrammer.Tests.Model;
 
 /// <summary>
-///   For view model tests. Use <see cref="MockSettingsFolderLocationReader" /> for model
+///   For view model tests. Use <see cref="TestSettingsFolderLocationReader" /> for model
 ///   tests.
 /// </summary>
 public class MockSettingsFolderLocationReader : TestSettingsFolderLocationReader {
