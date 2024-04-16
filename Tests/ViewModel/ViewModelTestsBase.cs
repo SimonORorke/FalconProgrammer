@@ -16,7 +16,7 @@ public abstract class ViewModelTestsBase {
       FileSystemService = MockFileSystemService,
       Serialiser = MockSerialiser,
       TestDeserialiser = {
-        EmbeddedResourceFileName = "SettingsFolderLocation.xml"
+        EmbeddedFileName = "SettingsFolderLocation.xml"
       }
     };
     MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
@@ -24,7 +24,7 @@ public abstract class ViewModelTestsBase {
       MockSerialiserForSettings = MockSerialiser,
       MockSettingsFolderLocationReader = MockSettingsFolderLocationReader, 
       TestDeserialiser = {
-        EmbeddedResourceFileName = "DefaultAlreadySettings.xml"
+        EmbeddedFileName = "DefaultAlreadySettings.xml"
       }
     };
     TestModelServices = new ModelServices {

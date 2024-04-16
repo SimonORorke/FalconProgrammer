@@ -41,7 +41,7 @@ public class TestSettingsReaderEmbedded : SettingsReader {
     return new TestSettingsFolderLocationReader {
       FileSystemService = MockFileSystemService,
       TestDeserialiser = {
-        EmbeddedResourceFileName = "SettingsFolderLocation.xml"
+        EmbeddedFileName = "SettingsFolderLocation.xml"
       }
     };
   }

@@ -12,7 +12,7 @@ public class SettingsFolderLocationReaderTests {
     var reader = new TestSettingsFolderLocationReader {
       FileSystemService = mockFileSystemService,
       TestDeserialiser = {
-        EmbeddedResourceFileName = "SettingsFolderLocation.xml"
+        EmbeddedFileName = "SettingsFolderLocation.xml"
       }
     };
     Assert.DoesNotThrow(() => reader.Read());
@@ -23,7 +23,7 @@ public class SettingsFolderLocationReaderTests {
     var reader = new TestSettingsFolderLocationReader {
       FileSystemService = new MockFileSystemService(),
       TestDeserialiser = {
-        EmbeddedResourceFileName = "InvalidXmlSettingsFolderLocation.xml"
+        EmbeddedFileName = "InvalidXmlSettingsFolderLocation.xml"
       }
     };
     Assert.DoesNotThrow(() => reader.Read());

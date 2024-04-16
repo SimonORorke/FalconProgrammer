@@ -55,7 +55,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockDialogService.ExpectedYesNoAnswer = true;
     string newSettingsPath = Path.Combine(MockDialogService.ExpectedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
-    MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedFileName =
       "SettingsFolderLocationK.xml";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);

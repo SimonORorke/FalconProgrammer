@@ -20,7 +20,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CutAndPaste() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
       "LocationsSettings.xml";
     var settings = MockSettingsReaderEmbedded.Read();
     ConfigureMockFileSystemService(settings);
@@ -58,7 +58,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
       "LocationsSettings.xml";
     var settings = MockSettingsReaderEmbedded.Read();
     ConfigureMockFileSystemService(settings);
@@ -136,7 +136,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderEmpty() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
       "LocationsSettings.xml";
     var settings = MockSettingsReaderEmbedded.Read();
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path,
@@ -150,7 +150,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderNotFound() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedResourceFileName =
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
       "LocationsSettings.xml";
     MockFileSystemService.Folder.ExpectedExists = false;
     await ViewModel.Open();
