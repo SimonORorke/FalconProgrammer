@@ -11,6 +11,13 @@ namespace FalconProgrammer.Controls;
 ///   Cut, Paste Before and Remove items.
 /// </summary>
 public class ItemActionButton : Button {
+  // As commands are never going to be styled, I looked at using DirectProperty rather
+  // than StyledProperty to make them accessible in XAML. However, I did not get
+  // DirectProperty to work. I concluded that DirectProperty would probably be tricky to
+  // use in this class because the ICommand properties to be referenced are two levels
+  // down, in MenuItems owned by the MenuFlyout owned by this ItemActionButton. I imagine
+  // it could be done with nested use of AvaloniaProperty.AddOwner. So StyledProperty is
+  // the way to go, in this class at least.
   public static readonly StyledProperty<ICommand?> CutCommandProperty =
     AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(CutCommand));
 
