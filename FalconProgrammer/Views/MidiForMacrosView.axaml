@@ -12,74 +12,86 @@
         <vm:MidiForMacrosViewModel />
     </Design.DataContext>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
                     Height="35" Margin="10, 10, 0, 0">
             <Label Target="ReplacementTextBox"
                    Margin="0, 0, 5, 0">
                 <AccessText Text="_Modulation Wheel Replacement CC No."
                             ShowAccessKey="True" />
             </Label>
-            <TextBox x:Name="ReplacementTextBox" 
+            <TextBox x:Name="ReplacementTextBox"
                      Text="{Binding ModWheelReplacementCcNo}"
                      TextAlignment="End"
+                     Height="30"
                      MinWidth="10"
                      Width="40" />
         </StackPanel>
-    <DataGrid
-        ItemsSource="{Binding ContinuousCcNoRanges}"
-        RowHeight="30"
-        GridLinesVisibility="All"
-        Margin="0, 10, 0, 0">
-        <DataGrid.Columns>
-            <DataGridTemplateColumn Width="90">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Start"
-                                   FontSize="16"
-                                   TextAlignment="Center" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="vm:CcNoRangeViewModel">
-                        <TextBox Text="{Binding Start}"
-                                 TextAlignment="End"/>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="90">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="End"
-                                   FontSize="16"
-                                   TextAlignment="Center" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="vm:CcNoRangeViewModel">
-                        <TextBox Text="{Binding End}"
-                                 TextAlignment="End" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="105">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Action"
-                                   FontSize="16"
-                                   Margin="9,0,0,0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="vm:CcNoRangeViewModel">
-                        <ct:ItemActionButton
-                            CutCommand="{Binding CutCommand}"
-                            PasteBeforeCommand="{Binding PasteBeforeCommand}"
-                            RemoveCommand="{Binding RemoveCommand}"
-                            Margin="0, 0, 0, 0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-        </DataGrid.Columns>
-    </DataGrid>
+        <Grid ColumnDefinitions="285, 10 ,285"
+              RowDefinitions="30, *">
+            <Label Grid.Column="0" Grid.Row="0"
+                   Target="ContinuousDataGrid">
+                <AccessText Text="_Continuous CC Number Ranges"
+                            TextAlignment="Center"
+                            ShowAccessKey="True" />
+            </Label>
+            <DataGrid
+                Grid.Column="0" Grid.Row="1"
+                x:Name="ContinuousDataGrid"
+                ItemsSource="{Binding ContinuousCcNoRanges}"
+                RowHeight="30"
+                GridLinesVisibility="All"
+                Margin="0, 10, 0, 0">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="90">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Start"
+                                           FontSize="16"
+                                           TextAlignment="End" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="vm:CcNoRangeViewModel">
+                                <TextBox Text="{Binding Start}"
+                                         TextAlignment="End" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="90">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="End"
+                                           FontSize="16"
+                                           TextAlignment="End" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="vm:CcNoRangeViewModel">
+                                <TextBox Text="{Binding End}"
+                                         TextAlignment="End" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="105">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Action"
+                                           FontSize="16"
+                                           Margin="9,0,0,0" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType="vm:CcNoRangeViewModel">
+                                <ct:ItemActionButton
+                                    CutCommand="{Binding CutCommand}"
+                                    PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                    RemoveCommand="{Binding RemoveCommand}"
+                                    Margin="0, 0, 0, 0" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </DockPanel>
 </UserControl>
