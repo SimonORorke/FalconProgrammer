@@ -13,7 +13,7 @@ public class CcNoRangeCollection(
     AddItem();
   }
 
-  private void AddItem(int start = 0, int end = 127) {
+  private void AddItem(int? start = null, int? end = null) {
     Add(new CcNoRangeViewModel(
       AppendAdditionItem, OnItemChanged, RemoveItem,
       IsAddingAdditionItem, CutItem, PasteBeforeItem) {
@@ -58,8 +58,8 @@ public class CcNoRangeCollection(
     SettingsRanges.AddRange(
       from range in ranges
       select new Settings.IntegerRange {
-        Start = range.Start,
-        End = range.End
+        Start = range.Start ?? 0,
+        End = range.End ?? range.Start ?? 0
       });
     return new ClosingValidationResult(true, true);
   }

@@ -27,14 +27,14 @@
         </StackPanel>
     <DataGrid
         ItemsSource="{Binding ContinuousCcNoRanges}"
-        RowHeight="35"
+        RowHeight="30"
         GridLinesVisibility="All"
         Margin="0, 10, 0, 0">
         <DataGrid.Columns>
-            <DataGridTemplateColumn Width="140">
+            <DataGridTemplateColumn Width="90">
                 <DataGridTemplateColumn.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="Start CC No"
+                        <TextBlock Text="Start"
                                    FontSize="16"
                                    TextAlignment="Center" />
                     </DataTemplate>
@@ -42,16 +42,14 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="vm:CcNoRangeViewModel">
                         <TextBox Text="{Binding Start}"
-                                 TextAlignment="End"
-                                 MinWidth="10"
-                                 Width="40" />
+                                 TextAlignment="End"/>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="140">
+            <DataGridTemplateColumn Width="90">
                 <DataGridTemplateColumn.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="End CC No"
+                        <TextBlock Text="End"
                                    FontSize="16"
                                    TextAlignment="Center" />
                     </DataTemplate>
@@ -59,9 +57,7 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="vm:CcNoRangeViewModel">
                         <TextBox Text="{Binding End}"
-                                 TextAlignment="End"
-                                 MinWidth="10"
-                                 Width="40" />
+                                 TextAlignment="End" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

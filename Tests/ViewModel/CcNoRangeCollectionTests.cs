@@ -59,7 +59,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   public async Task DisallowOverlappingRange() {
     var ranges = CreateContinuousCcNoRanges();
     ranges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
-    var lastRange = ranges[^1];
+    var lastRange = ranges[^2]; // Last before addition item
     var overlappingRange = TestHelper.CreateCcNoRangeAdditionItem(
       lastRange.Start, lastRange.End + 1);
     ranges.Add(overlappingRange);

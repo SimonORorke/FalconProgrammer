@@ -4,7 +4,7 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 internal static class TestHelper {
-  public static CcNoRangeViewModel CreateCcNoRangeAdditionItem(int start, int end) {
+  public static CcNoRangeViewModel CreateCcNoRangeAdditionItem(int? start, int? end) {
     return new CcNoRangeViewModel(
       AppendAdditionItem, OnItemChanged, RemoveItem, true,
       CutItem, PasteBeforeItem) {
