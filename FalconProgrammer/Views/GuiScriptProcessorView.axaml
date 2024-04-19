@@ -31,7 +31,7 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
                 <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate DataType="vm:SoundBankCategory">
+                    <DataTemplate>
                         <ComboBox ItemsSource="{Binding SoundBanks}"
                                   SelectedItem="{Binding SoundBank}" />
                     </DataTemplate>
@@ -45,7 +45,7 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="vm:SoundBankCategory">
+                    <DataTemplate>
                         <TextBlock Text="{Binding Category}"
                                    FontSize="16"
                                    Margin="13,0, 0, 0" />
