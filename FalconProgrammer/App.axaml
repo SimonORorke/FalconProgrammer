@@ -11,7 +11,7 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme /> <!-- Colour schemes are in code behind.  -->
+        <FluentTheme /> <!-- Colour schemes are selected in code behind.  -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <Style Selector="Label">
             <Setter Property="FontSize" Value="16" />
