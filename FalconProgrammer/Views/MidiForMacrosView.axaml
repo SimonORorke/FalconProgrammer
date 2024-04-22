@@ -11,6 +11,23 @@
         <!-- This only sets the DataContext for the previewer in an IDE -->
         <vm:MidiForMacrosViewModel />
     </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="TextBlock.actionHeader">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="9,0,0,0" />
+        </Style>
+        <Style Selector="TextBlock.ccHeader">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Padding" Value="0,0, 10,0" />
+            <Setter Property="TextAlignment" Value="End" />
+        </Style>
+        <Style Selector="TextBox"> <!-- For CC Numbers -->
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Padding" Value="0,6, 12,0" />
+            <Setter Property="TextAlignment" Value="End" />
+        </Style>
+    </UserControl.Styles>
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
                     Height="35" Margin="10, 10, 0, 0">
@@ -41,35 +58,31 @@
                 RowHeight="30"
                 GridLinesVisibility="All">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="81">
+                    <!-- Extra width needed for error icon at right -->
+                    <DataGridTemplateColumn Width="76">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
-                                <!-- Why is there a big right margin in these header TextBlocks? -->
                                 <TextBlock Text="Start"
-                                           FontSize="16"
-                                           HorizontalAlignment="Right"
-                                           TextAlignment="End" />
+                                           Classes="ccHeader" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Start}"
-                                         TextAlignment="End" />
+                                <TextBox Text="{Binding Start}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="81">
+                    <!-- Extra width needed for error icon at right -->
+                    <DataGridTemplateColumn Width="76">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="End"
-                                           FontSize="16"
-                                           TextAlignment="End" />
+                                           Classes="ccHeader" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding End}"
-                                         TextAlignment="End" />
+                                <TextBox Text="{Binding End}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -77,12 +90,11 @@
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="Action"
-                                           FontSize="16"
-                                           Margin="9,0,0,0" />
+                                           Classes="actionHeader" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="vm:CcNoRangeViewModel">
+                            <DataTemplate>
                                 <ct:ItemActionButton
                                     CutCommand="{Binding CutCommand}"
                                     PasteBeforeCommand="{Binding PasteBeforeCommand}"
@@ -105,35 +117,31 @@
                 RowHeight="30"
                 GridLinesVisibility="All">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="81">
+                    <!-- Extra width needed for error icon at right -->
+                    <DataGridTemplateColumn Width="76">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
-                                <!-- Why is there a big right margin in these header TextBlocks? -->
                                 <TextBlock Text="Start"
-                                           FontSize="16"
-                                           HorizontalAlignment="Right"
-                                           TextAlignment="End" />
+                                           Classes="ccHeader" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Start}"
-                                         TextAlignment="End" />
+                                <TextBox Text="{Binding Start}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="81">
+                    <!-- Extra width needed for error icon at right -->
+                    <DataGridTemplateColumn Width="76">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="End"
-                                           FontSize="16"
-                                           TextAlignment="End" />
+                                           Classes="ccHeader" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding End}"
-                                         TextAlignment="End" />
+                                <TextBox Text="{Binding End}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -141,12 +149,11 @@
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="Action"
-                                           FontSize="16"
-                                           Margin="9,0,0,0" />
+                                           Classes="actionHeader" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="vm:CcNoRangeViewModel">
+                            <DataTemplate>
                                 <ct:ItemActionButton
                                     CutCommand="{Binding CutCommand}"
                                     PasteBeforeCommand="{Binding PasteBeforeCommand}"

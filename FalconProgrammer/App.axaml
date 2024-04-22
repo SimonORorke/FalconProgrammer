@@ -10,6 +10,17 @@
         <local:ViewLocator />
     </Application.DataTemplates>
 
+    <Application.Resources>
+        <!-- The Fluent theme for DataGrid (see Styles below)  
+        reserves space at the right end of the column header cell for a sort icon.
+        The resulting big right margin looks ugly on the right-aligned CC No columns in the 
+        DataGrids on the MIDI for Macros page. As sorting is not (so far) wanted 
+        for DataGrids in this application,the fix is to override the reserved space to zero. 
+        If we want add any grids that require the sort icon, we can move this resource to
+        the MIDI for Macros page. -->
+        <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double> <!-- Default: 32 -->
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme /> <!-- Colour schemes are selected in code behind.  -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
@@ -28,7 +39,7 @@
                                         ContentTemplate="{TemplateBinding ErrorTemplate}"
                                         DataContext="{TemplateBinding Owner}"
                                         Content="{Binding (DataValidationErrors.Errors)}"
-                                        IsVisible="{Binding (DataValidationErrors.HasErrors)}"/>
+                                        IsVisible="{Binding (DataValidationErrors.HasErrors)}" />
                         <ContentPresenter Name="PART_ContentPresenter"
                                           Background="{TemplateBinding Background}"
                                           BorderBrush="{TemplateBinding BorderBrush}"
@@ -36,26 +47,26 @@
                                           CornerRadius="{TemplateBinding CornerRadius}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           Content="{TemplateBinding Content}"
-                                          Padding="{TemplateBinding Padding}"/>
+                                          Padding="{TemplateBinding Padding}" />
                     </DockPanel>
                 </ControlTemplate>
             </Setter>
             <Setter Property="ErrorTemplate">
                 <DataTemplate x:DataType="{x:Type x:Object}">
-                    <Canvas Width="14" Height="14" Margin="4 0 1 0" 
+                    <Canvas Width="14" Height="14" Margin="4 0 1 0"
                             Background="Transparent">
                         <Canvas.Styles>
                             <Style Selector="ToolTip">
-                                <Setter Property="Background" Value="Red"/>
-                                <Setter Property="BorderBrush" Value="Red"/>
+                                <Setter Property="Background" Value="Red" />
+                                <Setter Property="BorderBrush" Value="Red" />
                             </Style>
                         </Canvas.Styles>
                         <ToolTip.Tip>
-                            <ItemsControl ItemsSource="{Binding}"/>
+                            <ItemsControl ItemsSource="{Binding}" />
                         </ToolTip.Tip>
-                        <Path Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2" 
-                              Stroke="Red" 
-                              StrokeThickness="2"/>
+                        <Path Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2"
+                              Stroke="Red"
+                              StrokeThickness="2" />
                     </Canvas>
                 </DataTemplate>
             </Setter>
