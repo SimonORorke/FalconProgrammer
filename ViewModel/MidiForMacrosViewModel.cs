@@ -2,13 +2,13 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class MidiForMacrosViewModel(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : SettingsWriterViewModelBase(dialogService, dispatcherService) {
+public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   private CcNoRangeCollection? _continuousCcNoRanges;
   private int _modWheelReplacementCcNo;
   private CcNoRangeCollection? _toggleCcNoRanges;
+
+  public MidiForMacrosViewModel(IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   public CcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
     ??= new CcNoRangeCollection("Continuous",

@@ -1,6 +1,11 @@
 ﻿namespace FalconProgrammer.ViewModel;
 
-public class TabItemViewModel(ViewModelBase viewModel) {
-  public string Header { get; } = viewModel.TabTitle;
-  public ViewModelBase ViewModel { get; } = viewModel;
+public class TabItemViewModel {
+  public TabItemViewModel(ViewModelBase viewModel) {
+    Header = viewModel.TabTitle;
+    ViewModel = viewModel;
+  }
+
+  public string Header { get; }
+  public ViewModelBase ViewModel { get; }
 }

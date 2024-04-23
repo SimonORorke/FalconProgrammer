@@ -4,12 +4,13 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class SettingsWriterViewModelBase(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : ViewModelBase(dialogService, dispatcherService) {
+public abstract class SettingsWriterViewModelBase : ViewModelBase {
   private ISettingsFolderLocation? _settingsFolderLocation;
   private string _settingsFolderPath = string.Empty;
+
+  protected SettingsWriterViewModelBase(IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
+
   private bool HaveSettingsBeenUpdated { get; set; }
   protected bool IsPropertyChangedNotificationEnabled { get; set; } = true;
 
@@ -24,7 +25,7 @@ public abstract class SettingsWriterViewModelBase(
   ///   Specification of the settings file name is not supported because the application
   ///   saves settings automatically, without prompting the user for the file path.
   ///   The path of a file that does not yet exist cannot be specified in advance,
-  ///   whereas the path of its containing folder can. 
+  ///   whereas the path of its containing folder can.
   /// </remarks>
   [Required]
   [CustomValidation(typeof(SettingsWriterViewModelBase),
@@ -39,9 +40,9 @@ public abstract class SettingsWriterViewModelBase(
     if (IsVisible
         // We don't want to indicate that settings need to be saved when a new settings
         // file has just been read.
-        && e.PropertyName != nameof(SettingsFolderPath) 
+        && e.PropertyName != nameof(SettingsFolderPath)
         && IsPropertyChangedNotificationEnabled) {
-        HaveSettingsBeenUpdated = true;
+      HaveSettingsBeenUpdated = true;
     }
   }
 

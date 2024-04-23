@@ -2,7 +2,9 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-internal class ScriptProgramXml(Category category) : ProgramXml(category) {
+internal class ScriptProgramXml : ProgramXml {
+  public ScriptProgramXml(Category category) : base(category) { }
+
   protected override XElement GetTemplateModulationElement() {
     var rootElement = XElement.Load(Category.TemplateProgramPath);
     var scriptProcessorElement =

@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Model;
 
-internal class InfoPageLayout(FalconProgram program) {
+internal class InfoPageLayout {
   private const int MacroWidth = 60;
 
   // private const int MinHorizontalGapBetweenMacros = 5;
@@ -25,7 +25,11 @@ internal class InfoPageLayout(FalconProgram program) {
   /// </summary>
   private const int StandardRowHeight = 115;
 
-  private FalconProgram Program { get; } = program;
+  public InfoPageLayout(FalconProgram program) {
+    Program = program;
+  }
+
+  private FalconProgram Program { get; }
 
   public void MoveMacrosToStandardLayout() {
     var visibleMacros = (

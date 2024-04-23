@@ -5,9 +5,17 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
 
-internal class FalconProgram(string path, Category category, Settings settings) {
+internal class FalconProgram {
   private InfoPageLayout? _infoPageLayout;
-  [PublicAPI] public Category Category { get; } = category;
+
+  public FalconProgram(string path, Category category, Settings settings) {
+    Category = category;
+    Name = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
+    Path = path;
+    Settings = settings;
+  }
+
+  [PublicAPI] public Category Category { get; }
 
   /// <summary>
   ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
@@ -38,11 +46,11 @@ internal class FalconProgram(string path, Category category, Settings settings) 
   ///   Trim in case there's a space before the dot in the file name. That would otherwise
   ///   show up when Name is combined into PathShort.
   /// </summary>
-  private string Name { get; } = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
+  private string Name { get; }
 
   private int CurrentContinuousCcNo { get; set; }
   private int CurrentToggleCcNo { get; set; }
-  [PublicAPI] public string Path { get; } = path;
+  [PublicAPI] public string Path { get; }
 
   [PublicAPI]
   public string PathShort =>
@@ -53,7 +61,7 @@ internal class FalconProgram(string path, Category category, Settings settings) 
   private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } =
     ImmutableList<ScriptProcessor>.Empty;
 
-  public Settings Settings { get; } = settings;
+  public Settings Settings { get; }
   private string SoundBankName => Category.SoundBankFolder.Name;
 
   private void BypassDelayEffects() {

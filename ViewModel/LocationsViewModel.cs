@@ -3,15 +3,16 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class LocationsViewModel(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : SettingsWriterViewModelBase(dialogService, dispatcherService) {
+public partial class LocationsViewModel : SettingsWriterViewModelBase {
   // 'partial' allows CommunityToolkit.Mvvm code generation.
   private string _defaultTemplatePath = string.Empty;
   private string _originalProgramsFolderPath = string.Empty;
   private string _programsFolderPath = string.Empty;
   private string _templateProgramsFolderPath = string.Empty;
+
+  /// <inheritdoc />
+  public LocationsViewModel(IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
@@ -20,7 +21,7 @@ public partial class LocationsViewModel(
     get => _defaultTemplatePath;
     set => SetProperty(ref _defaultTemplatePath, value, true);
   }
-  
+
   private string FoundSettingsPath { get; set; } = string.Empty;
 
   [Required]
@@ -88,7 +89,7 @@ public partial class LocationsViewModel(
         FoundSettingsPath = newFoundSettingsPath;
         if (FoundSettingsPath != string.Empty) {
           bool load = await DialogService.AskYesNoQuestionAsync(
-            $"Settings file '{FoundSettingsPath}' already exists. " + 
+            $"Settings file '{FoundSettingsPath}' already exists. " +
             "Do you want to load the settings from that file?");
           if (load) {
             await LoadSettingsFromNewFile();
@@ -136,7 +137,7 @@ public partial class LocationsViewModel(
   internal override async Task Open() {
     await base.Open();
     ShowPathSettings();
-    FoundSettingsPath = FindSettingsFile(); 
+    FoundSettingsPath = FindSettingsFile();
   }
 
   private void ShowPathSettings() {

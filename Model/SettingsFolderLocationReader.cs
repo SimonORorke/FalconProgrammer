@@ -6,7 +6,7 @@ public class SettingsFolderLocationReader
   : XmlReaderBase<SettingsFolderLocation> {
   /// <summary>
   ///   Reads the location of the settings folder from a little XML file in the
-  ///   application's app data folder (~/Library in macOS). 
+  ///   application's app data folder (~/Library in macOS).
   /// </summary>
   public virtual ISettingsFolderLocation Read() {
     SettingsFolderLocation? result = null;

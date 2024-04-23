@@ -5,7 +5,9 @@ using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
-public class TestProgramXml(Category category) : ProgramXml(category) {
+public class TestProgramXml : ProgramXml {
+  public TestProgramXml(Category category) : base(category) { }
+
   /// <summary>
   ///   <see cref="ReadRootElementFromFile" /> will read the embedded resource file
   ///   with this name in the Tests assembly, ignoring its programPath parameter.

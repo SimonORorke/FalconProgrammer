@@ -3,9 +3,12 @@ using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
-public class TestCategory(DirectoryInfo soundBankFolder, string name, Settings settings)
-  : Category(soundBankFolder, name, settings) {
+public class TestCategory : Category {
   private MockFileSystemService? _mockFileSystemService;
+
+  public TestCategory(DirectoryInfo soundBankFolder, string name, Settings settings) :
+    base(soundBankFolder, name, settings) { }
+
   internal string CategoryFolderPath { get; private set; } = string.Empty;
 
   /// <summary>

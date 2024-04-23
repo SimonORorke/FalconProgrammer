@@ -3,11 +3,13 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class SoundBankCategoryCollection(
-  IFileSystemService fileSystemService,
-  IDispatcherService dispatcherService)
-  : DataGridItemCollection<SoundBankCategory>(dispatcherService) {
-  private IFileSystemService FileSystemService { get; } = fileSystemService;
+public class SoundBankCategoryCollection : DataGridItemCollection<SoundBankCategory> {
+  public SoundBankCategoryCollection(IFileSystemService fileSystemService,
+    IDispatcherService dispatcherService) : base(dispatcherService) {
+    FileSystemService = fileSystemService;
+  }
+
+  private IFileSystemService FileSystemService { get; }
 
   private ImmutableList<string> SoundBanks { get; set; } = [];
 

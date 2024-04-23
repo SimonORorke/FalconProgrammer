@@ -22,7 +22,7 @@ public abstract class ViewModelTestsBase {
     MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
       MockFileSystemService = MockFileSystemService,
       MockSerialiserForSettings = MockSerialiser,
-      MockSettingsFolderLocationReader = MockSettingsFolderLocationReader, 
+      MockSettingsFolderLocationReader = MockSettingsFolderLocationReader,
       TestDeserialiser = {
         EmbeddedFileName = "DefaultAlreadySettings.xml"
       }
@@ -47,6 +47,6 @@ public abstract class ViewModelTestsBase {
 
   protected MockSettingsReaderEmbedded MockSettingsReaderEmbedded { get; private set; } =
     null!;
-  
+
   protected ModelServices TestModelServices { get; private set; } = null!;
 }

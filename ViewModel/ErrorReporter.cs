@@ -2,7 +2,13 @@
 
 namespace FalconProgrammer.ViewModel;
 
-internal class ErrorReporter(IDialogService dialogService) {
+internal class ErrorReporter {
+  private readonly IDialogService _dialogService;
+
+  public ErrorReporter(IDialogService dialogService) {
+    _dialogService = dialogService;
+  }
+
   /// <summary>
   ///   For use when there is an error message to show when the user attempts to close
   ///   current tab page, either by selecting another tab or by closing the main window.
@@ -29,9 +35,9 @@ internal class ErrorReporter(IDialogService dialogService) {
       errorMessage +=
         $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " +
         "No (Esc) to resume.";
-      return await dialogService.AskYesNoQuestionAsync(errorMessage);
+      return await _dialogService.AskYesNoQuestionAsync(errorMessage);
     }
-    await dialogService.ShowErrorMessageBoxAsync(errorMessage);
+    await _dialogService.ShowErrorMessageBoxAsync(errorMessage);
     return false;
   }
 }

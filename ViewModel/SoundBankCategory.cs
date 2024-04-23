@@ -5,19 +5,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class SoundBankCategory(
-  // 'partial' allows CommunityToolkit.Mvvm code generation based on ObservableProperty
-  // and RelayCommand attributes.
-  Settings settings,
-  IFileSystemService fileSystemService,
-  Action appendAdditionItem,
-  Action onItemChanged,
-  Action<DataGridItem> removeItem,
-  bool isAdditionItem,
-  Action<DataGridItem> cutItem,
-  Action<DataGridItem> pasteBeforeItem)
-  : DataGridItem(appendAdditionItem,
-    onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
+public partial class SoundBankCategory : DataGridItem {
   public const string AllCategoriesCaption = "All";
 
   [ObservableProperty]
@@ -26,11 +14,25 @@ public partial class SoundBankCategory(
   [ObservableProperty]
   private string _soundBank = string.Empty; // Generates SoundBank property
 
+  /// <inheritdoc />
+  public SoundBankCategory(Settings settings,
+    IFileSystemService fileSystemService,
+    Action appendAdditionItem,
+    Action onItemChanged,
+    Action<DataGridItem> removeItem,
+    bool isAdditionItem,
+    Action<DataGridItem> cutItem,
+    Action<DataGridItem> pasteBeforeItem) : base(appendAdditionItem,
+    onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
+    FileSystemService = fileSystemService;
+    Settings = settings;
+  }
+
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
   internal bool IsForAllCategories => Category == AllCategoriesCaption;
   public ObservableCollection<string> Categories { get; } = [];
-  private IFileSystemService FileSystemService { get; } = fileSystemService;
-  private Settings Settings { get; } = settings;
+  private IFileSystemService FileSystemService { get; }
+  private Settings Settings { get; }
 
   // Code coverage highlighting does not work for these partial methods.
   partial void OnSoundBankChanged(string value) {

@@ -2,16 +2,17 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class CcNoRangeViewModel(
-  Action appendAdditionItem,
-  Action onItemChanged,
-  Action<DataGridItem> removeItem,
-  bool isAdditionItem,
-  Action<DataGridItem> cutItem,
-  Action<DataGridItem> pasteBeforeItem) : DataGridItem(appendAdditionItem,
-  onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
+public class CcNoRangeViewModel : DataGridItem {
   private int? _end;
   private int? _start;
+
+  public CcNoRangeViewModel(Action appendAdditionItem,
+    Action onItemChanged,
+    Action<DataGridItem> removeItem,
+    bool isAdditionItem,
+    Action<DataGridItem> cutItem,
+    Action<DataGridItem> pasteBeforeItem) : base(appendAdditionItem,
+    onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) { }
 
   [Required]
   [Range(0, 127)]

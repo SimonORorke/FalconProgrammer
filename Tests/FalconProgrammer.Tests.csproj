@@ -24,10 +24,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocation.xml" />
-        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationK.xml" />
-        <EmbeddedResource Include="Model\Xml\Settings\DefaultAlreadySettings.xml" />
-        <EmbeddedResource Include="Model\Xml\Settings\LocationsSettings.xml" />
+        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocation.xml"/>
+        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationK.xml"/>
+        <EmbeddedResource Include="Model\Xml\Settings\DefaultAlreadySettings.xml"/>
+        <EmbeddedResource Include="Model\Xml\Settings\LocationsSettings.xml"/>
         <None Remove="Model\Xml\DefaultAlreadySettings.xml"/>
         <None Remove="Model\Xml\SettingsFolderLocation.xml"/>
         <None Remove="Model\Xml\LocationsSettings.xml"/>
@@ -36,11 +36,11 @@
         <EmbeddedResource Include="Model\Xml\Programs\NoGuiScriptProcessor.uvip"/>
         <None Remove="Model\Xml\Programs\GuiScriptProcessor.uvip"/>
         <EmbeddedResource Include="Model\Xml\Programs\GuiScriptProcessor.uvip"/>
-        <None Remove="Model\Xml\SettingsFolderLocationK.xml" />
-        <None Remove="Model\Xml\SettingsFolderLocations\InvalidXmlFolderLocation.xml" />
-        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\InvalidXmlSettingsFolderLocation.xml" />
-        <None Remove="Model\Xml\Settings\InvalidXmlSettings.xml" />
-        <EmbeddedResource Include="Model\Xml\Settings\InvalidXmlSettings.xml" />
+        <None Remove="Model\Xml\SettingsFolderLocationK.xml"/>
+        <None Remove="Model\Xml\SettingsFolderLocations\InvalidXmlFolderLocation.xml"/>
+        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\InvalidXmlSettingsFolderLocation.xml"/>
+        <None Remove="Model\Xml\Settings\InvalidXmlSettings.xml"/>
+        <EmbeddedResource Include="Model\Xml\Settings\InvalidXmlSettings.xml"/>
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,10 @@
 ﻿namespace FalconProgrammer.ViewModel;
 
-public class GuiScriptProcessorViewModel(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : SettingsWriterViewModelBase(dialogService, dispatcherService) {
+public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   private SoundBankCategoryCollection? _soundBankCategories;
+
+  public GuiScriptProcessorViewModel(IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);

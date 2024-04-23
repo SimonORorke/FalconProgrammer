@@ -4,10 +4,10 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class TestGuiScriptProcessorViewModel(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : GuiScriptProcessorViewModel(dialogService, dispatcherService) {
+public class TestGuiScriptProcessorViewModel : GuiScriptProcessorViewModel {
+  public TestGuiScriptProcessorViewModel(IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
+
   [PublicAPI] internal int ClosedCount { get; set; }
   internal bool SkipInitialisation { get; set; }
 

@@ -18,7 +18,7 @@
                         ShowAccessKey="True" />
         </Label>
         <TextBlock Grid.Row="1" Grid.Column="3"
-                 Text="{Binding SettingsFolderPath}" />
+                   Text="{Binding SettingsFolderPath}" />
         <Button Grid.Row="1" Grid.Column="5" Content="Browse..."
                 x:Name="SettingsFolderButton"
                 Command="{Binding BrowseForSettingsFolderCommand}" />

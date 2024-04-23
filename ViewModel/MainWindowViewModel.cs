@@ -8,11 +8,8 @@ namespace FalconProgrammer.ViewModel;
 
 [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
-public partial class MainWindowViewModel(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : ViewModelBase(dialogService, dispatcherService),
-    IRecipient<GoToLocationsPageMessage> {
+public partial class MainWindowViewModel : ViewModelBase,
+  IRecipient<GoToLocationsPageMessage> {
   /// <summary>
   ///   Generates CurrentPageTitle property.
   /// </summary>
@@ -24,6 +21,16 @@ public partial class MainWindowViewModel(
   [ObservableProperty] private TabItemViewModel? _selectedTab;
 
   private ImmutableList<TabItemViewModel>? _tabs;
+
+  /// <inheritdoc />
+  public MainWindowViewModel(IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
+    BatchScriptViewModel = new BatchScriptViewModel(dialogService, dispatcherService);
+    GuiScriptProcessorViewModel =
+      new GuiScriptProcessorViewModel(dialogService, dispatcherService);
+    MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
+    LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
+  }
 
 #pragma warning disable CA1822
   // ReSharper disable once MemberCanBeMadeStatic.Global
@@ -40,30 +47,26 @@ public partial class MainWindowViewModel(
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal virtual BatchScriptViewModel BatchScriptViewModel { get; set; } =
-    new BatchScriptViewModel(dialogService, dispatcherService);
+  internal virtual BatchScriptViewModel BatchScriptViewModel { get; set; }
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  internal virtual GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; } =
-    new GuiScriptProcessorViewModel(dialogService, dispatcherService);
+  internal virtual GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal virtual MidiForMacrosViewModel MidiForMacrosViewModel { get; set; } =
-    new MidiForMacrosViewModel(dialogService, dispatcherService);
+  internal virtual MidiForMacrosViewModel MidiForMacrosViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal virtual LocationsViewModel LocationsViewModel { get; set; } =
-    new LocationsViewModel(dialogService, dispatcherService);
+  internal virtual LocationsViewModel LocationsViewModel { get; set; }
 
   /// <summary>
   ///   Not used because this is not a page but the owner of pages.
@@ -96,7 +99,7 @@ public partial class MainWindowViewModel(
     }
     if (!IsVisible) {
       // Start listening for ObservableRecipient messages. Set IsVisible to true.
-      Task.Run(async ()=>await Open()).Wait();
+      Task.Run(async () => await Open()).Wait();
     }
     DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value));
   }

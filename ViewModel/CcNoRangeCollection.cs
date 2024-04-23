@@ -2,11 +2,17 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class CcNoRangeCollection(
-  string rangeType,
-  IDialogService dialogService,
-  IDispatcherService dispatcherService)
-  : DataGridItemCollection<CcNoRangeViewModel>(dispatcherService) {
+public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
+  private readonly IDialogService _dialogService;
+  private readonly string _rangeType;
+
+  public CcNoRangeCollection(string rangeType,
+    IDialogService dialogService,
+    IDispatcherService dispatcherService) : base(dispatcherService) {
+    _rangeType = rangeType;
+    _dialogService = dialogService;
+  }
+
   private List<Settings.IntegerRange> SettingsRanges { get; set; } = null!;
 
   protected override void AppendAdditionItem() {
@@ -84,9 +90,9 @@ public class CcNoRangeCollection(
     if (isValid) {
       return new ClosingValidationResult(true, true);
     }
-    var errorReporter = new ErrorReporter(dialogService);
+    var errorReporter = new ErrorReporter(_dialogService);
     bool canClosePage = await errorReporter.CanClosePageOnErrorAsync(
-      $"MIDI for Macros settings cannot be saved because {rangeType} CC No ranges " +
+      $"MIDI for Macros settings cannot be saved because {_rangeType} CC No ranges " +
       "include overlapping ranges.",
       isClosingWindow);
     return new ClosingValidationResult(false, canClosePage);

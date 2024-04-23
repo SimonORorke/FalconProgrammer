@@ -4,10 +4,15 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class DataGridItemCollection<T>(
-  IDispatcherService dispatcherService) : ObservableCollection<T> where T : DataGridItem {
+public abstract class DataGridItemCollection<T> : ObservableCollection<T>
+  where T : DataGridItem {
   private bool _isPopulating;
-  private IDispatcherService DispatcherService { get; } = dispatcherService;
+
+  protected DataGridItemCollection(IDispatcherService dispatcherService) {
+    DispatcherService = dispatcherService;
+  }
+
+  private IDispatcherService DispatcherService { get; }
 
   /// <summary>
   ///   Gets whether the collection has changed since being populated.

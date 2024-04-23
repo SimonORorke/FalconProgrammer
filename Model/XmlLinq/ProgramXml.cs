@@ -6,13 +6,18 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class ProgramXml(Category category) : EntityBase {
+public class ProgramXml : EntityBase {
   private ImmutableList<XElement>? _scriptProcessorElements;
   private XElement? _templateMacroElement;
   private XElement? _templateModulationElement;
   private XElement? _templateRootElement;
   private XElement? _templateScriptProcessorElement;
-  [PublicAPI] public Category Category { get; } = category;
+
+  public ProgramXml(Category category) {
+    Category = category;
+  }
+
+  [PublicAPI] public Category Category { get; }
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
 
   /// <summary>

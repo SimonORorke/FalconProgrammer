@@ -2,11 +2,15 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class Effect(XElement element, ProgramXml programXml)
-  : ConnectionsParent(element, programXml) {
+public class Effect : ConnectionsParent {
   private bool? _isDelay;
   private bool? _isReverb;
-  public string EffectType { get; } = element.Name.ToString();
+
+  public Effect(XElement element, ProgramXml programXml) : base(element, programXml) {
+    EffectType = element.Name.ToString();
+  }
+
+  public string EffectType { get; }
   public bool IsDelay => _isDelay ??= GetIsDelay();
   public bool IsReverb => _isReverb ??= GetIsReverb();
 

@@ -11,7 +11,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     ViewModel = new MidiForMacrosViewModel(MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
-    Task.Run(async ()=> await ViewModel.Open()).Wait();
+    Task.Run(async () => await ViewModel.Open()).Wait();
   }
 
   private MidiForMacrosViewModel ViewModel { get; set; } = null!;

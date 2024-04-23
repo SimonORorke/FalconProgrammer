@@ -16,6 +16,5 @@ public class MockSettingsFolderLocation : ISettingsFolderLocation {
     }
   }
 
-  public void Write() {
-  }
+  public void Write() { }
 }

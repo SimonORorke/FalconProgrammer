@@ -5,15 +5,20 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ViewModelBase(
-  IDialogService dialogService,
-  IDispatcherService dispatcherService) : ObservableRecipientWithValidation {
+public abstract class ViewModelBase : ObservableRecipientWithValidation {
   private IFileSystemService? _fileSystemService;
   private ModelServices? _modelServices;
   private SettingsFolderLocationReader? _settingsFolderLocationReader;
   private SettingsReader? _settingsReader;
-  protected IDialogService DialogService { get; } = dialogService;
-  protected IDispatcherService DispatcherService { get; } = dispatcherService;
+
+  protected ViewModelBase(IDialogService dialogService,
+    IDispatcherService dispatcherService) {
+    DialogService = dialogService;
+    DispatcherService = dispatcherService;
+  }
+
+  protected IDialogService DialogService { get; }
+  protected IDispatcherService DispatcherService { get; }
 
   internal IFileSystemService FileSystemService =>
     _fileSystemService ??= ModelServices.FileSystemService;
@@ -42,7 +47,7 @@ public abstract class ViewModelBase(
   protected SettingsFolderLocationReader SettingsFolderLocationReader =>
     _settingsFolderLocationReader ??= ModelServices.SettingsFolderLocationReader;
 
-  private SettingsReader SettingsReader => 
+  private SettingsReader SettingsReader =>
     _settingsReader ??= ModelServices.SettingsReader;
 
   protected void GoToLocationsPage() {
@@ -88,7 +93,7 @@ public abstract class ViewModelBase(
       // file. See the comment in SettingsFolderLocationReader.Read.
       // So make the error message "Invalid XML was found in '{inputPath}'." more
       // specific.
-      string errorMessage = 
+      string errorMessage =
         exception.Message.Replace(" in '", " in settings file '");
       await OnSettingsXmlErrorAsync(errorMessage);
     }
