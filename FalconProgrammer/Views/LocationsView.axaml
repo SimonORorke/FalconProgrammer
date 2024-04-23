@@ -6,10 +6,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.LocationsView"
              x:DataType="vm:LocationsViewModel">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE -->
-        <vm:LocationsViewModel />
-    </Design.DataContext>
     <Grid ColumnDefinitions="10,205,10,795,10,100"
           RowDefinitions="10,Auto,10,Auto,10,Auto,10,Auto,10,Auto">
         <Label Grid.Row="1" Grid.Column="1"

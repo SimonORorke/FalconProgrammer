@@ -7,10 +7,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.MidiForMacrosView"
              x:DataType="vm:MidiForMacrosViewModel">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE -->
-        <vm:MidiForMacrosViewModel />
-    </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="TextBlock.actionHeader">
             <Setter Property="FontSize" Value="16" />

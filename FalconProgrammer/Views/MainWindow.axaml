@@ -8,12 +8,6 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/falcon_svg_repo_com.png"
         Title="Falcon Programmer">
-
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE. -->
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
-
     <DockPanel>
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="50">
             <Image Source="/Assets/falcon_svg_repo_com.png" />

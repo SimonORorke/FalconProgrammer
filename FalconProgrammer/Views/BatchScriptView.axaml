@@ -6,9 +6,5 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BatchScriptView"
              x:DataType="vm:BatchScriptViewModel">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE -->
-        <vm:BatchScriptViewModel />
-    </Design.DataContext>
     BatchScriptView
 </UserControl>

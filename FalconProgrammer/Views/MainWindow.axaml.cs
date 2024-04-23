@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Views;
@@ -8,6 +9,9 @@ namespace FalconProgrammer.Views;
 public partial class MainWindow : Window {
   public MainWindow() {
     InitializeComponent();
+    // This only sets the DataContext for the previewer in the IDE.
+    Design.SetDataContext(this,
+      new MainWindowViewModel(new DialogService(), new DispatcherService()));
     Title = Application.Current!.Name;
     Closing += OnClosing;
   }
