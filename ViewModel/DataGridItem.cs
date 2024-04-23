@@ -11,24 +11,17 @@ public abstract partial class DataGridItem : ObservableValidator {
   private bool _canRemove;
   private bool _isAdditionItem;
 
-  // TODO: Replace Action constructor parameters with Events.
-  protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
-    Action<DataGridItem> removeItem, bool isAdditionItem,
-    Action<DataGridItem> cutItem,
-    Action<DataGridItem> pasteBeforeItem) {
-    AppendAdditionItem = appendAdditionItem;
-    OnItemChanged = onItemChanged;
-    RemoveItem = removeItem;
+  protected DataGridItem(bool isAdditionItem) {
     IsAdditionItem = isAdditionItem;
     CanRemove = !isAdditionItem;
-    CutItem = cutItem;
-    PasteBeforeItem = pasteBeforeItem;
   }
 
-  private Action AppendAdditionItem { get; }
-  private Action<DataGridItem> CutItem { get; }
-  private Action OnItemChanged { get; }
-  private Action<DataGridItem> RemoveItem { get; }
+  internal event EventHandler? AppendAdditionItem;
+  internal event EventHandler<DataGridItem>? CutItem;
+  internal event EventHandler? ItemChanged;
+  internal event EventHandler<DataGridItem>? PasteBeforeItem;
+  internal event EventHandler<DataGridItem>? RemoveItem;
+  
   private bool HasNewAdditionItemBeenRequested { get; set; }
   private bool IsAdding { get; set; }
 
@@ -47,8 +40,6 @@ public abstract partial class DataGridItem : ObservableValidator {
   ///   <see cref="CanPasteBefore" /> Default: false.
   /// </summary>
   internal bool IsBatchUpdate { get; set; }
-
-  private Action<DataGridItem> PasteBeforeItem { get; }
 
   /// <summary>
   ///   Gets or sets CanExecute for <see cref="CutCommand" />.
@@ -79,7 +70,23 @@ public abstract partial class DataGridItem : ObservableValidator {
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanCut))] // Generates CutCommand
   private void Cut() {
-    CutItem(this);
+    OnCutItem();
+  }
+
+  private void OnAppendAdditionItem() {
+    AppendAdditionItem?.Invoke(null, EventArgs.Empty);
+  }
+
+  private void OnCutItem() {
+    CutItem?.Invoke(null, this);
+  }
+
+  private void OnItemChanged() {
+    ItemChanged?.Invoke(null, EventArgs.Empty);
+  }
+
+  private void OnPasteBeforeItem() {
+    PasteBeforeItem?.Invoke(null, this);
   }
 
   protected override void OnPropertyChanging(PropertyChangingEventArgs e) {
@@ -100,8 +107,7 @@ public abstract partial class DataGridItem : ObservableValidator {
         !HasNewAdditionItemBeenRequested) {
       // The user has used up the addition item. So we need to append another addition
       // item to the collection.
-      AppendAdditionItem();
-      // IsAdding = false;
+      OnAppendAdditionItem();
       HasNewAdditionItemBeenRequested = true;
       IsAdditionItem = false;
     }
@@ -110,13 +116,17 @@ public abstract partial class DataGridItem : ObservableValidator {
     OnItemChanged();
   }
 
+  private void OnRemoveItem() {
+    RemoveItem?.Invoke(null, this);
+  }
+
   /// <summary>
   ///   Cuts this item from the collection for potential pasting back in, otherwise
   ///   removal.
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanPasteBefore))] // Generates PasteBeforeCommand
   private void PasteBefore() {
-    PasteBeforeItem(this);
+    OnPasteBeforeItem();
   }
 
   /// <summary>
@@ -124,6 +134,6 @@ public abstract partial class DataGridItem : ObservableValidator {
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanRemove))] // Generates RemoveCommand
   private void Remove() {
-    RemoveItem(this);
+    OnRemoveItem();
   }
 }

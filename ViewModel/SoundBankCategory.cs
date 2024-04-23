@@ -14,16 +14,10 @@ public partial class SoundBankCategory : DataGridItem {
   [ObservableProperty]
   private string _soundBank = string.Empty; // Generates SoundBank property
 
-  /// <inheritdoc />
-  public SoundBankCategory(Settings settings,
+  public SoundBankCategory(
+    Settings settings,
     IFileSystemService fileSystemService,
-    Action appendAdditionItem,
-    Action onItemChanged,
-    Action<DataGridItem> removeItem,
-    bool isAdditionItem,
-    Action<DataGridItem> cutItem,
-    Action<DataGridItem> pasteBeforeItem) : base(appendAdditionItem,
-    onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) {
+    bool isAdditionItem) : base(isAdditionItem) {
     FileSystemService = fileSystemService;
     Settings = settings;
   }

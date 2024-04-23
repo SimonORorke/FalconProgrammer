@@ -37,6 +37,24 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
   private T? BeenCut { get; set; }
 
   /// <summary>
+  ///   Handles the new item's events and adds it to the collection.
+  /// </summary>
+  /// <param name="newItem">The item to add.</param>
+  protected void AddItem(T newItem) {
+    newItem.AppendAdditionItem -= OnAppendAdditionItem;
+    newItem.AppendAdditionItem += OnAppendAdditionItem;
+    newItem.CutItem -= OnCutItem;
+    newItem.CutItem += OnCutItem;
+    newItem.ItemChanged -= OnItemChanged;
+    newItem.ItemChanged += OnItemChanged;
+    newItem.PasteBeforeItem -= OnPasteBeforeItem;
+    newItem.PasteBeforeItem += OnPasteBeforeItem;
+    newItem.RemoveItem -= OnRemoveItem;
+    newItem.RemoveItem += OnRemoveItem;
+    Add(newItem);
+  }
+
+  /// <summary>
   ///   Appends an addition item.
   /// </summary>
   protected abstract void AppendAdditionItem();
@@ -46,20 +64,16 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
   // ReSharper disable once UnusedMemberInSuper.Global
   protected abstract void CutItem(DataGridItem itemToCut);
 
-  private void UpdateCanPasteBeforeForAllItems(bool value) {
-    for (int i = 0; i < Count; i++) {
-      this[i].IsBatchUpdate = true;
-      this[i].CanPasteBefore = value;
-      this[i].IsBatchUpdate = false;
-    }
-  }
-
   protected void CutItemTyped(T itemToCut) {
     BeenCut = itemToCut;
     DispatcherService.Dispatch(() => {
       Remove(itemToCut);
       UpdateCanPasteBeforeForAllItems(true);
     });
+  }
+
+  private void OnAppendAdditionItem(object? sender, EventArgs e) {
+    AppendAdditionItem();
   }
 
   protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
@@ -70,8 +84,24 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
     HasBeenChanged = true;
   }
 
-  protected void OnItemChanged() {
+  private void OnCutItem(object? sender, DataGridItem e) {
+    CutItem(e);
+  }
+
+  private void OnItemChanged() {
     HasBeenChanged = true;
+  }
+
+  private void OnItemChanged(object? sender, EventArgs e) {
+    OnItemChanged();
+  }
+
+  private void OnPasteBeforeItem(object? sender, DataGridItem e) {
+    PasteBeforeItem(e);
+  }
+
+  private void OnRemoveItem(object? sender, DataGridItem e) {
+    RemoveItem(e);
   }
 
   // This looks like a false suggestion we are having to suppress.
@@ -96,5 +126,13 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
 
   protected void RemoveItemTyped(T itemToRemove) {
     DispatcherService.Dispatch(() => Remove(itemToRemove));
+  }
+
+  private void UpdateCanPasteBeforeForAllItems(bool value) {
+    for (int i = 0; i < Count; i++) {
+      this[i].IsBatchUpdate = true;
+      this[i].CanPasteBefore = value;
+      this[i].IsBatchUpdate = false;
+    }
   }
 }

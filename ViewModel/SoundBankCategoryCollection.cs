@@ -18,9 +18,7 @@ public class SoundBankCategoryCollection : DataGridItemCollection<SoundBankCateg
   }
 
   private void AddItem(string soundBank = "", string category = "") {
-    Add(new SoundBankCategory(
-      Settings, FileSystemService, AppendAdditionItem, OnItemChanged, RemoveItem,
-      IsAddingAdditionItem, CutItem, PasteBeforeItem) {
+    AddItem(new SoundBankCategory(Settings, FileSystemService, IsAddingAdditionItem) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category

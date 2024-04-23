@@ -20,9 +20,7 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
   }
 
   private void AddItem(int? start = null, int? end = null) {
-    Add(new CcNoRangeViewModel(
-      AppendAdditionItem, OnItemChanged, RemoveItem,
-      IsAddingAdditionItem, CutItem, PasteBeforeItem) {
+    AddItem(new CcNoRangeViewModel(IsAddingAdditionItem) {
       Start = start,
       End = end
     });

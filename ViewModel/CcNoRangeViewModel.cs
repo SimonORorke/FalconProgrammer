@@ -6,13 +6,7 @@ public class CcNoRangeViewModel : DataGridItem {
   private int? _end;
   private int? _start;
 
-  public CcNoRangeViewModel(Action appendAdditionItem,
-    Action onItemChanged,
-    Action<DataGridItem> removeItem,
-    bool isAdditionItem,
-    Action<DataGridItem> cutItem,
-    Action<DataGridItem> pasteBeforeItem) : base(appendAdditionItem,
-    onItemChanged, removeItem, isAdditionItem, cutItem, pasteBeforeItem) { }
+  public CcNoRangeViewModel(bool isAdditionItem) : base(isAdditionItem) { }
 
   [Required]
   [Range(0, 127)]
