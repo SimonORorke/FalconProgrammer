@@ -11,6 +11,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   private bool _canRemove;
   private bool _isAdditionItem;
 
+  // TODO: Replace Action constructor parameters with Events.
   protected DataGridItem(Action appendAdditionItem, Action onItemChanged,
     Action<DataGridItem> removeItem, bool isAdditionItem,
     Action<DataGridItem> cutItem,
