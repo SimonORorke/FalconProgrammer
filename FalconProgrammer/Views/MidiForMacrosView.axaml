@@ -37,7 +37,7 @@
                      TextAlignment="End"
                      Height="30"
                      MinWidth="10"
-                     Width="40" />
+                     Width="45" />
         </StackPanel>
         <Grid RowDefinitions="30, *" ColumnDefinitions="Auto, 10, Auto"
               Margin="0,10,0,0">

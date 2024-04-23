@@ -9,6 +9,14 @@ public partial class MidiForMacrosView : UserControl {
     InitializeComponent();
     // This only sets the DataContext for the previewer in the IDE.
     Design.SetDataContext(this,
-      new MidiForMacrosViewModel(new DialogService(), new DispatcherService()));
+      new MidiForMacrosViewModel(new DialogService(), new DispatcherService()) {
+        ModWheelReplacementCcNo = 127,
+        ContinuousCcNoRanges = {
+          new CcNoRangeViewModel(true) { Start = 99, End = 123 }
+        },
+        ToggleCcNoRanges = {
+          new CcNoRangeViewModel(true) { Start = 88, End = 111 }
+        },
+      });
   }
 }
