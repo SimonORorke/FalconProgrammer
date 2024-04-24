@@ -22,7 +22,6 @@ public partial class MainWindowViewModel : ViewModelBase,
 
   private ImmutableList<TabItemViewModel>? _tabs;
 
-  /// <inheritdoc />
   public MainWindowViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
     BatchScriptViewModel = new BatchScriptViewModel(dialogService, dispatcherService);
@@ -47,26 +46,26 @@ public partial class MainWindowViewModel : ViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal virtual BatchScriptViewModel BatchScriptViewModel { get; set; }
+  internal BatchScriptViewModel BatchScriptViewModel { get; set; }
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  internal virtual GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
+  internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal virtual MidiForMacrosViewModel MidiForMacrosViewModel { get; set; }
+  internal MidiForMacrosViewModel MidiForMacrosViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal virtual LocationsViewModel LocationsViewModel { get; set; }
+  internal LocationsViewModel LocationsViewModel { get; set; }
 
   /// <summary>
   ///   Not used because this is not a page but the owner of pages.
