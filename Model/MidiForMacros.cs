@@ -19,6 +19,8 @@ public class MidiForMacros {
   internal ImmutableList<int> ContinuousCcNos =>
     _continuousCcNos ??= CreateCcNoList(ContinuousCcNoRanges);
 
+  internal bool HasModWheelReplacementCcNo => ModWheelReplacementCcNo > 1;
+
   internal ImmutableList<int> ToggleCcNos =>
     _toggleCcNos ??= CreateCcNoList(ToggleCcNoRanges);
 

@@ -866,6 +866,9 @@ internal class FalconProgram {
   ///   </para>
   /// </summary>
   public void ReuseCc1() {
+    if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
+      return;
+    }
     if (GuiScriptProcessor != null) {
       // See paragraph in summary.
       return;

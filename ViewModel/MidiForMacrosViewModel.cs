@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -10,9 +11,18 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   public MidiForMacrosViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
+  [ExcludeFromCodeCoverage]
+  public static string CcNoRangeAdvice => 
+    "For each of Continuous and Toggle CC Number Ranges, " +
+    "if the last End = the last Start, the last range will be extended indefinitely.";
+
   public CcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
     ??= new CcNoRangeCollection("Continuous",
       DialogService, DispatcherService);
+
+  [ExcludeFromCodeCoverage]
+  public static string ModWheelReplacementAdvice => 
+    "Must be > 1 to allow ReplaceModWheelWithMacro and ReuseCc1.";
 
   [Range(0, 127)]
   public int ModWheelReplacementCcNo {

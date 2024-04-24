@@ -381,6 +381,12 @@ public class Batch {
   [PublicAPI]
   public void ReplaceModWheelWithMacro(
     string? soundBankName, string? categoryName = null, string? programName = null) {
+    if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
+      Console.WriteLine(
+        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement CC " + 
+        "number greater than 1 has not been specified.");
+      return;
+    }
     Task = ConfigTask.ReplaceModWheelWithMacro;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
@@ -395,6 +401,12 @@ public class Batch {
   [PublicAPI]
   public void ReuseCc1(
     string? soundBankName, string? categoryName = null, string? programName = null) {
+    if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
+      Console.WriteLine(
+        "ReuseCc1 is not possible because a mod wheel replacement CC " + 
+        "number greater than 1 has has not been specified.");
+      return;
+    }
     Task = ConfigTask.ReuseCc1;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }

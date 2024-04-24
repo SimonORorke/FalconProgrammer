@@ -9,7 +9,7 @@ public class CcNoRangeViewModel : DataGridItem {
   public CcNoRangeViewModel(bool isAdditionItem) : base(isAdditionItem) { }
 
   [Required]
-  [Range(0, 127)]
+  [Range(1, 127)]
   [CustomValidation(typeof(CcNoRangeViewModel), nameof(ValidateStart))]
   public int? Start {
     get => _start;
@@ -17,7 +17,7 @@ public class CcNoRangeViewModel : DataGridItem {
   }
 
   [Required]
-  [Range(0, 127)]
+  [Range(1, 127)]
   [CustomValidation(typeof(CcNoRangeViewModel), nameof(ValidateEnd))]
   public int? End {
     get => _end;

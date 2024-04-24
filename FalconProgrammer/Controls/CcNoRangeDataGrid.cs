@@ -72,7 +72,6 @@ public class CcNoRangeDataGrid : DataGrid {
       HeaderTemplate = new DataTemplate {
         Content = new TextBlock {
           Text = "Action",
-          FontSize = 16,
           Margin = new Thickness(9, 0, 0, 0)
         }
       },
@@ -91,7 +90,6 @@ public class CcNoRangeDataGrid : DataGrid {
       HeaderTemplate = new DataTemplate {
         Content = new TextBlock {
           Text = headerText,
-          FontSize = 16,
           TextAlignment = TextAlignment.End
         }
       },

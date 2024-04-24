@@ -23,17 +23,12 @@ public record ClosingValidationResult {
   }
 
   /// <summary>Indicates whether the validation has been successful.</summary>
-  public bool Success { get; init; }
+  public bool Success { get; }
 
   /// <summary>
   ///   Indicates whether the page can be closed. Should be false only if the validation
   ///   failed on closing the main window and the user then cancelled closing the window
   ///   when the error was shown.
   /// </summary>
-  public bool CanClosePage { get; init; }
-
-  public void Deconstruct(out bool Success, out bool CanClosePage) {
-    Success = this.Success;
-    CanClosePage = this.CanClosePage;
-  }
+  public bool CanClosePage { get; }
 }

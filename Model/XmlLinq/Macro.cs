@@ -186,12 +186,14 @@ public class Macro : ModulationsOwner {
   }
 
   private int GetContinuousCcNoAfter(int prevContinuousCcNo, bool reuseCc1) {
-    if (prevContinuousCcNo == 1) {
-      return Midi.ContinuousCcNos[
-        Midi.ContinuousCcNos.IndexOf(Midi.ModWheelReplacementCcNo) + 1];
-    }
-    if (prevContinuousCcNo == Midi.ModWheelReplacementCcNo && reuseCc1) {
-      return 1; // Wheel
+    if (Midi.HasModWheelReplacementCcNo) {
+      if (prevContinuousCcNo == 1) {
+        return Midi.ContinuousCcNos[
+          Midi.ContinuousCcNos.IndexOf(Midi.ModWheelReplacementCcNo) + 1];
+      }
+      if (prevContinuousCcNo == Midi.ModWheelReplacementCcNo && reuseCc1) {
+        return 1; // Wheel
+      }
     }
     return GetCcNoAfter(prevContinuousCcNo, Midi.ContinuousCcNos);
   }
