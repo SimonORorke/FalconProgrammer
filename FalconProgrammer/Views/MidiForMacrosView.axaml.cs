@@ -16,7 +16,7 @@ public partial class MidiForMacrosView : UserControl {
         },
         ToggleCcNoRanges = {
           new CcNoRangeViewModel(true) { Start = 88, End = 111 }
-        },
+        }
       });
   }
 }

@@ -383,7 +383,7 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       Console.WriteLine(
-        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement CC " + 
+        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement CC " +
         "number greater than 1 has not been specified.");
       return;
     }
@@ -403,7 +403,7 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       Console.WriteLine(
-        "ReuseCc1 is not possible because a mod wheel replacement CC " + 
+        "ReuseCc1 is not possible because a mod wheel replacement CC " +
         "number greater than 1 has has not been specified.");
       return;
     }

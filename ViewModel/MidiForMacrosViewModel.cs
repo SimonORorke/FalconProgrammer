@@ -12,7 +12,7 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   [ExcludeFromCodeCoverage]
-  public static string CcNoRangeAdvice => 
+  public static string CcNoRangeAdvice =>
     "For each of Continuous and Toggle CC Number Ranges, " +
     "if the last End = the last Start, the last range will be extended indefinitely.";
 
@@ -21,7 +21,7 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
       DialogService, DispatcherService);
 
   [ExcludeFromCodeCoverage]
-  public static string ModWheelReplacementAdvice => 
+  public static string ModWheelReplacementAdvice =>
     "Must be > 1 to allow ReplaceModWheelWithMacro and ReuseCc1.";
 
   [Range(0, 127)]

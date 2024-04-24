@@ -16,12 +16,6 @@ public abstract partial class DataGridItem : ObservableValidator {
     CanRemove = !isAdditionItem;
   }
 
-  internal event EventHandler? AppendAdditionItem;
-  internal event EventHandler<DataGridItem>? CutItem;
-  internal event EventHandler? ItemChanged;
-  internal event EventHandler<DataGridItem>? PasteBeforeItem;
-  internal event EventHandler<DataGridItem>? RemoveItem;
-  
   private bool HasNewAdditionItemBeenRequested { get; set; }
   private bool IsAdding { get; set; }
 
@@ -64,6 +58,12 @@ public abstract partial class DataGridItem : ObservableValidator {
     get => _canRemove;
     protected set => SetProperty(ref _canRemove, value);
   }
+
+  internal event EventHandler? AppendAdditionItem;
+  internal event EventHandler<DataGridItem>? CutItem;
+  internal event EventHandler? ItemChanged;
+  internal event EventHandler<DataGridItem>? PasteBeforeItem;
+  internal event EventHandler<DataGridItem>? RemoveItem;
 
   /// <summary>
   ///   Cuts this item from the collection for potential pasting back in.
