@@ -8,16 +8,22 @@
              x:DataType="vm:LocationsViewModel">
     <Grid ColumnDefinitions="10,205,10,795,10,100"
           RowDefinitions="10,Auto,10,Auto,10,Auto,10,Auto,10,Auto">
-        <Label Grid.Row="1" Grid.Column="1"
-               Target="SettingsFolderButton">
-            <AccessText Text="_Settings Folder"
-                        ShowAccessKey="True" />
-        </Label>
+        <!-- There is no TextBox for Settings Folder. 
+        Its only editing control is the Button.
+        Although making the Label's target the Button would give the focus
+        to the Button, there would be no focus rectangle (unlike with tabbing). 
+        That would be confusing, and I could not find a way to fix it. 
+        So instead the Button has an access key. -->
+        <Label Grid.Row="1" Grid.Column="1" Content="Settings Folder" />
         <TextBlock Grid.Row="1" Grid.Column="3"
                    Text="{Binding SettingsFolderPath}" />
-        <Button Grid.Row="1" Grid.Column="5" Content="Browse..."
-                x:Name="SettingsFolderButton"
-                Command="{Binding BrowseForSettingsFolderCommand}" />
+        <Button Grid.Row="1" Grid.Column="5"
+                Command="{Binding BrowseForSettingsFolderCommand}">
+            <Button.Content>
+                <AccessText Text="_Browse..."
+                            ShowAccessKey="True" />
+            </Button.Content>
+        </Button>
         <Label Grid.Row="3" Grid.Column="1"
                Target="ProgramsFolderTextBox">
             <AccessText Text="_Programs Folder"
