@@ -17,7 +17,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     DispatcherService = dispatcherService;
   }
 
-  protected IDialogService DialogService { get; }
+  internal IDialogService DialogService { get; }
   protected IDispatcherService DispatcherService { get; }
 
   internal IFileSystemService FileSystemService =>
@@ -50,7 +50,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   private SettingsReader SettingsReader =>
     _settingsReader ??= ModelServices.SettingsReader;
 
-  protected void GoToLocationsPage() {
+  internal void GoToLocationsPage() {
     // using CommunityToolkit.Mvvm.Messaging is needed to provide this Send extension
     // method.
     Messenger.Send(new GoToLocationsPageMessage());

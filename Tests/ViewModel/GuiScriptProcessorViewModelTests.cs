@@ -129,7 +129,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
-      "Script processors cannot be updated: a programs folder has not been specified."));
+      "Script processors cannot be updated: the programs folder has not been specified."));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 

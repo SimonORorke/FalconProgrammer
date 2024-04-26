@@ -6,8 +6,6 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
-[SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 public partial class MainWindowViewModel : ViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
   /// <summary>
@@ -54,18 +52,20 @@ public partial class MainWindowViewModel : ViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
-
-  /// <summary>
-  ///   The setter is only for tests.
-  /// </summary>
-  [ExcludeFromCodeCoverage]
-  internal MidiForMacrosViewModel MidiForMacrosViewModel { get; set; }
+  
+  private TabItemViewModel LocationsTab => Tabs[1];
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
   internal LocationsViewModel LocationsViewModel { get; set; }
+
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  internal MidiForMacrosViewModel MidiForMacrosViewModel { get; set; }
 
   /// <summary>
   ///   Not used because this is not a page but the owner of pages.
@@ -76,19 +76,16 @@ public partial class MainWindowViewModel : ViewModelBase,
   public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
   public void Receive(GoToLocationsPageMessage message) {
-    DispatcherService.Dispatch(() => SelectedTab = Tabs[0]);
+    DispatcherService.Dispatch(() => SelectedTab = LocationsTab);
   }
 
   private ImmutableList<TabItemViewModel> CreateTabs() {
     var list = new List<TabItemViewModel> {
+      new TabItemViewModel(BatchScriptViewModel),
       new TabItemViewModel(LocationsViewModel),
       new TabItemViewModel(GuiScriptProcessorViewModel),
-      new TabItemViewModel(MidiForMacrosViewModel),
-      new TabItemViewModel(BatchScriptViewModel)
+      new TabItemViewModel(MidiForMacrosViewModel)
     };
-    // foreach (var tab in list) {
-    //   tab.ViewModel.ModelServices = ModelServices;
-    // }
     return list.ToImmutableList();
   }
 
@@ -112,10 +109,10 @@ public partial class MainWindowViewModel : ViewModelBase,
       // QueryCloseAsync will show an error message box and return false.
       bool canChangeTab = await CurrentPageViewModel.QueryCloseAsync();
       if (!canChangeTab) {
-        // Go back to the previous tab.
+        // Go to the Locations page.
         SelectedTab = (
           from tab in Tabs
-          where tab.ViewModel == CurrentPageViewModel
+          where tab.ViewModel == LocationsViewModel
           select tab).Single();
         return;
       }
@@ -139,7 +136,6 @@ public partial class MainWindowViewModel : ViewModelBase,
       }
     }
     // // Stop listening for ObservableRecipient messages.
-    // Messenger.UnregisterAll(this);
     return await base.QueryCloseAsync(true);
   }
 }

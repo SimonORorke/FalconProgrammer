@@ -10,7 +10,6 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
   private string _programsFolderPath = string.Empty;
   private string _templateProgramsFolderPath = string.Empty;
 
-  /// <inheritdoc />
   public LocationsViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 

@@ -17,28 +17,11 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   internal override async Task Open() {
     // Debug.WriteLine("GuiScriptProcessorViewModel.Open");
     await base.Open();
-    if (string.IsNullOrWhiteSpace(Settings.ProgramsFolder.Path)) {
-      await DialogService.ShowErrorMessageBoxAsync(
-        "Script processors cannot be updated: a programs folder has not been specified.");
-      GoToLocationsPage();
-      return;
-    }
-    if (!FileSystemService.Folder.Exists(Settings.ProgramsFolder.Path)) {
-      await DialogService.ShowErrorMessageBoxAsync(
-        "Script processors cannot be updated: cannot find programs folder "
-        + $"'{Settings.ProgramsFolder.Path}'.");
-      GoToLocationsPage();
-      return;
-    }
+    var validator = new SettingsValidator(this, 
+      "Script processors cannot be updated");
     var soundBanks =
-      FileSystemService.Folder.GetSubfolderNames(Settings.ProgramsFolder.Path);
+      await validator.GetProgramsFolderSoundBankNames();
     if (soundBanks.Count == 0) {
-      // Console.WriteLine(
-      //   "GuiScriptProcessorViewModel.Open: No sound bank subfolders.");
-      await DialogService.ShowErrorMessageBoxAsync(
-        "Script processors cannot be updated: programs folder "
-        + $"'{Settings.ProgramsFolder.Path}' contains no sound bank subfolders.");
-      GoToLocationsPage();
       return;
     }
     SoundBankCategories.Populate(Settings, soundBanks);
