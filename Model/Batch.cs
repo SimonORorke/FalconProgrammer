@@ -170,10 +170,11 @@ public class Batch {
     Category = CreateCategory(categoryName);
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.MustUseGuiScriptProcessor) {
-      // Console.WriteLine(
-      //   $"Cannot {Task} for category " +
-      //   $"'{SoundBankFolder.Name}\\{categoryName}' " +
-      //   "because the category's Info page layout has to be defined in a script.");
+      // TODO: Sound bank level MustUseGuiScriptProcessor check.
+      Console.WriteLine(
+        $"Cannot {Task} for category " +
+        $"'{SoundBankFolder.Name}\\{categoryName}' " +
+        "because the category's GUI has to be defined in a script.");
       return;
     }
     foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {

@@ -74,8 +74,6 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
 
   private bool TrySaveSettings(out string errorMessage) {
     if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
-      // Console.WriteLine(
-      //   $"SettingsWriterViewModelBase.TrySaveSettings ({GetType().Name}): A settings folder has not been specified.");
       errorMessage =
         "Settings cannot be saved: a settings folder has not been specified.";
       return false;
