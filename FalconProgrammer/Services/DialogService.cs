@@ -17,14 +17,14 @@ public class DialogService : IDialogService {
   private string ApplicationTitle => _applicationTitle ??= Application.Current!.Name!;
   private TopLevel TopLevel => _topLevel ??= ((App)Application.Current!).MainWindow;
 
-  public async Task<bool> AskYesNoQuestionAsync(string text) {
+  public async Task<bool> AskYesNoQuestion(string text) {
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
       ApplicationTitle, text, ButtonEnum.YesNo, Icon.Question);
     var result = await messageBox.ShowAsync();
     return result == ButtonResult.Yes;
   }
 
-  public async Task<string?> BrowseForFileAsync(
+  public async Task<string?> BrowseForFile(
     string dialogTitle, string filterName, string fileExtension) {
     string pattern = $"*.{fileExtension}";
     var files = await TopLevel.StorageProvider.OpenFilePickerAsync(
@@ -50,7 +50,7 @@ public class DialogService : IDialogService {
     return files.Count == 1 ? files[0].Path.LocalPath : null;
   }
 
-  public async Task<string?> BrowseForFolderAsync(string dialogTitle) {
+  public async Task<string?> BrowseForFolder(string dialogTitle) {
     var folders =
       await TopLevel.StorageProvider.OpenFolderPickerAsync(
         new FolderPickerOpenOptions {
@@ -61,7 +61,7 @@ public class DialogService : IDialogService {
     return folders.Count == 1 ? folders[0].Path.LocalPath : null;
   }
 
-  public async Task ShowErrorMessageBoxAsync(string text) {
+  public async Task ShowErrorMessageBox(string text) {
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
       ApplicationTitle, text, ButtonEnum.Ok, Icon.Error);
     await messageBox.ShowAsync();

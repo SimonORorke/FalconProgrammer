@@ -8,9 +8,9 @@ public class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   internal override async Task Open() {
     await base.Open();
-    var validator = new SettingsValidator(this, 
-      "All folder/file locations must be " + 
-      "specified in the settings." + Environment.NewLine + Environment.NewLine + 
+    var validator = new SettingsValidator(this,
+      "All folder/file locations must be " +
+      "specified in the settings." + Environment.NewLine + Environment.NewLine +
       "Batch scripts cannot be run");
     var soundBanks =
       await validator.GetProgramsFolderSoundBankNames();
@@ -27,8 +27,6 @@ public class BatchScriptViewModel : SettingsWriterViewModelBase {
     if (templateSoundBanks.Count == 0) {
       return;
     }
-    if (!await validator.ValidateDefaultTemplateFile()) {
-      return;
-    }
+    if (!await validator.ValidateDefaultTemplateFile()) { }
   }
 }

@@ -52,16 +52,16 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     ToggleCcNoRanges.Populate(Settings.MidiForMacros.ToggleCcNoRanges);
   }
 
-  internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     // Provided there are no validation errors for either of the two collections of
-    // ranges, base.QueryCloseAsync will automatically save this setting, if it has
+    // ranges, base.QueryClose will automatically save this setting, if it has
     // changed, as it is a property of this view model.
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
     bool canClosePage = true;
     bool haveRangesChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {
       InterpretClosingUpdateResult(
-        await ContinuousCcNoRanges.UpdateSettingsAsync(isClosingWindow),
+        await ContinuousCcNoRanges.UpdateSettings(isClosingWindow),
         ref haveRangesChanged, ref canClosePage);
       if (!canClosePage) {
         return false;
@@ -69,7 +69,7 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     }
     if (ToggleCcNoRanges.HasBeenChanged) {
       InterpretClosingUpdateResult(
-        await ToggleCcNoRanges.UpdateSettingsAsync(isClosingWindow),
+        await ToggleCcNoRanges.UpdateSettings(isClosingWindow),
         ref haveRangesChanged, ref canClosePage);
       if (!canClosePage) {
         return false;
@@ -80,6 +80,6 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
       OnPropertyChanged();
     }
     // Attempt to save settings if changed.
-    return await base.QueryCloseAsync(isClosingWindow);
+    return await base.QueryClose(isClosingWindow);
   }
 }

@@ -41,8 +41,8 @@
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\InvalidXmlSettingsFolderLocation.xml"/>
         <None Remove="Model\Xml\Settings\InvalidXmlSettings.xml"/>
         <EmbeddedResource Include="Model\Xml\Settings\InvalidXmlSettings.xml"/>
-        <None Remove="Model\Xml\Settings\NoDefaultTemplate.xml" />
-        <EmbeddedResource Include="Model\Xml\Settings\NoDefaultTemplate.xml" />
+        <None Remove="Model\Xml\Settings\NoDefaultTemplate.xml"/>
+        <EmbeddedResource Include="Model\Xml\Settings\NoDefaultTemplate.xml"/>
     </ItemGroup>
 
 </Project>

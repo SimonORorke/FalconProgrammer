@@ -11,13 +11,13 @@ public class MockDialogService : IDialogService {
   internal bool LastYesNoAnswer { get; set; }
   internal int ShowErrorMessageBoxCount { get; set; }
 
-  public async Task<bool> AskYesNoQuestionAsync(string text) {
+  public async Task<bool> AskYesNoQuestion(string text) {
     await Task.Delay(0);
     AskYesNoQuestionCount++;
     return LastYesNoAnswer = ExpectedYesNoAnswer;
   }
 
-  public async Task<string?> BrowseForFileAsync(
+  public async Task<string?> BrowseForFile(
     string dialogTitle,
     string filterName, string fileExtension) {
     if (Cancel) {
@@ -27,7 +27,7 @@ public class MockDialogService : IDialogService {
     return ExpectedPath;
   }
 
-  public async Task<string?> BrowseForFolderAsync(string dialogTitle) {
+  public async Task<string?> BrowseForFolder(string dialogTitle) {
     if (Cancel) {
       return null;
     }
@@ -35,7 +35,7 @@ public class MockDialogService : IDialogService {
     return ExpectedPath;
   }
 
-  public async Task ShowErrorMessageBoxAsync(string text) {
+  public async Task ShowErrorMessageBox(string text) {
     await Task.Delay(0);
     ShowErrorMessageBoxCount++;
     LastErrorMessage = text;

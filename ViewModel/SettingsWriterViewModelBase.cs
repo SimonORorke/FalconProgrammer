@@ -51,11 +51,11 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     SettingsFolderPath = SettingsFolderLocation.Path;
   }
 
-  internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
         var errorReporter = new ErrorReporter(DialogService);
-        return await errorReporter.CanClosePageOnErrorAsync(errorMessage,
+        return await errorReporter.CanClosePageOnError(errorMessage,
           isClosingWindow);
       }
     }
@@ -65,11 +65,11 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     // If implemented, this needs to allow for window closing, as with the
     // TrySaveSettings error message above.
     // if (GetErrors().Any()) {
-    //   await DialogService.ShowErrorMessageBoxAsync(
+    //   await DialogService.ShowErrorMessageBox(
     //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
     //   return false;
     // }
-    return await base.QueryCloseAsync(isClosingWindow);
+    return await base.QueryClose(isClosingWindow);
   }
 
   private bool TrySaveSettings(out string errorMessage) {

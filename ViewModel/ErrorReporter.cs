@@ -29,15 +29,15 @@ internal class ErrorReporter {
   ///   the current tab to fix the error; if the main window is being closed, the user
   ///   can opt to close the window anyway or resume to fix the error.
   /// </remarks>
-  public async Task<bool> CanClosePageOnErrorAsync(
+  public async Task<bool> CanClosePageOnError(
     string errorMessage, bool isClosingWindow) {
     if (isClosingWindow) {
       errorMessage +=
         $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " +
         "No (Esc) to resume.";
-      return await _dialogService.AskYesNoQuestionAsync(errorMessage);
+      return await _dialogService.AskYesNoQuestion(errorMessage);
     }
-    await _dialogService.ShowErrorMessageBoxAsync(errorMessage);
+    await _dialogService.ShowErrorMessageBox(errorMessage);
     return false;
   }
 }

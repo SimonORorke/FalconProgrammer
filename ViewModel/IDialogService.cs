@@ -10,7 +10,7 @@ public interface IDialogService {
   /// </summary>
   /// <param name="text">The message text to be shown.</param>
   /// <returns>True if Yes, false if No.</returns>
-  Task<bool> AskYesNoQuestionAsync(string text);
+  Task<bool> AskYesNoQuestion(string text);
 
   /// <summary>
   ///   Asynchronously shows an open file dialog, returning the path of the selected file
@@ -21,7 +21,7 @@ public interface IDialogService {
   /// <param name="fileExtension">
   ///   File name extension of the file type filter, excluding "*.".)
   /// </param>
-  Task<string?> BrowseForFileAsync(
+  Task<string?> BrowseForFile(
     string dialogTitle, string filterName, string fileExtension);
 
   /// <summary>
@@ -29,12 +29,12 @@ public interface IDialogService {
   ///   folder or, if the user cancels the dialog, null.
   /// </summary>
   /// <param name="dialogTitle">Dialog title.</param>
-  Task<string?> BrowseForFolderAsync(string dialogTitle);
+  Task<string?> BrowseForFolder(string dialogTitle);
 
   /// <summary>
   ///   Asynchronously shows an error message box.
   /// </summary>
   /// <param name="text">The message text to be shown.</param>
   /// <returns></returns>
-  Task ShowErrorMessageBoxAsync(string text);
+  Task ShowErrorMessageBox(string text);
 }

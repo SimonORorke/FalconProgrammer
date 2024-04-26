@@ -72,7 +72,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       GuiScriptProcessorTab; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
     Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
-    await ViewModel.QueryCloseWindowAsync();
+    await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
   }
 
@@ -108,7 +108,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockDialogService.ExpectedYesNoAnswer = true;
     // Make a property change to require saving settings.
     ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
-    bool canClose = await ViewModel.QueryCloseWindowAsync();
+    bool canClose = await ViewModel.QueryCloseWindow();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
     Assert.That(canClose, Is.True);
@@ -124,7 +124,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockDialogService.ExpectedYesNoAnswer = false;
     // Make a property change to require saving settings.
     ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
-    bool canClose = await ViewModel.QueryCloseWindowAsync();
+    bool canClose = await ViewModel.QueryCloseWindow();
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
     Assert.That(canClose, Is.False);

@@ -48,12 +48,12 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
     RemoveItemTyped((CcNoRangeViewModel)itemToRemove);
   }
 
-  internal async Task<ClosingValidationResult> UpdateSettingsAsync(
+  internal async Task<ClosingValidationResult> UpdateSettings(
     bool isClosingWindow) {
     var ranges = (from range in this
       where !range.IsAdditionItem
       select range).ToList();
-    var validation = await ValidateAsync(ranges,
+    var validation = await Validate(ranges,
       isClosingWindow);
     if (!validation.Success) {
       return validation;
@@ -68,7 +68,7 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
     return new ClosingValidationResult(true, true);
   }
 
-  private async Task<ClosingValidationResult> ValidateAsync(
+  private async Task<ClosingValidationResult> Validate(
     IReadOnlyCollection<CcNoRangeViewModel> ranges, bool isClosingWindow) {
     if (ranges.Count == 0) {
       return new ClosingValidationResult(true, true);
@@ -89,7 +89,7 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
       return new ClosingValidationResult(true, true);
     }
     var errorReporter = new ErrorReporter(_dialogService);
-    bool canClosePage = await errorReporter.CanClosePageOnErrorAsync(
+    bool canClosePage = await errorReporter.CanClosePageOnError(
       $"MIDI for Macros settings cannot be saved because {_rangeType} CC No ranges " +
       "include overlapping ranges.",
       isClosingWindow);

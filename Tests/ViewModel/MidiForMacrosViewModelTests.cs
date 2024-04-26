@@ -49,7 +49,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   public async Task UpdateModWheelReplacementCcNo() {
     const int newCcNo = 18;
     ViewModel.ModWheelReplacementCcNo = newCcNo;
-    Assert.That(await ViewModel.QueryCloseAsync(), Is.True);
+    Assert.That(await ViewModel.QueryClose(), Is.True);
     Assert.That(ViewModel.Settings.MidiForMacros.ModWheelReplacementCcNo,
       Is.EqualTo(newCcNo));
   }
@@ -79,7 +79,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     var newRange = TestHelper.CreateCcNoRangeAdditionItem(newRangeStart, newRangeEnd);
     ranges.Add(newRange);
     // Update settings.
-    Assert.That(!await ViewModel.QueryCloseAsync(true));
+    Assert.That(!await ViewModel.QueryClose(true));
   }
 
   private async Task UpdateCcNoRanges(
@@ -88,7 +88,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     var newRange = TestHelper.CreateCcNoRangeAdditionItem(21, 24);
     ranges.Add(newRange);
     // Update settings.
-    Assert.That(await ViewModel.QueryCloseAsync());
+    Assert.That(await ViewModel.QueryClose());
     Assert.That(rangesInSettings[^1].Start == newRange.Start
                 && rangesInSettings[^1].End == newRange.End);
   }

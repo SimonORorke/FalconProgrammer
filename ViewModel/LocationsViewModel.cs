@@ -51,7 +51,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
-    string? path = await DialogService.BrowseForFileAsync(
+    string? path = await DialogService.BrowseForFile(
       "Select the default template Falcon program",
       "Falcon Programs", "uvip");
     if (path != null) {
@@ -61,7 +61,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForOriginalProgramsFolder() {
-    string? path = await DialogService.BrowseForFolderAsync(
+    string? path = await DialogService.BrowseForFolder(
       "Select the Original Programs folder");
     if (path != null) {
       OriginalProgramsFolderPath = path;
@@ -70,7 +70,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForProgramsFolder() {
-    string? path = await DialogService.BrowseForFolderAsync(
+    string? path = await DialogService.BrowseForFolder(
       "Select the Programs folder");
     if (path != null) {
       ProgramsFolderPath = path;
@@ -79,7 +79,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForSettingsFolder() {
-    string? path = await DialogService.BrowseForFolderAsync(
+    string? path = await DialogService.BrowseForFolder(
       "Select the Settings folder");
     if (path != null) {
       SettingsFolderPath = path;
@@ -87,7 +87,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
       if (newFoundSettingsPath != FoundSettingsPath) {
         FoundSettingsPath = newFoundSettingsPath;
         if (FoundSettingsPath != string.Empty) {
-          bool load = await DialogService.AskYesNoQuestionAsync(
+          bool load = await DialogService.AskYesNoQuestion(
             $"Settings file '{FoundSettingsPath}' already exists. " +
             "Do you want to load the settings from that file?");
           if (load) {
@@ -100,7 +100,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   [RelayCommand]
   private async Task BrowseForTemplateProgramsFolder() {
-    string? path = await DialogService.BrowseForFolderAsync(
+    string? path = await DialogService.BrowseForFolder(
       "Select the Template Programs folder");
     if (path != null) {
       TemplateProgramsFolderPath = path;
@@ -124,13 +124,13 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   private async Task LoadSettingsFromNewFile() {
     UpdateSettingsFolderLocation();
-    await ReadSettingsAsync();
+    await ReadSettings();
     ShowPathSettings();
   }
 
-  protected override async Task OnSettingsXmlErrorAsync(string errorMessage) {
-    await base.OnSettingsXmlErrorAsync(errorMessage);
-    await DialogService.ShowErrorMessageBoxAsync(errorMessage);
+  protected override async Task OnSettingsXmlError(string errorMessage) {
+    await base.OnSettingsXmlError(errorMessage);
+    await DialogService.ShowErrorMessageBox(errorMessage);
   }
 
   internal override async Task Open() {
@@ -150,12 +150,12 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     IsPropertyChangedNotificationEnabled = true;
   }
 
-  internal override async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     Settings.DefaultTemplate.Path = DefaultTemplatePath;
     Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
     Settings.ProgramsFolder.Path = ProgramsFolderPath;
     Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath;
-    return await base.QueryCloseAsync(isClosingWindow); // Saves settings if changed.
+    return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 
   public static ValidationResult ValidateDefaultTemplatePath(

@@ -61,11 +61,11 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     IsVisible = true;
     // Start listening for ObservableRecipient messages.
     Messenger.RegisterAll(this);
-    await ReadSettingsAsync();
+    await ReadSettings();
   }
 
-  internal virtual async Task<bool> QueryCloseAsync(bool isClosingWindow = false) {
-    // Debug.WriteLine($"ViewModelBase.QueryCloseAsync: {GetType().Name}");
+  internal virtual async Task<bool> QueryClose(bool isClosingWindow = false) {
+    // Debug.WriteLine($"ViewModelBase.QueryClose: {GetType().Name}");
     IsVisible = false;
     // Stop listening for ObservableRecipient messages.
     Messenger.UnregisterAll(this);
@@ -76,7 +76,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   /// <summary>
   ///   Handles an XML error in a settings file.
   /// </summary>
-  protected virtual async Task OnSettingsXmlErrorAsync(string errorMessage) {
+  protected virtual async Task OnSettingsXmlError(string errorMessage) {
     await Task.Delay(0);
     // One way the user can fix the problem is by choosing a different settings folder
     // on the Locations page. LocationsViewModel will attempt to read settings on opening
@@ -84,7 +84,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     GoToLocationsPage();
   }
 
-  protected async Task ReadSettingsAsync() {
+  protected async Task ReadSettings() {
     try {
       Settings = SettingsReader.Read(true);
     } catch (XmlException exception) {
@@ -95,7 +95,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
       // specific.
       string errorMessage =
         exception.Message.Replace(" in '", " in settings file '");
-      await OnSettingsXmlErrorAsync(errorMessage);
+      await OnSettingsXmlError(errorMessage);
     }
   }
 }

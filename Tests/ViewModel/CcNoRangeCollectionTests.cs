@@ -49,7 +49,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
     Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.False);
     // Update settings
-    await ranges.UpdateSettingsAsync(false);
+    await ranges.UpdateSettings(false);
     Assert.That(settingsRanges, Has.Count.EqualTo(initialSettingsRangesCount));
     Assert.That(settingsRanges[0], Is.EqualTo(initialLastSettingsRange));
     Assert.That(settingsRanges[1], Is.EqualTo(initialFirstSettingsRange));
@@ -63,7 +63,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     var overlappingRange = TestHelper.CreateCcNoRangeAdditionItem(
       lastRange.Start, lastRange.End + 1);
     ranges.Add(overlappingRange);
-    var updateResult = await ranges.UpdateSettingsAsync(false);
+    var updateResult = await ranges.UpdateSettings(false);
     Assert.That(!updateResult.Success);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
   }
@@ -95,7 +95,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     int initialSettingsRangesCount = settingsRanges.Count;
     ranges.Populate(settingsRanges);
     ranges[0].RemoveCommand.Execute(null);
-    await ranges.UpdateSettingsAsync(false);
+    await ranges.UpdateSettings(false);
     Assert.That(settingsRanges, Has.Count.EqualTo(
       initialSettingsRangesCount - 1));
   }
