@@ -111,7 +111,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     // Test that the settings folder path when writing settings is now already as
     // specified in the settings folder location file. 
     await ViewModel.Open();
-    ViewModel.DefaultTemplatePath = @"C:\Test\Dummy.uvip";
+    ViewModel.DefaultTemplatePath = @"K:\Test\Dummy.uvip";
     await ViewModel.QueryClose();
     settings = (Settings)MockSerialiser.LastObjectSerialised;
     Assert.That(settings.DefaultTemplate.Path,

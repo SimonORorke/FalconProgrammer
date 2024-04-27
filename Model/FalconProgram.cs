@@ -8,11 +8,12 @@ namespace FalconProgrammer.Model;
 internal class FalconProgram {
   private InfoPageLayout? _infoPageLayout;
 
-  public FalconProgram(string path, Category category, Settings settings) {
+  public FalconProgram(string path, Category category, Settings settings, IBatchLog log) {
     Category = category;
     Name = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
     Path = path;
     Settings = settings;
+    Log = log;
   }
 
   [PublicAPI] public Category Category { get; }
@@ -30,6 +31,7 @@ internal class FalconProgram {
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
 
+  public IBatchLog Log { get; }
   internal List<Macro> Macros { get; private set; } = null!;
 
   /// <summary>
@@ -94,7 +96,7 @@ internal class FalconProgram {
   /// </summary>
   private bool CanReplaceModWheelWithMacro() {
     if (WheelMacroExists()) {
-      Console.WriteLine(
+      Log.WriteLine(
         $"{PathShort} already has a Wheel macro.");
       return false;
     }
@@ -105,7 +107,7 @@ internal class FalconProgram {
     }
     if (GuiScriptProcessor != null
         && !CanRemoveGuiScriptProcessor()) {
-      Console.WriteLine(
+      Log.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
         "there is a GUI script processor that is not feasible/desirable " +
         "to remove.");
@@ -115,7 +117,7 @@ internal class FalconProgram {
       ProgramXml.GetModulationElementsWithCcNo(1).Count;
     switch (modulationsByModWheelCount) {
       case 0:
-        Console.WriteLine($"{PathShort} contains no mod wheel modulations.");
+        Log.WriteLine($"{PathShort} contains no mod wheel modulations.");
         return false;
       case > 1:
         return true;
@@ -131,7 +133,7 @@ internal class FalconProgram {
       where macro.FindModulationWithCcNo(1) != null
       select macro).ToList();
     if (macrosOwningModWheelModulations.Count == 1) {
-      Console.WriteLine(
+      Log.WriteLine(
         $"{PathShort}: The mod wheel has not been replaced, as it only modulates a " +
         "single macro 100%.");
       // Example: Factory\Pads\DX FM Pad 2.0
@@ -149,7 +151,7 @@ internal class FalconProgram {
 
   public void CountMacros() {
     if (Macros.Count == 10) {
-      Console.WriteLine($"{PathShort} has {Macros.Count} macros.");
+      Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
     }
   }
 
@@ -586,7 +588,7 @@ internal class FalconProgram {
   }
 
   public void NotifyUpdate(string message) {
-    Console.WriteLine(message);
+    Log.WriteLine(message);
     HasBeenUpdated = true;
   }
 
@@ -650,7 +652,7 @@ internal class FalconProgram {
       where macro.DisplayName is "Attack" or "Decay" or "Sustain" or "Release"
       select macro).Count();
     if (count == 4) {
-      Console.WriteLine($"{PathShort} has ADSR macros.");
+      Log.WriteLine($"{PathShort} has ADSR macros.");
     }
   }
 
@@ -667,7 +669,7 @@ internal class FalconProgram {
       foreach (var modulation in dahdsr.Modulations) {
         writer.Write($"{modulation.Destination} ");
       }
-      Console.WriteLine(writer);
+      Log.WriteLine(writer.ToString());
     }
   }
 
@@ -690,7 +692,7 @@ internal class FalconProgram {
     // }
     var mainDahdsr = ProgramXml.FindMainDahdsr();
     if (mainDahdsr != null) {
-      Console.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}");
+      Log.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}");
     }
   }
 
@@ -713,7 +715,7 @@ internal class FalconProgram {
         || ProgramXml.GetModulationElementsWithCcNo(1).Count > 0) {
       return;
     }
-    Console.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
+    Log.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
   }
 
   public void Read() {
@@ -744,7 +746,7 @@ internal class FalconProgram {
     // Perhaps there's a better way, but it broke when I tried.
     Save();
     Read();
-    Console.WriteLine(
+    Log.WriteLine(
       $"{PathShort}: Saved and reloaded on reordering macros.");
   }
 
@@ -772,7 +774,7 @@ internal class FalconProgram {
     }
     if (GuiScriptProcessor != null
         && !CanRemoveGuiScriptProcessor()) {
-      Console.WriteLine(
+      Log.WriteLine(
         $"{PathShort}: Cannot remove macros because " +
         "there is a GUI script processor that is not feasible/desirable " +
         "to remove.");
@@ -834,7 +836,7 @@ internal class FalconProgram {
 
   private void ReUpdateMacroCcs() {
     UpdateMacroCcsOwnedByMacros();
-    Console.WriteLine($"{PathShort}: Re-updated macro Ccs.");
+    Log.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }
 
   public void RestoreOriginal() {
@@ -848,7 +850,7 @@ internal class FalconProgram {
         $"Cannot find original file '{originalPath}' to restore to '{Path}'.");
     }
     File.Copy(originalPath, Path, true);
-    Console.WriteLine($"{PathShort}: Restored to Original");
+    Log.WriteLine($"{PathShort}: Restored to Original");
   }
 
   /// <summary>
@@ -1001,7 +1003,7 @@ internal class FalconProgram {
   private void ZeroMacro(Macro macro) {
     if (macro.FindModulationWithCcNo(1) != null) {
       // Example: Titanium\Pads\Children's Choir.
-      Console.WriteLine(
+      Log.WriteLine(
         $"{PathShort}: Not changing {macro.DisplayName} to zero because " +
         "it is modulated by the wheel.");
     } else {
@@ -1034,7 +1036,7 @@ internal class FalconProgram {
         // ReSharper disable once StringLiteralTypo
         or @"Spectre\Leads\LD Showteker") {
       // These programs are silent without reverb!
-      Console.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
+      Log.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
       return false;
     }
     foreach (var reverbMacro in reverbMacros) {

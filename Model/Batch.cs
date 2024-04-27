@@ -5,8 +5,14 @@ namespace FalconProgrammer.Model;
 public class Batch {
   public const string ProgramExtension = ".uvip";
   private static Settings? _settings;
+
+  public Batch(IBatchLog log) {
+    Log = log;
+  }
+  
   private Category Category { get; set; } = null!;
   private List<string> EffectTypes { get; set; } = null!;
+  public IBatchLog Log { get; }
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
@@ -79,7 +85,7 @@ public class Batch {
         if (!string.IsNullOrEmpty(programName)) {
           Category = CreateCategory(categoryName);
           string programPath = Category.GetProgramPath(programName);
-          Program = new FalconProgram(programPath, Category, Settings);
+          Program = CreateFalconProgram(programPath);
           ConfigureProgram();
         } else {
           ConfigureProgramsInCategory(categoryName);
@@ -171,14 +177,14 @@ public class Batch {
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.MustUseGuiScriptProcessor) {
       // TODO: Sound bank level MustUseGuiScriptProcessor check.
-      Console.WriteLine(
+      Log.WriteLine(
         $"Cannot {Task} for category " +
         $"'{SoundBankFolder.Name}\\{categoryName}' " +
         "because the category's GUI has to be defined in a script.");
       return;
     }
     foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {
-      Program = new FalconProgram(programPath, Category, Settings);
+      Program = CreateFalconProgram(programPath);
       ConfigureProgram();
     }
   }
@@ -211,6 +217,10 @@ public class Batch {
     var result = new Category(SoundBankFolder, categoryName, Settings);
     result.Initialise();
     return result;
+  }
+
+  private FalconProgram CreateFalconProgram(string path) {
+    return new FalconProgram(path, Category, Settings, Log);
   }
 
   public static DirectoryInfo GetBatchFolder() {
@@ -320,10 +330,10 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     EffectTypes = [];
     Task = ConfigTask.QueryDelayTypes;
-    Console.WriteLine("Delay Types:");
+    Log.WriteLine("Delay Types:");
     ConfigurePrograms(soundBankName, categoryName, programName);
     foreach (string effectType in EffectTypes) {
-      Console.WriteLine(effectType);
+      Log.WriteLine(effectType);
     }
   }
 
@@ -337,12 +347,12 @@ public class Batch {
   [PublicAPI]
   public void QueryReverbTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    EffectTypes = new List<string>();
+    EffectTypes = [];
     Task = ConfigTask.QueryReverbTypes;
-    Console.WriteLine("Reverb Types:");
+    Log.WriteLine("Reverb Types:");
     ConfigurePrograms(soundBankName, categoryName, programName);
     foreach (string effectType in EffectTypes) {
-      Console.WriteLine(effectType);
+      Log.WriteLine(effectType);
     }
   }
 
@@ -383,7 +393,7 @@ public class Batch {
   public void ReplaceModWheelWithMacro(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      Console.WriteLine(
+      Log.WriteLine(
         "ReplaceModWheelWithMacro is not possible because a mod wheel replacement CC " +
         "number greater than 1 has not been specified.");
       return;
@@ -403,7 +413,7 @@ public class Batch {
   public void ReuseCc1(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      Console.WriteLine(
+      Log.WriteLine(
         "ReuseCc1 is not possible because a mod wheel replacement CC " +
         "number greater than 1 has has not been specified.");
       return;
@@ -433,12 +443,12 @@ public class Batch {
     batchScript.Validate();
     foreach (var batchTask in batchScript.SequenceTasks()) {
       Task = batchTask.ConfigTask;
-      Console.WriteLine(
+      Log.WriteLine(
         $"Task = {batchTask.Name}, SoundBank = '{batchTask.SoundBank}', " +
         $"Category = '{batchTask.Category}', " +
         $"Program = '{batchTask.Program}'");
       foreach (var parameter in batchTask.Parameters) {
-        Console.WriteLine($"    {parameter.Name} = {parameter.Value}");
+        Log.WriteLine($"    {parameter.Name} = {parameter.Value}");
       }
       ConfigurePrograms(
         batchTask.SoundBank, batchTask.Category, batchTask.Program);

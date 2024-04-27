@@ -3,15 +3,9 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class SoundBankCategoryCollection : DataGridItemCollection<SoundBankCategory> {
+public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankCategory> {
   public SoundBankCategoryCollection(IFileSystemService fileSystemService,
-    IDispatcherService dispatcherService) : base(dispatcherService) {
-    FileSystemService = fileSystemService;
-  }
-
-  private IFileSystemService FileSystemService { get; }
-
-  private ImmutableList<string> SoundBanks { get; set; } = [];
+    IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
 
   protected override void AppendAdditionItem() {
     AddItem();
@@ -29,14 +23,14 @@ public class SoundBankCategoryCollection : DataGridItemCollection<SoundBankCateg
     CutItemTyped((SoundBankCategory)itemToCut);
   }
 
-  internal void Populate(Settings settings, IEnumerable<string> soundBanks) {
+  internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
     SoundBanks = soundBanks.ToImmutableList();
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
       string categoryToDisplay = string.IsNullOrWhiteSpace(category.Category)
-        ? SoundBankCategory.AllCategoriesCaption
+        ? SoundBankCategory.AllCaption
         : category.Category;
       AddItem(category.SoundBank, categoryToDisplay);
     }
@@ -51,7 +45,7 @@ public class SoundBankCategoryCollection : DataGridItemCollection<SoundBankCateg
     RemoveItemTyped((SoundBankCategory)itemToRemove);
   }
 
-  internal void UpdateSettings() {
+  internal override void UpdateSettings() {
     Settings.MustUseGuiScriptProcessorCategories.Clear();
     foreach (var soundBankCategory in this) {
       if (!soundBankCategory.IsAdditionItem) {

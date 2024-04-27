@@ -20,6 +20,7 @@ public class Settings : SerialisationBase {
   public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
 
   [XmlElement] public MidiForMacros MidiForMacros { get; set; } = new MidiForMacros();
+  [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static string GetSettingsPath(string settingsFolderPath) {

@@ -6,7 +6,7 @@ public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void Run() {
-    var batch = new Batch();
+    var batch = new Batch(new ConsoleBatchLog());
     // batch.RollForward(null);
     // batch.RollForward("Devinity", "Bass");
     // batch.RollForward("Devinity", "Bass", "Bass Interia");

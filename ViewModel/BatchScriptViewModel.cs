@@ -1,32 +1,56 @@
-﻿namespace FalconProgrammer.ViewModel;
+﻿using System.Collections.Immutable;
+
+namespace FalconProgrammer.ViewModel;
 
 public class BatchScriptViewModel : SettingsWriterViewModelBase {
+  private BatchScopeCollection? _scopes;
+
   public BatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   public override string PageTitle => "Batch Script";
 
+  public BatchScopeCollection Scopes => _scopes
+    ??= new BatchScopeCollection(FileSystemService, DispatcherService);
+  private ImmutableList<string> SoundBanks { get; set; } = [];
+
   internal override async Task Open() {
     await base.Open();
+    if (!await ValidateAndPopulateSoundBanks()) {
+      return;
+    }
+    Scopes.Populate(Settings, SoundBanks);
+  }
+
+  internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
+    if (Scopes.HasBeenChanged) {
+      Scopes.UpdateSettings();
+      // Notify change, so that Settings will be saved.
+      OnPropertyChanged();
+    }
+    return await base.QueryClose(isClosingWindow); // Saves settings if changed.
+  }
+
+  private async Task<bool> ValidateAndPopulateSoundBanks() {
     var validator = new SettingsValidator(this,
       "All folder/file locations must be " +
       "specified in the settings." + Environment.NewLine + Environment.NewLine +
       "Batch scripts cannot be run");
-    var soundBanks =
+    SoundBanks =
       await validator.GetProgramsFolderSoundBankNames();
-    if (soundBanks.Count == 0) {
-      return;
+    if (SoundBanks.Count == 0) {
+      return false;
     }
     var originalSoundBanks =
       await validator.GetOriginalProgramsFolderSoundBankNames();
     if (originalSoundBanks.Count == 0) {
-      return;
+      return false;
     }
     var templateSoundBanks =
       await validator.GetTemplateProgramsFolderSoundBankNames();
     if (templateSoundBanks.Count == 0) {
-      return;
+      return false;
     }
-    if (!await validator.ValidateDefaultTemplateFile()) { }
+    return await validator.ValidateDefaultTemplateFile();
   }
 }

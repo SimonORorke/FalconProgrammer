@@ -6,7 +6,7 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public partial class SoundBankCategory : DataGridItem {
-  public const string AllCategoriesCaption = "All";
+  internal const string AllCaption = "All";
 
   [ObservableProperty]
   private string _category = string.Empty; // Generates Category property
@@ -23,10 +23,20 @@ public partial class SoundBankCategory : DataGridItem {
   }
 
   public ImmutableList<string> SoundBanks { get; internal set; } = [];
-  internal bool IsForAllCategories => Category == AllCategoriesCaption;
+  internal bool IsForAllCategories => Category == AllCaption;
   public ObservableCollection<string> Categories { get; } = [];
-  private IFileSystemService FileSystemService { get; }
-  private Settings Settings { get; }
+  protected IFileSystemService FileSystemService { get; }
+  protected Settings Settings { get; }
+
+  partial void OnCategoryChanged(string value) {
+    OnCategoryChanged1(value);
+  }
+
+  /// <summary>
+  ///   Because the generated OnCategoryChanged method is private
+  /// </summary>
+  protected virtual void OnCategoryChanged1(string value) {
+  }
 
   // Code coverage highlighting does not work for these partial methods.
   partial void OnSoundBankChanged(string value) {
@@ -36,12 +46,15 @@ public partial class SoundBankCategory : DataGridItem {
       return;
     }
     PopulateCategories();
-    Category = AllCategoriesCaption;
+    Category = AllCaption;
   }
 
   private void PopulateCategories() {
     Categories.Clear();
-    Categories.Add(AllCategoriesCaption);
+    if (SoundBank == AllCaption) {
+      return;
+    }
+    Categories.Add(AllCaption);
     string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
     var categoryFolderNames =
       FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);

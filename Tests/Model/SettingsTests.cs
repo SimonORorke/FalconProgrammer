@@ -5,6 +5,27 @@ namespace FalconProgrammer.Tests.Model;
 [TestFixture]
 public class SettingsTests {
   [Test]
+  public void Batch() {
+    var settingsReader = new TestSettingsReaderEmbedded();
+    var settings = settingsReader.Read();
+    Assert.That(settings.Batch.SoundBank, Is.Empty);
+    Assert.That(settings.Batch.Category, Is.Empty);
+    Assert.That(settings.Batch.Program, Is.Empty);
+    const string soundBank = "Pulsar";
+    const string category = "Plucks";
+    const string program = "Music Box";
+    settings.Batch.SoundBank = soundBank;
+    settings.Batch.Category = category;
+    settings.Batch.Program = program;
+    settings.Write();
+    var writtenSettings = 
+      (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
+    Assert.That(writtenSettings.Batch.SoundBank, Is.EqualTo(soundBank));
+    Assert.That(writtenSettings.Batch.Category, Is.EqualTo(category));
+    Assert.That(writtenSettings.Batch.Program, Is.EqualTo(program));
+  }
+
+  [Test]
   public void RealTestSettingsFile() {
     SettingsTestHelper.DeleteAnyData();
     Settings? settings = null;
@@ -87,10 +108,10 @@ public class SettingsTests {
     var mockSerializer = new MockSerialiser();
     var settings = new Settings {
       Serialiser = mockSerializer,
-      SettingsPath = @"C:\Libraries\Settings.xml"
+      SettingsPath = @"K:\Libraries\Settings.xml"
     };
-    const string newSettingsFolderPath = @"C:\Markup";
-    const string newSettingsPath = @"C:\Markup\Settings.xml";
+    const string newSettingsFolderPath = @"K:\Markup";
+    const string newSettingsPath = @"K:\Markup\Settings.xml";
     settings.Write(newSettingsFolderPath);
     Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
     Assert.That(mockSerializer.SerializeCount, Is.EqualTo(1));

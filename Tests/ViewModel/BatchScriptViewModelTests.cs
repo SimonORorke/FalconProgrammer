@@ -1,13 +1,16 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
 public class BatchScriptViewModelTests : ViewModelTestsBase {
+  private Settings Settings { get; set; } = null!;
   private BatchScriptViewModel ViewModel { get; set; } = null!;
 
   [SetUp]
   public override void Setup() {
     base.Setup();
+    Settings = ReadSettings("LocationsSettings.xml");
     ViewModel = new BatchScriptViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
@@ -16,15 +19,12 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task DefaultTemplateFileNotFound() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.OriginalProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.OriginalProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.TemplateProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.TemplateProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.TemplateProgramsFolder.Path);
     MockFileSystemService.File.ExistingPaths.Add(
       @"J:\FalconProgrammer\Settings\Settings.xml");
     await ViewModel.Open();
@@ -36,11 +36,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task OriginalProgramsFolderNotFound() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.ProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
@@ -50,15 +47,13 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoDefaultTemplateFile() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "NoDefaultTemplate.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.OriginalProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.OriginalProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.TemplateProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.TemplateProgramsFolder.Path);
+    Settings = ReadSettings("NoDefaultTemplate.xml");
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.TemplateProgramsFolder.Path);
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
@@ -68,6 +63,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoProgramsFolder() {
+    Settings = ReadSettings("DefaultAlreadySettings.xml");
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
@@ -77,13 +73,10 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task TemplateProgramsFolderNotFound() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.OriginalProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.OriginalProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
@@ -92,16 +85,25 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task UpdateScope() {
+    ConfigureValidMockFileSystemService();
+    await ViewModel.Open();
+    const string soundBank = "Pulsar";
+    const string category = "Plucks";
+    const string program = "Music Box";
+    var scope = ViewModel.Scopes[0];
+    scope.SoundBank = soundBank;
+    scope.Category = category;
+    scope.Program = program;
+    await ViewModel.QueryClose();
+    Assert.That(ViewModel.Settings.Batch.SoundBank, Is.EqualTo(soundBank));
+    Assert.That(ViewModel.Settings.Batch.Category, Is.EqualTo(category));
+    Assert.That(ViewModel.Settings.Batch.Program, Is.EqualTo(program));
+  }
+
+  [Test]
   public async Task ValidSettingsOnOpen() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.OriginalProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.OriginalProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(settings.TemplateProgramsFolder.Path);
-    AddSoundBankSubfolders(settings.TemplateProgramsFolder.Path);
+    ConfigureValidMockFileSystemService();
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
   }
@@ -125,7 +127,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Pulsar"), [
-        "Bass", "Leads"
+        "Bass", "Leads", "Plucks"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Spectre"), [
@@ -135,5 +137,23 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
       Path.Combine(folderPath, "Voklm"), [
         "Synth Choirs", "Vox Instruments"
       ]);
+  }
+
+  private void ConfigureValidMockFileSystemService() {
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
+    AddSoundBankSubfolders(Settings.TemplateProgramsFolder.Path);
+    MockFileSystemService.Folder.ExpectedFilePaths.Add(
+      Path.Combine(Settings.ProgramsFolder.Path, "Pulsar", "Plucks"), [
+        "Lighthouse.uvip", "Music Box.uvip", "Resonator.uvip"
+      ]);
+  }
+
+  private Settings ReadSettings(string embeddedFileName) {
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName = embeddedFileName;
+    return MockSettingsReaderEmbedded.Read();
   }
 }

@@ -6,12 +6,12 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   public GuiScriptProcessorViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
-    ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
-
   public override string PageTitle =>
     "Falcon program categories that must use a GUI script processor";
 
+  public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
+    ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
+  
   public override string TabTitle => "GUI Script Processor";
 
   internal override async Task Open() {
