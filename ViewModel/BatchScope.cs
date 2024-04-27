@@ -20,10 +20,10 @@ public partial class BatchScope : SoundBankCategory {
 
   private void PopulatePrograms() {
     Programs.Clear();
+    Programs.Add(AllCaption);
     if (Category == AllCaption) {
       return;
     }
-    Programs.Add(AllCaption);
     string categoryFolderPath = Path.Combine(
       Settings.ProgramsFolder.Path, SoundBank, Category);
     var programNames = 

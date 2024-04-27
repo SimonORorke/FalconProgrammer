@@ -94,8 +94,11 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Scopes, Has.Count.EqualTo(1));
     var scope = ViewModel.Scopes[0];
     Assert.That(scope.SoundBank, Is.EqualTo(SoundBankCategory.AllCaption));
+    Assert.That(scope.SoundBanks[0], Is.EqualTo(SoundBankCategory.AllCaption));
     Assert.That(scope.Category, Is.EqualTo(SoundBankCategory.AllCaption));
+    Assert.That(scope.Categories[0], Is.EqualTo(SoundBankCategory.AllCaption));
     Assert.That(scope.Program, Is.EqualTo(SoundBankCategory.AllCaption));
+    Assert.That(scope.Programs[0], Is.EqualTo(SoundBankCategory.AllCaption));
     scope.SoundBank = soundBank;
     scope.Category = category;
     scope.Program = program;

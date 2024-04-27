@@ -51,10 +51,10 @@ public partial class SoundBankCategory : DataGridItem {
 
   private void PopulateCategories() {
     Categories.Clear();
+    Categories.Add(AllCaption);
     if (SoundBank == AllCaption) {
       return;
     }
-    Categories.Add(AllCaption);
     string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
     var categoryFolderNames =
       FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);

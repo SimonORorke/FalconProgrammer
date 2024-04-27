@@ -33,7 +33,9 @@ public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
-    SoundBanks = soundBanks.ToImmutableList();
+    var soundBankList = soundBanks.ToList();
+    soundBankList.Insert(0, SoundBankCategory.AllCaption);
+    SoundBanks = soundBankList.ToImmutableList();
     Clear();
     AddItem(new BatchScope(Settings, FileSystemService) {
       SoundBanks = SoundBanks,

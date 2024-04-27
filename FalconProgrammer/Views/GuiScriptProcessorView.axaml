@@ -22,7 +22,6 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="vm:SoundBankCategory">
                         <TextBlock Text="{Binding SoundBank}"
-                                   FontSize="16"
                                    Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
@@ -43,7 +42,6 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Category}"
-                                   FontSize="16"
                                    Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>

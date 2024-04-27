@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -8,11 +9,14 @@ public class BatchScriptViewModel : SettingsWriterViewModelBase {
   public BatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  public override string PageTitle => "Batch Script";
+  [ExcludeFromCodeCoverage]
+  public override string PageTitle => "Run a batch Script";
 
   public BatchScopeCollection Scopes => _scopes
     ??= new BatchScopeCollection(FileSystemService, DispatcherService);
+
   private ImmutableList<string> SoundBanks { get; set; } = [];
+  public override string TabTitle => "Batch Script";
 
   internal override async Task Open() {
     await base.Open();

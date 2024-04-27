@@ -6,5 +6,81 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BatchScriptView"
              x:DataType="vm:BatchScriptViewModel">
-    BatchScriptView
+    <DockPanel>
+        <Label DockPanel.Dock="Top"
+               Target="ScopesDataGrid">
+            <AccessText Text="_Scope"
+                        FontSize="20"
+                        TextAlignment="Center"
+                        ShowAccessKey="True" />
+        </Label>
+    <DataGrid
+        x:Name="ScopesDataGrid"
+        ItemsSource="{Binding Scopes}"
+        RowHeight="35"
+        GridLinesVisibility="All">
+        <DataGrid.Columns>
+            <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Sound Bank or 'All'"
+                                   FontSize="20" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate DataType="vm:BatchScope">
+                        <TextBlock Text="{Binding SoundBank}"
+                                   Margin="13,0, 0, 0" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <ComboBox ItemsSource="{Binding SoundBanks}"
+                                  SelectedItem="{Binding SoundBank}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Category or 'All'"
+                                   FontSize="20" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Category}"
+                                   Margin="13,0, 0, 0" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate DataType="vm:BatchScope">
+                        <ComboBox ItemsSource="{Binding Categories}"
+                                  SelectedItem="{Binding Category}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Program or 'All'"
+                                   FontSize="20" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate DataType="vm:BatchScope">
+                        <TextBlock Text="{Binding Program}"
+                                   Margin="13,0, 0, 0" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                <DataGridTemplateColumn.CellEditingTemplate>
+                    <DataTemplate>
+                        <ComboBox ItemsSource="{Binding Programs}"
+                                  SelectedItem="{Binding Program}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+    </DockPanel>
 </UserControl>
