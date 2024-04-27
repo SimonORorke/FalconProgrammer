@@ -91,6 +91,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
+    Assert.That(ViewModel.Scopes, Has.Count.EqualTo(1));
     var scope = ViewModel.Scopes[0];
     scope.SoundBank = soundBank;
     scope.Category = category;
