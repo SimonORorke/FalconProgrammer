@@ -10,7 +10,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    Settings = ReadSettings("LocationsSettings.xml");
+    Settings = ReadMockSettings("LocationsSettings.xml");
     ViewModel = new BatchScriptViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
@@ -47,7 +47,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoDefaultTemplateFile() {
-    Settings = ReadSettings("NoDefaultTemplate.xml");
+    Settings = ReadMockSettings("NoDefaultTemplate.xml");
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
     AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
@@ -63,7 +63,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoProgramsFolder() {
-    Settings = ReadSettings("DefaultAlreadySettings.xml");
+    Settings = ReadMockSettings("DefaultAlreadySettings.xml");
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
@@ -157,10 +157,5 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
       Path.Combine(Settings.ProgramsFolder.Path, "Pulsar", "Plucks"), [
         "Lighthouse.uvip", "Music Box.uvip", "Resonator.uvip"
       ]);
-  }
-
-  private Settings ReadSettings(string embeddedFileName) {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName = embeddedFileName;
-    return MockSettingsReaderEmbedded.Read();
   }
 }

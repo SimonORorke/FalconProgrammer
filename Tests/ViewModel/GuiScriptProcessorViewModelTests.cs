@@ -4,6 +4,8 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
+  private Settings Settings { get; set; } = null!;
+
   // Why in this test fixture but not others does code cleanup insist on moving
   // properties to before SetUp?
   private GuiScriptProcessorViewModel ViewModel { get; set; } = null!;
@@ -11,6 +13,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
+    Settings = ReadMockSettings("LocationsSettings.xml");
     ViewModel = new GuiScriptProcessorViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
@@ -19,12 +22,9 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CutAndPaste() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    ConfigureMockFileSystemService(settings);
+    ConfigureMockFileSystemService();
     var settingsCategories =
-      settings.MustUseGuiScriptProcessorCategories;
+      Settings.MustUseGuiScriptProcessorCategories;
     int initialSettingsCategoriesCount = settingsCategories.Count;
     // Check that the test data is as expected
     Assert.That(initialSettingsCategoriesCount, Is.EqualTo(4));
@@ -57,10 +57,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    ConfigureMockFileSystemService(settings);
+    ConfigureMockFileSystemService();
     await ViewModel.Open(); // Reads settings to populate the page.
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
@@ -126,6 +123,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoProgramsFolder() {
+    Settings = ReadMockSettings("DefaultAlreadySettings.xml");
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
@@ -135,10 +133,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderEmpty() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
-    var settings = MockSettingsReaderEmbedded.Read();
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(settings.ProgramsFolder.Path,
+    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(Settings.ProgramsFolder.Path,
       []);
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
@@ -149,8 +144,6 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderNotFound() {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName =
-      "LocationsSettings.xml";
     MockFileSystemService.Folder.ExpectedExists = false;
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
@@ -159,33 +152,33 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 
-  private void ConfigureMockFileSystemService(Settings settings) {
+  private void ConfigureMockFileSystemService() {
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      settings.ProgramsFolder.Path, [
+      Settings.ProgramsFolder.Path, [
         "Ether Fields", "Factory", "Organic Keys", "Pulsar", "Spectre", "Voklm"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Ether Fields"), [
+      Path.Combine(Settings.ProgramsFolder.Path, "Ether Fields"), [
         "Granular", "Hybrid"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Factory"), [
+      Path.Combine(Settings.ProgramsFolder.Path, "Factory"), [
         "Bass-Sub", "Keys", "Organic Texture 2.8"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Organic Keys"), [
+      Path.Combine(Settings.ProgramsFolder.Path, "Organic Keys"), [
         "Acoustic Mood", "Lo-Fi"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Pulsar"), [
+      Path.Combine(Settings.ProgramsFolder.Path, "Pulsar"), [
         "Bass", "Leads"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Spectre"), [
+      Path.Combine(Settings.ProgramsFolder.Path, "Spectre"), [
         "Bells", "Chords"
       ]);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Voklm"), [
+      Path.Combine(Settings.ProgramsFolder.Path, "Voklm"), [
         "Synth Choirs", "Vox Instruments"
       ]);
   }

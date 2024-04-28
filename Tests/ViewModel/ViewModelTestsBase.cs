@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.Tests.Model;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.Tests.Model;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -49,4 +50,9 @@ public abstract class ViewModelTestsBase {
     null!;
 
   protected ModelServices TestModelServices { get; private set; } = null!;
+
+  protected Settings ReadMockSettings(string embeddedFileName) {
+    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName = embeddedFileName;
+    return MockSettingsReaderEmbedded.Read();
+  }
 }
