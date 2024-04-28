@@ -6,8 +6,8 @@ namespace FalconProgrammer.Tests.Model;
 public class TestCategory : Category {
   private MockFileSystemService? _mockFileSystemService;
 
-  public TestCategory(DirectoryInfo soundBankFolder, string name, Settings settings) :
-    base(soundBankFolder, name, settings) { }
+  public TestCategory(string soundBankFolderPath, string name, Settings settings) :
+    base(soundBankFolderPath, name, settings) { }
 
   internal string CategoryFolderPath { get; private set; } = string.Empty;
 
@@ -31,7 +31,7 @@ public class TestCategory : Category {
   internal void ConfigureMockFileSystemService(
     string templateSubfolderPath, string templateProgramFileName) {
     CategoryFolderPath = System.IO.Path.Combine(
-      Settings.ProgramsFolder.Path, SoundBankFolder.Name, Name);
+      Settings.ProgramsFolder.Path, SoundBankName, Name);
     string templateFolderPath = System.IO.Path.Combine(
       Settings.TemplateProgramsFolder.Path,
       templateSubfolderPath);

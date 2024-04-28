@@ -8,15 +8,15 @@ namespace FalconProgrammer.Model;
 internal class FalconProgram {
   private InfoPageLayout? _infoPageLayout;
 
-  public FalconProgram(string path, Category category, Settings settings, IBatchLog log) {
-    Category = category;
-    Name = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
+  public FalconProgram(string path, Category category, Batch batch) {
     Path = path;
-    Settings = settings;
-    Log = log;
+    Name = System.IO.Path.GetFileNameWithoutExtension(path).Trim();
+    Category = category;
+    Batch = batch;
   }
 
-  [PublicAPI] public Category Category { get; }
+  private Batch Batch { get; }
+  public Category Category { get; }
 
   /// <summary>
   ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
@@ -31,7 +31,7 @@ internal class FalconProgram {
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
 
-  public IBatchLog Log { get; }
+  private IBatchLog Log => Batch.Log;
   internal List<Macro> Macros { get; private set; } = null!;
 
   /// <summary>
@@ -63,8 +63,8 @@ internal class FalconProgram {
   private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } =
     ImmutableList<ScriptProcessor>.Empty;
 
-  public Settings Settings { get; }
-  private string SoundBankName => Category.SoundBankFolder.Name;
+  public Settings Settings => Batch.Settings;
+  private string SoundBankName => Category.SoundBankName;
 
   private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
@@ -302,7 +302,7 @@ internal class FalconProgram {
   ///   many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
   /// </remarks>
   internal Dictionary<string, Macro> GetAdsrMacros() {
-    string[] displayNames = { "Attack", "Decay", "Sustain", "Release" };
+    string[] displayNames = ["Attack", "Decay", "Sustain", "Release"];
     var result = new Dictionary<string, Macro>();
     foreach (string displayName in displayNames) {
       var macro = FindContinuousMacro(displayName);

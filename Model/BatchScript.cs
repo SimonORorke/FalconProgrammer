@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model;
 
 [XmlRoot("Batch")]
-public class BatchScript {
+public class BatchScript : SerialisationBase {
   private static ImmutableList<ConfigTask>? _sequencedConfigTasks;
 
   [XmlArray(nameof(Tasks))]
@@ -16,26 +16,6 @@ public class BatchScript {
 
   private static ImmutableList<ConfigTask> SequencedConfigTasks =>
     _sequencedConfigTasks ??= SequenceConfigTasks();
-
-  public static BatchScript Read(string batchScriptPath) {
-    var batchScriptFile = new FileInfo(batchScriptPath);
-    string parameterFullPath = batchScriptFile.FullName;
-    if (!batchScriptFile.Exists) {
-      string combinedBatchScriptPath = Path.Combine(
-        Batch.GetBatchFolder().FullName, Path.GetFileName(batchScriptPath));
-      batchScriptFile = new FileInfo(combinedBatchScriptPath);
-    }
-    if (!batchScriptFile.Exists) {
-      throw new ApplicationException(
-        $"Batch script file '{batchScriptFile.Name}' cannot be found. " +
-        $"Looked for both '{parameterFullPath}' and '{batchScriptFile.FullName}'.");
-    }
-    using var reader = new StreamReader(batchScriptFile.FullName);
-    var serializer = new XmlSerializer(typeof(BatchScript));
-    var result = (BatchScript)serializer.Deserialize(reader)!;
-    result.BatchScriptPath = batchScriptFile.FullName;
-    return result;
-  }
 
   private static ImmutableList<ConfigTask> SequenceConfigTasks() {
     return [

@@ -11,11 +11,11 @@ namespace FalconProgrammer.Model;
 public class Category {
   private IFileSystemService? _fileSystemService;
 
-  public Category(DirectoryInfo soundBankFolder, string name, Settings settings) {
-    SoundBankFolder = soundBankFolder;
+  public Category(string soundBankFolderPath, string name, Settings settings) {
+    SoundBankFolderPath = soundBankFolderPath;
     Name = name;
     Settings = settings;
-    Path = $"{SoundBankFolder.Name}\\{Name}";
+    Path = $"{SoundBankName}\\{Name}";
   }
 
   [ExcludeFromCodeCoverage]
@@ -57,13 +57,14 @@ public class Category {
   ///   </para>
   /// </remarks>
   public bool MustUseGuiScriptProcessor =>
-    Settings.MustUseGuiScriptProcessor(SoundBankFolder.Name, Name);
+    Settings.MustUseGuiScriptProcessor(SoundBankName, Name);
 
   [PublicAPI] public string Name { get; }
   [PublicAPI] public string Path { get; }
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
-  public DirectoryInfo SoundBankFolder { get; }
+  private string SoundBankFolderPath { get; }
+  public string SoundBankName => System.IO.Path.GetFileName(SoundBankFolderPath);
 
   [PublicAPI]
   public string TemplateCategoryName => System.IO.Path.GetFileName(
@@ -87,7 +88,7 @@ public class Category {
     Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
 
   private string GetFolderPath(string categoryName) {
-    string result = System.IO.Path.Combine(SoundBankFolder.FullName, categoryName);
+    string result = System.IO.Path.Combine(SoundBankFolderPath, categoryName);
     if (!FileSystemService.Folder.Exists(result)) {
       throw new ApplicationException(
         $"Category {Path}: Cannot find category folder '{result}'.");
@@ -97,7 +98,7 @@ public class Category {
 
   public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
     var programPaths = FileSystemService.Folder.GetFilePaths(
-      FolderPath, "*" + Batch.ProgramExtension);
+      FolderPath, "*.uvip");
     var result = (
       from programPath in programPaths
       where programPath != TemplateProgramPath
@@ -122,12 +123,12 @@ public class Category {
     ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
-      templatesFolderPath, SoundBankFolder.Name, Name);
+      templatesFolderPath, SoundBankName, Name);
     string folderPath = categoryTemplateFolderPath;
     if (!FileSystemService.Folder.Exists(folderPath)) {
       folderPath = string.Empty;
       string soundBankTemplateFolderPath = System.IO.Path.Combine(
-        templatesFolderPath, SoundBankFolder.Name);
+        templatesFolderPath, SoundBankName);
       if (FileSystemService.Folder.Exists(soundBankTemplateFolderPath)) {
         var subfolderNames =
           FileSystemService.Folder.GetSubfolderNames(soundBankTemplateFolderPath);
@@ -179,7 +180,7 @@ public class Category {
     // in all cases.
     if (templateXml.TemplateScriptProcessorElement != null) {
       return ScriptProcessor.Create(
-        SoundBankFolder.Name, templateXml.TemplateScriptProcessorElement, ProgramXml);
+        SoundBankName, templateXml.TemplateScriptProcessorElement, ProgramXml);
     }
     if (!MustUseGuiScriptProcessor) {
       return null;

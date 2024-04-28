@@ -18,7 +18,7 @@ public class CategoryTests {
 
   [Test]
   public void CannotFindTemplateScriptProcessor() {
-    var category = new TestCategory(GetSoundBankFolder("Factory"),
+    var category = new TestCategory(GetSoundBankFolderName("Factory"),
       "Organic Texture 2.8", Settings) {
       EmbeddedTemplateFileName = "NoGuiScriptProcessor.uvip"
     };
@@ -31,7 +31,7 @@ public class CategoryTests {
   [Test]
   public void CategoryFolderDoesNotExist() {
     var category =
-      new TestCategory(GetSoundBankFolder("Pulsar"), "DoesNotExist", Settings) {
+      new TestCategory(GetSoundBankFolderName("Pulsar"), "DoesNotExist", Settings) {
         MockFileSystemService = {
           Folder = {
             ExpectedExists = false
@@ -43,7 +43,7 @@ public class CategoryTests {
 
   [Test]
   public void FactoryCategorySpecificTemplate() {
-    var category = new TestCategory(GetSoundBankFolder("Factory"),
+    var category = new TestCategory(GetSoundBankFolderName("Factory"),
       "Organic Texture 2.8", Settings) {
       EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
     };
@@ -60,7 +60,7 @@ public class CategoryTests {
   [Test]
   public void FactoryDefaultTemplate() {
     var category =
-      new TestCategory(GetSoundBankFolder("Factory"), "Bass-Sub", Settings);
+      new TestCategory(GetSoundBankFolderName("Factory"), "Bass-Sub", Settings);
     category.ConfigureMockFileSystemService(
       @"Factory\Keys", "DX Mania.uvip");
     category.Initialise();
@@ -73,7 +73,7 @@ public class CategoryTests {
   [Test]
   public void Main() {
     var category =
-      new TestCategory(GetSoundBankFolder("Fluidity"), "Electronic", Settings) {
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
         EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
       };
     category.ConfigureMockFileSystemService(
@@ -83,7 +83,7 @@ public class CategoryTests {
     category.Initialise();
     Assert.That(!category.MustUseGuiScriptProcessor);
     Assert.That(category.Name, Is.EqualTo("Electronic"));
-    Assert.That(category.SoundBankFolder.Name, Is.EqualTo("Fluidity"));
+    Assert.That(category.SoundBankName, Is.EqualTo("Fluidity"));
     Assert.That(category.TemplateSoundBankName, Is.EqualTo("Fluidity"));
     Assert.That(category.TemplateCategoryName, Is.EqualTo("Strings"));
     Assert.That(category.TemplateProgramName, Is.EqualTo("Guitar Stream"));
@@ -98,7 +98,7 @@ public class CategoryTests {
   public void NonFactoryDefaultTemplateSameAsFactory() {
     // ReSharper disable once StringLiteralTypo
     var category =
-      new TestCategory(GetSoundBankFolder("Spectre"), "Polysynth", Settings);
+      new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
     category.ConfigureMockFileSystemService(
       @"Factory\Keys", "DX Mania.uvip");
     category.Initialise();
@@ -110,7 +110,7 @@ public class CategoryTests {
 
   [Test]
   public void PulsarHasCategorySpecificTemplates() {
-    var category = new TestCategory(GetSoundBankFolder("Pulsar"), "Bass", Settings) {
+    var category = new TestCategory(GetSoundBankFolderName("Pulsar"), "Bass", Settings) {
       EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
     };
     category.ConfigureMockFileSystemService(
@@ -125,7 +125,7 @@ public class CategoryTests {
   [Test]
   public void SoundBankFolderDoesNotExist() {
     var category =
-      new TestCategory(GetSoundBankFolder("DoesNotExist"), "Bass", Settings) {
+      new TestCategory(GetSoundBankFolderName("DoesNotExist"), "Bass", Settings) {
         MockFileSystemService = {
           Folder = {
             ExpectedExists = false
@@ -135,9 +135,7 @@ public class CategoryTests {
     Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
-  private DirectoryInfo GetSoundBankFolder(string soundBankName) {
-    var result = new DirectoryInfo(
-      Path.Combine(Settings.ProgramsFolder.Path, soundBankName));
-    return result;
+  private string GetSoundBankFolderName(string soundBankName) {
+    return Path.Combine(Settings.ProgramsFolder.Path, soundBankName);
   }
 }

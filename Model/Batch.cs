@@ -3,31 +3,45 @@
 namespace FalconProgrammer.Model;
 
 public class Batch {
-  public const string ProgramExtension = ".uvip";
-  private static Settings? _settings;
+  private BatchScriptReader? _batchScriptReader;
+  private IFileSystemService? _fileSystemService;
+  private Settings? _settings;
+  private SettingsReader? _settingsReader;
 
   public Batch(IBatchLog log) {
     Log = log;
   }
-  
+
+  internal BatchScriptReader BatchScriptReader {
+    get => _batchScriptReader ??= new BatchScriptReader();
+    // For tests
+    [PublicAPI] set => _batchScriptReader = value;
+  }
+
   private Category Category { get; set; } = null!;
   private List<string> EffectTypes { get; set; } = null!;
+
+  internal IFileSystemService FileSystemService {
+    get => _fileSystemService ??= Model.FileSystemService.Default;
+    // For tests
+    [PublicAPI] set => _fileSystemService = value;
+  }
+
   public IBatchLog Log { get; }
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
   private FalconProgram Program { get; set; } = null!;
 
-  private static Settings Settings {
-    get {
-      if (_settings == null) {
-        var settingsReader = new SettingsReader();
-        _settings = settingsReader.Read();
-      }
-      return _settings;
-    }
+  internal Settings Settings => _settings ??= SettingsReader.Read();
+
+  internal SettingsReader SettingsReader {
+    get => _settingsReader ??= new SettingsReader();
+    // For tests
+    [PublicAPI] set => _settingsReader = value;
   }
 
-  private DirectoryInfo SoundBankFolder { get; set; } = null!;
+  private string SoundBankFolderPath { get; set; } = null!;
+  private string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   private ConfigTask Task { get; set; }
 
   /// <summary>
@@ -80,7 +94,7 @@ public class Batch {
   private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!string.IsNullOrEmpty(soundBankName)) {
-      SoundBankFolder = GetSoundBankFolder(soundBankName);
+      SoundBankFolderPath = GetSoundBankFolderPath(soundBankName);
       if (!string.IsNullOrEmpty(categoryName)) {
         if (!string.IsNullOrEmpty(programName)) {
           Category = CreateCategory(categoryName);
@@ -91,16 +105,21 @@ public class Batch {
           ConfigureProgramsInCategory(categoryName);
         }
       } else {
-        foreach (var categoryFolder in SoundBankFolder.GetDirectories()) {
-          ConfigureProgramsInCategory(categoryFolder.Name);
+        foreach (string categoryName1 in FileSystemService.Folder.GetSubfolderNames(
+                   SoundBankFolderPath)) {
+          ConfigureProgramsInCategory(categoryName1);
         }
       }
     } else { // All sound banks
-      foreach (var soundBankFolder in GetProgramsFolder().GetDirectories()
-                 .Where(soundBankFolder => soundBankFolder.Name != ".git")) {
-        SoundBankFolder = soundBankFolder;
-        foreach (var categoryFolder in SoundBankFolder.GetDirectories()) {
-          ConfigureProgramsInCategory(categoryFolder.Name);
+      string programsFolderPath = GetProgramsFolderPath();
+      foreach (
+        string soundBankName1 in FileSystemService.Folder.GetSubfolderNames(
+            programsFolderPath)
+          .Where(soundBankName1 => soundBankName1 != ".git")) {
+        SoundBankFolderPath = Path.Combine(programsFolderPath, soundBankName1);
+        foreach (string categoryName1 in FileSystemService.Folder.GetSubfolderNames(
+                   SoundBankFolderPath)) {
+          ConfigureProgramsInCategory(categoryName1);
         }
       }
     }
@@ -179,7 +198,7 @@ public class Batch {
       // TODO: Sound bank level MustUseGuiScriptProcessor check.
       Log.WriteLine(
         $"Cannot {Task} for category " +
-        $"'{SoundBankFolder.Name}\\{categoryName}' " +
+        $"'{SoundBankName}\\{categoryName}' " +
         "because the category's GUI has to be defined in a script.");
       return;
     }
@@ -214,32 +233,16 @@ public class Batch {
   }
 
   private Category CreateCategory(string categoryName) {
-    var result = new Category(SoundBankFolder, categoryName, Settings);
+    var result = new Category(SoundBankFolderPath, categoryName, Settings);
     result.Initialise();
     return result;
   }
 
   private FalconProgram CreateFalconProgram(string path) {
-    return new FalconProgram(path, Category, Settings, Log);
+    return new FalconProgram(path, Category, this);
   }
 
-  public static DirectoryInfo GetBatchFolder() {
-    if (string.IsNullOrEmpty(Settings.BatchScriptsFolder.Path)) {
-      throw new ApplicationException(
-        "The batch folder is not specified in settings file " +
-        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-        "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
-    }
-    var result = new DirectoryInfo(Settings.BatchScriptsFolder.Path);
-    if (!result.Exists) {
-      throw new ApplicationException(
-        $"Cannot find batch folder '{result.FullName}'.");
-    }
-    return result;
-  }
-
-  public static DirectoryInfo GetOriginalProgramsFolder() {
+  public DirectoryInfo GetOriginalProgramsFolder() {
     if (string.IsNullOrEmpty(Settings.OriginalProgramsFolder.Path)) {
       throw new ApplicationException(
         "The original programs folder is not specified in settings file " +
@@ -255,7 +258,7 @@ public class Batch {
     return result;
   }
 
-  private static DirectoryInfo GetProgramsFolder() {
+  private string GetProgramsFolderPath() {
     if (string.IsNullOrEmpty(Settings.ProgramsFolder.Path)) {
       throw new ApplicationException(
         "The programs folder is not specified in settings file " +
@@ -263,22 +266,19 @@ public class Batch {
         "change the settings folder path in " +
         $"'{SettingsFolderLocation.GetSettingsFolderLocationPath}'.");
     }
-    var result = new DirectoryInfo(Settings.ProgramsFolder.Path);
-    if (!result.Exists) {
+    if (!FileSystemService.Folder.Exists(Settings.ProgramsFolder.Path)) {
       throw new ApplicationException(
-        $"Cannot find programs folder '{result.FullName}'.");
+        $"Cannot find programs folder '{Settings.ProgramsFolder.Path}'.");
     }
-    return result;
+    return Settings.ProgramsFolder.Path;
   }
 
-  private static DirectoryInfo GetSoundBankFolder(string soundBankName) {
-    var programsFolder = GetProgramsFolder();
-    var result = new DirectoryInfo(
-      Path.Combine(
-        programsFolder.FullName, soundBankName));
-    if (!result.Exists) {
+  private string GetSoundBankFolderPath(string soundBankName) {
+    string programsFolderPath = GetProgramsFolderPath();
+    string result = Path.Combine(programsFolderPath, soundBankName);
+    if (!FileSystemService.Folder.Exists(result)) {
       throw new ApplicationException(
-        $"Cannot find sound bank folder '{result.FullName}'.");
+        $"Cannot find sound bank folder '{result}'.");
     }
     return result;
   }
@@ -436,10 +436,7 @@ public class Batch {
   }
 
   public void RunScript(string batchScriptPath) {
-    if (!Path.HasExtension(batchScriptPath)) {
-      batchScriptPath += ".xml";
-    }
-    var batchScript = BatchScript.Read(batchScriptPath);
+    var batchScript = BatchScriptReader.Read(batchScriptPath);
     batchScript.Validate();
     foreach (var batchTask in batchScript.SequenceTasks()) {
       Task = batchTask.ConfigTask;

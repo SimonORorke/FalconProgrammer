@@ -56,7 +56,7 @@ internal class InfoPageLayout {
       3 => StandardBottommostY - 2 * rowHeight,
       _ => StandardBottommostY - 3 * rowHeight
     };
-    switch (Program.Category.SoundBankFolder.Name) {
+    switch (Program.Category.SoundBankName) {
       case "Ether Fields" when rowCount == 3:
         top -= 85;
         break;
