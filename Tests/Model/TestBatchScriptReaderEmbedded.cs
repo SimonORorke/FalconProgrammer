@@ -8,6 +8,11 @@ namespace FalconProgrammer.Tests.Model;
 ///   A test <see cref="BatchScript" /> reader that reads embedded files.
 /// </summary>
 public class TestBatchScriptReaderEmbedded : BatchScriptReader {
+  public TestBatchScriptReaderEmbedded() {
+    FileSystemService = MockFileSystemService = new MockFileSystemService();
+    Deserialiser = TestDeserialiser = new TestDeserialiser<BatchScript>();
+  }
+
   /// <summary>
   ///   The embedded resource file with this name in the Tests assembly will be
   ///   deserialised by the <see cref="Read" /> method, which will ignore its
@@ -18,33 +23,11 @@ public class TestBatchScriptReaderEmbedded : BatchScriptReader {
     set => TestDeserialiser.EmbeddedFileName = value;
   }
 
-  public override IFileSystemService FileSystemService {
-    get {
-      if (!base.FileSystemService.Equals(MockFileSystemService)) {
-        base.FileSystemService = MockFileSystemService;
-      }
-      return (MockFileSystemService)base.FileSystemService;
-    }
-    [ExcludeFromCodeCoverage] set => throw new NotSupportedException();
-  }
-
-  internal MockFileSystemService MockFileSystemService { get; } =
-    new MockFileSystemService();
+  internal MockFileSystemService MockFileSystemService { get; }
 
   internal MockSerialiser MockSerialiserForBatchScript { get; } = new MockSerialiser();
 
-  private TestDeserialiser<BatchScript> TestDeserialiser { get; } =
-    new TestDeserialiser<BatchScript>();
-
-  internal override Deserialiser<BatchScript> Deserialiser {
-    get {
-      if (!base.Deserialiser.Equals(TestDeserialiser)) {
-        base.Deserialiser = TestDeserialiser;
-      }
-      return (TestDeserialiser<BatchScript>)base.Deserialiser;
-    }
-    [ExcludeFromCodeCoverage] set => throw new NotSupportedException();
-  }
+  private TestDeserialiser<BatchScript> TestDeserialiser { get; }
 
   /// <summary>
   ///   Reads the embedded resource file specified by <see cref="EmbeddedFileName" /> in
