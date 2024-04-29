@@ -35,7 +35,9 @@ public class MockFolderService : IFolderService {
   }
 
   public IEnumerable<string> GetFilePaths(string path, string searchPattern) {
-    return ExpectedFilePaths[path];
+    return ExpectedFilePaths.TryGetValue(path, out var value) 
+      ? value 
+      : [];
   }
 
   public ImmutableList<string> GetSubfolderNames(string path) {

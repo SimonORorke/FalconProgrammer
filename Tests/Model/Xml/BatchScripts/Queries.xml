@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Batch>
+    <Tasks>
+        <Task Name="QueryAdsrMacros" SoundBank="SB" Category="Cat" Program="P1"/>
+        <Task Name="QueryDelayTypes" SoundBank="SB" Category="Cat" Program="P1"/>
+    </Tasks>
+</Batch>

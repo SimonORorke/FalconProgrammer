@@ -30,7 +30,7 @@ public class Batch {
   public IBatchLog Log { get; }
   private int NewCcNo { get; set; }
   private int OldCcNo { get; set; }
-  private FalconProgram Program { get; set; } = null!;
+  protected FalconProgram Program { get; private set; } = null!;
 
   internal Settings Settings => _settings ??= SettingsReader.Read();
 
@@ -40,9 +40,9 @@ public class Batch {
     set => _settingsReader = value;
   }
 
-  private string SoundBankFolderPath { get; set; } = null!;
+  protected string SoundBankFolderPath { get; private set; } = null!;
   private string SoundBankName => Path.GetFileName(SoundBankFolderPath);
-  private ConfigTask Task { get; set; }
+  protected ConfigTask Task { get; private set; }
 
   /// <summary>
   ///   Changes every occurrence of the specified old macro MIDI CC number to the
@@ -125,7 +125,7 @@ public class Batch {
     }
   }
 
-  private void ConfigureProgram() {
+  protected virtual void ConfigureProgram() {
     if (Task != ConfigTask.RestoreOriginal) {
       Program.Read();
     }
@@ -232,7 +232,7 @@ public class Batch {
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
-  private Category CreateCategory(string categoryName) {
+  protected virtual Category CreateCategory(string categoryName) {
     var result = new Category(SoundBankFolderPath, categoryName, Settings);
     result.Initialise();
     return result;
@@ -440,13 +440,6 @@ public class Batch {
     batchScript.Validate();
     foreach (var batchTask in batchScript.SequenceTasks()) {
       Task = batchTask.ConfigTask;
-      Log.WriteLine(
-        $"Task = {batchTask.Name}, SoundBank = '{batchTask.SoundBank}', " +
-        $"Category = '{batchTask.Category}', " +
-        $"Program = '{batchTask.Program}'");
-      foreach (var parameter in batchTask.Parameters) {
-        Log.WriteLine($"    {parameter.Name} = {parameter.Value}");
-      }
       ConfigurePrograms(
         batchTask.SoundBank, batchTask.Category, batchTask.Program);
     }

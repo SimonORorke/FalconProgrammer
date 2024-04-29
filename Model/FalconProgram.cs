@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
 
-internal class FalconProgram {
+public class FalconProgram {
   private InfoPageLayout? _infoPageLayout;
 
   public FalconProgram(string path, Category category, Batch batch) {
