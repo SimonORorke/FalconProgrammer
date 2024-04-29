@@ -12,6 +12,8 @@ public class SettingsFolderLocationReader
     SettingsFolderLocation? result = null;
     try {
       Deserialiser.AppDataFolderName = AppDataFolderName;
+      Deserialiser.FileSystemService = FileSystemService;
+      Deserialiser.Serialiser = Serialiser;
       result = Deserialiser.Deserialise(
         SettingsFolderLocation.GetSettingsFolderLocationPath(AppDataFolderName));
     } catch (XmlException) {

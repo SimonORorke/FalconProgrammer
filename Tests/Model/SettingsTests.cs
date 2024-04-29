@@ -93,7 +93,9 @@ public class SettingsTests {
       }
     };
     var settingsReader = new SettingsReader {
-      FileSystemService = mockFileSystemService
+      AppDataFolderName = SettingsTestHelper.TestAppDataFolderName,
+      FileSystemService = mockFileSystemService,
+      Serialiser = new MockSerialiser()
     };
     var settings = settingsReader.Read();
     Assert.That(settings.ProgramsFolder.Path, Is.Empty);

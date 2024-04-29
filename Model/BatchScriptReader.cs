@@ -7,6 +7,9 @@ public class BatchScriptReader : XmlReaderBase<BatchScript> {
       throw new ApplicationException(
         $"Batch script file '{batchScriptPath}' cannot be found.");
     }
+    Deserialiser.AppDataFolderName = AppDataFolderName;
+    Deserialiser.FileSystemService = FileSystemService;
+    Deserialiser.Serialiser = Serialiser;
     return Deserialiser.Deserialise(batchScriptPath);
   }
 }

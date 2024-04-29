@@ -9,6 +9,7 @@ namespace FalconProgrammer.Tests.Model;
 /// </summary>
 public class TestBatchScriptReaderEmbedded : BatchScriptReader {
   public TestBatchScriptReaderEmbedded() {
+    AppDataFolderName = SettingsTestHelper.TestAppDataFolderName;
     FileSystemService = MockFileSystemService = new MockFileSystemService();
     Deserialiser = TestDeserialiser = new TestDeserialiser<BatchScript>();
   }
@@ -35,6 +36,7 @@ public class TestBatchScriptReaderEmbedded : BatchScriptReader {
   /// </summary>
   public override BatchScript Read(string batchScriptPath) {
     var result = base.Read(batchScriptPath);
+    result.AppDataFolderName = AppDataFolderName;
     result.FileSystemService = FileSystemService;
     result.Serialiser = MockSerialiserForBatchScript;
     return result;
