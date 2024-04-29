@@ -15,7 +15,7 @@ public class Batch {
   internal BatchScriptReader BatchScriptReader {
     get => _batchScriptReader ??= new BatchScriptReader();
     // For tests
-    [PublicAPI] set => _batchScriptReader = value;
+    set => _batchScriptReader = value;
   }
 
   private Category Category { get; set; } = null!;
@@ -24,7 +24,7 @@ public class Batch {
   internal IFileSystemService FileSystemService {
     get => _fileSystemService ??= Model.FileSystemService.Default;
     // For tests
-    [PublicAPI] set => _fileSystemService = value;
+    set => _fileSystemService = value;
   }
 
   public IBatchLog Log { get; }
@@ -37,7 +37,7 @@ public class Batch {
   internal SettingsReader SettingsReader {
     get => _settingsReader ??= new SettingsReader();
     // For tests
-    [PublicAPI] set => _settingsReader = value;
+    set => _settingsReader = value;
   }
 
   private string SoundBankFolderPath { get; set; } = null!;

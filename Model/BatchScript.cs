@@ -71,9 +71,7 @@ public class BatchScript : SerialisationBase {
   }
 
   public void Write() {
-    var serializer = new XmlSerializer(typeof(BatchScript));
-    using var writer = new StreamWriter(BatchScriptPath);
-    serializer.Serialize(writer, this);
+    Serialiser.Serialise(typeof(BatchScript), this, BatchScriptPath);
   }
 
   public class BatchTask {
