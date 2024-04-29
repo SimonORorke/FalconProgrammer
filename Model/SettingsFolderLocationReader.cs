@@ -11,6 +11,7 @@ public class SettingsFolderLocationReader
   public virtual ISettingsFolderLocation Read() {
     SettingsFolderLocation? result = null;
     try {
+      Deserialiser.AppDataFolderName = AppDataFolderName;
       result = Deserialiser.Deserialise(
         SettingsFolderLocation.GetSettingsFolderLocationPath(AppDataFolderName));
     } catch (XmlException) {
