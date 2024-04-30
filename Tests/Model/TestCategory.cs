@@ -9,7 +9,8 @@ public class TestCategory : Category {
   public TestCategory(string soundBankFolderPath, string name, Settings settings) :
     base(soundBankFolderPath, name, settings) { }
 
-  internal string CategoryFolderPath { get; private set; } = string.Empty;
+  internal string CategoryFolderPath => System.IO.Path.Combine(
+    Settings.ProgramsFolder.Path, SoundBankName, Name);
 
   /// <summary>
   ///   <see cref="CreateTemplateXml" /> will read the embedded resource file
@@ -30,8 +31,6 @@ public class TestCategory : Category {
 
   internal void ConfigureMockFileSystemService(
     string templateSubfolderPath, string templateProgramFileName) {
-    CategoryFolderPath = System.IO.Path.Combine(
-      Settings.ProgramsFolder.Path, SoundBankName, Name);
     string templateFolderPath = System.IO.Path.Combine(
       Settings.TemplateProgramsFolder.Path,
       templateSubfolderPath);
