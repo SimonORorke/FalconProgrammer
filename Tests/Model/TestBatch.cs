@@ -32,6 +32,14 @@ public class TestBatch : Batch {
 
   protected override Category CreateCategory(string categoryName) {
     var result = new TestCategory(SoundBankFolderPath, categoryName, Settings);
+    result.ConfigureMockFileSystemService(
+      @"Fluidity\Strings", "Guitar Stream.uvip");
+    if (MockFileSystemService.Folder.ExpectedFilePaths.TryGetValue(
+          result.CategoryFolderPath, out var
+            categoryExpectedFilePaths)) {
+      result.MockFileSystemService.Folder.ExpectedFilePaths.Add(result.CategoryFolderPath,
+        categoryExpectedFilePaths);
+    }
     result.Initialise();
     return result;
   }

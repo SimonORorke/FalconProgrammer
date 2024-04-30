@@ -3,14 +3,9 @@
 namespace FalconProgrammer.Tests.Model;
 
 public class MockBatchLog : IBatchLog {
-  private StringWriter Writer { get; } = new StringWriter();
+  internal List<string> Lines { get; } = [];
 
   public void WriteLine(string text) {
-    Writer.WriteLine(text);
-  }
-
-  public override string ToString() {
-    return Writer.ToString() ?? string.Empty;
-    ;
+    Lines.Add(text);
   }
 }

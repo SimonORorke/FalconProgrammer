@@ -24,6 +24,9 @@ public class TestSettingsFolderLocationReader : SettingsFolderLocationReader {
     set => TestDeserialiser.EmbeddedFileName = value;
   }
 
-  [PublicAPI] internal MockFileSystemService MockFileSystemService { get; }
+  [ExcludeFromCodeCoverage]
+  [PublicAPI]
+  internal MockFileSystemService MockFileSystemService { get; }
+
   protected TestDeserialiser<SettingsFolderLocation> TestDeserialiser { get; }
 }

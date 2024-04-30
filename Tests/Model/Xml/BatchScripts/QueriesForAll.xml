@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Batch>
+    <Tasks>
+        <Task Name="QueryReverbTypes" SoundBank="All" Category="" Program=""/>
+    </Tasks>
+</Batch>

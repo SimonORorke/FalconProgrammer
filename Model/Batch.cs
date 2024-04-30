@@ -441,7 +441,14 @@ public class Batch {
     foreach (var batchTask in batchScript.SequenceTasks()) {
       Task = batchTask.ConfigTask;
       ConfigurePrograms(
-        batchTask.SoundBank, batchTask.Category, batchTask.Program);
+        GetParameter(batchTask.SoundBank),
+        GetParameter(batchTask.Category),
+        GetParameter(batchTask.Program));
+    }
+    return;
+
+    string? GetParameter(string level) {
+      return level is "All" or "" ? null : level;
     }
   }
 

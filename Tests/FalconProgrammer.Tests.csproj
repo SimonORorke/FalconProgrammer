@@ -46,7 +46,10 @@
         <None Remove="Model\Xml\BatchScripts\BatchScript.xml"/>
         <EmbeddedResource Include="Model\Xml\BatchScripts\BatchScript.xml"/>
         <None Remove="Model\Xml\BatchScripts\Queries.xml"/>
-        <EmbeddedResource Include="Model\Xml\BatchScripts\Queries.xml"/>
+        <None Remove="Model\Xml\BatchScripts\QueriesAll.xml"/>
+        <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForAll.xml"/>
+        <None Remove="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
+        <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
     </ItemGroup>
 
 </Project>

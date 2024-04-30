@@ -153,33 +153,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   private void ConfigureMockFileSystemService() {
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Settings.ProgramsFolder.Path, [
-        "Ether Fields", "Factory", "Organic Keys", "Pulsar", "Spectre", "Voklm"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(Settings.ProgramsFolder.Path, "Ether Fields"), [
-        "Granular", "Hybrid"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(Settings.ProgramsFolder.Path, "Factory"), [
-        "Bass-Sub", "Keys", "Organic Texture 2.8"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(Settings.ProgramsFolder.Path, "Organic Keys"), [
-        "Acoustic Mood", "Lo-Fi"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(Settings.ProgramsFolder.Path, "Pulsar"), [
-        "Bass", "Leads"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(Settings.ProgramsFolder.Path, "Spectre"), [
-        "Bells", "Chords"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(Settings.ProgramsFolder.Path, "Voklm"), [
-        "Synth Choirs", "Vox Instruments"
-      ]);
+    TestHelper.AddSoundBankSubfolders(
+      MockFileSystemService.Folder, Settings.ProgramsFolder.Path);
   }
 }

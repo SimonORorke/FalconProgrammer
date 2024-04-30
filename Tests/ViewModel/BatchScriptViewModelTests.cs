@@ -116,34 +116,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   private void AddSoundBankSubfolders(string folderPath) {
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      folderPath, [
-        "Ether Fields", "Factory", "Organic Keys", "Pulsar", "Spectre", "Voklm"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(folderPath, "Ether Fields"), [
-        "Granular", "Hybrid"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(folderPath, "Factory"), [
-        "Bass-Sub", "Keys", "Organic Texture 2.8"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(folderPath, "Organic Keys"), [
-        "Acoustic Mood", "Lo-Fi"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(folderPath, "Pulsar"), [
-        "Bass", "Leads", "Plucks"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(folderPath, "Spectre"), [
-        "Bells", "Chords"
-      ]);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
-      Path.Combine(folderPath, "Voklm"), [
-        "Synth Choirs", "Vox Instruments"
-      ]);
+    TestHelper.AddSoundBankSubfolders(MockFileSystemService.Folder, folderPath);
   }
 
   private void ConfigureValidMockFileSystemService() {
