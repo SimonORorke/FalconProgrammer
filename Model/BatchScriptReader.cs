@@ -9,6 +9,8 @@ public class BatchScriptReader : XmlReaderBase<BatchScript> {
     Deserialiser.AppDataFolderName = AppDataFolderName;
     Deserialiser.FileSystemService = FileSystemService;
     Deserialiser.Serialiser = Serialiser;
-    return Deserialiser.Deserialise(batchScriptPath);
+    var result = Deserialiser.Deserialise(batchScriptPath);
+    result.Path = batchScriptPath;
+    return result;
   }
 }

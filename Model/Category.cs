@@ -15,7 +15,7 @@ public class Category {
     SoundBankFolderPath = soundBankFolderPath;
     Name = name;
     Settings = settings;
-    Path = $"{SoundBankName}\\{Name}";
+    PathShort = $"{SoundBankName}\\{Name}";
   }
 
   [ExcludeFromCodeCoverage]
@@ -60,19 +60,19 @@ public class Category {
     Settings.MustUseGuiScriptProcessor(SoundBankName, Name);
 
   [PublicAPI] public string Name { get; }
-  [PublicAPI] public string Path { get; }
+  [PublicAPI] public string PathShort { get; }
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   private string SoundBankFolderPath { get; }
-  public string SoundBankName => System.IO.Path.GetFileName(SoundBankFolderPath);
+  public string SoundBankName => Path.GetFileName(SoundBankFolderPath);
 
   [PublicAPI]
-  public string TemplateCategoryName => System.IO.Path.GetFileName(
-    System.IO.Path.GetDirectoryName(TemplateProgramPath)!);
+  public string TemplateCategoryName => Path.GetFileName(
+    Path.GetDirectoryName(TemplateProgramPath)!);
 
   [PublicAPI]
   public string TemplateProgramName =>
-    System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
+    Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
   public string TemplateProgramPath { get; private set; } = null!;
 
@@ -85,13 +85,13 @@ public class Category {
 
   [PublicAPI]
   public string TemplateSoundBankName =>
-    Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
+    Directory.GetParent(Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
 
   private string GetFolderPath(string categoryName) {
-    string result = System.IO.Path.Combine(SoundBankFolderPath, categoryName);
+    string result = Path.Combine(SoundBankFolderPath, categoryName);
     if (!FileSystemService.Folder.Exists(result)) {
       throw new ApplicationException(
-        $"Category {Path}: Cannot find category folder '{result}'.");
+        $"Category {PathShort}: Cannot find category folder '{result}'.");
     }
     return result;
   }
@@ -105,16 +105,16 @@ public class Category {
       select programPath).ToList();
     if (result.Count == 0) {
       throw new ApplicationException(
-        $"Category {Path}: There are no program files to edit in folder '{FolderPath}'.");
+        $"Category {PathShort}: There are no program files to edit in folder '{FolderPath}'.");
     }
     return result;
   }
 
   public string GetProgramPath(string programName) {
-    string result = System.IO.Path.Combine(FolderPath, $"{programName}.uvip");
+    string result = Path.Combine(FolderPath, $"{programName}.uvip");
     if (!FileSystemService.File.Exists(result)) {
       throw new ApplicationException(
-        $"Category {Path}: Cannot find program file '{result}'.");
+        $"Category {PathShort}: Cannot find program file '{result}'.");
     }
     return result;
   }
@@ -122,19 +122,19 @@ public class Category {
   private string GetTemplateProgramPath() {
     ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
-    string categoryTemplateFolderPath = System.IO.Path.Combine(
+    string categoryTemplateFolderPath = Path.Combine(
       templatesFolderPath, SoundBankName, Name);
     string folderPath = categoryTemplateFolderPath;
     if (!FileSystemService.Folder.Exists(folderPath)) {
       folderPath = string.Empty;
-      string soundBankTemplateFolderPath = System.IO.Path.Combine(
+      string soundBankTemplateFolderPath = Path.Combine(
         templatesFolderPath, SoundBankName);
       if (FileSystemService.Folder.Exists(soundBankTemplateFolderPath)) {
         var subfolderNames =
           FileSystemService.Folder.GetSubfolderNames(soundBankTemplateFolderPath);
         if (subfolderNames.Count == 1) {
           folderPath =
-            System.IO.Path.Combine(soundBankTemplateFolderPath, subfolderNames[0]);
+            Path.Combine(soundBankTemplateFolderPath, subfolderNames[0]);
         }
       }
     }
@@ -149,12 +149,12 @@ public class Category {
     }
     if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
       throw new ApplicationException(
-        $"Category {Path}: A default Template must be specified in the " +
+        $"Category {PathShort}: A default Template must be specified in the " +
         "Settings file, to specify TemplateScriptProcessor.");
     }
     if (!FileSystemService.File.Exists(Settings.DefaultTemplate.Path)) {
       throw new ApplicationException(
-        $"Category {Path}: Cannot find default template file " +
+        $"Category {PathShort}: Cannot find default template file " +
         $"'{Settings.DefaultTemplate.Path}'.");
     }
     return Settings.DefaultTemplate.Path;
@@ -186,7 +186,7 @@ public class Category {
       return null;
     }
     throw new ApplicationException(
-      $"Category {Path}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
+      $"Category {PathShort}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
   }
 
   public void Initialise() {

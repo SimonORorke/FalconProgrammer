@@ -9,11 +9,11 @@ public class BatchScriptTests {
     TestBatchScriptReaderEmbedded = new TestBatchScriptReaderEmbedded {
       EmbeddedFileName = "BatchScript.xml"
     };
-    BatchScript = TestBatchScriptReaderEmbedded.Read(
-      "This path will be ignored.xml");
+    BatchScript = TestBatchScriptReaderEmbedded.Read(BatchScriptPath);
   }
 
   private BatchScript BatchScript { get; set; } = null!;
+  private const string BatchScriptPath = "This path will be ignored.xml"; 
 
   private TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; set; } =
     null!;
@@ -22,10 +22,10 @@ public class BatchScriptTests {
   public void FileNotFound() {
     TestBatchScriptReaderEmbedded.MockFileSystemService.File.ExpectedExists = false;
     var exception = Assert.Catch<ApplicationException>(() =>
-      TestBatchScriptReaderEmbedded.Read("This path will be ignored.xml"));
+      TestBatchScriptReaderEmbedded.Read(BatchScriptPath));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Is.EqualTo(
-      "Batch script file 'This path will be ignored.xml' cannot be found."));
+      $"Batch script file '{BatchScriptPath}' cannot be found."));
   }
 
   [Test]
@@ -41,6 +41,10 @@ public class BatchScriptTests {
   [Test]
   public void Validate() {
     Assert.DoesNotThrow(() => BatchScript.Validate());
+    Assert.That(BatchScript.Path, Is.EqualTo(BatchScriptPath));
+    Assert.That(BatchScript.Tasks[0].Parameters, Has.Count.EqualTo(2));
+    Assert.That(BatchScript.Tasks[0].Parameters[0].Name, Is.EqualTo("Big"));
+    Assert.That(BatchScript.Tasks[0].Parameters[0].Value, Is.EqualTo("12"));
     var newBatchTask = new BatchScript.BatchTask { Name = "Blah" };
     BatchScript.Tasks.Add(newBatchTask);
     var exception = Assert.Catch<ApplicationException>(() => BatchScript.Validate());

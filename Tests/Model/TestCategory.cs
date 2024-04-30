@@ -9,7 +9,7 @@ public class TestCategory : Category {
   public TestCategory(string soundBankFolderPath, string name, Settings settings) :
     base(soundBankFolderPath, name, settings) { }
 
-  internal string CategoryFolderPath => System.IO.Path.Combine(
+  internal string Path => System.IO.Path.Combine(
     Settings.ProgramsFolder.Path, SoundBankName, Name);
 
   /// <summary>
@@ -39,7 +39,7 @@ public class TestCategory : Category {
     string templateParentFolderPath = Directory.GetParent(templateFolderPath)!.FullName;
     string templateFolderName = System.IO.Path.GetFileName(templateFolderPath);
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(CategoryFolderPath);
+    MockFileSystemService.Folder.ExistingPaths.Add(Path);
     MockFileSystemService.Folder.ExistingPaths.Add(templateFolderPath);
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
       templateParentFolderPath, [templateFolderName]);

@@ -33,9 +33,9 @@ public class TestBatch : Batch {
   protected override Category CreateCategory(string categoryName) {
     var result = new TestCategory(SoundBankFolderPath, categoryName, Settings);
     if (MockFileSystemService.Folder.ExpectedFilePaths.TryGetValue(
-          result.CategoryFolderPath, out var
+          result.Path, out var
             categoryExpectedFilePaths)) {
-      result.MockFileSystemService.Folder.ExpectedFilePaths.Add(result.CategoryFolderPath,
+      result.MockFileSystemService.Folder.ExpectedFilePaths.Add(result.Path,
         categoryExpectedFilePaths);
     }
     result.Initialise();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using JetBrains.Annotations;
 
@@ -10,9 +11,9 @@ public class BatchScript : SerialisationBase {
 
   [XmlArray(nameof(Tasks))]
   [XmlArrayItem("Task")]
-  public List<BatchTask> Tasks { get; set; } = [];
+  public List<BatchTask> Tasks { get; [ExcludeFromCodeCoverage] set; } = [];
 
-  [XmlIgnore] public string BatchScriptPath { get; set; } = string.Empty;
+  [XmlIgnore] public string Path { get; set; } = string.Empty;
 
   private static ImmutableList<ConfigTask> SequencedConfigTasks =>
     _sequencedConfigTasks ??= SequenceConfigTasks();
@@ -71,7 +72,7 @@ public class BatchScript : SerialisationBase {
   }
 
   public void Write() {
-    Serialiser.Serialise(typeof(BatchScript), this, BatchScriptPath);
+    Serialiser.Serialise(typeof(BatchScript), this, Path);
   }
 
   public class BatchTask {
@@ -84,7 +85,8 @@ public class BatchScript : SerialisationBase {
     [XmlArray(nameof(Parameters))]
     [XmlArrayItem("Parameter")]
     [PublicAPI]
-    public List<BatchTaskParameter> Parameters { get; set; } = [];
+    public List<BatchTaskParameter> Parameters { get; [ExcludeFromCodeCoverage] set; } =
+      [];
 
     [XmlIgnore] public ConfigTask ConfigTask => _configTask ??= GetConfigTask();
 
