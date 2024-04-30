@@ -74,57 +74,6 @@ public class Batch {
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
-  /// <summary>
-  ///   Configures the specified programs as per the required task.
-  /// </summary>
-  /// <param name="soundBankName">
-  ///   The name of the sound bank folder. Null for all sound banks.
-  /// </param>
-  /// <param name="categoryName">
-  ///   The name of the category folder.
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  /// <param name="programName">
-  ///   The program name, excluding the ".uvip" suffix.
-  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
-  ///   specified, null (the default) for all files in the specified category.
-  ///   Otherwise ignored.
-  /// </param>
-  private void ConfigurePrograms(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    if (!string.IsNullOrEmpty(soundBankName)) {
-      SoundBankFolderPath = GetSoundBankFolderPath(soundBankName);
-      if (!string.IsNullOrEmpty(categoryName)) {
-        if (!string.IsNullOrEmpty(programName)) {
-          Category = CreateCategory(categoryName);
-          string programPath = Category.GetProgramPath(programName);
-          Program = CreateFalconProgram(programPath);
-          ConfigureProgram();
-        } else {
-          ConfigureProgramsInCategory(categoryName);
-        }
-      } else {
-        foreach (string categoryName1 in FileSystemService.Folder.GetSubfolderNames(
-                   SoundBankFolderPath)) {
-          ConfigureProgramsInCategory(categoryName1);
-        }
-      }
-    } else { // All sound banks
-      string programsFolderPath = GetProgramsFolderPath();
-      foreach (
-        string soundBankName1 in FileSystemService.Folder.GetSubfolderNames(
-            programsFolderPath)
-          .Where(soundBankName1 => soundBankName1 != ".git")) {
-        SoundBankFolderPath = Path.Combine(programsFolderPath, soundBankName1);
-        foreach (string categoryName1 in FileSystemService.Folder.GetSubfolderNames(
-                   SoundBankFolderPath)) {
-          ConfigureProgramsInCategory(categoryName1);
-        }
-      }
-    }
-  }
-
   protected virtual void ConfigureProgram() {
     if (Task != ConfigTask.RestoreOriginal) {
       Program.Read();
@@ -190,12 +139,56 @@ public class Batch {
     }
   }
 
+  /// <summary>
+  ///   Configures the specified programs as per the required task.
+  /// </summary>
+  /// <param name="soundBankName">
+  ///   The name of the sound bank folder. Null for all sound banks.
+  /// </param>
+  /// <param name="categoryName">
+  ///   The name of the category folder.
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
+  ///   categories in the specified sound bank. Otherwise ignored.
+  /// </param>
+  /// <param name="programName">
+  ///   The program name, excluding the ".uvip" suffix.
+  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
+  ///   specified, null (the default) for all files in the specified category.
+  ///   Otherwise ignored.
+  /// </param>
+  private void ConfigurePrograms(
+    string? soundBankName, string? categoryName = null, string? programName = null) {
+    if (!string.IsNullOrEmpty(soundBankName)) {
+      SoundBankFolderPath = GetSoundBankFolderPath(soundBankName);
+      if (!string.IsNullOrEmpty(categoryName)) {
+        if (!string.IsNullOrEmpty(programName)) {
+          Category = CreateCategory(categoryName);
+          string programPath = Category.GetProgramPath(programName);
+          Program = CreateFalconProgram(programPath);
+          ConfigureProgram();
+        } else {
+          ConfigureProgramsInCategory(categoryName);
+        }
+      } else {
+        ConfigureProgramsInSoundBank();
+      }
+    } else { // All sound banks
+      string programsFolderPath = GetProgramsFolderPath();
+      foreach (
+        string soundBankName1 in FileSystemService.Folder.GetSubfolderNames(
+            programsFolderPath)
+          .Where(soundBankName1 => soundBankName1 != ".git")) {
+        SoundBankFolderPath = Path.Combine(programsFolderPath, soundBankName1);
+        ConfigureProgramsInSoundBank();
+      }
+    }
+  }
+
   private void ConfigureProgramsInCategory(
     string categoryName) {
     Category = CreateCategory(categoryName);
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.MustUseGuiScriptProcessor) {
-      // TODO: Sound bank level MustUseGuiScriptProcessor check.
       Log.WriteLine(
         $"Cannot {Task} for category " +
         $"'{SoundBankName}\\{categoryName}' " +
@@ -205,6 +198,21 @@ public class Batch {
     foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {
       Program = CreateFalconProgram(programPath);
       ConfigureProgram();
+    }
+  }
+
+  private void ConfigureProgramsInSoundBank() {
+    if (Task is ConfigTask.ReplaceModWheelWithMacro
+        && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
+      Log.WriteLine(
+        $"Cannot {Task} for sound bank " +
+        $"'{SoundBankName}' " +
+        "because the sound bank's GUI has to be defined in a script.");
+      return;
+    }
+    foreach (string categoryName in FileSystemService.Folder.GetSubfolderNames(
+               SoundBankFolderPath)) {
+      ConfigureProgramsInCategory(categoryName);
     }
   }
 

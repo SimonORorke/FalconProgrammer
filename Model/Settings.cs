@@ -30,16 +30,16 @@ public class Settings : SerialisationBase {
   }
 
   public bool MustUseGuiScriptProcessor(
-    string soundBankFolderName, string categoryName) {
-    bool result = (
+    string soundBankName, string? categoryName = null) {
+    bool result = categoryName != null && (
       from programCategory in MustUseGuiScriptProcessorCategories
-      where programCategory.SoundBank == soundBankFolderName &&
+      where programCategory.SoundBank == soundBankName &&
             programCategory.Category == categoryName
       select programCategory).Any();
     if (!result) {
       result = (
         from programCategory in MustUseGuiScriptProcessorCategories
-        where programCategory.SoundBank == soundBankFolderName &&
+        where programCategory.SoundBank == soundBankName &&
               programCategory.Category == string.Empty
         select programCategory).Any();
     }
