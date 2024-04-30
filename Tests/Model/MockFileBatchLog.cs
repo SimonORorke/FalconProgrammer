@@ -18,6 +18,7 @@ public class MockFileBatchLog : FileBatchLog {
   }
 
   public override string ToString() {
-    return Writer.ToString() ?? string.Empty;;
+    return Writer.ToString() ?? string.Empty;
+    ;
   }
 }

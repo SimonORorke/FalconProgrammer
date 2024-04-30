@@ -7,9 +7,7 @@ public class CategoryTests {
   [SetUp]
   public void Setup() {
     var reader = new TestSettingsReaderEmbedded {
-      TestDeserialiser = {
-        EmbeddedFileName = "LocationsSettings.xml"
-      }
+      EmbeddedFileName = "LocationsSettings.xml"
     };
     Settings = reader.Read();
   }

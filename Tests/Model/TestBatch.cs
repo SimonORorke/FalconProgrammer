@@ -8,21 +8,22 @@ public class TestBatch : Batch {
   public TestBatch() : base(new MockBatchLog()) {
     FileSystemService = MockFileSystemService = new MockFileSystemService();
     SettingsReader = TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
-      TestDeserialiser = {
-        EmbeddedFileName = "LocationsSettings.xml"
-      }
+      EmbeddedFileName = "LocationsSettings.xml"
     };
     BatchScriptReader =
       TestBatchScriptReaderEmbedded = new TestBatchScriptReaderEmbedded();
   }
 
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
-  
-  [ExcludeFromCodeCoverage, PublicAPI] 
+
+  [ExcludeFromCodeCoverage]
+  [PublicAPI]
   internal MockFileSystemService MockFileSystemService { get; }
+
   internal TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
-  
-  [ExcludeFromCodeCoverage, PublicAPI] 
+
+  [ExcludeFromCodeCoverage]
+  [PublicAPI]
   internal TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; }
 
   protected override void ConfigureProgram() {

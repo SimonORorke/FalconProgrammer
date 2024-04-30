@@ -1,4 +1,6 @@
-﻿using FalconProgrammer.Model;
+﻿using System.Diagnostics.CodeAnalysis;
+using FalconProgrammer.Model;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -8,46 +10,36 @@ namespace FalconProgrammer.Tests.Model;
 ///   model tests.
 /// </summary>
 public class TestSettingsReaderEmbedded : SettingsReader {
-  private Deserialiser<Settings>? _deserialiser;
-  private MockFileSystemService? _mockFileSystemService;
-  private MockSerialiser? _mockSerialiserForSettings;
-
-  internal MockFileSystemService MockFileSystemService {
-    get => _mockFileSystemService ??= new MockFileSystemService();
-    set {
-      _mockFileSystemService = value;
-      FileSystemService = value;
-    }
+  public TestSettingsReaderEmbedded() {
+    AppDataFolderName = SettingsTestHelper.TestAppDataFolderName;
+    FileSystemService = MockFileSystemService = new MockFileSystemService();
+    Deserialiser = TestDeserialiser = new TestDeserialiser<Settings>();
+    Serialiser = MockSerialiserForSettings = new MockSerialiser();
   }
 
-  internal MockSerialiser MockSerialiserForSettings {
-    get => _mockSerialiserForSettings ??= new MockSerialiser();
-    set => _mockSerialiserForSettings = value;
+  /// <summary>
+  ///   The embedded resource file with this name in the Tests assembly will be
+  ///   deserialised by the <see cref="Read" /> method.
+  /// </summary>
+  internal string EmbeddedFileName {
+    [ExcludeFromCodeCoverage] [PublicAPI] get => TestDeserialiser.EmbeddedFileName;
+    set => TestDeserialiser.EmbeddedFileName = value;
   }
 
-  internal TestDeserialiser<Settings> TestDeserialiser =>
-    (TestDeserialiser<Settings>)Deserialiser;
-
-  private new Deserialiser<Settings> Deserialiser {
-    get {
-      if (_deserialiser == null) {
-        base.Deserialiser = _deserialiser = new TestDeserialiser<Settings>();
-      }
-      return _deserialiser;
-    }
-  }
+  [PublicAPI] internal MockFileSystemService MockFileSystemService { get; }
+  internal MockSerialiser MockSerialiserForSettings { get; }
+  private TestDeserialiser<Settings> TestDeserialiser { get; }
 
   protected override SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
     return new TestSettingsFolderLocationReader {
       FileSystemService = MockFileSystemService,
-      TestDeserialiser = {
-        EmbeddedFileName = "SettingsFolderLocation.xml"
-      }
+      EmbeddedFileName = "SettingsFolderLocation.xml"
     };
   }
 
   public override Settings Read(bool useDefaultIfNotFound = false) {
     var result = base.Read(useDefaultIfNotFound);
+    result.AppDataFolderName = AppDataFolderName;
     result.FileSystemService = FileSystemService;
     result.Serialiser = MockSerialiserForSettings;
     return result;

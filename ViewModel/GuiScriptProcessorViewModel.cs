@@ -11,7 +11,7 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
-  
+
   public override string TabTitle => "GUI Script Processor";
 
   internal override async Task Open() {

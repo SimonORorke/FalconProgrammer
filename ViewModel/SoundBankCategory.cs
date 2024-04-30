@@ -35,8 +35,7 @@ public partial class SoundBankCategory : DataGridItem {
   /// <summary>
   ///   Because the generated OnCategoryChanged method is private
   /// </summary>
-  protected virtual void OnCategoryChanged1(string value) {
-  }
+  protected virtual void OnCategoryChanged1(string value) { }
 
   // Code coverage highlighting does not work for these partial methods.
   partial void OnSoundBankChanged(string value) {

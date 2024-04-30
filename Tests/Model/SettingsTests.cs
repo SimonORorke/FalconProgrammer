@@ -6,7 +6,9 @@ namespace FalconProgrammer.Tests.Model;
 public class SettingsTests {
   [Test]
   public void Batch() {
-    var settingsReader = new TestSettingsReaderEmbedded();
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "LocationsSettings.xml"
+    };
     var settings = settingsReader.Read();
     Assert.That(settings.Batch.SoundBank, Is.Empty);
     Assert.That(settings.Batch.Category, Is.Empty);
@@ -18,7 +20,7 @@ public class SettingsTests {
     settings.Batch.Category = category;
     settings.Batch.Program = program;
     settings.Write();
-    var writtenSettings = 
+    var writtenSettings =
       (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
     Assert.That(writtenSettings.Batch.SoundBank, Is.EqualTo(soundBank));
     Assert.That(writtenSettings.Batch.Category, Is.EqualTo(category));

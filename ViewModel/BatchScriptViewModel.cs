@@ -9,8 +9,7 @@ public class BatchScriptViewModel : SettingsWriterViewModelBase {
   public BatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  [ExcludeFromCodeCoverage]
-  public override string PageTitle => "Run a batch Script";
+  [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
   public BatchScopeCollection Scopes => _scopes
     ??= new BatchScopeCollection(FileSystemService, DispatcherService);

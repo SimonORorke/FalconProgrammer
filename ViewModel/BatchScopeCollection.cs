@@ -11,9 +11,8 @@ namespace FalconProgrammer.ViewModel;
 public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
   public BatchScopeCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
-  
-  protected override void AppendAdditionItem() {
-  }
+
+  protected override void AppendAdditionItem() { }
 
   [ExcludeFromCodeCoverage]
   protected override void CutItem(DataGridItem itemToCut) {
@@ -29,7 +28,7 @@ public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
   protected override void RemoveItem(DataGridItem itemToRemove) {
     throw new NotSupportedException();
   }
-  
+
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
@@ -41,10 +40,10 @@ public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
       SoundBanks = SoundBanks,
       SoundBank = Settings.Batch.SoundBank != string.Empty
         ? Settings.Batch.SoundBank
-        : SoundBankCategory.AllCaption, 
+        : SoundBankCategory.AllCaption,
       Category = Settings.Batch.Category != string.Empty
         ? Settings.Batch.Category
-        : SoundBankCategory.AllCaption, 
+        : SoundBankCategory.AllCaption,
       Program = Settings.Batch.Program != string.Empty
         ? Settings.Batch.Program
         : SoundBankCategory.AllCaption

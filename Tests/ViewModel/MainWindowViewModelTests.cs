@@ -90,7 +90,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void SettingsXmlError() {
-    MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedFileName =
+    MockSettingsFolderLocationReader.EmbeddedFileName =
       "InvalidXmlSettings.xml";
     ViewModel.SelectedTab = LocationsTab; // Locations
     Assert.That(ViewModel.LocationsViewModel.ModelServices.SettingsReader,

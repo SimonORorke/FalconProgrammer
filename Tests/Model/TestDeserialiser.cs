@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
-internal class TestDeserialiser<T> : Deserialiser<T>
+public class TestDeserialiser<T> : Deserialiser<T>
   where T : SerialisationBase {
   /// <summary>
   ///   <see cref="Deserialise(string)" /> will deserialise the embedded resource file

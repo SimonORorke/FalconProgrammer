@@ -12,21 +12,12 @@ public abstract class ViewModelTestsBase {
     MockDispatcherService = new MockDispatcherService();
     MockFileSystemService = new MockFileSystemService();
     MockMessageRecipient = new MockMessageRecipient();
-    MockSerialiser = new MockSerialiser();
     MockSettingsFolderLocationReader = new MockSettingsFolderLocationReader {
-      FileSystemService = MockFileSystemService,
-      Serialiser = MockSerialiser,
-      TestDeserialiser = {
-        EmbeddedFileName = "SettingsFolderLocation.xml"
-      }
+      EmbeddedFileName = "SettingsFolderLocation.xml"
     };
     MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
-      MockFileSystemService = MockFileSystemService,
-      MockSerialiserForSettings = MockSerialiser,
       MockSettingsFolderLocationReader = MockSettingsFolderLocationReader,
-      TestDeserialiser = {
-        EmbeddedFileName = "DefaultAlreadySettings.xml"
-      }
+      EmbeddedFileName = "DefaultAlreadySettings.xml"
     };
     TestModelServices = new ModelServices {
       FileSystemService = MockFileSystemService,
@@ -39,7 +30,6 @@ public abstract class ViewModelTestsBase {
   protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;
-  protected MockSerialiser MockSerialiser { get; private set; } = null!;
 
   protected MockSettingsFolderLocationReader MockSettingsFolderLocationReader {
     get;
@@ -52,7 +42,7 @@ public abstract class ViewModelTestsBase {
   protected ModelServices TestModelServices { get; private set; } = null!;
 
   protected Settings ReadMockSettings(string embeddedFileName) {
-    MockSettingsReaderEmbedded.TestDeserialiser.EmbeddedFileName = embeddedFileName;
+    MockSettingsReaderEmbedded.EmbeddedFileName = embeddedFileName;
     return MockSettingsReaderEmbedded.Read();
   }
 }

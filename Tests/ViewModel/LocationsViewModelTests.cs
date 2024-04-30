@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FalconProgrammer.Model;
+using FalconProgrammer.Tests.Model;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -55,7 +56,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockDialogService.ExpectedYesNoAnswer = true;
     string newSettingsPath = Path.Combine(MockDialogService.ExpectedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
-    MockSettingsFolderLocationReader.TestDeserialiser.EmbeddedFileName =
+    MockSettingsFolderLocationReader.EmbeddedFileName =
       "SettingsFolderLocationK.xml";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
@@ -95,10 +96,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.DefaultTemplatePath,
       Is.EqualTo(MockDialogService.ExpectedPath));
     await ViewModel.QueryClose();
-    Assert.That(MockSerialiser.LastOutputPath,
+    var mockSerialiser = (MockSerialiser)ViewModel.Settings.Serialiser;
+    Assert.That(mockSerialiser.LastOutputPath,
       Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
-    Assert.That(MockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
-    var settings = (Settings)MockSerialiser.LastObjectSerialised;
+    Assert.That(mockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
+    var settings = (Settings)mockSerialiser.LastObjectSerialised;
     Assert.That(settings.SettingsPath,
       Is.EqualTo(Path.Combine(ViewModel.SettingsFolderPath, "Settings.xml")));
     Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(ViewModel.ProgramsFolderPath));
@@ -113,7 +115,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     ViewModel.DefaultTemplatePath = @"K:\Test\Dummy.uvip";
     await ViewModel.QueryClose();
-    settings = (Settings)MockSerialiser.LastObjectSerialised;
+    settings = (Settings)mockSerialiser.LastObjectSerialised;
     Assert.That(settings.DefaultTemplate.Path,
       Is.EqualTo(ViewModel.DefaultTemplatePath));
   }

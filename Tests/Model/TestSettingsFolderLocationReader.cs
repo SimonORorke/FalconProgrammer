@@ -1,4 +1,6 @@
-﻿using FalconProgrammer.Model;
+﻿using System.Diagnostics.CodeAnalysis;
+using FalconProgrammer.Model;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -7,18 +9,21 @@ namespace FalconProgrammer.Tests.Model;
 ///   model tests.
 /// </summary>
 public class TestSettingsFolderLocationReader : SettingsFolderLocationReader {
-  private Deserialiser<SettingsFolderLocation>? _deserialiser;
-
-  internal TestDeserialiser<SettingsFolderLocation> TestDeserialiser =>
-    (TestDeserialiser<SettingsFolderLocation>)Deserialiser;
-
-  private new Deserialiser<SettingsFolderLocation> Deserialiser {
-    get {
-      if (_deserialiser == null) {
-        base.Deserialiser =
-          _deserialiser = new TestDeserialiser<SettingsFolderLocation>();
-      }
-      return _deserialiser;
-    }
+  public TestSettingsFolderLocationReader() {
+    AppDataFolderName = SettingsTestHelper.TestAppDataFolderName;
+    FileSystemService = MockFileSystemService = new MockFileSystemService();
+    Deserialiser = TestDeserialiser = new TestDeserialiser<SettingsFolderLocation>();
   }
+
+  /// <summary>
+  ///   The embedded resource file with this name in the Tests assembly will be
+  ///   deserialised by the <see cref="SettingsFolderLocationReader.Read" /> method.
+  /// </summary>
+  internal string EmbeddedFileName {
+    [ExcludeFromCodeCoverage] [PublicAPI] get => TestDeserialiser.EmbeddedFileName;
+    set => TestDeserialiser.EmbeddedFileName = value;
+  }
+
+  [PublicAPI] internal MockFileSystemService MockFileSystemService { get; }
+  protected TestDeserialiser<SettingsFolderLocation> TestDeserialiser { get; }
 }

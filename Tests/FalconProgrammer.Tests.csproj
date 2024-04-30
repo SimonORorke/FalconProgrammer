@@ -43,10 +43,10 @@
         <EmbeddedResource Include="Model\Xml\Settings\InvalidXmlSettings.xml"/>
         <None Remove="Model\Xml\Settings\NoDefaultTemplate.xml"/>
         <EmbeddedResource Include="Model\Xml\Settings\NoDefaultTemplate.xml"/>
-        <None Remove="Model\Xml\BatchScripts\BatchScript.xml" />
-        <EmbeddedResource Include="Model\Xml\BatchScripts\BatchScript.xml" />
-        <None Remove="Model\Xml\BatchScripts\Queries.xml" />
-        <EmbeddedResource Include="Model\Xml\BatchScripts\Queries.xml" />
+        <None Remove="Model\Xml\BatchScripts\BatchScript.xml"/>
+        <EmbeddedResource Include="Model\Xml\BatchScripts\BatchScript.xml"/>
+        <None Remove="Model\Xml\BatchScripts\Queries.xml"/>
+        <EmbeddedResource Include="Model\Xml\BatchScripts\Queries.xml"/>
     </ItemGroup>
 
 </Project>

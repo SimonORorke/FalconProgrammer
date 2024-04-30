@@ -7,10 +7,10 @@ namespace FalconProgrammer.ViewModel;
 public partial class BatchScope : SoundBankCategory {
   [ObservableProperty]
   private string _program = string.Empty; // Generates Program property
-  
+
   public BatchScope(Settings settings, IFileSystemService fileSystemService) : base(
     settings, fileSystemService, false) { }
-  
+
   public ObservableCollection<string> Programs { get; } = [];
 
   protected override void OnCategoryChanged1(string value) {
@@ -26,7 +26,7 @@ public partial class BatchScope : SoundBankCategory {
     }
     string categoryFolderPath = Path.Combine(
       Settings.ProgramsFolder.Path, SoundBank, Category);
-    var programNames = 
+    var programNames =
       from programPath in FileSystemService.Folder.GetFilePaths(
         categoryFolderPath, "*.uvip")
       select Path.GetFileNameWithoutExtension(programPath);

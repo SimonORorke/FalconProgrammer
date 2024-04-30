@@ -12,12 +12,13 @@ public class TestBatchScriptReaderEmbedded : BatchScriptReader {
     AppDataFolderName = SettingsTestHelper.TestAppDataFolderName;
     FileSystemService = MockFileSystemService = new MockFileSystemService();
     Deserialiser = TestDeserialiser = new TestDeserialiser<BatchScript>();
+    Serialiser = MockSerialiserForBatchScript = new MockSerialiser();
   }
 
   /// <summary>
   ///   The embedded resource file with this name in the Tests assembly will be
-  ///   deserialised by the <see cref="Read" /> method, which will ignore its
-  ///   batchScriptPath parameter.
+  ///   deserialised by the <see cref="BatchScriptReader.Read" /> method, which will
+  ///   ignore its batchScriptPath parameter.
   /// </summary>
   internal string EmbeddedFileName {
     [ExcludeFromCodeCoverage] [PublicAPI] get => TestDeserialiser.EmbeddedFileName;
@@ -25,20 +26,6 @@ public class TestBatchScriptReaderEmbedded : BatchScriptReader {
   }
 
   internal MockFileSystemService MockFileSystemService { get; }
-
-  internal MockSerialiser MockSerialiserForBatchScript { get; } = new MockSerialiser();
-
+  internal MockSerialiser MockSerialiserForBatchScript { get; }
   private TestDeserialiser<BatchScript> TestDeserialiser { get; }
-
-  /// <summary>
-  ///   Reads the embedded resource file specified by <see cref="EmbeddedFileName" /> in
-  ///   the Tests assembly, ignoring the <paramref name="batchScriptPath" /> parameter.
-  /// </summary>
-  public override BatchScript Read(string batchScriptPath) {
-    var result = base.Read(batchScriptPath);
-    result.AppDataFolderName = AppDataFolderName;
-    result.FileSystemService = FileSystemService;
-    result.Serialiser = MockSerialiserForBatchScript;
-    return result;
-  }
 }
