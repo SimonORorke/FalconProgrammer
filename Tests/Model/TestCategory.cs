@@ -9,9 +9,6 @@ public class TestCategory : Category {
   public TestCategory(string soundBankFolderPath, string name, Settings settings) :
     base(soundBankFolderPath, name, settings) { }
 
-  internal string Path => System.IO.Path.Combine(
-    Settings.ProgramsFolder.Path, SoundBankName, Name);
-
   /// <summary>
   ///   <see cref="CreateTemplateXml" /> will read the embedded resource file
   ///   with this name in the Tests assembly, ignoring its inputPath parameter.

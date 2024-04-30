@@ -22,7 +22,8 @@ public class Category {
   protected virtual IFileSystemService FileSystemService =>
     _fileSystemService ??= Model.FileSystemService.Default;
 
-  private string FolderPath { get; set; } = null!;
+  internal string Path => System.IO.Path.Combine(
+    Settings.ProgramsFolder.Path, SoundBankName, Name);
 
   /// <summary>
   ///   I think the only categories where the GUI script processor cannot be
@@ -64,15 +65,15 @@ public class Category {
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   private string SoundBankFolderPath { get; }
-  public string SoundBankName => Path.GetFileName(SoundBankFolderPath);
+  public string SoundBankName => System.IO.Path.GetFileName(SoundBankFolderPath);
 
   [PublicAPI]
-  public string TemplateCategoryName => Path.GetFileName(
-    Path.GetDirectoryName(TemplateProgramPath)!);
+  public string TemplateCategoryName => System.IO.Path.GetFileName(
+    System.IO.Path.GetDirectoryName(TemplateProgramPath)!);
 
   [PublicAPI]
   public string TemplateProgramName =>
-    Path.GetFileNameWithoutExtension(TemplateProgramPath);
+    System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
   public string TemplateProgramPath { get; private set; } = null!;
 
@@ -85,33 +86,24 @@ public class Category {
 
   [PublicAPI]
   public string TemplateSoundBankName =>
-    Directory.GetParent(Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
-
-  private string GetFolderPath(string categoryName) {
-    string result = Path.Combine(SoundBankFolderPath, categoryName);
-    if (!FileSystemService.Folder.Exists(result)) {
-      throw new ApplicationException(
-        $"Category {PathShort}: Cannot find category folder '{result}'.");
-    }
-    return result;
-  }
+    Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
 
   public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
     var programPaths = FileSystemService.Folder.GetFilePaths(
-      FolderPath, "*.uvip");
+      Path, "*.uvip");
     var result = (
       from programPath in programPaths
       where programPath != TemplateProgramPath
       select programPath).ToList();
     if (result.Count == 0) {
       throw new ApplicationException(
-        $"Category {PathShort}: There are no program files to edit in folder '{FolderPath}'.");
+        $"Category {PathShort}: There are no program files to edit in folder '{Path}'.");
     }
     return result;
   }
 
   public string GetProgramPath(string programName) {
-    string result = Path.Combine(FolderPath, $"{programName}.uvip");
+    string result = System.IO.Path.Combine(Path, $"{programName}.uvip");
     if (!FileSystemService.File.Exists(result)) {
       throw new ApplicationException(
         $"Category {PathShort}: Cannot find program file '{result}'.");
@@ -122,19 +114,19 @@ public class Category {
   private string GetTemplateProgramPath() {
     ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
-    string categoryTemplateFolderPath = Path.Combine(
+    string categoryTemplateFolderPath = System.IO.Path.Combine(
       templatesFolderPath, SoundBankName, Name);
     string folderPath = categoryTemplateFolderPath;
     if (!FileSystemService.Folder.Exists(folderPath)) {
       folderPath = string.Empty;
-      string soundBankTemplateFolderPath = Path.Combine(
+      string soundBankTemplateFolderPath = System.IO.Path.Combine(
         templatesFolderPath, SoundBankName);
       if (FileSystemService.Folder.Exists(soundBankTemplateFolderPath)) {
         var subfolderNames =
           FileSystemService.Folder.GetSubfolderNames(soundBankTemplateFolderPath);
         if (subfolderNames.Count == 1) {
           folderPath =
-            Path.Combine(soundBankTemplateFolderPath, subfolderNames[0]);
+            System.IO.Path.Combine(soundBankTemplateFolderPath, subfolderNames[0]);
         }
       }
     }
@@ -190,7 +182,10 @@ public class Category {
   }
 
   public void Initialise() {
-    FolderPath = GetFolderPath(Name);
+    if (!FileSystemService.Folder.Exists(Path)) {
+      throw new ApplicationException(
+        $"Category {PathShort}: Cannot find category folder '{Path}'.");
+    }
     TemplateProgramPath = GetTemplateProgramPath();
     TemplateScriptProcessor = GetTemplateScriptProcessor();
   }
