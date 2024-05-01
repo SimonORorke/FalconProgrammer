@@ -94,8 +94,8 @@ public class CategoryTests {
 
   [Test]
   public void NonFactoryDefaultTemplateSameAsFactory() {
-    // ReSharper disable once StringLiteralTypo
     var category =
+      // ReSharper disable once StringLiteralTypo
       new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
     category.ConfigureMockFileSystemService(
       @"Factory\Keys", "DX Mania.uvip");
@@ -104,6 +104,34 @@ public class CategoryTests {
     Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
     Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
     Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
+  }
+
+  [Test]
+  public void NonFactoryDefaultTemplateDoesNotExist() {
+    var category =
+      // ReSharper disable once StringLiteralTypo
+      new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
+    category.ConfigureMockFileSystemService(
+      @"Factory\Keys", "DX Mania.uvip");
+    category.MockFileSystemService.File.ExpectedExists = false;
+    var exception = Assert.Catch<ApplicationException>(
+      () => category.Initialise());
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.Contain("Cannot find default template file"));
+  }
+
+  [Test]
+  public void NoNonFactoryDefaultTemplate() {
+    var category =
+      // ReSharper disable once StringLiteralTypo
+      new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
+    category.ConfigureMockFileSystemService(
+      @"Factory\Keys", "DX Mania.uvip");
+    category.Settings.DefaultTemplate.Path = string.Empty;
+    var exception = Assert.Catch<ApplicationException>(
+      () => category.Initialise());
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.Contain("A default Template must be specified"));
   }
 
   [Test]
@@ -148,6 +176,16 @@ public class CategoryTests {
       () => category.GetProgramPath("Blah"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain("Cannot find program file"));
+  }
+
+  [Test]
+  public void ProgramExists() {
+    var category =
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      };
+    Assert.DoesNotThrow(
+      () => category.GetProgramPath("Blah"));
   }
 
   [Test]
