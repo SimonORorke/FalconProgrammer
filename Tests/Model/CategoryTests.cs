@@ -107,6 +107,50 @@ public class CategoryTests {
   }
 
   [Test]
+  public void NoProgramFilesToEdit() {
+    var category =
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      };
+    var exception = Assert.Catch<ApplicationException>(
+      () => category.GetPathsOfProgramFilesToEdit());
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.Contain(
+      "There are no program files to edit in folder"));
+  }
+
+  [Test]
+  public void NoTemplateProgramsFolder() {
+    var category =
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      };
+    category.Settings.TemplateProgramsFolder.Path = string.Empty;
+    var exception = Assert.Catch<ApplicationException>(
+      () => category.Initialise());
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.StartWith(
+      "The template programs folder is not specified in settings file"));
+  }
+
+  [Test]
+  public void ProgramDoesNotExist() {
+    var category =
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip",
+        MockFileSystemService = {
+          File = {
+            ExpectedExists = false
+          }
+        }
+      };
+    var exception = Assert.Catch<ApplicationException>(
+      () => category.GetProgramPath("Blah"));
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.Contain("Cannot find program file"));
+  }
+
+  [Test]
   public void PulsarHasCategorySpecificTemplates() {
     var category = new TestCategory(GetSoundBankFolderName("Pulsar"), "Bass", Settings) {
       EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
@@ -131,6 +175,23 @@ public class CategoryTests {
         }
       };
     Assert.Throws<ApplicationException>(() => category.Initialise());
+  }
+
+  [Test]
+  public void TemplateProgramsFolderDoesNotExist() {
+    var category =
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      };
+    category.ConfigureMockFileSystemService(
+      @"Fluidity\Strings", "Guitar Stream.uvip");
+    category.MockFileSystemService.Folder.ExistingPaths.Remove(
+      Settings.TemplateProgramsFolder.Path);
+    var exception = Assert.Catch<ApplicationException>(
+      () => category.Initialise());
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.StartWith(
+      "Cannot find template programs folder"));
   }
 
   private string GetSoundBankFolderName(string soundBankName) {

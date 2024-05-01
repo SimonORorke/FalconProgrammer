@@ -60,18 +60,16 @@ public class Category {
   public bool MustUseGuiScriptProcessor =>
     Settings.MustUseGuiScriptProcessor(SoundBankName, Name);
 
-  [PublicAPI] public string Name { get; }
+  public string Name { get; }
   [PublicAPI] public string PathShort { get; }
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   private string SoundBankFolderPath { get; }
   public string SoundBankName => System.IO.Path.GetFileName(SoundBankFolderPath);
 
-  [PublicAPI]
   public string TemplateCategoryName => System.IO.Path.GetFileName(
     System.IO.Path.GetDirectoryName(TemplateProgramPath)!);
 
-  [PublicAPI]
   public string TemplateProgramName =>
     System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
@@ -97,7 +95,8 @@ public class Category {
       select programPath).ToList();
     if (result.Count == 0) {
       throw new ApplicationException(
-        $"Category {PathShort}: There are no program files to edit in folder '{Path}'.");
+        $"Category {PathShort}: " +
+        $"There are no program files to edit in folder '{Path}'.");
     }
     return result;
   }
