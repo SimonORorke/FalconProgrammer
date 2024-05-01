@@ -1,7 +1,6 @@
 ﻿namespace FalconProgrammer.Model;
 
 public enum ConfigTask {
-  ChangeMacroCcNo,
   CountMacros,
   InitialiseLayout,
   InitialiseValuesAndMoveMacros,

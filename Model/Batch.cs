@@ -28,8 +28,6 @@ public class Batch {
   }
 
   public IBatchLog Log { get; }
-  private int NewCcNo { get; set; }
-  private int OldCcNo { get; set; }
   protected FalconProgram Program { get; private set; } = null!;
 
   internal Settings Settings => _settings ??= SettingsReader.Read();
@@ -44,44 +42,11 @@ public class Batch {
   private string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   protected ConfigTask Task { get; private set; }
 
-  /// <summary>
-  ///   Changes every occurrence of the specified old macro MIDI CC number to the
-  ///   specified new CC number.
-  /// </summary>
-  /// <param name="oldCcNo">MIDI CC number to be replaced.</param>
-  /// <param name="newCcNo">Replacement MIDI CC number.</param>
-  /// <param name="soundBankName">
-  ///   The name of the sound bank folder. Null for all sound banks.
-  /// </param>
-  /// <param name="categoryName">
-  ///   The name of the category folder.
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  /// <param name="programName">
-  ///   The program name, excluding the ".uvip" suffix.
-  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
-  ///   specified, null (the default) for all files in the specified category.
-  ///   Otherwise ignored.
-  /// </param>
-  [PublicAPI]
-  public void ChangeMacroCcNo(
-    int oldCcNo, int newCcNo,
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    OldCcNo = oldCcNo;
-    NewCcNo = newCcNo;
-    Task = ConfigTask.ChangeMacroCcNo;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
   protected virtual void ConfigureProgram() {
     if (Task != ConfigTask.RestoreOriginal) {
       Program.Read();
     }
     switch (Task) {
-      case ConfigTask.ChangeMacroCcNo:
-        Program.ChangeMacroCcNo(OldCcNo, NewCcNo);
-        break;
       case ConfigTask.CountMacros:
         Program.CountMacros();
         break;

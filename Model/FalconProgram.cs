@@ -142,13 +142,6 @@ public class FalconProgram {
     return true;
   }
 
-  public void ChangeMacroCcNo(int oldCcNo, int newCcNo) {
-    var oldModulation = new Modulation(ProgramXml) { CcNo = oldCcNo };
-    var newModulation = new Modulation(ProgramXml) { CcNo = newCcNo };
-    ProgramXml.ChangeModulationSource(oldModulation.Source, newModulation.Source);
-    NotifyUpdate($"{PathShort}: Changed MIDI CC {oldCcNo}  to {newCcNo}.");
-  }
-
   public void CountMacros() {
     if (Macros.Count == 10) {
       Log.WriteLine($"{PathShort} has {Macros.Count} macros.");

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
 
@@ -82,12 +81,6 @@ public class BatchScript : SerialisationBase {
     [XmlAttribute] public string Category { get; set; } = string.Empty;
     [XmlAttribute] public string Program { get; set; } = string.Empty;
 
-    [XmlArray(nameof(Parameters))]
-    [XmlArrayItem("Parameter")]
-    [PublicAPI]
-    public List<BatchTaskParameter> Parameters { get; [ExcludeFromCodeCoverage] set; } =
-      [];
-
     [XmlIgnore] public ConfigTask ConfigTask => _configTask ??= GetConfigTask();
 
     private ConfigTask GetConfigTask() {
@@ -97,10 +90,5 @@ public class BatchScript : SerialisationBase {
         throw new ApplicationException($"'{Name}' is not a valid task name.", ex);
       }
     }
-  }
-
-  public class BatchTaskParameter {
-    [XmlAttribute] public string Name { get; set; } = string.Empty;
-    [XmlAttribute] public string Value { get; set; } = string.Empty;
   }
 }

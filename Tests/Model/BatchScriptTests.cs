@@ -41,10 +41,6 @@ public class BatchScriptTests {
   [Test]
   public void Validate() {
     Assert.DoesNotThrow(() => BatchScript.Validate());
-    Assert.That(BatchScript.Path, Is.EqualTo(BatchScriptPath));
-    Assert.That(BatchScript.Tasks[0].Parameters, Has.Count.EqualTo(2));
-    Assert.That(BatchScript.Tasks[0].Parameters[0].Name, Is.EqualTo("Big"));
-    Assert.That(BatchScript.Tasks[0].Parameters[0].Value, Is.EqualTo("12"));
     var newBatchTask = new BatchScript.BatchTask { Name = "Blah" };
     BatchScript.Tasks.Add(newBatchTask);
     var exception = Assert.Catch<ApplicationException>(() => BatchScript.Validate());
@@ -62,9 +58,13 @@ public class BatchScriptTests {
 
   [Test]
   public void Write() {
+    Assert.That(BatchScript.Path, Is.EqualTo(BatchScriptPath));
     BatchScript.Write();
     Assert.That(
       TestBatchScriptReaderEmbedded.MockSerialiserForBatchScript.LastObjectSerialised,
       Is.EqualTo(BatchScript));
+    Assert.That(
+      TestBatchScriptReaderEmbedded.MockSerialiserForBatchScript.LastOutputPath,
+      Is.EqualTo(BatchScriptPath));
   }
 }

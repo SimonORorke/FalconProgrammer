@@ -1,12 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Batch>
     <Tasks>
-        <Task Name="QueryAdsrMacros" SoundBank="" Category="" Program="">
-            <Parameters>
-                <Parameter Name="Big" Value="12"/>
-                <Parameter Name="Bog" Value="34"/>
-            </Parameters>
-        </Task>
+        <Task Name="QueryAdsrMacros" SoundBank="" Category="" Program=""/>
         <Task Name="PrependPathLineToDescription" SoundBank="" Category="" Program=""/>
         <Task Name="UpdateMacroCcs" SoundBank="" Category="" Program=""/>
         <Task Name="InitialiseLayout" SoundBank="SB" Category="Cat" Program="P2"/>
