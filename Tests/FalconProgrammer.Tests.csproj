@@ -50,6 +50,8 @@
         <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForAll.xml"/>
         <None Remove="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
         <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
+        <None Remove="Model\Xml\Settings\BatchSettings.xml" />
+        <EmbeddedResource Include="Model\Xml\Settings\BatchSettings.xml" />
     </ItemGroup>
 
 </Project>

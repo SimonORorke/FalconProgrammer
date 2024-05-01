@@ -10,7 +10,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    Settings = ReadMockSettings("LocationsSettings.xml");
+    Settings = ReadMockSettings("BatchSettings.xml");
     ViewModel = new BatchScriptViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
@@ -107,7 +107,20 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Settings.Batch.Category, Is.EqualTo(category));
     Assert.That(ViewModel.Settings.Batch.Program, Is.EqualTo(program));
   }
-
+  
+  [Test]
+  public async Task UpdateTasks() {
+    ConfigureValidMockFileSystemService();
+    await ViewModel.Open();
+    Assert.That(ViewModel.Settings.Batch.Tasks, Has.Count.EqualTo(2));
+    var taskViewModel = ViewModel.Tasks[0];
+    Assert.That(taskViewModel.Task, Is.EqualTo("InitialiseLayout"));
+    const string task = "PrependPathLineToDescription";
+    taskViewModel.Task = task;
+    await ViewModel.QueryClose();
+    Assert.That(ViewModel.Settings.Batch.Tasks[0], Is.EqualTo(task));
+  }
+  
   [Test]
   public async Task ValidSettingsOnOpen() {
     ConfigureValidMockFileSystemService();

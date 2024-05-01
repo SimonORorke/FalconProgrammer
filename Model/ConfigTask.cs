@@ -1,7 +1,7 @@
 ﻿namespace FalconProgrammer.Model;
 
 public enum ConfigTask {
-  CountMacros,
+  CountMacros, // TODO: Rename CountMacros to QueryCountMacros 
   InitialiseLayout,
   InitialiseValuesAndMoveMacros,
   MoveConnectionsBeforeProperties,

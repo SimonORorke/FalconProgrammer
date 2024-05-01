@@ -23,6 +23,10 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
     CutItemTyped((SoundBankCategory)itemToCut);
   }
 
+  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+    PasteBeforeItemTyped((SoundBankCategory)itemBeforeWhichToPaste);
+  }
+
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
@@ -35,10 +39,6 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
       AddItem(category.SoundBank, categoryToDisplay);
     }
     IsPopulating = false;
-  }
-
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
-    PasteBeforeItemTyped((SoundBankCategory)itemBeforeWhichToPaste);
   }
 
   protected override void RemoveItem(DataGridItem itemToRemove) {

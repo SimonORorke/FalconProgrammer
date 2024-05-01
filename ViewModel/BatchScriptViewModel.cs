@@ -5,6 +5,7 @@ namespace FalconProgrammer.ViewModel;
 
 public class BatchScriptViewModel : SettingsWriterViewModelBase {
   private BatchScopeCollection? _scopes;
+  private TaskCollection? _tasks;
 
   public BatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
@@ -17,17 +18,25 @@ public class BatchScriptViewModel : SettingsWriterViewModelBase {
   private ImmutableList<string> SoundBanks { get; set; } = [];
   public override string TabTitle => "Batch Script";
 
+  public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
+
   internal override async Task Open() {
     await base.Open();
     if (!await ValidateAndPopulateSoundBanks()) {
       return;
     }
     Scopes.Populate(Settings, SoundBanks);
+    Tasks.Populate(Settings);
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (Scopes.HasBeenChanged) {
       Scopes.UpdateSettings();
+      // Notify change, so that Settings will be saved.
+      OnPropertyChanged();
+    }
+    if (Tasks.HasBeenChanged) {
+      Tasks.UpdateSettings();
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }

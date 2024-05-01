@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+    <!-- The unrealistic drive letter has been chosen 
+    for tests that are expected to access a mock file system. 
+    A test will throw an exception if it attempts to write to the real file system, 
+    provided it is run on a computer that does not have that drive. -->
+    <BatchScriptsFolder Path="J:\FalconProgrammer\Batch"/>
+    <ProgramsFolder Path="J:\FalconProgrammer\Programs"/>
+    <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
+    <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
+    <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Factory\Keys\DX Mania.uvip"/>
+    <MustUseGuiScriptProcessor>
+        <ProgramCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <ProgramCategory SoundBank="Organic Keys" Category=""/>
+        <ProgramCategory SoundBank="Pulsar" Category=""/>
+        <ProgramCategory SoundBank="Voklm" Category=""/>
+    </MustUseGuiScriptProcessor>
+    <Batch SoundBank="All" Category="All" Program="All">
+        <Tasks>
+            <Task>InitialiseLayout</Task>
+            <Task>UpdateMacroCcs</Task>
+        </Tasks>
+    </Batch>
+</Settings>

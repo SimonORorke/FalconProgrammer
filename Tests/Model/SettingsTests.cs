@@ -13,18 +13,23 @@ public class SettingsTests {
     Assert.That(settings.Batch.SoundBank, Is.Empty);
     Assert.That(settings.Batch.Category, Is.Empty);
     Assert.That(settings.Batch.Program, Is.Empty);
+    Assert.That(settings.Batch.Tasks, Is.Empty);
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
+    const string task = nameof(ConfigTask.UpdateMacroCcs);
     settings.Batch.SoundBank = soundBank;
     settings.Batch.Category = category;
     settings.Batch.Program = program;
+    settings.Batch.Tasks.Add(task);
     settings.Write();
     var writtenSettings =
       (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
     Assert.That(writtenSettings.Batch.SoundBank, Is.EqualTo(soundBank));
     Assert.That(writtenSettings.Batch.Category, Is.EqualTo(category));
     Assert.That(writtenSettings.Batch.Program, Is.EqualTo(program));
+    Assert.That(writtenSettings.Batch.Tasks, Has.Count.EqualTo(1));
+    Assert.That(writtenSettings.Batch.Tasks[0], Is.EqualTo(task));
   }
 
   [Test]

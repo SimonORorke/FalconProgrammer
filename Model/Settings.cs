@@ -16,8 +16,10 @@ public class Settings : SerialisationBase {
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(ProgramCategory))]
-  [ExcludeFromCodeCoverage]
-  public List<ProgramCategory> MustUseGuiScriptProcessorCategories { get; set; } = [];
+  public List<ProgramCategory> MustUseGuiScriptProcessorCategories {
+    get;
+    [ExcludeFromCodeCoverage] set;
+  } = [];
 
   [XmlElement] public MidiForMacros MidiForMacros { get; set; } = new MidiForMacros();
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
