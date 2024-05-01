@@ -142,12 +142,6 @@ public class FalconProgram {
     return true;
   }
 
-  public void CountMacros() {
-    if (Macros.Count == 10) {
-      Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
-    }
-  }
-
   private List<Macro> CreateMacrosFromElements() {
     var result = (
       from macroElement in ProgramXml.MacroElements
@@ -649,6 +643,10 @@ public class FalconProgram {
     }
   }
 
+  public void QueryCountMacros() {
+    Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
+  }
+  
   public void QueryDahdsrModulations() {
     if (GuiScriptProcessor != null) {
       return;

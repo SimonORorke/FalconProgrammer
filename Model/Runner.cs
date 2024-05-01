@@ -47,7 +47,7 @@ public static class Runner {
     // batch.RollForward("Spectre", "Leads", "LD Showteker");
     // batch.RollForward("Spectre", "Polysynth", "PL Cream");
     // batch.RollForward("Titanium");
-    // batch.CountMacros(null);
+    // batch.QueryCountMacros(null);
     // batch.MoveConnectionsBeforeProperties(null);
     // batch.QueryAdsrMacros(null);
     // batch.QueryDahdsrModulations(null);

@@ -47,9 +47,6 @@ public class Batch {
       Program.Read();
     }
     switch (Task) {
-      case ConfigTask.CountMacros:
-        Program.CountMacros();
-        break;
       case ConfigTask.InitialiseLayout:
         Program.InitialiseLayout();
         break;
@@ -61,6 +58,9 @@ public class Batch {
         break;
       case ConfigTask.QueryAdsrMacros:
         Program.QueryAdsrMacros();
+        break;
+      case ConfigTask.QueryCountMacros:
+        Program.QueryCountMacros();
         break;
       case ConfigTask.QueryDahdsrModulations:
         Program.QueryDahdsrModulations();
@@ -181,30 +181,6 @@ public class Batch {
     }
   }
 
-  /// <summary>
-  ///   For each of the specified Falcon program presets, reports the number of macros.
-  /// </summary>
-  /// <param name="soundBankName">
-  ///   The name of the sound bank folder. Null for all sound banks.
-  /// </param>
-  /// <param name="categoryName">
-  ///   The name of the category folder.
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  /// <param name="programName">
-  ///   The program name, excluding the ".uvip" suffix.
-  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
-  ///   specified, null (the default) for all files in the specified category.
-  ///   Otherwise ignored.
-  /// </param>
-  [PublicAPI]
-  public void CountMacros(string? soundBankName, string? categoryName = null,
-    string? programName = null) {
-    Task = ConfigTask.CountMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
   protected virtual Category CreateCategory(string categoryName) {
     var result = new Category(SoundBankFolderPath, categoryName, Settings);
     result.Initialise();
@@ -288,6 +264,30 @@ public class Batch {
   public void QueryAdsrMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryAdsrMacros;
+    ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  /// <summary>
+  ///   For each of the specified Falcon program presets, reports the number of macros.
+  /// </summary>
+  /// <param name="soundBankName">
+  ///   The name of the sound bank folder. Null for all sound banks.
+  /// </param>
+  /// <param name="categoryName">
+  ///   The name of the category folder.
+  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
+  ///   categories in the specified sound bank. Otherwise ignored.
+  /// </param>
+  /// <param name="programName">
+  ///   The program name, excluding the ".uvip" suffix.
+  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
+  ///   specified, null (the default) for all files in the specified category.
+  ///   Otherwise ignored.
+  /// </param>
+  [PublicAPI]
+  public void QueryCountMacros(string? soundBankName, string? categoryName = null,
+    string? programName = null) {
+    Task = ConfigTask.QueryCountMacros;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
