@@ -370,14 +370,14 @@ public class FalconProgram {
     }
     switch (SoundBankName) {
       case "Eternal Funk":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Yellowish Mid-Green.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Yellowish Mid-Green.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;
       case "Fluidity":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Midnight Blue.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Midnight Blue.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
@@ -386,26 +386,26 @@ public class FalconProgram {
         }
         break;
       case "Hypnotic Drive":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Dark Goldenrod.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Dark Goldenrod.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Inner Dimensions":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Dark Red.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Dark Red.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Modular Noise":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Dark Forest.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Dark Forest.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
         break;
       case "Savage":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Heath.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Heath.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Titanium":
-        ProgramXml.SetBackgroundImagePath("./../../../Images/Dull Purple.png");
+        ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Dull Purple.png");
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       default:
@@ -415,7 +415,7 @@ public class FalconProgram {
   }
 
   private void InitialiseOrganicPadsProgram() {
-    ProgramXml.SetBackgroundImagePath("./../../../Images/Bluish Teal.png");
+    ProgramXml.SetBackgroundImagePath("./../../../BackgroundImages/Bluish Teal.png");
     NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
