@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -189,8 +190,20 @@ public class CategoryTests {
   }
 
   [Test]
+  public void ProgramXml() {
+    var category =
+      new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
+        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      };
+    var programXml = new ProgramXml(category);
+    category.ProgramXml = programXml;
+    Assert.That(category.ProgramXml.Category.Name, Is.EqualTo(category.Name));
+  }
+
+  [Test]
   public void PulsarHasCategorySpecificTemplates() {
-    var category = new TestCategory(GetSoundBankFolderName("Pulsar"), "Bass", Settings) {
+    var category = new TestCategory(
+      GetSoundBankFolderName("Pulsar"), "Bass", Settings) {
       EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
     };
     category.ConfigureMockFileSystemService(
