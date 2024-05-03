@@ -25,7 +25,7 @@
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
-                <DataTemplate DataType="vm:TabItemViewModel">
+                <DataTemplate DataType="vm:TabItem">
                     <ContentControl Content="{Binding ViewModel}" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
