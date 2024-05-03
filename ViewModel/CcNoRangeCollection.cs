@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
+public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeItem> {
   private readonly IDialogService _dialogService;
   private readonly string _rangeType;
 
@@ -20,14 +20,14 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
   }
 
   private void AddItem(int? start = null, int? end = null) {
-    AddItem(new CcNoRangeViewModel(IsAddingAdditionItem) {
+    AddItem(new CcNoRangeItem(IsAddingAdditionItem) {
       Start = start,
       End = end
     });
   }
 
   protected override void CutItem(DataGridItem itemToCut) {
-    CutItemTyped((CcNoRangeViewModel)itemToCut);
+    CutItemTyped((CcNoRangeItem)itemToCut);
   }
 
   internal void Populate(List<Settings.IntegerRange> settingsRanges) {
@@ -41,11 +41,11 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
   }
 
   protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
-    PasteBeforeItemTyped((CcNoRangeViewModel)itemBeforeWhichToPaste);
+    PasteBeforeItemTyped((CcNoRangeItem)itemBeforeWhichToPaste);
   }
 
   protected override void RemoveItem(DataGridItem itemToRemove) {
-    RemoveItemTyped((CcNoRangeViewModel)itemToRemove);
+    RemoveItemTyped((CcNoRangeItem)itemToRemove);
   }
 
   internal async Task<ClosingValidationResult> UpdateSettings(
@@ -69,7 +69,7 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeViewModel> {
   }
 
   private async Task<ClosingValidationResult> Validate(
-    IReadOnlyCollection<CcNoRangeViewModel> ranges, bool isClosingWindow) {
+    IReadOnlyCollection<CcNoRangeItem> ranges, bool isClosingWindow) {
     if (ranges.Count == 0) {
       return new ClosingValidationResult(true, true);
     }

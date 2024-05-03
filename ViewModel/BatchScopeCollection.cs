@@ -33,20 +33,20 @@ public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
     IsPopulating = true;
     Settings = settings;
     var soundBankList = soundBanks.ToList();
-    soundBankList.Insert(0, SoundBankCategory.AllCaption);
+    soundBankList.Insert(0, SoundBankItem.AllCaption);
     SoundBanks = soundBankList.ToImmutableList();
     Clear();
     AddItem(new BatchScope(Settings, FileSystemService) {
       SoundBanks = SoundBanks,
       SoundBank = Settings.Batch.SoundBank != string.Empty
         ? Settings.Batch.SoundBank
-        : SoundBankCategory.AllCaption,
+        : SoundBankItem.AllCaption,
       Category = Settings.Batch.Category != string.Empty
         ? Settings.Batch.Category
-        : SoundBankCategory.AllCaption,
+        : SoundBankItem.AllCaption,
       Program = Settings.Batch.Program != string.Empty
         ? Settings.Batch.Program
-        : SoundBankCategory.AllCaption
+        : SoundBankItem.AllCaption
     });
     IsPopulating = false;
   }

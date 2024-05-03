@@ -4,7 +4,7 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class ProgramHierarchyCollection<T> : DataGridItemCollection<T>
-  where T : SoundBankCategory {
+  where T : SoundBankItem {
   protected ProgramHierarchyCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(dispatcherService) {
     FileSystemService = fileSystemService;

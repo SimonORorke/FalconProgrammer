@@ -22,6 +22,11 @@ public class Settings : SerialisationBase {
   } = [];
 
   [XmlElement] public MidiForMacros MidiForMacros { get; set; } = new MidiForMacros();
+
+  [XmlArray(nameof(Backgrounds))]
+  [XmlArrayItem(nameof(Background))]
+  public List<Background> Backgrounds { get; [ExcludeFromCodeCoverage] set; } = [];
+
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
@@ -53,6 +58,11 @@ public class Settings : SerialisationBase {
       SettingsPath = GetSettingsPath(settingsFolderPath);
     }
     Serialiser.Serialise(typeof(Settings), this, SettingsPath);
+  }
+
+  public class Background {
+    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
+    [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
   public class Folder {

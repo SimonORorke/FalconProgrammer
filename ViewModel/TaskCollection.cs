@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class TaskCollection : DataGridItemCollection<TaskViewModel> {
+public class TaskCollection : DataGridItemCollection<TaskItem> {
   public TaskCollection(IDispatcherService dispatcherService) : base(dispatcherService) { }
   private ImmutableList<string> Tasks { get; } = CreateTasks();
 
@@ -12,7 +12,7 @@ public class TaskCollection : DataGridItemCollection<TaskViewModel> {
   }
 
   private void AddItem(string task = "") {
-    AddItem(new TaskViewModel(IsAddingAdditionItem) {
+    AddItem(new TaskItem(IsAddingAdditionItem) {
       Tasks = Tasks,
       Task = task
     });
@@ -25,11 +25,11 @@ public class TaskCollection : DataGridItemCollection<TaskViewModel> {
   }
 
   protected override void CutItem(DataGridItem itemToCut) {
-    CutItemTyped((TaskViewModel)itemToCut);
+    CutItemTyped((TaskItem)itemToCut);
   }
 
   protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
-    PasteBeforeItemTyped((TaskViewModel)itemBeforeWhichToPaste);
+    PasteBeforeItemTyped((TaskItem)itemBeforeWhichToPaste);
   }
 
   internal void Populate(Settings settings) {
@@ -43,7 +43,7 @@ public class TaskCollection : DataGridItemCollection<TaskViewModel> {
   }
 
   protected override void RemoveItem(DataGridItem itemToRemove) {
-    RemoveItemTyped((TaskViewModel)itemToRemove);
+    RemoveItemTyped((TaskItem)itemToRemove);
   }
 
   internal void UpdateSettings() {

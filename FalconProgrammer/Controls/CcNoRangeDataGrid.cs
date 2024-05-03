@@ -76,7 +76,7 @@ public class CcNoRangeDataGrid : DataGrid {
         }
       },
       CellTemplate = new DataTemplate {
-        DataType = typeof(CcNoRangeViewModel),
+        DataType = typeof(CcNoRangeItem),
         Content = ActionButton
       }
     };
@@ -94,7 +94,7 @@ public class CcNoRangeDataGrid : DataGrid {
         }
       },
       CellTemplate = new DataTemplate {
-        DataType = typeof(CcNoRangeViewModel),
+        DataType = typeof(CcNoRangeItem),
         Content = ccNoTextBox
       }
     };

@@ -122,16 +122,6 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task NoProgramsFolder() {
-    Settings = ReadMockSettings("DefaultAlreadySettings.xml");
-    await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
-      "Script processors cannot be updated: the programs folder has not been specified."));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
-  }
-
-  [Test]
   public async Task ProgramsFolderEmpty() {
     MockFileSystemService.Folder.ExpectedSubfolderNames.Add(Settings.ProgramsFolder.Path,
       []);
@@ -149,6 +139,16 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
       "Script processors cannot be updated: cannot find programs folder "));
+    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+  }
+
+  [Test]
+  public async Task NoProgramsNotSpecified() {
+    Settings = ReadMockSettings("DefaultAlreadySettings.xml");
+    await ViewModel.Open();
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
+      "Script processors cannot be updated: the programs folder has not been specified."));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 

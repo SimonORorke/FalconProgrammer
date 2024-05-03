@@ -34,7 +34,7 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
       string categoryToDisplay = string.IsNullOrWhiteSpace(category.Category)
-        ? SoundBankCategory.AllCaption
+        ? SoundBankItem.AllCaption
         : category.Category;
       AddItem(category.SoundBank, categoryToDisplay);
     }

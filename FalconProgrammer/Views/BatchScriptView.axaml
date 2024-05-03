@@ -108,7 +108,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="vm:TaskViewModel">
+                            <DataTemplate DataType="vm:TaskItem">
                                 <TextBlock Text="{Binding Task}"
                                            Margin="13,0, 0, 0" />
                             </DataTemplate>
@@ -128,7 +128,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="vm:TaskViewModel">
+                            <DataTemplate DataType="vm:TaskItem">
                                 <controls:ItemActionButton
                                     CutCommand="{Binding CutCommand}"
                                     PasteBeforeCommand="{Binding PasteBeforeCommand}"

@@ -15,4 +15,8 @@
         <ProgramCategory SoundBank="Pulsar" Category=""/>
         <ProgramCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
+    <Backgrounds>
+        <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Background Images\Yellowish Mid-Green.png"/>
+        <Background SoundBank="Fluidity" Path="J:\FalconProgrammer\Background Images\Midnight Blue.png"/>
+    </Backgrounds>
 </Settings>

@@ -5,28 +5,17 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class SoundBankCategory : DataGridItem {
-  internal const string AllCaption = "All";
-
+public partial class SoundBankCategory : SoundBankItem {
   [ObservableProperty]
   private string _category = string.Empty; // Generates Category property
-
-  [ObservableProperty]
-  private string _soundBank = string.Empty; // Generates SoundBank property
 
   public SoundBankCategory(
     Settings settings,
     IFileSystemService fileSystemService,
-    bool isAdditionItem) : base(isAdditionItem) {
-    FileSystemService = fileSystemService;
-    Settings = settings;
-  }
+    bool isAdditionItem) : base(settings, fileSystemService, isAdditionItem) { }
 
-  public ImmutableList<string> SoundBanks { get; internal set; } = [];
   internal bool IsForAllCategories => Category == AllCaption;
   public ObservableCollection<string> Categories { get; } = [];
-  protected IFileSystemService FileSystemService { get; }
-  protected Settings Settings { get; }
 
   partial void OnCategoryChanged(string value) {
     OnCategoryChanged1(value);
@@ -38,7 +27,7 @@ public partial class SoundBankCategory : DataGridItem {
   protected virtual void OnCategoryChanged1(string value) { }
 
   // Code coverage highlighting does not work for these partial methods.
-  partial void OnSoundBankChanged(string value) {
+  protected override void OnSoundBankChanged1(string value) {
     // On addition after removal, the new sound bank is null.
     // This fixes it.
     if (string.IsNullOrWhiteSpace(value)) {

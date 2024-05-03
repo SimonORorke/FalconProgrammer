@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class TaskViewModel : DataGridItem {
-  public TaskViewModel(bool isAdditionItem) : base(isAdditionItem) { }
+public partial class TaskItem : DataGridItem {
+  public TaskItem(bool isAdditionItem) : base(isAdditionItem) { }
 
   [ObservableProperty]
   private string _task = string.Empty; // Generates Task property

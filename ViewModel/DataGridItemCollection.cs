@@ -12,7 +12,7 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
     DispatcherService = dispatcherService;
   }
 
-  private IDispatcherService DispatcherService { get; }
+  protected IDispatcherService DispatcherService { get; }
 
   /// <summary>
   ///   Gets whether the collection has changed since being populated.
