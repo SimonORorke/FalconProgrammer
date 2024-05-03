@@ -4,10 +4,10 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
+  // In this test fixture but not most others, code cleanup insists on moving
+  // properties to before SetUp. This seems to be to do with there is a method that is
+  // not a Test.
   private Settings Settings { get; set; } = null!;
-
-  // Why in this test fixture but not others does code cleanup insist on moving
-  // properties to before SetUp?
   private GuiScriptProcessorViewModel ViewModel { get; set; } = null!;
 
   [SetUp]

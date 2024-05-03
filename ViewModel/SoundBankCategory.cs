@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
 
@@ -28,13 +27,13 @@ public partial class SoundBankCategory : SoundBankItem {
 
   // Code coverage highlighting does not work for these partial methods.
   protected override void OnSoundBankChanged1(string value) {
-    // On addition after removal, the new sound bank is null.
+    // On addition after removal, the new sound bank is null. (Or it was at one stage.)
     // This fixes it.
-    if (string.IsNullOrWhiteSpace(value)) {
-      return;
+    // TODO: Does SoundBankCategory.OnSoundBankChanged1 still need to check for null.
+    if (!string.IsNullOrWhiteSpace(value)) {
+      PopulateCategories();
+      Category = AllCaption;
     }
-    PopulateCategories();
-    Category = AllCaption;
   }
 
   private void PopulateCategories() {

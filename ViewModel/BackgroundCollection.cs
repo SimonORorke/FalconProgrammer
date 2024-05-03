@@ -18,14 +18,12 @@ public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
   }
 
   private void AddItem(string soundBank = "", string path = "") {
-    var item = new BackgroundItem(Settings, FileSystemService, IsAddingAdditionItem) {
+    AddItem(new BackgroundItem(Settings, FileSystemService, IsAddingAdditionItem,
+      BrowseForPath) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Path = path
-    };
-    item.BrowseForPath -= ItemOnBrowseForPath;
-    item.BrowseForPath += ItemOnBrowseForPath;
-    AddItem(item);
+    });
   }
 
   private async Task BrowseForPath(BackgroundItem item) {
@@ -39,10 +37,6 @@ public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
 
   protected override void CutItem(DataGridItem itemToCut) {
     CutItemTyped((BackgroundItem)itemToCut);
-  }
-
-  private void ItemOnBrowseForPath(object? sender, BackgroundItem e) {
-    DispatcherService.Dispatch(() => Task.Run(() => BrowseForPath(e)));
   }
 
   protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {

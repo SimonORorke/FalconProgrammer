@@ -93,8 +93,4 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="BackgroundImages\" />
-    </ItemGroup>
-
 </Project>
