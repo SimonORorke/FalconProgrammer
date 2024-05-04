@@ -368,47 +368,24 @@ public class FalconProgram {
     if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
       RemoveGuiScriptProcessor();
     }
+    if (Settings.TryGetBackgroundImagePathForSoundBank(
+          SoundBankName, out string path)) {
+      ProgramXml.SetBackgroundImagePath(path);
+      NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+    }
     switch (SoundBankName) {
-      case "Eternal Funk":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Yellowish Mid-Green.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;
       case "Fluidity":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Midnight Blue.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
           MoveMacroToEnd(attackMacro);
           RefreshMacroOrder();
         }
         break;
-      case "Hypnotic Drive":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dark Goldenrod.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
-      case "Inner Dimensions":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dark Red.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
-      case "Modular Noise":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dark Forest.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
       case "Organic Pads":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Bluish Teal.png");
-        NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
         InitialiseOrganicPadsProgram();
-        break;
-      case "Savage":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Heath.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
-      case "Titanium":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dull Purple.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       default:
         return;

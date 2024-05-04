@@ -53,6 +53,15 @@ public class Settings : SerialisationBase {
     return result;
   }
 
+  internal bool TryGetBackgroundImagePathForSoundBank(
+    string soundBankName, out string path) {
+    path = (
+      from background in Backgrounds
+      where background.SoundBank == soundBankName
+      select background.Path).FirstOrDefault() ?? string.Empty;
+    return path != string.Empty;
+  }
+
   public void Write(string? settingsFolderPath = null) {
     if (settingsFolderPath != null) {
       SettingsPath = GetSettingsPath(settingsFolderPath);
