@@ -14,13 +14,18 @@ public class TestBatch : Batch {
 
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
   internal MockFileSystemService MockFileSystemService { get; }
-  internal bool RunPrograms { get; set; } = true;
   internal TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
   internal TestFalconProgram TestProgram => (TestFalconProgram)Program;
   internal TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; }
 
+  /// <summary>
+  ///   If false, modification of Falcon programs will be bypassed and instead
+  ///   details of each bypassed task will be logged. Default: true.
+  /// </summary>
+  internal bool UpdatePrograms { get; set; } = true;
+
   protected override void ConfigureProgram() {
-    if (RunPrograms) {
+    if (UpdatePrograms) {
       base.ConfigureProgram();
       return;
     }

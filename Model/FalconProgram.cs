@@ -427,9 +427,10 @@ public class FalconProgram {
       };
       layer.AddModulation(modulation);
     }
-    NotifyUpdate(
-      $"{PathShort}: Added modulations to layers and initialised macros to layer gains.");
+    NotifyUpdate($"{PathShort}: " + 
+                 "Added modulations to layers and initialised macros to layer gains.");
     // Add the DAHDSR Controller ScriptProcessor.
+    // TODO: Handle missing script DAHDSR Controller.lua
     var scriptProcessor = ProgramXml.AddScriptProcessor(
       "EventProcessor0", "Organic Pads",
       "./../../../Scripts/DAHDSR Controller.lua",

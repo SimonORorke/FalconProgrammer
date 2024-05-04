@@ -1,5 +1,12 @@
-﻿namespace FalconProgrammer.Tests.Model;
+﻿using FalconProgrammer.Model;
 
+namespace FalconProgrammer.Tests.Model;
+
+/// <summary>
+///   Each Test here uses the easiest way to test <see cref="FalconProgram "/>,
+///   which is via <see cref="TestBatch" />. Tests of <see cref="Batch" /> where program
+///   updates are mocked out should go in <see cref="BatchTests" />.
+/// </summary>
 [TestFixture]
 public class FalconProgramTests {
   [SetUp]

@@ -1,11 +1,21 @@
-﻿namespace FalconProgrammer.Tests.Model;
+﻿using FalconProgrammer.Model;
 
+namespace FalconProgrammer.Tests.Model;
+
+/// <summary>
+///   For each Test here, modifications of Falcon programs are mocked out by setting
+///   <see cref="TestBatch.UpdatePrograms" /> to false. Tests where
+///   <see cref="TestBatch" /> is used to facilitate tests of
+///   <see cref="FalconProgram "/> should go in <see cref="FalconProgramTests" />.
+/// </summary>
 [TestFixture]
 public class BatchTests {
   [SetUp]
   public void Setup() {
     Batch = new TestBatch {
-      RunPrograms = false,
+      // We don't want to test modifications of Falcon programs here.
+      // Those tests should go in FalconProgramTests.
+      UpdatePrograms = false,
       TestSettingsReaderEmbedded = {
         EmbeddedFileName = "BatchSettings.xml"
       }
