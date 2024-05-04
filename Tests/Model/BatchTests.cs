@@ -4,7 +4,11 @@
 public class BatchTests {
   [SetUp]
   public void Setup() {
-    Batch = new TestBatch();
+    Batch = new TestBatch {
+      TestSettingsReaderEmbedded = {
+        EmbeddedFileName = "BatchSettings.xml"
+      }
+    };
   }
 
   private TestBatch Batch { get; set; } = null!;
@@ -13,7 +17,6 @@ public class BatchTests {
   public void CannotReplaceModWheelWithMacroForCategory() {
     const string soundBankName = "Factory";
     const string category = "Organic Texture 2.8";
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName, category));
     Batch.ReplaceModWheelWithMacro(soundBankName, category);
@@ -25,7 +28,6 @@ public class BatchTests {
   [Test]
   public void CannotReplaceModWheelWithMacroForSoundBank() {
     const string soundBankName = "Organic Keys";
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName));
     Batch.ReplaceModWheelWithMacro(soundBankName);
@@ -37,7 +39,6 @@ public class BatchTests {
   [Test]
   public void CannotReplaceModWheelWithoutModWheelReplacementCcNo() {
     const string soundBankName = "Organic Keys";
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.Settings.MidiForMacros.ModWheelReplacementCcNo = 0;
     Batch.ReplaceModWheelWithMacro(soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
@@ -47,14 +48,12 @@ public class BatchTests {
 
   [Test]
   public void OriginalProgramsFolderFound() {
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Assert.That(Batch.GetOriginalProgramsFolderPath(), Is.EqualTo(
       Batch.Settings.OriginalProgramsFolder.Path));
   }
 
   [Test]
   public void OriginalProgramsFolderNotFound() {
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.MockFileSystemService.Folder.ExpectedExists = false;
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.GetOriginalProgramsFolderPath());
@@ -65,7 +64,6 @@ public class BatchTests {
 
   [Test]
   public void OriginalProgramsFolderNotSpecified() {
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.Settings.OriginalProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.GetOriginalProgramsFolderPath());
@@ -76,7 +74,6 @@ public class BatchTests {
 
   [Test]
   public void ProgramsFolderNotFound() {
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.MockFileSystemService.Folder.ExpectedExists = false;
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.QueryCountMacros(null));
@@ -87,7 +84,6 @@ public class BatchTests {
 
   [Test]
   public void ProgramsFolderNotSpecified() {
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.Settings.ProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.UpdateMacroCcs(null));
@@ -131,7 +127,6 @@ public class BatchTests {
 
   [Test]
   public void SoundBankFolderNotFound() {
-    Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.MockFileSystemService.Folder.ExistingPaths.Add(
       Batch.Settings.ProgramsFolder.Path);
     var exception = Assert.Throws<ApplicationException>(
