@@ -15,7 +15,7 @@ public class Category {
     SoundBankFolderPath = soundBankFolderPath;
     Name = name;
     Settings = settings;
-    PathShort = $"{SoundBankName}\\{Name}";
+    PathShort = $@"{SoundBankName}\{Name}";
   }
 
   [ExcludeFromCodeCoverage]

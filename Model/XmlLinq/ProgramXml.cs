@@ -96,6 +96,10 @@ public class ProgramXml : EntityBase {
     }
   }
 
+  protected virtual void CloseXmlWriter(XmlWriter writer) {
+    writer.Close();
+  }
+
   public void CopyMacroElementsFromTemplate() {
     var originalMacroElements = MacroElements.ToList();
     for (int i = originalMacroElements.Count - 1; i >= 0; i--) {
@@ -112,6 +116,11 @@ public class ProgramXml : EntityBase {
       var newMacroElement = new XElement(templateMacroElement);
       ControlSignalSourcesElement.Add(newMacroElement);
     }
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual Stream CreateOutputStream(string outputProgramPath) {
+    return new FileStream(outputProgramPath, FileMode.OpenOrCreate);
   }
 
   public Dahdsr? FindMainDahdsr() {
@@ -269,7 +278,7 @@ public class ProgramXml : EntityBase {
   public void SaveToFile(string outputProgramPath) {
     try {
       var writer = XmlWriter.Create(
-        outputProgramPath,
+        CreateOutputStream(outputProgramPath),
         new XmlWriterSettings {
           Indent = true,
           IndentChars = "    "
@@ -280,7 +289,7 @@ public class ProgramXml : EntityBase {
           // NewLineHandling = NewLineHandling.None
         });
       RootElement.WriteTo(writer);
-      writer.Close();
+      CloseXmlWriter(writer);
     } catch (XmlException ex) {
       throw new InvalidOperationException(
         $"The following XML error was found on writing to '{outputProgramPath}'\r\n:{ex.Message}");

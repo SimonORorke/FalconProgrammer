@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Xml;
 using System.Xml.Linq;
 using FalconProgrammer.Model;
 using FalconProgrammer.Model.XmlLinq;
@@ -12,7 +13,28 @@ public class TestProgramXml : ProgramXml {
   ///   <see cref="ReadRootElementFromFile" /> will read the embedded resource file
   ///   with this name in the Tests assembly, ignoring its programPath parameter.
   /// </summary>
-  public string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+
+  private MemoryStream OutputStream { get; set; }
+  internal string SavedXml { get; private set; } = string.Empty;
+
+  private Stream GetEmbeddedProgramStream() {
+    var assembly = Assembly.GetExecutingAssembly();
+    string resourceName = XmlTestHelper.GetEmbeddedResourceName(
+      EmbeddedProgramFileName, assembly);
+    return assembly.GetManifestResourceStream(resourceName)!;
+  }
+
+  protected override void CloseXmlWriter(XmlWriter writer) {
+    base.CloseXmlWriter(writer);
+    OutputStream.Position = 0;
+    using var reader = new StreamReader(OutputStream);
+    SavedXml = reader.ReadToEnd();
+  }
+
+  protected override Stream CreateOutputStream(string outputProgramPath) {
+    return OutputStream = new MemoryStream();
+  }
 
   /// <summary>
   ///   The file specified by <paramref name="programPath" /> will not be accessed or
@@ -21,9 +43,6 @@ public class TestProgramXml : ProgramXml {
   ///   deserialised.
   /// </summary>
   protected override XElement ReadRootElementFromFile(string programPath) {
-    var assembly = Assembly.GetExecutingAssembly();
-    string resourceName = XmlTestHelper.GetEmbeddedResourceName(
-      EmbeddedProgramFileName, assembly);
-    return ReadRootElementFromStream(assembly.GetManifestResourceStream(resourceName)!);
+    return ReadRootElementFromStream(GetEmbeddedProgramStream());
   }
 }

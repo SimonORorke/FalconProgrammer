@@ -15,7 +15,7 @@ public class FalconProgram {
     Batch = batch;
   }
 
-  private Batch Batch { get; }
+  protected Batch Batch { get; }
   public Category Category { get; }
 
   /// <summary>
@@ -154,7 +154,7 @@ public class FalconProgram {
     return result;
   }
 
-  private ProgramXml CreateProgramXml() {
+  protected virtual ProgramXml CreateProgramXml() {
     return Category.MustUseGuiScriptProcessor
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
@@ -398,6 +398,8 @@ public class FalconProgram {
         NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       case "Organic Pads":
+        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Bluish Teal.png");
+        NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
         InitialiseOrganicPadsProgram();
         break;
       case "Savage":
@@ -415,8 +417,6 @@ public class FalconProgram {
   }
 
   private void InitialiseOrganicPadsProgram() {
-    ProgramXml.SetBackgroundImagePath("./../../../Background Images/Bluish Teal.png");
-    NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
     NotifyUpdate($"{PathShort}: Copied macros from template.");

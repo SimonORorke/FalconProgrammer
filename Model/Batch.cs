@@ -19,7 +19,7 @@ public class Batch {
     set => _batchScriptReader = value;
   }
 
-  private Category Category { get; set; } = null!;
+  protected Category Category { get; private set; } = null!;
   private List<string> EffectTypes { get; set; } = null!;
 
   internal IFileSystemService FileSystemService {
@@ -157,7 +157,7 @@ public class Batch {
         && Category.MustUseGuiScriptProcessor) {
       Log.WriteLine(
         $"Cannot {Task} for category " +
-        $"'{SoundBankName}\\{categoryName}' " +
+        $@"'{SoundBankName}\{categoryName}' " +
         "because the category's GUI has to be defined in a script.");
       return;
     }
@@ -189,7 +189,8 @@ public class Batch {
     return result;
   }
 
-  private FalconProgram CreateFalconProgram(string path) {
+  [ExcludeFromCodeCoverage]
+  protected virtual FalconProgram CreateFalconProgram(string path) {
     return new FalconProgram(path, Category, this);
   }
 

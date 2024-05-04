@@ -5,6 +5,7 @@ public class BatchTests {
   [SetUp]
   public void Setup() {
     Batch = new TestBatch {
+      RunPrograms = false,
       TestSettingsReaderEmbedded = {
         EmbeddedFileName = "BatchSettings.xml"
       }

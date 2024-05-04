@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FalconProgrammer.Model;
-using JetBrains.Annotations;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -15,18 +13,17 @@ public class TestBatch : Batch {
   }
 
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
-
-  [ExcludeFromCodeCoverage]
-  [PublicAPI]
   internal MockFileSystemService MockFileSystemService { get; }
-
+  internal bool RunPrograms { get; set; } = true;
   internal TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
-
-  [ExcludeFromCodeCoverage]
-  [PublicAPI]
+  internal TestFalconProgram TestProgram => (TestFalconProgram)Program;
   internal TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; }
 
   protected override void ConfigureProgram() {
+    if (RunPrograms) {
+      base.ConfigureProgram();
+      return;
+    }
     Log.WriteLine($"{Task}: '{Program.PathShort}'");
   }
 
@@ -43,5 +40,9 @@ public class TestBatch : Batch {
     }
     result.Initialise();
     return result;
+  }
+
+  protected override FalconProgram CreateFalconProgram(string path) {
+    return new TestFalconProgram(path, Category, this);
   }
 }
