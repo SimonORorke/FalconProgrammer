@@ -90,7 +90,7 @@ public class BatchTests {
     Batch.TestSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     Batch.Settings.ProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.QueryCountMacros(null));
+      () => Batch.UpdateMacroCcs(null));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "The programs folder is not specified in settings file "));
@@ -135,7 +135,7 @@ public class BatchTests {
     Batch.MockFileSystemService.Folder.ExistingPaths.Add(
       Batch.Settings.ProgramsFolder.Path);
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.QueryCountMacros("Factory"));
+      () => Batch.PrependPathLineToDescription("Factory"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith("Cannot find sound bank folder '"));
   }
