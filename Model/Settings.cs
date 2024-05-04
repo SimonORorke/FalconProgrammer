@@ -53,7 +53,7 @@ public class Settings : SerialisationBase {
     return result;
   }
 
-  internal bool TryGetBackgroundImagePathForSoundBank(
+  internal bool TryGetSoundBankBackgroundImagePath(
     string soundBankName, out string path) {
     path = (
       from background in Backgrounds
