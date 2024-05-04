@@ -15,6 +15,44 @@
         <ProgramCategory SoundBank="Pulsar" Category=""/>
         <ProgramCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
+    <MidiForMacros ModWheelReplacementCcNo="34">
+        <ContinuousCcNoRanges>
+            <ContinuousCcNoRange>
+                <Start>31</Start>
+                <End>34</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>11</Start>
+                <End>11</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>36</Start>
+                <End>37</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>28</Start>
+                <End>28</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>41</Start>
+                <End>48</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>51</Start>
+                <End>58</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>61</Start>
+                <End>61</End>
+            </ContinuousCcNoRange>
+        </ContinuousCcNoRanges>
+        <ToggleCcNoRanges>
+            <ToggleCcNoRange>
+                <Start>112</Start>
+                <End>112</End>
+            </ToggleCcNoRange>
+        </ToggleCcNoRanges>
+    </MidiForMacros>
     <Batch SoundBank="All" Category="All" Program="All">
         <Tasks>
             <Task>InitialiseLayout</Task>

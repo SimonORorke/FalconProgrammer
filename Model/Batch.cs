@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
 
@@ -181,6 +182,7 @@ public class Batch {
     }
   }
 
+  [ExcludeFromCodeCoverage]
   protected virtual Category CreateCategory(string categoryName) {
     var result = new Category(SoundBankFolderPath, categoryName, Settings);
     result.Initialise();
@@ -191,7 +193,7 @@ public class Batch {
     return new FalconProgram(path, Category, this);
   }
 
-  public DirectoryInfo GetOriginalProgramsFolder() {
+  public string GetOriginalProgramsFolderPath() {
     if (string.IsNullOrEmpty(Settings.OriginalProgramsFolder.Path)) {
       throw new ApplicationException(
         "The original programs folder is not specified in settings file " +
@@ -199,12 +201,12 @@ public class Batch {
         "change the settings folder path in " +
         $"'{SettingsFolderLocation.GetSettingsFolderLocationPath}'.");
     }
-    var result = new DirectoryInfo(Settings.OriginalProgramsFolder.Path);
-    if (!result.Exists) {
+    if (!FileSystemService.Folder.Exists(Settings.OriginalProgramsFolder.Path)) {
       throw new ApplicationException(
-        $"Cannot find original programs folder '{result.FullName}'.");
+        "Cannot find original programs folder '" + 
+        $"{Settings.OriginalProgramsFolder.Path}'.");
     }
-    return result;
+    return Settings.OriginalProgramsFolder.Path;
   }
 
   private string GetProgramsFolderPath() {
@@ -367,8 +369,8 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       Log.WriteLine(
-        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement CC " +
-        "number greater than 1 has not been specified.");
+        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement " + 
+        "CC number greater than 1 has not been specified.");
       return;
     }
     Task = ConfigTask.ReplaceModWheelWithMacro;

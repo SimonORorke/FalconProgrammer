@@ -38,6 +38,9 @@ public class TestBatch : Batch {
       result.MockFileSystemService.Folder.ExpectedFilePaths.Add(result.Path,
         categoryExpectedFilePaths);
     }
+    if (result.MustUseGuiScriptProcessor) {
+      result.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
+    }
     result.Initialise();
     return result;
   }

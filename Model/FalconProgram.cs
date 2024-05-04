@@ -832,7 +832,7 @@ public class FalconProgram {
 
   public void RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
-      Batch.GetOriginalProgramsFolder().FullName,
+      Batch.GetOriginalProgramsFolderPath(),
       SoundBankName,
       Category.Name,
       System.IO.Path.GetFileName(Path));
