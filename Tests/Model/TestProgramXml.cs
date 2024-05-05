@@ -30,7 +30,9 @@ public class TestProgramXml : ProgramXml {
   ///   deserialised.
   /// </summary>
   protected override XElement ReadRootElementFromFile(string programPath) {
-    return ReadRootElementFromStream(GetEmbeddedProgramStream());
+    var reader = new StreamReader(GetEmbeddedProgramStream());
+    string programXmlText = reader.ReadToEnd(); 
+    return ReadRootElementFromXmlText(programXmlText);
   }
 
   protected override void SaveXmlTextToFile(string outputProgramPath, string xmlText) {

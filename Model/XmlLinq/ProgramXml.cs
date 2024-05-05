@@ -236,11 +236,11 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
-  protected static XElement ReadRootElementFromStream(Stream programStream) {
+  protected static XElement ReadRootElementFromXmlText(string programXmlText) {
     // In the following newer way of loading the XML to an object hierarchy,
     // there's no way to stop line breaks from being replaced by spaces.
     // But line breaks are correct when inserting or removing elements.
-    return XElement.Load(programStream);
+    return XElement.Load(new StringReader(programXmlText));
     // This way of loading the XML to an object hierarchy
     // stops line breaks from being replaced by spaces in Description
     // when PrependPathLineToDescription updates it.
@@ -255,8 +255,8 @@ public class ProgramXml : EntityBase {
 
   [ExcludeFromCodeCoverage]
   protected virtual XElement ReadRootElementFromFile(string programPath) {
-    using var programStream = File.OpenRead(programPath);
-    return ReadRootElementFromStream(programStream);
+    string programXmlText = File.ReadAllText(programPath);
+    return ReadRootElementFromXmlText(programXmlText);
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
