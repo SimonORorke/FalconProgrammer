@@ -10,8 +10,9 @@ namespace FalconProgrammer.Tests.Model;
 /// <remarks>
 ///   There are few tests of <see cref="FalconProgram " /> here because the easiest way
 ///   to regression test it is to run an actual batch and then check in the Program
-///   folder's version control to confirm that there have been no changes. The most
-///   comprehensive test is to run <see cref="Batch.RollForward" /> for all sound banks. 
+///   folder's version control to confirm that there have been no changes. A
+///   comprehensive test is to use <see cref="BatchRunner" /> to run
+///   <see cref="Batch.RollForward" /> for all sound banks.
 /// </remarks>
 [TestFixture]
 public class FalconProgramTests {
