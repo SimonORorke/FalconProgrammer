@@ -3,6 +3,7 @@
     <MustUseGuiScriptProcessor>
         <ProgramCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
         <ProgramCategory SoundBank="Organic Keys" Category=""/>
+        <ProgramCategory SoundBank="Organic Pads" Category=""/>
         <ProgramCategory SoundBank="Pulsar" Category=""/>
         <ProgramCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>

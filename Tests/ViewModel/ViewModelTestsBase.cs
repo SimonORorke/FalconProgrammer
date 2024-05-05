@@ -17,7 +17,7 @@ public abstract class ViewModelTestsBase {
     };
     MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
       MockSettingsFolderLocationReader = MockSettingsFolderLocationReader,
-      EmbeddedFileName = "DefaultAlreadySettings.xml"
+      EmbeddedFileName = "DefaultSettingsWithMidi.xml"
     };
     TestModelServices = new ModelServices {
       FileSystemService = MockFileSystemService,

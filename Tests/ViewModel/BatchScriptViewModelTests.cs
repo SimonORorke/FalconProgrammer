@@ -63,7 +63,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoProgramsFolder() {
-    Settings = ReadMockSettings("DefaultAlreadySettings.xml");
+    Settings = ReadMockSettings("DefaultSettingsWithMidi.xml");
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(

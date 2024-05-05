@@ -109,7 +109,7 @@ public class SettingsTests {
     Assert.That(settings.MustUseGuiScriptProcessorCategories, Is.Empty);
     settings = settingsReader.Read(true);
     Assert.That(settings.ProgramsFolder.Path, Is.Empty);
-    Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
+    Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(5));
   }
 
   [Test]
