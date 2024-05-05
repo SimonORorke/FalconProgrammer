@@ -96,6 +96,11 @@ public class ProgramXml : EntityBase {
     }
   }
 
+  protected virtual void CloseXmlWriter(XmlWriter writer) {
+    writer.Dispose();
+    // writer.Close();
+  }
+
   public void CopyMacroElementsFromTemplate() {
     var originalMacroElements = MacroElements.ToList();
     for (int i = originalMacroElements.Count - 1; i >= 0; i--) {
@@ -112,6 +117,11 @@ public class ProgramXml : EntityBase {
       var newMacroElement = new XElement(templateMacroElement);
       ControlSignalSourcesElement.Add(newMacroElement);
     }
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual Stream CreateOutputStream(string outputProgramPath) {
+    return new FileStream(outputProgramPath, FileMode.OpenOrCreate);
   }
 
   public Dahdsr? FindMainDahdsr() {
@@ -180,7 +190,7 @@ public class ProgramXml : EntityBase {
       // Simple test to get ReadRootElementFromFile to throw this:
       // Change the open root element line to "UVI4>".
       // But remember the template file is loaded before the updatable file!
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
     }
   }
@@ -268,8 +278,9 @@ public class ProgramXml : EntityBase {
 
   public void SaveToFile(string outputProgramPath) {
     try {
+      using var outputStream = CreateOutputStream(outputProgramPath);
       var writer = XmlWriter.Create(
-        outputProgramPath,
+        outputStream,
         new XmlWriterSettings {
           Indent = true,
           IndentChars = "    "
@@ -280,7 +291,7 @@ public class ProgramXml : EntityBase {
           // NewLineHandling = NewLineHandling.None
         });
       RootElement.WriteTo(writer);
-      writer.Close();
+      CloseXmlWriter(writer);
     } catch (XmlException ex) {
       throw new InvalidOperationException(
         $"The following XML error was found on writing to '{outputProgramPath}'\r\n:{ex.Message}");

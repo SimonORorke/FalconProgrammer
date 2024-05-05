@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FalconProgrammer.Model;
-using JetBrains.Annotations;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -15,18 +13,22 @@ public class TestBatch : Batch {
   }
 
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
-
-  [ExcludeFromCodeCoverage]
-  [PublicAPI]
   internal MockFileSystemService MockFileSystemService { get; }
-
   internal TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
-
-  [ExcludeFromCodeCoverage]
-  [PublicAPI]
+  internal TestFalconProgram TestProgram => (TestFalconProgram)Program;
   internal TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; }
 
+  /// <summary>
+  ///   If false, modification of Falcon programs will be bypassed and instead
+  ///   details of each bypassed task will be logged. Default: true.
+  /// </summary>
+  internal bool UpdatePrograms { get; set; } = true;
+
   protected override void ConfigureProgram() {
+    if (UpdatePrograms) {
+      base.ConfigureProgram();
+      return;
+    }
     Log.WriteLine($"{Task}: '{Program.PathShort}'");
   }
 
@@ -40,8 +42,14 @@ public class TestBatch : Batch {
     }
     if (result.MustUseGuiScriptProcessor) {
       result.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
+    } else if (SoundBankName == "Organic Pads") {
+      result.EmbeddedTemplateFileName = "Tibetan Horns.uvip";
     }
     result.Initialise();
     return result;
+  }
+
+  protected override FalconProgram CreateFalconProgram(string path) {
+    return new TestFalconProgram(path, Category, this);
   }
 }

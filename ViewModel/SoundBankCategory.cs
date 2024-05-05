@@ -29,7 +29,6 @@ public partial class SoundBankCategory : SoundBankItem {
   protected override void OnSoundBankChanged1(string value) {
     // On addition after removal, the new sound bank is null. (Or it was at one stage.)
     // This fixes it.
-    // TODO: Does SoundBankCategory.OnSoundBankChanged1 still need to check for null.
     if (!string.IsNullOrWhiteSpace(value)) {
       PopulateCategories();
       Category = AllCaption;

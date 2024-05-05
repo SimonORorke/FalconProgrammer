@@ -15,7 +15,7 @@ public class FalconProgram {
     Batch = batch;
   }
 
-  private Batch Batch { get; }
+  protected Batch Batch { get; }
   public Category Category { get; }
 
   /// <summary>
@@ -154,7 +154,7 @@ public class FalconProgram {
     return result;
   }
 
-  private ProgramXml CreateProgramXml() {
+  protected virtual ProgramXml CreateProgramXml() {
     return Category.MustUseGuiScriptProcessor
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
@@ -368,45 +368,26 @@ public class FalconProgram {
     if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
       RemoveGuiScriptProcessor();
     }
+    // Commenting this out makes no difference to Save/Read problem.
+    if (Settings.TryGetSoundBankBackgroundImagePath(
+          SoundBankName, out string path)) {
+      // TODO: Background image path should be relative if possible. 
+      ProgramXml.SetBackgroundImagePath(path);
+      NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+    }
     switch (SoundBankName) {
-      case "Eternal Funk":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Yellowish Mid-Green.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
       case "Ether Fields" or "Spectre":
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;
       case "Fluidity":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Midnight Blue.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
           MoveMacroToEnd(attackMacro);
           RefreshMacroOrder();
         }
         break;
-      case "Hypnotic Drive":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dark Goldenrod.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
-      case "Inner Dimensions":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dark Red.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
-      case "Modular Noise":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dark Forest.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
-        break;
-      case "Savage":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Heath.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
-        break;
-      case "Titanium":
-        ProgramXml.SetBackgroundImagePath("./../../../Background Images/Dull Purple.png");
-        NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
         break;
       default:
         return;
@@ -415,8 +396,6 @@ public class FalconProgram {
   }
 
   private void InitialiseOrganicPadsProgram() {
-    ProgramXml.SetBackgroundImagePath("./../../../Background Images/Bluish Teal.png");
-    NotifyUpdate($"{PathShort}: Set SetBackgroundImagePath.");
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
     NotifyUpdate($"{PathShort}: Copied macros from template.");
@@ -450,9 +429,11 @@ public class FalconProgram {
       };
       layer.AddModulation(modulation);
     }
-    NotifyUpdate(
-      $"{PathShort}: Added modulations to layers and initialised macros to layer gains.");
+    NotifyUpdate($"{PathShort}: " +
+                 "Added modulations to layers and initialised macros to layer gains.");
     // Add the DAHDSR Controller ScriptProcessor.
+    // TODO: Handle missing script DAHDSR Controller.lua
+    //System.IO.Path.GetFullPath()
     var scriptProcessor = ProgramXml.AddScriptProcessor(
       "EventProcessor0", "Organic Pads",
       "./../../../Scripts/DAHDSR Controller.lua",
@@ -646,7 +627,7 @@ public class FalconProgram {
   public void QueryCountMacros() {
     Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
   }
-  
+
   public void QueryDahdsrModulations() {
     if (GuiScriptProcessor != null) {
       return;
