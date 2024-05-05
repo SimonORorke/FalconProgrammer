@@ -159,8 +159,7 @@ public class ProgramXml : EntityBase {
       Element.Elements("Layers").FirstOrDefault() ??
       throw new InvalidOperationException(
         $"Cannot find Layers element in '{InputProgramPath}'.");
-    // var layerElements = layersElement.Elements("Layer");
-    var layerElements = layersElement.Descendants("Layer");
+    var layerElements = layersElement.Elements("Layer");
     return (
       from layerElement in layerElements
       select new ModulationsOwner(layerElement, this)).ToImmutableList();
@@ -191,7 +190,7 @@ public class ProgramXml : EntityBase {
       // Simple test to get ReadRootElementFromFile to throw this:
       // Change the open root element line to "UVI4>".
       // But remember the template file is loaded before the updatable file!
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
     }
   }
