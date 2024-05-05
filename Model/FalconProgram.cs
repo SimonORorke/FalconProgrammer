@@ -154,6 +154,14 @@ public class FalconProgram {
     return result;
   }
 
+  /// <summary>
+  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  protected virtual TextReader CreateProgramReader() {
+    return new StreamReader(Path);
+  }
+
   protected virtual ProgramXml CreateProgramXml() {
     return Category.MustUseGuiScriptProcessor
       ? new ScriptProgramXml(Category)
@@ -277,17 +285,6 @@ public class FalconProgram {
       .Replace("<script>&lt;", "<script><")
       .Replace("&gt;</script>", "></script>");
     UpdateProgramFileWithFixedCData(newContents);
-  }
-
-  [ExcludeFromCodeCoverage]
-  protected virtual TextReader CreateProgramReader() {
-    return new StreamReader(Path);
-  }
-
-  [ExcludeFromCodeCoverage]
-  protected virtual void UpdateProgramFileWithFixedCData(string newContents) {
-    using var writer = new StreamWriter(Path);
-    writer.Write(newContents);
   }
 
   /// <summary>
@@ -979,6 +976,15 @@ public class FalconProgram {
         }
       }
     }
+  }
+
+  /// <summary>
+  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  protected virtual void UpdateProgramFileWithFixedCData(string newContents) {
+    using var writer = new StreamWriter(Path);
+    writer.Write(newContents);
   }
 
   private bool WheelMacroExists() {
