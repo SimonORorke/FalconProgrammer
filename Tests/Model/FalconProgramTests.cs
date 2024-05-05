@@ -3,10 +3,16 @@
 namespace FalconProgrammer.Tests.Model;
 
 /// <summary>
-///   Each Test here uses the easiest way to test <see cref="FalconProgram " />,
-///   which is via <see cref="TestBatch" />. Tests of <see cref="Batch" /> where program
+///   Each Test here uses an easy way to test <see cref="FalconProgram " />,
+///   via <see cref="TestBatch" />. Tests of <see cref="Batch" /> where program
 ///   updates are mocked out should go in <see cref="BatchTests" />.
 /// </summary>
+/// <remarks>
+///   There are few tests of <see cref="FalconProgram " /> here because the easiest way
+///   to regression test it is to run an actual batch and then check in the Program
+///   folder's version control to confirm that there have been no changes. The most
+///   comprehensive test is to run <see cref="Batch.RollForward" /> for all sound banks. 
+/// </remarks>
 [TestFixture]
 public class FalconProgramTests {
   [SetUp]
@@ -41,7 +47,7 @@ public class FalconProgramTests {
       Batch.MockBatchLog.Lines.Clear();
       Batch.InitialiseLayout(soundBankName, categoryName, programName);
       string expectedPath = $"\"./../../../Images/{expectedImageFileName}\"";
-      Assert.That(Batch.TestProgram.TestProgramXml.SavedXml, Does.Contain(expectedPath));
+      Assert.That(Batch.TestProgram.SavedXml, Does.Contain(expectedPath));
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
     }
   }

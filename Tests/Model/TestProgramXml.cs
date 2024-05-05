@@ -20,13 +20,15 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
 
-  internal string SavedXml { get; set; } = string.Empty;
-
-  internal static Stream GetEmbeddedProgramStream(string embeddedFileName) {
+  private static Stream GetEmbeddedProgramStream(string embeddedFileName) {
     var assembly = Assembly.GetExecutingAssembly();
     string resourceName = XmlTestHelper.GetEmbeddedResourceName(
       embeddedFileName, assembly);
     return assembly.GetManifestResourceStream(resourceName)!;
+  }
+
+  private void OnSaved(string savedXml) {
+    Saved?.Invoke(this, savedXml);
   }
 
   /// <summary>
@@ -50,6 +52,8 @@ public class TestProgramXml : ProgramXml {
   }
 
   protected override void SaveXmlTextToFile(string outputProgramPath, string xmlText) {
-    SavedXml = xmlText;
+    OnSaved(xmlText);
   }
+
+  internal event EventHandler<string>? Saved;
 }
