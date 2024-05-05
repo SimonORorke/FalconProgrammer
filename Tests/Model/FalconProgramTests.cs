@@ -1,9 +1,10 @@
-﻿using FalconProgrammer.Model;
+﻿using System.Diagnostics.CodeAnalysis;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
 /// <summary>
-///   Each Test here uses the easiest way to test <see cref="FalconProgram "/>,
+///   Each Test here uses the easiest way to test <see cref="FalconProgram " />,
 ///   which is via <see cref="TestBatch" />. Tests of <see cref="Batch" /> where program
 ///   updates are mocked out should go in <see cref="BatchTests" />.
 /// </summary>
@@ -43,8 +44,11 @@ public class FalconProgramTests {
     }
   }
 
+  [ExcludeFromCodeCoverage]
   [Test]
+  [Explicit]
   public void InitialiseOrganicPadsProgram() {
+    // Only finds the first layer.
     Batch.InitialiseLayout(
       "Organic Pads", "Bass", "Imagination");
   }
