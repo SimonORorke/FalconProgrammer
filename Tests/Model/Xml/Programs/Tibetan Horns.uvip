@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="Tibetan Horns" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Organic Pads.ufs/Presets/Mystical/Tibetan Horns.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Properties description="Organic Pads
+A Modern Creative Pad Toolbox
+
+- Expand Falcon with 100 modern-oriented pad sounds
+- Tweak and perform on-the-fly with macro controls and XY morphing
+- Deep editing capabilities of Falcon allow limitless customization
+
+A beautifully crafted and expressive collection of sounds designed with the needs of modern production in mind, Organic Pads is a one-stop shop exploring the arena of sustained and evolving sounds within Falcon. Featuring 100 hand-crafted patches arranged in 4 categories including Light, Dark, Mystical, and Nature, Organic Pads gives you a diverse and wide-ranging palette of styles to explore.
+
+Every patch in Organic Pads features a performable XY morphing section, letting you interactively blend and sculpt your sound from 4 discrete layers (sample, synthesis, noise, and texture). As well, each patch has been constructed with custom macros and top-level control over delay and reverb, allowing you to find the perfect mix for your track.
+
+Explore evolving worlds of movement, texture, and color, and as with all Falcon expansions, feel free to dig beneath the surface into the very patch structure, where you can further fine-tune, augment, deconstruct, or completely reshape the included sounds in any way that your inspiration leads you.
+
+Falcon&apos;s versatility and pristine sound quality is evident throughout this collection, utilizing numerous synthesis and sound design techniques and a robust use of effects and modulators. Sounds can all be quickly previewed, edited, layered or performed with nearly limitless variation thanks to Falcon&apos;s semi-modular architecture and rich component library.
+"/>
+        <ControlSignalSources>
+            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.0704054" AttackCurve="0.58591878" HoldTime="0" DecayTime="6.6326785" DecayCurve="0" SustainLevel="0.20824032" ReleaseTime="1.9393053" ReleaseCurve="-0.65597433" DisplayName="DAHDSR 1" VelocityAmount="0" VelocitySens="0.12662303" Retrigger="1" NoteOffRetrigger="0"/>
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Macro 1" Bipolar="0" Style="0" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 1" Destination="Value" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                </Connections>
+                <Properties customPosition="0" x="315" y="190"/>
+            </ConstantModulation>
+        </ControlSignalSources>
+        <EventProcessors>
+            <ScriptProcessor Name="EventProcessor0" Bypass="0" Vertical_Slider="0.51608396" Horizontal_Slider="0.5029968" Xpad="0.5029968" Ypad="0.51608396" CCX="21" CCY="22" W2M="1" delaySend="0.32000017" reverbSend="0.31999999" API_version="21">
+                <Properties OriginalProgramPath="$Organic Pads.ufs/Presets/Mystical/Tibetan Horns.uvip" PresetPath="/Users/theogallienne/Desktop/Organic Pads/BASE/Scripts/OrganicPadsStub.lua" ScriptPath="$Organic Pads.ufs/Scripts/OrganicPadsStub.lua"/>
+                <script><![CDATA[category = "Mystical"; require "OrganicPads"]]></script>
+                <ScriptData/>
+            </ScriptProcessor>
+        </EventProcessors>
+        <Inserts>
+            <DigitalEq Name="InsertFX1" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="1" Visible1="1" Type1="1" Slope1="3" Channels1="0" Freq1="27.457859" Q1="0.78750521" Gain1="3" Bandwidth1="1" Enabled2="1" Visible2="1" Type2="5" Slope2="0" Channels2="0" Freq2="6060.1328" Q2="0.70710677" Gain2="3.6067924" Bandwidth2="1" Enabled3="1" Visible3="1" Type3="6" Slope3="0" Channels3="0" Freq3="1758.5758" Q3="0.70710677" Gain3="1.3064156" Bandwidth3="1" Enabled4="1" Visible4="1" Type4="6" Slope4="0" Channels4="0" Freq4="785.21393" Q4="0.70710677" Gain4="0.14984512" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="2" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="2" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="2" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="2" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="2" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="2" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="2" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1">
+                <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/FXs/Digital Eq/Base_8.preset"/>
+            </DigitalEq>
+            <Maximizer Name="InsertFX0" Bypass="0" Threshold="-7.7163658" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20"/>
+        </Inserts>
+        <Auxs>
+            <AuxEffect Name="Aux0" Bypass="0" Gain="1" Pan="0" PreInsert="1" DisplayName="Aux 1">
+                <Inserts>
+                    <EffectRack Name="InsertFX0" Bypass="0">
+                        <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/FXs/Effect Rack/FX_1_Rack_9.preset"/>
+                        <Chains>
+                            <AuxEffect Name="Chain1" Bypass="0" Gain="1" Pan="0" PreInsert="1" DisplayName="Chain1">
+                                <Inserts>
+                                    <Gain Name="InsertFX0" Bypass="0" Volume="0.87809056"/>
+                                    <DigitalEq Name="InsertFX4" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="1" Visible1="1" Type1="1" Slope1="4" Channels1="0" Freq1="106.1339" Q1="0.28098723" Gain1="-14.088174" Bandwidth1="1" Enabled2="1" Visible2="1" Type2="5" Slope2="0" Channels2="0" Freq2="6120.105" Q2="0.70710677" Gain2="4.8055878" Bandwidth2="1" Enabled3="1" Visible3="1" Type3="6" Slope3="0" Channels3="0" Freq3="796.48114" Q3="0.70710677" Gain3="-0.94133759" Bandwidth3="1" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="2" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="2" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="2" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="2" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="2" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="2" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="2" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="2" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1">
+                                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/Digital Eq/Basic 3 Band.preset"/>
+                                    </DigitalEq>
+                                    <Phasor Name="InsertFX2" Bypass="0" SyncToHost="0" Speed="0.20204791" MinFreq="200" MaxFreq="3000" Feedback="0.62111998" Depth="1" Spread="1" Order="3" LFOSHape="0">
+                                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/Phasor/Stereo Widener.preset"/>
+                                    </Phasor>
+                                    <DualDelayX Name="InsertFX5" Bypass="0" SyncToHost="1" TapeSaturation="0" TapeDrive="0" TapeWarmth="0.5" Reflection="0" DelayTime="0.5" LowCut="200.64964" HighCut="15434.062" PeakFreq="2080.5173" PeakGain="7.3874264" PeakQ="2.6337304" PeakCompensation="1" Feedback="0.63953578" Mix="0.7083115" Rotation="0" InputWidth="1" OutputWidth="1" DelayRatio="0.033394337" FeedbackRatio="0" InputRotation="0" OutputRotation="0" Modulation="1" ModDepth="14.201767" ModRate="0.38277647" ModChannelOffset="0.66537124" Interpolation="1" DispersionSpread="20" DispersionFreq="200" Dispersion="0" DiffusionSpread="20" DiffusionAmount="0.2" Diffusion="0" CrusherFreq="9" CrusherBits="16" Crusher="0" Filtering="1" DuckerThreshold="-10" DuckerAttack="1" DuckerHold="1" DuckerDecay="200.00002" DuckerAttenuation="20" DuckerBypass="1">
+                                        <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/FXs/Dual Delay X/Slow Delay.preset"/>
+                                    </DualDelayX>
+                                    <FreqShifter Name="InsertFX1" Bypass="0" CoarseFreq="0.0012512207" FineFreq="-2.1401711" ChannelSpread="4.9999962" CrossoverFreq="600.00006" PreHighPassFreq="53.27029" Mix="0.95090872" WetGain="0" Mirror="1" PreHighPassEnabled="0" CrossoverEnabled="1">
+                                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/Freq Shifter/Phaser Stereo.preset"/>
+                                    </FreqShifter>
+                                </Inserts>
+                            </AuxEffect>
+                        </Chains>
+                    </EffectRack>
+                </Inserts>
+            </AuxEffect>
+            <AuxEffect Name="Aux1" Bypass="0" Gain="1" Pan="0" PreInsert="1" DisplayName="Aux 2">
+                <Inserts>
+                    <SparkVerb Name="InsertFX0" Bypass="0" ModDepth="7.4735298" ModRate="1" Diffusion="0.61799997" DiffusionStart="5" Width="0.89984411" RoomSize="33.378319" DecayTime="3.4175453" DecayLow="0.51767802" DecayHigh="1.46228" FreqLow="215.745" FreqHigh="12000" Shape="1" Mix="1" Quality="4" Mode="2" HiCut="0" LowCut="0" Rolloff="20000" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/03 - Large to Endless/Curiosity.preset"/>
+                    </SparkVerb>
+                </Inserts>
+            </AuxEffect>
+        </Auxs>
+        <Layers>
+            <Layer Name="Layer 0" Bypass="0" Gain="0.18837464" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Synthesis" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ff02b0ff"/>
+                <ControlSignalSources>
+                    <MultiEnvelope Name="Multi Envelope 1" Bypass="0" SyncToHost="1" DisplayName="Multi Envelope Gain" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NumSteps="19" Speed="1" Smooth="0.008300025" Bipolar="0" NoteOffRetrigger="0" LoopStart="0" LoopEnd="18">
+                        <Steps>
+                            <Step Time="0" DestLevel="0" Curve="0"/>
+                            <Step Time="2" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.125" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.25" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.375" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.5" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.625" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.75" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="0.875" Curve="0.63419223"/>
+                            <Step Time="0" DestLevel="0" Curve="-0.63419223"/>
+                            <Step Time="0.25" DestLevel="1" Curve="0.69647062"/>
+                            <Step Time="0" DestLevel="0" Curve="0.63419223"/>
+                        </Steps>
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Flourish/Flourish 25.preset"/>
+                    </MultiEnvelope>
+                </ControlSignalSources>
+                <Inserts>
+                    <Widener Name="InsertFX0" Bypass="0" Delay="4.2969999" Width="0" HighShelfFreqSide="10000" HighSelfGainSide="0">
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/07 - Stereo &amp; Amplitude/05 - UVI Wide/More Stereo.preset"/>
+                    </Widener>
+                </Inserts>
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="0.32000017" Destination="../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                    <BusRouter Name="AuxSend1" Bypass="0" Gain="0.31999999" Destination="../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.28558025" Pan="-0.012467265" DisplayName="Analog" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 1" Ratio="0.090908706" Source="$Keygroup/Multi Envelope 2" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 2" Ratio="0.40438738" Source="$Layer/Multi Envelope 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <MultiEnvelope Name="Multi Envelope 1" Bypass="0" SyncToHost="1" DisplayName="ME_WTP" VelocityAmount="0" VelocitySens="0.75" Retrigger="0" NumSteps="5" Speed="0.25" Smooth="0" Bipolar="0" NoteOffRetrigger="0" ShouldFakeMachFiveReleaseTriggerBug="1" LoopStart="0" LoopEnd="4">
+                                <Steps>
+                                    <Step Time="0" DestLevel="0.5" Curve="0"/>
+                                    <Step Time="1" DestLevel="1" Curve="-0.63419223"/>
+                                    <Step Time="1" DestLevel="0" Curve="-0.015849879"/>
+                                    <Step Time="1" DestLevel="1" Curve="-0.025148669"/>
+                                    <Step Time="1" DestLevel="0.5" Curve="0.58565909"/>
+                                </Steps>
+                                <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Pulses/Pulse 08.preset"/>
+                            </MultiEnvelope>
+                            <MultiEnvelope Name="Multi Envelope 2" Bypass="0" SyncToHost="1" DisplayName="Multi Envelope 2" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NumSteps="9" Speed="0.25" Smooth="0.00041012873" Bipolar="0" NoteOffRetrigger="0" LoopStart="0" LoopEnd="8">
+                                <Steps>
+                                    <Step Time="0" DestLevel="0" Curve="0"/>
+                                    <Step Time="1" DestLevel="0.75" Curve="-0.025148669"/>
+                                    <Step Time="0" DestLevel="0.375" Curve="-0.89174324"/>
+                                    <Step Time="0.5" DestLevel="0.75" Curve="0.89174324"/>
+                                    <Step Time="0.5" DestLevel="1" Curve="-0.025148669"/>
+                                    <Step Time="0.5" DestLevel="0.75" Curve="-0.025148669"/>
+                                    <Step Time="0.5" DestLevel="0.375" Curve="-0.89174324"/>
+                                    <Step Time="0" DestLevel="0.75" Curve="0.89174324"/>
+                                    <Step Time="1" DestLevel="0" Curve="-0.025148669"/>
+                                </Steps>
+                                <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Domes/Dome 26.preset"/>
+                            </MultiEnvelope>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <Rez Name="InsertFX0" Bypass="0" Freq="671.44995" Q="0.46545446" KeyTracking="0" Mode="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.12852742" Source="$Keygroup/Multi Envelope 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </Rez>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                            <BusRouter Name="AuxSend1" Bypass="0" Gain="0" Destination="../../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                        </BusRouters>
+                        <Oscillators>
+                            <MinBlepGenerator Name="Oscillator 2" Bypass="0" Waveform="1" Pwm="0.67467266" StartPhase="0" Polarity="0" HardSync="0" HardSyncShift="0" NumOscillators="6" MultiOscSpread="0.18831177" Stereo="1" PhaseSpread="2" DetuneMode="0" StereoSpread="0.34799987" StereoSpreadMode="1" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.18495336" Source="$Program/Macro 1" Destination="Pwm" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.67823738" SignalConnectionVersion="1"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </MinBlepGenerator>
+                        </Oscillators>
+                    </Keygroup>
+                    <Keygroup Name="Keygroup 1" Bypass="0" Gain="0.31037021" Pan="0" DisplayName="Wavetable" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 1" Ratio="0.090908706" Source="$Layer/Multi Envelope 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <MultiEnvelope Name="Multi Envelope 1" Bypass="0" SyncToHost="1" DisplayName="ME_WTP" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NumSteps="9" Speed="0.25" Smooth="0" Bipolar="0" NoteOffRetrigger="0" LoopStart="0" LoopEnd="8">
+                                <Steps>
+                                    <Step Time="0" DestLevel="0.31481481" Curve="0"/>
+                                    <Step Time="0.48888889" DestLevel="0.24264705" Curve="0.56643122"/>
+                                    <Step Time="0.52222222" DestLevel="0.56617647" Curve="-0.61926007"/>
+                                    <Step Time="0.48888889" DestLevel="0.77941179" Curve="0.520733"/>
+                                    <Step Time="0.5" DestLevel="1" Curve="-0.63419235"/>
+                                    <Step Time="0.5" DestLevel="0.81617647" Curve="0.69647056"/>
+                                    <Step Time="0.51111114" DestLevel="0.4852941" Curve="-0.54501832"/>
+                                    <Step Time="0.48888889" DestLevel="0.22058824" Curve="0.56643128"/>
+                                    <Step Time="0.51568627" DestLevel="0.31481481" Curve="-0.64813894"/>
+                                </Steps>
+                                <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Curves/Curve Tri Sync 01.preset"/>
+                            </MultiEnvelope>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <DigitalFilter Name="InsertFX0" Bypass="0" Type="0" Slope="2" Freq="307.5029" KeyTracking="0" Spread="7" Q="4.0996637" Gain="0" Bandwidth="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.40483779" Source="$Program/Macro 1" Destination="Freq" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.44514096" SignalConnectionVersion="1"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.21630017" Source="$Keygroup/Multi Envelope 1" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                        </Connections>
+                                    </SignalConnection>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/FXs/Digital Filter/Horn.preset"/>
+                            </DigitalFilter>
+                            <Gain Name="InsertFX1" Bypass="0" Volume="1.0000001">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.22257206" Source="$Program/Macro 1" Destination="Volume" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.80000001" SignalConnectionVersion="1"/>
+                                </Connections>
+                            </Gain>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                            <BusRouter Name="AuxSend1" Bypass="0" Gain="0" Destination="../../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                        </BusRouters>
+                        <Oscillators>
+                            <WaveTableOscillator Name="Oscillator" Bypass="0" WavetablePath="$FalconResources.ufs/Samples/Wavetables/X-Miscellaneous/Instable.wav" StartPhase="0" PhaseDistortionAmount="0" PhaseDistortionMode="3" Spread="0.11454541" DetuneMode="0" WaveIndex="0.29298729" WaveIndexSpread="0.69610375" StereoSpread="0.78051931" StereoSpreadMode="1" NumOscs="3" FadeMipMap="0" FadeWaveIndex="1" Stereo="1" PhaseSpread="1" EnableFM="1" FMDepth="0.25896105" FMRatio="27.328827" FMRatioFine="-4.9869385" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.18495126" Source="$Keygroup/Multi Envelope 1" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </WaveTableOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 1" Bypass="0" Gain="0.56966734" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Sample" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffa398e8"/>
+                <ControlSignalSources/>
+                <Inserts>
+                    <DigitalEq Name="InsertFX1" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="1" Visible1="1" Type1="1" Slope1="4" Channels1="0" Freq1="156.43163" Q1="0.14522526" Gain1="3" Bandwidth1="1" Enabled2="1" Visible2="1" Type2="5" Slope2="0" Channels2="0" Freq2="2860.1213" Q2="0.70710677" Gain2="7.9524422" Bandwidth2="1" Enabled3="1" Visible3="1" Type3="6" Slope3="0" Channels3="0" Freq3="1514.0923" Q3="0.70710677" Gain3="1.9058132" Bandwidth3="1" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="2" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="2" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="2" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="2" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="2" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="2" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="2" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="2" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1">
+                        <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/FXs/Digital Eq/Base_10.preset"/>
+                    </DigitalEq>
+                    <Widener Name="InsertFX0" Bypass="0" Delay="15" Width="0.50961041" HighShelfFreqSide="10000" HighSelfGainSide="0">
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/07 - Stereo &amp; Amplitude/05 - UVI Wide/Really Wide.preset"/>
+                    </Widener>
+                </Inserts>
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="0.32000017" Destination="../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                    <BusRouter Name="AuxSend1" Bypass="0" Gain="0.31999999" Destination="../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.06325949" Pan="0" DisplayName="Sample" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <Inserts>
+                            <XpanderFilter Name="InsertFX0" Bypass="0" Freq="667.63654" Q="0.23272757" KeyTracking="0" Mode="9" DistortionType="0" Drive="3.7402534" Fat="0" Algorithm="0" Oversampling="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-0.22257206" Source="$Program/Macro 1" Destination="Freq" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.5078367" SignalConnectionVersion="1"/>
+                                </Connections>
+                            </XpanderFilter>
+                            <Gain Name="InsertFX1" Bypass="0" Volume="2.0734859">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.16" Source="$Program/Macro 1" Destination="Volume" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.89999998" SignalConnectionVersion="1"/>
+                                </Connections>
+                            </Gain>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                            <BusRouter Name="AuxSend1" Bypass="0" Gain="0" Destination="../../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                        </BusRouters>
+                        <Oscillators>
+                            <GranularOscillator Name="Oscillator" Bypass="0" CoarseTune="-9" FineTune="4" Gain="1" Pitch="0" NoteTracking="1" BaseNote="62" DisplayName="Oscillator 1" SamplePath="$Organic Pads.ufs/Samples/Ambiance/AVS_Horns_3_C3.wav" Direction="-0.24363714" Speed="2.2069647" GrainSize="196.34488" GrainSymmetry="0.46675318" GrainFade="0.56" Density="3.5704842" Jitter="0.12519495" Position="0.52311707" PositionVariation="180.00006" PitchVariation="3.3854475" LoopMode="2" PitchCompMode="1" Window="0" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                                <PlaybackOptions Start="68542" Stop="437912" PlayDirection="0"/>
+                            </GranularOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 2" Bypass="0" Gain="0.060126957" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Noise" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffbe88cc"/>
+                <ControlSignalSources/>
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="0.32000017" Destination="../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                    <BusRouter Name="AuxSend1" Bypass="0" Gain="0.31999999" Destination="../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.22953524" Pan="0.0048862696" DisplayName="Noise" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                            <BusRouter Name="AuxSend1" Bypass="0" Gain="0" Destination="../../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                        </BusRouters>
+                        <Oscillators>
+                            <TextureOscillator Name="Oscillator" Bypass="0" SamplePath="$Organic Pads.ufs/Samples/Noise/AVS_Noise_27_C4.wav" SamplePath2="$FalconResources.ufs/Samples/Textures/Machines/Spray.wav" Width="1" Pitch1="0.97273064" Pitch2="0" Gain1="0.087272644" Gain2="-0.19948292" Pan1="0" Pan2="0" Mix="0.5" SampleStart="0.17038989" RandomStartDepth="0" Legato="0" Lowpass="3177.1843" Highpass="83.892609" PlaybackMode1="1" PlaybackMode2="1" BPOnOff="1" Bandpass="1031.0973" Bandwidth="0" PeakOnOff="1" PeakFreq="878.81146" PeakGain="0" PeakQ="1" CoarseTune="0" FineTune="-26" Gain="1" Pitch="0" NoteTracking="1" BaseNote="59" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.38334078" Source="$Program/Macro 1" Destination="Bandpass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.57075655" SignalConnectionVersion="1"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/Oscillators/Texture/Ebowed.preset"/>
+                            </TextureOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 3" Bypass="0" Gain="0.18183106" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Texture" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffca7d6d"/>
+                <ControlSignalSources/>
+                <Inserts>
+                    <Autopan Name="InsertFX0" Bypass="0" SyncToHost="1" Depth="1" Speed="8" Mode="3" AutopanVersion="1">
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/07 - Stereo &amp; Amplitude/02 - Autopan/Very Slow.preset"/>
+                    </Autopan>
+                </Inserts>
+                <BusRouters>
+                    <BusRouter Name="AuxSend0" Bypass="0" Gain="0.32000017" Destination="../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                    <BusRouter Name="AuxSend1" Bypass="0" Gain="0.31999999" Destination="../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                </BusRouters>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.41629621" Pan="0" DisplayName="Texture" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <MultiEnvelope Name="Multi Envelope 1" Bypass="0" SyncToHost="1" DisplayName="Multi Envelope 1" VelocityAmount="0" VelocitySens="0.030000448" Retrigger="1" NumSteps="17" Speed="0.99999994" Smooth="0.048895665" Bipolar="0" NoteOffRetrigger="0" ShouldFakeMachFiveReleaseTriggerBug="1" LoopStart="0" LoopEnd="16">
+                                <Steps>
+                                    <Step Time="0" DestLevel="0" Curve="0"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="0.77077132"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="0.64813882"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="0.56643128"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="0.41412359"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="-0.41412386"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="-0.56643146"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="-0.69647062"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.34823564"/>
+                                    <Step Time="0.5" DestLevel="0" Curve="-0.80105495"/>
+                                </Steps>
+                                <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Gates/Gate _8S 01.preset"/>
+                            </MultiEnvelope>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="2.0734859">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.15539551" Source="$Program/Macro 1" Destination="Volume" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.89999998" SignalConnectionVersion="1"/>
+                                </Connections>
+                            </Gain>
+                            <TSDrive Name="InsertFX1" Bypass="0" Drive="0.043636352" InputVoltage="0.2" OutputGain="0.99047667" LowFreq="504.93643" HighFreq="45777.762" Asymmetry="0.45298699"/>
+                            <CrossOverFilter Name="InsertFX2" Bypass="0" LowFrequency="200.00002" HighFrequency="4021.9224" Type="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.25794929" Source="$Program/Macro 1" Destination="HighFrequency" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.76780123" SignalConnectionVersion="1"/>
+                                </Connections>
+                            </CrossOverFilter>
+                        </Inserts>
+                        <BusRouters>
+                            <BusRouter Name="AuxSend0" Bypass="0" Gain="0" Destination="../../../Aux0" PreFader="0" BusRouterVersion="1"/>
+                            <BusRouter Name="AuxSend1" Bypass="0" Gain="0" Destination="../../../Aux1" PreFader="0" BusRouterVersion="1"/>
+                        </BusRouters>
+                        <Oscillators>
+                            <PluckOscillator Name="Oscillator 2" Bypass="0" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2" SamplePath="$Organic Pads.ufs/Samples/Textures/AVS_HemiStones_14.wav" Decay="60" DecayType="0" NumStrings="2" ExcitationBrightness="1" ExcitationCutoff="20000" Inharmonicity="0" Release="1" Brightness="0.94467527" HFBridgeLoss="0.1" DecayFreqHigh="20000" PickPosition="0.13" PickDepth="0.5" PickFilterEnabled="1" Stretch="0" StretchProb="0.5" Detune="6.2779198" Coupling="0.1" Shape="0" HarmonicRatio="1.0109091" HarmonicDamp="0.14545459" DynamicRange="19.501293" InterpolationMode="1" CouplingMode="5" StringCoarseTune="0" NoiseVolume="0.095172442" SynthVolume="0.123726" SampleVolume="1" SampleStart="0.16207787" SampleDetune="2.7926941" SampleKeyFollow="1" Sustained="1" Stereo="0" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.4357363" Source="$Keygroup/Multi Envelope 1" Destination="NoiseVolume" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/johnv/Documents/UVI/Falcon/User Presets/Oscillators/Pluck/Noise.preset"/>
+                            </PluckOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="C:/ProgramData/UVI/Falcon/FalconResources.ufs"/>
+    <NeededFS Source="D:/Libraries/UVI/Organic Pads.ufs"/>
+</UVI4>

@@ -6,7 +6,7 @@ public enum ConfigTask {
   MoveConnectionsBeforeProperties,
   PrependPathLineToDescription,
   QueryAdsrMacros,
-  QueryCountMacros, 
+  QueryCountMacros,
   QueryDahdsrModulations,
   QueryDelayTypes,
   QueryMainDahdsr,

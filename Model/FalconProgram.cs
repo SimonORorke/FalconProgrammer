@@ -370,6 +370,7 @@ public class FalconProgram {
     }
     if (Settings.TryGetSoundBankBackgroundImagePath(
           SoundBankName, out string path)) {
+      // TODO: Background image path should be relative if possible. 
       ProgramXml.SetBackgroundImagePath(path);
       NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
     }
@@ -427,10 +428,11 @@ public class FalconProgram {
       };
       layer.AddModulation(modulation);
     }
-    NotifyUpdate($"{PathShort}: " + 
+    NotifyUpdate($"{PathShort}: " +
                  "Added modulations to layers and initialised macros to layer gains.");
     // Add the DAHDSR Controller ScriptProcessor.
     // TODO: Handle missing script DAHDSR Controller.lua
+    //System.IO.Path.GetFullPath()
     var scriptProcessor = ProgramXml.AddScriptProcessor(
       "EventProcessor0", "Organic Pads",
       "./../../../Scripts/DAHDSR Controller.lua",
@@ -624,7 +626,7 @@ public class FalconProgram {
   public void QueryCountMacros() {
     Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
   }
-  
+
   public void QueryDahdsrModulations() {
     if (GuiScriptProcessor != null) {
       return;

@@ -42,6 +42,8 @@ public class TestBatch : Batch {
     }
     if (result.MustUseGuiScriptProcessor) {
       result.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
+    } else if (SoundBankName == "Organic Pads") {
+      result.EmbeddedTemplateFileName = "Tibetan Horns.uvip";
     }
     result.Initialise();
     return result;

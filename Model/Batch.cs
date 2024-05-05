@@ -40,7 +40,7 @@ public class Batch {
   }
 
   protected string SoundBankFolderPath { get; private set; } = null!;
-  private string SoundBankName => Path.GetFileName(SoundBankFolderPath);
+  protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   protected ConfigTask Task { get; private set; }
 
   protected virtual void ConfigureProgram() {
@@ -204,7 +204,7 @@ public class Batch {
     }
     if (!FileSystemService.Folder.Exists(Settings.OriginalProgramsFolder.Path)) {
       throw new ApplicationException(
-        "Cannot find original programs folder '" + 
+        "Cannot find original programs folder '" +
         $"{Settings.OriginalProgramsFolder.Path}'.");
     }
     return Settings.OriginalProgramsFolder.Path;
@@ -216,7 +216,7 @@ public class Batch {
         "The programs folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
         "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath}'.");
+        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
     }
     if (!FileSystemService.Folder.Exists(Settings.ProgramsFolder.Path)) {
       throw new ApplicationException(
@@ -370,7 +370,7 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       Log.WriteLine(
-        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement " + 
+        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement " +
         "CC number greater than 1 has not been specified.");
       return;
     }

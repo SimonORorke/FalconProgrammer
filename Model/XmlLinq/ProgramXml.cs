@@ -97,7 +97,8 @@ public class ProgramXml : EntityBase {
   }
 
   protected virtual void CloseXmlWriter(XmlWriter writer) {
-    writer.Close();
+    writer.Dispose();
+    // writer.Close();
   }
 
   public void CopyMacroElementsFromTemplate() {
@@ -158,7 +159,8 @@ public class ProgramXml : EntityBase {
       Element.Elements("Layers").FirstOrDefault() ??
       throw new InvalidOperationException(
         $"Cannot find Layers element in '{InputProgramPath}'.");
-    var layerElements = layersElement.Elements("Layer");
+    // var layerElements = layersElement.Elements("Layer");
+    var layerElements = layersElement.Descendants("Layer");
     return (
       from layerElement in layerElements
       select new ModulationsOwner(layerElement, this)).ToImmutableList();
@@ -277,8 +279,9 @@ public class ProgramXml : EntityBase {
 
   public void SaveToFile(string outputProgramPath) {
     try {
+      using var outputStream = CreateOutputStream(outputProgramPath);
       var writer = XmlWriter.Create(
-        CreateOutputStream(outputProgramPath),
+        outputStream,
         new XmlWriterSettings {
           Indent = true,
           IndentChars = "    "

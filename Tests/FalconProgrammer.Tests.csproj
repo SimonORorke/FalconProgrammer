@@ -52,6 +52,8 @@
         <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
         <None Remove="Model\Xml\Settings\BatchSettings.xml" />
         <EmbeddedResource Include="Model\Xml\Settings\BatchSettings.xml" />
+        <None Remove="Model\Xml\Programs\Tibetan Horns.uvip" />
+        <EmbeddedResource Include="Model\Xml\Programs\Tibetan Horns.uvip" />
     </ItemGroup>
 
 </Project>

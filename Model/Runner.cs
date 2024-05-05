@@ -6,6 +6,7 @@ public static class Runner {
   [SuppressMessage("ReSharper", "CommentTypo")]
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void Run() {
+    Global.ApplicationTitle = "Falcon Programmer";
     var batch = new Batch(new ConsoleBatchLog());
     // batch.RollForward(null);
     // batch.RollForward("Devinity", "Bass");
@@ -28,7 +29,7 @@ public static class Runner {
     // batch.RollForward("Factory", "VCF-20 Synths 2.5", "Bass Story");
     // batch.RollForward("Factory", "Vocal-Formant", "Vocal Growl Bass 1.6");
     // batch.RollForward("Fluidity");
-    // batch.RollForward("Fluidity", "Electronic", "Fluid Sweeper");
+    batch.RollForward("Fluidity", "Electronic", "Fluid Sweeper");
     // batch.ReplaceModWheelWithMacro("Fluidity", "Electronic", "Fluid Sweeper");
     // batch.RollForward("Fluidity", "Strings", "Guitar Stream");
     // batch.RollForward("Hypnotic Drive");

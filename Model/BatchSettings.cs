@@ -10,8 +10,5 @@ public class BatchSettings {
 
   [XmlArray(nameof(Tasks))]
   [XmlArrayItem("Task")]
-  public List<string> Tasks {
-    get;
-    [ExcludeFromCodeCoverage] set;
-  } = [];
+  public List<string> Tasks { get; [ExcludeFromCodeCoverage] set; } = [];
 }

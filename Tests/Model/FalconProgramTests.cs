@@ -42,4 +42,10 @@ public class FalconProgramTests {
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
     }
   }
+
+  [Test]
+  public void InitialiseOrganicPadsProgram() {
+    Batch.InitialiseLayout(
+      "Organic Pads", "Bass", "Imagination");
+  }
 }
