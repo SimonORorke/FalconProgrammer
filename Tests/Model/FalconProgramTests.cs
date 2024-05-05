@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -38,18 +37,18 @@ public class FalconProgramTests {
       const string programName = "Imagination";
       Batch.MockBatchLog.Lines.Clear();
       Batch.InitialiseLayout(soundBankName, categoryName, programName);
-      Assert.That(Batch.TestProgram.TestProgramXml.SavedXml, Does.Contain(
-        expectedImageFileName));
+      string expectedPath = $"\"./../../../Images/{expectedImageFileName}\"";
+      Assert.That(Batch.TestProgram.TestProgramXml.SavedXml, Does.Contain(expectedPath));
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
     }
   }
 
-  [ExcludeFromCodeCoverage]
-  [Test]
-  [Explicit]
-  public void InitialiseOrganicPadsProgram() {
-    // Only finds the first layer.
-    Batch.InitialiseLayout(
-      "Organic Pads", "Bass", "Imagination");
-  }
+  // [Test]
+  // [Explicit]
+  // public void InitialiseOrganicPadsProgram() {
+  //   // Only finds Layer 0.
+  //   // System.NotSupportedException : Layer 1 Layer is not supported.
+  //   Batch.InitialiseLayout(
+  //     "Organic Pads", "Bass", "Imagination");
+  // }
 }

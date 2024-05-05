@@ -370,9 +370,7 @@ public class FalconProgram {
     }
     if (Settings.TryGetSoundBankBackgroundImagePath(
           SoundBankName, out string path)) {
-      // TODO: Background image path should be relative. 
-      ProgramXml.SetBackgroundImagePath(path);
-      NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+      SetBackgroundImagePath();
     }
     switch (SoundBankName) {
       case "Ether Fields" or "Spectre":
@@ -392,6 +390,15 @@ public class FalconProgram {
         return;
     }
     NotifyUpdate($"{PathShort}: Initialised layout.");
+    return;
+
+    void SetBackgroundImagePath() {
+      string relativePath =
+        System.IO.Path.GetRelativePath(Category.Path, path);
+      string falconFormatPath = "./" + relativePath.Replace(@"\", "/");
+      ProgramXml.SetBackgroundImagePath(falconFormatPath);
+      NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+    }
   }
 
   private void InitialiseOrganicPadsProgram() {
