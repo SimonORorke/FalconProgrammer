@@ -22,7 +22,8 @@ public class TestCategory : Category {
 
   protected override ProgramXml CreateTemplateXml() {
     return new TestProgramXml(this) {
-      EmbeddedProgramFileName = EmbeddedTemplateFileName
+      EmbeddedProgramFileName = EmbeddedTemplateFileName,
+      EmbeddedTemplateFileName = EmbeddedTemplateFileName
     };
   }
 

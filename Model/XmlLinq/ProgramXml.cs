@@ -47,7 +47,7 @@ public class ProgramXml : EntityBase {
     _templateMacroElement ??= GetTemplateMacroElement();
 
   private XElement TemplateRootElement =>
-    _templateRootElement ??= ReadRootElementFromFile(Category.TemplateProgramPath);
+    _templateRootElement ??= ReadTemplateRootElementFromFile();
 
   public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
@@ -171,7 +171,7 @@ public class ProgramXml : EntityBase {
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
     try {
-      RootElement = ReadRootElementFromFile(InputProgramPath);
+      RootElement = ReadProgramRootElementFromFile();
       ControlSignalSourcesElement =
         Element.Elements("ControlSignalSources").FirstOrDefault() ??
         throw new InvalidOperationException(
@@ -236,11 +236,11 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
-  protected static XElement ReadRootElementFromXmlText(string programXmlText) {
+  protected static XElement ReadRootElementFromXmlText(string xmlText) {
     // In the following newer way of loading the XML to an object hierarchy,
     // there's no way to stop line breaks from being replaced by spaces.
     // But line breaks are correct when inserting or removing elements.
-    return XElement.Load(new StringReader(programXmlText));
+    return XElement.Load(new StringReader(xmlText));
     // This way of loading the XML to an object hierarchy
     // stops line breaks from being replaced by spaces in Description
     // when PrependPathLineToDescription updates it.
@@ -254,9 +254,18 @@ public class ProgramXml : EntityBase {
   }
 
   [ExcludeFromCodeCoverage]
-  protected virtual XElement ReadRootElementFromFile(string programPath) {
-    string programXmlText = File.ReadAllText(programPath);
-    return ReadRootElementFromXmlText(programXmlText);
+  protected virtual XElement ReadProgramRootElementFromFile() {
+    return ReadRootElementFromFile(InputProgramPath);
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual XElement ReadTemplateRootElementFromFile() {
+    return ReadRootElementFromFile(Category.TemplateProgramPath);
+  }
+  
+  private static XElement ReadRootElementFromFile(string path) {
+    string xmlText = File.ReadAllText(path);
+    return ReadRootElementFromXmlText(xmlText);
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {

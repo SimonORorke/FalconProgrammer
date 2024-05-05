@@ -29,6 +29,9 @@ public class FalconProgramTests {
     SoundBankBackground("Modular Noise", "Dark Forest.png");
     SoundBankBackground("Savage", "Heath.png");
     SoundBankBackground("Titanium", "Dull Purple.png");
+    Batch.EmbeddedProgramFileName = "Tibetan Horns.uvip";
+    Batch.EmbeddedTemplateFileName = "Crystal Caves.uvip";
+    SoundBankBackground("Organic Pads", "Bluish Teal.png");
     return;
 
     void SoundBankBackground(string soundBankName,
@@ -42,13 +45,4 @@ public class FalconProgramTests {
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
     }
   }
-
-  // [Test]
-  // [Explicit]
-  // public void InitialiseOrganicPadsProgram() {
-  //   // Only finds Layer 0.
-  //   // System.NotSupportedException : Layer 1 Layer is not supported.
-  //   Batch.InitialiseLayout(
-  //     "Organic Pads", "Bass", "Imagination");
-  // }
 }

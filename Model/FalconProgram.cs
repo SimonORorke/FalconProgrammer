@@ -15,7 +15,7 @@ public class FalconProgram {
     Batch = batch;
   }
 
-  protected Batch Batch { get; }
+  private Batch Batch { get; }
   public Category Category { get; }
 
   /// <summary>
@@ -270,12 +270,22 @@ public class FalconProgram {
     if (SoundBankName != "Organic Pads") {
       return;
     }
-    var reader = new StreamReader(Path);
+    var reader = CreateProgramReader();
     string oldContents = reader.ReadToEnd();
     reader.Close();
     string newContents = oldContents
       .Replace("<script>&lt;", "<script><")
       .Replace("&gt;</script>", "></script>");
+    UpdateProgramFileWithFixedCData(newContents);
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual TextReader CreateProgramReader() {
+    return new StreamReader(Path);
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual void UpdateProgramFileWithFixedCData(string newContents) {
     using var writer = new StreamWriter(Path);
     writer.Write(newContents);
   }

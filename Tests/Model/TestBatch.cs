@@ -12,6 +12,8 @@ public class TestBatch : Batch {
       TestBatchScriptReaderEmbedded = new TestBatchScriptReaderEmbedded();
   }
 
+  internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
   internal MockFileSystemService MockFileSystemService { get; }
   internal TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
@@ -40,16 +42,13 @@ public class TestBatch : Batch {
       result.MockFileSystemService.Folder.ExpectedFilePaths.Add(result.Path,
         categoryExpectedFilePaths);
     }
-    if (result.MustUseGuiScriptProcessor) {
-      result.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
-    } else if (SoundBankName == "Organic Pads") {
-      result.EmbeddedTemplateFileName = "Tibetan Horns.uvip";
-    }
+    result.EmbeddedTemplateFileName = EmbeddedTemplateFileName;
     result.Initialise();
     return result;
   }
 
   protected override FalconProgram CreateFalconProgram(string path) {
-    return new TestFalconProgram(path, Category, this);
+    return new TestFalconProgram(
+        EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
   }
 }
