@@ -33,7 +33,7 @@ internal class ErrorReporter {
     string errorMessage, bool isClosingWindow) {
     if (isClosingWindow) {
       errorMessage +=
-        $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationTitle}, " +
+        $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationName}, " +
         "No (Esc) to resume.";
       return await _dialogService.AskYesNoQuestion(errorMessage);
     }

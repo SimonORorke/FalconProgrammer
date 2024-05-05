@@ -23,7 +23,7 @@ public class SettingsFolderLocation : SerialisationBase, ISettingsFolderLocation
     string? appDataFolderName = null) {
     string appDataFolderPath = System.IO.Path.Combine(
       Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-      appDataFolderName ?? Global.ApplicationTitle);
+      appDataFolderName ?? Global.ApplicationName);
     return appDataFolderPath;
   }
 

@@ -33,11 +33,11 @@ public partial class MainWindowViewModel : ViewModelBase,
   // ReSharper disable once MemberCanBeMadeStatic.Global
   // Notwithstanding the warnings from both ReSharper and the compiler that this property
   // should be static, App.OnFrameworkInitializationCompleted cannot access it if it is
-  // static: "Cannot access static property 'ApplicationTitle' in non-static context".
+  // static: "Cannot access static property 'ApplicationName' in non-static context".
   public string ApplicationTitle {
 #pragma warning restore CA1822
-    get => Global.ApplicationTitle;
-    set => Global.ApplicationTitle = value;
+    get => Global.ApplicationName;
+    set => Global.ApplicationName = value;
   }
 
   /// <summary>

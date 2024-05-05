@@ -32,7 +32,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   [Test]
   public void ApplicationTitle() {
     ViewModel.ApplicationTitle = "A made-up name";
-    Assert.That(Global.ApplicationTitle, Is.EqualTo(ViewModel.ApplicationTitle));
+    Assert.That(Global.ApplicationName, Is.EqualTo(ViewModel.ApplicationTitle));
   }
 
   [Test]

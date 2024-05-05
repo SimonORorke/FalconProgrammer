@@ -1,5 +1,5 @@
 ﻿namespace FalconProgrammer.Model;
 
 public static class Global {
-  public static string ApplicationTitle { get; set; } = string.Empty;
+  public static string ApplicationName { get; set; } = string.Empty;
 }
