@@ -368,10 +368,9 @@ public class FalconProgram {
     if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
       RemoveGuiScriptProcessor();
     }
-    // Commenting this out makes no difference to Save/Read problem.
     if (Settings.TryGetSoundBankBackgroundImagePath(
           SoundBankName, out string path)) {
-      // TODO: Background image path should be relative if possible. 
+      // TODO: Background image path should be relative. 
       ProgramXml.SetBackgroundImagePath(path);
       NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
     }

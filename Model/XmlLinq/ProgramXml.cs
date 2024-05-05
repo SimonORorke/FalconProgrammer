@@ -96,11 +96,6 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  protected virtual void CloseXmlWriter(XmlWriter writer) {
-    writer.Dispose();
-    // writer.Close();
-  }
-
   public void CopyMacroElementsFromTemplate() {
     var originalMacroElements = MacroElements.ToList();
     for (int i = originalMacroElements.Count - 1; i >= 0; i--) {
@@ -117,11 +112,6 @@ public class ProgramXml : EntityBase {
       var newMacroElement = new XElement(templateMacroElement);
       ControlSignalSourcesElement.Add(newMacroElement);
     }
-  }
-
-  [ExcludeFromCodeCoverage]
-  protected virtual Stream CreateOutputStream(string outputProgramPath) {
-    return new FileStream(outputProgramPath, FileMode.OpenOrCreate);
   }
 
   public Dahdsr? FindMainDahdsr() {
@@ -277,10 +267,10 @@ public class ProgramXml : EntityBase {
   }
 
   public void SaveToFile(string outputProgramPath) {
+    using var stringWriterUtf8 = new StringWriterUtf8();
     try {
-      using var outputStream = CreateOutputStream(outputProgramPath);
-      var writer = XmlWriter.Create(
-        outputStream,
+      using var xmlWriter = XmlWriter.Create(
+        stringWriterUtf8,
         new XmlWriterSettings {
           Indent = true,
           IndentChars = "    "
@@ -290,12 +280,18 @@ public class ProgramXml : EntityBase {
           // See comment in ReadRootElementFromFile.
           // NewLineHandling = NewLineHandling.None
         });
-      RootElement.WriteTo(writer);
-      CloseXmlWriter(writer);
+      RootElement.WriteTo(xmlWriter);
     } catch (XmlException ex) {
-      throw new InvalidOperationException(
-        $"The following XML error was found on writing to '{outputProgramPath}'\r\n:{ex.Message}");
+      throw new ApplicationException(
+        "The following XML error was found on writing to " + 
+        $"'{outputProgramPath}'{Environment.NewLine}:{ex.Message}");
     }
+    SaveXmlTextToFile(outputProgramPath, stringWriterUtf8.ToString());
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual void SaveXmlTextToFile(string outputProgramPath, string xmlText) {
+    File.WriteAllText(outputProgramPath, xmlText);
   }
 
   public void SetBackgroundImagePath(string path) {

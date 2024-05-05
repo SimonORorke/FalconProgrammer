@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Xml;
 using System.Xml.Linq;
 using FalconProgrammer.Model;
 using FalconProgrammer.Model.XmlLinq;
@@ -15,7 +14,6 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
 
-  private MemoryStream OutputStream { get; set; }
   internal string SavedXml { get; private set; } = string.Empty;
 
   private Stream GetEmbeddedProgramStream() {
@@ -23,17 +21,6 @@ public class TestProgramXml : ProgramXml {
     string resourceName = XmlTestHelper.GetEmbeddedResourceName(
       EmbeddedProgramFileName, assembly);
     return assembly.GetManifestResourceStream(resourceName)!;
-  }
-
-  protected override void CloseXmlWriter(XmlWriter writer) {
-    base.CloseXmlWriter(writer);
-    OutputStream.Position = 0;
-    using var reader = new StreamReader(OutputStream);
-    SavedXml = reader.ReadToEnd();
-  }
-
-  protected override Stream CreateOutputStream(string outputProgramPath) {
-    return OutputStream = new MemoryStream();
   }
 
   /// <summary>
@@ -44,5 +31,9 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   protected override XElement ReadRootElementFromFile(string programPath) {
     return ReadRootElementFromStream(GetEmbeddedProgramStream());
+  }
+
+  protected override void SaveXmlTextToFile(string outputProgramPath, string xmlText) {
+    SavedXml = xmlText;
   }
 }
