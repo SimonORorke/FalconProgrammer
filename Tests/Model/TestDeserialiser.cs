@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -18,9 +17,6 @@ public class TestDeserialiser<T> : Deserialiser<T>
   ///   deserialised.
   /// </summary>
   public override T Deserialise(string inputPath) {
-    var assembly = Assembly.GetExecutingAssembly();
-    string resourceName = XmlTestHelper.GetEmbeddedResourceName(
-      EmbeddedFileName, assembly);
-    return Deserialise(assembly.GetManifestResourceStream(resourceName)!);
+    return Deserialise(Global.GetEmbeddedFileStream(EmbeddedFileName));
   }
 }

@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace FalconProgrammer.Model;
 
 public class SettingsReader : XmlReaderBase<Settings> {
@@ -17,7 +15,7 @@ public class SettingsReader : XmlReaderBase<Settings> {
     var result =
       FileSystemService.File.Exists(settingsPath) || !useDefaultIfNotFound
         ? Deserialiser.Deserialise(settingsPath)
-        : Deserialiser.Deserialise(GetDefaultSettingsStream());
+        : Deserialiser.Deserialise(Global.GetEmbeddedFileStream("DefaultSettings.xml"));
     result.SettingsPath = settingsPath;
     return result;
   }
@@ -37,12 +35,5 @@ public class SettingsReader : XmlReaderBase<Settings> {
       FileSystemService = FileSystemService,
       Serialiser = Serialiser
     };
-  }
-
-  private static Stream GetDefaultSettingsStream() {
-    var assembly = Assembly.GetExecutingAssembly();
-    string resourceName = assembly.GetManifestResourceNames()
-      .Single(resourcePath => resourcePath.EndsWith("DefaultSettings.xml"));
-    return assembly.GetManifestResourceStream(resourceName)!;
   }
 }

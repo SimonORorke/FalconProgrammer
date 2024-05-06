@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using FalconProgrammer.Model;
 using FalconProgrammer.Model.XmlLinq;
 
@@ -20,13 +19,6 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
 
-  private static Stream GetEmbeddedProgramStream(string embeddedFileName) {
-    var assembly = Assembly.GetExecutingAssembly();
-    string resourceName = XmlTestHelper.GetEmbeddedResourceName(
-      embeddedFileName, assembly);
-    return assembly.GetManifestResourceStream(resourceName)!;
-  }
-
   private void OnSaved(string savedXml) {
     Saved?.Invoke(this, savedXml);
   }
@@ -36,7 +28,7 @@ public class TestProgramXml : ProgramXml {
   ///   will be read from the Tests assembly and deserialised.
   /// </summary>
   protected override XElement ReadProgramRootElementFromFile() {
-    var reader = new StreamReader(GetEmbeddedProgramStream(EmbeddedProgramFileName));
+    var reader = new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
     string programXmlText = reader.ReadToEnd(); 
     return ReadRootElementFromXmlText(programXmlText);
   }
@@ -46,7 +38,7 @@ public class TestProgramXml : ProgramXml {
   ///   will be read from the Tests assembly and deserialised.
   /// </summary>
   protected override XElement ReadTemplateRootElementFromFile() {
-    var reader = new StreamReader(GetEmbeddedProgramStream(EmbeddedTemplateFileName));
+    var reader = new StreamReader(Global.GetEmbeddedFileStream(EmbeddedTemplateFileName));
     string programXmlText = reader.ReadToEnd(); 
     return ReadRootElementFromXmlText(programXmlText);
   }
