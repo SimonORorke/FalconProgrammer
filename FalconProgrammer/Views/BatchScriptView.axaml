@@ -89,7 +89,7 @@
             <Label Grid.Column="0" Grid.Row="0"
                    Target="TasksDataGrid"
                    Margin="0, 10, 0, 0">
-                <AccessText Text="_Tasks"
+                <AccessText Text="_Configuration Tasks"
                             FontSize="20"
                             TextAlignment="Center"
                             ShowAccessKey="True" />
