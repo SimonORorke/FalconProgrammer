@@ -504,26 +504,6 @@ public class FalconProgram {
     }
   }
 
-  /// <summary>
-  ///   This was needed for the data comparison check when data access was refactored to
-  ///   use Linq for XML throughout. It should not be needed again.
-  /// </summary>
-  public void MoveConnectionsBeforeProperties() {
-    bool updated = false;
-    foreach (var dummy in Macros
-               .Where(macro => macro.MoveConnectionsBeforeProperties())) {
-      updated = true;
-    }
-    foreach (var dummy in ScriptProcessors
-               .Where(scriptProcessor =>
-                 scriptProcessor.MoveConnectionsBeforeProperties())) {
-      updated = true;
-    }
-    if (updated) {
-      NotifyUpdate($"{PathShort}: Moved Connections before Properties.");
-    }
-  }
-
   private void MoveMacros(List<Macro> macrosToMove, bool hasZeroedReverbMacros) {
     // For unknown reason, when zeroing reverb silences the program and so had been
     // disallowed, just moving the macro to the end can silence the program.

@@ -6,7 +6,12 @@ namespace FalconProgrammer.Model;
 
 [XmlRoot("Batch")]
 public class BatchScript : SerialisationBase {
-  private static ImmutableList<ConfigTask>? _sequencedConfigTasks;
+  static BatchScript() {
+    // The second of these two statics depends on the first.
+    // So they need to be created in this order.
+    SequencedConfigTasks = SequenceConfigTasks();
+    OrderedConfigTasks = OrderConfigTasks();
+  }
 
   [XmlArray(nameof(Tasks))]
   [XmlArrayItem("Task")]
@@ -14,8 +19,28 @@ public class BatchScript : SerialisationBase {
 
   [XmlIgnore] public string Path { get; set; } = string.Empty;
 
-  private static ImmutableList<ConfigTask> SequencedConfigTasks =>
-    _sequencedConfigTasks ??= SequenceConfigTasks();
+  /// <summary>
+  ///   Get all <see cref="ConfigTask "/>s, with those that need to be run in a
+  ///   particular order first, in the order in which they need to be run, followed by
+  ///   all the others.
+  /// </summary>
+  public static ImmutableList<ConfigTask> OrderedConfigTasks { get; }
+
+  /// <summary>
+  ///   Gets those <see cref="ConfigTask "/>s that need to be run in a particular order
+  ///   in the order in which they need to be run.
+  /// </summary>
+  internal static ImmutableList<ConfigTask> SequencedConfigTasks { get; }
+
+  private static ImmutableList<ConfigTask> OrderConfigTasks() {
+    var list = new List<ConfigTask>(SequencedConfigTasks);
+    var unsequenced =
+      from constant in Enum.GetValues<ConfigTask>()
+      where !SequencedConfigTasks.Contains(constant)
+      select constant;
+    list.AddRange(unsequenced);
+    return list.ToImmutableList();
+  }
 
   private static ImmutableList<ConfigTask> SequenceConfigTasks() {
     return [

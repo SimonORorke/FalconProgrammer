@@ -20,8 +20,8 @@ public class TaskCollection : DataGridItemCollection<TaskItem> {
 
   private static ImmutableList<string> CreateTasks() {
     return (
-      from task in Enum.GetNames<ConfigTask>()
-      select task).ToImmutableList();
+      from configTask in BatchScript.OrderedConfigTasks
+      select configTask.ToString()).ToImmutableList();
   }
 
   protected override void CutItem(DataGridItem itemToCut) {

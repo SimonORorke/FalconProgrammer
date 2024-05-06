@@ -29,6 +29,17 @@ public class BatchScriptTests {
   }
 
   [Test]
+  public void OrderedConfigTasks() {
+    Assert.That(BatchScript.OrderedConfigTasks, 
+      Has.Count.GreaterThan(BatchScript.SequencedConfigTasks.Count));
+    Assert.That(BatchScript.OrderedConfigTasks[0], 
+      Is.EqualTo(BatchScript.SequencedConfigTasks[0]));
+    int lastSequencedIndex = BatchScript.SequencedConfigTasks.Count - 1;
+    Assert.That(BatchScript.OrderedConfigTasks[lastSequencedIndex], 
+      Is.EqualTo(BatchScript.SequencedConfigTasks[lastSequencedIndex]));
+  }
+
+  [Test]
   public void SequenceTasks() {
     var sequencedTasks = BatchScript.SequenceTasks();
     Assert.That(sequencedTasks[0], Is.SameAs(BatchScript.Tasks[3]));

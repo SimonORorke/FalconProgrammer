@@ -3,7 +3,6 @@
 public enum ConfigTask {
   InitialiseLayout,
   InitialiseValuesAndMoveMacros,
-  MoveConnectionsBeforeProperties,
   PrependPathLineToDescription,
   QueryAdsrMacros,
   QueryCountMacros,

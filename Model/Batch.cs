@@ -54,9 +54,6 @@ public class Batch {
       case ConfigTask.InitialiseValuesAndMoveMacros:
         Program.InitialiseValuesAndMoveMacros();
         break;
-      case ConfigTask.MoveConnectionsBeforeProperties:
-        Program.MoveConnectionsBeforeProperties();
-        break;
       case ConfigTask.QueryAdsrMacros:
         Program.QueryAdsrMacros();
         break;
@@ -246,13 +243,6 @@ public class Batch {
   public void InitialiseValuesAndMoveMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.InitialiseValuesAndMoveMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void MoveConnectionsBeforeProperties(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.MoveConnectionsBeforeProperties;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 

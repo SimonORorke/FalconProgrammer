@@ -70,18 +70,6 @@ public class ModulationsOwner : EntityBase {
     return list.ToImmutableList();
   }
 
-  public bool MoveConnectionsBeforeProperties() {
-    var connectionsElement = Element.Element("Connections");
-    var propertiesElement = Element.Element("Properties");
-    if (propertiesElement != null && connectionsElement != null &&
-        connectionsElement != Element.Elements().First()) {
-      connectionsElement.Remove();
-      propertiesElement.AddBeforeSelf(connectionsElement);
-      return true;
-    }
-    return false;
-  }
-
   public void RemoveModulation(Modulation modulation) {
     modulation.Element.Remove();
     if (Modulations.Contains(modulation)) {
