@@ -4,15 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ct="using:FalconProgrammer.Controls"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:local="clr-namespace:FalconProgrammer"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
-             x:Class="FalconProgrammer.Views.GuiScriptProcessorView"
-             x:DataType="vm:GuiScriptProcessorViewModel">
+             x:Class="FalconProgrammer.Views.BackgroundView"
+             x:DataType="vm:BackgroundViewModel">
     <DataGrid
-        ItemsSource="{Binding SoundBankCategories}"
+        ItemsSource="{Binding Backgrounds}"
         RowHeight="35"
         GridLinesVisibility="All">
         <DataGrid.Columns>
-            <DataGridTemplateColumn Width="*">
+            <DataGridTemplateColumn Width="175">
                 <DataGridTemplateColumn.HeaderTemplate>
                     <DataTemplate>
                         <TextBlock Text="Sound Bank"
@@ -20,7 +21,7 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="vm:SoundBankCategory">
                         <TextBlock Text="{Binding SoundBank}"
                                    Margin="13,0, 0, 0" />
                     </DataTemplate>
@@ -35,22 +36,53 @@
             <DataGridTemplateColumn Width="*">
                 <DataGridTemplateColumn.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="Category or 'All'"
+                        <TextBlock Text="Background Image Path"
                                    FontSize="20" />
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Category}"
+                        <TextBlock Text="{Binding Path}"
                                    Margin="13,0, 0, 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
-                <DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Width="81">
+                <DataGridTemplateColumn.HeaderTemplate>
                     <DataTemplate>
-                        <ComboBox ItemsSource="{Binding Categories}"
-                                  SelectedItem="{Binding Category}" />
+                        <TextBlock Text="Image"
+                                   FontSize="20" />
                     </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Image
+                            Source="{Binding Path, Converter={x:Static 
+                            local:Converters.PathToBitmap}}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="48"
+                            Height="32" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Width="110">
+                <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="Browse"
+                                   FontSize="20" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding BrowseCommand}"
+                                Margin="13,0,0,0"
+                                Height="25"
+                                MinHeight="25">
+                            <TextBlock Text="Browse..." />
+                        </Button>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Width="110">
                 <DataGridTemplateColumn.HeaderTemplate>

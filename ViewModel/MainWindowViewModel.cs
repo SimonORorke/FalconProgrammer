@@ -22,6 +22,7 @@ public partial class MainWindowViewModel : ViewModelBase,
 
   public MainWindowViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
+    BackgroundViewModel = new BackgroundViewModel(dialogService, dispatcherService);
     BatchScriptViewModel = new BatchScriptViewModel(dialogService, dispatcherService);
     GuiScriptProcessorViewModel =
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
@@ -39,6 +40,12 @@ public partial class MainWindowViewModel : ViewModelBase,
     get => Global.ApplicationName;
     set => Global.ApplicationName = value;
   }
+
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  internal BackgroundViewModel BackgroundViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
@@ -84,7 +91,8 @@ public partial class MainWindowViewModel : ViewModelBase,
       new TabItem(BatchScriptViewModel),
       new TabItem(LocationsViewModel),
       new TabItem(GuiScriptProcessorViewModel),
-      new TabItem(MidiForMacrosViewModel)
+      new TabItem(MidiForMacrosViewModel),
+      new TabItem(BackgroundViewModel)
     };
     return list.ToImmutableList();
   }

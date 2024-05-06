@@ -45,6 +45,7 @@ public class ViewLocator : IDataTemplate {
   private static Control? CreateView(object viewModel) {
     return viewModel switch {
       MainWindowViewModel => new MainWindow(),
+      BackgroundViewModel => new BackgroundView(),
       BatchScriptViewModel => new BatchScriptView(),
       GuiScriptProcessorViewModel => new GuiScriptProcessorView(),
       MidiForMacrosViewModel => new MidiForMacrosView(),
