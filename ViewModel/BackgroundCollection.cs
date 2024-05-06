@@ -61,7 +61,7 @@ public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
   internal override void UpdateSettings() {
     Settings.Backgrounds.Clear();
     foreach (var backgroundItem in this) {
-      if (!backgroundItem.IsAdditionItem) {
+      if (!backgroundItem.IsAdditionItem && backgroundItem.SoundBank != string.Empty) {
         Settings.Backgrounds.Add(new Settings.Background {
           SoundBank = backgroundItem.SoundBank,
           Path = backgroundItem.Path
