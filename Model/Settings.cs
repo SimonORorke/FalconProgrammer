@@ -8,7 +8,6 @@ namespace FalconProgrammer.Model;
 /// </summary>
 [XmlRoot(nameof(Settings))]
 public class Settings : SerialisationBase {
-  [XmlElement] public Folder BatchScriptsFolder { get; set; } = new Folder();
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();

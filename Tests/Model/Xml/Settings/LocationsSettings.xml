@@ -4,7 +4,6 @@
     for tests that are expected to access a mock file system. 
     A test will throw an exception if it attempts to write to the real file system, 
     provided it is run on a computer that does not have that drive. -->
-    <BatchScriptsFolder Path="J:\FalconProgrammer\Batch"/>
     <ProgramsFolder Path="J:\FalconProgrammer\Programs"/>
     <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>

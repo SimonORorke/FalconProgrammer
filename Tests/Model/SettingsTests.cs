@@ -44,8 +44,6 @@ public class SettingsTests {
       // Debug.WriteLine(
       //   $"TestSettingsFolderPath = '{SettingsTestHelper.TestSettingsFolderPath}'");
       Assert.That(File.Exists(settings.SettingsPath));
-      Assert.That(settings.BatchScriptsFolder.Path, Is.EqualTo(
-        SettingsTestHelper.BatchScriptsFolderPath));
       Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(
         SettingsTestHelper.ProgramsFolderPath));
       Assert.That(settings.OriginalProgramsFolder.Path, Is.EqualTo(

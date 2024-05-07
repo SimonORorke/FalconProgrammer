@@ -4,9 +4,6 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.Tests.Model;
 
 public static class SettingsTestHelper {
-  public const string BatchScriptsFolderPath =
-    @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Batch";
-
   public const string DefaultSettingsFolderPath =
     @"D:\Simon\OneDrive\Documents\Music\Software\UVI\FalconProgrammer.Data\Settings";
 
@@ -66,9 +63,6 @@ public static class SettingsTestHelper {
   /// </summary>
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void WriteSettings(Settings settings) {
-    settings.BatchScriptsFolder = new Settings.Folder {
-      Path = BatchScriptsFolderPath
-    };
     settings.ProgramsFolder = new Settings.Folder {
       Path = ProgramsFolderPath
     };
