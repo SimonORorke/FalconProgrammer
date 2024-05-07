@@ -9,12 +9,13 @@ namespace FalconProgrammer.ViewModel;
 public partial class MainWindowViewModel : ViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
   /// <summary>
-  ///   Generates CurrentPageTitle property.
+  ///   Generates <see cref="CurrentPageTitle" /> property.
   /// </summary>
   [ObservableProperty] private string _currentPageTitle = string.Empty;
 
   /// <summary>
-  ///   Generates SelectedTab property and partial OnSelectedTabChanged method.
+  ///   Generates <see cref="SelectedTab" />  property
+  ///   and partial OnSelectedTabChanged method.
   /// </summary>
   [ObservableProperty] private TabItem? _selectedTab;
 

@@ -5,8 +5,11 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public partial class SoundBankCategory : SoundBankItem {
+  /// <summary>
+  ///   Generates <see cref="Category" /> property.
+  /// </summary>
   [ObservableProperty]
-  private string _category = string.Empty; // Generates Category property
+  private string _category = string.Empty;
 
   public SoundBankCategory(
     Settings settings,

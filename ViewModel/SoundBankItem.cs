@@ -7,8 +7,11 @@ namespace FalconProgrammer.ViewModel;
 public partial class SoundBankItem : DataGridItem {
   internal const string AllCaption = "All";
 
+  /// <summary>
+  ///   Generates <see cref="SoundBank" /> property.
+  /// </summary>
   [ObservableProperty]
-  private string _soundBank = string.Empty; // Generates SoundBank property
+  private string _soundBank = string.Empty;
 
   public SoundBankItem(
     Settings settings,

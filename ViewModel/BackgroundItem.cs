@@ -5,7 +5,10 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public partial class BackgroundItem : SoundBankItem {
-  [ObservableProperty] private string _path = string.Empty; // Generates Path property
+  /// <summary>
+  ///   Generates <see cref="Path" /> property.
+  /// </summary>
+  [ObservableProperty] private string _path = string.Empty;
 
   public BackgroundItem(Settings settings, IFileSystemService fileSystemService,
     bool isAdditionItem, Func<BackgroundItem, Task> browseForItemPath) :
@@ -15,7 +18,10 @@ public partial class BackgroundItem : SoundBankItem {
 
   private Func<BackgroundItem, Task> BrowseForItemPath { get; }
 
-  [RelayCommand] // Generates BrowseCommand
+  /// <summary>
+  ///   Generates <see cref="BrowseCommand" />.
+  /// </summary>
+  [RelayCommand]
   private async Task Browse() {
     await BrowseForItemPath(this);
   }

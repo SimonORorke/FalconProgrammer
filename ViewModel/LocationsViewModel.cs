@@ -49,6 +49,9 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   public override string PageTitle => "Locations";
 
+  /// <summary>
+  ///   Generates <see cref="BrowseForDefaultTemplateCommand" />.
+  /// </summary>
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
     string? path = await DialogService.BrowseForFile(
@@ -59,6 +62,9 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  /// <summary>
+  ///   Generates <see cref="BrowseForOriginalProgramsFolderCommand" />.
+  /// </summary>
   [RelayCommand]
   private async Task BrowseForOriginalProgramsFolder() {
     string? path = await DialogService.BrowseForFolder(
@@ -68,6 +74,9 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  /// <summary>
+  ///   Generates <see cref="BrowseForProgramsFolderCommand" />.
+  /// </summary>
   [RelayCommand]
   private async Task BrowseForProgramsFolder() {
     string? path = await DialogService.BrowseForFolder(
@@ -77,6 +86,9 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  /// <summary>
+  ///   Generates <see cref="BrowseForSettingsFolderCommand" />.
+  /// </summary>
   [RelayCommand]
   private async Task BrowseForSettingsFolder() {
     string? path = await DialogService.BrowseForFolder(
@@ -98,6 +110,9 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  /// <summary>
+  ///   Generates <see cref="BrowseForTemplateProgramsFolderCommand" />.
+  /// </summary>
   [RelayCommand]
   private async Task BrowseForTemplateProgramsFolder() {
     string? path = await DialogService.BrowseForFolder(
