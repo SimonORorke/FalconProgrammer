@@ -11,6 +11,7 @@ public class Batch {
 
   public Batch(IBatchLog log) {
     Log = log;
+    
   }
 
   internal BatchScriptReader BatchScriptReader {
@@ -40,9 +41,11 @@ public class Batch {
   }
 
   protected string SoundBankFolderPath { get; private set; } = null!;
-  protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
+  [PublicAPI] protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   protected ConfigTask Task { get; private set; }
 
+  public event EventHandler? ScriptRunEnded;
+  
   protected virtual void ConfigureProgram() {
     if (Task != ConfigTask.RestoreOriginal) {
       Program.Read();
@@ -246,6 +249,10 @@ public class Batch {
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
+  private void OnScriptRunEnded() {
+    ScriptRunEnded?.Invoke(this, EventArgs.Empty);
+  }
+
   [PublicAPI]
   public void PrependPathLineToDescription(
     string? soundBankName, string? categoryName = null, string? programName = null) {
@@ -401,21 +408,36 @@ public class Batch {
     ReuseCc1(soundBankName, categoryName, programName);
   }
 
-  public void RunScript(string batchScriptPath) {
-    var batchScript = BatchScriptReader.Read(batchScriptPath);
-    batchScript.Validate();
-    foreach (var batchTask in batchScript.SequenceTasks()) {
-      Task = batchTask.ConfigTask;
-      ConfigurePrograms(
-        GetScopeParameter(batchTask.SoundBank),
-        GetScopeParameter(batchTask.Category),
-        GetScopeParameter(batchTask.Program));
+  public void RunScript(BatchScript batchScript) {
+    try {
+      batchScript.Validate();
+      foreach (var batchTask in batchScript.SequenceTasks()) {
+        Task = batchTask.ConfigTask;
+        ConfigurePrograms(
+          GetScopeParameter(batchTask.SoundBank),
+          GetScopeParameter(batchTask.Category),
+          GetScopeParameter(batchTask.Program));
+      }
+    } catch (Exception exception) {
+      Log.WriteLine("==========================================");
+      Log.WriteLine("The batch run terminated with this error:");
+      Log.WriteLine("==========================================");
+      Log.WriteLine(exception is ApplicationException
+        ? exception.Message
+        : exception.ToString());
+      Log.WriteLine("==========================================");
     }
+    OnScriptRunEnded();
     return;
 
     string? GetScopeParameter(string level) {
       return level is "All" or "" ? null : level;
     }
+  }
+
+  public virtual void RunScript(string batchScriptPath) {
+    var batchScript = BatchScriptReader.Read(batchScriptPath);
+    RunScript(batchScript);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {

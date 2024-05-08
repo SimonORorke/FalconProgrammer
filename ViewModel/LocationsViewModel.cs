@@ -54,7 +54,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [RelayCommand]
   private async Task BrowseForDefaultTemplate() {
-    string? path = await DialogService.BrowseForFile(
+    string? path = await DialogService.OpenFile(
       "Select the default template Falcon program",
       "Falcon Programs", "uvip");
     if (path != null) {

@@ -13,6 +13,13 @@ public interface IDialogService {
   Task<bool> AskYesNoQuestion(string text);
 
   /// <summary>
+  ///   Asynchronously shows an open folder dialog, returning the path of the selected
+  ///   folder or, if the user cancels the dialog, null.
+  /// </summary>
+  /// <param name="dialogTitle">Dialog title.</param>
+  Task<string?> BrowseForFolder(string dialogTitle);
+
+  /// <summary>
   ///   Asynchronously shows an open file dialog, returning the path of the selected file
   ///   or, if the user cancels the dialog, null.
   /// </summary>
@@ -21,15 +28,19 @@ public interface IDialogService {
   /// <param name="fileExtension">
   ///   File name extension of the file type filter, excluding "*.".)
   /// </param>
-  Task<string?> BrowseForFile(
+  Task<string?> OpenFile(
     string dialogTitle, string filterName, string fileExtension);
 
   /// <summary>
-  ///   Asynchronously shows an open folder dialog, returning the path of the selected
-  ///   folder or, if the user cancels the dialog, null.
+  ///   Asynchronously shows a save file dialog, returning the path of the specified file
+  ///   or, if the user cancels the dialog, null.
   /// </summary>
   /// <param name="dialogTitle">Dialog title.</param>
-  Task<string?> BrowseForFolder(string dialogTitle);
+  /// <param name="defaultExtension">
+  ///   Default file name extension, excluding ".".)
+  /// </param>
+  Task<string?> SaveFile(
+    string dialogTitle, string defaultExtension);
 
   /// <summary>
   ///   Asynchronously shows an error message box.

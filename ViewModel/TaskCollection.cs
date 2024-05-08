@@ -14,7 +14,7 @@ public class TaskCollection : DataGridItemCollection<TaskItem> {
   private void AddItem(string task = "") {
     AddItem(new TaskItem(IsAddingAdditionItem) {
       Tasks = Tasks,
-      Task = task
+      Name = task
     });
   }
 
@@ -48,9 +48,9 @@ public class TaskCollection : DataGridItemCollection<TaskItem> {
 
   internal void UpdateSettings() {
     Settings.Batch.Tasks.Clear();
-    foreach (var taskViewModel in this) {
-      if (!taskViewModel.IsAdditionItem) {
-        Settings.Batch.Tasks.Add(taskViewModel.Task);
+    foreach (var taskItem in this) {
+      if (!taskItem.IsAdditionItem) {
+        Settings.Batch.Tasks.Add(taskItem.Name);
       }
     }
     Settings.Write();

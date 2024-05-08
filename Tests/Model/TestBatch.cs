@@ -1,9 +1,10 @@
 ﻿using FalconProgrammer.Model;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.Model;
 
 public class TestBatch : Batch {
-  public TestBatch() : base(new MockBatchLog()) {
+  public TestBatch(IBatchLog? log = null) : base(log ?? new MockBatchLog()) {
     FileSystemService = MockFileSystemService = new MockFileSystemService();
     SettingsReader = TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
       EmbeddedFileName = "LocationsSettings.xml"
@@ -13,12 +14,17 @@ public class TestBatch : Batch {
   }
 
   internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  
+  [PublicAPI] internal string EmbeddedScriptFileName { get; set; } = 
+    "QueriesForProgram.xml";
+  
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
   internal MockFileSystemService MockFileSystemService { get; }
-  internal TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
+  private TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
   internal TestFalconProgram TestProgram => (TestFalconProgram)Program;
   internal TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; }
+  internal Exception? ExceptionWhenConfiguringProgram { get; set; }
 
   /// <summary>
   ///   If false, modification of Falcon programs will be bypassed and instead
@@ -27,6 +33,9 @@ public class TestBatch : Batch {
   internal bool UpdatePrograms { get; set; } = true;
 
   protected override void ConfigureProgram() {
+    if (ExceptionWhenConfiguringProgram != null) {
+      throw ExceptionWhenConfiguringProgram;
+    }
     if (UpdatePrograms) {
       base.ConfigureProgram();
       return;
@@ -50,5 +59,10 @@ public class TestBatch : Batch {
   protected override FalconProgram CreateFalconProgram(string path) {
     return new TestFalconProgram(
         EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
+  }
+
+  public override void RunScript(string batchScriptPath) {
+    TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName; 
+    base.RunScript(batchScriptPath);
   }
 }

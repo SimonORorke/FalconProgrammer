@@ -27,7 +27,7 @@ public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
   }
 
   private async Task BrowseForPath(BackgroundItem item) {
-    string? path = await DialogService.BrowseForFile(
+    string? path = await DialogService.OpenFile(
       "Select a background image (dimensions: 720 x 480)",
       "Images", "png");
     if (path != null) {

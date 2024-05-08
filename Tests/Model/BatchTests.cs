@@ -106,6 +106,30 @@ public class BatchTests {
   }
 
   [Test]
+  public void RunScriptException() {
+    bool hasScriptRunEnded = false;
+    Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true; 
+    const string errorMessage = "This is a test error message.";
+    // Simulate FalconProgram throwing an ApplicationException when a task is run.
+    Batch.ExceptionWhenConfiguringProgram = new ApplicationException(errorMessage);
+    Batch.RunScript("This will be ignored.xml");
+    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain(errorMessage));
+    // The log should contain the error message but not a stack trace.
+    Assert.That(Batch.MockBatchLog.Text, Does.Not.Contain(nameof(ApplicationException)));
+    // Simulate FalconProgram throwing an Exception other than an ApplicationException
+    // when a task is run.
+    hasScriptRunEnded = false;
+    Batch.MockBatchLog.Lines.Clear();
+    Batch.ExceptionWhenConfiguringProgram = new InvalidOperationException(errorMessage);
+    Batch.RunScript("This will be ignored.xml");
+    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain(errorMessage));
+    // The log should contain a stack trace.
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain(nameof(InvalidOperationException)));
+  }
+
+  [Test]
   public void RunScriptForAll() {
     var mockFolderService = Batch.MockFileSystemService.Folder;
     string programsFolderPath = Batch.Settings.ProgramsFolder.Path;
@@ -120,7 +144,7 @@ public class BatchTests {
       Path.Combine(onlySoundBankFolderPath, onlyCategoryName);
     mockFolderService.ExpectedFilePaths.Add(
       onlyCategoryFolderPath, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
-    Batch.TestBatchScriptReaderEmbedded.EmbeddedFileName = "QueriesForAll.xml";
+    Batch.EmbeddedScriptFileName = "QueriesForAll.xml";
     Batch.RunScript("This will be ignored.xml");
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
@@ -131,8 +155,10 @@ public class BatchTests {
 
   [Test]
   public void RunScriptForProgram() {
-    Batch.TestBatchScriptReaderEmbedded.EmbeddedFileName = "QueriesForProgram.xml";
+    bool hasScriptRunEnded = false;
+    Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true; 
     Batch.RunScript("This will be ignored.xml");
+    Assert.That(hasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo(@"QueryDelayTypes: 'SB\Cat\P1'"));

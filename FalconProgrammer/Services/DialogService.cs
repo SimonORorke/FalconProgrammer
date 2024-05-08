@@ -24,7 +24,18 @@ public class DialogService : IDialogService {
     return result == ButtonResult.Yes;
   }
 
-  public async Task<string?> BrowseForFile(
+  public async Task<string?> BrowseForFolder(string dialogTitle) {
+    var folders =
+      await TopLevel.StorageProvider.OpenFolderPickerAsync(
+        new FolderPickerOpenOptions {
+          Title = dialogTitle,
+          AllowMultiple = false
+        }
+      );
+    return folders.Count == 1 ? folders[0].Path.LocalPath : null;
+  }
+
+  public async Task<string?> OpenFile(
     string dialogTitle, string filterName, string fileExtension) {
     string pattern = $"*.{fileExtension}";
     var files = await TopLevel.StorageProvider.OpenFilePickerAsync(
@@ -50,15 +61,15 @@ public class DialogService : IDialogService {
     return files.Count == 1 ? files[0].Path.LocalPath : null;
   }
 
-  public async Task<string?> BrowseForFolder(string dialogTitle) {
-    var folders =
-      await TopLevel.StorageProvider.OpenFolderPickerAsync(
-        new FolderPickerOpenOptions {
-          Title = dialogTitle,
-          AllowMultiple = false
-        }
-      );
-    return folders.Count == 1 ? folders[0].Path.LocalPath : null;
+  public async Task<string?> SaveFile(
+    string dialogTitle, string defaultExtension) {
+    var file = await TopLevel.StorageProvider.SaveFilePickerAsync(
+      new FilePickerSaveOptions {
+        Title = dialogTitle,
+        DefaultExtension = defaultExtension,
+        ShowOverwritePrompt = true
+      });
+    return file?.Path.LocalPath;
   }
 
   public async Task ShowErrorMessageBox(string text) {

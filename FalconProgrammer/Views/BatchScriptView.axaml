@@ -109,14 +109,14 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="vm:TaskItem">
-                                <TextBlock Text="{Binding Task}"
+                                <TextBlock Text="{Binding Name}"
                                            Margin="13,0, 0, 0" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding Tasks}"
-                                          SelectedItem="{Binding Task}" />
+                                          SelectedItem="{Binding Name}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>

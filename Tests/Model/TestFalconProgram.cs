@@ -16,9 +16,9 @@ public class TestFalconProgram : FalconProgram {
 
   private string EmbeddedProgramFileName { get; }
   private string EmbeddedTemplateFileName { get; }
-  internal string SavedXml { get; set; } = string.Empty;
+  internal string SavedXml { get; private set; } = string.Empty;
 
-  internal TestProgramXml TestProgramXml {
+  private TestProgramXml TestProgramXml {
     get {
       return _testProgramXml ??= CreateTestProgramXml();
 
