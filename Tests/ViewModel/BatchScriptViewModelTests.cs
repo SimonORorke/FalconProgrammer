@@ -87,7 +87,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ConfigureThisScript();
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
-    ViewModel.RunThisScriptCommand.Execute(null);
+    await ViewModel.RunThisScriptCommand.ExecuteAsync(null);
     // Commands are disabled while a script is running. That would be fiddly to test.
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
@@ -98,9 +98,27 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task RunThisScriptCancelled() {
+    await ConfigureThisScript();
+    Assert.That(!ViewModel.CanCancelBatchRun);
+    // The Cancel command will be enabled while the batch is running.
+    // However, that's tricky to test. Fortunately, we can ignore the fact that the
+    // command is disabled at this stage, which will only prevent it from being executed
+    // in the GUI. So we will cancel before running, which should be impossible in the
+    // GUI. This should cancel the batch immediately, before any Falcon programs are
+    // updated.
+    ViewModel.TestBatch.UpdatePrograms = true;
+    ViewModel.CancelBatchRunCommand.Execute(null);
+    await ViewModel.RunThisScriptCommand.ExecuteAsync(null);
+    Assert.That(!ViewModel.CanCancelBatchRun);
+    Assert.That(ViewModel.Log, Does.Contain(
+      @"The batch run has been cancelled."));
+  }
+
+  [Test]
   public async Task SaveThisScript() {
     await ConfigureThisScript();
-    ViewModel.SaveThisScriptCommand.Execute(null);
+    await ViewModel.SaveThisScriptCommand.ExecuteAsync(null);
     Assert.That(ViewModel.TestBatchScript, Is.Not.Null);
     Assert.That(ViewModel.TestBatchScript.MockSerialiser.LastOutputPath, 
       Is.EqualTo(BatchScriptPath));
@@ -110,7 +128,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   public async Task SaveThisScriptCancelled() {
     await ConfigureThisScript();
     MockDialogService.Cancel = true;
-    ViewModel.SaveThisScriptCommand.Execute(null);
+    await ViewModel.SaveThisScriptCommand.ExecuteAsync(null);
     Assert.That(ViewModel.TestBatchScript, Is.Null);
   }
 

@@ -8,6 +8,7 @@ namespace FalconProgrammer.ViewModel;
 
 public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private Batch? _batch;
+  private bool _canCancelBatchRun;
   private bool _canRunSavedScript = true;
   private bool _canRunThisScript = true;
   private bool _canSaveLog = true;
@@ -33,6 +34,14 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   internal SubscribableBatchLog BatchLog { get; }
+
+  /// <summary>
+  ///   Gets or sets CanExecute for <see cref="CancelBatchRunCommand" />.
+  /// </summary>
+  public bool CanCancelBatchRun {
+    get => _canCancelBatchRun;
+    private set => SetProperty(ref _canCancelBatchRun, value);
+  }
 
   /// <summary>
   ///   Gets or sets CanExecute for <see cref="RunSavedScriptCommand" />.
@@ -65,6 +74,9 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
+  private CancellationTokenSource RunCancellationTokenSource { get; } =
+    new CancellationTokenSource();
+
   internal BatchScope Scope => Scopes[0]; 
 
   public BatchScopeCollection Scopes => _scopes
@@ -76,17 +88,26 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
 
   private void BatchLogOnLineWritten(object? sender, EventArgs e) {
-    Log = BatchLog.ToString();
+    DispatcherService.Dispatch(() => Log = BatchLog.ToString());
   }
 
   private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
     CanSaveLog = CanRunSavedScript = CanRunThisScript = true;
+    CanCancelBatchRun = false;
   }
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
     return await DialogService.OpenFile(
       $"Open a batch script file to {purpose}",
       "XML files", "xml");
+  }
+
+  /// <summary>
+  ///   Generates <see cref="CancelBatchRunCommand" />.
+  /// </summary>
+  [RelayCommand(CanExecute = nameof(CanCancelBatchRun))]
+  private void CancelBatchRun() {
+    RunCancellationTokenSource.Cancel();
   }
 
   [ExcludeFromCodeCoverage]
@@ -140,6 +161,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     BatchLog.Lines.Clear();
     Log = string.Empty;
     CanSaveLog = CanRunSavedScript = CanRunThisScript = false;
+    CanCancelBatchRun = true;
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -164,7 +186,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
       PrepareForRun();
-      Batch.RunScript(path);
+      await Batch.RunScript(path, RunCancellationTokenSource.Token);
     }
   }
 
@@ -172,10 +194,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   ///   Generates <see cref="RunThisScriptCommand" />.
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanRunThisScript))]
-  private void RunThisScript() {
+  private async Task RunThisScript() {
     var script = CreateThisBatchScript();
     PrepareForRun();
-    Batch.RunScript(script);
+    await Batch.RunScript(script, RunCancellationTokenSource.Token);
   }
 
   /// <summary>

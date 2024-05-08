@@ -23,37 +23,41 @@ public class BatchTests {
   }
 
   private TestBatch Batch { get; set; } = null!;
+  private const string BatchScriptPath = "This path X will be ignored.xml";
+  
+  private CancellationTokenSource RunCancellationTokenSource { get; } =
+    new CancellationTokenSource();
 
   [Test]
-  public void CannotReplaceModWheelWithMacroForCategory() {
+  public async Task CannotReplaceModWheelWithMacroForCategory() {
     const string soundBankName = "Factory";
     const string category = "Organic Texture 2.8";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName, category));
     Batch.EmbeddedProgramFileName = "GuiScriptProcessor.uvip";
     Batch.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
-    Batch.ReplaceModWheelWithMacro(soundBankName, category);
+    await Batch.ReplaceModWheelWithMacro(soundBankName, category);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
       "because the category's GUI has to be defined in a script."));
   }
 
   [Test]
-  public void CannotReplaceModWheelWithMacroForSoundBank() {
+  public async Task CannotReplaceModWheelWithMacroForSoundBank() {
     const string soundBankName = "Organic Keys";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName));
-    Batch.ReplaceModWheelWithMacro(soundBankName);
+    await Batch.ReplaceModWheelWithMacro(soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
       "because the sound bank's GUI has to be defined in a script."));
   }
 
   [Test]
-  public void CannotReplaceModWheelWithoutModWheelReplacementCcNo() {
+  public async Task CannotReplaceModWheelWithoutModWheelReplacementCcNo() {
     const string soundBankName = "Organic Keys";
     Batch.Settings.MidiForMacros.ModWheelReplacementCcNo = 0;
-    Batch.ReplaceModWheelWithMacro(soundBankName);
+    await Batch.ReplaceModWheelWithMacro(soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
       "CC number greater than 1 has not been specified."));
@@ -88,7 +92,7 @@ public class BatchTests {
   [Test]
   public void ProgramsFolderNotFound() {
     Batch.MockFileSystemService.Folder.ExpectedExists = false;
-    var exception = Assert.Throws<ApplicationException>(
+    var exception = Assert.ThrowsAsync<ApplicationException>(
       () => Batch.QueryCountMacros(null));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
@@ -98,7 +102,7 @@ public class BatchTests {
   [Test]
   public void ProgramsFolderNotSpecified() {
     Batch.Settings.ProgramsFolder.Path = string.Empty;
-    var exception = Assert.Throws<ApplicationException>(
+    var exception = Assert.ThrowsAsync<ApplicationException>(
       () => Batch.UpdateMacroCcs(null));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
@@ -106,13 +110,25 @@ public class BatchTests {
   }
 
   [Test]
-  public void RunScriptException() {
+  public async Task RunScriptCancelled() {
+    bool hasScriptRunEnded = false;
+    Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true;
+    await RunCancellationTokenSource.CancelAsync();
+    Batch.UpdatePrograms = true;
+    await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
+    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain(
+      "The batch run has been cancelled."));
+  }
+
+  [Test]
+  public async Task RunScriptException() {
     bool hasScriptRunEnded = false;
     Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true; 
     const string errorMessage = "This is a test error message.";
     // Simulate FalconProgram throwing an ApplicationException when a task is run.
     Batch.ExceptionWhenConfiguringProgram = new ApplicationException(errorMessage);
-    Batch.RunScript("This will be ignored.xml");
+    await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(hasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(errorMessage));
     // The log should contain the error message but not a stack trace.
@@ -122,7 +138,7 @@ public class BatchTests {
     hasScriptRunEnded = false;
     Batch.MockBatchLog.Lines.Clear();
     Batch.ExceptionWhenConfiguringProgram = new InvalidOperationException(errorMessage);
-    Batch.RunScript("This will be ignored.xml");
+    await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(hasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(errorMessage));
     // The log should contain a stack trace.
@@ -130,7 +146,7 @@ public class BatchTests {
   }
 
   [Test]
-  public void RunScriptForAll() {
+  public async Task RunScriptForAll() {
     var mockFolderService = Batch.MockFileSystemService.Folder;
     string programsFolderPath = Batch.Settings.ProgramsFolder.Path;
     const string onlySoundBankName = "Fluidity";
@@ -145,7 +161,7 @@ public class BatchTests {
     mockFolderService.ExpectedFilePaths.Add(
       onlyCategoryFolderPath, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     Batch.EmbeddedScriptFileName = "QueriesForAll.xml";
-    Batch.RunScript("This will be ignored.xml");
+    await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
       @"QueryReverbTypes: 'Fluidity\Electronic\Cream Synth'"));
@@ -154,10 +170,10 @@ public class BatchTests {
   }
 
   [Test]
-  public void RunScriptForProgram() {
+  public async Task RunScriptForProgram() {
     bool hasScriptRunEnded = false;
     Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true; 
-    Batch.RunScript("This will be ignored.xml");
+    await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(hasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
@@ -168,7 +184,7 @@ public class BatchTests {
   public void SoundBankFolderNotFound() {
     Batch.MockFileSystemService.Folder.ExistingPaths.Add(
       Batch.Settings.ProgramsFolder.Path);
-    var exception = Assert.Throws<ApplicationException>(
+    var exception = Assert.ThrowsAsync<ApplicationException>(
       () => Batch.PrependPathLineToDescription("Factory"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith("Cannot find sound bank folder '"));

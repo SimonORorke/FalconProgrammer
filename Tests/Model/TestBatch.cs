@@ -32,12 +32,12 @@ public class TestBatch : Batch {
   /// </summary>
   internal bool UpdatePrograms { get; set; } = true;
 
-  protected override void ConfigureProgram() {
+  protected override async Task ConfigureProgram() {
     if (ExceptionWhenConfiguringProgram != null) {
       throw ExceptionWhenConfiguringProgram;
     }
     if (UpdatePrograms) {
-      base.ConfigureProgram();
+      await base.ConfigureProgram();
       return;
     }
     Log.WriteLine($"{Task}: '{Program.PathShort}'");
@@ -61,8 +61,9 @@ public class TestBatch : Batch {
         EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
   }
 
-  public override void RunScript(string batchScriptPath) {
+  public override async Task RunScript(
+    string batchScriptPath, CancellationToken cancellationToken) {
     TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName; 
-    base.RunScript(batchScriptPath);
+    await base.RunScript(batchScriptPath, cancellationToken);
   }
 }
