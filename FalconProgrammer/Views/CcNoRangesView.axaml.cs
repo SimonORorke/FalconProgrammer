@@ -4,12 +4,13 @@ using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Views;
 
-public partial class TasksView : UserControl {
-  public TasksView() {
+public partial class CcNoRangesView : UserControl {
+  public CcNoRangesView() {
     // Prevent the previewer's DataContext from being created when the application is run.
     if (Design.IsDesignMode) {
       // This only sets the DataContext for the previewer in the IDE.
-      Design.SetDataContext(this, new TaskCollection(new DispatcherService()));
+      Design.SetDataContext(this, new CcNoRangeCollection(
+        "Design", new DialogService(),  new DispatcherService()));
     }
     InitializeComponent();
   }
