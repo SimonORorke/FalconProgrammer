@@ -1,4 +1,4 @@
-using System.Reflection;
+using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using FalconProgrammer.ViewModel;
@@ -14,13 +14,6 @@ namespace FalconProgrammer;
 ///   are assumed to be in this assembly.
 /// </remarks>
 public class ViewLocator : IDataTemplate {
-  private Assembly? _thisAssembly;
-  private string? _viewsNameSpace;
-  private Assembly ThisAssembly => _thisAssembly ??= Assembly.GetExecutingAssembly();
-
-  private string ViewsNameSpace => _viewsNameSpace ??=
-    $"{ThisAssembly.GetName().Name!}.Views";
-
   public Control? Build(object? viewModel) {
     if (viewModel is null) {
       return null;
@@ -30,12 +23,13 @@ public class ViewLocator : IDataTemplate {
       view.DataContext = viewModel;
       return view;
     }
-    string viewName = GetViewName(viewModel);
-    return new TextBlock { Text = "Not Found: " + viewName };
+    return new TextBlock {
+      Text = $"A view has not been specified for view model {viewModel.GetType().Name}."
+    };
   }
 
   public bool Match(object? viewModel) {
-    return viewModel is ViewModelBase;
+    return viewModel is INotifyPropertyChanged;
   }
 
   /// <summary>
@@ -44,28 +38,15 @@ public class ViewLocator : IDataTemplate {
   /// </summary>
   private static Control? CreateView(object viewModel) {
     return viewModel switch {
-      MainWindowViewModel => new MainWindow(),
       BackgroundViewModel => new BackgroundView(),
       BatchScriptViewModel => new BatchScriptView(),
+      BatchScopeCollection => new BatchScopesView(),
       GuiScriptProcessorViewModel => new GuiScriptProcessorView(),
-      MidiForMacrosViewModel => new MidiForMacrosView(),
       LocationsViewModel => new LocationsView(),
+      MainWindowViewModel => new MainWindow(),
+      MidiForMacrosViewModel => new MidiForMacrosView(),
+      TaskCollection => new TasksView(),
       _ => null
     };
-  }
-
-  /// <summary>
-  ///   As view creation is strongly typed, getting a view name is only used for
-  ///   error messages.
-  /// </summary>
-  private string GetViewName(object viewModel) {
-    string viewModelShortName = viewModel.GetType().Name;
-    string viewShortName = viewModelShortName.EndsWith("WindowViewModel")
-      // E.g. view model MainWindowViewModel, view MainWindow. 
-      ? viewModelShortName.Replace("ViewModel", string.Empty)
-      // E.g. view model LocationsViewModel, view LocationsView. 
-      : viewModelShortName.Replace("ViewModel", "View");
-    string result = $"{ViewsNameSpace}.{viewShortName}";
-    return result;
   }
 }

@@ -1,0 +1,64 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ct="clr-namespace:FalconProgrammer.Controls"
+             xmlns:vm="using:FalconProgrammer.ViewModel"
+             mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
+             x:Class="FalconProgrammer.Views.TasksView"
+             x:DataType="vm:TaskCollection">
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto">
+        <Label Grid.Column="0" Grid.Row="0"
+               Target="TasksDataGrid"
+               Margin="0, 10, 0, 0">
+            <AccessText Text="_Configuration Tasks"
+                        FontSize="20"
+                        TextAlignment="Center"
+                        ShowAccessKey="True" />
+        </Label>
+        <DataGrid Grid.Column="0" Grid.Row="1"
+                  x:Name="TasksDataGrid"
+                  ItemsSource="{Binding}"
+                  RowHeight="35"
+                  GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="315">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Task"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="vm:TaskItem">
+                            <TextBlock Text="{Binding Name}"
+                                       Margin="13,0, 0, 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Tasks}"
+                                      SelectedItem="{Binding Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="110">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Action"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="vm:TaskItem">
+                            <ct:ItemActionButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
