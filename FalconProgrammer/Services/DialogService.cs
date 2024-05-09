@@ -37,7 +37,6 @@ public class DialogService : IDialogService {
 
   public async Task<string?> OpenFile(
     string dialogTitle, string filterName, string fileExtension) {
-    string pattern = $"*.{fileExtension}";
     var files = await TopLevel.StorageProvider.OpenFilePickerAsync(
       new FilePickerOpenOptions {
         Title = dialogTitle,
@@ -54,7 +53,7 @@ public class DialogService : IDialogService {
         // programs. 
         FileTypeFilter = [
           new FilePickerFileType(filterName) {
-            Patterns = [pattern]
+            Patterns = [$"*.{fileExtension}"]
           }
         ]
       });
@@ -62,12 +61,17 @@ public class DialogService : IDialogService {
   }
 
   public async Task<string?> SaveFile(
-    string dialogTitle, string defaultExtension) {
+    string dialogTitle, string filterName, string fileExtension) {
     var file = await TopLevel.StorageProvider.SaveFilePickerAsync(
       new FilePickerSaveOptions {
         Title = dialogTitle,
-        DefaultExtension = defaultExtension,
-        ShowOverwritePrompt = true
+        DefaultExtension = fileExtension,
+        ShowOverwritePrompt = true,
+        FileTypeChoices = [
+          new FilePickerFileType(filterName) {
+            Patterns = [$"*.{fileExtension}"]
+          }
+        ]
       });
     return file?.Path.LocalPath;
   }

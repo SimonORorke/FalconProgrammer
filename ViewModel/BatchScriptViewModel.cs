@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.Input;
@@ -12,7 +13,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private bool _canRunSavedScript = true;
   private bool _canRunThisScript = true;
   private bool _canSaveLog = true;
-  private string _log = string.Empty;
   private BatchScopeCollection? _scopes;
   private TaskCollection? _tasks;
 
@@ -67,10 +67,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     private set => SetProperty(ref _canSaveLog, value);
   }
 
-  internal string Log {
-    get => _log;
-    private set => SetProperty(ref _log, value);
-  }
+  public ObservableCollection<string> Log { get; } = [];
 
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
@@ -87,13 +84,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
 
-  private void BatchLogOnLineWritten(object? sender, EventArgs e) {
-    DispatcherService.Dispatch(() => Log = BatchLog.ToString());
+  private async void BatchLogOnLineWritten(object? sender, string text) {
+    await DispatcherService.DispatchAsync(() => Log.Add(text));
   }
 
-  private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
-    CanSaveLog = CanRunSavedScript = CanRunThisScript = true;
-    CanCancelBatchRun = false;
+  private async void BatchOnScriptRunEnded(object? sender, EventArgs e) {
+    await DispatcherService.DispatchAsync(() => {
+      CanSaveLog = CanRunSavedScript = CanRunThisScript = true;
+      CanCancelBatchRun = false;
+    });
   }
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
@@ -157,11 +156,13 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     Tasks.Populate(Settings);
   }
 
-  private void PrepareForRun() {
+  private async Task PrepareForRun() {
     BatchLog.Lines.Clear();
-    Log = string.Empty;
-    CanSaveLog = CanRunSavedScript = CanRunThisScript = false;
-    CanCancelBatchRun = true;
+    await DispatcherService.DispatchAsync(() => {
+      Log.Clear();
+      CanSaveLog = CanRunSavedScript = CanRunThisScript = false;
+      CanCancelBatchRun = true;
+    });
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -185,7 +186,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private async Task RunSavedScript() {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
-      PrepareForRun();
+      await PrepareForRun();
       await Batch.RunScript(path, RunCancellationTokenSource.Token);
     }
   }
@@ -196,7 +197,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   [RelayCommand(CanExecute = nameof(CanRunThisScript))]
   private async Task RunThisScript() {
     var script = CreateThisBatchScript();
-    PrepareForRun();
+    await PrepareForRun();
     await Batch.RunScript(script, RunCancellationTokenSource.Token);
   }
 
@@ -206,7 +207,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   [RelayCommand(CanExecute = nameof(CanSaveLog))]
   private async Task SaveLog() {
     string? path = await DialogService.SaveFile(
-      "Save Log", "txt");
+      "Save Log", "Text files","txt");
     if (path != null) {
       SaveLogToFile(path);
     }
@@ -215,7 +216,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   protected virtual void SaveLogToFile(string outputPath) {
-    File.WriteAllText(outputPath, Log);
+    File.WriteAllText(outputPath, BatchLog.ToString());
   }
 
   /// <summary>
@@ -224,7 +225,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   [RelayCommand]
   private async Task SaveThisScript() {
     string? path = await DialogService.SaveFile(
-      "Save Batch Script", "xml");
+      "Save Batch Script", "XML files", "xml");
     if (path != null) {
       var script = CreateThisBatchScript();
       script.Serialiser.Serialise(typeof(BatchScript), script, path);

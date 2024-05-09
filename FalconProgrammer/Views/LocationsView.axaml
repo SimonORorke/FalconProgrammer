@@ -20,14 +20,12 @@
         <Button Grid.Row="1" Grid.Column="5"
                 Command="{Binding BrowseForSettingsFolderCommand}">
             <Button.Content>
-                <AccessText Text="_Browse..."
-                            ShowAccessKey="True" />
+                <AccessText Text="_Browse..." />
             </Button.Content>
         </Button>
         <Label Grid.Row="3" Grid.Column="1"
                Target="ProgramsFolderTextBox">
-            <AccessText Text="_Programs Folder"
-                        ShowAccessKey="True" />
+            <AccessText Text="_Programs Folder" />
         </Label>
         <TextBox Grid.Row="3" Grid.Column="3"
                  x:Name="ProgramsFolderTextBox"
@@ -37,8 +35,7 @@
                 Command="{Binding BrowseForProgramsFolderCommand}" />
         <Label Grid.Row="5" Grid.Column="1"
                Target="OriginalProgramsFolderTextBox">
-            <AccessText Text="_Original Programs Folder"
-                        ShowAccessKey="True" />
+            <AccessText Text="_Original Programs Folder" />
         </Label>
         <TextBox Grid.Row="5" Grid.Column="3"
                  x:Name="OriginalProgramsFolderTextBox"
@@ -48,8 +45,7 @@
                 Command="{Binding BrowseForOriginalProgramsFolderCommand}" />
         <Label Grid.Row="7" Grid.Column="1"
                Target="TemplateProgramsFolderTextBox">
-            <AccessText Text="_Template Programs Folder"
-                        ShowAccessKey="True" />
+            <AccessText Text="_Template Programs Folder" />
         </Label>
         <TextBox Grid.Row="7" Grid.Column="3"
                  x:Name="TemplateProgramsFolderTextBox"
@@ -59,8 +55,7 @@
                 Command="{Binding BrowseForTemplateProgramsFolderCommand}" />
         <Label Grid.Row="9" Grid.Column="1"
                Target="DefaultTemplateFileTextBox">
-            <AccessText Text="_Default Template File"
-                        ShowAccessKey="True" />
+            <AccessText Text="_Default Template File" />
         </Label>
         <TextBox Grid.Row="9" Grid.Column="3"
                  x:Name="DefaultTemplateFileTextBox"

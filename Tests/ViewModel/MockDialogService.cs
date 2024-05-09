@@ -37,7 +37,7 @@ public class MockDialogService : IDialogService {
   }
 
   public async Task<string?> SaveFile(
-    string dialogTitle, string defaultExtension) {
+    string dialogTitle, string filterName, string fileExtension) {
     if (Cancel) {
       return null;
     }

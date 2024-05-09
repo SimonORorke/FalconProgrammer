@@ -10,4 +10,9 @@ public class MockDispatcherService : IDispatcherService {
     DispatchCount++;
     action();
   }
+
+  public async Task DispatchAsync(Action action) {
+    await Task.Delay(0);
+    Dispatch(action);
+  }
 }

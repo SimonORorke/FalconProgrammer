@@ -79,7 +79,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ViewModel.RunSavedScriptCommand.ExecuteAsync(null);
     // Commands are disabled while a script is running. That would be fiddly to test.
     Assert.That(ViewModel.CanRunSavedScript);
-    Assert.That(ViewModel.Log, Does.StartWith(@"QueryAdsrMacros: 'SB\Cat\P1'"));
+    Assert.That(ViewModel.Log[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
   }
 
   [Test]
@@ -91,10 +91,10 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     // Commands are disabled while a script is running. That would be fiddly to test.
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
-    Assert.That(ViewModel.Log, Does.StartWith(
+    Assert.That(ViewModel.Log[0], Is.EqualTo(
       @"InitialiseLayout: 'Factory\Keys\Morning Keys'"));
     await ViewModel.SaveLogCommand.ExecuteAsync(null);
-    Assert.That(ViewModel.SavedLog, Is.EqualTo(ViewModel.Log));
+    Assert.That(ViewModel.SavedLog, Is.EqualTo(ViewModel.BatchLog.ToString()));
   }
 
   [Test]

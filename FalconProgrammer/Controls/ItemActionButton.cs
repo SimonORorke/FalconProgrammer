@@ -57,8 +57,7 @@ public class ItemActionButton : Button {
   private static MenuItem CreateMenuItem(string text) {
     return new MenuItem {
       Header = new AccessText {
-        Text = text,
-        ShowAccessKey = true
+        Text = text
       }
     };
   }

@@ -6,10 +6,89 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BatchScriptView"
              x:DataType="vm:BatchScriptViewModel">
+    <UserControl.Styles>
+        <Style Selector="AccessText.top">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.top">
+            <Setter Property="Margin" Value="20,0,0,0" />
+            <Setter Property="Width" Value="140" />
+        </Style>
+    </UserControl.Styles>
     <DockPanel>
-        <ContentControl DockPanel.Dock="Top" 
+        <TextBlock DockPanel.Dock="Top" Height="10" />
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Command="{Binding RunThisScriptCommand}"
+                    Classes="top"
+                    Margin="10,0,0,0">
+                <Button.Content>
+                    <AccessText Text="Run _This Script" Classes="top" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding SaveThisScriptCommand}"
+                    Classes="top">
+                <Button.Content>
+                    <AccessText Text="_Save This Script" Classes="top" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding EditSavedScriptCommand}"
+                    Classes="top">
+                <Button.Content>
+                    <AccessText Text="_Edit Saved Script" Classes="top" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding RunSavedScriptCommand}"
+                    Classes="top">
+                <Button.Content>
+                    <AccessText Text="_Run Saved Script" Classes="top" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding SaveLogCommand}"
+                    Classes="top">
+                <Button.Content>
+                    <AccessText Text="Save _Log" Classes="top" />
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding CancelBatchRunCommand}"
+                    Classes="top">
+                <Button.Content>
+                    <AccessText Text="Cancel _Batch Run" Classes="top" />
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <ContentControl DockPanel.Dock="Top"
                         Content="{Binding Scopes}" />
-        <ContentControl DockPanel.Dock="Top" 
-                        Content="{Binding Tasks}" />
+        <Grid ColumnDefinitions="Auto, 10, *" RowDefinitions="*">
+            <ContentControl
+                Grid.Column="0"
+                Content="{Binding Tasks}" />
+            <Grid Grid.Column="2"
+                  ColumnDefinitions="*" RowDefinitions="Auto, *">
+                <Label Grid.Row="0"
+                       Target="LogItemsControl"
+                       Margin="0, 10, 0, 0">
+                    <AccessText Text="Log"
+                                FontSize="18"
+                                TextAlignment="Center" />
+                </Label>
+                <Border Grid.Row="1"
+                        BorderBrush="{DynamicResource SystemBaseLowColor}"
+                        BorderThickness="2"
+                        Margin="0, 0, 0, 10">
+                    <ScrollViewer>
+                        <ItemsControl x:Name="LogItemsControl"
+                                      ItemsSource="{Binding Log}"
+                                      Margin="10,5,10,5">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"
+                                               TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
     </DockPanel>
 </UserControl>

@@ -3,10 +3,10 @@
 public class SubscribableBatchLog : IBatchLog {
   public List<string> Lines { get; } = [];
 
-  public event EventHandler? LineWritten;
+  public event EventHandler<string>? LineWritten;
 
-  private void OnLineWritten() {
-    LineWritten?.Invoke(this, EventArgs.Empty);
+  private void OnLineWritten(string text) {
+    LineWritten?.Invoke(this, text);
   }
 
   public override string ToString() {
@@ -19,6 +19,6 @@ public class SubscribableBatchLog : IBatchLog {
 
   public void WriteLine(string text) {
     Lines.Add(text);
-    OnLineWritten();
+    OnLineWritten(text);
   }
 }

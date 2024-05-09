@@ -36,11 +36,13 @@ public interface IDialogService {
   ///   or, if the user cancels the dialog, null.
   /// </summary>
   /// <param name="dialogTitle">Dialog title.</param>
-  /// <param name="defaultExtension">
-  ///   Default file name extension, excluding ".".)
+  /// <param name="filterName">Display name of the file type filter.</param>
+  /// <param name="fileExtension">
+  ///   Default file name extension and file name extension of the file type filter,
+  ///   excluding ".".)
   /// </param>
   Task<string?> SaveFile(
-    string dialogTitle, string defaultExtension);
+    string dialogTitle, string filterName, string fileExtension);
 
   /// <summary>
   ///   Asynchronously shows an error message box.
