@@ -636,6 +636,9 @@ public class FalconProgram {
     }
   }
 
+  /// <summary>
+  ///   TODO: Fix QueryDelayTypes and QueryReverbTypes. 
+  /// </summary>
   public IEnumerable<string> QueryDelayTypes() {
     var result = new List<string>();
     foreach (var macro in Macros.Where(macro => macro.ModulatesDelay)) {

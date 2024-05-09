@@ -64,7 +64,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private CancellationTokenSource RunCancellationTokenSource { get; } =
     new CancellationTokenSource();
 
-  internal BatchScope Scope => Scopes[0]; 
+  internal BatchScope Scope => Scopes[0];
 
   public BatchScopeCollection Scopes => _scopes
     ??= new BatchScopeCollection(FileSystemService, DispatcherService);
@@ -73,6 +73,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   public override string TabTitle => "Batch Script";
 
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
+  public event EventHandler? LogLineWritten;
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
     return await DialogService.OpenFile(
@@ -132,6 +133,9 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  /// <summary>
+  ///   TODO: Fix button enabling/disabling in OnRunEnded and PrepareForRun.  
+  /// </summary>
   private async Task OnRunEnded() {
     await DispatcherService.DispatchAsync(() => CanSaveLog = true);
     await DispatcherService.DispatchAsync(() => CanRunSavedScript = true);
@@ -211,12 +215,11 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   [RelayCommand(CanExecute = nameof(CanSaveLog))]
   private async Task SaveLog() {
     string? path = await DialogService.SaveFile(
-      "Save Log", "Text files","txt");
+      "Save Log", "Text files", "txt");
     if (path != null) {
       SaveLogToFile(path);
     }
   }
-
 
   [ExcludeFromCodeCoverage]
   protected virtual void SaveLogToFile(string outputPath) {
@@ -258,8 +261,9 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
     return await validator.ValidateDefaultTemplateFile();
   }
-  
+
   private async Task WriteLogLine(string text) {
     await DispatcherService.DispatchAsync(() => Log.Add(text));
+    LogLineWritten?.Invoke(this, EventArgs.Empty);
   }
 }

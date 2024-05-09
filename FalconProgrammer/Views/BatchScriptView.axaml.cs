@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
+using Avalonia.Threading;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 
@@ -13,5 +15,16 @@ public partial class BatchScriptView : UserControl {
         new BatchScriptViewModel(new DialogService(), new DispatcherService()));
     }
     InitializeComponent();
+    Dispatcher.UIThread.Post(() => {
+      ViewModel = (BatchScriptViewModel)DataContext!;
+      ViewModel.LogLineWritten += ViewModelOnLogLineWritten;
+    });
   }
+
+  private void ViewModelOnLogLineWritten(object? sender, EventArgs e) {
+    LogScrollViewer.ScrollToEnd();
+  }
+
+  private BatchScriptViewModel ViewModel { get; set; } = null!;
+
 }

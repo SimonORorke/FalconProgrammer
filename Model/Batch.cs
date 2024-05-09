@@ -424,6 +424,7 @@ public class Batch {
           GetScopeParameter(batchTask.Category),
           GetScopeParameter(batchTask.Program));
       }
+      await Log.WriteLine("The batch run has finished.");
     } catch (OperationCanceledException) {
       await Log.WriteLine("==========================================");
       await Log.WriteLine("The batch run has been cancelled.");

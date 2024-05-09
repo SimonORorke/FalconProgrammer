@@ -75,7 +75,7 @@
                         BorderBrush="{DynamicResource SystemBaseLowColor}"
                         BorderThickness="2"
                         Margin="0, 0, 0, 10">
-                    <ScrollViewer>
+                    <ScrollViewer x:Name="LogScrollViewer">
                         <ItemsControl x:Name="LogItemsControl"
                                       ItemsSource="{Binding Log}"
                                       Margin="10,5,10,5">
