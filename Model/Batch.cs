@@ -11,8 +11,12 @@ public class Batch {
 
   public Batch(IBatchLog log) {
     Log = log;
-    
   }
+  
+  // public Batch(IBatchLog log, Func<Task> onScriptRunEnded) {
+  //   Log = log;
+  //   OnScriptRunEnded = onScriptRunEnded;
+  // }
 
   internal BatchScriptReader BatchScriptReader {
     get => _batchScriptReader ??= new BatchScriptReader();
@@ -31,8 +35,8 @@ public class Batch {
   }
 
   public IBatchLog Log { get; }
+  public Func<Task>? OnScriptRunEnded { get; set; }
   protected FalconProgram Program { get; private set; } = null!;
-
   internal Settings Settings => _settings ??= SettingsReader.Read();
 
   internal SettingsReader SettingsReader {
@@ -44,8 +48,6 @@ public class Batch {
   protected string SoundBankFolderPath { get; private set; } = null!;
   [PublicAPI] protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   protected ConfigTask Task { get; private set; }
-
-  public event EventHandler? ScriptRunEnded;
   
   protected virtual async Task ConfigureProgram() {
     // ReSharper disable once MethodSupportsCancellation
@@ -58,49 +60,49 @@ public class Batch {
     }
     switch (Task) {
       case ConfigTask.InitialiseLayout:
-        Program.InitialiseLayout();
+        await Program.InitialiseLayout();
         break;
       case ConfigTask.InitialiseValuesAndMoveMacros:
-        Program.InitialiseValuesAndMoveMacros();
+        await Program.InitialiseValuesAndMoveMacros();
         break;
       case ConfigTask.QueryAdsrMacros:
-        Program.QueryAdsrMacros();
+        await Program.QueryAdsrMacros();
         break;
       case ConfigTask.QueryCountMacros:
-        Program.QueryCountMacros();
+        await Program.QueryCountMacros();
         break;
       case ConfigTask.QueryDahdsrModulations:
-        Program.QueryDahdsrModulations();
+        await Program.QueryDahdsrModulations();
         break;
       case ConfigTask.PrependPathLineToDescription:
-        Program.PrependPathLineToDescription();
+        await Program.PrependPathLineToDescription();
         break;
       case ConfigTask.QueryDelayTypes:
         UpdateEffectTypes(Program.QueryDelayTypes());
         break;
       case ConfigTask.QueryMainDahdsr:
-        Program.QueryMainDahdsr();
+        await Program.QueryMainDahdsr();
         break;
       case ConfigTask.QueryReverbTypes:
         UpdateEffectTypes(Program.QueryReverbTypes());
         break;
       case ConfigTask.QueryReuseCc1NotSupported:
-        Program.QueryReuseCc1NotSupported();
+        await Program.QueryReuseCc1NotSupported();
         break;
       case ConfigTask.RemoveDelayEffectsAndMacros:
-        Program.RemoveDelayEffectsAndMacros();
+        await Program.RemoveDelayEffectsAndMacros();
         break;
       case ConfigTask.ReplaceModWheelWithMacro:
-        Program.ReplaceModWheelWithMacro();
+        await Program.ReplaceModWheelWithMacro();
         break;
       case ConfigTask.RestoreOriginal:
-        Program.RestoreOriginal();
+        await Program.RestoreOriginal();
         break;
       case ConfigTask.ReuseCc1:
-        Program.ReuseCc1();
+        await Program.ReuseCc1();
         break;
       case ConfigTask.UpdateMacroCcs:
-        Program.UpdateMacroCcs();
+        await Program.UpdateMacroCcs();
         break;
     }
     if (Program.HasBeenUpdated) {
@@ -161,7 +163,7 @@ public class Batch {
     Category = CreateCategory(categoryName);
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.MustUseGuiScriptProcessor) {
-      Log.WriteLine(
+      await Log.WriteLine(
         $"Cannot {Task} for category " +
         $@"'{SoundBankName}\{categoryName}' " +
         "because the category's GUI has to be defined in a script.");
@@ -176,7 +178,7 @@ public class Batch {
   private async Task ConfigureProgramsInSoundBank() {
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
-      Log.WriteLine(
+      await Log.WriteLine(
         $"Cannot {Task} for sound bank " +
         $"'{SoundBankName}' " +
         "because the sound bank's GUI has to be defined in a script.");
@@ -255,10 +257,6 @@ public class Batch {
     await ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
-  private void OnScriptRunEnded() {
-    ScriptRunEnded?.Invoke(this, EventArgs.Empty);
-  }
-
   [PublicAPI]
   public async Task PrependPathLineToDescription(
     string? soundBankName, string? categoryName = null, string? programName = null) {
@@ -309,10 +307,10 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     EffectTypes = [];
     Task = ConfigTask.QueryDelayTypes;
-    Log.WriteLine("Delay Types:");
+    await Log.WriteLine("Delay Types:");
     await ConfigurePrograms(soundBankName, categoryName, programName);
     foreach (string effectType in EffectTypes) {
-      Log.WriteLine(effectType);
+      await Log.WriteLine(effectType);
     }
   }
 
@@ -328,10 +326,10 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     EffectTypes = [];
     Task = ConfigTask.QueryReverbTypes;
-    Log.WriteLine("Reverb Types:");
+    await Log.WriteLine("Reverb Types:");
     await ConfigurePrograms(soundBankName, categoryName, programName);
     foreach (string effectType in EffectTypes) {
-      Log.WriteLine(effectType);
+      await Log.WriteLine(effectType);
     }
   }
 
@@ -372,7 +370,7 @@ public class Batch {
   public async Task ReplaceModWheelWithMacro(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      Log.WriteLine(
+      await Log.WriteLine(
         "ReplaceModWheelWithMacro is not possible because a mod wheel replacement " +
         "CC number greater than 1 has not been specified.");
       return;
@@ -392,7 +390,7 @@ public class Batch {
   public async Task ReuseCc1(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      Log.WriteLine(
+      await Log.WriteLine(
         "ReuseCc1 is not possible because a mod wheel replacement CC " +
         "number greater than 1 has has not been specified.");
       return;
@@ -427,19 +425,19 @@ public class Batch {
           GetScopeParameter(batchTask.Program));
       }
     } catch (OperationCanceledException) {
-      Log.WriteLine("==========================================");
-      Log.WriteLine("The batch run has been cancelled.");
-      Log.WriteLine("==========================================");
+      await Log.WriteLine("==========================================");
+      await Log.WriteLine("The batch run has been cancelled.");
+      await Log.WriteLine("==========================================");
     } catch (Exception exception) {
-      Log.WriteLine("==========================================");
-      Log.WriteLine("The batch run terminated with this error:");
-      Log.WriteLine("==========================================");
-      Log.WriteLine(exception is ApplicationException
+      await Log.WriteLine("==========================================");
+      await Log.WriteLine("The batch run terminated with this error:");
+      await Log.WriteLine("==========================================");
+      await Log.WriteLine(exception is ApplicationException
         ? exception.Message
         : exception.ToString());
-      Log.WriteLine("==========================================");
+      await Log.WriteLine("==========================================");
     }
-    OnScriptRunEnded();
+    await OnScriptRunEnded!();
     return;
 
     string? GetScopeParameter(string level) {

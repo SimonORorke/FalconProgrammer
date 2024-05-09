@@ -31,7 +31,7 @@ internal class InfoPageLayout {
 
   private FalconProgram Program { get; }
 
-  public void MoveMacrosToStandardLayout() {
+  public async Task MoveMacrosToStandardLayout() {
     var visibleMacros = (
       from macro in Program.Macros
       // Exclude invisible macros.
@@ -82,7 +82,7 @@ internal class InfoPageLayout {
         y += StandardRowHeight;
       }
     }
-    Program.NotifyUpdate(
+    await Program.NotifyUpdate(
       $"{Program.PathShort}: Moved macros to standard layout.");
   }
 
@@ -106,8 +106,8 @@ internal class InfoPageLayout {
   ///     as toggle macros are not controlled by expression pedals.
   ///   </para>
   /// </remarks>
-  public void ReplaceModWheelWithMacro() {
-    OrderMacrosByLocation();
+  public async Task ReplaceModWheelWithMacro() {
+    await OrderMacrosByLocation();
     var wheelMacro = CreateWheelMacro();
     var visibleContinuousMacros = (
       from macro in Program.ContinuousMacros
@@ -134,8 +134,8 @@ internal class InfoPageLayout {
       insertionIndex = visibleContinuousMacros.IndexOf(adsrMacros["Attack"]);
     }
     Program.Macros.Insert(insertionIndex, wheelMacro);
-    Program.RefreshMacroOrder();
-    MoveMacrosToStandardLayout();
+    await Program.RefreshMacroOrder();
+    await MoveMacrosToStandardLayout();
     return;
 
     int AtEnd() {
@@ -179,7 +179,7 @@ internal class InfoPageLayout {
     return result;
   }
 
-  private void OrderMacrosByLocation() {
+  private async Task OrderMacrosByLocation() {
     var visibleMacrosSortedByLocation = Program.GetMacrosSortedByLocation(
       Program.MacroCcLocationOrder);
     var newOrder = new List<Macro>();
@@ -191,6 +191,6 @@ internal class InfoPageLayout {
     newOrder.AddRange(invisibleMacros);
     Program.Macros.Clear();
     Program.Macros.AddRange(newOrder);
-    Program.RefreshMacroOrder();
+    await Program.RefreshMacroOrder();
   }
 }

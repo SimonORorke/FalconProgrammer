@@ -19,6 +19,7 @@ public class TestBatch : Batch {
     "QueriesForProgram.xml";
   
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal bool HasScriptRunEnded { get; private set; }
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
   internal MockFileSystemService MockFileSystemService { get; }
   private TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
@@ -40,7 +41,7 @@ public class TestBatch : Batch {
       await base.ConfigureProgram();
       return;
     }
-    Log.WriteLine($"{Task}: '{Program.PathShort}'");
+    await Log.WriteLine($"{Task}: '{Program.PathShort}'");
   }
 
   protected override Category CreateCategory(string categoryName) {
@@ -61,8 +62,15 @@ public class TestBatch : Batch {
         EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
   }
 
+  private async Task OnBatchScriptRunEnded() {
+    await System.Threading.Tasks.Task.Delay(0);
+    HasScriptRunEnded = true;
+  }
+
   public override async Task RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
+    HasScriptRunEnded = false;
+    OnScriptRunEnded ??= OnBatchScriptRunEnded;
     TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName; 
     await base.RunScript(batchScriptPath, cancellationToken);
   }

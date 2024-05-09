@@ -111,35 +111,30 @@ public class BatchTests {
 
   [Test]
   public async Task RunScriptCancelled() {
-    bool hasScriptRunEnded = false;
-    Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true;
     await RunCancellationTokenSource.CancelAsync();
     Batch.UpdatePrograms = true;
     await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
-    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.HasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(
       "The batch run has been cancelled."));
   }
 
   [Test]
   public async Task RunScriptException() {
-    bool hasScriptRunEnded = false;
-    Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true; 
     const string errorMessage = "This is a test error message.";
     // Simulate FalconProgram throwing an ApplicationException when a task is run.
     Batch.ExceptionWhenConfiguringProgram = new ApplicationException(errorMessage);
     await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
-    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.HasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(errorMessage));
     // The log should contain the error message but not a stack trace.
     Assert.That(Batch.MockBatchLog.Text, Does.Not.Contain(nameof(ApplicationException)));
     // Simulate FalconProgram throwing an Exception other than an ApplicationException
     // when a task is run.
-    hasScriptRunEnded = false;
     Batch.MockBatchLog.Lines.Clear();
     Batch.ExceptionWhenConfiguringProgram = new InvalidOperationException(errorMessage);
     await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
-    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.HasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(errorMessage));
     // The log should contain a stack trace.
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(nameof(InvalidOperationException)));
@@ -171,10 +166,8 @@ public class BatchTests {
 
   [Test]
   public async Task RunScriptForProgram() {
-    bool hasScriptRunEnded = false;
-    Batch.ScriptRunEnded += (_, _) => hasScriptRunEnded = true; 
     await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
-    Assert.That(hasScriptRunEnded);
+    Assert.That(Batch.HasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo(@"QueryDelayTypes: 'SB\Cat\P1'"));

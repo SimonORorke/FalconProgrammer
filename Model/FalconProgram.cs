@@ -66,17 +66,17 @@ public class FalconProgram {
   public Settings Settings => Batch.Settings;
   private string SoundBankName => Category.SoundBankName;
 
-  private void BypassDelayEffects() {
+  private async Task BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
       effect.Bypass = true;
-      NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
+      await NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
     }
   }
 
-  private void BypassReverbEffects() {
+  private async Task BypassReverbEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsReverb)) {
       effect.Bypass = true;
-      NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
+      await NotifyUpdate($"{PathShort}: Bypassed {effect.EffectType}.");
     }
   }
 
@@ -94,9 +94,9 @@ public class FalconProgram {
   ///   Returns whether certain conditions are fulfilled indicating that the program's
   ///   mod wheel modulations may be reassigned to a new macro.
   /// </summary>
-  private bool CanReplaceModWheelWithMacro() {
+  private async Task<bool> CanReplaceModWheelWithMacro() {
     if (WheelMacroExists()) {
-      Log.WriteLine(
+      await Log.WriteLine(
         $"{PathShort} already has a Wheel macro.");
       return false;
     }
@@ -107,7 +107,7 @@ public class FalconProgram {
     }
     if (GuiScriptProcessor != null
         && !CanRemoveGuiScriptProcessor()) {
-      Log.WriteLine(
+      await Log.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
         "there is a GUI script processor that is not feasible/desirable " +
         "to remove.");
@@ -117,7 +117,7 @@ public class FalconProgram {
       ProgramXml.GetModulationElementsWithCcNo(1).Count;
     switch (modulationsByModWheelCount) {
       case 0:
-        Log.WriteLine($"{PathShort} contains no mod wheel modulations.");
+        await Log.WriteLine($"{PathShort} contains no mod wheel modulations.");
         return false;
       case > 1:
         return true;
@@ -133,7 +133,7 @@ public class FalconProgram {
       where macro.FindModulationWithCcNo(1) != null
       select macro).ToList();
     if (macrosOwningModWheelModulations.Count == 1) {
-      Log.WriteLine(
+      await Log.WriteLine(
         $"{PathShort}: The mod wheel has not been replaced, as it only modulates a " +
         "single macro 100%.");
       // Example: Factory\Pads\DX FM Pad 2.0
@@ -366,18 +366,18 @@ public class FalconProgram {
       select m).Count() == 1;
   }
 
-  public void InitialiseLayout() {
+  public async Task InitialiseLayout() {
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
     // processor, if there is one, unless there is a need to keep it.
     // This saves having to decide later whether to remove the GUI script processor,
     // such as to add a wheel macro or remove a delay macro.
     if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
-      RemoveGuiScriptProcessor();
+      await RemoveGuiScriptProcessor();
     }
     if (Settings.TryGetSoundBankBackgroundImagePath(
           SoundBankName, out string path)) {
-      SetBackgroundImagePath();
+      await SetBackgroundImagePath();
     }
     switch (SoundBankName) {
       case "Ether Fields" or "Spectre":
@@ -386,38 +386,38 @@ public class FalconProgram {
       case "Fluidity":
         var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
-          MoveMacroToEnd(attackMacro);
-          RefreshMacroOrder();
+          await MoveMacroToEnd(attackMacro);
+          await RefreshMacroOrder();
         }
         break;
       case "Organic Pads":
-        InitialiseOrganicPadsProgram();
+        await InitialiseOrganicPadsProgram();
         break;
       default:
         return;
     }
-    NotifyUpdate($"{PathShort}: Initialised layout.");
+    await NotifyUpdate($"{PathShort}: Initialised layout.");
     return;
 
-    void SetBackgroundImagePath() {
+    async Task SetBackgroundImagePath() {
       string relativePath =
         System.IO.Path.GetRelativePath(Category.Path, path);
       string falconFormatPath = "./" + relativePath.Replace(@"\", "/");
       ProgramXml.SetBackgroundImagePath(falconFormatPath);
-      NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
+      await NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
     }
   }
 
-  private void InitialiseOrganicPadsProgram() {
+  private async Task InitialiseOrganicPadsProgram() {
     ProgramXml.CopyMacroElementsFromTemplate();
     Macros = CreateMacrosFromElements();
-    NotifyUpdate($"{PathShort}: Copied macros from template.");
+    await NotifyUpdate($"{PathShort}: Copied macros from template.");
     // The Wheel macro is Macro 9.
     // So all modulations whose source is the original Wheel macro, Macro 1,
     // need to be updated to Macro 9 instead.
     ProgramXml.ChangeModulationSource(
       "$Program/Macro 1", "$Program/Macro 9");
-    NotifyUpdate($"{PathShort}: Updated modulations by Wheel macro.");
+    await NotifyUpdate($"{PathShort}: Updated modulations by Wheel macro.");
     // In the original program, the four main timbre parameters (Synthesis, Sample, Noise
     // and Texture) are controlled by an XY control in the script GUI.
     // In this customised program, to make variation of these parameters mutually
@@ -442,14 +442,14 @@ public class FalconProgram {
       };
       layer.AddModulation(modulation);
     }
-    NotifyUpdate($"{PathShort}: " +
-                 "Added modulations to layers and initialised macros to layer gains.");
+    await NotifyUpdate($"{PathShort}: " +
+                       "Added modulations to layers and initialised macros to layer gains.");
     // Add the DAHDSR Controller ScriptProcessor.
     var scriptProcessor = ProgramXml.AddScriptProcessor(
       "EventProcessor0", "Organic Pads",
       "./../../../Scripts/DAHDSR Controller.lua",
       "<![CDATA[require 'DahdsrController/DahdsrController']]>");
-    NotifyUpdate($"{PathShort}: Added ScriptProcessor.");
+    await NotifyUpdate($"{PathShort}: Added ScriptProcessor.");
     // Add the ScriptProcessor modulations.
     var adsrMacros = GetAdsrMacros().Values;
     foreach (var adsrMacro in adsrMacros) {
@@ -460,7 +460,7 @@ public class FalconProgram {
         SourceMacro = adsrMacro
       });
     }
-    NotifyUpdate($"{PathShort}: Added ScriptProcessor Modulations.");
+    await NotifyUpdate($"{PathShort}: Added ScriptProcessor Modulations.");
     // Initialise the DAHDSR attack and release times to subvert the original intention 
     // for the sound to be a pad!
     // A problem still to solve is that reducing the attack time to zero while playing
@@ -474,37 +474,37 @@ public class FalconProgram {
     }
     mainDahdsr.AttackTime = 0.02f;
     mainDahdsr.ReleaseTime = 0.3f;
-    NotifyUpdate(
+    await NotifyUpdate(
       $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " +
       "and .ReleaseTime.");
-    BypassReverbEffects();
+    await BypassReverbEffects();
   }
 
-  public void InitialiseValuesAndMoveMacros() {
+  public async Task InitialiseValuesAndMoveMacros() {
     var macrosToMove = new List<Macro>();
     var adsrMacros = GetAdsrMacros();
     if (adsrMacros.Count < 4
         && adsrMacros.TryGetValue("Release", out var releaseMacro)) {
-      ZeroMacro(releaseMacro);
+      await ZeroMacro(releaseMacro);
       if (GuiScriptProcessor == null) {
         macrosToMove.Add(releaseMacro);
       }
     }
-    bool hasZeroedReverbMacros = ZeroReverbMacros();
+    bool hasZeroedReverbMacros = await ZeroReverbMacros();
     if (GuiScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
       // "Organic Keys" sound bank
       organicKeysScriptProcessor.DelaySend = 0;
       organicKeysScriptProcessor.ReverbSend = 0;
-      NotifyUpdate(
+      await NotifyUpdate(
         $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " +
         "and .ReverbSend to zero.");
     }
     if (GuiScriptProcessor == null) {
-      MoveMacros(macrosToMove, hasZeroedReverbMacros);
+      await MoveMacros(macrosToMove, hasZeroedReverbMacros);
     }
   }
 
-  private void MoveMacros(List<Macro> macrosToMove, bool hasZeroedReverbMacros) {
+  private async Task MoveMacros(List<Macro> macrosToMove, bool hasZeroedReverbMacros) {
     // For unknown reason, when zeroing reverb silences the program and so had been
     // disallowed, just moving the macro to the end can silence the program.
     // ReSharper disable once CommentTypo
@@ -523,11 +523,11 @@ public class FalconProgram {
     }
     if (macrosToMove.Count > 0) {
       foreach (var macro in macrosToMove) {
-        MoveMacroToEnd(macro);
+        await MoveMacroToEnd(macro);
       }
-      RefreshMacroOrder();
+      await RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
-      ReUpdateMacroCcs();
+      await ReUpdateMacroCcs();
     }
   }
 
@@ -538,16 +538,16 @@ public class FalconProgram {
   ///   After one or more calls to <see cref="MoveMacroToEnd" />,
   ///   <see cref="RefreshMacroOrder" /> must be called.
   /// </remarks>
-  private void MoveMacroToEnd(Macro macro) {
+  private async Task MoveMacroToEnd(Macro macro) {
     if (macro != Macros[^1]) {
       Macros.Remove(macro);
       Macros.Add(macro);
-      NotifyUpdate($"{PathShort}: Moved {macro.DisplayName} macro to end.");
+      await NotifyUpdate($"{PathShort}: Moved {macro.DisplayName} macro to end.");
     }
   }
 
-  public void NotifyUpdate(string message) {
-    Log.WriteLine(message);
+  public async Task NotifyUpdate(string message) {
+    await Log.WriteLine(message);
     HasBeenUpdated = true;
   }
 
@@ -586,7 +586,7 @@ public class FalconProgram {
     Effects = effects.ToImmutableList();
   }
 
-  public void PrependPathLineToDescription() {
+  public async Task PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
     const string crLf = "\r\n";
     string oldDescription = ProgramXml.GetDescription();
@@ -599,10 +599,10 @@ public class FalconProgram {
       ? oldDescription.Replace(oldPathLine, newPathLine)
       : newPathLine + oldDescription;
     ProgramXml.SetDescription(newDescription);
-    NotifyUpdate($"{PathShort}: Prepended path line to description.");
+    await NotifyUpdate($"{PathShort}: Prepended path line to description.");
   }
 
-  public void QueryAdsrMacros() {
+  public async Task QueryAdsrMacros() {
     if (GuiScriptProcessor != null) {
       return;
     }
@@ -611,28 +611,28 @@ public class FalconProgram {
       where macro.DisplayName is "Attack" or "Decay" or "Sustain" or "Release"
       select macro).Count();
     if (count == 4) {
-      Log.WriteLine($"{PathShort} has ADSR macros.");
+      await Log.WriteLine($"{PathShort} has ADSR macros.");
     }
   }
 
-  public void QueryCountMacros() {
-    Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
+  public async Task QueryCountMacros() {
+    await Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
   }
 
-  public void QueryDahdsrModulations() {
+  public async Task QueryDahdsrModulations() {
     if (GuiScriptProcessor != null) {
       return;
     }
     var dahdsrs = ProgramXml.GetDahdsrs();
     foreach (var dahdsr in dahdsrs.Where(dahdsr => dahdsr.Modulations.Count > 1)) {
-      using var writer = new StringWriter();
-      writer.Write(
+      await using var writer = new StringWriter();
+      await writer.WriteAsync(
         $"{PathShort}: {dahdsr.DisplayName} has " +
         $"{dahdsr.Modulations.Count} modulations: ");
       foreach (var modulation in dahdsr.Modulations) {
-        writer.Write($"{modulation.Destination} ");
+        await writer.WriteAsync($"{modulation.Destination} ");
       }
-      Log.WriteLine(writer.ToString());
+      await Log.WriteLine(writer.ToString());
     }
   }
 
@@ -649,13 +649,13 @@ public class FalconProgram {
     return result;
   }
 
-  public void QueryMainDahdsr() {
+  public async Task QueryMainDahdsr() {
     // if (GuiScriptProcessor != null) {
     //   return;
     // }
     var mainDahdsr = ProgramXml.FindMainDahdsr();
     if (mainDahdsr != null) {
-      Log.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}");
+      await Log.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}");
     }
   }
 
@@ -672,13 +672,13 @@ public class FalconProgram {
     return result;
   }
 
-  public void QueryReuseCc1NotSupported() {
+  public async Task QueryReuseCc1NotSupported() {
     if (GuiScriptProcessor == null
         || ContinuousMacros.Count < 5
         || ProgramXml.GetModulationElementsWithCcNo(1).Count > 0) {
       return;
     }
-    Log.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
+    await Log.WriteLine($"{PathShort}: Reusing MIDI CC 1 is not yet supported.");
   }
 
   public void Read() {
@@ -703,22 +703,22 @@ public class FalconProgram {
   /// <summary>
   ///   If the macro order has changed, run this to refresh the XML.
   /// </summary>
-  public void RefreshMacroOrder() {
+  public async Task RefreshMacroOrder() {
     ProgramXml.ReplaceMacroElements(Macros);
     // If we don't reload, relocating the macros jumbles them.
     // Perhaps there's a better way, but it broke when I tried.
     Save();
     Read();
-    Log.WriteLine(
+    await Log.WriteLine(
       $"{PathShort}: Saved and reloaded on reordering macros.");
   }
 
-  public void RemoveDelayEffectsAndMacros() {
-    BypassDelayEffects();
-    if (RemoveDelayMacros()) {
-      RefreshMacroOrder();
+  public async Task RemoveDelayEffectsAndMacros() {
+    await BypassDelayEffects();
+    if (await RemoveDelayMacros()) {
+      await RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
-      ReUpdateMacroCcs();
+      await ReUpdateMacroCcs();
     }
   }
 
@@ -727,7 +727,7 @@ public class FalconProgram {
   ///   These are recognised by the macro name, or if all the effects the
   ///   macro modulates have been bypassed by <see cref="BypassDelayEffects" />.
   /// </summary>
-  private bool RemoveDelayMacros() {
+  private async Task<bool> RemoveDelayMacros() {
     var removableMacros = (
       from macro in Macros
       where macro.ModulatesDelay || !macro.ModulatesEnabledEffects
@@ -737,7 +737,7 @@ public class FalconProgram {
     }
     if (GuiScriptProcessor != null
         && !CanRemoveGuiScriptProcessor()) {
-      Log.WriteLine(
+      await Log.WriteLine(
         $"{PathShort}: Cannot remove macros because " +
         "there is a GUI script processor that is not feasible/desirable " +
         "to remove.");
@@ -746,7 +746,7 @@ public class FalconProgram {
     foreach (var macro in removableMacros) {
       macro.RemoveElement();
       Macros.Remove(macro);
-      NotifyUpdate($"{PathShort}: Removed {macro}.");
+      await NotifyUpdate($"{PathShort}: Removed {macro}.");
     }
     return true;
   }
@@ -759,7 +759,7 @@ public class FalconProgram {
   ///   move the existing macros to locations optimal for accommodating a new wheel
   ///   replacement macro.
   /// </summary>
-  private void RemoveGuiScriptProcessor() {
+  private async Task RemoveGuiScriptProcessor() {
     GuiScriptProcessor!.Remove();
     GuiScriptProcessor = null;
     // GuiScriptProcessor!.Remove will have removed the EventProcessors
@@ -779,7 +779,7 @@ public class FalconProgram {
         macro.RemoveModulation(forMacroModulation);
       }
     }
-    NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
+    await NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveMacrosToStandardLayout();
   }
 
@@ -788,21 +788,21 @@ public class FalconProgram {
   ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
   ///   explaining why it is not feasible.
   /// </summary>
-  public void ReplaceModWheelWithMacro() {
-    if (!CanReplaceModWheelWithMacro()) {
+  public async Task ReplaceModWheelWithMacro() {
+    if (!await CanReplaceModWheelWithMacro()) {
       return;
     }
     InfoPageLayout.ReplaceModWheelWithMacro();
-    ReUpdateMacroCcs();
-    NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
+    await ReUpdateMacroCcs();
+    await NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
   }
 
-  private void ReUpdateMacroCcs() {
+  private async Task ReUpdateMacroCcs() {
     UpdateMacroCcsOwnedByMacros();
-    Log.WriteLine($"{PathShort}: Re-updated macro Ccs.");
+    await Log.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }
 
-  public void RestoreOriginal() {
+  public async Task RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
       Batch.GetOriginalProgramsFolderPath(),
       SoundBankName,
@@ -813,7 +813,7 @@ public class FalconProgram {
         $"Cannot find original file '{originalPath}' to restore to '{Path}'.");
     }
     File.Copy(originalPath, Path, true);
-    Log.WriteLine($"{PathShort}: Restored to Original");
+    await Log.WriteLine($"{PathShort}: Restored to Original");
   }
 
   /// <summary>
@@ -830,7 +830,7 @@ public class FalconProgram {
   ///     <see cref="QueryReuseCc1NotSupported" />, all in Pulsar.
   ///   </para>
   /// </summary>
-  public void ReuseCc1() {
+  public async Task ReuseCc1() {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       return;
     }
@@ -876,14 +876,14 @@ public class FalconProgram {
       int newCcNo = GetNextCcNo(macro, true);
       macro.ChangeCcNoTo(newCcNo);
     }
-    NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
+    await NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
   }
 
   public void Save() {
     ProgramXml.SaveToFile(Path);
   }
 
-  public void UpdateMacroCcs() {
+  public async Task UpdateMacroCcs() {
     if (GuiScriptProcessor == null) {
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate
@@ -896,7 +896,7 @@ public class FalconProgram {
       GuiScriptProcessor.UpdateModulationsFromTemplate(
         Category.TemplateScriptProcessor.Modulations);
     }
-    NotifyUpdate($"{PathShort}: Updated Macro CCs.");
+    await NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
 
   /// <summary>
@@ -972,19 +972,19 @@ public class FalconProgram {
   /// <summary>
   ///   Sets the specified macro's value to zero if allowed.
   /// </summary>
-  private void ZeroMacro(Macro macro) {
+  private async Task ZeroMacro(Macro macro) {
     if (macro.FindModulationWithCcNo(1) != null) {
       // Example: Titanium\Pads\Children's Choir.
-      Log.WriteLine(
+      await Log.WriteLine(
         $"{PathShort}: Not changing {macro.DisplayName} to zero because " +
         "it is modulated by the wheel.");
     } else {
       macro.ChangeValueToZero();
-      NotifyUpdate($"{PathShort}: Changed {macro.DisplayName} to zero.");
+      await NotifyUpdate($"{PathShort}: Changed {macro.DisplayName} to zero.");
     }
   }
 
-  private bool ZeroReverbMacros() {
+  private async Task<bool> ZeroReverbMacros() {
     var reverbMacros = (
       from macro in Macros
       where macro.ModulatesReverb
@@ -1008,11 +1008,11 @@ public class FalconProgram {
         // ReSharper disable once StringLiteralTypo
         or @"Spectre\Leads\LD Showteker") {
       // These programs are silent without reverb!
-      Log.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
+      await Log.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
       return false;
     }
     foreach (var reverbMacro in reverbMacros) {
-      ZeroMacro(reverbMacro);
+      await ZeroMacro(reverbMacro);
     }
     return true;
   }

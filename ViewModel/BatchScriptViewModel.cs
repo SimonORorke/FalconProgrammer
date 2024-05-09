@@ -18,22 +18,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   public BatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
-    BatchLog = new SubscribableBatchLog();
-    BatchLog.LineWritten += BatchLogOnLineWritten;
+    BatchLog = new BatchLog(async text => await WriteLogLine(text));
   }
 
-  protected Batch Batch {
-    get {
-      if (_batch == null) {
-        _batch = CreateBatch();
-        _batch.ScriptRunEnded += BatchOnScriptRunEnded;
-        
-      }
-      return _batch;
-    }
-  }
+  protected Batch Batch => _batch ??= CreateInitialisedBatch();
 
-  internal SubscribableBatchLog BatchLog { get; }
+  internal BatchLog BatchLog { get; }
 
   /// <summary>
   ///   Gets or sets CanExecute for <see cref="CancelBatchRunCommand" />.
@@ -84,17 +74,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
 
-  private async void BatchLogOnLineWritten(object? sender, string text) {
-    await DispatcherService.DispatchAsync(() => Log.Add(text));
-  }
-
-  private async void BatchOnScriptRunEnded(object? sender, EventArgs e) {
-    await DispatcherService.DispatchAsync(() => {
-      CanSaveLog = CanRunSavedScript = CanRunThisScript = true;
-      CanCancelBatchRun = false;
-    });
-  }
-
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
     return await DialogService.OpenFile(
       $"Open a batch script file to {purpose}",
@@ -126,6 +105,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       }).ToList();
   }
 
+  private Batch CreateInitialisedBatch() {
+    var result = CreateBatch();
+    result.OnScriptRunEnded = OnRunEnded;
+    return result;
+  }
+
   [ExcludeFromCodeCoverage]
   protected virtual BatchScript CreateThisBatchScript() {
     return new BatchScript {
@@ -147,6 +132,19 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  private async Task OnRunEnded() {
+    await DispatcherService.DispatchAsync(() => CanSaveLog = true);
+    await DispatcherService.DispatchAsync(() => CanRunSavedScript = true);
+    await DispatcherService.DispatchAsync(() => CanRunThisScript = true);
+    await DispatcherService.DispatchAsync(() => CanCancelBatchRun = false);
+    // await DispatcherService.DispatchAsync(() => {
+    //   CanSaveLog = true;
+    //   CanRunSavedScript = true;
+    //   CanRunThisScript = true;
+    //   CanCancelBatchRun = false;
+    // });
+  }
+
   internal override async Task Open() {
     await base.Open();
     if (!await ValidateAndPopulateSoundBanks()) {
@@ -157,12 +155,18 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   private async Task PrepareForRun() {
-    BatchLog.Lines.Clear();
-    await DispatcherService.DispatchAsync(() => {
-      Log.Clear();
-      CanSaveLog = CanRunSavedScript = CanRunThisScript = false;
-      CanCancelBatchRun = true;
-    });
+    await DispatcherService.DispatchAsync(() => Log.Clear());
+    await DispatcherService.DispatchAsync(() => CanSaveLog = false);
+    await DispatcherService.DispatchAsync(() => CanRunSavedScript = false);
+    await DispatcherService.DispatchAsync(() => CanRunThisScript = false);
+    await DispatcherService.DispatchAsync(() => CanCancelBatchRun = true);
+    // await DispatcherService.DispatchAsync(() => {
+    //   Log.Clear();
+    //   CanSaveLog = false;
+    //   CanRunSavedScript = false;
+    //   CanRunThisScript = false;
+    //   CanCancelBatchRun = true;
+    // });
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -253,5 +257,9 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       return false;
     }
     return await validator.ValidateDefaultTemplateFile();
+  }
+  
+  private async Task WriteLogLine(string text) {
+    await DispatcherService.DispatchAsync(() => Log.Add(text));
   }
 }
