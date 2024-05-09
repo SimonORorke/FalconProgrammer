@@ -60,10 +60,11 @@ public class BatchRunner {
     // await batch.RollForward("Spectre", "Leads", "LD Showteker");
     // await batch.RollForward("Spectre", "Polysynth", "PL Cream");
     // await batch.RollForward("Titanium");
-    // await batch.QueryCountMacros(null);
     // await batch.MoveConnectionsBeforeProperties(null);
     // await batch.QueryAdsrMacros(null);
+    // await batch.QueryCountMacros(null);
+    await batch.QueryDelayTypes(null);
     // await batch.QueryDahdsrModulations(null);
-    await batch.QueryReuseCc1NotSupported(null);
+    // await batch.QueryReuseCc1NotSupported(null);
   }
 }
