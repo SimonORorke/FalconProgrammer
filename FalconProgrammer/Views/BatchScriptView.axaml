@@ -22,7 +22,7 @@
                     Classes="top"
                     Margin="10,0,0,0">
                 <Button.Content>
-                    <AccessText Text="Run _This Script" Classes="top" />
+                    <AccessText Text="_Run This Script" Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveThisScriptCommand}"
@@ -40,7 +40,7 @@
             <Button Command="{Binding RunSavedScriptCommand}"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="_Run Saved Script" Classes="top" />
+                    <AccessText Text="R_un Saved Script" Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveLogCommand}"
@@ -52,7 +52,7 @@
             <Button Command="{Binding CancelBatchRunCommand}"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="Cancel _Batch Run" Classes="top" />
+                    <AccessText Text="_Cancel Batch Run" Classes="top" />
                 </Button.Content>
             </Button>
         </StackPanel>
