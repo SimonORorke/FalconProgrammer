@@ -87,7 +87,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ConfigureThisScript();
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
-    await ViewModel.RunThisScriptCommand.ExecuteAsync(null);
+    ViewModel.RunThisScriptCommand.Execute(null);
     // Commands are disabled while a script is running. That would be fiddly to test.
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
@@ -109,7 +109,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     // updated.
     ViewModel.TestBatch.UpdatePrograms = true;
     ViewModel.CancelBatchRunCommand.Execute(null);
-    await ViewModel.RunThisScriptCommand.ExecuteAsync(null);
+    ViewModel.RunThisScriptCommand.Execute(null);
     Assert.That(!ViewModel.CanCancelBatchRun);
     Assert.That(ViewModel.Log, Does.Contain(
       @"The batch run has been cancelled."));

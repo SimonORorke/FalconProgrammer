@@ -49,9 +49,7 @@ public class Batch {
   [PublicAPI] protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   protected ConfigTask Task { get; private set; }
   
-  protected virtual async Task ConfigureProgram() {
-    // ReSharper disable once MethodSupportsCancellation
-    await System.Threading.Tasks.Task.Delay(0);
+  protected virtual void ConfigureProgram() {
     if (RunCancellationToken.IsCancellationRequested) {
       RunCancellationToken.ThrowIfCancellationRequested();
     }
@@ -60,49 +58,49 @@ public class Batch {
     }
     switch (Task) {
       case ConfigTask.InitialiseLayout:
-        await Program.InitialiseLayout();
+        Program.InitialiseLayout();
         break;
       case ConfigTask.InitialiseValuesAndMoveMacros:
-        await Program.InitialiseValuesAndMoveMacros();
+        Program.InitialiseValuesAndMoveMacros();
         break;
       case ConfigTask.QueryAdsrMacros:
-        await Program.QueryAdsrMacros();
+        Program.QueryAdsrMacros();
         break;
       case ConfigTask.QueryCountMacros:
-        await Program.QueryCountMacros();
+        Program.QueryCountMacros();
         break;
       case ConfigTask.QueryDahdsrModulations:
-        await Program.QueryDahdsrModulations();
+        Program.QueryDahdsrModulations();
         break;
       case ConfigTask.PrependPathLineToDescription:
-        await Program.PrependPathLineToDescription();
+        Program.PrependPathLineToDescription();
         break;
       case ConfigTask.QueryDelayTypes:
         UpdateEffectTypes(Program.QueryDelayTypes());
         break;
       case ConfigTask.QueryMainDahdsr:
-        await Program.QueryMainDahdsr();
+        Program.QueryMainDahdsr();
         break;
       case ConfigTask.QueryReverbTypes:
         UpdateEffectTypes(Program.QueryReverbTypes());
         break;
       case ConfigTask.QueryReuseCc1NotSupported:
-        await Program.QueryReuseCc1NotSupported();
+        Program.QueryReuseCc1NotSupported();
         break;
       case ConfigTask.RemoveDelayEffectsAndMacros:
-        await Program.RemoveDelayEffectsAndMacros();
+        Program.RemoveDelayEffectsAndMacros();
         break;
       case ConfigTask.ReplaceModWheelWithMacro:
-        await Program.ReplaceModWheelWithMacro();
+        Program.ReplaceModWheelWithMacro();
         break;
       case ConfigTask.RestoreOriginal:
-        await Program.RestoreOriginal();
+        Program.RestoreOriginal();
         break;
       case ConfigTask.ReuseCc1:
-        await Program.ReuseCc1();
+        Program.ReuseCc1();
         break;
       case ConfigTask.UpdateMacroCcs:
-        await Program.UpdateMacroCcs();
+        Program.UpdateMacroCcs();
         break;
     }
     if (Program.HasBeenUpdated) {
@@ -130,14 +128,14 @@ public class Batch {
   ///   specified, null (the default) for all files in the specified category.
   ///   Otherwise ignored.
   /// </param>
-  private async Task ConfigurePrograms(
+  private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     switch (Task) {
       case ConfigTask.QueryDelayTypes:
-        await PrepareForEffectTypesQuery("Delay");
+        PrepareForEffectTypesQuery("Delay");
         break;
       case ConfigTask.QueryReverbTypes:
-        await PrepareForEffectTypesQuery("Reverb");
+        PrepareForEffectTypesQuery("Reverb");
         break;
     }
     if (!string.IsNullOrEmpty(soundBankName)) {
@@ -147,12 +145,12 @@ public class Batch {
           Category = CreateCategory(categoryName);
           string programPath = Category.GetProgramPath(programName);
           Program = CreateFalconProgram(programPath);
-          await ConfigureProgram();
+          ConfigureProgram();
         } else {
-          await ConfigureProgramsInCategory(categoryName);
+          ConfigureProgramsInCategory(categoryName);
         }
       } else {
-        await ConfigureProgramsInSoundBank();
+        ConfigureProgramsInSoundBank();
       }
     } else { // All sound banks
       string programsFolderPath = GetProgramsFolderPath();
@@ -161,20 +159,20 @@ public class Batch {
             programsFolderPath)
           .Where(soundBankName1 => soundBankName1 != ".git")) {
         SoundBankFolderPath = Path.Combine(programsFolderPath, soundBankName1);
-        await ConfigureProgramsInSoundBank();
+        ConfigureProgramsInSoundBank();
       }
     }
     if (Task is ConfigTask.QueryDelayTypes or ConfigTask.QueryReverbTypes) {
-      await WriteEffectTypesQueryResult();
+      WriteEffectTypesQueryResult();
     }
   }
 
-  private async Task ConfigureProgramsInCategory(
+  private void ConfigureProgramsInCategory(
     string categoryName) {
     Category = CreateCategory(categoryName);
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Category.MustUseGuiScriptProcessor) {
-      await Log.WriteLine(
+      Log.WriteLine(
         $"Cannot {Task} for category " +
         $@"'{SoundBankName}\{categoryName}' " +
         "because the category's GUI has to be defined in a script.");
@@ -182,14 +180,14 @@ public class Batch {
     }
     foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {
       Program = CreateFalconProgram(programPath);
-      await ConfigureProgram();
+      ConfigureProgram();
     }
   }
 
-  private async Task ConfigureProgramsInSoundBank() {
+  private void ConfigureProgramsInSoundBank() {
     if (Task is ConfigTask.ReplaceModWheelWithMacro
         && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
-      await Log.WriteLine(
+      Log.WriteLine(
         $"Cannot {Task} for sound bank " +
         $"'{SoundBankName}' " +
         "because the sound bank's GUI has to be defined in a script.");
@@ -197,7 +195,7 @@ public class Batch {
     }
     foreach (string categoryName in FileSystemService.Folder.GetSubfolderNames(
                SoundBankFolderPath)) {
-      await ConfigureProgramsInCategory(categoryName);
+      ConfigureProgramsInCategory(categoryName);
     }
   }
 
@@ -255,36 +253,36 @@ public class Batch {
   }
 
   [PublicAPI]
-  public async Task InitialiseLayout(
+  public void InitialiseLayout(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.InitialiseLayout;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task InitialiseValuesAndMoveMacros(
+  public void InitialiseValuesAndMoveMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.InitialiseValuesAndMoveMacros;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
-  private async Task PrepareForEffectTypesQuery(string effectType) {
+  private void PrepareForEffectTypesQuery(string effectType) {
     EffectTypes = [];
-    await Log.WriteLine($"{effectType} Types:");
+    Log.WriteLine($"{effectType} Types:");
   }
 
   [PublicAPI]
-  public async Task PrependPathLineToDescription(
+  public void PrependPathLineToDescription(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.PrependPathLineToDescription;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task QueryAdsrMacros(
+  public void QueryAdsrMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryAdsrMacros;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   /// <summary>
@@ -305,52 +303,52 @@ public class Batch {
   ///   Otherwise ignored.
   /// </param>
   [PublicAPI]
-  public async Task QueryCountMacros(string? soundBankName, string? categoryName = null,
+  public void QueryCountMacros(string? soundBankName, string? categoryName = null,
     string? programName = null) {
     Task = ConfigTask.QueryCountMacros;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task QueryDahdsrModulations(
+  public void QueryDahdsrModulations(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryDahdsrModulations;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task QueryDelayTypes(
+  public void QueryDelayTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryDelayTypes;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task QueryMainDahdsr(
+  public void QueryMainDahdsr(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryMainDahdsr;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task QueryReverbTypes(
+  public void QueryReverbTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryReverbTypes;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task QueryReuseCc1NotSupported(
+  public void QueryReuseCc1NotSupported(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.QueryReuseCc1NotSupported;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task RemoveDelayEffectsAndMacros(
+  public void RemoveDelayEffectsAndMacros(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.RemoveDelayEffectsAndMacros;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   /// <summary>
@@ -373,78 +371,78 @@ public class Batch {
   ///   Otherwise ignored.
   /// </param>
   [PublicAPI]
-  public async Task ReplaceModWheelWithMacro(
+  public void ReplaceModWheelWithMacro(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      await Log.WriteLine(
+      Log.WriteLine(
         "ReplaceModWheelWithMacro is not possible because a mod wheel replacement " +
         "CC number greater than 1 has not been specified.");
       return;
     }
     Task = ConfigTask.ReplaceModWheelWithMacro;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task RestoreOriginal(
+  public void RestoreOriginal(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.RestoreOriginal;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task ReuseCc1(
+  public void ReuseCc1(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      await Log.WriteLine(
+      Log.WriteLine(
         "ReuseCc1 is not possible because a mod wheel replacement CC " +
         "number greater than 1 has has not been specified.");
       return;
     }
     Task = ConfigTask.ReuseCc1;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
   [PublicAPI]
-  public async Task RollForward(
+  public void RollForward(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    await RestoreOriginal(soundBankName, categoryName, programName);
-    await PrependPathLineToDescription(soundBankName, categoryName, programName);
-    await InitialiseLayout(soundBankName, categoryName, programName);
-    await UpdateMacroCcs(soundBankName, categoryName, programName);
-    await RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    await InitialiseValuesAndMoveMacros(soundBankName, categoryName, programName);
-    await ReplaceModWheelWithMacro(soundBankName, categoryName, programName);
-    await ReuseCc1(soundBankName, categoryName, programName);
+    RestoreOriginal(soundBankName, categoryName, programName);
+    PrependPathLineToDescription(soundBankName, categoryName, programName);
+    InitialiseLayout(soundBankName, categoryName, programName);
+    UpdateMacroCcs(soundBankName, categoryName, programName);
+    RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
+    InitialiseValuesAndMoveMacros(soundBankName, categoryName, programName);
+    ReplaceModWheelWithMacro(soundBankName, categoryName, programName);
+    ReuseCc1(soundBankName, categoryName, programName);
   }
 
-  public async Task RunScript(
+  public void RunScript(
     BatchScript batchScript, CancellationToken cancellationToken) {
     RunCancellationToken = cancellationToken;
     try {
       batchScript.Validate();
       foreach (var batchTask in batchScript.SequenceTasks()) {
         Task = batchTask.ConfigTask;
-        await ConfigurePrograms(
+        ConfigurePrograms(
           GetScopeParameter(batchTask.SoundBank),
           GetScopeParameter(batchTask.Category),
           GetScopeParameter(batchTask.Program));
       }
-      await Log.WriteLine("The batch run has finished.");
+      Log.WriteLine("The batch run has finished.");
     } catch (OperationCanceledException) {
-      await Log.WriteLine("==========================================");
-      await Log.WriteLine("The batch run has been cancelled.");
-      await Log.WriteLine("==========================================");
+      Log.WriteLine("==========================================");
+      Log.WriteLine("The batch run has been cancelled.");
+      Log.WriteLine("==========================================");
     } catch (Exception exception) {
-      await Log.WriteLine("==========================================");
-      await Log.WriteLine("The batch run terminated with this error:");
-      await Log.WriteLine("==========================================");
-      await Log.WriteLine(exception is ApplicationException
+      Log.WriteLine("==========================================");
+      Log.WriteLine("The batch run terminated with this error:");
+      Log.WriteLine("==========================================");
+      Log.WriteLine(exception is ApplicationException
         ? exception.Message
         : exception.ToString());
-      await Log.WriteLine("==========================================");
+      Log.WriteLine("==========================================");
     }
-    await OnScriptRunEnded!();
+    OnScriptRunEnded!();
     return;
 
     string? GetScopeParameter(string level) {
@@ -452,10 +450,10 @@ public class Batch {
     }
   }
 
-  public virtual async Task RunScript(
+  public virtual void RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
     var batchScript = BatchScriptReader.Read(batchScriptPath);
-    await RunScript(batchScript, cancellationToken);
+    RunScript(batchScript, cancellationToken);
   }
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
@@ -483,15 +481,15 @@ public class Batch {
   ///   Otherwise ignored.
   /// </param>
   [PublicAPI]
-  public async Task UpdateMacroCcs(
+  public void UpdateMacroCcs(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.UpdateMacroCcs;
-    await ConfigurePrograms(soundBankName, categoryName, programName);
+    ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
-  private async Task WriteEffectTypesQueryResult() {
+  private void WriteEffectTypesQueryResult() {
     foreach (string effectType in EffectTypes) {
-      await Log.WriteLine(effectType);
+      Log.WriteLine(effectType);
     }
   }
 }

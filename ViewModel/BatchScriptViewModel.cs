@@ -158,19 +158,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     Tasks.Populate(Settings);
   }
 
-  private async Task PrepareForRun() {
-    await DispatcherService.DispatchAsync(() => Log.Clear());
-    await DispatcherService.DispatchAsync(() => CanSaveLog = false);
-    await DispatcherService.DispatchAsync(() => CanRunSavedScript = false);
-    await DispatcherService.DispatchAsync(() => CanRunThisScript = false);
-    await DispatcherService.DispatchAsync(() => CanCancelBatchRun = true);
-    // await DispatcherService.DispatchAsync(() => {
-    //   Log.Clear();
-    //   CanSaveLog = false;
-    //   CanRunSavedScript = false;
-    //   CanRunThisScript = false;
-    //   CanCancelBatchRun = true;
-    // });
+  private void PrepareForRun() {
+    Log.Clear();
+    CanSaveLog = false;
+    DispatcherService.DispatchAsync(() => CanRunSavedScript = false);
+    DispatcherService.DispatchAsync(() => CanRunThisScript = false);
+    DispatcherService.DispatchAsync(() => CanCancelBatchRun = true);
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -194,8 +187,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private async Task RunSavedScript() {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
-      await PrepareForRun();
-      await Batch.RunScript(path, RunCancellationTokenSource.Token);
+      PrepareForRun();
+      Batch.RunScript(path, RunCancellationTokenSource.Token);
     }
   }
 
@@ -203,10 +196,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   ///   Generates <see cref="RunThisScriptCommand" />.
   /// </summary>
   [RelayCommand(CanExecute = nameof(CanRunThisScript))]
-  private async Task RunThisScript() {
+  private void RunThisScript() {
     var script = CreateThisBatchScript();
-    await PrepareForRun();
-    await Batch.RunScript(script, RunCancellationTokenSource.Token);
+    PrepareForRun();
+    Batch.RunScript(script, RunCancellationTokenSource.Token);
   }
 
   /// <summary>

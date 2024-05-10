@@ -33,15 +33,15 @@ public class TestBatch : Batch {
   /// </summary>
   internal bool UpdatePrograms { get; set; } = true;
 
-  protected override async Task ConfigureProgram() {
+  protected override void ConfigureProgram() {
     if (ExceptionWhenConfiguringProgram != null) {
       throw ExceptionWhenConfiguringProgram;
     }
     if (UpdatePrograms) {
-      await base.ConfigureProgram();
+      base.ConfigureProgram();
       return;
     }
-    await Log.WriteLine($"{Task}: '{Program.PathShort}'");
+    Log.WriteLine($"{Task}: '{Program.PathShort}'");
   }
 
   protected override Category CreateCategory(string categoryName) {
@@ -67,11 +67,11 @@ public class TestBatch : Batch {
     HasScriptRunEnded = true;
   }
 
-  public override async Task RunScript(
+  public override void RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
     HasScriptRunEnded = false;
     OnScriptRunEnded ??= OnBatchScriptRunEnded;
     TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName; 
-    await base.RunScript(batchScriptPath, cancellationToken);
+    base.RunScript(batchScriptPath, cancellationToken);
   }
 }
