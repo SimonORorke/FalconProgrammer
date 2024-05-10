@@ -381,7 +381,7 @@ public class FalconProgram {
     }
     switch (SoundBankName) {
       case "Ether Fields" or "Spectre":
-        InfoPageLayout.MoveMacrosToStandardLayout();
+        await InfoPageLayout.MoveMacrosToStandardLayout();
         break;
       case "Fluidity":
         var attackMacro = FindContinuousMacro("Attack");
@@ -526,7 +526,7 @@ public class FalconProgram {
         await MoveMacroToEnd(macro);
       }
       await RefreshMacroOrder();
-      InfoPageLayout.MoveMacrosToStandardLayout();
+      await InfoPageLayout.MoveMacrosToStandardLayout();
       await ReUpdateMacroCcs();
     }
   }
@@ -636,9 +636,6 @@ public class FalconProgram {
     }
   }
 
-  /// <summary>
-  ///   TODO: Fix QueryDelayTypes and QueryReverbTypes. 
-  /// </summary>
   public IEnumerable<string> QueryDelayTypes() {
     var result = new List<string>();
     foreach (var macro in Macros.Where(macro => macro.ModulatesDelay)) {
@@ -720,7 +717,7 @@ public class FalconProgram {
     await BypassDelayEffects();
     if (await RemoveDelayMacros()) {
       await RefreshMacroOrder();
-      InfoPageLayout.MoveMacrosToStandardLayout();
+      await InfoPageLayout.MoveMacrosToStandardLayout();
       await ReUpdateMacroCcs();
     }
   }
@@ -783,7 +780,7 @@ public class FalconProgram {
       }
     }
     await NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
-    InfoPageLayout.MoveMacrosToStandardLayout();
+    await InfoPageLayout.MoveMacrosToStandardLayout();
   }
 
   /// <summary>
@@ -795,7 +792,7 @@ public class FalconProgram {
     if (!await CanReplaceModWheelWithMacro()) {
       return;
     }
-    InfoPageLayout.ReplaceModWheelWithMacro();
+    await InfoPageLayout.ReplaceModWheelWithMacro();
     await ReUpdateMacroCcs();
     await NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
   }

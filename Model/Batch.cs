@@ -132,6 +132,14 @@ public class Batch {
   /// </param>
   private async Task ConfigurePrograms(
     string? soundBankName, string? categoryName = null, string? programName = null) {
+    switch (Task) {
+      case ConfigTask.QueryDelayTypes:
+        await PrepareForEffectTypesQuery("Delay");
+        break;
+      case ConfigTask.QueryReverbTypes:
+        await PrepareForEffectTypesQuery("Reverb");
+        break;
+    }
     if (!string.IsNullOrEmpty(soundBankName)) {
       SoundBankFolderPath = GetSoundBankFolderPath(soundBankName);
       if (!string.IsNullOrEmpty(categoryName)) {
@@ -155,6 +163,9 @@ public class Batch {
         SoundBankFolderPath = Path.Combine(programsFolderPath, soundBankName1);
         await ConfigureProgramsInSoundBank();
       }
+    }
+    if (Task is ConfigTask.QueryDelayTypes or ConfigTask.QueryReverbTypes) {
+      await WriteEffectTypesQueryResult();
     }
   }
 
@@ -257,6 +268,11 @@ public class Batch {
     await ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
+  private async Task PrepareForEffectTypesQuery(string effectType) {
+    EffectTypes = [];
+    await Log.WriteLine($"{effectType} Types:");
+  }
+
   [PublicAPI]
   public async Task PrependPathLineToDescription(
     string? soundBankName, string? categoryName = null, string? programName = null) {
@@ -305,13 +321,8 @@ public class Batch {
   [PublicAPI]
   public async Task QueryDelayTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    EffectTypes = [];
     Task = ConfigTask.QueryDelayTypes;
-    await Log.WriteLine("Delay Types:");
     await ConfigurePrograms(soundBankName, categoryName, programName);
-    foreach (string effectType in EffectTypes) {
-      await Log.WriteLine(effectType);
-    }
   }
 
   [PublicAPI]
@@ -324,13 +335,8 @@ public class Batch {
   [PublicAPI]
   public async Task QueryReverbTypes(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    EffectTypes = [];
     Task = ConfigTask.QueryReverbTypes;
-    await Log.WriteLine("Reverb Types:");
     await ConfigurePrograms(soundBankName, categoryName, programName);
-    foreach (string effectType in EffectTypes) {
-      await Log.WriteLine(effectType);
-    }
   }
 
   [PublicAPI]
@@ -481,5 +487,11 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = ConfigTask.UpdateMacroCcs;
     await ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  private async Task WriteEffectTypesQueryResult() {
+    foreach (string effectType in EffectTypes) {
+      await Log.WriteLine(effectType);
+    }
   }
 }

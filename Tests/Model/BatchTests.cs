@@ -157,22 +157,24 @@ public class BatchTests {
       onlyCategoryFolderPath, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     Batch.EmbeddedScriptFileName = "QueriesForAll.xml";
     await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
-    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(3));
-    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-      @"QueryReverbTypes: 'Fluidity\Electronic\Cream Synth'"));
+    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(4));
+    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo("Reverb Types:"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo(
+      @"QueryReverbTypes: 'Fluidity\Electronic\Cream Synth'"));
+    Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo(
       @"QueryReverbTypes: 'Fluidity\Electronic\Fluid Sweeper'"));
-    Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo("The batch run has finished."));
+    Assert.That(Batch.MockBatchLog.Lines[3], Is.EqualTo("The batch run has finished."));
   }
 
   [Test]
   public async Task RunScriptForProgram() {
     await Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(Batch.HasScriptRunEnded);
-    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(3));
+    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(4));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
-    Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo(@"QueryDelayTypes: 'SB\Cat\P1'"));
-    Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo("The batch run has finished."));
+    Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo("Delay Types:"));
+    Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo(@"QueryDelayTypes: 'SB\Cat\P1'"));
+    Assert.That(Batch.MockBatchLog.Lines[3], Is.EqualTo("The batch run has finished."));
   }
 
   [Test]
