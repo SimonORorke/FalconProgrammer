@@ -9,6 +9,7 @@ namespace FalconProgrammer.ViewModel;
 
 public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private Batch? _batch;
+  private BatchLog? _batchLog;
   private bool _canCancelBatchRun;
   private bool _canRunSavedScript = true;
   private bool _canRunThisScript = true;
@@ -18,12 +19,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   public BatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
-    BatchLog = new BatchLog(async text => await WriteLogLine(text));
   }
 
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
-
-  internal BatchLog BatchLog { get; }
+  internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
 
   /// <summary>
   ///   Gets or sets CanExecute for <see cref="CancelBatchRunCommand" />.
@@ -75,6 +74,22 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
   public event EventHandler? LogLineWritten;
 
+  private void BatchLogOnLineWritten(object? sender, string text) {
+    DispatcherService.Dispatch(() => {
+      Log.Add(text);
+      LogLineWritten?.Invoke(this, EventArgs.Empty);
+    });
+  }
+
+  private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
+    DispatcherService.Dispatch(() => {
+      CanSaveLog = true;
+      CanRunSavedScript = true;
+      CanRunThisScript = true;
+      CanCancelBatchRun = false;
+    });
+  }
+
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
     return await DialogService.OpenFile(
       $"Open a batch script file to {purpose}",
@@ -94,6 +109,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     return new Batch(BatchLog);
   }
 
+  private BatchLog CreateBatchLog() {
+    var result = new BatchLog();
+    result.LineWritten += BatchLogOnLineWritten;
+    return result;
+  }
+
   protected List<BatchScript.BatchTask> CreateBatchTasks() {
     return (
       from task in Tasks
@@ -108,7 +129,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private Batch CreateInitialisedBatch() {
     var result = CreateBatch();
-    result.OnScriptRunEnded = OnRunEnded;
+    result.ScriptRunEnded += BatchOnScriptRunEnded; 
     return result;
   }
 
@@ -133,22 +154,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
-  /// <summary>
-  ///   TODO: Fix button enabling/disabling in OnRunEnded and PrepareForRun.  
-  /// </summary>
-  private async Task OnRunEnded() {
-    await DispatcherService.DispatchAsync(() => CanSaveLog = true);
-    await DispatcherService.DispatchAsync(() => CanRunSavedScript = true);
-    await DispatcherService.DispatchAsync(() => CanRunThisScript = true);
-    await DispatcherService.DispatchAsync(() => CanCancelBatchRun = false);
-    // await DispatcherService.DispatchAsync(() => {
-    //   CanSaveLog = true;
-    //   CanRunSavedScript = true;
-    //   CanRunThisScript = true;
-    //   CanCancelBatchRun = false;
-    // });
-  }
-
   internal override async Task Open() {
     await base.Open();
     if (!await ValidateAndPopulateSoundBanks()) {
@@ -160,10 +165,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private void PrepareForRun() {
     Log.Clear();
-    CanSaveLog = false;
-    DispatcherService.DispatchAsync(() => CanRunSavedScript = false);
-    DispatcherService.DispatchAsync(() => CanRunThisScript = false);
-    DispatcherService.DispatchAsync(() => CanCancelBatchRun = true);
+    DispatcherService.Dispatch(() => {
+      CanSaveLog = false;
+      CanRunSavedScript = false;
+      CanRunThisScript = false;
+      CanCancelBatchRun = true;
+    });
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -188,7 +195,11 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
       PrepareForRun();
-      Batch.RunScript(path, RunCancellationTokenSource.Token);
+      var runThread =
+        new Thread(() => Batch.RunScript(path, RunCancellationTokenSource.Token)) {
+          Name = nameof(RunSavedScript)
+        };
+      runThread.Start();
     }
   }
 
@@ -199,7 +210,11 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private void RunThisScript() {
     var script = CreateThisBatchScript();
     PrepareForRun();
-    Batch.RunScript(script, RunCancellationTokenSource.Token);
+    var runThread =
+      new Thread(() => Batch.RunScript(script, RunCancellationTokenSource.Token)) {
+        Name = nameof(RunThisScript)
+      };
+    runThread.Start();
   }
 
   /// <summary>
@@ -253,10 +268,5 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       return false;
     }
     return await validator.ValidateDefaultTemplateFile();
-  }
-
-  private async Task WriteLogLine(string text) {
-    await DispatcherService.DispatchAsync(() => Log.Add(text));
-    LogLineWritten?.Invoke(this, EventArgs.Empty);
   }
 }

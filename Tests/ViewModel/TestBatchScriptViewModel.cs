@@ -36,6 +36,6 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
   }
 
   protected override void SaveLogToFile(string outputPath) {
-    SavedLog = BatchLog.ToString();
+    SavedLog = BatchLog.ToString()!;
   }
 }

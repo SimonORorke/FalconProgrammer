@@ -1,5 +1,5 @@
 ﻿namespace FalconProgrammer.Model;
 
 public interface IBatchLog {
-  Task WriteLine(string text);
+  void WriteLine(string text);
 }

@@ -14,8 +14,7 @@ public class MockBatchLog : IBatchLog {
     return writer.ToString();
   }
 
-  public async Task WriteLine(string text) {
-    await Task.Delay(0);
+  public void WriteLine(string text) {
     Lines.Add(text);
   }
 }

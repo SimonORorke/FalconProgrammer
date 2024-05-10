@@ -5,8 +5,7 @@ namespace FalconProgrammer.Tests.Model;
 
 [ExcludeFromCodeCoverage]
 public class ConsoleBatchLog : IBatchLog {
-  public async Task WriteLine(string text) {
-    await Task.Delay(0);
+  public void WriteLine(string text) {
     Console.WriteLine(text);
   }
 }

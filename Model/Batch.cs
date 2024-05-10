@@ -35,7 +35,6 @@ public class Batch {
   }
 
   public IBatchLog Log { get; }
-  public Func<Task>? OnScriptRunEnded { get; set; }
   protected FalconProgram Program { get; private set; } = null!;
   internal Settings Settings => _settings ??= SettingsReader.Read();
 
@@ -48,7 +47,8 @@ public class Batch {
   protected string SoundBankFolderPath { get; private set; } = null!;
   [PublicAPI] protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
   protected ConfigTask Task { get; private set; }
-  
+  public event EventHandler? ScriptRunEnded;
+
   protected virtual void ConfigureProgram() {
     if (RunCancellationToken.IsCancellationRequested) {
       RunCancellationToken.ThrowIfCancellationRequested();
@@ -266,6 +266,10 @@ public class Batch {
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
+  protected virtual void OnScriptRunEnded() {
+    ScriptRunEnded?.Invoke(this, EventArgs.Empty);
+  }
+
   private void PrepareForEffectTypesQuery(string effectType) {
     EffectTypes = [];
     Log.WriteLine($"{effectType} Types:");
@@ -442,7 +446,7 @@ public class Batch {
         : exception.ToString());
       Log.WriteLine("==========================================");
     }
-    OnScriptRunEnded!();
+    OnScriptRunEnded();
     return;
 
     string? GetScopeParameter(string level) {

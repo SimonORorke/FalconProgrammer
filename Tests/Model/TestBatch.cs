@@ -62,15 +62,14 @@ public class TestBatch : Batch {
         EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
   }
 
-  private async Task OnBatchScriptRunEnded() {
-    await System.Threading.Tasks.Task.Delay(0);
+  protected override void OnScriptRunEnded() {
+    base.OnScriptRunEnded();
     HasScriptRunEnded = true;
   }
 
   public override void RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
     HasScriptRunEnded = false;
-    OnScriptRunEnded ??= OnBatchScriptRunEnded;
     TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName; 
     base.RunScript(batchScriptPath, cancellationToken);
   }

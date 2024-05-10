@@ -77,6 +77,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   public async Task RunSavedScript() {
     Assert.That(ViewModel.CanRunSavedScript);
     await ViewModel.RunSavedScriptCommand.ExecuteAsync(null);
+    TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
+      "Batch script run has ended.");
     // Commands are disabled while a script is running. That would be fiddly to test.
     Assert.That(ViewModel.CanRunSavedScript);
     Assert.That(ViewModel.Log[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
@@ -88,6 +90,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
     ViewModel.RunThisScriptCommand.Execute(null);
+    TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
+      "Batch script run has ended.");
     // Commands are disabled while a script is running. That would be fiddly to test.
     Assert.That(ViewModel.CanRunThisScript);
     Assert.That(ViewModel.CanSaveLog);
@@ -110,6 +114,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     ViewModel.TestBatch.UpdatePrograms = true;
     ViewModel.CancelBatchRunCommand.Execute(null);
     ViewModel.RunThisScriptCommand.Execute(null);
+    TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
+      "Batch script run has ended.");
     Assert.That(!ViewModel.CanCancelBatchRun);
     Assert.That(ViewModel.Log, Does.Contain(
       @"The batch run has been cancelled."));
