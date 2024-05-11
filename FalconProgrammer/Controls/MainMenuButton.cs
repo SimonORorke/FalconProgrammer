@@ -35,17 +35,15 @@ public class MainMenuButton : MenuButtonBase {
   }
 
   private MenuItem ManualMenuItem { get; } = CreateMenuItem("_Manual");
-  
-  protected override List<MenuItem> GetMenuItems() {
-    return [AboutMenuItem, ManualMenuItem];
+
+  protected override List<PropertyMenuItem> CreatePropertyMenuItems() {
+    return [
+      new PropertyMenuItem(AboutCommandProperty, AboutMenuItem),
+      new PropertyMenuItem(ManualCommandProperty, ManualMenuItem)
+    ];
   }
 
-  protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {
-    base.OnPropertyChanged(change);
-    if (change.Property == AboutCommandProperty) {
-      AboutMenuItem.Command = AboutCommand;
-    } else if (change.Property == ManualCommandProperty) {
-      ManualMenuItem.Command = ManualCommand;
-    }
+  protected override ICommand GetMenuItemCommand(MenuItem menuItem) {
+    return menuItem == AboutMenuItem ? AboutCommand! : ManualCommand!;
   }
 }

@@ -49,23 +49,23 @@ public class ItemActionButton : MenuButtonBase {
 
   private MenuItem RemoveMenuItem { get; } = CreateMenuItem("_Remove");
 
-  protected override List<MenuItem> GetMenuItems() {
-    return [CutMenuItem, PasteBeforeMenuItem, RemoveMenuItem];
+  protected override List<PropertyMenuItem> CreatePropertyMenuItems() {
+    return [
+      new PropertyMenuItem(CutCommandProperty, CutMenuItem),
+      new PropertyMenuItem(PasteBeforeCommandProperty, PasteBeforeMenuItem),
+      new PropertyMenuItem(RemoveCommandProperty, RemoveMenuItem)
+    ];
+  }
+
+  protected override ICommand GetMenuItemCommand(MenuItem menuItem) {
+    if (menuItem == CutMenuItem) {
+      return CutCommand!;
+    }
+    return menuItem == PasteBeforeMenuItem ? PasteBeforeCommand! : RemoveCommand!;
   }
 
   protected override void OnInitialized() {
     base.OnInitialized();
     Height = MinHeight = 25;
-  }
-
-  protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {
-    base.OnPropertyChanged(change);
-    if (change.Property == CutCommandProperty) {
-      CutMenuItem.Command = CutCommand;
-    } else if (change.Property == PasteBeforeCommandProperty) {
-      PasteBeforeMenuItem.Command = PasteBeforeCommand;
-    } else if (change.Property == RemoveCommandProperty) {
-      RemoveMenuItem.Command = RemoveCommand;
-    }
   }
 }
