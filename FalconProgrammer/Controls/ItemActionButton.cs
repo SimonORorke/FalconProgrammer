@@ -55,7 +55,6 @@ public class ItemActionButton : MenuButtonBase {
 
   protected override void OnInitialized() {
     base.OnInitialized();
-    Margin = new Thickness(13, 0, 0, 0);
     Height = MinHeight = 25;
   }
 
