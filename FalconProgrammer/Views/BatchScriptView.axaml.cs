@@ -33,8 +33,8 @@ public partial class BatchScriptView : UserControl {
   ///   Disables/enables buttons in preparation for a batch run. 
   /// </summary>
   /// <remarks>
-  ///   Presumably to do with threading, I could disable/enable the buttons by setting
-  ///   CanExecute for the button commands in the view model.
+  ///   For unknown reason, I could not disable/enable the buttons in the view model by
+  ///   setting CanExecute for the button commands.
   /// </remarks>
   private void ViewModelOnRunBeginning(object? sender, EventArgs e) {
     RunThisScriptButton.IsEnabled = false;
@@ -47,8 +47,9 @@ public partial class BatchScriptView : UserControl {
   ///   Disables/enables buttons when a batch run ends. 
   /// </summary>
   /// <remarks>
-  ///   Presumably to do with threading, I could disable/enable the buttons by setting
-  ///   CanExecute for the button commands in the view model.
+  ///   For unknown reason, I could not disable/enable the buttons in the view model by
+  ///   setting CanExecute for the button commands. (Just the button clicked would be
+  ///   disabled.)
   /// </remarks>
   private void ViewModelOnRunEnded(object? sender, EventArgs e) {
     RunThisScriptButton.IsEnabled = true;

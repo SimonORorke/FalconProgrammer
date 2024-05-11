@@ -12,7 +12,7 @@
         </Style>
         <Style Selector="Button.top">
             <Setter Property="Margin" Value="20,0,0,0" />
-            <Setter Property="Width" Value="140" />
+            <Setter Property="Width" Value="145" />
         </Style>
     </UserControl.Styles>
     <DockPanel>
@@ -29,27 +29,27 @@
             <Button Command="{Binding SaveThisScriptCommand}"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="_Save This Script" Classes="top" />
+                    <AccessText Text="_Save This Script..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding EditSavedScriptCommand}"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="_Edit Saved Script" Classes="top" />
+                    <AccessText Text="_Edit Saved Script..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding RunSavedScriptCommand}"
                     x:Name="RunSavedScriptButton"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="R_un Saved Script" Classes="top" />
+                    <AccessText Text="R_un Saved Script..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveLogCommand}"
                     x:Name="SaveLogButton"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="Save _Log" Classes="top" />
+                    <AccessText Text="Save _Log..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding CancelBatchRunCommand}"
