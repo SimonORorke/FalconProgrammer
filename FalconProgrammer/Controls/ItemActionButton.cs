@@ -1,9 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Layout;
 
 namespace FalconProgrammer.Controls;
 
@@ -11,7 +9,7 @@ namespace FalconProgrammer.Controls;
 ///   An edit action button for a data item. Clicking the button shows a flyout menu with
 ///   Cut, Paste Before and Remove items.
 /// </summary>
-public class ItemActionButton : Button {
+public class ItemActionButton : MenuButtonBase {
   // As commands are never going to be styled, I looked at using DirectProperty rather
   // than StyledProperty to make them accessible in XAML. However, I did not get
   // DirectProperty to work. I concluded that DirectProperty would probably be tricky to
@@ -27,6 +25,8 @@ public class ItemActionButton : Button {
 
   public static readonly StyledProperty<ICommand?> RemoveCommandProperty =
     AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(RemoveCommand));
+
+  protected override string AccessibleButtonText => "Action...";
 
   public ICommand? CutCommand {
     get => GetValue(CutCommandProperty);
@@ -49,36 +49,14 @@ public class ItemActionButton : Button {
 
   private MenuItem RemoveMenuItem { get; } = CreateMenuItem("_Remove");
 
-  /// <summary>
-  ///   Even though the class inherits from Button, we still have to specify that we
-  ///   want it to look like a button. Otherwise we get nothing.
-  /// </summary>
-  protected override Type StyleKeyOverride => typeof(Button);
-
-  private static MenuItem CreateMenuItem(string text) {
-    return new MenuItem {
-      Header = new AccessText {
-        Text = text
-      }
-    };
+  protected override List<MenuItem> GetMenuItems() {
+    return [CutMenuItem, PasteBeforeMenuItem, RemoveMenuItem];
   }
 
   protected override void OnInitialized() {
     base.OnInitialized();
     Margin = new Thickness(13, 0, 0, 0);
     Height = MinHeight = 25;
-    Content = new AccessText {
-    // Content = new TextBlock {
-      Text = "Action...",
-      FontSize = 16,
-      HorizontalAlignment = HorizontalAlignment.Center,
-      VerticalAlignment = VerticalAlignment.Center
-    };
-    var menuFlyout = new MenuFlyout();
-    menuFlyout.Items.Add(CutMenuItem);
-    menuFlyout.Items.Add(PasteBeforeMenuItem);
-    menuFlyout.Items.Add(RemoveMenuItem);
-    Flyout = menuFlyout;
   }
 
   protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {
