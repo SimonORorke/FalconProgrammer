@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
 using JetBrains.Annotations;
@@ -30,6 +31,12 @@ public partial class MainWindowViewModel : ViewModelBase,
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
+  }
+  /// <summary>
+  ///   Generates <see cref="AboutCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private void About() {
   }
 
 #pragma warning disable CA1822
@@ -69,6 +76,13 @@ public partial class MainWindowViewModel : ViewModelBase,
   /// </summary>
   [ExcludeFromCodeCoverage]
   internal LocationsViewModel LocationsViewModel { get; set; }
+
+  /// <summary>
+  ///   Generates <see cref="ManualCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private void Manual() {
+  }
 
   /// <summary>
   ///   The setter is only for tests.
