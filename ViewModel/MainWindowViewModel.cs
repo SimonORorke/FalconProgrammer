@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -46,7 +47,7 @@ public partial class MainWindowViewModel : ViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  internal BackgroundViewModel BackgroundViewModel { get; set; }
+  [PublicAPI] internal BackgroundViewModel BackgroundViewModel { get; set; }
 
   /// <summary>
   ///   The setter is only for tests.
