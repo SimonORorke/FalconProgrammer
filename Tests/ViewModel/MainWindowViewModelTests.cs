@@ -31,8 +31,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void ApplicationTitle() {
-    ViewModel.ApplicationTitle = "A made-up name";
-    Assert.That(Global.ApplicationName, Is.EqualTo(ViewModel.ApplicationTitle));
+    ViewModel.ApplicationName = "A made-up name";
+    Assert.That(Global.ApplicationName, Is.EqualTo(ViewModel.ApplicationName));
   }
 
   [Test]

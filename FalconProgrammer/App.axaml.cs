@@ -33,7 +33,7 @@ public class App : Application {
     // Creates a ServiceProvider containing services from the provided IServiceCollection
     var services = collection.BuildServiceProvider();
     var viewModel = services.GetRequiredService<MainWindowViewModel>();
-    viewModel.ApplicationTitle = Name!;
+    viewModel.ApplicationName = Name!;
     MainWindow = new MainWindow {
       DataContext = viewModel
     };
