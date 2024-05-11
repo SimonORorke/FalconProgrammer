@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 
 namespace FalconProgrammer.Controls;
 
@@ -66,8 +67,12 @@ public class ItemActionButton : Button {
     base.OnInitialized();
     Margin = new Thickness(13, 0, 0, 0);
     Height = MinHeight = 25;
-    Content = new TextBlock {
-      Text = "Action..."
+    Content = new AccessText {
+    // Content = new TextBlock {
+      Text = "Action...",
+      FontSize = 16,
+      HorizontalAlignment = HorizontalAlignment.Center,
+      VerticalAlignment = VerticalAlignment.Center
     };
     var menuFlyout = new MenuFlyout();
     menuFlyout.Items.Add(CutMenuItem);
