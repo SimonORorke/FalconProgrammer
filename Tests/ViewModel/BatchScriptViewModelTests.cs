@@ -75,26 +75,18 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task RunSavedScript() {
-    Assert.That(ViewModel.CanRunSavedScript);
     await ViewModel.RunSavedScriptCommand.ExecuteAsync(null);
     TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
       "Batch script run has ended.");
-    // Commands are disabled while a script is running. That would be fiddly to test.
-    Assert.That(ViewModel.CanRunSavedScript);
     Assert.That(ViewModel.Log[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
   }
 
   [Test]
   public async Task RunThisScript() {
     await ConfigureThisScript();
-    Assert.That(ViewModel.CanRunThisScript);
-    Assert.That(ViewModel.CanSaveLog);
     ViewModel.RunThisScriptCommand.Execute(null);
     TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
       "Batch script run has ended.");
-    // Commands are disabled while a script is running. That would be fiddly to test.
-    Assert.That(ViewModel.CanRunThisScript);
-    Assert.That(ViewModel.CanSaveLog);
     Assert.That(ViewModel.Log[0], Is.EqualTo(
       @"InitialiseLayout: 'Factory\Keys\Morning Keys'"));
     await ViewModel.SaveLogCommand.ExecuteAsync(null);
@@ -104,19 +96,12 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task RunThisScriptCancelled() {
     await ConfigureThisScript();
-    Assert.That(!ViewModel.CanCancelBatchRun);
-    // The Cancel command will be enabled while the batch is running.
-    // However, that's tricky to test. Fortunately, we can ignore the fact that the
-    // command is disabled at this stage, which will only prevent it from being executed
-    // in the GUI. So we will cancel before running, which should be impossible in the
-    // GUI. This should cancel the batch immediately, before any Falcon programs are
-    // updated.
+    // This should cancel the batch immediately, before any Falcon programs are updated.
     ViewModel.TestBatch.UpdatePrograms = true;
     ViewModel.CancelBatchRunCommand.Execute(null);
     ViewModel.RunThisScriptCommand.Execute(null);
     TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
       "Batch script run has ended.");
-    Assert.That(!ViewModel.CanCancelBatchRun);
     Assert.That(ViewModel.Log, Does.Contain(
       @"The batch run has been cancelled."));
   }

@@ -19,6 +19,7 @@
         <TextBlock DockPanel.Dock="Top" Height="10" />
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Command="{Binding RunThisScriptCommand}"
+                    x:Name="RunThisScriptButton"
                     Classes="top"
                     Margin="10,0,0,0">
                 <Button.Content>
@@ -38,19 +39,23 @@
                 </Button.Content>
             </Button>
             <Button Command="{Binding RunSavedScriptCommand}"
+                    x:Name="RunSavedScriptButton"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="R_un Saved Script" Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveLogCommand}"
+                    x:Name="SaveLogButton"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="Save _Log" Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding CancelBatchRunCommand}"
-                    Classes="top">
+                    x:Name="CancelBatchRunButton"
+                    Classes="top"
+                    IsEnabled="False">
                 <Button.Content>
                     <AccessText Text="_Cancel Batch Run" Classes="top" />
                 </Button.Content>

@@ -10,10 +10,6 @@ namespace FalconProgrammer.ViewModel;
 public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private Batch? _batch;
   private BatchLog? _batchLog;
-  private bool _canCancelBatchRun;
-  private bool _canRunSavedScript = true;
-  private bool _canRunThisScript = true;
-  private bool _canSaveLog = true;
   private BatchScopeCollection? _scopes;
   private TaskCollection? _tasks;
 
@@ -23,38 +19,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
   internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
-
-  /// <summary>
-  ///   Gets or sets CanExecute for <see cref="CancelBatchRunCommand" />.
-  /// </summary>
-  public bool CanCancelBatchRun {
-    get => _canCancelBatchRun;
-    private set => SetProperty(ref _canCancelBatchRun, value);
-  }
-
-  /// <summary>
-  ///   Gets or sets CanExecute for <see cref="RunSavedScriptCommand" />.
-  /// </summary>
-  public bool CanRunSavedScript {
-    get => _canRunSavedScript;
-    private set => SetProperty(ref _canRunSavedScript, value);
-  }
-
-  /// <summary>
-  ///   Gets or sets CanExecute for <see cref="RunThisScriptCommand" />.
-  /// </summary>
-  public bool CanRunThisScript {
-    get => _canRunThisScript;
-    private set => SetProperty(ref _canRunThisScript, value);
-  }
-
-  /// <summary>
-  ///   Gets or sets CanExecute for <see cref="SaveLogCommand" />.
-  /// </summary>
-  public bool CanSaveLog {
-    get => _canSaveLog;
-    private set => SetProperty(ref _canSaveLog, value);
-  }
 
   public ObservableCollection<string> Log { get; } = [];
 
@@ -73,6 +37,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
   public event EventHandler? LogLineWritten;
+  public event EventHandler? RunBeginning;
+  public event EventHandler? RunEnded;
 
   private void BatchLogOnLineWritten(object? sender, string text) {
     DispatcherService.Dispatch(() => {
@@ -82,12 +48,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
-    DispatcherService.Dispatch(() => {
-      CanSaveLog = true;
-      CanRunSavedScript = true;
-      CanRunThisScript = true;
-      CanCancelBatchRun = false;
-    });
+    OnRunEnded();
   }
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
@@ -99,7 +60,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// <summary>
   ///   Generates <see cref="CancelBatchRunCommand" />.
   /// </summary>
-  [RelayCommand(CanExecute = nameof(CanCancelBatchRun))]
+  [RelayCommand]
   private void CancelBatchRun() {
     RunCancellationTokenSource.Cancel();
   }
@@ -154,6 +115,14 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  private void OnRunBeginning() {
+    RunBeginning?.Invoke(this, EventArgs.Empty);
+  }
+
+  private void OnRunEnded() {
+    RunEnded?.Invoke(this, EventArgs.Empty);
+  }
+
   internal override async Task Open() {
     await base.Open();
     if (!await ValidateAndPopulateSoundBanks()) {
@@ -165,12 +134,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private void PrepareForRun() {
     Log.Clear();
-    DispatcherService.Dispatch(() => {
-      CanSaveLog = false;
-      CanRunSavedScript = false;
-      CanRunThisScript = false;
-      CanCancelBatchRun = true;
-    });
+    OnRunBeginning();
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -190,7 +154,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// <summary>
   ///   Generates <see cref="RunSavedScriptCommand" />.
   /// </summary>
-  [RelayCommand(CanExecute = nameof(CanRunSavedScript))]
+  [RelayCommand]
   private async Task RunSavedScript() {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
@@ -206,7 +170,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// <summary>
   ///   Generates <see cref="RunThisScriptCommand" />.
   /// </summary>
-  [RelayCommand(CanExecute = nameof(CanRunThisScript))]
+  [RelayCommand]
   private void RunThisScript() {
     var script = CreateThisBatchScript();
     PrepareForRun();
@@ -220,7 +184,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// <summary>
   ///   Generates <see cref="SaveLogCommand" />.
   /// </summary>
-  [RelayCommand(CanExecute = nameof(CanSaveLog))]
+  [RelayCommand]
   private async Task SaveLog() {
     string? path = await DialogService.SaveFile(
       "Save Log", "Text files", "txt");
