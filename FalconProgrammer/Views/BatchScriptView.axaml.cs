@@ -51,11 +51,9 @@ public partial class BatchScriptView : UserControl {
   ///   CanExecute for the button commands in the view model.
   /// </remarks>
   private void ViewModelOnRunEnded(object? sender, EventArgs e) {
-    Dispatcher.UIThread.Post(() => {
-      RunThisScriptButton.IsEnabled = true;
-      RunSavedScriptButton.IsEnabled = true;
-      SaveLogButton.IsEnabled = true;
-      CancelBatchRunButton.IsEnabled = false;
-    });
+    RunThisScriptButton.IsEnabled = true;
+    RunSavedScriptButton.IsEnabled = true;
+    SaveLogButton.IsEnabled = true;
+    CancelBatchRunButton.IsEnabled = false;
   }
 }

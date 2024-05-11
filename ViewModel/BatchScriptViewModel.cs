@@ -48,7 +48,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
-    OnRunEnded();
+    DispatcherService.Dispatch(OnRunEnded);
   }
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
