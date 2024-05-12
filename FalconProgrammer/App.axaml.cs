@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 using FalconProgrammer.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,9 +31,15 @@ public class App : Application {
     }
     // Register all the services needed for the application to run
     var collection = new ServiceCollection();
-    collection.AddCommonServices();
-    // Creates a ServiceProvider containing services from the provided IServiceCollection
+    collection.AddSingleton<IDialogService, DialogService>();
+    collection.AddSingleton<IDispatcherService, DispatcherService>();
+    // We only need to register the main window's view model as a service recipient,
+    // as it will pass services on to other view models when it creates them.
+    collection.AddTransient<MainWindowViewModel>();
+    // Create a ServiceProvider containing services from the provided IServiceCollection.
     var services = collection.BuildServiceProvider();
+    // Create the main window view and it's view model, assigning the view model to the
+    // view.
     var viewModel = services.GetRequiredService<MainWindowViewModel>();
     viewModel.ApplicationName = Name!;
     MainWindow = new MainWindow {
@@ -40,6 +47,8 @@ public class App : Application {
     };
     switch (ApplicationLifetime) {
       case IClassicDesktopStyleApplicationLifetime desktop:
+        // This should be the only case that applies, as we only expect to install the
+        // application on macOS and Windows.
         desktop.MainWindow = MainWindow;
         break;
       case ISingleViewApplicationLifetime singleViewPlatform:

@@ -32,7 +32,6 @@ public class ApplicationInfo : IApplicationInfo {
 
   private TAttribute GetCustomAttribute<TAttribute>() 
     where TAttribute : Attribute {
-    return (TAttribute)EntryAssembly.GetCustomAttributes(
-      typeof(TAttribute), false)[0];
+    return EntryAssembly.GetCustomAttributes<TAttribute>().ToArray()[0];
   }
 }
