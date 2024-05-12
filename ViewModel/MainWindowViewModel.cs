@@ -32,6 +32,7 @@ public partial class MainWindowViewModel : ViewModelBase,
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
   }
+  
   /// <summary>
   ///   Generates <see cref="AboutCommand" />.
   /// </summary>

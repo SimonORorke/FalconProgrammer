@@ -14,6 +14,7 @@ public class App : Application {
 
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
+    Name = new ApplicationInfo().Product;
     new ColourScheme().Select(ColourScheme.Scheme.Lavender);
   }
 

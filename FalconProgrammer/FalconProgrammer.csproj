@@ -9,6 +9,18 @@
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <!-- Assembly attributed for About box etc. -->
+        <Title>Falcon Programmer</Title>
+        <Company>Simon O'Rorke</Company>
+        <Product>Falcon Programmer</Product>
+        <Copyright>Copyright © 2024 Simon O'Rorke</Copyright>
+        <InformationalVersion>0.9.0</InformationalVersion>
+        <ProductVersion>0.9.0</ProductVersion>
+        <AssemblyVersion>0.9.0</AssemblyVersion>
+        <FileVersion>0.9.0</FileVersion>
+    </PropertyGroup>
+
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
