@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -13,9 +12,11 @@ namespace FalconProgrammer.Controls;
 ///   Base class for a <see cref="Button" /> that, when clicked, shows a flyout menu.
 /// </summary>
 public abstract class MenuButtonBase : Button {
-  private List<PropertyMenuItem>? _propertyItems;
+  private Dictionary<AvaloniaProperty, MenuItem>? _propertyMenuItems;
   protected abstract string AccessibleButtonText { get; }
-  private List<PropertyMenuItem> PropertyMenuItems => _propertyItems ??= CreatePropertyMenuItems();
+
+  private Dictionary<AvaloniaProperty, MenuItem> PropertyMenuItems =>
+    _propertyMenuItems ??= CreatePropertyMenuItems();
 
   /// <summary>
   ///   Even though the class inherits from Button, we still have to specify that we
@@ -25,8 +26,8 @@ public abstract class MenuButtonBase : Button {
 
   private MenuFlyout CreateFlyout() {
     var result = new MenuFlyout();
-    foreach (var propertyItem in PropertyMenuItems) {
-      result.Items.Add(propertyItem.MenuItem);
+    foreach (var menuItem in PropertyMenuItems.Values) {
+      result.Items.Add(menuItem);
     }
     return result;
   }
@@ -39,7 +40,7 @@ public abstract class MenuButtonBase : Button {
     };
   }
 
-  protected abstract List<PropertyMenuItem> CreatePropertyMenuItems();
+  protected abstract Dictionary<AvaloniaProperty, MenuItem> CreatePropertyMenuItems();
 
   protected abstract ICommand GetMenuItemCommand(MenuItem menuItem);
 
@@ -56,24 +57,8 @@ public abstract class MenuButtonBase : Button {
 
   protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {
     base.OnPropertyChanged(change);
-    var propertyMenuItem = (
-      from item in PropertyMenuItems
-      where item.Property == change.Property
-      select item).FirstOrDefault();
-    if (propertyMenuItem != null) {
-      propertyMenuItem.MenuItem.Command = GetMenuItemCommand(propertyMenuItem.MenuItem);
+    if (PropertyMenuItems.TryGetValue(change.Property, out var menuItem)) {
+      menuItem.Command = GetMenuItemCommand(menuItem);
     }
-  }
-
-  protected class PropertyMenuItem {
-    public PropertyMenuItem(
-      AvaloniaProperty property,
-      MenuItem menuItem) {
-      Property = property;
-      MenuItem = menuItem;
-    }
-
-    public AvaloniaProperty Property { get; }
-    public MenuItem MenuItem { get; }
   }
 }

@@ -36,11 +36,11 @@ public class MainMenuButton : MenuButtonBase {
 
   private MenuItem ManualMenuItem { get; } = CreateMenuItem("_Manual");
 
-  protected override List<PropertyMenuItem> CreatePropertyMenuItems() {
-    return [
-      new PropertyMenuItem(AboutCommandProperty, AboutMenuItem),
-      new PropertyMenuItem(ManualCommandProperty, ManualMenuItem)
-    ];
+  protected override Dictionary<AvaloniaProperty,MenuItem> CreatePropertyMenuItems() {
+    return new Dictionary<AvaloniaProperty, MenuItem> {
+      { AboutCommandProperty, AboutMenuItem },
+      { ManualCommandProperty, ManualMenuItem }
+    };
   }
 
   protected override ICommand GetMenuItemCommand(MenuItem menuItem) {

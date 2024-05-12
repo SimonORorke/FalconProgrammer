@@ -49,12 +49,12 @@ public class ItemActionButton : MenuButtonBase {
 
   private MenuItem RemoveMenuItem { get; } = CreateMenuItem("_Remove");
 
-  protected override List<PropertyMenuItem> CreatePropertyMenuItems() {
-    return [
-      new PropertyMenuItem(CutCommandProperty, CutMenuItem),
-      new PropertyMenuItem(PasteBeforeCommandProperty, PasteBeforeMenuItem),
-      new PropertyMenuItem(RemoveCommandProperty, RemoveMenuItem)
-    ];
+  protected override Dictionary<AvaloniaProperty, MenuItem> CreatePropertyMenuItems() {
+    return new Dictionary<AvaloniaProperty, MenuItem> {
+      { CutCommandProperty, CutMenuItem },
+      { PasteBeforeCommandProperty, PasteBeforeMenuItem },
+      { RemoveCommandProperty, RemoveMenuItem }
+    };
   }
 
   protected override ICommand GetMenuItemCommand(MenuItem menuItem) {
