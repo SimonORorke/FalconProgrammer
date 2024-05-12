@@ -10,15 +10,20 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <!-- Assembly attributed for About box etc. -->
-        <Title>Falcon Programmer</Title>
+        <!-- Assembly attributes for
+        the Details page of the executable file's properties and the About box. 
+        Note: File description in the executable file's properties is 
+        automatically generated, ignoring the FileDescription, 
+        which we therefore will not bother to specify. -->
         <Company>Simon O'Rorke</Company>
-        <Product>Falcon Programmer</Product>
         <Copyright>Copyright © 2024 Simon O'Rorke</Copyright>
-        <InformationalVersion>0.9.0</InformationalVersion>
-        <ProductVersion>0.9.0</ProductVersion>
-        <AssemblyVersion>0.9.0</AssemblyVersion>
+        <!-- FileVersion is shown for File version in the executable file's properties. -->
         <FileVersion>0.9.0</FileVersion>
+        <!-- InformationalVersion, not ProductVersion, 
+        is shown for Product version in the executable file's properties.
+        For consistency, this will aslo be the version shown in the About box. -->
+        <InformationalVersion>0.9.0</InformationalVersion>
+        <Product>Falcon Programmer</Product>
     </PropertyGroup>
 
     <ItemGroup>

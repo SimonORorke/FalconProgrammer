@@ -4,10 +4,25 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
-
         <LangVersion>12</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Assembly attributes for
+        the Details page of the executable file's properties and the About box. 
+        Note: File description in the executable file's properties is 
+        automatically generated, ignoring the FileDescription, 
+        which we therefore will not bother to specify. -->
+        <Company>Simon O'Rorke</Company>
+        <Copyright>Copyright © 2024 Simon O'Rorke</Copyright>
+        <!-- FileVersion is shown for File version in the executable file's properties. -->
+        <FileVersion>0.9.0</FileVersion>
+        <!-- InformationalVersion, not ProductVersion, 
+        is shown for Product version in the executable file's properties.
+        For consistency, this will aslo be the version shown in the About box. -->
+        <InformationalVersion>0.9.0</InformationalVersion>
+        <Product>Falcon Programmer</Product>
     </PropertyGroup>
 
     <ItemGroup>

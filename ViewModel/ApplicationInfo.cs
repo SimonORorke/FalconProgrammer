@@ -25,10 +25,10 @@ public class ApplicationInfo : IApplicationInfo {
     _entryAssembly ??= Assembly.GetEntryAssembly()!;
 
   public string Product => _product ??=
-    GetCustomAttribute<AssemblyProductAttribute>().Product; 
+    GetCustomAttribute<AssemblyProductAttribute>().Product;
 
   public string Version => _version ??=
-    GetCustomAttribute<AssemblyVersionAttribute>().Version; 
+    GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion; 
 
   private TAttribute GetCustomAttribute<TAttribute>() 
     where TAttribute : Attribute {
