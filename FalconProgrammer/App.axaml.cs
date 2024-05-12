@@ -38,8 +38,7 @@ public class App : Application {
     collection.AddTransient<MainWindowViewModel>();
     // Create a ServiceProvider containing services from the provided IServiceCollection.
     var services = collection.BuildServiceProvider();
-    // Create the main window view and it's view model, assigning the view model to the
-    // view.
+    // Create the main window view and assign its view model.
     var viewModel = services.GetRequiredService<MainWindowViewModel>();
     viewModel.ApplicationName = Name!;
     MainWindow = new MainWindow {
