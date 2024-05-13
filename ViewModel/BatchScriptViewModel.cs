@@ -159,11 +159,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
       PrepareForRun();
-      var runThread =
-        new Thread(() => Batch.RunScript(path, RunCancellationTokenSource.Token)) {
-          Name = nameof(RunSavedScript)
-        };
-      runThread.Start();
+      StartThread(() => Batch.RunScript(path, RunCancellationTokenSource.Token), 
+        nameof(RunSavedScript));
     }
   }
 
@@ -174,11 +171,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private void RunThisScript() {
     var script = CreateThisBatchScript();
     PrepareForRun();
-    var runThread =
-      new Thread(() => Batch.RunScript(script, RunCancellationTokenSource.Token)) {
-        Name = nameof(RunThisScript)
-      };
-    runThread.Start();
+    StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token), 
+      nameof(RunThisScript));
   }
 
   /// <summary>
@@ -209,6 +203,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       var script = CreateThisBatchScript();
       script.Serialiser.Serialise(typeof(BatchScript), script, path);
     }
+  }
+  
+  [ExcludeFromCodeCoverage]
+  protected virtual void StartThread(Action action, string threadName) {
+    var thread =
+      new Thread(action.Invoke) {
+        Name = threadName
+      };
+    thread.Start();
   }
 
   private async Task<bool> ValidateAndPopulateSoundBanks() {

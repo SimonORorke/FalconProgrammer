@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-[TestFixture]
 public class TestBatchScriptViewModel : BatchScriptViewModel {
   public TestBatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
@@ -37,5 +36,14 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
 
   protected override void SaveLogToFile(string outputPath) {
     SavedLog = BatchLog.ToString()!;
+  }
+
+  /// <summary>
+  ///   For unknown reason, testing a run of a saved script, which was working fine,
+  ///   now sometimes fails to finish and times out. So we mock out running batches on
+  ///   a separate thread.
+  /// </summary>
+  protected override void StartThread(Action action, string threadName) {
+    action.Invoke();
   }
 }

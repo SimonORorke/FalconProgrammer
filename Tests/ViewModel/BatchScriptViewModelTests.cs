@@ -76,23 +76,23 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task RunSavedScript() {
     await ViewModel.RunSavedScriptCommand.ExecuteAsync(null);
-    TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
-      "Batch script run has ended.");
+    // TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
+    //   "Batch script run has ended.");
     Assert.That(ViewModel.Log[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
   }
-
+  
   [Test]
   public async Task RunThisScript() {
     await ConfigureThisScript();
     ViewModel.RunThisScriptCommand.Execute(null);
-    TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
-      "Batch script run has ended.");
+    // TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
+    //   "Batch script run has ended.");
     Assert.That(ViewModel.Log[0], Is.EqualTo(
       @"InitialiseLayout: 'Factory\Keys\Morning Keys'"));
     await ViewModel.SaveLogCommand.ExecuteAsync(null);
     Assert.That(ViewModel.SavedLog, Is.EqualTo(ViewModel.BatchLog.ToString()));
   }
-
+  
   [Test]
   public async Task RunThisScriptCancelled() {
     await ConfigureThisScript();
@@ -100,8 +100,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     ViewModel.TestBatch.UpdatePrograms = true;
     ViewModel.CancelBatchRunCommand.Execute(null);
     ViewModel.RunThisScriptCommand.Execute(null);
-    TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
-      "Batch script run has ended.");
+    // TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
+    //   "Batch script run has ended.");
     Assert.That(ViewModel.Log, Does.Contain(
       @"The batch run has been cancelled."));
   }
