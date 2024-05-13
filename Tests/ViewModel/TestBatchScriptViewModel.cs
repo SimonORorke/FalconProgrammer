@@ -39,9 +39,9 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
   }
 
   /// <summary>
-  ///   For unknown reason, testing a run of a saved script, which was working fine,
-  ///   now sometimes fails to finish and times out. So we mock out running batches on
-  ///   a separate thread.
+  ///   For unknown reason, testing a run of a saved script on a separate thread, which
+  ///   was working fine, started to sometimes fail to finish and time out. So we mock
+  ///   out running batches on a separate thread.
   /// </summary>
   protected override void StartThread(Action action, string threadName) {
     action.Invoke();
