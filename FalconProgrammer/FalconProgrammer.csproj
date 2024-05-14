@@ -3,17 +3,26 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <!-- TODO: Different ApplicationIcon format for macOS and Windows.
-        The format needs to be .ico for Windows, .icns for macOS.
-        Creating the .icns looks easy in macOS and I can't see how to do it in
-        Windows. And we need a way to make the icon file specification 
-        dependant on operating system. -->
-        <ApplicationIcon>Assets/falcon_svg_repo_com_512_512.ico</ApplicationIcon>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
+    
+    <Choose>
+        <When Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+            <PropertyGroup>
+                <!-- Don't split the tag into three lines.
+                It causes a file not found error! -->
+                <ApplicationIcon>Assets/falcon_svg_repo_com_512_512.ico</ApplicationIcon>
+            </PropertyGroup>    
+        </When>
+        <Otherwise> <!-- macOS - $([MSBuild]::IsOsPlatform('OSX')) -->
+            <PropertyGroup>
+                <ApplicationIcon>Assets/falcon_svg_repo_com_512_512.icns</ApplicationIcon>
+            </PropertyGroup>
+        </Otherwise>
+    </Choose>
 
     <PropertyGroup>
         <!-- Assembly attributes for
