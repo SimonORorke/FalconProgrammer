@@ -11,18 +11,22 @@
     <PropertyGroup>
         <!-- Assembly attributes for
         the Details page of the executable file's properties and the About box. 
-        Note: File description in the executable file's properties is 
-        automatically generated, ignoring the FileDescription, 
-        which we therefore will not bother to specify. -->
-        <Company>Simon O'Rorke</Company>
+        At least in Windows, File description in the file properties is automatically 
+        generated, ignoring the FileDescription attribute, which we therefore will 
+        not bother to specify. -->
+        <Product>Falcon Programmer</Product> <!-- Shown in window titles too. -->
+        <!-- FileVersion is shown for File version in the executable file's 
+        properties. -->
+        <FileVersion>0.9.0.0</FileVersion>
+        <!-- Version is the version shown in the About box. 
+        Product version in the executable file's properties also derives from 
+        Version, not ProductVersion. However, see ApplicationInfo.Version's summary.
+        -->
+        <Version>0.9.0.0</Version>
         <Copyright>Copyright © 2024 Simon O'Rorke</Copyright>
-        <!-- FileVersion is shown for File version in the executable file's properties. -->
-        <FileVersion>0.9.0</FileVersion>
-        <!-- InformationalVersion, not ProductVersion, 
-        is shown for Product version in the executable file's properties.
-        For consistency, this will aslo be the version shown in the About box. -->
-        <InformationalVersion>0.9.0</InformationalVersion>
-        <Product>Falcon Programmer</Product>
+        <!-- Though the Company attribute is not in the file properties and we 
+        don't currently show it in the About box, it's here for completeness. -->
+        <Company>Simon O'Rorke</Company>
     </PropertyGroup>
 
     <ItemGroup>
