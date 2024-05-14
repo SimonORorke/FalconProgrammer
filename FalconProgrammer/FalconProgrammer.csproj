@@ -3,8 +3,12 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-<!--        Needs to be .ico for windows, ?? for mac. -->
-<!--        <ApplicationIcon>Assets/falcon_svg_repo_com.png</ApplicationIcon>-->
+        <!-- TODO: Different ApplicationIcon format for macOS and Windows.
+        The format needs to be .ico for Windows, .icns for macOS.
+        Creating the .icns looks easy in macOS and I can't see how to do it in
+        Windows. And we need a way to make the icon file specification 
+        dependant on operating system. -->
+        <ApplicationIcon>Assets/falcon_svg_repo_com_512_512.ico</ApplicationIcon>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
