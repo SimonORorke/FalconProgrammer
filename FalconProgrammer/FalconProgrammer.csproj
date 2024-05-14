@@ -3,6 +3,8 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
+<!--        Needs to be .ico for windows, ?? for mac. -->
+<!--        <ApplicationIcon>Assets/falcon_svg_repo_com.png</ApplicationIcon>-->
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -12,12 +14,15 @@
     <PropertyGroup>
         <!-- Assembly attributes for
         the Details page of the executable file's properties and the About box. 
-        Note: File description in the executable file's properties is 
-        automatically generated, ignoring the FileDescription, 
-        which we therefore will not bother to specify. -->
+        At least in Windows, File description in the file properties is automatically 
+        generated, ignoring the FileDescription attribute, which we therefore will 
+        not bother to specify. 
+        Though the Company attribute is also not in the file properties and we don't
+        currently show it in the About box, it's here for completeness. -->
         <Company>Simon O'Rorke</Company>
         <Copyright>Copyright © 2024 Simon O'Rorke</Copyright>
-        <!-- FileVersion is shown for File version in the executable file's properties. -->
+        <!-- FileVersion is shown for File version in the executable file's 
+        properties. -->
         <FileVersion>0.9.0</FileVersion>
         <!-- InformationalVersion, not ProductVersion, 
         is shown for Product version in the executable file's properties.
@@ -43,6 +48,14 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia.csproj" />
         <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="LICENCE.txt" />
+      <EmbeddedResource Include="LICENCE.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

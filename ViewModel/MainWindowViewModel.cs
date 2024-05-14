@@ -32,13 +32,6 @@ public partial class MainWindowViewModel : ViewModelBase,
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
   }
-  
-  /// <summary>
-  ///   Generates <see cref="AboutCommand" />.
-  /// </summary>
-  [RelayCommand]
-  private void About() {
-  }
 
 #pragma warning disable CA1822
   // ReSharper disable once MemberCanBeMadeStatic.Global
@@ -54,14 +47,17 @@ public partial class MainWindowViewModel : ViewModelBase,
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  [ExcludeFromCodeCoverage]
-  [PublicAPI] internal BackgroundViewModel BackgroundViewModel { get; set; }
+  [PublicAPI]
+  internal BackgroundViewModel BackgroundViewModel { get; [ExcludeFromCodeCoverage] set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  [ExcludeFromCodeCoverage]
-  internal BatchScriptViewModel BatchScriptViewModel { get; set; }
+  [PublicAPI]
+  internal BatchScriptViewModel BatchScriptViewModel {
+    get;
+    [ExcludeFromCodeCoverage] set;
+  }
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
@@ -75,21 +71,17 @@ public partial class MainWindowViewModel : ViewModelBase,
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  [ExcludeFromCodeCoverage]
-  internal LocationsViewModel LocationsViewModel { get; set; }
-
-  /// <summary>
-  ///   Generates <see cref="ManualCommand" />.
-  /// </summary>
-  [RelayCommand]
-  private void Manual() {
-  }
+  [PublicAPI]
+  internal LocationsViewModel LocationsViewModel { get; [ExcludeFromCodeCoverage] set; }
 
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  [ExcludeFromCodeCoverage]
-  internal MidiForMacrosViewModel MidiForMacrosViewModel { get; set; }
+  [PublicAPI]
+  internal MidiForMacrosViewModel MidiForMacrosViewModel {
+    get;
+    [ExcludeFromCodeCoverage] set;
+  }
 
   /// <summary>
   ///   Not used because this is not a page but the owner of pages.
@@ -101,6 +93,25 @@ public partial class MainWindowViewModel : ViewModelBase,
 
   public void Receive(GoToLocationsPageMessage message) {
     DispatcherService.Dispatch(() => SelectedTab = LocationsTab);
+  }
+
+  /// <summary>
+  ///   Generates <see cref="AboutCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private async Task About() {
+    await DialogService.ShowAboutBox(CreateAboutViewModel());
+  }
+
+  /// <summary>
+  ///   Generates <see cref="ManualCommand" />.
+  /// </summary>
+  [RelayCommand]
+  [ExcludeFromCodeCoverage]
+  private void Manual() { }
+
+  protected virtual AboutWindowViewModel CreateAboutViewModel() {
+    return new AboutWindowViewModel();
   }
 
   private ImmutableList<TabItem> CreateTabs() {
@@ -126,6 +137,8 @@ public partial class MainWindowViewModel : ViewModelBase,
   }
 
   private async void OnSelectedTabChangedAsync(TabItem value) {
+    // This method has to be async void rather than async Task because the calling
+    // method, OnSelectedTabChanged is a partial method that cannot be a Task.
     if (CurrentPageViewModel != null
         // If a return to the same page has been forced because of errors,
         // the error message that was shown by QueryClose should not be shown again.
@@ -160,7 +173,7 @@ public partial class MainWindowViewModel : ViewModelBase,
         return false;
       }
     }
-    // // Stop listening for ObservableRecipient messages.
+    // Stop listening for ObservableRecipient messages.
     return await base.QueryClose(true);
   }
 }

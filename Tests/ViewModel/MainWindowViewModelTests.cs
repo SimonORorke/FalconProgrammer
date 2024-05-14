@@ -10,13 +10,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     base.Setup();
     TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(
       MockDialogService, MockDispatcherService);
-    ViewModel = new MainWindowViewModel(
+    ViewModel = new TestMainWindowViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
-    // Do not show the Locations tab initially at this stage: the SettingsXmlError test
-    // requires prior configuration.
   }
 
   private TabItem BatchScriptTab => ViewModel.Tabs[0];
@@ -27,7 +25,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
     null!;
 
-  private MainWindowViewModel ViewModel { get; set; } = null!;
+  private TestMainWindowViewModel ViewModel { get; set; } = null!;
 
   [Test]
   public void ApplicationTitle() {
@@ -96,6 +94,12 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.LocationsViewModel.ModelServices.SettingsReader,
       Is.EqualTo(MockSettingsReaderEmbedded));
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+  }
+
+  [Test]
+  public async Task ShowAboutBox() {
+    await ViewModel.AboutCommand.ExecuteAsync(null);
+    Assert.That(MockDialogService.ShowAboutBoxCount, Is.EqualTo(1));
   }
 
   [Test]

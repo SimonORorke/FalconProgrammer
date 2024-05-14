@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using FalconProgrammer.ViewModel;
+using FalconProgrammer.Views;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
@@ -13,9 +14,9 @@ namespace FalconProgrammer.Services;
 /// </summary>
 public class DialogService : IDialogService {
   private string? _applicationTitle;
-  private TopLevel? _topLevel;
+  private Window? _mainWindow;
   private string ApplicationTitle => _applicationTitle ??= Application.Current!.Name!;
-  private TopLevel TopLevel => _topLevel ??= ((App)Application.Current!).MainWindow;
+  private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
 
   public async Task<bool> AskYesNoQuestion(string text) {
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
@@ -26,7 +27,7 @@ public class DialogService : IDialogService {
 
   public async Task<string?> BrowseForFolder(string dialogTitle) {
     var folders =
-      await TopLevel.StorageProvider.OpenFolderPickerAsync(
+      await MainWindow.StorageProvider.OpenFolderPickerAsync(
         new FolderPickerOpenOptions {
           Title = dialogTitle,
           AllowMultiple = false
@@ -37,7 +38,7 @@ public class DialogService : IDialogService {
 
   public async Task<string?> OpenFile(
     string dialogTitle, string filterName, string fileExtension) {
-    var files = await TopLevel.StorageProvider.OpenFilePickerAsync(
+    var files = await MainWindow.StorageProvider.OpenFilePickerAsync(
       new FilePickerOpenOptions {
         Title = dialogTitle,
         AllowMultiple = false,
@@ -62,7 +63,7 @@ public class DialogService : IDialogService {
 
   public async Task<string?> SaveFile(
     string dialogTitle, string filterName, string fileExtension) {
-    var file = await TopLevel.StorageProvider.SaveFilePickerAsync(
+    var file = await MainWindow.StorageProvider.SaveFilePickerAsync(
       new FilePickerSaveOptions {
         Title = dialogTitle,
         DefaultExtension = fileExtension,
@@ -74,6 +75,13 @@ public class DialogService : IDialogService {
         ]
       });
     return file?.Path.LocalPath;
+  }
+
+  public async Task ShowAboutBox(AboutWindowViewModel windowViewModel) {
+    var aboutBox = new AboutWindow {
+      DataContext = windowViewModel
+    };
+    await aboutBox.ShowDialog(MainWindow);
   }
 
   public async Task ShowErrorMessageBox(string text) {

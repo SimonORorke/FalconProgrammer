@@ -7,8 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="1130" d:DesignHeight="450"
         x:Class="FalconProgrammer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/falcon_svg_repo_com.png"
-        Title="Falcon Programmer">
+        Icon="/Assets/falcon_svg_repo_com.png">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Height="50">
             <Image DockPanel.Dock="Left" Source="/Assets/falcon_svg_repo_com.png" />

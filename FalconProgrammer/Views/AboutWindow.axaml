@@ -1,0 +1,29 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:htc="using:HyperText.Avalonia.Controls"
+        xmlns:vm="using:FalconProgrammer.ViewModel"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="FalconProgrammer.Views.AboutWindow"
+        x:DataType="vm:AboutWindowViewModel"
+        Icon="/Assets/falcon_svg_repo_com.png"
+        CanResize="False"
+        Height="600"
+        Width="800"
+        WindowStartupLocation="CenterOwner">
+    <StackPanel>
+        <TextBlock Text="{Binding Product}" />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Version: " />
+            <TextBlock Text="{Binding Version}" />
+        </StackPanel>
+        <TextBlock Text="{Binding Copyright}" />
+        <!-- <Button  -->
+        <!--     Content="{Binding DownloadUrl}" -->
+        <!--     Command="{Binding OpenDownloadUrlCommand}" /> -->
+        <htc:Hyperlink
+            Url="{Binding DownloadUrl}"
+            Command="{Binding OpenDownloadUrlCommand}" />
+    </StackPanel>
+</Window>

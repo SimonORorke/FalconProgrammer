@@ -45,6 +45,12 @@ public interface IDialogService {
     string dialogTitle, string filterName, string fileExtension);
 
   /// <summary>
+  ///   Asynchronously shows the About box.
+  /// </summary>
+  /// <param name="windowViewModel">The view model to be assigned to the About box.</param>
+  Task ShowAboutBox(AboutWindowViewModel windowViewModel);
+
+  /// <summary>
   ///   Asynchronously shows an error message box.
   /// </summary>
   /// <param name="text">The message text to be shown.</param>

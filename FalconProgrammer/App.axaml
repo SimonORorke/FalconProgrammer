@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FalconProgrammer.App"
              xmlns:local="using:FalconProgrammer"
+             xmlns:ht="using:HyperText.Avalonia"
              RequestedThemeVariant="Default">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -23,6 +24,7 @@
     <Application.Styles>
         <FluentTheme />  <!-- The colour scheme is selected in code behind.  -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <ht:HyperLinkStyle/>
         <Style Selector="AccessText">
             <Setter Property="ShowAccessKey" Value="True" />
         </Style>

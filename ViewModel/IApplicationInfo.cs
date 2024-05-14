@@ -5,7 +5,7 @@
 ///   project file. 
 /// </summary>
 public interface IApplicationInfo {
-  string Company { get; }
+  // string Company { get; }
   string Copyright { get; }
   string Product { get; }
   string Version { get; }

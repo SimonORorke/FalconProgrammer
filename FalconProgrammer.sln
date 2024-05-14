@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Model", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FalconProgrammer.Tests", "Tests\FalconProgrammer.Tests.csproj", "{70B41F78-D2E7-4688-A6F0-85136F1E38B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperText.Avalonia", "HyperText.Avalonia\HyperText.Avalonia.csproj", "{BDAEB2CB-A996-4150-A4BB-CA3FBF1930A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{70B41F78-D2E7-4688-A6F0-85136F1E38B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70B41F78-D2E7-4688-A6F0-85136F1E38B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70B41F78-D2E7-4688-A6F0-85136F1E38B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDAEB2CB-A996-4150-A4BB-CA3FBF1930A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDAEB2CB-A996-4150-A4BB-CA3FBF1930A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDAEB2CB-A996-4150-A4BB-CA3FBF1930A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDAEB2CB-A996-4150-A4BB-CA3FBF1930A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
