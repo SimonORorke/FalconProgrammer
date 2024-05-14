@@ -22,9 +22,9 @@
     </Application.Resources>
 
     <Application.Styles>
-        <FluentTheme />  <!-- The colour scheme is selected in code behind.  -->
+        <FluentTheme /> <!-- The colour scheme is selected in code behind. -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-        <ht:HyperLinkStyle/>
+        <ht:HyperLinkStyle/> <!-- Required for Hyperlink control. -->
         <Style Selector="AccessText">
             <Setter Property="ShowAccessKey" Value="True" />
         </Style>

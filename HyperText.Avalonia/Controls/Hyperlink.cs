@@ -8,6 +8,8 @@ namespace HyperText.Avalonia.Controls;
 ///   There's a HyperText.Avalonia NuGet package. But that does not work for me.
 ///   I reported the problem:
 ///   https://github.com/AvaloniaUtils/HyperText.Avalonia/issues/4.
+///   <see cref="HyperLinkStyle " /> needs to be added to the application's Styles for
+///   this control to work.
 /// </summary>
 public class Hyperlink : Button {
   public static readonly DirectProperty<Hyperlink, string> UrlProperty
