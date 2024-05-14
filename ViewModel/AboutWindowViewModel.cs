@@ -17,7 +17,7 @@ public partial class AboutWindowViewModel : ObservableObject {
   public string Copyright => ApplicationInfo.Copyright;
 
   [ExcludeFromCodeCoverage]
-  public string DownloadUrl => "https://github.com/SimonORorke/FalconProgrammer";
+  public static string DownloadUrl => "https://github.com/SimonORorke/FalconProgrammer";
 
   public string Product => ApplicationInfo.Product;
   public string Title => $"About {ApplicationInfo.Product}";

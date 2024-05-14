@@ -27,11 +27,16 @@ public class ApplicationInfo : IApplicationInfo {
   public string Product => _product ??=
     GetCustomAttribute<AssemblyProductAttribute>().Product;
 
-  public string Version => _version ??=
-    GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion; 
+  public string Version => _version ??= EntryAssembly.GetName().Version!.ToString();
+
+  // GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion; 
 
   private TAttribute GetCustomAttribute<TAttribute>() 
     where TAttribute : Attribute {
     return EntryAssembly.GetCustomAttributes<TAttribute>().ToArray()[0];
   }
+
+  // private string GetVersion() {
+  //   var thisAssemName = EntryAssembly.GetName().Version!.ToString();
+  // }
 }
