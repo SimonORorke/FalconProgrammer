@@ -20,14 +20,14 @@ public class BatchScript : SerialisationBase {
   [XmlIgnore] public string Path { get; set; } = string.Empty;
 
   /// <summary>
-  ///   Get all <see cref="ConfigTask "/>s, with those that need to be run in a
+  ///   Get all <see cref="ConfigTask " />s, with those that need to be run in a
   ///   particular order first, in the order in which they need to be run, followed by
-  ///   all the others.
+  ///   all the others. Queries are excluded.
   /// </summary>
   public static ImmutableList<ConfigTask> OrderedConfigTasks { get; }
 
   /// <summary>
-  ///   Gets those <see cref="ConfigTask "/>s that need to be run in a particular order
+  ///   Gets those <see cref="ConfigTask " />s that need to be run in a particular order
   ///   in the order in which they need to be run.
   /// </summary>
   internal static ImmutableList<ConfigTask> SequencedConfigTasks { get; }
@@ -37,6 +37,7 @@ public class BatchScript : SerialisationBase {
     var unsequenced =
       from constant in Enum.GetValues<ConfigTask>()
       where !SequencedConfigTasks.Contains(constant)
+            && !constant.ToString().StartsWith("Query")
       select constant;
     list.AddRange(unsequenced);
     return list.ToImmutableList();
