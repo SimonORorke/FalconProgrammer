@@ -6,7 +6,7 @@ namespace FalconProgrammer.Model;
 public static class Global {
   public static string ApplicationName { get; set; } = string.Empty;
 
-  internal static Stream GetEmbeddedFileStream(string embeddedFileName) {
+  public static Stream GetEmbeddedFileStream(string embeddedFileName) {
     var assembly = Assembly.GetCallingAssembly();
     string resourceName = GetEmbeddedResourceName(
       embeddedFileName, assembly);

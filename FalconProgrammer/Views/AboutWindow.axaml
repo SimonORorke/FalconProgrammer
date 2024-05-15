@@ -12,6 +12,14 @@
         Height="600"
         Width="800"
         WindowStartupLocation="CenterOwner">
+    <Window.Styles>
+        <Style Selector="AccessText">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="80" />
+        </Style>
+    </Window.Styles>
     <StackPanel>
         <TextBlock Text="{Binding Product}" />
         <StackPanel Orientation="Horizontal">
@@ -19,11 +27,14 @@
             <TextBlock Text="{Binding Version}" />
         </StackPanel>
         <TextBlock Text="{Binding Copyright}" />
-        <!-- <Button  -->
-        <!--     Content="{Binding DownloadUrl}" -->
-        <!--     Command="{Binding OpenDownloadUrlCommand}" /> -->
         <htc:Hyperlink
             Url="{Binding DownloadUrl}"
             Command="{Binding OpenDownloadUrlCommand}" />
+        <Button x:Name="OkButton" Content="OK" IsCancel="True" IsDefault="True" />
+        <Button Command="{Binding LicenceCommand}">
+            <Button.Content>
+                <AccessText Text="_Licence" />
+            </Button.Content>
+        </Button>
     </StackPanel>
 </Window>

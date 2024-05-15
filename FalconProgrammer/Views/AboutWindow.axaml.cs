@@ -1,7 +1,6 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
-//using HyperText.Avalonia
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Views;
@@ -14,18 +13,16 @@ public partial class AboutWindow : Window {
       Design.SetDataContext(this, new AboutWindowViewModel());
     }
     InitializeComponent();
-    Dispatcher.UIThread.Post(() => {
-      WindowViewModel = (AboutWindowViewModel)DataContext!;
-      Title = WindowViewModel.Title;
-      WindowViewModel.MustClose += WindowViewModelOnMustClose;
-    });
-    // var xx = new HyperText.Avalonia.Controls.Hyperlink();
-    // xx.Command
+    OkButton.Click += OkButtonOnClick;
+    if (!Design.IsDesignMode) {
+      Dispatcher.UIThread.Post(() => {
+        var viewModel = (AboutWindowViewModel)DataContext!;
+        Title = viewModel.Title;
+      });
+    }
   }
 
-  private AboutWindowViewModel WindowViewModel { get; set; } = null!;
-
-  private void WindowViewModelOnMustClose(object? sender, EventArgs e) {
+  private void OkButtonOnClick(object? sender, RoutedEventArgs e) {
     Close();
   }
 }

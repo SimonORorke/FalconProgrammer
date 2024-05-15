@@ -14,9 +14,9 @@ public class AboutWindowViewModelTests {
     Assert.That(viewModel.Product, Is.EqualTo(mockApplicationInfo.Product));
     Assert.That(viewModel.Title, Is.EqualTo("About Falcon Programmer"));
     Assert.That(viewModel.Version, Is.EqualTo(mockApplicationInfo.Version));
-    bool hasClosed = false;
-    viewModel.MustClose += (_, _) => hasClosed = true;
-    viewModel.OkCommand.Execute(null);
-    Assert.That(hasClosed);
+    // bool hasClosed = false;
+    // viewModel.MustClose += (_, _) => hasClosed = true;
+    // viewModel.OkCommand.Execute(null);
+    // Assert.That(hasClosed);
   }
 }

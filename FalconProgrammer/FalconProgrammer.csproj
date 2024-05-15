@@ -68,8 +68,5 @@
 
     <ItemGroup>
       <None Remove="LICENCE.txt" />
-      <EmbeddedResource Include="LICENCE.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
     </ItemGroup>
 </Project>

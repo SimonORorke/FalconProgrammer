@@ -23,7 +23,7 @@ public partial class AboutWindowViewModel : ObservableObject {
   public string Title => $"About {ApplicationInfo.Product}";
   public string Version => ApplicationInfo.Version;
 
-  public event EventHandler? MustClose;
+  // public event EventHandler? MustClose;
 
   /// <summary>
   ///   Generates <see cref="LicenceCommand" />.
@@ -40,13 +40,13 @@ public partial class AboutWindowViewModel : ObservableObject {
     }
   }
 
-  /// <summary>
-  ///   Generates <see cref="OkCommand" />.
-  /// </summary>
-  [RelayCommand]
-  private void Ok() {
-    OnMustClose();
-  }
+  // /// <summary>
+  // ///   Generates <see cref="OkCommand" />.
+  // /// </summary>
+  // [RelayCommand]
+  // private void Ok() {
+  //   OnMustClose();
+  // }
 
   /// <summary>
   ///   Generates <see cref="OpenDownloadUrlCommand" />.
@@ -59,7 +59,7 @@ public partial class AboutWindowViewModel : ObservableObject {
     });
   }
 
-  private void OnMustClose() {
-    MustClose?.Invoke(this, EventArgs.Empty);
-  }
+  // private void OnMustClose() {
+  //   MustClose?.Invoke(this, EventArgs.Empty);
+  // }
 }
