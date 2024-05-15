@@ -111,7 +111,7 @@ public partial class MainWindowViewModel : ViewModelBase,
   private void Manual() { }
 
   protected virtual AboutWindowViewModel CreateAboutViewModel() {
-    return new AboutWindowViewModel();
+    return new AboutWindowViewModel(DialogService);
   }
 
   private ImmutableList<TabItem> CreateTabs() {

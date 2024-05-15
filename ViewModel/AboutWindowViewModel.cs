@@ -2,11 +2,16 @@
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
 public partial class AboutWindowViewModel : ObservableObject {
   private IApplicationInfo? _applicationInfo;
+
+  public AboutWindowViewModel(IDialogService dialogService) {
+    DialogService = dialogService;
+  }
 
   internal IApplicationInfo ApplicationInfo {
     get => _applicationInfo ??= new ApplicationInfo();
@@ -15,6 +20,7 @@ public partial class AboutWindowViewModel : ObservableObject {
   }
 
   public string Copyright => ApplicationInfo.Copyright;
+  private IDialogService DialogService { get; }
 
   [ExcludeFromCodeCoverage]
   public static string DownloadUrl => "https://github.com/SimonORorke/FalconProgrammer";
@@ -23,30 +29,17 @@ public partial class AboutWindowViewModel : ObservableObject {
   public string Title => $"About {ApplicationInfo.Product}";
   public string Version => ApplicationInfo.Version;
 
-  // public event EventHandler? MustClose;
-
   /// <summary>
   ///   Generates <see cref="LicenceCommand" />.
   /// </summary>
-  [ExcludeFromCodeCoverage]
   [RelayCommand]
-  private static void Licence() {
-    string path = Path.Combine(
-      Directory.GetParent(Environment.ProcessPath!)!.FullName, "LICENCE.txt");
-    if (File.Exists(path)) {
-      Process.Start(new ProcessStartInfo(path) {
-        UseShellExecute = true
-      });
-    }
+  private async Task Licence() {
+    var stream = Global.GetEmbeddedFileStream("LICENCE.txt");
+    var reader = new StreamReader(stream);
+    string licenceText = await reader.ReadToEndAsync();
+    await DialogService.ShowMessageWindow(
+      new MessageWindowViewModel(licenceText, $"{Global.ApplicationName} - Licence"));
   }
-
-  // /// <summary>
-  // ///   Generates <see cref="OkCommand" />.
-  // /// </summary>
-  // [RelayCommand]
-  // private void Ok() {
-  //   OnMustClose();
-  // }
 
   /// <summary>
   ///   Generates <see cref="OpenDownloadUrlCommand" />.
@@ -58,8 +51,4 @@ public partial class AboutWindowViewModel : ObservableObject {
       UseShellExecute = true
     });
   }
-
-  // private void OnMustClose() {
-  //   MustClose?.Invoke(this, EventArgs.Empty);
-  // }
 }

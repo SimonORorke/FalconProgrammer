@@ -9,9 +9,11 @@ public class MockDialogService : IDialogService {
   internal string ExpectedPath { get; set; } = string.Empty;
   internal bool ExpectedYesNoAnswer { get; set; }
   [PublicAPI] internal string LastErrorMessage { get; set; } = string.Empty;
+  [PublicAPI] internal string LastMessageWindowMessage { get; set; } = string.Empty;
   [PublicAPI] internal bool LastYesNoAnswer { get; set; }
   [PublicAPI] internal int ShowAboutBoxCount { get; set; }
   [PublicAPI] internal int ShowErrorMessageBoxCount { get; set; }
+  [PublicAPI] internal int ShowMessageWindowCount { get; set; }
 
   public async Task<bool> AskYesNoQuestion(string text) {
     await Task.Delay(0);
@@ -46,7 +48,7 @@ public class MockDialogService : IDialogService {
     return ExpectedPath;
   }
 
-  public async Task ShowAboutBox(AboutWindowViewModel windowViewModel) {
+  public async Task ShowAboutBox(AboutWindowViewModel viewModel) {
     await Task.Delay(0);
     ShowAboutBoxCount++;
   }
@@ -55,5 +57,11 @@ public class MockDialogService : IDialogService {
     await Task.Delay(0);
     ShowErrorMessageBoxCount++;
     LastErrorMessage = text;
+  }
+
+  public async Task ShowMessageWindow(MessageWindowViewModel viewModel) {
+    await Task.Delay(0);
+    ShowMessageWindowCount++;
+    LastMessageWindowMessage = viewModel.Text;
   }
 }

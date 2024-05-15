@@ -3,11 +3,11 @@
 namespace FalconProgrammer.ViewModel;
 
 internal class ErrorReporter {
-  private readonly IDialogService _dialogService;
-
   public ErrorReporter(IDialogService dialogService) {
-    _dialogService = dialogService;
+    DialogService = dialogService;
   }
+
+  private IDialogService DialogService { get; }
 
   /// <summary>
   ///   For use when there is an error message to show when the user attempts to close
@@ -35,9 +35,9 @@ internal class ErrorReporter {
       errorMessage +=
         $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationName}, " +
         "No (Esc) to resume.";
-      return await _dialogService.AskYesNoQuestion(errorMessage);
+      return await DialogService.AskYesNoQuestion(errorMessage);
     }
-    await _dialogService.ShowErrorMessageBox(errorMessage);
+    await DialogService.ShowErrorMessageBox(errorMessage);
     return false;
   }
 }

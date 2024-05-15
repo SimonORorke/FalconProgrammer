@@ -47,8 +47,10 @@ public interface IDialogService {
   /// <summary>
   ///   Asynchronously shows the About box.
   /// </summary>
-  /// <param name="windowViewModel">The view model to be assigned to the About box.</param>
-  Task ShowAboutBox(AboutWindowViewModel windowViewModel);
+  /// <param name="viewModel">
+  ///   The view model to be assigned to the About box.
+  /// </param>
+  Task ShowAboutBox(AboutWindowViewModel viewModel);
 
   /// <summary>
   ///   Asynchronously shows an error message box.
@@ -56,4 +58,12 @@ public interface IDialogService {
   /// <param name="text">The message text to be shown.</param>
   /// <returns></returns>
   Task ShowErrorMessageBox(string text);
+
+  /// <summary>
+  ///   Asynchronously shows the Message window.
+  /// </summary>
+  /// <param name="viewModel">
+  ///   The view model to be assigned to the Message window.
+  /// </param>
+  Task ShowMessageWindow(MessageWindowViewModel viewModel);
 }

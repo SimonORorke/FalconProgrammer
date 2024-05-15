@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
@@ -16,6 +17,7 @@ public class DialogService : IDialogService {
   private string? _applicationTitle;
   private Window? _mainWindow;
   private string ApplicationTitle => _applicationTitle ??= Application.Current!.Name!;
+  private Window? CurrentDialog { get; set; }
   private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
 
   public async Task<bool> AskYesNoQuestion(string text) {
@@ -77,16 +79,28 @@ public class DialogService : IDialogService {
     return file?.Path.LocalPath;
   }
 
-  public async Task ShowAboutBox(AboutWindowViewModel windowViewModel) {
-    var aboutBox = new AboutWindow {
-      DataContext = windowViewModel
+  public async Task ShowAboutBox(AboutWindowViewModel viewModel) {
+    CurrentDialog = new AboutWindow {
+      DataContext = viewModel
     };
-    await aboutBox.ShowDialog(MainWindow);
+    await CurrentDialog.ShowDialog(MainWindow);
+    CurrentDialog = null;
   }
 
   public async Task ShowErrorMessageBox(string text) {
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
       ApplicationTitle, text, ButtonEnum.Ok, Icon.Error);
     await messageBox.ShowAsync();
+  }
+
+  public async Task ShowMessageWindow(MessageWindowViewModel viewModel) {
+    var messageWindow = new MessageWindow {
+      DataContext = viewModel
+    };
+    try {
+      await messageWindow.ShowDialog(CurrentDialog ?? MainWindow);
+    } catch {
+      messageWindow.Show();
+    }
   }
 }

@@ -1,0 +1,45 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:FalconProgrammer.ViewModel"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Icon="/Assets/falcon_svg_repo_com.png"
+        x:Class="FalconProgrammer.Views.MessageWindow"
+        x:DataType="vm:MessageWindowViewModel"
+        Height="600"
+        Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Window.Styles>
+        <Style Selector="AccessText">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="150" />
+        </Style>
+    </Window.Styles>
+    <Grid RowDefinitions="*, 10, Auto, 10, Auto, 10">
+        <TextBox Grid.Row="0" x:Name="MessageTextBox" 
+                 Text="{Binding Text}"
+                 Margin="5, 5, 5, 5"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap" />
+        <Grid
+            Grid.Row="2"
+            ColumnDefinitions="*, Auto, *, Auto, *">
+            <Button Grid.Column="1"
+                    x:Name="OkButton" Content="OK" IsCancel="True" IsDefault="True"
+                    HorizontalAlignment="Center" />
+            <Button Grid.Column="3"
+                    x:Name="CopyButton"
+                    HorizontalAlignment="Center">
+                <Button.Content>
+                    <AccessText Text="_Copy to Clipboard" />
+                </Button.Content>
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="4"
+                   x:Name="StatusTextBlock"
+                   HorizontalAlignment="Center" />
+    </Grid>
+</Window>
