@@ -1,8 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 
-namespace HyperText.Avalonia.Controls;
+namespace FalconProgrammer.Controls;
 
 /// <summary>
 ///   Based on https://github.com/AvaloniaUtils/HyperText.Avalonia.
@@ -12,7 +11,6 @@ namespace HyperText.Avalonia.Controls;
 ///   <see cref="HyperLinkStyle " /> needs to be added to the application's Styles for
 ///   this control to work.
 /// </summary>
-[ExcludeFromCodeCoverage]
 public class Hyperlink : Button {
   public static readonly DirectProperty<Hyperlink, string> UrlProperty
     = AvaloniaProperty.RegisterDirect<Hyperlink, string>(nameof(Url), o => o.Url,

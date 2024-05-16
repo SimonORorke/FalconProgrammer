@@ -1,21 +1,23 @@
+<!-- Based on https://github.com/AvaloniaUtils/HyperText.Avalonia.
+See Hyperlink class's summary. -->
 <Style
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:HyperText.Avalonia.Controls">
-    <Style Selector="controls|Hyperlink.hyperlink">
+    xmlns:ct="clr-namespace:FalconProgrammer.Controls">
+    <Style Selector="ct|Hyperlink.hyperlink">
         <Setter Property="Foreground" Value="#3483eb" />
     </Style>
-    <Style Selector="controls|Hyperlink.hyperlink:pointerover">
+    <Style Selector="ct|Hyperlink.hyperlink:pointerover">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Foreground" Value="#3496eb" />
     </Style>
 
 
-    <Style Selector="controls|Hyperlink.hyperlink:pointerover > TextBlock">
+    <Style Selector="ct|Hyperlink.hyperlink:pointerover > TextBlock">
         <Setter Property="TextDecorations" Value="Underline" />
     </Style>
 
-    <Style Selector="controls|Hyperlink">
+    <Style Selector="ct|Hyperlink">
         <Setter Property="Template">
             <ControlTemplate>
                 <ContentPresenter Name="PART_ContentPresenter"
