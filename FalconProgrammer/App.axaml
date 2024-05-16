@@ -23,6 +23,7 @@
     <Application.Styles>
         <FluentTheme /> <!-- The colour scheme is selected in code behind. -->
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <StyleInclude Source="/Styles/DataValidationErrorsStyle.axaml" />
         <StyleInclude Source="/Styles/HyperlinkStyle.axaml" />
         <Style Selector="AccessText">
             <Setter Property="ShowAccessKey" Value="True" />
@@ -34,49 +35,6 @@
         <Style Selector="TextBlock">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-        <!-- This makes the error indicator a graphic with tooltip to the right of the input.
-        The default is a text block below the input, 
-        which works for TextBoxes but not DataGrid cells. -->
-        <Style Selector="DataValidationErrors">
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <DockPanel LastChildFill="True">
-                        <ContentControl DockPanel.Dock="Right"
-                                        ContentTemplate="{TemplateBinding ErrorTemplate}"
-                                        DataContext="{TemplateBinding Owner}"
-                                        Content="{Binding (DataValidationErrors.Errors)}"
-                                        IsVisible="{Binding (DataValidationErrors.HasErrors)}" />
-                        <ContentPresenter Name="PART_ContentPresenter"
-                                          Background="{TemplateBinding Background}"
-                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                          BorderThickness="{TemplateBinding BorderThickness}"
-                                          CornerRadius="{TemplateBinding CornerRadius}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Content="{TemplateBinding Content}"
-                                          Padding="{TemplateBinding Padding}" />
-                    </DockPanel>
-                </ControlTemplate>
-            </Setter>
-            <Setter Property="ErrorTemplate">
-                <DataTemplate x:DataType="{x:Type x:Object}">
-                    <Canvas Width="14" Height="14" Margin="4 0 1 0"
-                            Background="Transparent">
-                        <Canvas.Styles>
-                            <Style Selector="ToolTip">
-                                <Setter Property="Background" Value="Red" />
-                                <Setter Property="BorderBrush" Value="Red" />
-                            </Style>
-                        </Canvas.Styles>
-                        <ToolTip.Tip>
-                            <ItemsControl ItemsSource="{Binding}" />
-                        </ToolTip.Tip>
-                        <Path Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2"
-                              Stroke="Red"
-                              StrokeThickness="2" />
-                    </Canvas>
-                </DataTemplate>
-            </Setter>
         </Style>
     </Application.Styles>
 </Application>
