@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
@@ -10,6 +11,7 @@ namespace HyperText.Avalonia;
 ///   Based on https://github.com/AvaloniaUtils/HyperText.Avalonia.
 ///   See <see cref="Hyperlink " /> summary.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class HyperLinkStyle : Styles, IResourceProvider, IStyle {
   private readonly IStyle _controlsStyles;
   private bool _isLoading;
