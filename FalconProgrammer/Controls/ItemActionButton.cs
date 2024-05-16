@@ -26,6 +26,11 @@ public class ItemActionButton : MenuButtonBase {
   public static readonly StyledProperty<ICommand?> RemoveCommandProperty =
     AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(RemoveCommand));
 
+  public ItemActionButton() {
+    // Line left edge up with left edge of column header text
+    Margin = new Thickness(13, 0, 0, 0);
+  }
+
   protected override string AccessibleButtonText => "Action...";
 
   public ICommand? CutCommand {
