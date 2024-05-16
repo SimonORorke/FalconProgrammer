@@ -21,13 +21,6 @@
                        VerticalAlignment="Center"
                        Margin="10,0" />
         </DockPanel>
-        <!-- <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="50"> -->
-        <!--     <Image Source="/Assets/falcon_svg_repo_com.png" /> -->
-        <!--     <TextBlock Text="{Binding CurrentPageTitle}" -->
-        <!--                FontSize="24" -->
-        <!--                VerticalAlignment="Center" -->
-        <!--                Margin="10,0" /> -->
-        <!-- </StackPanel> -->
         <TabControl x:Name="TabControl"
                     ItemsSource="{Binding Tabs}"
                     SelectedItem="{Binding SelectedTab}">

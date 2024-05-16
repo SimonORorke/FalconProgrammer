@@ -22,11 +22,12 @@ public partial class AboutWindowViewModel : ObservableObject {
   public string Copyright => ApplicationInfo.Copyright;
   private IDialogService DialogService { get; }
 
-  [ExcludeFromCodeCoverage]
-  public static string DownloadUrl => "https://github.com/SimonORorke/FalconProgrammer";
-
   public string Product => ApplicationInfo.Product;
   public string Title => $"About {ApplicationInfo.Product}";
+
+  [ExcludeFromCodeCoverage]
+  public static string Url => "https://github.com/SimonORorke/FalconProgrammer";
+  
   public string Version => ApplicationInfo.Version;
 
   /// <summary>
@@ -42,12 +43,12 @@ public partial class AboutWindowViewModel : ObservableObject {
   }
 
   /// <summary>
-  ///   Generates <see cref="OpenDownloadUrlCommand" />.
+  ///   Generates <see cref="OpenUrlCommand" />.
   /// </summary>
   [ExcludeFromCodeCoverage]
   [RelayCommand]
-  private void OpenDownloadUrl() {
-    Process.Start(new ProcessStartInfo(DownloadUrl) {
+  private void OpenUrl() {
+    Process.Start(new ProcessStartInfo(Url) {
       UseShellExecute = true
     });
   }
