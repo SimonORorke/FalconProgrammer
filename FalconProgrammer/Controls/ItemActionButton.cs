@@ -27,7 +27,7 @@ public class ItemActionButton : MenuButtonBase {
     AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(RemoveCommand));
 
   public ItemActionButton() {
-    // Line left edge up with left edge of column header text
+    // Align left edge with left edge of column header text
     Margin = new Thickness(13, 0, 0, 0);
   }
 
