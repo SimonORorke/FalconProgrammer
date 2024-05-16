@@ -38,7 +38,7 @@ public partial class AboutWindowViewModel : ObservableObject {
     var reader = new StreamReader(stream);
     string licenceText = await reader.ReadToEndAsync();
     await DialogService.ShowMessageWindow(
-      new MessageWindowViewModel(licenceText, $"{Global.ApplicationName} - Licence"));
+      new MessageWindowViewModel(licenceText, $"{Product} - Licence"));
   }
 
   /// <summary>

@@ -31,5 +31,7 @@ public class AboutWindowViewModelTests {
     Assert.That(MockDialogService.ShowMessageWindowCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastMessageWindowMessage, 
       Does.StartWith(MockApplicationInfo.Product));
+    Assert.That(MockDialogService.LastMessageWindowTitle, 
+      Is.EqualTo("Falcon Programmer - Licence"));
   }
 }

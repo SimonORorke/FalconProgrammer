@@ -10,6 +10,7 @@ public class MockDialogService : IDialogService {
   internal bool ExpectedYesNoAnswer { get; set; }
   [PublicAPI] internal string LastErrorMessage { get; set; } = string.Empty;
   [PublicAPI] internal string LastMessageWindowMessage { get; set; } = string.Empty;
+  [PublicAPI] internal string LastMessageWindowTitle { get; set; } = string.Empty;
   [PublicAPI] internal bool LastYesNoAnswer { get; set; }
   [PublicAPI] internal int ShowAboutBoxCount { get; set; }
   [PublicAPI] internal int ShowErrorMessageBoxCount { get; set; }
@@ -63,5 +64,6 @@ public class MockDialogService : IDialogService {
     await Task.Delay(0);
     ShowMessageWindowCount++;
     LastMessageWindowMessage = viewModel.Text;
+    LastMessageWindowTitle = viewModel.Title;
   }
 }
