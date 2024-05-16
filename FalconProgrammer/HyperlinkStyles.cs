@@ -16,28 +16,28 @@ namespace FalconProgrammer;
 /// </summary>
 [ExcludeFromCodeCoverage]
 [UsedImplicitly]
-public class HyperLinkStyle : Styles, IResourceProvider, IStyle {
+public class HyperlinkStyles : Styles, IResourceProvider, IStyle {
   private readonly IStyle _controlsStyles;
   private bool _isLoading;
   private IStyle? _loaded;
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="HyperLinkStyle" /> class.
+    ///   Initializes a new instance of the <see cref="HyperlinkStyles" /> class.
     /// </summary>
     /// <param name="baseUri">The base URL for the XAML context.</param>
     [RequiresUnreferencedCode("Calls Avalonia.Markup.Xaml.Styling.StyleInclude.StyleInclude(Uri)")]
-    private HyperLinkStyle(Uri? baseUri) {
+    private HyperlinkStyles(Uri? baseUri) {
     _controlsStyles = new StyleInclude(baseUri) {
       Source = new Uri("avares://HyperText.Avalonia/Styles/HyperlinkStyle.axaml")
     };
   }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="HyperLinkStyle" /> class.
+    ///   Initializes a new instance of the <see cref="HyperlinkStyles" /> class.
     /// </summary>
     /// <param name="serviceProvider">The XAML service provider.</param>
     [RequiresUnreferencedCode("Calls Avalonia.Markup.Xaml.Styling.StyleInclude.StyleInclude(Uri)")]
-    public HyperLinkStyle(IServiceProvider serviceProvider)
+    public HyperlinkStyles(IServiceProvider serviceProvider)
     : this(((IUriContext)serviceProvider.GetService(typeof(IUriContext))!).BaseUri) { }
 
   /// <summary>
