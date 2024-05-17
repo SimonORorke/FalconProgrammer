@@ -67,8 +67,4 @@
     <ItemGroup>
         <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="LICENCE.txt" />
-    </ItemGroup>
 </Project>
