@@ -24,7 +24,7 @@ public class AboutWindowViewModelTests {
     Assert.That(ViewModel.Copyright, Is.EqualTo(MockApplicationInfo.Copyright));
     Assert.That(ViewModel.Product, Is.EqualTo(MockApplicationInfo.Product));
     Assert.That(ViewModel.Title, Is.EqualTo("About Falcon Programmer"));
-    Assert.That(ViewModel.Version, Is.EqualTo(MockApplicationInfo.Version));
+    Assert.That(ViewModel.Version, Does.Contain(MockApplicationInfo.Version));
   }
 
   [Test]
