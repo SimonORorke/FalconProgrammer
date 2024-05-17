@@ -1,4 +1,6 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.Tests.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -27,6 +29,7 @@ public class AboutWindowViewModelTests {
 
   [Test]
   public async Task Licence() {
+    Global.ApplicationName = new MockApplicationInfo().Product;
     await ViewModel.LicenceCommand.ExecuteAsync(null);
     Assert.That(MockDialogService.ShowMessageWindowCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastMessageWindowMessage, 

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace FalconProgrammer.ViewModel;
+namespace FalconProgrammer.Model;
 
 /// <summary>
 ///   Application information read from assembly attributes specified in the top-level

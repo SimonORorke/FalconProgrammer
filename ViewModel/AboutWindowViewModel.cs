@@ -1,12 +1,11 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class AboutWindowViewModel : ObservableObject {
+public partial class AboutWindowViewModel {
   private IApplicationInfo? _applicationInfo;
 
   public AboutWindowViewModel(IDialogService dialogService) {

@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Tests.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 

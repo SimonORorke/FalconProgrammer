@@ -34,16 +34,7 @@ public partial class MainWindowViewModel : ViewModelBase,
     // throw new InvalidOperationException("This is a test exception.");
   }
 
-#pragma warning disable CA1822
-  // ReSharper disable once MemberCanBeMadeStatic.Global
-  // Notwithstanding the warnings from both ReSharper and the compiler that this property
-  // should be static, App.OnFrameworkInitializationCompleted cannot access it if it is
-  // static: "Cannot access static property 'ApplicationName' in non-static context".
-  public string ApplicationName {
-#pragma warning restore CA1822
-    get => Global.ApplicationName;
-    set => Global.ApplicationName = value;
-  }
+  public static string ApplicationName => Global.ApplicationName;
 
   /// <summary>
   ///   The setter is only for tests.

@@ -4,7 +4,12 @@ using System.Reflection;
 namespace FalconProgrammer.Model;
 
 public static class Global {
-  public static string ApplicationName { get; set; } = string.Empty;
+  private static string? _applicationName;
+
+  public static string ApplicationName {
+    get => _applicationName ??= new ApplicationInfo().Product;
+    set => _applicationName = value; // For tests
+  }
 
   public static Stream GetEmbeddedFileStream(string embeddedFileName) {
     var assembly = Assembly.GetCallingAssembly();

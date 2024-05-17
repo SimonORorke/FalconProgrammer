@@ -1,6 +1,6 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
 
-namespace FalconProgrammer.Tests.ViewModel;
+namespace FalconProgrammer.Tests.Model;
 
 public class MockApplicationInfo : IApplicationInfo {
   // public string Company { get; } = "Simon O\'Rorke";

@@ -1,4 +1,6 @@
-﻿namespace FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+
+namespace FalconProgrammer.ViewModel;
 
 /// <summary>
 ///   View model for a dialog window that shows large messages with scrollbars.
@@ -16,14 +18,15 @@ public class MessageWindowViewModel {
   /// </param>
   public MessageWindowViewModel(string text, string title) {
     Text = text;
-    Title = $"{ApplicationInfo.Product} - {title}";
+    TitleWithoutPrefix = title;
   }
   
   internal IApplicationInfo ApplicationInfo {
     get => _applicationInfo ??= new ApplicationInfo();
     set => _applicationInfo = value;
   }
-
+  
   public string Text { get; }
-  public string Title { get; }
+  public string Title => $"{ApplicationInfo.Product} - {TitleWithoutPrefix}";
+  private string TitleWithoutPrefix { get; }
 }

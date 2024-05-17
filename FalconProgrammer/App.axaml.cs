@@ -15,7 +15,7 @@ public class App : Application {
 
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
-    Name = new ApplicationInfo().Product;
+    Name = MainWindowViewModel.ApplicationName;
     new ColourScheme().Select(ColourScheme.Scheme.Lavender);
   }
 
@@ -40,7 +40,6 @@ public class App : Application {
     var services = collection.BuildServiceProvider();
     // Create the main window view and assign its view model.
     var viewModel = services.GetRequiredService<MainWindowViewModel>();
-    viewModel.ApplicationName = Name!;
     MainWindow = new MainWindow {
       DataContext = viewModel
     };
