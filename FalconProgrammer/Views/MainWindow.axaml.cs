@@ -39,6 +39,11 @@ public partial class MainWindow : Window {
             throw;
 #else
             Program.LogFatalException(exception);
+            new DialogService().ShowErrorMessageBox(
+              Program.TerminationMessage).WaitAsync(
+              // When the message box is awaiting response,
+              // this timeout time has no effect.
+              new TimeSpan(0, 0, 10));
             result = true;
 #endif
           }

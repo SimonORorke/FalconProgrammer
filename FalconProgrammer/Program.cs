@@ -13,6 +13,7 @@ namespace FalconProgrammer;
 internal sealed class Program {
 #if !DEBUG
   private static string LogFilePathWithoutDateStamp { get; set; } = string.Empty;
+  public static string TerminationMessage { get; private set; } = string.Empty;
 #endif
 
   // Initialization code. Don't use any Avalonia, third-party APIs or any
@@ -59,9 +60,10 @@ internal sealed class Program {
     string logFilePathFormat = LogFilePathWithoutDateStamp.Replace(
       // ReSharper disable once StringLiteralTypo
       ".txt", "[yyyymmdd].txt");
-    Console.WriteLine(
-      "The application is terminating with a fatal Exception. The stack trace is " + 
-      $"logged to '{logFilePathFormat}'.");
+    TerminationMessage =
+      "The application is terminating with an error. The details have been " +
+      $"logged to '{logFilePathFormat}'."; 
+    Console.WriteLine(TerminationMessage);
   }
   
   private static void StartLogging() {
