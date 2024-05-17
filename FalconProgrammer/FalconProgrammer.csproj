@@ -59,10 +59,12 @@
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10"/>
         <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Serilog" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\HyperText.Avalonia\HyperText.Avalonia.csproj" />
         <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj"/>
     </ItemGroup>
 

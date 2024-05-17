@@ -31,6 +31,7 @@ public partial class MainWindowViewModel : ViewModelBase,
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
+    throw new InvalidOperationException("This is a test exception.");
   }
 
 #pragma warning disable CA1822
