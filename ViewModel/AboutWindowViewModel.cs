@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -39,7 +39,9 @@ public partial class AboutWindowViewModel : ObservableObject {
     var reader = new StreamReader(stream);
     string licenceText = await reader.ReadToEndAsync();
     await DialogService.ShowMessageWindow(
-      new MessageWindowViewModel(licenceText, $"{Product} - Licence"));
+      new MessageWindowViewModel(licenceText, "Licence") {
+        ApplicationInfo = ApplicationInfo
+      });
   }
 
   /// <summary>
