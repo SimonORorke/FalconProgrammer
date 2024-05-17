@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -27,7 +28,21 @@ public partial class MainWindow : Window {
       e.Cancel = true;
       ViewModel.QueryCloseWindow().ContinueWith(
         task => {
-          if (task.Result) {
+          bool result;
+          try {
+            result = task.Result;
+          } catch (Exception exception) {
+#if DEBUG
+            Console.WriteLine(
+              "The application is terminating with a fatal Exception: " + 
+              $"'{exception.Message}'");
+            throw;
+#else
+            Program.LogFatalException(exception);
+            result = true;
+#endif
+          }
+          if (result) {
             ForceClose = true;
             Close();
           }

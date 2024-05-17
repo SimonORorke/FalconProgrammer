@@ -31,7 +31,7 @@ public partial class MainWindowViewModel : ViewModelBase,
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
-    throw new InvalidOperationException("This is a test exception.");
+    // throw new InvalidOperationException("This is a test exception.");
   }
 
 #pragma warning disable CA1822
@@ -159,6 +159,7 @@ public partial class MainWindowViewModel : ViewModelBase,
     CurrentPageViewModel = value.ViewModel;
     CurrentPageTitle = CurrentPageViewModel.PageTitle;
     await CurrentPageViewModel.Open();
+    // throw new InvalidOperationException("This is a test async void exception.");
   }
 
   internal override async Task Open() {
@@ -169,6 +170,7 @@ public partial class MainWindowViewModel : ViewModelBase,
   }
 
   public async Task<bool> QueryCloseWindow() {
+    // throw new InvalidOperationException("This is a test QueryCloseWindow exception.");
     if (CurrentPageViewModel != null) {
       if (!await CurrentPageViewModel.QueryClose(true)) {
         return false;
