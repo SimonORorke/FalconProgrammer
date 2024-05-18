@@ -8,12 +8,17 @@ namespace FalconProgrammer.Views;
 public partial class MessageWindow : Window {
   public MessageWindow() {
     InitializeComponent();
-    OkButton.Click += OkButtonOnClick;
+    CloseButton.Click += CloseButtonOnClick;
     CopyButton.Click += CopyButtonOnClick;
     Dispatcher.UIThread.Post(() => {
       var viewModel = (MessageWindowViewModel)DataContext!;
       Title = viewModel.Title;
+      CloseButton.Focus();
     });
+  }
+
+  private void CloseButtonOnClick(object? sender, RoutedEventArgs e) {
+    Close();
   }
 
   private async void CopyButtonOnClick(object? sender, RoutedEventArgs e) {
@@ -25,11 +30,7 @@ public partial class MessageWindow : Window {
       StatusTextBlock.Text = "Selected text copied to clipboard";
     }
     if (CopyButton.IsFocused) {
-      OkButton.Focus();
+      CloseButton.Focus();
     }
-  }
-
-  private void OkButtonOnClick(object? sender, RoutedEventArgs e) {
-    Close();
   }
 }

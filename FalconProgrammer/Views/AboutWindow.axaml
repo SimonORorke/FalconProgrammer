@@ -47,7 +47,7 @@
             Grid.Row="2"
             ColumnDefinitions="*, Auto, *, Auto, *">
             <Button Grid.Column="1"
-                    x:Name="OkButton" Content="OK" IsCancel="True" IsDefault="True"
+                    x:Name="CloseButton" Content="Close" IsCancel="True" IsDefault="True"
                     HorizontalAlignment="Center" />
             <Button Grid.Column="3"
                     x:Name="LicenceButton"

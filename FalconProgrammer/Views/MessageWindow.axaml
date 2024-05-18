@@ -7,8 +7,8 @@
         Icon="/Assets/falcon_svg_repo_com.png"
         x:Class="FalconProgrammer.Views.MessageWindow"
         x:DataType="vm:MessageWindowViewModel"
-        Height="600"
         Width="800"
+        Height="600"
         WindowStartupLocation="CenterScreen">
     <Window.Styles>
         <Style Selector="AccessText">
@@ -28,7 +28,7 @@
             Grid.Row="2"
             ColumnDefinitions="*, Auto, *, Auto, *">
             <Button Grid.Column="1"
-                    x:Name="OkButton" Content="OK" IsCancel="True" IsDefault="True"
+                    x:Name="CloseButton" Content="Close" IsCancel="True" IsDefault="True"
                     HorizontalAlignment="Center" />
             <Button Grid.Column="3"
                     x:Name="CopyButton"

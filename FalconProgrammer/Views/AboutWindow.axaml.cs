@@ -14,14 +14,15 @@ public partial class AboutWindow : Window {
       Design.SetDataContext(this, new AboutWindowViewModel(new DialogService()));
     }
     InitializeComponent();
-    OkButton.Click += OkButtonOnClick;
+    CloseButton.Click += CloseButtonOnClick;
     Dispatcher.UIThread.Post(() => {
       var viewModel = (AboutWindowViewModel)DataContext!;
       Title = viewModel.Title;
+      CloseButton.Focus();
     });
   }
 
-  private void OkButtonOnClick(object? sender, RoutedEventArgs e) {
+  private void CloseButtonOnClick(object? sender, RoutedEventArgs e) {
     Close();
   }
 }
