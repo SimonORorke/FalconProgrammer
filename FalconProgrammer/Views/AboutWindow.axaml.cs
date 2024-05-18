@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using FalconProgrammer.Services;
@@ -18,7 +19,7 @@ public partial class AboutWindow : Window {
     Dispatcher.UIThread.Post(() => {
       var viewModel = (AboutWindowViewModel)DataContext!;
       Title = viewModel.Title;
-      CloseButton.Focus();
+      CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
     });
   }
 

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using FalconProgrammer.ViewModel;
@@ -13,7 +14,7 @@ public partial class MessageWindow : Window {
     Dispatcher.UIThread.Post(() => {
       var viewModel = (MessageWindowViewModel)DataContext!;
       Title = viewModel.Title;
-      CloseButton.Focus();
+      CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
     });
   }
 
@@ -30,7 +31,7 @@ public partial class MessageWindow : Window {
       StatusTextBlock.Text = "Selected text copied to clipboard";
     }
     if (CopyButton.IsFocused) {
-      CloseButton.Focus();
+      CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
     }
   }
 }
