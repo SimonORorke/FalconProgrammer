@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 
@@ -18,10 +19,14 @@ public partial class MainWindow : Window {
     InitializeComponent();
     Title = Application.Current!.Name;
     Closing += OnClosing;
+    Dispatcher.UIThread.Post(() => {
+      ViewModel = (MainWindowViewModel)DataContext!;
+      ColourScheme.Select(ViewModel.ColourSchemeId);
+    });
   }
 
   private bool ForceClose { get; set; }
-  private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
+  private MainWindowViewModel ViewModel { get; set; } = null!;
 
   private void OnClosing(object? sender, WindowClosingEventArgs e) {
     if (!ForceClose) {

@@ -17,6 +17,10 @@ public class MainMenuButton : MenuButtonBase {
   public static readonly StyledProperty<ICommand?> AboutCommandProperty =
     AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(AboutCommand));
 
+  public static readonly StyledProperty<ICommand?> SelectColourSchemeCommandProperty =
+    AvaloniaProperty.Register<ItemActionButton, ICommand?>(
+      nameof(SelectColourSchemeCommand));
+
   public static readonly StyledProperty<ICommand?> ManualCommandProperty =
     AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(ManualCommand));
 
@@ -29,6 +33,13 @@ public class MainMenuButton : MenuButtonBase {
 
   private MenuItem AboutMenuItem { get; } = CreateMenuItem("_About");
 
+  public ICommand? SelectColourSchemeCommand {
+    get => GetValue(SelectColourSchemeCommandProperty);
+    set => SetValue(SelectColourSchemeCommandProperty, value);
+  }
+
+  private MenuItem SelectColourSchemeMenuItem { get; } = CreateMenuItem("_Color Scheme...");
+
   public ICommand? ManualCommand {
     get => GetValue(ManualCommandProperty);
     set => SetValue(ManualCommandProperty, value);
@@ -39,11 +50,15 @@ public class MainMenuButton : MenuButtonBase {
   protected override Dictionary<AvaloniaProperty,MenuItem> CreatePropertyMenuItems() {
     return new Dictionary<AvaloniaProperty, MenuItem> {
       { AboutCommandProperty, AboutMenuItem },
-      { ManualCommandProperty, ManualMenuItem }
+      { ManualCommandProperty, ManualMenuItem },
+      { SelectColourSchemeCommandProperty, SelectColourSchemeMenuItem }
     };
   }
 
   protected override ICommand GetMenuItemCommand(MenuItem menuItem) {
+    if (menuItem == SelectColourSchemeMenuItem) {
+      return SelectColourSchemeCommand!;
+    }
     return menuItem == AboutMenuItem ? AboutCommand! : ManualCommand!;
   }
 }

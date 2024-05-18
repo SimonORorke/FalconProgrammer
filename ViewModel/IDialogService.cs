@@ -53,6 +53,14 @@ public interface IDialogService {
   Task ShowAboutBox(AboutWindowViewModel viewModel);
 
   /// <summary>
+  ///   Asynchronously shows the Colour Scheme dialog box.
+  /// </summary>
+  /// <param name="viewModel">
+  ///   The view model to be assigned to the Colour Scheme dialog box.
+  /// </param>
+  Task ShowColourSchemeDialog(ColourSchemeWindowViewModel viewModel);
+
+  /// <summary>
   ///   Asynchronously shows an error message box.
   /// </summary>
   /// <param name="text">The message text to be shown.</param>

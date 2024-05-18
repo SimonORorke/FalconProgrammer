@@ -15,6 +15,7 @@
                 DockPanel.Dock="Right"
                 AboutCommand="{Binding AboutCommand}"
                 ManualCommand="{Binding ManualCommand}"
+                SelectColourSchemeCommand="{Binding SelectColourSchemeCommand}"
                 Margin="0,0,8,0" />
             <TextBlock Text="{Binding CurrentPageTitle}"
                        FontSize="24"

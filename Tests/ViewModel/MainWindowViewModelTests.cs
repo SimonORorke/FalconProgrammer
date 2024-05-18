@@ -32,6 +32,20 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Global.ApplicationName = "Test Name";
     Assert.That(MainWindowViewModel.ApplicationName, Is.EqualTo(Global.ApplicationName));
   }
+  
+  [Test]
+  public async Task ColourSchemeInvalid() {
+    ReadMockSettings("InvalidColourSchemeSettings.xml");
+    await ViewModel.Open();
+    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
+  }
+  
+  [Test]
+  public async Task ColourSchemeNotFound() {
+    ReadMockSettings("LocationsSettings.xml");
+    await ViewModel.Open();
+    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
+  }
 
   [Test]
   public void DisallowChangePage() {
@@ -100,6 +114,12 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public async Task ShowAboutBox() {
     await ViewModel.AboutCommand.ExecuteAsync(null);
     Assert.That(MockDialogService.ShowAboutBoxCount, Is.EqualTo(1));
+  }
+
+  [Test]
+  public async Task ShowColourSchemeDialog() {
+    await ViewModel.SelectColourSchemeCommand.ExecuteAsync(null);
+    Assert.That(MockDialogService.ShowColourSchemeDialogCount, Is.EqualTo(1));
   }
 
   [Test]

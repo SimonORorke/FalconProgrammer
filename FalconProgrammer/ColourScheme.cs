@@ -1,51 +1,36 @@
-﻿using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer;
 
-public class ColourScheme {
-  public enum Scheme {
-    Default,
-    Forest,
-    Lavender,
-    Nighttime
-  }
-
-  private FluentTheme? _fluentTheme;
-  private FluentTheme FluentTheme => _fluentTheme ??= GetFluentTheme();
-
-  private static FluentTheme GetFluentTheme() {
-    return (
-      from style in Application.Current!.Styles
-      where style is FluentTheme
-      select (FluentTheme)style).Single();
-  }
-
-  public void Select(Scheme scheme) {
-    FluentTheme.Palettes.Clear();
+public static class ColourScheme {
+  public static void Select(ColourSchemeId scheme) {
+    var newFluentTheme = new FluentTheme(); 
+    newFluentTheme.Palettes.Clear();
     var lightKey = new ThemeVariant("Light", null);
     var darkKey = new ThemeVariant("Dark", null);
     var light = new ColorPaletteResources();
     var dark = new ColorPaletteResources();
-    FluentTheme.Palettes.Add(lightKey, light);
-    FluentTheme.Palettes.Add(darkKey, dark);
+    newFluentTheme.Palettes.Add(lightKey, light);
+    newFluentTheme.Palettes.Add(darkKey, dark);
     switch (scheme) {
-      case Scheme.Default:
+      case ColourSchemeId.Default:
         SelectDefaultColourScheme(light, dark);
         break;
-      case Scheme.Forest:
+      case ColourSchemeId.Forest:
         SelectForestColourScheme(light, dark);
         break;
-      case Scheme.Lavender:
+      case ColourSchemeId.Lavender:
         SelectLavenderColourScheme(light, dark);
         break;
-      case Scheme.Nighttime:
+      case ColourSchemeId.Nighttime:
         SelectNighttimeColourScheme(light, dark);
         break;
     }
+    Application.Current!.Styles[0] = newFluentTheme;
   }
 
   /// <summary>

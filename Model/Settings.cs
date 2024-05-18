@@ -27,6 +27,7 @@ public class Settings : SerialisationBase {
   public List<Background> Backgrounds { get; [ExcludeFromCodeCoverage] set; } = [];
 
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
+  [XmlElement] public string ColourScheme { get; set; } = string.Empty;
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static string GetSettingsPath(string settingsFolderPath) {

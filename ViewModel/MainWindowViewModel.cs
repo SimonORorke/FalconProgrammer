@@ -10,6 +10,8 @@ namespace FalconProgrammer.ViewModel;
 
 public partial class MainWindowViewModel : ViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
+  private ColourSchemeId _colourSchemeId;
+
   /// <summary>
   ///   Generates <see cref="CurrentPageTitle" /> property.
   /// </summary>
@@ -49,6 +51,11 @@ public partial class MainWindowViewModel : ViewModelBase,
   internal BatchScriptViewModel BatchScriptViewModel {
     get;
     [ExcludeFromCodeCoverage] set;
+  }
+
+  public ColourSchemeId ColourSchemeId {
+    get => _colourSchemeId;
+    private set => SetProperty(ref _colourSchemeId, value);
   }
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
@@ -106,6 +113,11 @@ public partial class MainWindowViewModel : ViewModelBase,
     return new AboutWindowViewModel(DialogService);
   }
 
+  private ColourSchemeWindowViewModel CreateColourSchemeWindowViewModel() {
+    return new ColourSchemeWindowViewModel(
+      ColourSchemeId, DialogService, DispatcherService);
+  }
+
   private ImmutableList<TabItem> CreateTabs() {
     var list = new List<TabItem> {
       new TabItem(BatchScriptViewModel),
@@ -155,6 +167,8 @@ public partial class MainWindowViewModel : ViewModelBase,
 
   internal override async Task Open() {
     await base.Open();
+    ColourSchemeId =
+      ColourSchemeWindowViewModel.StringToColourSchemeId(Settings.ColourScheme);
     foreach (var tab in Tabs) {
       tab.ViewModel.ModelServices = ModelServices;
     }
@@ -169,5 +183,19 @@ public partial class MainWindowViewModel : ViewModelBase,
     }
     // Stop listening for ObservableRecipient messages.
     return await base.QueryClose(true);
+  }
+
+  /// <summary>
+  ///   Generates <see cref="SelectColourSchemeCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private async Task SelectColourScheme() {
+    var colourSchemeWindowViewModel = CreateColourSchemeWindowViewModel();
+    await colourSchemeWindowViewModel.Open();
+    await DialogService.ShowColourSchemeDialog(colourSchemeWindowViewModel);
+    await colourSchemeWindowViewModel.QueryClose();
+    ColourSchemeId =
+      ColourSchemeWindowViewModel.StringToColourSchemeId(
+        colourSchemeWindowViewModel.ColourScheme);
   }
 }

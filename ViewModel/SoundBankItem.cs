@@ -26,6 +26,8 @@ public partial class SoundBankItem : DataGridItem {
   protected Settings Settings { get; }
 
   // Code coverage highlighting does not work for these partial methods.
+  // I reported this to JetBrains on 1st April 2024:
+  // https://youtrack.jetbrains.com/issue/DCVR-12514
   partial void OnSoundBankChanged(string value) {
     OnSoundBankChanged1(value);
   }

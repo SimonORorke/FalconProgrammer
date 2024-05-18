@@ -41,6 +41,11 @@ public abstract class ViewModelTestsBase {
 
   protected ModelServices TestModelServices { get; private set; } = null!;
 
+  /// <summary>
+  ///   This sets up the settings reader to provide the view model with the settings
+  ///   required for the test. So updates to the settings returned will not get picked up
+  ///   by the view model.
+  /// </summary>
   protected Settings ReadMockSettings(string embeddedFileName) {
     MockSettingsReaderEmbedded.EmbeddedFileName = embeddedFileName;
     return MockSettingsReaderEmbedded.Read();

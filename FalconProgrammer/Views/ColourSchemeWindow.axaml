@@ -1,0 +1,25 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:FalconProgrammer.ViewModel"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="FalconProgrammer.Views.ColourSchemeWindow"
+        x:DataType="vm:ColourSchemeWindowViewModel"
+        Title="Colour Scheme"
+        Icon="/Assets/falcon_svg_repo_com.png"
+        CanResize="False"
+        Width="500"
+        Height="85"
+        WindowStartupLocation="CenterOwner">
+    <StackPanel>
+        <TextBlock Height="10" />
+        <TextBlock Text="{Binding PageTitle}"
+                   HorizontalAlignment="Center" />
+        <TextBlock Height="10" />
+        <ComboBox x:Name="ColourSchemeComboBox" 
+                  ItemsSource="{Binding ColourSchemes}"
+                  SelectedItem="{Binding ColourScheme}"
+                  HorizontalAlignment="Center" />
+    </StackPanel>        
+</Window>

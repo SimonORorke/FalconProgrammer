@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -30,6 +31,21 @@ public class SettingsTests {
     Assert.That(writtenSettings.Batch.Program, Is.EqualTo(program));
     Assert.That(writtenSettings.Batch.Tasks, Has.Count.EqualTo(1));
     Assert.That(writtenSettings.Batch.Tasks[0], Is.EqualTo(task));
+  }
+
+  [Test]
+  public void ColourScheme() {
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "LocationsSettings.xml"
+    };
+    var settings = settingsReader.Read();
+    Assert.That(settings.ColourScheme, Is.Empty);
+    const string colourScheme = nameof(ColourSchemeId.Lavender);
+    settings.ColourScheme = colourScheme;
+    settings.Write();
+    var writtenSettings =
+      (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
+    Assert.That(writtenSettings.ColourScheme, Is.EqualTo(colourScheme));
   }
 
   [Test]

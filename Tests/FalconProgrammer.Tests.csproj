@@ -75,6 +75,8 @@
         <EmbeddedResource Include="Model\Xml\Programs\Tibetan Horns.uvip" />
         <None Remove="Model\Xml\Templates\Crystal Caves.uvip.xml" />
         <EmbeddedResource Include="Model\Xml\Templates\Crystal Caves.uvip.xml" />
+        <None Remove="Model\Xml\Settings\InvalidColourSchemeSettings.xml" />
+        <EmbeddedResource Include="Model\Xml\Settings\InvalidColourSchemeSettings.xml" />
     </ItemGroup>
 
 </Project>

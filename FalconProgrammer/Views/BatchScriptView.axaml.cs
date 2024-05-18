@@ -16,14 +16,12 @@ public partial class BatchScriptView : UserControl {
     }
     InitializeComponent();
     Dispatcher.UIThread.Post(() => {
-      ViewModel = (BatchScriptViewModel)DataContext!;
-      ViewModel.LogLineWritten += ViewModelOnLogLineWritten;
-      ViewModel.RunBeginning += ViewModelOnRunBeginning;
-      ViewModel.RunEnded += ViewModelOnRunEnded;
+      var viewModel = (BatchScriptViewModel)DataContext!;
+      viewModel.LogLineWritten += ViewModelOnLogLineWritten;
+      viewModel.RunBeginning += ViewModelOnRunBeginning;
+      viewModel.RunEnded += ViewModelOnRunEnded;
     });
   }
-
-  private BatchScriptViewModel ViewModel { get; set; } = null!;
 
   private void ViewModelOnLogLineWritten(object? sender, EventArgs e) {
     LogScrollViewer.ScrollToEnd();

@@ -86,6 +86,14 @@ public class DialogService : IDialogService {
     CurrentDialog = null;
   }
 
+  public async Task ShowColourSchemeDialog(ColourSchemeWindowViewModel viewModel) {
+    CurrentDialog = new ColourSchemeWindow {
+      DataContext = viewModel
+    };
+    await CurrentDialog.ShowDialog(MainWindow);
+    CurrentDialog = null;
+  }
+
   public async Task ShowErrorMessageBox(string text) {
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
       ApplicationTitle, text, ButtonEnum.Ok, Icon.Error);
