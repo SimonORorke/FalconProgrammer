@@ -22,6 +22,22 @@ public partial class MainWindow : Window {
     Dispatcher.UIThread.Post(() => {
       ViewModel = (MainWindowViewModel)DataContext!;
       ColourScheme.Select(ViewModel.ColourSchemeId);
+      // It would be good to focus the TabControl or its first item.
+      // Here's what I have tried:
+      //
+      // Does nothing. I've posted a comment to
+      // https://github.com/AvaloniaUI/Avalonia/discussions/11588.
+      //
+      // RaiseEvent(new KeyEventArgs {
+      //   Key = Key.Tab,
+      //   RoutedEvent = new RoutedEvent(nameof(KeyDownEvent), RoutingStrategies.Bubble,
+      //     typeof(KeyEventArgs), typeof(Window))
+      // });
+      //
+      // Focus throws NullReferenceException.
+      //
+      // var firstTabItem = (TabControl.Items[0] as TabItem)!;
+      // firstTabItem.Focus();
     });
   }
 
@@ -39,7 +55,7 @@ public partial class MainWindow : Window {
           } catch (Exception exception) {
 #if DEBUG
             Console.WriteLine(
-              "The application is terminating with a fatal Exception: " + 
+              "The application is terminating with a fatal Exception: " +
               $"'{exception.Message}'");
             throw;
 #else
