@@ -6,7 +6,7 @@ using Avalonia.Controls;
 namespace FalconProgrammer.Controls;
 
 /// <summary>
-///   The button that shows the small main menu. 
+///   The button that shows the small main menu.
 /// </summary>
 /// <remarks>
 ///   A possible future enhancement would be to have a Light/Dark Colour Scheme selection
@@ -38,7 +38,8 @@ public class MainMenuButton : MenuButtonBase {
     set => SetValue(SelectColourSchemeCommandProperty, value);
   }
 
-  private MenuItem SelectColourSchemeMenuItem { get; } = CreateMenuItem("_Color Scheme...");
+  private MenuItem SelectColourSchemeMenuItem { get; } =
+    CreateMenuItem("_Color Scheme...");
 
   public ICommand? ManualCommand {
     get => GetValue(ManualCommandProperty);
@@ -47,7 +48,7 @@ public class MainMenuButton : MenuButtonBase {
 
   private MenuItem ManualMenuItem { get; } = CreateMenuItem("_Manual");
 
-  protected override Dictionary<AvaloniaProperty,MenuItem> CreatePropertyMenuItems() {
+  protected override Dictionary<AvaloniaProperty, MenuItem> CreatePropertyMenuItems() {
     return new Dictionary<AvaloniaProperty, MenuItem> {
       { AboutCommandProperty, AboutMenuItem },
       { ManualCommandProperty, ManualMenuItem },

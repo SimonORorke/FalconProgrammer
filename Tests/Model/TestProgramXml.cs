@@ -29,7 +29,7 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   protected override XElement ReadProgramRootElementFromFile() {
     var reader = new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
-    string programXmlText = reader.ReadToEnd(); 
+    string programXmlText = reader.ReadToEnd();
     return ReadRootElementFromXmlText(programXmlText);
   }
 
@@ -39,7 +39,7 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   protected override XElement ReadTemplateRootElementFromFile() {
     var reader = new StreamReader(Global.GetEmbeddedFileStream(EmbeddedTemplateFileName));
-    string programXmlText = reader.ReadToEnd(); 
+    string programXmlText = reader.ReadToEnd();
     return ReadRootElementFromXmlText(programXmlText);
   }
 

@@ -80,7 +80,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     //   "Batch script run has ended.");
     Assert.That(ViewModel.Log[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
   }
-  
+
   [Test]
   public async Task RunThisScript() {
     await ConfigureThisScript();
@@ -92,7 +92,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ViewModel.SaveLogCommand.ExecuteAsync(null);
     Assert.That(ViewModel.SavedLog, Is.EqualTo(ViewModel.BatchLog.ToString()));
   }
-  
+
   [Test]
   public async Task RunThisScriptCancelled() {
     await ConfigureThisScript();
@@ -111,7 +111,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ConfigureThisScript();
     await ViewModel.SaveThisScriptCommand.ExecuteAsync(null);
     Assert.That(ViewModel.TestBatchScript, Is.Not.Null);
-    Assert.That(ViewModel.TestBatchScript.MockSerialiser.LastOutputPath, 
+    Assert.That(ViewModel.TestBatchScript.MockSerialiser.LastOutputPath,
       Is.EqualTo(BatchScriptPath));
   }
 

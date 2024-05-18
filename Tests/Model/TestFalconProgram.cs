@@ -7,7 +7,7 @@ public class TestFalconProgram : FalconProgram {
   private TestProgramXml? _testProgramXml;
 
   public TestFalconProgram(
-    string embeddedProgramFileName, string embeddedTemplateFileName, 
+    string embeddedProgramFileName, string embeddedTemplateFileName,
     string path, Category category, Batch batch)
     : base(path, category, batch) {
     EmbeddedProgramFileName = embeddedProgramFileName;

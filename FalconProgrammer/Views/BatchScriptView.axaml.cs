@@ -28,7 +28,7 @@ public partial class BatchScriptView : UserControl {
   }
 
   /// <summary>
-  ///   Disables/enables buttons in preparation for a batch run. 
+  ///   Disables/enables buttons in preparation for a batch run.
   /// </summary>
   /// <remarks>
   ///   For unknown reason, I could not disable/enable the buttons in the view model by
@@ -43,7 +43,7 @@ public partial class BatchScriptView : UserControl {
   }
 
   /// <summary>
-  ///   Disables/enables buttons when a batch run ends. 
+  ///   Disables/enables buttons when a batch run ends.
   /// </summary>
   /// <remarks>
   ///   For unknown reason, I could not disable/enable the buttons in the view model by

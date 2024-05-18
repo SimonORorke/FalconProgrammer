@@ -7,7 +7,7 @@ namespace FalconProgrammer.ViewModel;
 /// </summary>
 public class MessageWindowViewModel {
   private IApplicationInfo? _applicationInfo;
-  
+
   /// <summary>
   ///   Initialises a new instance of the <see cref="MessageWindowViewModel" /> class.
   /// </summary>
@@ -20,12 +20,12 @@ public class MessageWindowViewModel {
     Text = text;
     TitleWithoutPrefix = title;
   }
-  
+
   internal IApplicationInfo ApplicationInfo {
     get => _applicationInfo ??= new ApplicationInfo();
     set => _applicationInfo = value;
   }
-  
+
   public string Text { get; }
   public string Title => $"{ApplicationInfo.Product} - {TitleWithoutPrefix}";
   private string TitleWithoutPrefix { get; }

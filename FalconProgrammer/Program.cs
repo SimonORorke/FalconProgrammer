@@ -1,8 +1,8 @@
 ﻿using System;
+using Avalonia;
 #if !DEBUG
 using System.IO;
 #endif
-using Avalonia;
 #if !DEBUG
 using Serilog;
 #endif

@@ -45,7 +45,7 @@
     <ItemGroup>
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocation.xml"/>
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationK.xml"/>
-        <EmbeddedResource Include="Model\Xml\Settings\DefaultSettingsWithMidi.xml" />
+        <EmbeddedResource Include="Model\Xml\Settings\DefaultSettingsWithMidi.xml"/>
         <EmbeddedResource Include="Model\Xml\Settings\LocationsSettings.xml"/>
         <None Remove="Model\Xml\DefaultAlreadySettings.xml"/>
         <None Remove="Model\Xml\SettingsFolderLocation.xml"/>
@@ -69,14 +69,14 @@
         <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForAll.xml"/>
         <None Remove="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
         <EmbeddedResource Include="Model\Xml\BatchScripts\QueriesForProgram.xml"/>
-        <None Remove="Model\Xml\Settings\BatchSettings.xml" />
-        <EmbeddedResource Include="Model\Xml\Settings\BatchSettings.xml" />
-        <None Remove="Model\Xml\Programs\Tibetan Horns.uvip" />
-        <EmbeddedResource Include="Model\Xml\Programs\Tibetan Horns.uvip" />
-        <None Remove="Model\Xml\Templates\Crystal Caves.uvip.xml" />
-        <EmbeddedResource Include="Model\Xml\Templates\Crystal Caves.uvip.xml" />
-        <None Remove="Model\Xml\Settings\InvalidColourSchemeSettings.xml" />
-        <EmbeddedResource Include="Model\Xml\Settings\InvalidColourSchemeSettings.xml" />
+        <None Remove="Model\Xml\Settings\BatchSettings.xml"/>
+        <EmbeddedResource Include="Model\Xml\Settings\BatchSettings.xml"/>
+        <None Remove="Model\Xml\Programs\Tibetan Horns.uvip"/>
+        <EmbeddedResource Include="Model\Xml\Programs\Tibetan Horns.uvip"/>
+        <None Remove="Model\Xml\Templates\Crystal Caves.uvip.xml"/>
+        <EmbeddedResource Include="Model\Xml\Templates\Crystal Caves.uvip.xml"/>
+        <None Remove="Model\Xml\Settings\InvalidColourSchemeSettings.xml"/>
+        <EmbeddedResource Include="Model\Xml\Settings\InvalidColourSchemeSettings.xml"/>
     </ItemGroup>
 
 </Project>

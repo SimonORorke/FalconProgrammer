@@ -26,7 +26,7 @@ public partial class AboutWindowViewModel {
 
   [ExcludeFromCodeCoverage]
   public static string Url => "https://github.com/SimonORorke/FalconProgrammer";
-  
+
   public string Version => $"Version {ApplicationInfo.Version}";
 
   /// <summary>

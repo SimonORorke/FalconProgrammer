@@ -114,7 +114,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Xml\DefaultSettings.xml" />
+        <EmbeddedResource Include="Xml\DefaultSettings.xml"/>
     </ItemGroup>
 
 </Project>

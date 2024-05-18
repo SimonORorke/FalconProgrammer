@@ -14,10 +14,11 @@ public class TestBatch : Batch {
   }
 
   internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
-  
-  [PublicAPI] internal string EmbeddedScriptFileName { get; set; } = 
+
+  [PublicAPI]
+  internal string EmbeddedScriptFileName { get; set; } =
     "QueriesForProgram.xml";
-  
+
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
   internal bool HasScriptRunEnded { get; private set; }
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
@@ -59,7 +60,7 @@ public class TestBatch : Batch {
 
   protected override FalconProgram CreateFalconProgram(string path) {
     return new TestFalconProgram(
-        EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
+      EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
   }
 
   protected override void OnScriptRunEnded() {
@@ -70,7 +71,7 @@ public class TestBatch : Batch {
   public override void RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
     HasScriptRunEnded = false;
-    TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName; 
+    TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName;
     base.RunScript(batchScriptPath, cancellationToken);
   }
 }

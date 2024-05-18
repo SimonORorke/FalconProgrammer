@@ -10,8 +10,7 @@ public partial class SoundBankItem : DataGridItem {
   /// <summary>
   ///   Generates <see cref="SoundBank" /> property.
   /// </summary>
-  [ObservableProperty]
-  private string _soundBank = string.Empty;
+  [ObservableProperty] private string _soundBank = string.Empty;
 
   public SoundBankItem(
     Settings settings,

@@ -8,8 +8,7 @@ public partial class SoundBankCategory : SoundBankItem {
   /// <summary>
   ///   Generates <see cref="Category" /> property.
   /// </summary>
-  [ObservableProperty]
-  private string _category = string.Empty;
+  [ObservableProperty] private string _category = string.Empty;
 
   public SoundBankCategory(
     Settings settings,

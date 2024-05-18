@@ -17,9 +17,9 @@
         <TextBlock Text="{Binding PageTitle}"
                    HorizontalAlignment="Center" />
         <TextBlock Height="10" />
-        <ComboBox x:Name="ColourSchemeComboBox" 
+        <ComboBox x:Name="ColourSchemeComboBox"
                   ItemsSource="{Binding ColourSchemes}"
                   SelectedItem="{Binding ColourScheme}"
                   HorizontalAlignment="Center" />
-    </StackPanel>        
+    </StackPanel>
 </Window>

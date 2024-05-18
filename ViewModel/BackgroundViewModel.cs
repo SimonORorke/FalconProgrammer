@@ -4,18 +4,17 @@ namespace FalconProgrammer.ViewModel;
 
 public class BackgroundViewModel : SettingsWriterViewModelBase {
   private BackgroundCollection? _backgrounds;
-  
-  public BackgroundViewModel(IDialogService dialogService, 
+
+  public BackgroundViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   public BackgroundCollection Backgrounds => _backgrounds
     ??= new BackgroundCollection(DialogService, FileSystemService, DispatcherService);
 
-  [ExcludeFromCodeCoverage] 
+  [ExcludeFromCodeCoverage]
   public override string PageTitle => "Background Images for Info Page";
 
-  [ExcludeFromCodeCoverage] 
-  public override string TabTitle => "Background";
+  [ExcludeFromCodeCoverage] public override string TabTitle => "Background";
 
   internal override async Task Open() {
     await base.Open();

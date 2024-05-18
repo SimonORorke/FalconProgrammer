@@ -50,7 +50,7 @@ public class ApplicationInfo : IApplicationInfo {
   }
 
   /// <summary>
-  ///   Returns the version specified by 
+  ///   Returns the version specified by
   ///   <see cref="AssemblyVersionAttribute " /> (Version in the top-level project file),
   ///   formatted.
   /// </summary>

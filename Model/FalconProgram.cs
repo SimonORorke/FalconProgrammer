@@ -443,7 +443,7 @@ public class FalconProgram {
       layer.AddModulation(modulation);
     }
     NotifyUpdate($"{PathShort}: " +
-                       "Added modulations to layers and initialised macros to layer gains.");
+                 "Added modulations to layers and initialised macros to layer gains.");
     // Add the DAHDSR Controller ScriptProcessor.
     var scriptProcessor = ProgramXml.AddScriptProcessor(
       "EventProcessor0", "Organic Pads",

@@ -32,9 +32,9 @@ public class AboutWindowViewModelTests {
     Global.ApplicationName = new MockApplicationInfo().Product;
     await ViewModel.LicenceCommand.ExecuteAsync(null);
     Assert.That(MockDialogService.ShowMessageWindowCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastMessageWindowMessage, 
+    Assert.That(MockDialogService.LastMessageWindowMessage,
       Does.StartWith(MockApplicationInfo.Product));
-    Assert.That(MockDialogService.LastMessageWindowTitle, 
+    Assert.That(MockDialogService.LastMessageWindowTitle,
       Is.EqualTo("Falcon Programmer - Licence"));
   }
 }

@@ -13,7 +13,7 @@ public class BatchScriptTests {
   }
 
   private BatchScript BatchScript { get; set; } = null!;
-  private const string BatchScriptPath = "This path will be ignored.xml"; 
+  private const string BatchScriptPath = "This path will be ignored.xml";
 
   private TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; set; } =
     null!;
@@ -30,12 +30,12 @@ public class BatchScriptTests {
 
   [Test]
   public void OrderedConfigTasks() {
-    Assert.That(BatchScript.OrderedConfigTasks, 
+    Assert.That(BatchScript.OrderedConfigTasks,
       Has.Count.GreaterThan(BatchScript.SequencedConfigTasks.Count));
-    Assert.That(BatchScript.OrderedConfigTasks[0], 
+    Assert.That(BatchScript.OrderedConfigTasks[0],
       Is.EqualTo(BatchScript.SequencedConfigTasks[0]));
     int lastSequencedIndex = BatchScript.SequencedConfigTasks.Count - 1;
-    Assert.That(BatchScript.OrderedConfigTasks[lastSequencedIndex], 
+    Assert.That(BatchScript.OrderedConfigTasks[lastSequencedIndex],
       Is.EqualTo(BatchScript.SequencedConfigTasks[lastSequencedIndex]));
   }
 

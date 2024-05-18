@@ -69,7 +69,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   ///   Cuts this item from the collection for potential pasting back in.
   /// </summary>
   /// <remarks>
-  ///   Generates <see cref="CutCommand" />. 
+  ///   Generates <see cref="CutCommand" />.
   /// </remarks>
   [RelayCommand(CanExecute = nameof(CanCut))]
   private void Cut() {
@@ -128,7 +128,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   ///   removal.
   /// </summary>
   /// <remarks>
-  ///   Generates <see cref="PasteBeforeCommand" />. 
+  ///   Generates <see cref="PasteBeforeCommand" />.
   /// </remarks>
   [RelayCommand(CanExecute = nameof(CanPasteBefore))]
   private void PasteBefore() {
@@ -139,7 +139,7 @@ public abstract partial class DataGridItem : ObservableValidator {
   ///   Removes this item from the collection.
   /// </summary>
   /// <remarks>
-  ///   Generates <see cref="RemoveCommand" />. 
+  ///   Generates <see cref="RemoveCommand" />.
   /// </remarks>
   [RelayCommand(CanExecute = nameof(CanRemove))]
   private void Remove() {

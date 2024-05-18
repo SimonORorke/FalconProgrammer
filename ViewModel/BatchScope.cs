@@ -8,8 +8,7 @@ public partial class BatchScope : SoundBankCategory {
   /// <summary>
   ///   Generates <see cref="Program" /> property.
   /// </summary>
-  [ObservableProperty]
-  private string _program = string.Empty;
+  [ObservableProperty] private string _program = string.Empty;
 
   public BatchScope(Settings settings, IFileSystemService fileSystemService) : base(
     settings, fileSystemService, false) { }

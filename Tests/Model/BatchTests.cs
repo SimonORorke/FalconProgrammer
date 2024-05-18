@@ -6,7 +6,7 @@ namespace FalconProgrammer.Tests.Model;
 ///   For each Test here, modifications of Falcon programs are mocked out by setting
 ///   <see cref="TestBatch.UpdatePrograms" /> to false. Tests where
 ///   <see cref="TestBatch" /> is used to facilitate tests of
-///   <see cref="FalconProgram "/> should go in <see cref="FalconProgramTests" />.
+///   <see cref="FalconProgram " /> should go in <see cref="FalconProgramTests" />.
 /// </summary>
 [TestFixture]
 public class BatchTests {
@@ -24,7 +24,7 @@ public class BatchTests {
 
   private TestBatch Batch { get; set; } = null!;
   private const string BatchScriptPath = "This path X will be ignored.xml";
-  
+
   private CancellationTokenSource RunCancellationTokenSource { get; } =
     new CancellationTokenSource();
 

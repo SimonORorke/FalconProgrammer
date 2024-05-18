@@ -32,14 +32,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Global.ApplicationName = "Test Name";
     Assert.That(MainWindowViewModel.ApplicationName, Is.EqualTo(Global.ApplicationName));
   }
-  
+
   [Test]
   public async Task ColourSchemeInvalid() {
     ReadMockSettings("InvalidColourSchemeSettings.xml");
     await ViewModel.Open();
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
   }
-  
+
   [Test]
   public async Task ColourSchemeNotFound() {
     ReadMockSettings("LocationsSettings.xml");

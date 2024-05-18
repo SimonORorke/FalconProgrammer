@@ -12,10 +12,8 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
 
   internal string SavedLog { get; private set; } = string.Empty;
 
-  [ExcludeFromCodeCoverage]
-  [PublicAPI]
-  internal TestBatch TestBatch => (TestBatch)Batch;
-  
+  [ExcludeFromCodeCoverage] [PublicAPI] internal TestBatch TestBatch => (TestBatch)Batch;
+
   internal TestBatchScript? TestBatchScript { get; private set; }
 
   protected override Batch CreateBatch() {

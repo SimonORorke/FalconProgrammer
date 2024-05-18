@@ -43,6 +43,7 @@ internal static class TestHelper {
       End = end
     };
   }
+
   /// <summary>
   ///   Waits for a process that is running on another thread to finish.
   /// </summary>

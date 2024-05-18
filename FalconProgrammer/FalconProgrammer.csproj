@@ -8,14 +8,14 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
-    
+
     <Choose>
         <When Condition="$([MSBuild]::IsOsPlatform('Windows'))">
             <PropertyGroup>
                 <!-- Don't split the tag into three lines.
                 It causes a file not found error! -->
                 <ApplicationIcon>Assets/falcon_svg_repo_com_512_512.ico</ApplicationIcon>
-            </PropertyGroup>    
+            </PropertyGroup>
         </When>
         <Otherwise> <!-- macOS - $([MSBuild]::IsOsPlatform('OSX')) -->
             <PropertyGroup>
@@ -30,7 +30,7 @@
         At least in Windows, File description in the file properties is automatically 
         generated, ignoring the FileDescription attribute, which we therefore will 
         not bother to specify. -->
-        <Product>Falcon Programmer</Product> <!-- Shown in window titles too. --> 
+        <Product>Falcon Programmer</Product> <!-- Shown in window titles too. -->
         <!-- FileVersion is shown for File version in the executable file's 
         properties. -->
         <FileVersion>0.9.0.0</FileVersion>
@@ -51,7 +51,7 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.10"/>
-        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.10" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.10"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.0.10"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10"/>
@@ -60,9 +60,9 @@
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10"/>
         <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
-        <PackageReference Include="Serilog" Version="3.1.1" />
-        <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Serilog" Version="3.1.1"/>
+        <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0"/>
     </ItemGroup>
 
     <ItemGroup>

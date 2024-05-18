@@ -32,7 +32,7 @@
                    Width="256" Height="256"
                    Margin="10" VerticalAlignment="Top" />
             <StackPanel Grid.Column="1">
-                <TextBlock Text="{Binding Product}" 
+                <TextBlock Text="{Binding Product}"
                            FontSize="45" Margin="0,40,5,25" />
                 <TextBlock Text="{Binding Version}" />
                 <TextBlock Text="{Binding Copyright}" />

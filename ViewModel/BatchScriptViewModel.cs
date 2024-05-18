@@ -14,8 +14,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private TaskCollection? _tasks;
 
   public BatchScriptViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
-  }
+    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
   internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
@@ -90,7 +89,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private Batch CreateInitialisedBatch() {
     var result = CreateBatch();
-    result.ScriptRunEnded += BatchOnScriptRunEnded; 
+    result.ScriptRunEnded += BatchOnScriptRunEnded;
     return result;
   }
 
@@ -159,7 +158,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     string? path = await BrowseForBatchScriptFile("run");
     if (path != null) {
       PrepareForRun();
-      StartThread(() => Batch.RunScript(path, RunCancellationTokenSource.Token), 
+      StartThread(() => Batch.RunScript(path, RunCancellationTokenSource.Token),
         nameof(RunSavedScript));
     }
   }
@@ -171,7 +170,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private void RunThisScript() {
     var script = CreateThisBatchScript();
     PrepareForRun();
-    StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token), 
+    StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token),
       nameof(RunThisScript));
   }
 
@@ -204,7 +203,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       script.Serialiser.Serialise(typeof(BatchScript), script, path);
     }
   }
-  
+
   [ExcludeFromCodeCoverage]
   protected virtual void StartThread(Action action, string threadName) {
     var thread =

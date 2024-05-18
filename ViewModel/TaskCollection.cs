@@ -4,7 +4,9 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public class TaskCollection : DataGridItemCollection<TaskItem> {
-  public TaskCollection(IDispatcherService dispatcherService) : base(dispatcherService) { }
+  public TaskCollection(IDispatcherService dispatcherService) :
+    base(dispatcherService) { }
+
   private ImmutableList<string> Tasks { get; } = CreateTasks();
 
   protected override void AppendAdditionItem() {

@@ -10,9 +10,10 @@ public class TestBatchScript : BatchScript {
     FileSystemService = MockFileSystemService = new MockFileSystemService();
     Serialiser = MockSerialiser = new MockSerialiser();
   }
-  
+
   [ExcludeFromCodeCoverage]
   [PublicAPI]
   internal MockFileSystemService MockFileSystemService { get; }
+
   internal MockSerialiser MockSerialiser { get; }
 }

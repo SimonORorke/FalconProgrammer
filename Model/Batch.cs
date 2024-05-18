@@ -12,7 +12,7 @@ public class Batch {
   public Batch(IBatchLog log) {
     Log = log;
   }
-  
+
   // public Batch(IBatchLog log, Func<Task> onScriptRunEnded) {
   //   Log = log;
   //   OnScriptRunEnded = onScriptRunEnded;

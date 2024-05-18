@@ -25,6 +25,9 @@ public partial class MainWindow : Window {
       // It would be good to focus the TabControl or its first item.
       // Here's what I have tried:
       //
+      // Does nothing.
+      // OnKeyDown(new KeyEventArgs {Key = Key.Tab});
+      //
       // Does nothing. I've posted a comment to
       // https://github.com/AvaloniaUI/Avalonia/discussions/11588.
       //

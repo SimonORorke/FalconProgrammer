@@ -262,7 +262,7 @@ public class ProgramXml : EntityBase {
   protected virtual XElement ReadTemplateRootElementFromFile() {
     return ReadRootElementFromFile(Category.TemplateProgramPath);
   }
-  
+
   private static XElement ReadRootElementFromFile(string path) {
     string xmlText = File.ReadAllText(path);
     return ReadRootElementFromXmlText(xmlText);
@@ -292,7 +292,7 @@ public class ProgramXml : EntityBase {
       RootElement.WriteTo(xmlWriter);
     } catch (XmlException ex) {
       throw new ApplicationException(
-        "The following XML error was found on writing to " + 
+        "The following XML error was found on writing to " +
         $"'{outputProgramPath}'{Environment.NewLine}:{ex.Message}");
     }
     SaveXmlTextToFile(outputProgramPath, stringWriterUtf8.ToString());

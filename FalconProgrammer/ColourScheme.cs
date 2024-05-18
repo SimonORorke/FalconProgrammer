@@ -8,7 +8,7 @@ namespace FalconProgrammer;
 
 public static class ColourScheme {
   public static void Select(ColourSchemeId scheme) {
-    var newFluentTheme = new FluentTheme(); 
+    var newFluentTheme = new FluentTheme();
     newFluentTheme.Palettes.Clear();
     var lightKey = new ThemeVariant("Light", null);
     var darkKey = new ThemeVariant("Dark", null);

@@ -4,7 +4,6 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 [TestFixture]
 public class ColourSchemeWindowViewModelTests : ViewModelTestsBase {
-
   [SetUp]
   public override void Setup() {
     base.Setup();
@@ -18,16 +17,16 @@ public class ColourSchemeWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public void ColourSchemes() {
-    Assert.That(ViewModel.ColourSchemes[0], 
+    Assert.That(ViewModel.ColourSchemes[0],
       Is.EqualTo(ColourSchemeId.Default.ToString()));
   }
-  
+
   [Test]
   public async Task SettingFoundChange() {
     ReadMockSettings("BatchSettings.xml");
     var newColourSchemeId = ColourSchemeId.Default;
-    ViewModel.ChangeColourScheme += (_, colourSchemeId) => 
-      newColourSchemeId = colourSchemeId; 
+    ViewModel.ChangeColourScheme += (_, colourSchemeId) =>
+      newColourSchemeId = colourSchemeId;
     await ViewModel.Open();
     Assert.That(ViewModel.ColourScheme, Is.EqualTo(ColourSchemeId.Forest.ToString()));
     string newColourScheme = ColourSchemeId.Nighttime.ToString();
