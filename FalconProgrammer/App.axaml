@@ -21,7 +21,7 @@
     </Application.Resources>
 
     <Application.Styles>
-        <FluentTheme /> <!-- The colour scheme is selected in code behind. -->
+        <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <StyleInclude Source="/Styles/DataValidationErrorsStyle.axaml" />
         <StyleInclude Source="/Styles/HyperlinkStyle.axaml" />
