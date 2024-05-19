@@ -42,7 +42,7 @@ public class ScriptProcessor : ModulationsOwner {
     // ScriptProcessor elements, if there are more than one.
     // Just removing the Info page CCs ScriptProcessor element will not work.
     // ReSharper disable once CommentTypo
-    // Example: Factory\RetroWave 2.5\BAS Voltage Reso.
+    // Example: Factory2\RetroWave 2.5\BAS Voltage Reso.
     eventProcessorsElement!.Remove();
   }
 

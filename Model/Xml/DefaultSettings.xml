@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings>
     <MustUseGuiScriptProcessor>
-        <ProgramCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <ProgramCategory SoundBank="Factory2" Category="Organic Texture 2.8"/>
         <ProgramCategory SoundBank="Organic Keys" Category=""/>
         <ProgramCategory SoundBank="Organic Pads" Category=""/>
         <ProgramCategory SoundBank="Pulsar" Category=""/>

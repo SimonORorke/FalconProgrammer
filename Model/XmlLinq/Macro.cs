@@ -128,7 +128,7 @@ public class Macro : ModulationsOwner {
       }
     } else {
       // ReSharper disable once CommentTypo
-      // Example: Reverb Mix macro of Factory\Polysynth\Velocity Pluck 
+      // Example: Reverb Mix macro of Factory2\Polysynth\Velocity Pluck 
       AddModulation(new Modulation(ProgramXml) {
         CcNo = targetCcNo
       });
