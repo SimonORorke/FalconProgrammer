@@ -136,7 +136,7 @@ public class FalconProgram {
       Log.WriteLine(
         $"{PathShort}: The mod wheel has not been replaced, as it only modulates a " +
         "single macro 100%.");
-      // Example: Factory2\Pads\DX FM Pad 2.0
+      // Example: Factory\Pads\DX FM Pad 2.0
       return false;
     }
     return true;
@@ -192,14 +192,14 @@ public class FalconProgram {
           from scriptProcessor in ScriptProcessors
           // Examples of programs with GuiScriptProcessor
           // but no template ScriptProcessor:
-          // Factory2\Bass-Sub\Balarbas 2.0
-          // Factory2\Keys\Smooth E-piano 2.1.
+          // Factory\Bass-Sub\Balarbas 2.0
+          // Factory\Keys\Smooth E-piano 2.1.
           where scriptProcessor.Name == "EventProcessor9"
           select scriptProcessor).FirstOrDefault();
       }
       // Examples of programs with ScriptProcessors but no GuiScriptProcessor:
       // Ether Fields\Bells - Plucks\Cloche Esperer
-      // Factory2\Bass-Sub\BA Shomp 1.2
+      // Factory\Bass-Sub\BA Shomp 1.2
       return null;
     }
     // Using a template ScriptProcessor
@@ -252,7 +252,7 @@ public class FalconProgram {
       // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
       // contains 'Wheel'. The only two additional programs that subsequently got wheel
       // macros added were
-      // Factory2\Hybrid Perfs\Louis Funky Dub and Factory2\Pluck\Permuda 1.1.
+      // Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
       //
       // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
       // hear. The mod wheel did work, and the added wheel macro has successfully
@@ -322,7 +322,7 @@ public class FalconProgram {
         : new LeftToRightTopToBottomComparer());
     // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
     foreach (var macro in Macros) {
-      // This validation is not reliable. In "Factory2\Bells\Glowing 1.2", the macros with
+      // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
       //macro.Validate();
       // for (int j = macro.Modulations.Count - 1; j >= 0; j--) {
@@ -908,8 +908,8 @@ public class FalconProgram {
   ///   There are different series of CCs for continuous and toggle macros.
   /// </summary>
   private void UpdateMacroCcsOwnedByMacros() {
-    // Most Factory2 programs list the ConstantModulation macro specifications in order
-    // top to bottom, left to right. But a few, e.g. Factory2\Keys\Days Of Old 1.4, do not.
+    // Most Factory programs list the ConstantModulation macro specifications in order
+    // top to bottom, left to right. But a few, e.g. Factory\Keys\Days Of Old 1.4, do not.
     var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
     // Reinitialise CurrentContinuousCcNo, incremented by GetNextCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
@@ -943,7 +943,7 @@ public class FalconProgram {
         // Ratio, and, with the exception below, just replace the CC number.
         var modulation = forMacroModulations[0];
         modulation.CcNo = ccNo;
-        // In Factory2\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1 instead
+        // In Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1 instead
         // of the usual 1. I don't know what the point of that is. But it prevents the
         // button controller mapped to the macro from working. To fix this, if a toggle
         // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing
@@ -992,14 +992,14 @@ public class FalconProgram {
     if (reverbMacros.Count == 0) {
       return false;
     }
-    if (PathShort is @"Factory2\Bass-Sub\Coastal Halftones 1.4"
-        or @"Factory2\Bass-Sub\Metropolis 1.4"
-        or @"Factory2\Leads\Ali3n 1.4"
-        or @"Factory2\Pads\Arrival 1.4"
+    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
+        or @"Factory\Bass-Sub\Metropolis 1.4"
+        or @"Factory\Leads\Ali3n 1.4"
+        or @"Factory\Pads\Arrival 1.4"
         // ReSharper disable once StringLiteralTypo
-        or @"Factory2\Pads\Novachord Noir 1.4"
-        or @"Factory2\Pads\Pad Motion 1.5"
-        or @"Factory2\Synth Brass\Gotham Brass 1.4"
+        or @"Factory\Pads\Novachord Noir 1.4"
+        or @"Factory\Pads\Pad Motion 1.5"
+        or @"Factory\Synth Brass\Gotham Brass 1.4"
         or @"Inner Dimensions\Pad\GrainVoices 2"
         or @"Savage\Pads-Drones\Lunar Nashi"
         or @"Savage\Pads-Drones\Pad Chord Ram"

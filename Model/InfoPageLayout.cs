@@ -15,7 +15,7 @@ internal class InfoPageLayout {
   ///   bottom margin.  So place the new continuous macro no lower than the standard
   ///   bottommost Y.
   ///   ReSharper disable once CommentTypo
-  ///   Example: "Factory2\Pluck\Pad Mullerizer".
+  ///   Example: "Factory\Pluck\Pad Mullerizer".
   /// </summary>
   private const int StandardBottommostY = 355;
 
@@ -162,7 +162,7 @@ internal class InfoPageLayout {
         from macro in Program.Macros
         select macro.MacroNo).Max() + 1
       // ReSharper disable once CommentTypo
-      // Example: Factory2\Distorted\Doom Octaver after it has had its Delay macro removed.
+      // Example: Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
       : 1;
     var result = new Macro(Program.ProgramXml, Program.Settings.MidiForMacros) {
       MacroNo = wheelMacroNo,
