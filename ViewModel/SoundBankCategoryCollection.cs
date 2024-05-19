@@ -50,7 +50,7 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
     foreach (var soundBankCategory in this) {
       if (!soundBankCategory.IsAdditionItem) {
         Settings.MustUseGuiScriptProcessorCategories.Add(
-          new Settings.ProgramCategory {
+          new Settings.SoundBankCategory {
             SoundBank = soundBankCategory.SoundBank,
             Category = soundBankCategory.IsForAllCategories
               ? string.Empty

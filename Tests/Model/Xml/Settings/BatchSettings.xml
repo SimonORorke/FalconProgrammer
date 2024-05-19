@@ -19,10 +19,10 @@
         <Background SoundBank="Titanium" Path="J:\FalconProgrammer\Images\Dull Purple.png"/>
     </Backgrounds>
     <MustUseGuiScriptProcessor>
-        <ProgramCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
-        <ProgramCategory SoundBank="Organic Keys" Category=""/>
-        <ProgramCategory SoundBank="Pulsar" Category=""/>
-        <ProgramCategory SoundBank="Voklm" Category=""/>
+        <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Organic Keys" Category=""/>
+        <SoundBankCategory SoundBank="Pulsar" Category=""/>
+        <SoundBankCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
     <MidiForMacros ModWheelReplacementCcNo="34">
         <ContinuousCcNoRanges>

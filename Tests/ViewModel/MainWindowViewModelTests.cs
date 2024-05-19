@@ -17,10 +17,10 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     };
   }
 
-  private TabItem BatchScriptTab => ViewModel.Tabs[0];
-  private TabItem GuiScriptProcessorTab => ViewModel.Tabs[2];
-  private TabItem LocationsTab => ViewModel.Tabs[1];
-  private TabItem MidiForMacrosTab => ViewModel.Tabs[3];
+  private TabItemViewModel BatchScriptTab => ViewModel.Tabs[0];
+  private TabItemViewModel GuiScriptProcessorTab => ViewModel.Tabs[2];
+  private TabItemViewModel LocationsTab => ViewModel.Tabs[1];
+  private TabItemViewModel MidiForMacrosTab => ViewModel.Tabs[3];
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
     null!;

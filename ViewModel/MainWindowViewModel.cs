@@ -21,9 +21,9 @@ public partial class MainWindowViewModel : ViewModelBase,
   ///   Generates <see cref="SelectedTab" />  property
   ///   and partial OnSelectedTabChanged method.
   /// </summary>
-  [ObservableProperty] private TabItem? _selectedTab;
+  [ObservableProperty] private TabItemViewModel? _selectedTab;
 
-  private ImmutableList<TabItem>? _tabs;
+  private ImmutableList<TabItemViewModel>? _tabs;
 
   public MainWindowViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
@@ -65,7 +65,7 @@ public partial class MainWindowViewModel : ViewModelBase,
   /// </summary>
   internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
 
-  private TabItem LocationsTab => Tabs[1];
+  private TabItemViewModel LocationsTab => Tabs[1];
 
   /// <summary>
   ///   The setter is only for tests.
@@ -88,7 +88,7 @@ public partial class MainWindowViewModel : ViewModelBase,
   [ExcludeFromCodeCoverage]
   public override string PageTitle => throw new NotSupportedException();
 
-  public ImmutableList<TabItem> Tabs => _tabs ??= CreateTabs();
+  public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
   public void Receive(GoToLocationsPageMessage message) {
     DispatcherService.Dispatch(() => SelectedTab = LocationsTab);
@@ -118,18 +118,18 @@ public partial class MainWindowViewModel : ViewModelBase,
       ColourSchemeId, DialogService, DispatcherService);
   }
 
-  private ImmutableList<TabItem> CreateTabs() {
-    var list = new List<TabItem> {
-      new TabItem(BatchScriptViewModel),
-      new TabItem(LocationsViewModel),
-      new TabItem(GuiScriptProcessorViewModel),
-      new TabItem(MidiForMacrosViewModel),
-      new TabItem(BackgroundViewModel)
+  private ImmutableList<TabItemViewModel> CreateTabs() {
+    var list = new List<TabItemViewModel> {
+      new TabItemViewModel(BatchScriptViewModel),
+      new TabItemViewModel(LocationsViewModel),
+      new TabItemViewModel(GuiScriptProcessorViewModel),
+      new TabItemViewModel(MidiForMacrosViewModel),
+      new TabItemViewModel(BackgroundViewModel)
     };
     return list.ToImmutableList();
   }
 
-  partial void OnSelectedTabChanged(TabItem? value) {
+  partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (value == null) {
       return;
     }
@@ -140,7 +140,7 @@ public partial class MainWindowViewModel : ViewModelBase,
     DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value));
   }
 
-  private async void OnSelectedTabChangedAsync(TabItem value) {
+  private async void OnSelectedTabChangedAsync(TabItemViewModel value) {
     // This method has to be async void rather than async Task because the calling
     // method, OnSelectedTabChanged is a partial method that cannot be a Task.
     if (CurrentPageViewModel != null

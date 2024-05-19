@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 
@@ -16,14 +15,15 @@ public partial class AboutWindow : Window {
     }
     InitializeComponent();
     CloseButton.Click += CloseButtonOnClick;
-    Dispatcher.UIThread.Post(() => {
-      var viewModel = (AboutWindowViewModel)DataContext!;
-      Title = viewModel.Title;
-      CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
-    });
   }
 
   private void CloseButtonOnClick(object? sender, RoutedEventArgs e) {
     Close();
+  }
+
+  protected override void OnLoaded(RoutedEventArgs e) {
+    var viewModel = (AboutWindowViewModel)DataContext!;
+    Title = viewModel.Title;
+    CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
   }
 }

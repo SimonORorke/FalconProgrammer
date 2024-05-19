@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Views;
@@ -11,11 +10,6 @@ public partial class MessageWindow : Window {
     InitializeComponent();
     CloseButton.Click += CloseButtonOnClick;
     CopyButton.Click += CopyButtonOnClick;
-    Dispatcher.UIThread.Post(() => {
-      var viewModel = (MessageWindowViewModel)DataContext!;
-      Title = viewModel.Title;
-      CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
-    });
   }
 
   private void CloseButtonOnClick(object? sender, RoutedEventArgs e) {
@@ -33,5 +27,11 @@ public partial class MessageWindow : Window {
     if (CopyButton.IsFocused) {
       CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
     }
+  }
+
+  protected override void OnLoaded(RoutedEventArgs e) {
+    var viewModel = (MessageWindowViewModel)DataContext!;
+    Title = viewModel.Title;
+    CloseButton.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle 
   }
 }

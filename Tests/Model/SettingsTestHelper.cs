@@ -76,20 +76,20 @@ public static class SettingsTestHelper {
       Path = DefaultTemplatePath
     };
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.ProgramCategory {
+      new Settings.SoundBankCategory {
         SoundBank = "Factory",
         Category = "Organic Texture 2.8"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.ProgramCategory {
+      new Settings.SoundBankCategory {
         SoundBank = "Organic Keys"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.ProgramCategory {
+      new Settings.SoundBankCategory {
         SoundBank = "Pulsar"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.ProgramCategory {
+      new Settings.SoundBankCategory {
         SoundBank = "Voklm"
       });
     settings.MidiForMacros.ModWheelReplacementCcNo = 34;

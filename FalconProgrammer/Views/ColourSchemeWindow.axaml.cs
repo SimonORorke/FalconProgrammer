@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Threading;
+using Avalonia.Interactivity;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 
@@ -15,11 +15,12 @@ public partial class ColourSchemeWindow : Window {
           new DialogService(), new DispatcherService()));
     }
     InitializeComponent();
-    Dispatcher.UIThread.Post(() => {
-      var viewModel = (ColourSchemeWindowViewModel)DataContext!;
-      viewModel.ChangeColourScheme += ViewModelOnChangeColourScheme;
-      ColourSchemeComboBox.Focus();
-    });
+  }
+
+  protected override void OnLoaded(RoutedEventArgs e) {
+    var viewModel = (ColourSchemeWindowViewModel)DataContext!;
+    viewModel.ChangeColourScheme += ViewModelOnChangeColourScheme;
+    ColourSchemeComboBox.Focus();
   }
 
   private static void ViewModelOnChangeColourScheme(object? sender, ColourSchemeId e) {

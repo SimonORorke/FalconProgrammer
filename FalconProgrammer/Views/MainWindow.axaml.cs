@@ -2,7 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Threading;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 
@@ -19,33 +21,21 @@ public partial class MainWindow : Window {
     InitializeComponent();
     Title = Application.Current!.Name;
     Closing += OnClosing;
-    Dispatcher.UIThread.Post(() => {
-      ViewModel = (MainWindowViewModel)DataContext!;
-      ColourScheme.Select(ViewModel.ColourSchemeId);
-      // It would be good to focus the TabControl or its first item.
-      // Here's what I have tried:
-      //
-      // Does nothing.
-      // OnKeyDown(new KeyEventArgs {Key = Key.Tab});
-      //
-      // Does nothing. I've posted a comment to
-      // https://github.com/AvaloniaUI/Avalonia/discussions/11588.
-      //
-      // RaiseEvent(new KeyEventArgs {
-      //   Key = Key.Tab,
-      //   RoutedEvent = new RoutedEvent(nameof(KeyDownEvent), RoutingStrategies.Bubble,
-      //     typeof(KeyEventArgs), typeof(Window))
-      // });
-      //
-      // Focus throws NullReferenceException.
-      //
-      // var firstTabItem = (TabControl.Items[0] as TabItem)!;
-      // firstTabItem.Focus();
-    });
+    // Dispatcher.UIThread.Post(() => {
+    //   ViewModel = (MainWindowViewModel)DataContext!;
+    //   ColourScheme.Select(ViewModel.ColourSchemeId);
+    // });
   }
 
   private bool ForceClose { get; set; }
   private MainWindowViewModel ViewModel { get; set; } = null!;
+
+  protected override void OnLoaded(RoutedEventArgs e) {
+    ViewModel = (MainWindowViewModel)DataContext!;
+    ColourScheme.Select(ViewModel.ColourSchemeId);
+    var firstTabItem = TabControl.FindDescendantOfType<TabItem>();
+    firstTabItem!.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle
+  }
 
   private void OnClosing(object? sender, WindowClosingEventArgs e) {
     if (!ForceClose) {

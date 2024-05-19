@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings>
     <MustUseGuiScriptProcessor>
-        <ProgramCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
-        <ProgramCategory SoundBank="Organic Keys" Category=""/>
-        <ProgramCategory SoundBank="Organic Pads" Category=""/>
-        <ProgramCategory SoundBank="Pulsar" Category=""/>
-        <ProgramCategory SoundBank="Voklm" Category=""/>
+        <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Organic Keys" Category=""/>
+        <SoundBankCategory SoundBank="Organic Pads" Category=""/>
+        <SoundBankCategory SoundBank="Pulsar" Category=""/>
+        <SoundBankCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
     <MidiForMacros ModWheelReplacementCcNo="34">
         <ContinuousCcNoRanges>

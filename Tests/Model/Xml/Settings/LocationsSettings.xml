@@ -9,10 +9,10 @@
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
     <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Factory\Keys\DX Mania.uvip"/>
     <MustUseGuiScriptProcessor>
-        <ProgramCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
-        <ProgramCategory SoundBank="Organic Keys" Category=""/>
-        <ProgramCategory SoundBank="Pulsar" Category=""/>
-        <ProgramCategory SoundBank="Voklm" Category=""/>
+        <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Organic Keys" Category=""/>
+        <SoundBankCategory SoundBank="Pulsar" Category=""/>
+        <SoundBankCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
     <Backgrounds>
         <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Background Images\Yellowish Mid-Green.png"/>
