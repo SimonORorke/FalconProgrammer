@@ -15,17 +15,17 @@ public class BatchScopeCollection : ProgramHierarchyCollection<ProgramItem> {
   protected override void AppendAdditionItem() { }
 
   [ExcludeFromCodeCoverage]
-  protected override void CutItem(DataGridItem itemToCut) {
+  protected override void CutItem(DataGridItemBase itemToCut) {
     throw new NotSupportedException();
   }
 
   [ExcludeFromCodeCoverage]
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     throw new NotSupportedException();
   }
 
   [ExcludeFromCodeCoverage]
-  protected override void RemoveItem(DataGridItem itemToRemove) {
+  protected override void RemoveItem(DataGridItemBase itemToRemove) {
     throw new NotSupportedException();
   }
 

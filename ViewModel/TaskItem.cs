@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class TaskItem : DataGridItem {
+public partial class TaskItem : DataGridItemBase {
   /// <summary>
   ///   Generates <see cref="Name" /> property.
   /// </summary>

@@ -21,15 +21,15 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollection<ProgramItem>
     });
   }
 
-  protected override void CutItem(DataGridItem itemToCut) {
+  protected override void CutItem(DataGridItemBase itemToCut) {
     CutItemTyped((ProgramItem)itemToCut);
   }
 
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     PasteBeforeItemTyped((ProgramItem)itemBeforeWhichToPaste);
   }
 
-  protected override void RemoveItem(DataGridItem itemToRemove) {
+  protected override void RemoveItem(DataGridItemBase itemToRemove) {
     RemoveItemTyped((ProgramItem)itemToRemove);
   }
 

@@ -35,11 +35,11 @@ public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
     }
   }
 
-  protected override void CutItem(DataGridItem itemToCut) {
+  protected override void CutItem(DataGridItemBase itemToCut) {
     CutItemTyped((BackgroundItem)itemToCut);
   }
 
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     PasteBeforeItemTyped((BackgroundItem)itemBeforeWhichToPaste);
   }
 
@@ -54,7 +54,7 @@ public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
     IsPopulating = false;
   }
 
-  protected override void RemoveItem(DataGridItem itemToRemove) {
+  protected override void RemoveItem(DataGridItemBase itemToRemove) {
     RemoveItemTyped((BackgroundItem)itemToRemove);
   }
 

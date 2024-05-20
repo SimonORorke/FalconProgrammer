@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class CcNoRangeItem : DataGridItem {
+public class CcNoRangeItem : DataGridItemBase {
   private int? _end;
   private int? _start;
 

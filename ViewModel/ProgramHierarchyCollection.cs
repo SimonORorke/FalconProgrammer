@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ProgramHierarchyCollection<T> : DataGridItemCollection<T>
+public abstract class ProgramHierarchyCollection<T> : DataGridItemCollectionBase<T>
   where T : SoundBankItem {
   protected ProgramHierarchyCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(dispatcherService) {

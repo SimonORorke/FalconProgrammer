@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class TaskCollection : DataGridItemCollection<TaskItem> {
+public class TaskCollection : DataGridItemCollectionBase<TaskItem> {
   public TaskCollection(IDispatcherService dispatcherService) :
     base(dispatcherService) { }
 
@@ -26,11 +26,11 @@ public class TaskCollection : DataGridItemCollection<TaskItem> {
       select configTask.ToString()).ToImmutableList();
   }
 
-  protected override void CutItem(DataGridItem itemToCut) {
+  protected override void CutItem(DataGridItemBase itemToCut) {
     CutItemTyped((TaskItem)itemToCut);
   }
 
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     PasteBeforeItemTyped((TaskItem)itemBeforeWhichToPaste);
   }
 
@@ -44,7 +44,7 @@ public class TaskCollection : DataGridItemCollection<TaskItem> {
     IsPopulating = false;
   }
 
-  protected override void RemoveItem(DataGridItem itemToRemove) {
+  protected override void RemoveItem(DataGridItemBase itemToRemove) {
     RemoveItemTyped((TaskItem)itemToRemove);
   }
 

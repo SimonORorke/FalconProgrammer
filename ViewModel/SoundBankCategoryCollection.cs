@@ -20,11 +20,11 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
     });
   }
 
-  protected override void CutItem(DataGridItem itemToCut) {
+  protected override void CutItem(DataGridItemBase itemToCut) {
     CutItemTyped((SoundBankCategory)itemToCut);
   }
 
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     PasteBeforeItemTyped((SoundBankCategory)itemBeforeWhichToPaste);
   }
 
@@ -42,7 +42,7 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
     IsPopulating = false;
   }
 
-  protected override void RemoveItem(DataGridItem itemToRemove) {
+  protected override void RemoveItem(DataGridItemBase itemToRemove) {
     RemoveItemTyped((SoundBankCategory)itemToRemove);
   }
 

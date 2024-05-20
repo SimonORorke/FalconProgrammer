@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.ViewModel;
 
-public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeItem> {
+public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
   private readonly IDialogService _dialogService;
   private readonly string _rangeType;
 
@@ -26,7 +26,7 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeItem> {
     });
   }
 
-  protected override void CutItem(DataGridItem itemToCut) {
+  protected override void CutItem(DataGridItemBase itemToCut) {
     CutItemTyped((CcNoRangeItem)itemToCut);
   }
 
@@ -40,11 +40,11 @@ public class CcNoRangeCollection : DataGridItemCollection<CcNoRangeItem> {
     IsPopulating = false;
   }
 
-  protected override void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste) {
+  protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     PasteBeforeItemTyped((CcNoRangeItem)itemBeforeWhichToPaste);
   }
 
-  protected override void RemoveItem(DataGridItem itemToRemove) {
+  protected override void RemoveItem(DataGridItemBase itemToRemove) {
     RemoveItemTyped((CcNoRangeItem)itemToRemove);
   }
 

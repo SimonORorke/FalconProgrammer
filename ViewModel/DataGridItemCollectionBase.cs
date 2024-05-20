@@ -4,11 +4,11 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class DataGridItemCollection<T> : ObservableCollection<T>
-  where T : DataGridItem {
+public abstract class DataGridItemCollectionBase<T> : ObservableCollection<T>
+  where T : DataGridItemBase {
   private bool _isPopulating;
 
-  protected DataGridItemCollection(IDispatcherService dispatcherService) {
+  protected DataGridItemCollectionBase(IDispatcherService dispatcherService) {
     DispatcherService = dispatcherService;
   }
 
@@ -62,7 +62,7 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
   // This looks like a false suggestion we are having to suppress.
   // AppendAdditionItem does not get the suggestion. Why does this method?
   // ReSharper disable once UnusedMemberInSuper.Global
-  protected abstract void CutItem(DataGridItem itemToCut);
+  protected abstract void CutItem(DataGridItemBase itemToCut);
 
   protected void CutItemTyped(T itemToCut) {
     BeenCut = itemToCut;
@@ -84,7 +84,7 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
     HasBeenChanged = true;
   }
 
-  private void OnCutItem(object? sender, DataGridItem e) {
+  private void OnCutItem(object? sender, DataGridItemBase e) {
     CutItem(e);
   }
 
@@ -96,18 +96,18 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
     OnItemChanged();
   }
 
-  private void OnPasteBeforeItem(object? sender, DataGridItem e) {
+  private void OnPasteBeforeItem(object? sender, DataGridItemBase e) {
     PasteBeforeItem(e);
   }
 
-  private void OnRemoveItem(object? sender, DataGridItem e) {
+  private void OnRemoveItem(object? sender, DataGridItemBase e) {
     RemoveItem(e);
   }
 
   // This looks like a false suggestion we are having to suppress.
   // AppendAdditionItem does not get the suggestion. Why does this method?
   // ReSharper disable once UnusedMemberInSuper.Global
-  protected abstract void PasteBeforeItem(DataGridItem itemBeforeWhichToPaste);
+  protected abstract void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste);
 
   protected void PasteBeforeItemTyped(T itemBeforeWhichToPaste) {
     if (BeenCut != null) {
@@ -122,7 +122,7 @@ public abstract class DataGridItemCollection<T> : ObservableCollection<T>
   // This looks like a false suggestion we are having to suppress.
   // AppendAdditionItem does not get the suggestion. Why does this method?
   // ReSharper disable once UnusedMemberInSuper.Global
-  protected abstract void RemoveItem(DataGridItem itemToRemove);
+  protected abstract void RemoveItem(DataGridItemBase itemToRemove);
 
   protected void RemoveItemTyped(T itemToRemove) {
     DispatcherService.Dispatch(() => Remove(itemToRemove));

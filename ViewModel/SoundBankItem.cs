@@ -4,7 +4,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class SoundBankItem : DataGridItem {
+public partial class SoundBankItem : DataGridItemBase {
   internal const string AllCaption = "All";
 
   /// <summary>

@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract partial class DataGridItem : ObservableValidator {
+public abstract partial class DataGridItemBase : ObservableValidator {
   private bool _canCut;
   private bool _canPasteBefore;
   private bool _canRemove;
   private bool _isAdditionItem;
 
-  protected DataGridItem(bool isAdditionItem) {
+  protected DataGridItemBase(bool isAdditionItem) {
     IsAdditionItem = isAdditionItem;
     CanRemove = !isAdditionItem;
   }
@@ -60,10 +60,10 @@ public abstract partial class DataGridItem : ObservableValidator {
   }
 
   internal event EventHandler? AppendAdditionItem;
-  internal event EventHandler<DataGridItem>? CutItem;
+  internal event EventHandler<DataGridItemBase>? CutItem;
   internal event EventHandler? ItemChanged;
-  internal event EventHandler<DataGridItem>? PasteBeforeItem;
-  internal event EventHandler<DataGridItem>? RemoveItem;
+  internal event EventHandler<DataGridItemBase>? PasteBeforeItem;
+  internal event EventHandler<DataGridItemBase>? RemoveItem;
 
   /// <summary>
   ///   Cuts this item from the collection for potential pasting back in.
