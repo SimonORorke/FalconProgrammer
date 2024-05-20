@@ -48,7 +48,7 @@ public partial class AboutWindowViewModel {
   /// </summary>
   [ExcludeFromCodeCoverage]
   [RelayCommand]
-  private void OpenUrl() {
+  private static void OpenUrl() {
     Process.Start(new ProcessStartInfo(Url) {
       UseShellExecute = true
     });
