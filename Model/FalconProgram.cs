@@ -992,21 +992,7 @@ public class FalconProgram {
     if (reverbMacros.Count == 0) {
       return false;
     }
-    if (PathShort is @"Factory\Bass-Sub\Coastal Halftones 1.4"
-        or @"Factory\Bass-Sub\Metropolis 1.4"
-        or @"Factory\Leads\Ali3n 1.4"
-        or @"Factory\Pads\Arrival 1.4"
-        // ReSharper disable once StringLiteralTypo
-        or @"Factory\Pads\Novachord Noir 1.4"
-        or @"Factory\Pads\Pad Motion 1.5"
-        or @"Factory\Synth Brass\Gotham Brass 1.4"
-        or @"Inner Dimensions\Pad\GrainVoices 2"
-        or @"Savage\Pads-Drones\Lunar Nashi"
-        or @"Savage\Pads-Drones\Pad Chord Ram"
-        or @"Savage\Pads-Drones\Voc Sidechain"
-        or @"Savage\Pads-Drones\Wonder Land"
-        // ReSharper disable once StringLiteralTypo
-        or @"Spectre\Leads\LD Showteker") {
+    if (!Settings.CanChangeReverbToZero(SoundBankName, Category.Name, Name)) {
       // These programs are silent without reverb!
       Log.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
       return false;

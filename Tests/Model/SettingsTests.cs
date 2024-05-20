@@ -6,6 +6,24 @@ namespace FalconProgrammer.Tests.Model;
 [TestFixture]
 public class SettingsTests {
   [Test]
+  public void Background() {
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "DefaultSettingsWithMidi.xml"
+    };
+    var settings = settingsReader.Read();
+    const string soundBank = "Eternal Funk"; 
+    Assert.That(settings.TryGetSoundBankBackgroundImagePath(
+      soundBank, out _), Is.False);
+    settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "BatchSettings.xml"
+    };
+    settings = settingsReader.Read();
+    Assert.That(settings.TryGetSoundBankBackgroundImagePath(
+      soundBank, out string path), Is.True);
+    Assert.That(path, Does.EndWith("Yellowish Mid-Green.png"));
+  }
+  
+  [Test]
   public void Batch() {
     var settingsReader = new TestSettingsReaderEmbedded {
       EmbeddedFileName = "LocationsSettings.xml"
@@ -58,6 +76,7 @@ public class SettingsTests {
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
+    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.False);
     var programPath = new Settings.ProgramPath {
       SoundBank = soundBank,
       Category = category,
@@ -75,6 +94,7 @@ public class SettingsTests {
     Assert.That(
       writtenSettings.DoNotZeroReverbMacros[0].Program, Is.EqualTo(program));
     Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverbMacros>"));
+    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.True);
   }
 
   [Test]

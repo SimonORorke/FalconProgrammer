@@ -35,25 +35,43 @@ public class Settings : SerialisationBase {
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
+  /// <summary>
+  ///   Gets whether the initial value of a program's Reverb macro may be changed to zero.
+  /// </summary>
+  /// <remarks>
+  ///   Some programs are silent without reverb, in which case setting the initial reverb
+  ///   amount to zero should be disallowed by including the program in the
+  ///   <see cref="DoNotZeroReverbMacros" /> list in the settings.
+  /// </remarks>
+  internal bool CanChangeReverbToZero(
+    string soundBankName, string categoryName, string programName) {
+    return (
+      from programPath in DoNotZeroReverbMacros
+      where programPath.SoundBank == soundBankName &&
+            programPath.Category == categoryName &&
+            programPath.Program == programName
+      select programPath).Any();
+  }
+
   internal static string GetSettingsPath(string settingsFolderPath) {
     return !string.IsNullOrWhiteSpace(settingsFolderPath)
       ? Path.Combine(settingsFolderPath, "Settings.xml")
       : string.Empty;
   }
 
-  public bool MustUseGuiScriptProcessor(
+  internal bool MustUseGuiScriptProcessor(
     string soundBankName, string? categoryName = null) {
     bool result = categoryName != null && (
-      from programCategory in MustUseGuiScriptProcessorCategories
-      where programCategory.SoundBank == soundBankName &&
-            programCategory.Category == categoryName
-      select programCategory).Any();
+      from soundBankCategory in MustUseGuiScriptProcessorCategories
+      where soundBankCategory.SoundBank == soundBankName &&
+            soundBankCategory.Category == categoryName
+      select soundBankCategory).Any();
     if (!result) {
       result = (
-        from programCategory in MustUseGuiScriptProcessorCategories
-        where programCategory.SoundBank == soundBankName &&
-              programCategory.Category == string.Empty
-        select programCategory).Any();
+        from soundBankCategory in MustUseGuiScriptProcessorCategories
+        where soundBankCategory.SoundBank == soundBankName &&
+              soundBankCategory.Category == string.Empty
+        select soundBankCategory).Any();
     }
     return result;
   }
