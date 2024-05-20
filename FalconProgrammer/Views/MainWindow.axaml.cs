@@ -25,13 +25,6 @@ public partial class MainWindow : Window {
   private bool ForceClose { get; set; }
   private MainWindowViewModel ViewModel { get; set; } = null!;
 
-  protected override void OnLoaded(RoutedEventArgs e) {
-    ViewModel = (MainWindowViewModel)DataContext!;
-    ColourScheme.Select(ViewModel.ColourSchemeId);
-    var firstTabItem = TabControl.FindDescendantOfType<TabItem>();
-    firstTabItem!.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle
-  }
-
   protected override void OnClosing(WindowClosingEventArgs e) {
     if (!ForceClose) {
       e.Cancel = true;
@@ -63,5 +56,12 @@ public partial class MainWindow : Window {
         },
         TaskScheduler.FromCurrentSynchronizationContext());
     }
+  }
+
+  protected override void OnLoaded(RoutedEventArgs e) {
+    ViewModel = (MainWindowViewModel)DataContext!;
+    ColourScheme.Select(ViewModel.ColourSchemeId);
+    var firstTabItem = TabControl.FindDescendantOfType<TabItem>();
+    firstTabItem!.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle
   }
 }
