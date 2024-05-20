@@ -23,7 +23,7 @@ public class ColourSchemeWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task SettingFoundChange() {
-    ReadMockSettings("BatchSettings.xml");
+    MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     var newColourSchemeId = ColourSchemeId.Default;
     ViewModel.ChangeColourScheme += (_, colourSchemeId) =>
       newColourSchemeId = colourSchemeId;

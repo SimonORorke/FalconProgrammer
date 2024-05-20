@@ -35,14 +35,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ColourSchemeInvalid() {
-    ReadMockSettings("InvalidColourSchemeSettings.xml");
+    MockSettingsReaderEmbedded.EmbeddedFileName = "InvalidColourSchemeSettings.xml";
     await ViewModel.Open();
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
   }
 
   [Test]
   public async Task ColourSchemeNotFound() {
-    ReadMockSettings("LocationsSettings.xml");
+    MockSettingsReaderEmbedded.EmbeddedFileName = "LocationsSettings.xml";
     await ViewModel.Open();
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
   }
