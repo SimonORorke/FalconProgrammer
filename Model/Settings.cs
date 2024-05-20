@@ -12,10 +12,11 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Template DefaultTemplate { get; set; } = new Template();
+  [XmlElement] public string ColourScheme { get; set; } = string.Empty;
 
   [XmlArray("MustUseGuiScriptProcessor")]
-  [XmlArrayItem(nameof(ProgramCategory))]
-  public List<ProgramCategory> MustUseGuiScriptProcessorCategories {
+  [XmlArrayItem(nameof(SoundBankCategory))]
+  public List<SoundBankCategory> MustUseGuiScriptProcessorCategories {
     get;
     [ExcludeFromCodeCoverage] set;
   } = [];
@@ -26,8 +27,12 @@ public class Settings : SerialisationBase {
   [XmlArrayItem(nameof(Background))]
   public List<Background> Backgrounds { get; [ExcludeFromCodeCoverage] set; } = [];
 
+  [XmlArray(nameof(DoNotZeroReverbMacros))]
+  [XmlArrayItem(nameof(ProgramPath))]
+  public List<ProgramPath> DoNotZeroReverbMacros { get; [ExcludeFromCodeCoverage] set; } =
+    [];
+
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
-  [XmlElement] public string ColourScheme { get; set; } = string.Empty;
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   internal static string GetSettingsPath(string settingsFolderPath) {
@@ -83,7 +88,13 @@ public class Settings : SerialisationBase {
     public int End;
   }
 
-  public class ProgramCategory {
+  public class ProgramPath {
+    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
+    [XmlAttribute] public string Category { get; set; } = string.Empty;
+    [XmlAttribute] public string Program { get; set; } = string.Empty;
+  }
+
+  public class SoundBankCategory {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
   }

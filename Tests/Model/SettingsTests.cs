@@ -49,6 +49,35 @@ public class SettingsTests {
   }
 
   [Test]
+  public void DoNotZeroReverbMacros() {
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "LocationsSettings.xml"
+    };
+    var settings = settingsReader.Read();
+    Assert.That(settings.DoNotZeroReverbMacros, Is.Empty);
+    const string soundBank = "Pulsar";
+    const string category = "Plucks";
+    const string program = "Music Box";
+    var programPath = new Settings.ProgramPath {
+      SoundBank = soundBank,
+      Category = category,
+      Program = program
+    };
+    settings.DoNotZeroReverbMacros.Add(programPath);
+    settings.Write();
+    var mockSerialiser = settingsReader.MockSerialiserForSettings;
+    var writtenSettings = (Settings)mockSerialiser.LastObjectSerialised;
+    Assert.That(writtenSettings.DoNotZeroReverbMacros, Has.Count.EqualTo(1));
+    Assert.That(
+      writtenSettings.DoNotZeroReverbMacros[0].SoundBank, Is.EqualTo(soundBank));
+    Assert.That(
+      writtenSettings.DoNotZeroReverbMacros[0].Category, Is.EqualTo(category));
+    Assert.That(
+      writtenSettings.DoNotZeroReverbMacros[0].Program, Is.EqualTo(program));
+    Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverbMacros>"));
+  }
+
+  [Test]
   public void RealTestSettingsFile() {
     SettingsTestHelper.DeleteAnyData();
     Settings? settings = null;
