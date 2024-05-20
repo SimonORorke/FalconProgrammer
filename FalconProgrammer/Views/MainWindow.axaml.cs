@@ -20,11 +20,6 @@ public partial class MainWindow : Window {
     }
     InitializeComponent();
     Title = Application.Current!.Name;
-    Closing += OnClosing;
-    // Dispatcher.UIThread.Post(() => {
-    //   ViewModel = (MainWindowViewModel)DataContext!;
-    //   ColourScheme.Select(ViewModel.ColourSchemeId);
-    // });
   }
 
   private bool ForceClose { get; set; }
@@ -37,7 +32,7 @@ public partial class MainWindow : Window {
     firstTabItem!.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle
   }
 
-  private void OnClosing(object? sender, WindowClosingEventArgs e) {
+  protected override void OnClosing(WindowClosingEventArgs e) {
     if (!ForceClose) {
       e.Cancel = true;
       ViewModel.QueryCloseWindow().ContinueWith(
