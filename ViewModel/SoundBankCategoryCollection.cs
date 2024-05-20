@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankCategory> {
+public class SoundBankCategoryCollection : ProgramHierarchyCollectionBase<SoundBankCategory> {
   public SoundBankCategoryCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
 

@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class DoNotZeroReverbCollection : ProgramHierarchyCollection<ProgramItem> {
+public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramItem> {
   public DoNotZeroReverbCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
 

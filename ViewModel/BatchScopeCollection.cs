@@ -8,7 +8,7 @@ namespace FalconProgrammer.ViewModel;
 ///   For now at least, we only support a single <see cref="ProgramItem" />.
 ///   But it's handy to display it in a DataGrid.
 /// </summary>
-public class BatchScopeCollection : ProgramHierarchyCollection<ProgramItem> {
+public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> {
   public BatchScopeCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
 

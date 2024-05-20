@@ -3,9 +3,9 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class ProgramHierarchyCollection<T> : DataGridItemCollectionBase<T>
+public abstract class ProgramHierarchyCollectionBase<T> : DataGridItemCollectionBase<T>
   where T : SoundBankItem {
-  protected ProgramHierarchyCollection(IFileSystemService fileSystemService,
+  protected ProgramHierarchyCollectionBase(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(dispatcherService) {
     FileSystemService = fileSystemService;
   }

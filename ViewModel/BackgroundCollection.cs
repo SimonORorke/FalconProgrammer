@@ -3,7 +3,7 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class BackgroundCollection : ProgramHierarchyCollection<BackgroundItem> {
+public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundItem> {
   public BackgroundCollection(IDialogService dialogService,
     IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(
