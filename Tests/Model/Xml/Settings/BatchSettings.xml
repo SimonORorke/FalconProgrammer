@@ -8,16 +8,7 @@
     <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
     <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Factory\Keys\DX Mania.uvip"/>
-    <Backgrounds>
-        <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Images\Yellowish Mid-Green.png"/>
-        <Background SoundBank="Fluidity" Path="J:\FalconProgrammer\Images\Midnight Blue.png"/>
-        <Background SoundBank="Hypnotic Drive" Path="J:\FalconProgrammer\Images\Dark Goldenrod.png"/>
-        <Background SoundBank="Inner Dimensions" Path="J:\FalconProgrammer\Images\Dark Red.png"/>
-        <Background SoundBank="Modular Noise" Path="J:\FalconProgrammer\Images\Dark Forest.png"/>
-        <Background SoundBank="Organic Pads" Path="J:\FalconProgrammer\Images\Bluish Teal.png"/>
-        <Background SoundBank="Savage" Path="J:\FalconProgrammer\Images\Heath.png"/>
-        <Background SoundBank="Titanium" Path="J:\FalconProgrammer\Images\Dull Purple.png"/>
-    </Backgrounds>
+    <ColourScheme>Forest</ColourScheme>
     <MustUseGuiScriptProcessor>
         <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>
@@ -62,11 +53,35 @@
             </ToggleCcNoRange>
         </ToggleCcNoRanges>
     </MidiForMacros>
+    <Backgrounds>
+        <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Images\Yellowish Mid-Green.png"/>
+        <Background SoundBank="Fluidity" Path="J:\FalconProgrammer\Images\Midnight Blue.png"/>
+        <Background SoundBank="Hypnotic Drive" Path="J:\FalconProgrammer\Images\Dark Goldenrod.png"/>
+        <Background SoundBank="Inner Dimensions" Path="J:\FalconProgrammer\Images\Dark Red.png"/>
+        <Background SoundBank="Modular Noise" Path="J:\FalconProgrammer\Images\Dark Forest.png"/>
+        <Background SoundBank="Organic Pads" Path="J:\FalconProgrammer\Images\Bluish Teal.png"/>
+        <Background SoundBank="Savage" Path="J:\FalconProgrammer\Images\Heath.png"/>
+        <Background SoundBank="Titanium" Path="J:\FalconProgrammer\Images\Dull Purple.png"/>
+    </Backgrounds>
+    <DoNotZeroReverbMacros>
+        <ProgramPath SoundBank="Factory" Category="Bass-Sub" Program="Coastal Halftones 1.4" />
+        <ProgramPath SoundBank="Factory" Category="Bass-Sub" Program="Metropolis 1.4" />
+        <ProgramPath SoundBank="Factory" Category="Leads" Program="Ali3n 1.4" />
+        <ProgramPath SoundBank="Factory" Category="Pads" Program="Arrival 1.4" />
+        <ProgramPath SoundBank="Factory" Category="Pads" Program="Novachord Noir 1.4" />
+        <ProgramPath SoundBank="Factory" Category="Pads" Program="Pad Motion 1.5" />
+        <ProgramPath SoundBank="Factory" Category="Synth Brass" Program="Gotham Brass 1.4" />
+        <ProgramPath SoundBank="Inner Dimensions" Category="Pad" Program="GrainVoices 2" />
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Lunar Nashi" />
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Pad Chord Ram" />
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Voc Sidechain" />
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Wonder Land" />
+        <ProgramPath SoundBank="Spectre" Category="Leads" Program="LD Showteker" />
+    </DoNotZeroReverbMacros>
     <Batch SoundBank="All" Category="All" Program="All">
         <Tasks>
             <Task>InitialiseLayout</Task>
             <Task>UpdateMacroCcs</Task>
         </Tasks>
     </Batch>
-    <ColourScheme>Forest</ColourScheme>
 </Settings>
