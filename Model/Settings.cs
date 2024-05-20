@@ -71,7 +71,7 @@ public class Settings : SerialisationBase {
     if (settingsFolderPath != null) {
       SettingsPath = GetSettingsPath(settingsFolderPath);
     }
-    Serialiser.Serialise(typeof(Settings), this, SettingsPath);
+    Serialiser.Serialise(this, SettingsPath);
   }
 
   public class Background {

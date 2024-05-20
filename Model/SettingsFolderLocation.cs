@@ -11,8 +11,7 @@ public class SettingsFolderLocation : SerialisationBase, ISettingsFolderLocation
     if (!FileSystemService.Folder.Exists(appDataFolderPath)) {
       FileSystemService.Folder.Create(appDataFolderPath);
     }
-    Serialiser.Serialise(
-      typeof(SettingsFolderLocation), this,
+    Serialiser.Serialise(this,
       GetSettingsFolderLocationPath(AppDataFolderName));
     if (!string.IsNullOrWhiteSpace(Path)) {
       FileSystemService.Folder.Create(Path);

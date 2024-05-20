@@ -97,7 +97,7 @@ public class BatchScript : SerialisationBase {
   }
 
   public void Write() {
-    Serialiser.Serialise(typeof(BatchScript), this, Path);
+    Serialiser.Serialise(this, Path);
   }
 
   public class BatchTask {

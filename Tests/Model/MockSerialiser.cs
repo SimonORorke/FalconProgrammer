@@ -12,12 +12,12 @@ public class MockSerialiser : ISerialiser {
   internal string LastOutputText { get; set; } = string.Empty;
   internal int SerializeCount { get; set; }
 
-  public void Serialise(Type type, object objectToSerialise, string outputPath) {
-    LastType = type;
+  public void Serialise(object objectToSerialise, string outputPath) {
     LastObjectSerialised = objectToSerialise;
     LastOutputPath = outputPath;
     SerializeCount++;
-    var serializer = new XmlSerializer(objectToSerialise.GetType());
+    LastType = objectToSerialise.GetType();
+    var serializer = new XmlSerializer(LastType);
     using var writer = new StringWriter();
     serializer.Serialize(writer, objectToSerialise);
     LastOutputText = writer.ToString();

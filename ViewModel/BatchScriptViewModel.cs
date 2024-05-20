@@ -200,7 +200,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       "Save Batch Script", "XML files", "xml");
     if (path != null) {
       var script = CreateThisBatchScript();
-      script.Serialiser.Serialise(typeof(BatchScript), script, path);
+      script.Serialiser.Serialise(script, path);
     }
   }
 

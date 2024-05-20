@@ -10,8 +10,8 @@ public class Serialiser : ISerialiser {
   private Serialiser() { }
   public static ISerialiser Default => _default ??= new Serialiser();
 
-  public void Serialise(Type type, object objectToSerialise, string outputPath) {
-    var serializer = new XmlSerializer(type);
+  public void Serialise(object objectToSerialise, string outputPath) {
+    var serializer = new XmlSerializer(objectToSerialise.GetType());
     using var writer = new StreamWriter(outputPath);
     serializer.Serialize(writer, objectToSerialise);
   }
