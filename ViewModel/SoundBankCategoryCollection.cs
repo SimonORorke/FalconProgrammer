@@ -12,7 +12,8 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollection<SoundBankC
   }
 
   private void AddItem(string soundBank = "", string category = "") {
-    AddItem(new SoundBankCategory(Settings, FileSystemService, IsAddingAdditionItem) {
+    AddItem(new SoundBankCategory(
+      Settings, FileSystemService, IsAddingAdditionItem, true) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category

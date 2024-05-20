@@ -5,10 +5,10 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 /// <summary>
-///   For now at least, we only support a single <see cref="BatchScope" />.
+///   For now at least, we only support a single <see cref="ProgramItem" />.
 ///   But it's handy to display it in a DataGrid.
 /// </summary>
-public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
+public class BatchScopeCollection : ProgramHierarchyCollection<ProgramItem> {
   public BatchScopeCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
 
@@ -36,7 +36,7 @@ public class BatchScopeCollection : ProgramHierarchyCollection<BatchScope> {
     soundBankList.Insert(0, SoundBankItem.AllCaption);
     SoundBanks = soundBankList.ToImmutableList();
     Clear();
-    AddItem(new BatchScope(Settings, FileSystemService) {
+    AddItem(new ProgramItem(Settings, FileSystemService, false, true) {
       SoundBanks = SoundBanks,
       SoundBank = Settings.Batch.SoundBank != string.Empty
         ? Settings.Batch.SoundBank

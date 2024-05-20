@@ -4,27 +4,32 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class BatchScope : SoundBankCategory {
+public partial class ProgramItem : SoundBankCategory {
   /// <summary>
   ///   Generates <see cref="Program" /> property.
   /// </summary>
   [ObservableProperty] private string _program = string.Empty;
 
-  public BatchScope(Settings settings, IFileSystemService fileSystemService) : base(
-    settings, fileSystemService, false) { }
+  public ProgramItem(Settings settings, IFileSystemService fileSystemService,
+    bool isAdditionItem, bool allowAll) : 
+    base(settings, fileSystemService, isAdditionItem, allowAll) { }
 
   public ObservableCollection<string> Programs { get; } = [];
 
   protected override void OnCategoryChanged1(string value) {
     PopulatePrograms();
-    Program = AllCaption;
+    if (AllowAll) {
+      Program = AllCaption;
+    }
   }
 
   private void PopulatePrograms() {
     Programs.Clear();
-    Programs.Add(AllCaption);
-    if (Category == AllCaption) {
-      return;
+    if (AllowAll) {
+      Programs.Add(AllCaption);
+      if (Category == AllCaption) {
+        return;
+      }
     }
     string categoryFolderPath = Path.Combine(
       Settings.ProgramsFolder.Path, SoundBank, Category);

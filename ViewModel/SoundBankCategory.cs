@@ -13,8 +13,12 @@ public partial class SoundBankCategory : SoundBankItem {
   public SoundBankCategory(
     Settings settings,
     IFileSystemService fileSystemService,
-    bool isAdditionItem) : base(settings, fileSystemService, isAdditionItem) { }
+    bool isAdditionItem, bool allowAll) : base(
+    settings, fileSystemService, isAdditionItem) {
+    AllowAll = allowAll;
+  }
 
+  protected bool AllowAll { get; }
   internal bool IsForAllCategories => Category == AllCaption;
   public ObservableCollection<string> Categories { get; } = [];
 
@@ -39,9 +43,11 @@ public partial class SoundBankCategory : SoundBankItem {
 
   private void PopulateCategories() {
     Categories.Clear();
-    Categories.Add(AllCaption);
-    if (SoundBank == AllCaption) {
-      return;
+    if (AllowAll) {
+      Categories.Add(AllCaption);
+      if (SoundBank == AllCaption) {
+        return;
+      }
     }
     string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
     var categoryFolderNames =

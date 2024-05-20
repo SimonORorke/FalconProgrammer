@@ -26,7 +26,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private CancellationTokenSource RunCancellationTokenSource { get; } =
     new CancellationTokenSource();
 
-  internal BatchScope Scope => Scopes[0];
+  internal ProgramItem Scope => Scopes[0];
 
   public BatchScopeCollection Scopes => _scopes
     ??= new BatchScopeCollection(FileSystemService, DispatcherService);
