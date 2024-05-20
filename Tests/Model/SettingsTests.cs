@@ -76,7 +76,7 @@ public class SettingsTests {
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
-    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.False);
+    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.True);
     var programPath = new Settings.ProgramPath {
       SoundBank = soundBank,
       Category = category,
@@ -94,7 +94,7 @@ public class SettingsTests {
     Assert.That(
       writtenSettings.DoNotZeroReverbMacros[0].Program, Is.EqualTo(program));
     Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverbMacros>"));
-    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.True);
+    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.False);
   }
 
   [Test]

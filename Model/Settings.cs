@@ -41,11 +41,11 @@ public class Settings : SerialisationBase {
   /// <remarks>
   ///   Some programs are silent without reverb, in which case setting the initial reverb
   ///   amount to zero should be disallowed by including the program in the
-  ///   <see cref="DoNotZeroReverbMacros" /> list in the settings.
+  ///   <see cref="DoNotZeroReverbMacros" /> list in settings.
   /// </remarks>
   internal bool CanChangeReverbToZero(
     string soundBankName, string categoryName, string programName) {
-    return (
+    return !(
       from programPath in DoNotZeroReverbMacros
       where programPath.SoundBank == soundBankName &&
             programPath.Category == categoryName &&
