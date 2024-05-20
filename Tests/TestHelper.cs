@@ -9,7 +9,8 @@ internal static class TestHelper {
     MockFolderService mockFolderService, string folderPath) {
     mockFolderService.ExpectedSubfolderNames.Add(
       folderPath, [
-        "Ether Fields", "Factory", "Organic Keys", "Pulsar", "Spectre", "Voklm"
+        "Ether Fields", "Factory", "Inner Dimensions", "Organic Keys", "Pulsar", "Savage",
+        "Spectre", "Voklm"
       ]);
     mockFolderService.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Ether Fields"), [
@@ -17,7 +18,11 @@ internal static class TestHelper {
       ]);
     mockFolderService.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Factory"), [
-        "Bass-Sub", "Keys", "Organic Texture 2.8"
+        "Bass-Sub", "Keys", "Leads", "Organic Texture 2.8", "Pads", "Synth Brass" 
+      ]);
+    mockFolderService.ExpectedSubfolderNames.Add(
+      Path.Combine(folderPath, "Inner Dimensions"), [
+        "Pad"
       ]);
     mockFolderService.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Organic Keys"), [
@@ -28,8 +33,12 @@ internal static class TestHelper {
         "Bass", "Leads", "Plucks"
       ]);
     mockFolderService.ExpectedSubfolderNames.Add(
+      Path.Combine(folderPath, "Savage"), [
+        "Pads-Drones"
+      ]);
+    mockFolderService.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Spectre"), [
-        "Bells", "Chords"
+        "Bells", "Chords", "Leads"
       ]);
     mockFolderService.ExpectedSubfolderNames.Add(
       Path.Combine(folderPath, "Voklm"), [

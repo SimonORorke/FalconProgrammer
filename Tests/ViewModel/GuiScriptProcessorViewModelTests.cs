@@ -64,8 +64,8 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Factory"));
     Assert.That(ViewModel.SoundBankCategories[0].Category,
       Is.EqualTo("Organic Texture 2.8"));
-    Assert.That(ViewModel.SoundBankCategories[0].SoundBanks, Has.Count.EqualTo(6));
-    Assert.That(ViewModel.SoundBankCategories[0].Categories, Has.Count.EqualTo(4));
+    Assert.That(ViewModel.SoundBankCategories[0].SoundBanks, Has.Count.EqualTo(8));
+    Assert.That(ViewModel.SoundBankCategories[0].Categories, Has.Count.EqualTo(7));
     Assert.That(ViewModel.SoundBankCategories[0].Categories[0], Is.EqualTo("All"));
     Assert.That(ViewModel.SoundBankCategories[0].Categories[1], Is.EqualTo("Bass-Sub"));
     Assert.That(ViewModel.SoundBankCategories[0].CanRemove, Is.True);
@@ -78,7 +78,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories[1].IsForAllCategories, Is.True);
     // Addition item
     Assert.That(ViewModel.SoundBankCategories[4].SoundBank, Is.Empty);
-    Assert.That(ViewModel.SoundBankCategories[4].SoundBanks, Has.Count.EqualTo(6));
+    Assert.That(ViewModel.SoundBankCategories[4].SoundBanks, Has.Count.EqualTo(8));
     Assert.That(ViewModel.SoundBankCategories[4].Categories, Has.Count.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories[4].Category, Is.Empty);
     Assert.That(ViewModel.SoundBankCategories[4].CanRemove, Is.False);
