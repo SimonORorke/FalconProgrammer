@@ -27,9 +27,9 @@ public class Settings : SerialisationBase {
   [XmlArrayItem(nameof(Background))]
   public List<Background> Backgrounds { get; [ExcludeFromCodeCoverage] set; } = [];
 
-  [XmlArray(nameof(DoNotZeroReverbMacros))]
+  [XmlArray(nameof(DoNotZeroReverb))]
   [XmlArrayItem(nameof(ProgramPath))]
-  public List<ProgramPath> DoNotZeroReverbMacros { get; [ExcludeFromCodeCoverage] set; } =
+  public List<ProgramPath> DoNotZeroReverb { get; [ExcludeFromCodeCoverage] set; } =
     [];
 
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
@@ -41,12 +41,12 @@ public class Settings : SerialisationBase {
   /// <remarks>
   ///   Some programs are silent without reverb, in which case setting the initial reverb
   ///   amount to zero should be disallowed by including the program in the
-  ///   <see cref="DoNotZeroReverbMacros" /> list in settings.
+  ///   <see cref="DoNotZeroReverb" /> list in settings.
   /// </remarks>
   internal bool CanChangeReverbToZero(
     string soundBankName, string categoryName, string programName) {
     return !(
-      from programPath in DoNotZeroReverbMacros
+      from programPath in DoNotZeroReverb
       where programPath.SoundBank == soundBankName &&
             programPath.Category == categoryName &&
             programPath.Program == programName

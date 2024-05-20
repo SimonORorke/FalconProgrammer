@@ -63,7 +63,7 @@
         <Background SoundBank="Savage" Path="J:\FalconProgrammer\Images\Heath.png"/>
         <Background SoundBank="Titanium" Path="J:\FalconProgrammer\Images\Dull Purple.png"/>
     </Backgrounds>
-    <DoNotZeroReverbMacros>
+    <DoNotZeroReverb>
         <ProgramPath SoundBank="Factory" Category="Bass-Sub" Program="Coastal Halftones 1.4" />
         <ProgramPath SoundBank="Factory" Category="Bass-Sub" Program="Metropolis 1.4" />
         <ProgramPath SoundBank="Factory" Category="Leads" Program="Ali3n 1.4" />
@@ -77,7 +77,7 @@
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Voc Sidechain" />
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Wonder Land" />
         <ProgramPath SoundBank="Spectre" Category="Leads" Program="LD Showteker" />
-    </DoNotZeroReverbMacros>
+    </DoNotZeroReverb>
     <Batch SoundBank="All" Category="All" Program="All">
         <Tasks>
             <Task>InitialiseLayout</Task>

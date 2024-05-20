@@ -72,7 +72,7 @@ public class SettingsTests {
       EmbeddedFileName = "LocationsSettings.xml"
     };
     var settings = settingsReader.Read();
-    Assert.That(settings.DoNotZeroReverbMacros, Is.Empty);
+    Assert.That(settings.DoNotZeroReverb, Is.Empty);
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
@@ -82,18 +82,18 @@ public class SettingsTests {
       Category = category,
       Program = program
     };
-    settings.DoNotZeroReverbMacros.Add(programPath);
+    settings.DoNotZeroReverb.Add(programPath);
     settings.Write();
     var mockSerialiser = settingsReader.MockSerialiserForSettings;
     var writtenSettings = (Settings)mockSerialiser.LastObjectSerialised;
-    Assert.That(writtenSettings.DoNotZeroReverbMacros, Has.Count.EqualTo(1));
+    Assert.That(writtenSettings.DoNotZeroReverb, Has.Count.EqualTo(1));
     Assert.That(
-      writtenSettings.DoNotZeroReverbMacros[0].SoundBank, Is.EqualTo(soundBank));
+      writtenSettings.DoNotZeroReverb[0].SoundBank, Is.EqualTo(soundBank));
     Assert.That(
-      writtenSettings.DoNotZeroReverbMacros[0].Category, Is.EqualTo(category));
+      writtenSettings.DoNotZeroReverb[0].Category, Is.EqualTo(category));
     Assert.That(
-      writtenSettings.DoNotZeroReverbMacros[0].Program, Is.EqualTo(program));
-    Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverbMacros>"));
+      writtenSettings.DoNotZeroReverb[0].Program, Is.EqualTo(program));
+    Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverb>"));
     Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.False);
   }
 

@@ -37,7 +37,9 @@ public partial class SoundBankCategory : SoundBankItem {
     // This fixes it.
     if (!string.IsNullOrWhiteSpace(value)) {
       PopulateCategories();
-      Category = AllCaption;
+      if (AllowAll) {
+        Category = AllCaption;
+      }
     }
   }
 
