@@ -36,7 +36,7 @@ public class BatchTests {
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName, category));
     Batch.EmbeddedProgramFileName = "GuiScriptProcessor.uvip";
     Batch.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
-    Batch.ReplaceModWheelWithMacro(soundBankName, category);
+    Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, category);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
       "because the category's GUI has to be defined in a script."));
@@ -47,7 +47,7 @@ public class BatchTests {
     const string soundBankName = "Organic Keys";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName));
-    Batch.ReplaceModWheelWithMacro(soundBankName);
+    Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
       "because the sound bank's GUI has to be defined in a script."));
@@ -57,7 +57,7 @@ public class BatchTests {
   public void CannotReplaceModWheelWithoutModWheelReplacementCcNo() {
     const string soundBankName = "Organic Keys";
     Batch.Settings.MidiForMacros.ModWheelReplacementCcNo = 0;
-    Batch.ReplaceModWheelWithMacro(soundBankName);
+    Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
       "CC number greater than 1 has not been specified."));
@@ -93,7 +93,7 @@ public class BatchTests {
   public void ProgramsFolderNotFound() {
     Batch.MockFileSystemService.Folder.ExpectedExists = false;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.QueryCountMacros(null));
+      () => Batch.RunTask(ConfigTask.QueryCountMacros, null));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "Cannot find programs folder '"));
@@ -103,7 +103,7 @@ public class BatchTests {
   public void ProgramsFolderNotSpecified() {
     Batch.Settings.ProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.UpdateMacroCcs(null));
+      () => Batch.RunTask(ConfigTask.UpdateMacroCcs, null));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "The programs folder is not specified in settings file "));
@@ -182,7 +182,8 @@ public class BatchTests {
     Batch.MockFileSystemService.Folder.ExistingPaths.Add(
       Batch.Settings.ProgramsFolder.Path);
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.PrependPathLineToDescription("Factory"));
+      () => Batch.RunTask(
+        ConfigTask.PrependPathLineToDescription, "Factory"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith("Cannot find sound bank folder '"));
   }

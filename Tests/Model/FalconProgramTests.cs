@@ -46,7 +46,8 @@ public class FalconProgramTests {
       const string categoryName = "Bass";
       const string programName = "Imagination";
       Batch.MockBatchLog.Lines.Clear();
-      Batch.InitialiseLayout(soundBankName, categoryName, programName);
+      Batch.RunTask(
+        ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
       string expectedPath = $"\"./../../../Images/{expectedImageFileName}\"";
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(expectedPath));
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));

@@ -615,6 +615,9 @@ public class FalconProgram {
     }
   }
 
+  /// <summary>
+  ///   Reports how many macros the program has.
+  /// </summary>
   public void QueryCountMacros() {
     Log.WriteLine($"{PathShort} has {Macros.Count} macros.");
   }
@@ -883,6 +886,9 @@ public class FalconProgram {
     ProgramXml.SaveToFile(Path);
   }
 
+  /// <summary>
+  ///   Configures macro CCs.
+  /// </summary>
   public void UpdateMacroCcs() {
     if (GuiScriptProcessor == null) {
       // The CCs are specified in Modulations owned by the Macros

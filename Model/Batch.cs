@@ -13,11 +13,6 @@ public class Batch {
     Log = log;
   }
 
-  // public Batch(IBatchLog log, Func<Task> onScriptRunEnded) {
-  //   Log = log;
-  //   OnScriptRunEnded = onScriptRunEnded;
-  // }
-
   internal BatchScriptReader BatchScriptReader {
     get => _batchScriptReader ??= new BatchScriptReader();
     // For tests
@@ -131,6 +126,22 @@ public class Batch {
   private void ConfigurePrograms(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     switch (Task) {
+      case ConfigTask.ReplaceModWheelWithMacro:
+        if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
+          Log.WriteLine(
+            "ReplaceModWheelWithMacro is not possible because a mod wheel " + 
+            "replacement CC number greater than 1 has not been specified.");
+          return;
+        }
+        break;
+      case ConfigTask.ReuseCc1:
+        if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
+          Log.WriteLine(
+            "ReuseCc1 is not possible because a mod wheel replacement CC " +
+            "number greater than 1 has has not been specified.");
+          return;
+        }
+        break;
       case ConfigTask.QueryDelayTypes:
         PrepareForEffectTypesQuery("Delay");
         break;
@@ -252,20 +263,6 @@ public class Batch {
     return result;
   }
 
-  [PublicAPI]
-  public void InitialiseLayout(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.InitialiseLayout;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void InitialiseValuesAndMoveMacros(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.InitialiseValuesAndMoveMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
   protected virtual void OnScriptRunEnded() {
     ScriptRunEnded?.Invoke(this, EventArgs.Empty);
   }
@@ -276,148 +273,16 @@ public class Batch {
   }
 
   [PublicAPI]
-  public void PrependPathLineToDescription(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.PrependPathLineToDescription;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void QueryAdsrMacros(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.QueryAdsrMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  /// <summary>
-  ///   For each of the specified Falcon program presets, reports the number of macros.
-  /// </summary>
-  /// <param name="soundBankName">
-  ///   The name of the sound bank folder. Null for all sound banks.
-  /// </param>
-  /// <param name="categoryName">
-  ///   The name of the category folder.
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  /// <param name="programName">
-  ///   The program name, excluding the ".uvip" suffix.
-  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
-  ///   specified, null (the default) for all files in the specified category.
-  ///   Otherwise ignored.
-  /// </param>
-  [PublicAPI]
-  public void QueryCountMacros(string? soundBankName, string? categoryName = null,
-    string? programName = null) {
-    Task = ConfigTask.QueryCountMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void QueryDahdsrModulations(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.QueryDahdsrModulations;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void QueryDelayTypes(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.QueryDelayTypes;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void QueryMainDahdsr(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.QueryMainDahdsr;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void QueryReverbTypes(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.QueryReverbTypes;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void QueryReuseCc1NotSupported(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.QueryReuseCc1NotSupported;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void RemoveDelayEffectsAndMacros(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.RemoveDelayEffectsAndMacros;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  /// <summary>
-  ///   In each of the specified Falcon program presets where it is feasible, replaces
-  ///   use of the modulation wheel with a Wheel macro that executes the same
-  ///   modulations.
-  /// </summary>
-  /// <param name="soundBankName">
-  ///   The name of the sound bank folder. Null for all sound banks.
-  /// </param>
-  /// <param name="categoryName">
-  ///   The name of the category folder.
-  ///   If <paramref name="soundBankName" /> is specified, null (the default) for all
-  ///   categories in the specified sound bank. Otherwise ignored.
-  /// </param>
-  /// <param name="programName">
-  ///   The program name, excluding the ".uvip" suffix.
-  ///   If <paramref name="soundBankName" /> and <paramref name="soundBankName" /> are
-  ///   specified, null (the default) for all files in the specified category.
-  ///   Otherwise ignored.
-  /// </param>
-  [PublicAPI]
-  public void ReplaceModWheelWithMacro(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      Log.WriteLine(
-        "ReplaceModWheelWithMacro is not possible because a mod wheel replacement " +
-        "CC number greater than 1 has not been specified.");
-      return;
-    }
-    Task = ConfigTask.ReplaceModWheelWithMacro;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void RestoreOriginal(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.RestoreOriginal;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
-  public void ReuseCc1(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
-      Log.WriteLine(
-        "ReuseCc1 is not possible because a mod wheel replacement CC " +
-        "number greater than 1 has has not been specified.");
-      return;
-    }
-    Task = ConfigTask.ReuseCc1;
-    ConfigurePrograms(soundBankName, categoryName, programName);
-  }
-
-  [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    RestoreOriginal(soundBankName, categoryName, programName);
-    PrependPathLineToDescription(soundBankName, categoryName, programName);
-    InitialiseLayout(soundBankName, categoryName, programName);
-    UpdateMacroCcs(soundBankName, categoryName, programName);
-    RemoveDelayEffectsAndMacros(soundBankName, categoryName, programName);
-    InitialiseValuesAndMoveMacros(soundBankName, categoryName, programName);
-    ReplaceModWheelWithMacro(soundBankName, categoryName, programName);
-    ReuseCc1(soundBankName, categoryName, programName);
+    RunTask(ConfigTask.RestoreOriginal, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.PrependPathLineToDescription, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.RemoveDelayEffectsAndMacros, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.InitialiseValuesAndMoveMacros, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.ReuseCc1, soundBankName, categoryName, programName);
   }
 
   public void RunScript(
@@ -426,8 +291,8 @@ public class Batch {
     try {
       batchScript.Validate();
       foreach (var batchTask in batchScript.SequenceTasks()) {
-        Task = batchTask.ConfigTask;
-        ConfigurePrograms(
+        RunTask(
+          batchTask.ConfigTask,
           GetScopeParameter(batchTask.SoundBank),
           GetScopeParameter(batchTask.Category),
           GetScopeParameter(batchTask.Program));
@@ -460,16 +325,12 @@ public class Batch {
     RunScript(batchScript, cancellationToken);
   }
 
-  private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
-    foreach (string effectType in effectTypes.Where(effectType =>
-               !EffectTypes.Contains(effectType))) {
-      EffectTypes.Add(effectType);
-    }
-  }
-
   /// <summary>
-  ///   Configures macro CCs for Falcon program presets.
+  ///   Runs the specified configuration task for the specified Falcon program(s).
   /// </summary>
+  /// <param name="task">
+  ///   The configuration task to run.
+  /// </param>
   /// <param name="soundBankName">
   ///   The name of the sound bank folder. Null for all sound banks.
   /// </param>
@@ -484,11 +345,17 @@ public class Batch {
   ///   specified, null (the default) for all files in the specified category.
   ///   Otherwise ignored.
   /// </param>
-  [PublicAPI]
-  public void UpdateMacroCcs(
+  internal void RunTask(ConfigTask task,
     string? soundBankName, string? categoryName = null, string? programName = null) {
-    Task = ConfigTask.UpdateMacroCcs;
+    Task = task;
     ConfigurePrograms(soundBankName, categoryName, programName);
+  }
+
+  private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
+    foreach (string effectType in effectTypes.Where(effectType =>
+               !EffectTypes.Contains(effectType))) {
+      EffectTypes.Add(effectType);
+    }
   }
 
   private void WriteEffectTypesQueryResult() {
