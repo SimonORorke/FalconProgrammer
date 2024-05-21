@@ -13,7 +13,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
 
   private void AddItem(string soundBank = "", string category = "", string program = "") {
     AddItem(new ProgramItem(
-      Settings, FileSystemService, IsAddingAdditionItem, false) {
+      Settings, FileSystemService, IsAddingAdditionItem, true) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category,
