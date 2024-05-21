@@ -138,7 +138,7 @@ public class Batch {
         if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
           Log.WriteLine(
             "ReuseCc1 is not possible because a mod wheel replacement CC " +
-            "number greater than 1 has has not been specified.");
+            "number greater than 1 has not been specified.");
           return;
         }
         break;

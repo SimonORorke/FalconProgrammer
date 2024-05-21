@@ -64,6 +64,16 @@ public class BatchTests {
   }
 
   [Test]
+  public void CannotReuseCc1WithoutModWheelReplacementCcNo() {
+    const string soundBankName = "Organic Keys";
+    Batch.Settings.MidiForMacros.ModWheelReplacementCcNo = 0;
+    Batch.RunTask(ConfigTask.ReuseCc1, soundBankName);
+    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
+    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
+      "CC number greater than 1 has not been specified."));
+  }
+
+  [Test]
   public void OriginalProgramsFolderFound() {
     Assert.That(Batch.GetOriginalProgramsFolderPath(), Is.EqualTo(
       Batch.Settings.OriginalProgramsFolder.Path));
