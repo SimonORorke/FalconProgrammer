@@ -71,6 +71,7 @@ public class Macro : ModulationsOwner {
     set => Name = $"Macro {value}";
   }
 
+  internal bool IsModulatedByWheel => FindModulationWithCcNo(1) != null; 
   private MidiForMacros Midi { get; }
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
   public bool ModulatesDelay => DisplayName.Contains("Delay");

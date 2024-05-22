@@ -20,7 +20,7 @@ public class BatchRunner {
   public void Run() {
     Global.ApplicationName = "Falcon Programmer";
     var batch = new Batch(new ConsoleBatchLog());
-    // batch.RollForward(null);
+    batch.RollForward(null);
     // batch.RollForward("Devinity", "Bass");
     // batch.RollForward("Devinity", "Bass", "Bass Interia");
     // batch.RollForward("Devinity", "Bass", "Comber Bass");
@@ -54,6 +54,8 @@ public class BatchRunner {
     // batch.RollForward("Spectre", "Leads", "LD Showteker");
     // batch.RollForward("Spectre", "Polysynth", "PL Cream");
     // batch.RollForward("Titanium");
+    // batch.RollForward("Titanium", "Pads", "Children's Choir");
+    // batch.RollForward("Titanium", "Pads", "Chill Retro");
     // batch.RunTask(ConfigTask.QueryMainDahdsr, "Factory");
     // batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, "Factory", "RetroWave 2.5", "PAD Midnight Organ");
     // batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, "Fluidity", "Electronic", "Fluid Sweeper");
@@ -64,6 +66,6 @@ public class BatchRunner {
     // batch.RunTask(ConfigTask.QueryDelayTypes, null);
     // batch.RunTask(ConfigTask.QueryDahdsrModulations, null);
     // batch.RunTask(ConfigTask.QueryReuseCc1NotSupported, null);
-    batch.RunTask(ConfigTask.QueryReverbTypes, null);
+    // batch.RunTask(ConfigTask.QueryReverbTypes, null);
   }
 }

@@ -49,7 +49,9 @@ public class BatchScript : SerialisationBase {
       ConfigTask.InitialiseLayout,
       ConfigTask.UpdateMacroCcs,
       ConfigTask.RemoveDelayEffectsAndMacros,
-      ConfigTask.InitialiseValuesAndMoveMacros,
+      ConfigTask.ZeroReleaseMacro,
+      ConfigTask.ZeroReverbMacros,
+      ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
       ConfigTask.ReuseCc1
     ];

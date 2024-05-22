@@ -2,7 +2,7 @@
 
 public enum ConfigTask {
   InitialiseLayout,
-  InitialiseValuesAndMoveMacros,
+  MoveZeroedMacrosToEnd,
   PrependPathLineToDescription,
   QueryAdsrMacros,
   QueryCountMacros,
@@ -15,5 +15,7 @@ public enum ConfigTask {
   ReplaceModWheelWithMacro,
   RestoreOriginal,
   ReuseCc1,
-  UpdateMacroCcs
+  UpdateMacroCcs,
+  ZeroReleaseMacro,
+  ZeroReverbMacros
 }

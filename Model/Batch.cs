@@ -55,8 +55,8 @@ public class Batch {
       case ConfigTask.InitialiseLayout:
         Program.InitialiseLayout();
         break;
-      case ConfigTask.InitialiseValuesAndMoveMacros:
-        Program.InitialiseValuesAndMoveMacros();
+      case ConfigTask.MoveZeroedMacrosToEnd:
+        Program.MoveZeroedMacrosToEnd();
         break;
       case ConfigTask.QueryAdsrMacros:
         Program.QueryAdsrMacros();
@@ -96,6 +96,12 @@ public class Batch {
         break;
       case ConfigTask.UpdateMacroCcs:
         Program.UpdateMacroCcs();
+        break;
+      case ConfigTask.ZeroReleaseMacro:
+        Program.ZeroReleaseMacro();
+        break;
+      case ConfigTask.ZeroReverbMacros:
+        Program.ZeroReverbMacros();
         break;
     }
     if (Program.HasBeenUpdated) {
@@ -280,7 +286,9 @@ public class Batch {
     RunTask(ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
     RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
     RunTask(ConfigTask.RemoveDelayEffectsAndMacros, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.InitialiseValuesAndMoveMacros, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.ZeroReleaseMacro, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.ZeroReverbMacros, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.MoveZeroedMacrosToEnd, soundBankName, categoryName, programName);
     RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, categoryName, programName);
     RunTask(ConfigTask.ReuseCc1, soundBankName, categoryName, programName);
   }

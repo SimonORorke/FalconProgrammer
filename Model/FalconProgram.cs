@@ -130,7 +130,7 @@ public class FalconProgram {
     // check the Modulations it owns.
     var macrosOwningModWheelModulations = (
       from macro in Macros
-      where macro.FindModulationWithCcNo(1) != null
+      where macro.IsModulatedByWheel
       select macro).ToList();
     if (macrosOwningModWheelModulations.Count == 1) {
       Log.WriteLine(
@@ -480,44 +480,41 @@ public class FalconProgram {
     BypassReverbEffects();
   }
 
-  public void InitialiseValuesAndMoveMacros() {
+  /// <summary>
+  ///   Moves release and reverb macros with zero values to the end of the standard GUI
+  ///   layout. Run after <see cref="ZeroReleaseMacro" /> and
+  ///   <see cref="ZeroReverbMacros" />.
+  ///   If we only refrained from zeroing a macro because it is modulated by the wheel,
+  ///   we will assume that the player will use the wheel, and so the macro will still be
+  ///   moved to the end.
+  /// </summary>
+  public void MoveZeroedMacrosToEnd() {
+    if (GuiScriptProcessor != null) {
+      Log.WriteLine(
+        $"{PathShort}: Cannot move macros because " +
+        "there is a GUI script processor that is not feasible/desirable " +
+        "to remove.");
+      return;
+    }
     var macrosToMove = new List<Macro>();
-    var adsrMacros = GetAdsrMacros();
-    if (adsrMacros.Count < 4
-        && adsrMacros.TryGetValue("Release", out var releaseMacro)) {
-      ZeroMacro(releaseMacro);
-      if (GuiScriptProcessor == null) {
-        macrosToMove.Add(releaseMacro);
-      }
+    if (TryGetNonAdsrReleaseMacro(out var releaseMacro)
+        && (releaseMacro!.Value == 0 || releaseMacro.IsModulatedByWheel)) {
+      macrosToMove.Add(releaseMacro);
     }
-    bool hasZeroedReverbMacros = ZeroReverbMacros();
-    if (GuiScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
-      // "Organic Keys" sound bank
-      organicKeysScriptProcessor.DelaySend = 0;
-      organicKeysScriptProcessor.ReverbSend = 0;
-      NotifyUpdate(
-        $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " +
-        "and .ReverbSend to zero.");
+    var reverbToggleMacro = FindReverbToggleMacro();
+    if (reverbToggleMacro?.Value == 0) {
+      macrosToMove.Add(reverbToggleMacro);
     }
-    if (GuiScriptProcessor == null) {
-      MoveMacros(macrosToMove, hasZeroedReverbMacros);
-    }
-  }
-
-  private void MoveMacros(List<Macro> macrosToMove, bool hasZeroedReverbMacros) {
-    // For unknown reason, when zeroing reverb silences the program and so had been
-    // disallowed, just moving the macro to the end can silence the program.
-    // ReSharper disable once CommentTypo
-    // Example: Spectre\Leads\LD Showteker.
-    // In any case, it's doubtful if moving a reverb macro to the end if it is crucial to
-    // the sound is a good idea. So we won't do it.
-    if (hasZeroedReverbMacros) {
-      var reverbToggleMacro = FindReverbToggleMacro();
-      if (reverbToggleMacro != null) {
-        macrosToMove.Add(reverbToggleMacro);
-      }
-      var reverbContinuousMacro = FindReverbContinuousMacro();
-      if (reverbContinuousMacro != null) {
+    var reverbContinuousMacro = FindReverbContinuousMacro();
+    if (reverbContinuousMacro != null) {
+      if (reverbContinuousMacro.Value == 0
+          // If we only refrained from zeroing the macro because it's modulated by the
+          // wheel, assume the player will use the wheel, and so still move it to the
+          // end.
+          // Example: Titanium\Pads\Children's Choir.
+          || (reverbContinuousMacro.IsModulatedByWheel &&
+              Settings.CanChangeReverbToZero(
+                SoundBankName, Category.Name, Name))) {
         macrosToMove.Add(reverbContinuousMacro);
       }
     }
@@ -528,6 +525,7 @@ public class FalconProgram {
       RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
       ReUpdateMacroCcs();
+      NotifyUpdate($"{PathShort}: Moved zeroed macros to end.");
     }
   }
 
@@ -886,6 +884,17 @@ public class FalconProgram {
     ProgramXml.SaveToFile(Path);
   }
 
+  private bool TryGetNonAdsrReleaseMacro(out Macro? releaseMacro) {
+    var adsrMacros = GetAdsrMacros();
+    if (adsrMacros.Count < 4
+        && adsrMacros.TryGetValue("Release", out var macro)) {
+      releaseMacro = macro;
+    } else {
+      releaseMacro = null;
+    }
+    return releaseMacro != null;
+  }
+
   /// <summary>
   ///   Configures macro CCs.
   /// </summary>
@@ -979,7 +988,7 @@ public class FalconProgram {
   ///   Sets the specified macro's value to zero if allowed.
   /// </summary>
   private void ZeroMacro(Macro macro) {
-    if (macro.FindModulationWithCcNo(1) != null) {
+    if (macro.IsModulatedByWheel) {
       // Example: Titanium\Pads\Children's Choir.
       Log.WriteLine(
         $"{PathShort}: Not changing {macro.DisplayName} to zero because " +
@@ -990,22 +999,40 @@ public class FalconProgram {
     }
   }
 
-  private bool ZeroReverbMacros() {
+  /// <summary>
+  ///   If a Release macro is not part of a set of four ADSR macros, set its initial
+  ///   value to zero.
+  /// </summary>
+  public void ZeroReleaseMacro() {
+    if (TryGetNonAdsrReleaseMacro(out var releaseMacro)) {
+      ZeroMacro(releaseMacro!);
+      NotifyUpdate($"{PathShort}: Changed Release to zero.");
+    }
+  }
+
+  public void ZeroReverbMacros() {
+    if (GuiScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
+      // "Organic Keys" sound bank
+      organicKeysScriptProcessor.DelaySend = 0;
+      organicKeysScriptProcessor.ReverbSend = 0;
+      NotifyUpdate(
+        $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " +
+        "and .ReverbSend to zero.");
+    }
     var reverbMacros = (
       from macro in Macros
       where macro.ModulatesReverb
       select macro).ToList();
     if (reverbMacros.Count == 0) {
-      return false;
+      return;
     }
     if (!Settings.CanChangeReverbToZero(SoundBankName, Category.Name, Name)) {
       // These programs are silent without reverb!
       Log.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
-      return false;
+      return;
     }
     foreach (var reverbMacro in reverbMacros) {
       ZeroMacro(reverbMacro);
     }
-    return true;
   }
 }
