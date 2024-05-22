@@ -46,6 +46,7 @@ public class ViewLocator : IDataTemplate {
       LocationsViewModel => new LocationsView(),
       MainWindowViewModel => new MainWindow(),
       MidiForMacrosViewModel => new MidiForMacrosView(),
+      ReverbViewModel => new ReverbView(),
       TaskCollection => new TasksView(),
       _ => null
     };

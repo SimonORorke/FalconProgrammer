@@ -33,6 +33,7 @@ public partial class MainWindowViewModel : ViewModelBase,
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
+    ReverbViewModel = new ReverbViewModel(dialogService, dispatcherService);
     // throw new InvalidOperationException("This is a test exception.");
   }
 
@@ -88,6 +89,12 @@ public partial class MainWindowViewModel : ViewModelBase,
   [ExcludeFromCodeCoverage]
   public override string PageTitle => throw new NotSupportedException();
 
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [PublicAPI]
+  internal ReverbViewModel ReverbViewModel { get; [ExcludeFromCodeCoverage] set; }
+
   public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
   public void Receive(GoToLocationsPageMessage message) {
@@ -124,7 +131,8 @@ public partial class MainWindowViewModel : ViewModelBase,
       new TabItemViewModel(LocationsViewModel),
       new TabItemViewModel(GuiScriptProcessorViewModel),
       new TabItemViewModel(MidiForMacrosViewModel),
-      new TabItemViewModel(BackgroundViewModel)
+      new TabItemViewModel(BackgroundViewModel),
+      new TabItemViewModel(ReverbViewModel),
     };
     return list.ToImmutableList();
   }

@@ -10,8 +10,8 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle =>
-    "InitialiseValuesAndMoveMacros must bypass these programs when initialising " + 
-    "Reverb macros to zero.";
+    "Task ZeroReverbMacros must bypass these programs when initialising " + 
+    "Reverb macro values to zero.";
 
   public DoNotZeroReverbCollection DoNotZeroReverb => _doNotZeroReverb
     ??= new DoNotZeroReverbCollection(FileSystemService, DispatcherService);

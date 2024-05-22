@@ -13,7 +13,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
 
   private void AddItem(string soundBank = "", string category = "", string program = "") {
     AddItem(new ProgramItem(
-      Settings, FileSystemService, IsAddingAdditionItem, true) {
+      Settings, FileSystemService, IsAddingAdditionItem, false) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category,
@@ -47,7 +47,10 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
   internal override void UpdateSettings() {
     Settings.DoNotZeroReverb.Clear();
     foreach (var programItem in this) {
-      if (!programItem.IsAdditionItem) {
+      if (!programItem.IsAdditionItem 
+          && !string.IsNullOrEmpty(programItem.SoundBank)
+          && !string.IsNullOrEmpty(programItem.Category)
+          && !string.IsNullOrEmpty(programItem.Program)) {
         Settings.DoNotZeroReverb.Add(new Settings.ProgramPath {
           SoundBank = programItem.SoundBank,
           Category = programItem.Category,
