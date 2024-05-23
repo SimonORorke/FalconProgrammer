@@ -62,7 +62,7 @@ public class MockDialogService : IDialogService {
     ShowColourSchemeDialogCount++;
   }
 
-  public async Task ShowErrorMessageBox(string text) {
+  public async Task ShowErrorMessageBox(string text, string tabTitle = "") {
     await Task.Delay(0);
     ShowErrorMessageBoxCount++;
     LastErrorMessage = text;

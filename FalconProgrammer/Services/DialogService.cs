@@ -94,9 +94,12 @@ public class DialogService : IDialogService {
     CurrentDialog = null;
   }
 
-  public async Task ShowErrorMessageBox(string text) {
+  public async Task ShowErrorMessageBox(string text, string tabTitle = "") {
+    string title = tabTitle == string.Empty 
+      ? ApplicationTitle 
+      : $"{ApplicationTitle} - {tabTitle}"; 
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
-      ApplicationTitle, text, ButtonEnum.Ok, Icon.Error);
+      title, text, ButtonEnum.Ok, Icon.Error);
     await messageBox.ShowAsync();
   }
 

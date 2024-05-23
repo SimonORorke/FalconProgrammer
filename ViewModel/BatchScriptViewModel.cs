@@ -217,7 +217,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     var validator = new SettingsValidator(this,
       "All folder/file locations must be " +
       "specified in the settings." + Environment.NewLine + Environment.NewLine +
-      "Batch scripts cannot be run");
+      "Batch scripts cannot be run", TabTitle);
     SoundBanks =
       await validator.GetProgramsFolderSoundBankNames();
     if (SoundBanks.Count == 0) {

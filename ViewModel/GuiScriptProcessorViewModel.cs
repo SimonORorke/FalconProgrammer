@@ -18,7 +18,7 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
     // Debug.WriteLine("GuiScriptProcessorViewModel.Open");
     await base.Open();
     var validator = new SettingsValidator(this,
-      "Script processors cannot be updated");
+      "Script processors cannot be updated", TabTitle);
     var soundBanks =
       await validator.GetProgramsFolderSoundBankNames();
     if (soundBanks.Count == 0) {

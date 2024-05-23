@@ -11,7 +11,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   protected SettingsWriterViewModelBase(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  private bool HaveSettingsBeenUpdated { get; set; }
+  protected bool HaveSettingsBeenUpdated { get; set; }
   protected bool IsPropertyChangedNotificationEnabled { get; set; } = true;
 
   private ISettingsFolderLocation SettingsFolderLocation =>
@@ -55,8 +55,12 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
         var errorReporter = new ErrorReporter(DialogService);
-        return await errorReporter.CanClosePageOnError(errorMessage,
-          isClosingWindow);
+        bool canClosePage = await errorReporter.CanClosePageOnError(
+          errorMessage, TabTitle, isClosingWindow);
+        if (!canClosePage) {
+          GoToLocationsPage();
+        }
+        return canClosePage;
       }
     }
     // I'm not sure whether insisting that all errors on the page are fixed is a good

@@ -85,7 +85,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
     }
     var errorReporter = new ErrorReporter(DialogService);
     bool canClosePage = await errorReporter.CanClosePageOnError(
-      errorMessage, isClosingWindow);
+      errorMessage, "Reverb", isClosingWindow);
     return new ClosingValidationResult(false, canClosePage);
   }
 }

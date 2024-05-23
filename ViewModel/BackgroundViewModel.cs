@@ -19,7 +19,7 @@ public class BackgroundViewModel : SettingsWriterViewModelBase {
   internal override async Task Open() {
     await base.Open();
     var validator = new SettingsValidator(this,
-      "Background images cannot be updated");
+      "Background images cannot be updated", TabTitle);
     var soundBanks =
       await validator.GetProgramsFolderSoundBankNames();
     if (soundBanks.Count == 0) {

@@ -90,7 +90,7 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     var errorReporter = new ErrorReporter(DialogService);
     bool canClosePage = await errorReporter.CanClosePageOnError(
       $"MIDI for Macros settings cannot be saved because {RangeType} CC No ranges " +
-      "include overlapping ranges.",
+      "include overlapping ranges.", "MIDI for Macros",
       isClosingWindow);
     return new ClosingValidationResult(false, canClosePage);
   }

@@ -54,6 +54,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     // using CommunityToolkit.Mvvm.Messaging is needed to provide this Send extension
     // method.
     Messenger.Send(new GoToLocationsPageMessage());
+    // DispatcherService.Dispatch(() => Messenger.Send(new GoToLocationsPageMessage()));
   }
 
   internal virtual async Task Open() {

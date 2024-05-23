@@ -22,7 +22,7 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
   internal override async Task Open() {
     await base.Open();
     var validator = new SettingsValidator(this,
-      "Reverb cannot be updated");
+      "Reverb cannot be updated", TabTitle);
     var soundBanks =
       await validator.GetProgramsFolderSoundBankNames();
     if (soundBanks.Count == 0) {

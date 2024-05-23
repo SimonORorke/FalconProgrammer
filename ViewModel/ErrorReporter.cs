@@ -17,6 +17,9 @@ internal class ErrorReporter {
   ///   is shown in a message box with OK button only.
   /// </summary>
   /// <param name="errorMessage">The error message to show.</param>
+  /// <param name="tabTitle">
+  ///   The tab title to be appended to the message box title.
+  /// </param>
   /// <param name="isClosingWindow">
   ///   True if the window is closing, false if another tab has been selected.
   /// </param>
@@ -30,14 +33,14 @@ internal class ErrorReporter {
   ///   can opt to close the window anyway or resume to fix the error.
   /// </remarks>
   public async Task<bool> CanClosePageOnError(
-    string errorMessage, bool isClosingWindow) {
+    string errorMessage, string tabTitle, bool isClosingWindow) {
     if (isClosingWindow) {
       errorMessage +=
         $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationName}, " +
         "No (Esc) to resume.";
       return await DialogService.AskYesNoQuestion(errorMessage);
     }
-    await DialogService.ShowErrorMessageBox(errorMessage);
+    await DialogService.ShowErrorMessageBox(errorMessage, tabTitle);
     return false;
   }
 }

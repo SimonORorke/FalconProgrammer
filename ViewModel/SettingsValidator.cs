@@ -8,18 +8,21 @@ namespace FalconProgrammer.ViewModel;
 /// </summary>
 public class SettingsValidator {
   public SettingsValidator(
-    ViewModelBase viewModel, string prefixForErrorMessage) {
+    ViewModelBase viewModel, string prefixForErrorMessage,
+    string tabTitleForErrorMessage) {
     ViewModel = viewModel;
     Settings = viewModel.Settings;
     DialogService = viewModel.DialogService;
     FileSystemService = viewModel.FileSystemService;
     PrefixForErrorMessage = prefixForErrorMessage;
+    TabTitleForErrorMessage = tabTitleForErrorMessage;
   }
 
   private IDialogService DialogService { get; }
   private IFileSystemService FileSystemService { get; }
   private string PrefixForErrorMessage { get; }
   private Settings Settings { get; }
+  private string TabTitleForErrorMessage { get; }
   private ViewModelBase ViewModel { get; }
 
   /// <summary>
@@ -56,26 +59,29 @@ public class SettingsValidator {
       Settings.ProgramsFolder.Path, "programs");
   }
 
+  private async Task ShowErrorMessage(string errorMessage) {
+    await DialogService.ShowErrorMessageBox(
+      $"{PrefixForErrorMessage}: {errorMessage}", TabTitleForErrorMessage);
+  }
+
   private async Task<ImmutableList<string>> GetSoundBankNamesFromFolder(
     string path, string description) {
     if (string.IsNullOrWhiteSpace(path)) {
-      await DialogService.ShowErrorMessageBox(
-        $"{PrefixForErrorMessage}: the {description} folder has not been specified.");
+      await ShowErrorMessage($"the {description} folder has not been specified.");
       ViewModel.GoToLocationsPage();
       return [];
     }
     if (!FileSystemService.Folder.Exists(path)) {
-      await DialogService.ShowErrorMessageBox(
-        $"{PrefixForErrorMessage}: cannot find {description} folder '{path}'.");
+      await ShowErrorMessage($"cannot find {description} folder '{path}'.");
       ViewModel.GoToLocationsPage();
       return [];
     }
     var soundBanks =
       FileSystemService.Folder.GetSubfolderNames(path);
     if (soundBanks.Count == 0) {
-      await DialogService.ShowErrorMessageBox(
-        $"{PrefixForErrorMessage}: {description} folder "
-        + $"'{path}' contains no sound bank subfolders.");
+      await ShowErrorMessage(
+        $"{description} folder " + 
+        $"'{path}' contains no sound bank subfolders.");
       ViewModel.GoToLocationsPage();
       return [];
     }
@@ -111,15 +117,14 @@ public class SettingsValidator {
   /// </remarks>
   public async Task<bool> ValidateDefaultTemplateFile() {
     if (string.IsNullOrWhiteSpace(Settings.DefaultTemplate.Path)) {
-      await DialogService.ShowErrorMessageBox(
-        $"{PrefixForErrorMessage}: the default template file has not been specified.");
+      await ShowErrorMessage("the default template file has not been specified.");
       ViewModel.GoToLocationsPage();
       return false;
     }
     if (!FileSystemService.File.Exists(Settings.DefaultTemplate.Path)) {
-      await DialogService.ShowErrorMessageBox(
-        $"{PrefixForErrorMessage}: cannot find default template file "
-        + $"'{Settings.DefaultTemplate.Path}'.");
+      await ShowErrorMessage(
+        "cannot find default template file " + 
+        $"'{Settings.DefaultTemplate.Path}'.");
       ViewModel.GoToLocationsPage();
       return false;
     }

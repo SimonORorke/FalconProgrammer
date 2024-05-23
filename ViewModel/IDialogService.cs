@@ -64,8 +64,10 @@ public interface IDialogService {
   ///   Asynchronously shows an error message box.
   /// </summary>
   /// <param name="text">The message text to be shown.</param>
-  /// <returns></returns>
-  Task ShowErrorMessageBox(string text);
+  /// <param name="tabTitle">
+  ///   Optionally specifies a tab title to be appended to the message box title.
+  /// </param>
+  Task ShowErrorMessageBox(string text, string tabTitle = "");
 
   /// <summary>
   ///   Asynchronously shows the Message window.

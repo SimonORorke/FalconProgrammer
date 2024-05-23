@@ -159,10 +159,9 @@ public partial class MainWindowViewModel : ViewModelBase,
       // QueryClose will show an error message box and return false.
       bool canChangeTab = await CurrentPageViewModel.QueryClose();
       if (!canChangeTab) { 
-        // Go to the Locations page. WRONG
         SelectedTab = (
           from tab in Tabs
-          where tab.ViewModel == LocationsViewModel
+          where tab.ViewModel == CurrentPageViewModel
           select tab).Single();
         return;
       }
