@@ -6,21 +6,23 @@ namespace FalconProgrammer.Tests.ViewModel;
 public class MockDialogService : IDialogService {
   [PublicAPI] internal int AskYesNoQuestionCount { get; set; }
   internal bool Cancel { get; set; }
-  internal string ExpectedPath { get; set; } = string.Empty;
-  internal bool ExpectedYesNoAnswer { get; set; }
   [PublicAPI] internal string LastErrorMessage { get; set; } = string.Empty;
   [PublicAPI] internal string LastMessageWindowMessage { get; set; } = string.Empty;
   [PublicAPI] internal string LastMessageWindowTitle { get; set; } = string.Empty;
   [PublicAPI] internal bool LastYesNoAnswer { get; set; }
+  [PublicAPI] internal string LastYesNoQuestion { get; set; } = string.Empty;
   [PublicAPI] internal int ShowAboutBoxCount { get; set; }
   [PublicAPI] internal int ShowColourSchemeDialogCount { get; set; }
   [PublicAPI] internal int ShowErrorMessageBoxCount { get; set; }
   [PublicAPI] internal int ShowMessageWindowCount { get; set; }
+  internal string SimulatedPath { get; set; } = string.Empty;
+  internal bool SimulatedYesNoAnswer { get; set; }
 
   public async Task<bool> AskYesNoQuestion(string text) {
     await Task.Delay(0);
     AskYesNoQuestionCount++;
-    return LastYesNoAnswer = ExpectedYesNoAnswer;
+    LastYesNoQuestion = text;
+    return LastYesNoAnswer = SimulatedYesNoAnswer;
   }
 
   public async Task<string?> BrowseForFolder(string dialogTitle) {
@@ -28,7 +30,7 @@ public class MockDialogService : IDialogService {
       return null;
     }
     await Task.Delay(0);
-    return ExpectedPath;
+    return SimulatedPath;
   }
 
   public async Task<string?> OpenFile(
@@ -38,7 +40,7 @@ public class MockDialogService : IDialogService {
       return null;
     }
     await Task.Delay(0);
-    return ExpectedPath;
+    return SimulatedPath;
   }
 
   public async Task<string?> SaveFile(
@@ -47,7 +49,7 @@ public class MockDialogService : IDialogService {
       return null;
     }
     await Task.Delay(0);
-    return ExpectedPath;
+    return SimulatedPath;
   }
 
   public async Task ShowAboutBox(AboutWindowViewModel viewModel) {

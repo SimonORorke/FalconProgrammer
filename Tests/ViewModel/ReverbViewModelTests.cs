@@ -19,6 +19,22 @@ public class ReverbViewModelTests : ViewModelTestsBase {
   private ReverbViewModel ViewModel { get; set; } = null!;
 
   [Test]
+  public async Task InvalidProgramItem() {
+    TestHelper.AddSoundBankSubfolders(
+      MockFileSystemService.Folder, Settings.ProgramsFolder.Path);
+    await ViewModel.Open(); // Reads settings to populate the page.
+    var invalidProgramItem =
+      new ProgramItem(ViewModel.Settings, ViewModel.FileSystemService,
+        false, true) {
+        SoundBank = "Pulsar", Category = "Plucks", Program = string.Empty
+      };
+    ViewModel.DoNotZeroReverb[^1] = invalidProgramItem; // Addition item
+    MockDialogService.SimulatedYesNoAnswer = false;
+    bool canClose = await ViewModel.QueryClose();
+    Assert.That(canClose, Is.EqualTo(false));
+  }
+
+  [Test]
   public async Task Main() {
     TestHelper.AddSoundBankSubfolders(
       MockFileSystemService.Folder, Settings.ProgramsFolder.Path);
@@ -34,7 +50,8 @@ public class ReverbViewModelTests : ViewModelTestsBase {
         SoundBank = "Pulsar", Category = "Plucks", Program = "C"
       };
     ViewModel.DoNotZeroReverb[0] = newProgramItem;
-    await ViewModel.QueryClose(); // Updates and saves settings
+    bool canClose = await ViewModel.QueryClose(); // Updates and saves settings
+    Assert.That(canClose, Is.EqualTo(true));
     Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]), 
       Is.EqualTo(Path.Combine(newProgramItem.SoundBank,
         newProgramItem.Category, newProgramItem.Program)));

@@ -39,9 +39,9 @@ public class TestCategory : Category {
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
     MockFileSystemService.Folder.ExistingPaths.Add(Path);
     MockFileSystemService.Folder.ExistingPaths.Add(templateFolderPath);
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(
+    MockFileSystemService.Folder.SimulatedSubfolderNames.Add(
       templateParentFolderPath, [templateFolderName]);
-    MockFileSystemService.Folder.ExpectedFilePaths.Add(
+    MockFileSystemService.Folder.SimulatedFilePaths.Add(
       templateFolderPath, [templateProgramPath]);
   }
 }

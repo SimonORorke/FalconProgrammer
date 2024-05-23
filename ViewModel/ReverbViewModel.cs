@@ -14,7 +14,7 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
     "Reverb macro values to zero.";
 
   public DoNotZeroReverbCollection DoNotZeroReverb => _doNotZeroReverb
-    ??= new DoNotZeroReverbCollection(FileSystemService, DispatcherService);
+    ??= new DoNotZeroReverbCollection(DialogService, FileSystemService, DispatcherService);
 
   [ExcludeFromCodeCoverage]
   public override string TabTitle => "Reverb";
@@ -33,6 +33,10 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (DoNotZeroReverb.HasBeenChanged) {
+      var closingValidationResult = await DoNotZeroReverb.Validate(isClosingWindow);
+      if (!closingValidationResult.Success) {
+        return closingValidationResult.CanClosePage;
+      }
       DoNotZeroReverb.UpdateSettings();
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();

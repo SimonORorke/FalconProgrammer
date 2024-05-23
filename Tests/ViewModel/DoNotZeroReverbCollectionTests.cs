@@ -9,7 +9,7 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     Settings = ReadMockSettings("BatchSettings.xml");
-    Collection = new DoNotZeroReverbCollection(
+    Collection = new DoNotZeroReverbCollection(MockDialogService,
       MockFileSystemService, MockDispatcherService);
   }
 
@@ -17,12 +17,35 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
   private Settings Settings { get; set; } = null!;
 
   private static IEnumerable<string> SoundBanks => [
-    "Eternal Funk", "Factory", "Fluidity", "Hypnotic Drive", "Inner Dimensions",
-    "Savage", "Spectre"
+    "Eternal Funk", "Ether Fields", "Factory", "Fluidity", "Hypnotic Drive", 
+    "Inner Dimensions", "Savage", "Spectre"
   ];
 
   [Test]
-  public void Main() {
+  public async Task InvalidProgramItem() {
+    ConfigureMockFileSystemService();
+    Collection.Populate(Settings, SoundBanks);
+    Assert.That(Collection[0].CanCut, Is.True);
+    Collection[0].CutCommand.Execute(null);
+    // Add an incomplete program item.
+    const string soundBank = "Ether Fields";
+    Collection[^1].SoundBank = soundBank; // Addition item
+    // No longer addition item
+    Assert.That(Collection[^2].IsAdditionItem, Is.False);
+    Assert.That(Collection[^2].SoundBank, Is.EqualTo(soundBank));
+    Assert.That(Collection[^2].CanCut, Is.True);
+    Assert.That(Collection[^2].CanPasteBefore, Is.True);
+    Assert.That(Collection[^2].CanRemove, Is.True);
+    MockDialogService.SimulatedYesNoAnswer = true;
+    var closingValidationResult = await Collection.Validate(true);
+    Assert.That(closingValidationResult.Success, Is.False);
+    Assert.That(closingValidationResult.CanClosePage, Is.True);
+    Assert.That(MockDialogService.LastYesNoQuestion, Does.StartWith(
+      "Sound Bank, Category and Program must all be specified. "));
+  }
+
+  [Test]
+  public async Task Main() {
     ConfigureMockFileSystemService();
     int initialSettingsDoNotZeroReverbCount = Settings.DoNotZeroReverb.Count;
     // Check that the test data is as expected
@@ -32,7 +55,7 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
     int initialCollectionCount = Collection.Count;
     Assert.That(initialCollectionCount,
       Is.EqualTo(initialSettingsDoNotZeroReverbCount + 1));
-    Assert.That(Collection[0].SoundBanks, Has.Count.EqualTo(7));
+    Assert.That(Collection[0].SoundBanks, Has.Count.EqualTo(SoundBanks.Count()));
     // Cut
     Collection[^2].CutCommand.Execute(null); // Last before addition item
     Assert.That(Collection, Has.Count.EqualTo(initialCollectionCount - 1));
@@ -42,6 +65,9 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
     // Remove
     Collection[0].RemoveCommand.Execute(null);
     Assert.That(Collection, Has.Count.EqualTo(initialCollectionCount - 1));
+    // Validate
+    var closingValidationResult = await Collection.Validate(true);
+    Assert.That(closingValidationResult.Success, Is.True);
     // Update Settings
     Collection.UpdateSettings();
     Assert.That(Settings.DoNotZeroReverb, Has.Count.EqualTo(

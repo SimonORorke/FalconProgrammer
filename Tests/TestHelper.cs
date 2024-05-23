@@ -7,40 +7,40 @@ namespace FalconProgrammer.Tests;
 internal static class TestHelper {
   public static void AddSoundBankSubfolders(
     MockFolderService mockFolderService, string folderPath) {
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       folderPath, [
         "Ether Fields", "Factory", "Inner Dimensions", "Organic Keys", "Pulsar", "Savage",
         "Spectre", "Voklm"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Ether Fields"), [
         "Granular", "Hybrid"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Factory"), [
         "Bass-Sub", "Keys", "Leads", "Organic Texture 2.8", "Pads", "Synth Brass" 
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Inner Dimensions"), [
         "Pad"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Organic Keys"), [
         "Acoustic Mood", "Lo-Fi"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Pulsar"), [
         "Bass", "Leads", "Plucks"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Savage"), [
         "Pads-Drones"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Spectre"), [
         "Bells", "Chords", "Leads"
       ]);
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Voklm"), [
         "Synth Choirs", "Vox Instruments"
       ]);

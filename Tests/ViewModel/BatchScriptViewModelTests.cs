@@ -11,7 +11,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    MockDialogService.ExpectedPath = BatchScriptPath;
+    MockDialogService.SimulatedPath = BatchScriptPath;
     Settings = ReadMockSettings("BatchSettings.xml");
     ViewModel = new TestBatchScriptViewModel(
       MockDialogService, MockDispatcherService) {
@@ -201,11 +201,11 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
     AddSoundBankSubfolders(Settings.TemplateProgramsFolder.Path);
-    MockFileSystemService.Folder.ExpectedFilePaths.Add(
+    MockFileSystemService.Folder.SimulatedFilePaths.Add(
       Path.Combine(Settings.ProgramsFolder.Path, "Pulsar", "Plucks"), [
         "Lighthouse.uvip", "Music Box.uvip", "Resonator.uvip"
       ]);
-    MockFileSystemService.Folder.ExpectedFilePaths.Add(
+    MockFileSystemService.Folder.SimulatedFilePaths.Add(
       Path.Combine(Settings.ProgramsFolder.Path, "Factory", "Keys"), [
         "Ballad Plucker.uvip", "Eighty Nine.uvip", "Morning Keys.uvip"
       ]);

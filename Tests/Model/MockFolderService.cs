@@ -9,10 +9,10 @@ public class MockFolderService : IFolderService {
   internal bool ExpectedExists { get; set; } = true;
   internal List<string> ExistingPaths { get; } = [];
 
-  internal Dictionary<string, IEnumerable<string>> ExpectedFilePaths { get; } =
+  internal Dictionary<string, IEnumerable<string>> SimulatedFilePaths { get; } =
     [];
 
-  internal Dictionary<string, IEnumerable<string>> ExpectedSubfolderNames { get; } = [];
+  internal Dictionary<string, IEnumerable<string>> SimulatedSubfolderNames { get; } = [];
 
   [ExcludeFromCodeCoverage]
   public void Create(string path) {
@@ -35,12 +35,12 @@ public class MockFolderService : IFolderService {
   }
 
   public IEnumerable<string> GetFilePaths(string path, string searchPattern) {
-    return ExpectedFilePaths.TryGetValue(path, out var value)
+    return SimulatedFilePaths.TryGetValue(path, out var value)
       ? value
       : [];
   }
 
   public ImmutableList<string> GetSubfolderNames(string path) {
-    return ExpectedSubfolderNames[path].ToImmutableList();
+    return SimulatedSubfolderNames[path].ToImmutableList();
   }
 }

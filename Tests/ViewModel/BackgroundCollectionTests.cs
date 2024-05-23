@@ -23,12 +23,12 @@ public class BackgroundCollectionTests : ViewModelTestsBase {
   [Test]
   public async Task Browse() {
     Collection.Populate(Settings, SoundBanks);
-    MockDialogService.ExpectedPath =
+    MockDialogService.SimulatedPath =
       @"K:\NewLeaf\Background Images\Dark Forest.png";
     var command = (AsyncRelayCommand)Collection[0].BrowseCommand;
     await command.ExecuteAsync(null);
     Assert.That(Collection[0].Path,
-      Is.EqualTo(MockDialogService.ExpectedPath));
+      Is.EqualTo(MockDialogService.SimulatedPath));
   }
 
   [Test]

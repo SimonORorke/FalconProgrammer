@@ -123,7 +123,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderEmpty() {
-    MockFileSystemService.Folder.ExpectedSubfolderNames.Add(Settings.ProgramsFolder.Path,
+    MockFileSystemService.Folder.SimulatedSubfolderNames.Add(Settings.ProgramsFolder.Path,
       []);
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));

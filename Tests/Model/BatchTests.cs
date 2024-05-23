@@ -155,15 +155,15 @@ public class BatchTests {
     var mockFolderService = Batch.MockFileSystemService.Folder;
     string programsFolderPath = Batch.Settings.ProgramsFolder.Path;
     const string onlySoundBankName = "Fluidity";
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       programsFolderPath, [onlySoundBankName]);
     string onlySoundBankFolderPath = Path.Combine(programsFolderPath, onlySoundBankName);
     const string onlyCategoryName = "Electronic";
-    mockFolderService.ExpectedSubfolderNames.Add(
+    mockFolderService.SimulatedSubfolderNames.Add(
       onlySoundBankFolderPath, [onlyCategoryName]);
     string onlyCategoryFolderPath =
       Path.Combine(onlySoundBankFolderPath, onlyCategoryName);
-    mockFolderService.ExpectedFilePaths.Add(
+    mockFolderService.SimulatedFilePaths.Add(
       onlyCategoryFolderPath, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     Batch.EmbeddedScriptFileName = "QueriesForAll.xml";
     Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);

@@ -4,8 +4,13 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramItem> {
-  public DoNotZeroReverbCollection(IFileSystemService fileSystemService,
-    IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
+  public DoNotZeroReverbCollection(
+    IDialogService dialogService, IFileSystemService fileSystemService,
+    IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) {
+    DialogService = dialogService;
+  }
+  
+  private IDialogService DialogService { get; }
 
   protected override void AppendAdditionItem() {
     AddItem();
@@ -47,10 +52,10 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
   internal override void UpdateSettings() {
     Settings.DoNotZeroReverb.Clear();
     foreach (var programItem in this) {
-      if (!programItem.IsAdditionItem 
-          && !string.IsNullOrEmpty(programItem.SoundBank)
-          && !string.IsNullOrEmpty(programItem.Category)
-          && !string.IsNullOrEmpty(programItem.Program)) {
+      if (!programItem.IsAdditionItem
+          && programItem.SoundBank != string.Empty
+          && programItem.Category != string.Empty
+          && programItem.Program != string.Empty) {
         Settings.DoNotZeroReverb.Add(new Settings.ProgramPath {
           SoundBank = programItem.SoundBank,
           Category = programItem.Category,
@@ -59,5 +64,28 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
       }
     }
     Settings.Write();
+  }
+
+  internal async Task<ClosingValidationResult> Validate(bool isClosingWindow) {
+    string errorMessage = string.Empty;
+    foreach (var programItem in this) {
+      if (!programItem.IsAdditionItem
+          && (programItem.SoundBank == string.Empty
+              || programItem.Category == string.Empty
+              || programItem.Program == string.Empty)) {
+        errorMessage =
+          "Sound Bank, Category and Program must all be specified. " +
+          "The following program path will not be saved:" + Environment.NewLine +
+          $"Sound Bank '{programItem.SoundBank}', Category '{programItem.Category}" + 
+          $"', Program '{programItem.Program}'";
+      }
+    }
+    if (errorMessage == string.Empty) {
+      return new ClosingValidationResult(true, true);
+    }
+    var errorReporter = new ErrorReporter(DialogService);
+    bool canClosePage = await errorReporter.CanClosePageOnError(
+      errorMessage, isClosingWindow);
+    return new ClosingValidationResult(false, canClosePage);
   }
 }

@@ -77,7 +77,7 @@ public class CategoryTests {
       };
     category.ConfigureMockFileSystemService(
       @"Fluidity\Strings", "Guitar Stream.uvip");
-    category.MockFileSystemService.Folder.ExpectedFilePaths.Add(
+    category.MockFileSystemService.Folder.SimulatedFilePaths.Add(
       category.Path, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     category.Initialise();
     Assert.That(!category.MustUseGuiScriptProcessor);

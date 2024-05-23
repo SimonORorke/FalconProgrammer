@@ -158,8 +158,8 @@ public partial class MainWindowViewModel : ViewModelBase,
       // If there is an error on the previous selected tab's page,
       // QueryClose will show an error message box and return false.
       bool canChangeTab = await CurrentPageViewModel.QueryClose();
-      if (!canChangeTab) {
-        // Go to the Locations page.
+      if (!canChangeTab) { 
+        // Go to the Locations page. WRONG
         SelectedTab = (
           from tab in Tabs
           where tab.ViewModel == LocationsViewModel

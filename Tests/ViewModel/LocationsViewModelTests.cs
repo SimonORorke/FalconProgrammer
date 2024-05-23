@@ -29,32 +29,32 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public async Task CancelBrowseForSettingsFolder() {
     await ViewModel.Open();
     MockDialogService.Cancel = true;
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
     MockFileSystemService.File.ExpectedExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
-      Is.Not.EqualTo(MockDialogService.ExpectedPath));
+      Is.Not.EqualTo(MockDialogService.SimulatedPath));
   }
 
   [Test]
   public async Task CancelBrowseForDefaultTemplate() {
     await ViewModel.Open();
     MockDialogService.Cancel = true;
-    MockDialogService.ExpectedPath =
+    MockDialogService.SimulatedPath =
       @"K:\NewLeaf\Program Templates\My Sound.uvip";
     var command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
-      Is.Not.EqualTo(MockDialogService.ExpectedPath));
+      Is.Not.EqualTo(MockDialogService.SimulatedPath));
   }
 
   [Test]
   public async Task LoadSettingsFromAnotherSettingsFile() {
     await ViewModel.Open();
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
-    MockDialogService.ExpectedYesNoAnswer = true;
-    string newSettingsPath = Path.Combine(MockDialogService.ExpectedPath, "Settings.xml");
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedYesNoAnswer = true;
+    string newSettingsPath = Path.Combine(MockDialogService.SimulatedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
     MockSettingsFolderLocationReader.EmbeddedFileName =
       "SettingsFolderLocationK.xml";
@@ -68,33 +68,33 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task Main() {
     await ViewModel.Open();
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
-      Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
+      Is.EqualTo(MockDialogService.SimulatedPath));
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     MockFileSystemService.File.ExpectedExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
-      Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Original Programs";
+      Is.EqualTo(MockDialogService.SimulatedPath));
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Original Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForOriginalProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.OriginalProgramsFolderPath,
-      Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Template Programs";
+      Is.EqualTo(MockDialogService.SimulatedPath));
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Template Programs";
     command = (AsyncRelayCommand)ViewModel.BrowseForTemplateProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
-      Is.EqualTo(MockDialogService.ExpectedPath));
-    MockDialogService.ExpectedPath =
+      Is.EqualTo(MockDialogService.SimulatedPath));
+    MockDialogService.SimulatedPath =
       @"K:\NewLeaf\Program Templates\My Sound.uvip";
     command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.DefaultTemplatePath,
-      Is.EqualTo(MockDialogService.ExpectedPath));
+      Is.EqualTo(MockDialogService.SimulatedPath));
     await ViewModel.QueryClose();
     var mockSerialiser = (MockSerialiser)ViewModel.Settings.Serialiser;
     Assert.That(mockSerialiser.LastOutputPath,
@@ -133,7 +133,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     ViewModel.SettingsFolderPath = @"K:\NewLeaf\Settings";
     MockFileSystemService.File.ExpectedExists = false;
     MockFileSystemService.Folder.ExpectedExists = false;
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     // Make a property change to require saving settings.
     ViewModel.ProgramsFolderPath += "X";
     Assert.That(await ViewModel.QueryClose(), Is.False);
@@ -147,7 +147,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public async Task SettingsFolderNotSpecified() {
     await ViewModel.Open();
     MockFileSystemService.File.ExpectedExists = false;
-    MockDialogService.ExpectedPath = @"K:\NewLeaf\Programs";
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
     Assert.That(await ViewModel.QueryClose(), Is.False);
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
