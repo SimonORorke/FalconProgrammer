@@ -40,6 +40,9 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   public event EventHandler? RunEnded;
 
   private void BatchLogOnLineWritten(object? sender, string text) {
+    // We need to tak a breather to give the GUI an opportunity to repaint when necessary
+    // and to allow the batch to be cancelled.
+    Thread.Sleep(1);
     DispatcherService.Dispatch(() => {
       Log.Add(text);
       LogLineWritten?.Invoke(this, EventArgs.Empty);
