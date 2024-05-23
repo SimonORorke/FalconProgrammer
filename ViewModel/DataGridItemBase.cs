@@ -13,7 +13,7 @@ public abstract partial class DataGridItemBase : ObservableValidator {
 
   protected DataGridItemBase(bool isAdditionItem) {
     IsAdditionItem = isAdditionItem;
-    CanRemove = !isAdditionItem;
+    // CanRemove = !isAdditionItem;
   }
 
   private bool HasNewAdditionItemBeenRequested { get; set; }
@@ -52,11 +52,14 @@ public abstract partial class DataGridItemBase : ObservableValidator {
   }
 
   /// <summary>
-  ///   Gets or sets CanExecute for <see cref="RemoveCommand" />.
+  ///   Gets or CanExecute for <see cref="RemoveCommand" />.
   /// </summary>
   public bool CanRemove {
-    get => _canRemove;
-    protected set => SetProperty(ref _canRemove, value);
+    get {
+      SetProperty(ref _canRemove, !IsAdditionItem);
+      return _canRemove;
+    }
+    // protected set => SetProperty(ref _canRemove, value);
   }
 
   internal event EventHandler? AppendAdditionItem;
@@ -102,9 +105,9 @@ public abstract partial class DataGridItemBase : ObservableValidator {
   }
 
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-    if (e.PropertyName != nameof(CanRemove) && !IsAdditionItem) {
-      CanRemove = true;
-    }
+    // if (e.PropertyName != nameof(CanRemove) && !IsAdditionItem) {
+    //   CanRemove = true;
+    // }
     if (IsAdding &&
         // Allow for CanRemove as well as a persistable property changed.
         !HasNewAdditionItemBeenRequested) {
