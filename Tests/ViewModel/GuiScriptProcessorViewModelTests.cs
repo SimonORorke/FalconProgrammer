@@ -76,6 +76,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SoundBankCategories[1].SoundBank, Is.EqualTo("Organic Keys"));
     Assert.That(ViewModel.SoundBankCategories[1].Category, Is.EqualTo("All"));
     Assert.That(ViewModel.SoundBankCategories[1].IsForAllCategories, Is.True);
+    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Addition item
     Assert.That(ViewModel.SoundBankCategories[4].SoundBank, Is.Empty);
     Assert.That(ViewModel.SoundBankCategories[4].SoundBanks, Has.Count.EqualTo(8));

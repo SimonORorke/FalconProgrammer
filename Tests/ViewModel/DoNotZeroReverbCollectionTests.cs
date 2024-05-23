@@ -25,17 +25,19 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
   public async Task InvalidProgramItem() {
     ConfigureMockFileSystemService();
     Collection.Populate(Settings, SoundBanks);
-    Assert.That(Collection[0].CanCut, Is.True);
+    Assert.That(Collection.HasBeenChanged, Is.False);
     Collection[0].CutCommand.Execute(null);
+    Assert.That(Collection[0].CutCommand.CanExecute(null), Is.True);
     // Add an incomplete program item.
     const string soundBank = "Ether Fields";
     Collection[^1].SoundBank = soundBank; // Addition item
     // No longer addition item
+    Assert.That(Collection.HasBeenChanged, Is.True);
     Assert.That(Collection[^2].IsAdditionItem, Is.False);
     Assert.That(Collection[^2].SoundBank, Is.EqualTo(soundBank));
-    Assert.That(Collection[^2].CanCut, Is.True);
-    Assert.That(Collection[^2].CanPasteBefore, Is.True);
-    Assert.That(Collection[^2].CanRemove, Is.True);
+    Assert.That(Collection[^2].CutCommand.CanExecute(null), Is.True);
+    Assert.That(Collection[^2].PasteBeforeCommand.CanExecute(null), Is.True);
+    Assert.That(Collection[^2].RemoveCommand.CanExecute(null), Is.True);
     MockDialogService.SimulatedYesNoAnswer = true;
     var closingValidationResult = await Collection.Validate(true);
     Assert.That(closingValidationResult.Success, Is.False);
