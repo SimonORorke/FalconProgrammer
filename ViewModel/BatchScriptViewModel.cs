@@ -23,8 +23,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
-  private CancellationTokenSource RunCancellationTokenSource { get; } =
-    new CancellationTokenSource();
+  private CancellationTokenSource RunCancellationTokenSource { get; set; } = null!;
 
   internal ProgramItem Scope => Scopes[0];
 
@@ -40,8 +39,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   public event EventHandler? RunEnded;
 
   private void BatchLogOnLineWritten(object? sender, string text) {
-    // We need to tak a breather to give the GUI an opportunity to repaint when necessary
-    // and to allow the batch to be cancelled.
+    // The batch thread needs to tak a breather to give the GUI an opportunity to repaint
+    // when necessary and to allow the batch to be cancelled.
     Thread.Sleep(1);
     DispatcherService.Dispatch(() => {
       Log.Add(text);
@@ -50,6 +49,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
+    RunCancellationTokenSource.Dispose();
     DispatcherService.Dispatch(OnRunEnded);
   }
 
@@ -136,6 +136,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private void PrepareForRun() {
     Log.Clear();
+    RunCancellationTokenSource = new CancellationTokenSource();
     OnRunBeginning();
   }
 
