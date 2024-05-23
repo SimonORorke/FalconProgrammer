@@ -49,9 +49,9 @@ public class TestBatch : Batch {
     var result = new TestCategory(SoundBankFolderPath, categoryName, Settings);
     if (MockFileSystemService.Folder.SimulatedFilePaths.TryGetValue(
           result.Path, out var
-            categoryExpectedFilePaths)) {
+            categorySimulatedFilePaths)) {
       result.MockFileSystemService.Folder.SimulatedFilePaths.Add(result.Path,
-        categoryExpectedFilePaths);
+        categorySimulatedFilePaths);
     }
     result.EmbeddedTemplateFileName = EmbeddedTemplateFileName;
     result.Initialise();

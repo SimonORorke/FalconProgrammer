@@ -127,7 +127,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.SelectedTab = LocationsTab; // Locations
     // Error condition: settings folder not found.
     // So the user should be prompted to confirm closing the window.
-    MockFileSystemService.Folder.ExpectedExists = false;
+    MockFileSystemService.Folder.SimulatedExists = false;
     // User will confirm that the window should be closed, even though there is a error.
     MockDialogService.SimulatedYesNoAnswer = true;
     // Make a property change to require saving settings.
@@ -143,7 +143,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.SelectedTab = LocationsTab; // Locations
     // Error condition: settings folder not found.
     // So the user should be prompted to confirm closing the window.
-    MockFileSystemService.Folder.ExpectedExists = false;
+    MockFileSystemService.Folder.SimulatedExists = false;
     // User will decline to close the window, so that the error can be fixed.
     MockDialogService.SimulatedYesNoAnswer = false;
     // Make a property change to require saving settings.

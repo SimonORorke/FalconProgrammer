@@ -37,7 +37,7 @@ public class BackgroundViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ProgramsFolderNotFound() {
-    MockFileSystemService.Folder.ExpectedExists = false;
+    MockFileSystemService.Folder.SimulatedExists = false;
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(

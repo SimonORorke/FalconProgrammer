@@ -20,7 +20,7 @@ public class BatchScriptTests {
 
   [Test]
   public void FileNotFound() {
-    TestBatchScriptReaderEmbedded.MockFileSystemService.File.ExpectedExists = false;
+    TestBatchScriptReaderEmbedded.MockFileSystemService.File.SimulatedExists = false;
     var exception = Assert.Catch<ApplicationException>(() =>
       TestBatchScriptReaderEmbedded.Read(BatchScriptPath));
     Assert.That(exception, Is.Not.Null);

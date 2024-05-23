@@ -30,7 +30,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     MockDialogService.Cancel = true;
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
-    MockFileSystemService.File.ExpectedExists = false;
+    MockFileSystemService.File.SimulatedExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
@@ -74,7 +74,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SettingsFolderPath,
       Is.EqualTo(MockDialogService.SimulatedPath));
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
-    MockFileSystemService.File.ExpectedExists = false;
+    MockFileSystemService.File.SimulatedExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
@@ -122,7 +122,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task NoSettingsFolderLocation() {
-    MockSettingsFolderLocationReader.ExpectedFileExists = false;
+    MockSettingsFolderLocationReader.SimulatedFileExists = false;
     await ViewModel.Open();
     Assert.That(ViewModel.SettingsFolderPath, Is.Empty);
   }
@@ -131,8 +131,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public async Task SettingsFolderDoesNotExist() {
     await ViewModel.Open();
     ViewModel.SettingsFolderPath = @"K:\NewLeaf\Settings";
-    MockFileSystemService.File.ExpectedExists = false;
-    MockFileSystemService.Folder.ExpectedExists = false;
+    MockFileSystemService.File.SimulatedExists = false;
+    MockFileSystemService.Folder.SimulatedExists = false;
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     // Make a property change to require saving settings.
     ViewModel.ProgramsFolderPath += "X";
@@ -146,7 +146,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task SettingsFolderNotSpecified() {
     await ViewModel.Open();
-    MockFileSystemService.File.ExpectedExists = false;
+    MockFileSystemService.File.SimulatedExists = false;
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
     Assert.That(await ViewModel.QueryClose(), Is.False);

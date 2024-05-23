@@ -6,7 +6,7 @@ namespace FalconProgrammer.Tests.Model;
 
 public class MockFolderService : IFolderService {
   internal bool CanCreate { get; set; } = true;
-  internal bool ExpectedExists { get; set; } = true;
+  internal bool SimulatedExists { get; set; } = true;
   internal List<string> ExistingPaths { get; } = [];
 
   internal Dictionary<string, IEnumerable<string>> SimulatedFilePaths { get; } =
@@ -23,7 +23,7 @@ public class MockFolderService : IFolderService {
 
   public bool Exists(string path) {
     if (ExistingPaths.Count == 0) {
-      return ExpectedExists;
+      return SimulatedExists;
     }
     if (ExistingPaths.Contains(path)) {
       return true;

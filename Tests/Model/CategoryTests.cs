@@ -33,7 +33,7 @@ public class CategoryTests {
       new TestCategory(GetSoundBankFolderName("Pulsar"), "DoesNotExist", Settings) {
         MockFileSystemService = {
           Folder = {
-            ExpectedExists = false
+            SimulatedExists = false
           }
         }
       };
@@ -114,7 +114,7 @@ public class CategoryTests {
       new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
     category.ConfigureMockFileSystemService(
       @"Factory\Keys", "DX Mania.uvip");
-    category.MockFileSystemService.File.ExpectedExists = false;
+    category.MockFileSystemService.File.SimulatedExists = false;
     var exception = Assert.Catch<ApplicationException>(
       () => category.Initialise());
     Assert.That(exception, Is.Not.Null);
@@ -169,7 +169,7 @@ public class CategoryTests {
         EmbeddedTemplateFileName = "GuiScriptProcessor.uvip",
         MockFileSystemService = {
           File = {
-            ExpectedExists = false
+            SimulatedExists = false
           }
         }
       };
@@ -221,7 +221,7 @@ public class CategoryTests {
       new TestCategory(GetSoundBankFolderName("DoesNotExist"), "Bass", Settings) {
         MockFileSystemService = {
           Folder = {
-            ExpectedExists = false
+            SimulatedExists = false
           }
         }
       };

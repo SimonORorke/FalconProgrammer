@@ -7,11 +7,11 @@ namespace FalconProgrammer.Tests.Model;
 ///   tests.
 /// </summary>
 public class MockSettingsFolderLocationReader : TestSettingsFolderLocationReader {
-  internal bool ExpectedFileExists { get; set; } = true;
+  internal bool SimulatedFileExists { get; set; } = true;
 
   public override ISettingsFolderLocation Read() {
     var result = new MockSettingsFolderLocation();
-    if (ExpectedFileExists) {
+    if (SimulatedFileExists) {
       var location = TestDeserialiser.Deserialise("Will be ignored");
       result.Path = location.Path;
     }

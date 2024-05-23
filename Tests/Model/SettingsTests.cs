@@ -159,7 +159,7 @@ public class SettingsTests {
   public void UseDefault() {
     var mockFileSystemService = new MockFileSystemService {
       File = {
-        ExpectedExists = false
+        SimulatedExists = false
       }
     };
     var settingsReader = new SettingsReader {

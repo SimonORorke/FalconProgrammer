@@ -81,7 +81,7 @@ public class BatchTests {
 
   [Test]
   public void OriginalProgramsFolderNotFound() {
-    Batch.MockFileSystemService.Folder.ExpectedExists = false;
+    Batch.MockFileSystemService.Folder.SimulatedExists = false;
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.GetOriginalProgramsFolderPath());
     Assert.That(exception, Is.Not.Null);
@@ -101,7 +101,7 @@ public class BatchTests {
 
   [Test]
   public void ProgramsFolderNotFound() {
-    Batch.MockFileSystemService.Folder.ExpectedExists = false;
+    Batch.MockFileSystemService.Folder.SimulatedExists = false;
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.RunTask(ConfigTask.QueryCountMacros, null));
     Assert.That(exception, Is.Not.Null);
