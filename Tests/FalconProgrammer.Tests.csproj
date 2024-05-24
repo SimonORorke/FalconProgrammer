@@ -77,6 +77,8 @@
         <EmbeddedResource Include="Model\Xml\Settings\InvalidColourSchemeSettings.xml"/>
         <None Remove="Model\Xml\Templates\Crystal Caves.uvip" />
         <EmbeddedResource Include="Model\Xml\Templates\Crystal Caves.uvip" />
+        <None Remove="Model\Xml\BatchScripts\XmlErrorScript.xml" />
+        <EmbeddedResource Include="Model\Xml\BatchScripts\XmlErrorScript.xml" />
     </ItemGroup>
 
     <ItemGroup>

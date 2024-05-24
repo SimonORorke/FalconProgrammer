@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Xml;
 using CommunityToolkit.Mvvm.Input;
 using FalconProgrammer.Model;
 
@@ -121,9 +122,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [RelayCommand]
   private async Task LoadScript() {
-    string? path = await BrowseForBatchScriptFile("run");
+    string? path = await BrowseForBatchScriptFile("load");
     if (path != null) {
-      var script = Batch.ReadScript(path);
+      BatchScript script;
+      try {
+        script = Batch.ReadScript(path);
+      } catch (XmlException exception) {
+        await DialogService.ShowErrorMessageBox(exception.Message, TabTitle);
+        return;
+      }
       Scopes.LoadFromScript(script);
       Tasks.LoadFromScript(script);
     }

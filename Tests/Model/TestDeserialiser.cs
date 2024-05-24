@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.Model;
+﻿using System.Xml;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -17,6 +18,11 @@ public class TestDeserialiser<T> : Deserialiser<T>
   ///   deserialised.
   /// </summary>
   public override T Deserialise(string inputPath) {
-    return Deserialise(Global.GetEmbeddedFileStream(EmbeddedFileName));
+    try {
+      return Deserialise(Global.GetEmbeddedFileStream(EmbeddedFileName));
+    } catch (XmlException) {
+      throw new XmlException(
+        $"Invalid XML was found in embedded file '{EmbeddedFileName}'.");
+    }
   }
 }

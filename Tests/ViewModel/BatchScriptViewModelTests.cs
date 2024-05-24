@@ -54,6 +54,16 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task LoadScriptXmlError() {
+    await ConfigureScript();
+    ViewModel.TestBatch.EmbeddedScriptFileName = "XmlErrorScript.xml";
+    await ViewModel.LoadScriptCommand.ExecuteAsync(null);
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+      "Invalid XML was found in embedded file"));
+  }
+
+  [Test]
   public async Task OriginalProgramsFolderNotFound() {
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
     AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
