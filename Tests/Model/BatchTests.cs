@@ -182,7 +182,7 @@ public class BatchTests {
     Assert.That(Batch.HasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-      @"QueryAdsrMacros: 'Factory\Keys\Morning Keys'"));
+      @"QueryAdsrMacros: 'Spectre\Bells\BL Xylophone'"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo("The batch run has finished."));
   }
 

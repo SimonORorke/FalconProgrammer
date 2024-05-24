@@ -68,10 +68,14 @@ public class TestBatch : Batch {
     HasScriptRunEnded = true;
   }
 
+  public override BatchScript ReadScript(string batchScriptPath) {
+    TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName;
+    return base.ReadScript(batchScriptPath);
+  }
+
   public override void RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
     HasScriptRunEnded = false;
-    TestBatchScriptReaderEmbedded.EmbeddedFileName = EmbeddedScriptFileName;
     base.RunScript(batchScriptPath, cancellationToken);
   }
 }

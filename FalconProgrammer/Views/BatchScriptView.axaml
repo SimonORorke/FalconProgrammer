@@ -12,37 +12,37 @@
         </Style>
         <Style Selector="Button.top">
             <Setter Property="Margin" Value="20,0,0,0" />
-            <Setter Property="Width" Value="145" />
+            <Setter Property="Width" Value="120" />
         </Style>
     </UserControl.Styles>
     <DockPanel>
         <TextBlock DockPanel.Dock="Top" Height="10" />
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Button Command="{Binding RunThisScriptCommand}"
-                    x:Name="RunThisScriptButton"
+            <Button Command="{Binding RunScriptCommand}"
+                    x:Name="RunScriptButton"
                     Classes="top"
                     Margin="10,0,0,0">
                 <Button.Content>
-                    <AccessText Text="_Run This Script" Classes="top" />
+                    <AccessText Text="_Run Script" Classes="top" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding SaveThisScriptCommand}"
+            <Button Command="{Binding SaveScriptCommand}"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="_Save This Script..." Classes="top" />
+                    <AccessText Text="_Save Script..." Classes="top" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding EditSavedScriptCommand}"
+            <Button Command="{Binding EditScriptFileCommand}"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="_Edit Saved Script..." Classes="top" />
+                    <AccessText Text="_Edit Script File" Classes="top" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding RunSavedScriptCommand}"
-                    x:Name="RunSavedScriptButton"
+            <Button Command="{Binding LoadScriptCommand}"
+                    x:Name="LoadScriptButton"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="R_un Saved Script..." Classes="top" />
+                    <AccessText Text="_Load Script..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveLogCommand}"
@@ -57,7 +57,7 @@
                     Classes="top"
                     IsEnabled="False">
                 <Button.Content>
-                    <AccessText Text="_Cancel Batch Run" Classes="top" />
+                    <AccessText Text="_Cancel Run" Classes="top" />
                 </Button.Content>
             </Button>
         </StackPanel>

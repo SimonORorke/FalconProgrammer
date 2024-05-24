@@ -278,6 +278,10 @@ public class Batch {
     Log.WriteLine($"{effectType} Types:");
   }
 
+  public virtual BatchScript ReadScript(string batchScriptPath) {
+    return BatchScriptReader.Read(batchScriptPath);
+  }
+
   [PublicAPI]
   public void RollForward(
     string? soundBankName, string? categoryName = null, string? programName = null) {
@@ -328,7 +332,7 @@ public class Batch {
 
   public virtual void RunScript(
     string batchScriptPath, CancellationToken cancellationToken) {
-    var batchScript = BatchScriptReader.Read(batchScriptPath);
+    var batchScript = ReadScript(batchScriptPath);
     RunScript(batchScript, cancellationToken);
   }
 

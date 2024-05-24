@@ -37,6 +37,23 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task LoadScript() {
+    await ConfigureScript();
+    await ViewModel.LoadScriptCommand.ExecuteAsync(null);
+    Assert.That(ViewModel.Scope.SoundBank, Is.EqualTo("Spectre"));
+    Assert.That(ViewModel.Scope.Category, Is.EqualTo("Bells"));
+    Assert.That(ViewModel.Scope.Program, Is.EqualTo("BL Xylophone"));
+    Assert.That(ViewModel.Tasks, Has.Count.EqualTo(2));
+    Assert.That(ViewModel.Tasks[0].Name, Is.EqualTo("QueryAdsrMacros"));
+    await ViewModel.QueryClose();
+    Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo("Spectre"));
+    Assert.That(ViewModel.Settings.Batch.Scope.Category, Is.EqualTo("Bells"));
+    Assert.That(ViewModel.Settings.Batch.Scope.Program, Is.EqualTo("BL Xylophone"));
+    Assert.That(ViewModel.Settings.Batch.Tasks, Has.Count.EqualTo(1));
+    Assert.That(ViewModel.Settings.Batch.Tasks[0], Is.EqualTo("QueryAdsrMacros"));
+  }
+
+  [Test]
   public async Task OriginalProgramsFolderNotFound() {
     MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
     AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
@@ -74,16 +91,9 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task RunSavedScript() {
-    await ViewModel.RunSavedScriptCommand.ExecuteAsync(null);
-    Assert.That(ViewModel.Log[0], Is.EqualTo(
-      @"QueryAdsrMacros: 'Factory\Keys\Morning Keys'"));
-  }
-
-  [Test]
-  public async Task RunThisScript() {
-    await ConfigureThisScript();
-    ViewModel.RunThisScriptCommand.Execute(null);
+  public async Task RunScript() {
+    await ConfigureScript();
+    ViewModel.RunScriptCommand.Execute(null);
     // TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
     //   "Batch script run has ended.");
     Assert.That(ViewModel.Log[0], Is.EqualTo(
@@ -93,29 +103,29 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task RunThisScriptCancelled() {
-    await ConfigureThisScript();
+  public async Task RunScriptCancelled() {
+    await ConfigureScript();
     // This should cancel the batch immediately, before any Falcon programs are updated.
     ViewModel.TestBatch.UpdatePrograms = true;
     ViewModel.CancelBatchRunCommand.Execute(null);
-    ViewModel.RunThisScriptCommand.Execute(null);
+    ViewModel.RunScriptCommand.Execute(null);
     Assert.That(ViewModel.Log, Does.Contain("The batch run has been cancelled."));
   }
 
   [Test]
-  public async Task SaveThisScript() {
-    await ConfigureThisScript();
-    await ViewModel.SaveThisScriptCommand.ExecuteAsync(null);
+  public async Task SaveScript() {
+    await ConfigureScript();
+    await ViewModel.SaveScriptCommand.ExecuteAsync(null);
     Assert.That(ViewModel.TestBatchScript, Is.Not.Null);
     Assert.That(ViewModel.TestBatchScript.MockSerialiser.LastOutputPath,
       Is.EqualTo(BatchScriptPath));
   }
 
   [Test]
-  public async Task SaveThisScriptCancelled() {
-    await ConfigureThisScript();
+  public async Task SaveScriptCancelled() {
+    await ConfigureScript();
     MockDialogService.Cancel = true;
-    await ViewModel.SaveThisScriptCommand.ExecuteAsync(null);
+    await ViewModel.SaveScriptCommand.ExecuteAsync(null);
     Assert.That(ViewModel.TestBatchScript, Is.Null);
   }
 
@@ -179,7 +189,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     TestHelper.AddSoundBankSubfolders(MockFileSystemService.Folder, folderPath);
   }
 
-  private async Task ConfigureThisScript() {
+  private async Task ConfigureScript() {
     ConfigureValidMockFileSystemService();
     await ViewModel.Open();
     const string soundBank = "Factory";

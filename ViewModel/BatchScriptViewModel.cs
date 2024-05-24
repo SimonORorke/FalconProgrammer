@@ -56,7 +56,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
     return await DialogService.OpenFile(
-      $"Open a batch script file to {purpose}",
+      $"Select a batch script file to {purpose}",
       "XML files", "xml");
   }
 
@@ -103,16 +103,29 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   /// <summary>
-  ///   Generates <see cref="EditSavedScriptCommand" />.
+  ///   Generates <see cref="EditScriptFileCommand" />.
   /// </summary>
   [RelayCommand]
   [ExcludeFromCodeCoverage]
-  protected virtual async Task EditSavedScript() {
+  protected virtual async Task EditScriptFile() {
     string? path = await BrowseForBatchScriptFile("edit");
     if (path != null) {
       Process.Start(new ProcessStartInfo(path) {
         UseShellExecute = true
       });
+    }
+  }
+
+  /// <summary>
+  ///   Generates <see cref="LoadScriptCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private async Task LoadScript() {
+    string? path = await BrowseForBatchScriptFile("run");
+    if (path != null) {
+      var script = Batch.ReadScript(path);
+      Scopes.LoadFromScript(script);
+      Tasks.LoadFromScript(script);
     }
   }
 
@@ -154,27 +167,14 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   /// <summary>
-  ///   Generates <see cref="RunSavedScriptCommand" />.
+  ///   Generates <see cref="RunScriptCommand" />.
   /// </summary>
   [RelayCommand]
-  private async Task RunSavedScript() {
-    string? path = await BrowseForBatchScriptFile("run");
-    if (path != null) {
-      PrepareForRun();
-      StartThread(() => Batch.RunScript(path, RunCancellationTokenSource.Token),
-        nameof(RunSavedScript));
-    }
-  }
-
-  /// <summary>
-  ///   Generates <see cref="RunThisScriptCommand" />.
-  /// </summary>
-  [RelayCommand]
-  private void RunThisScript() {
+  private void RunScript() {
     var script = CreateInitialisedBatchScript();
     PrepareForRun();
     StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token),
-      nameof(RunThisScript));
+      nameof(RunScript));
   }
 
   /// <summary>
@@ -195,10 +195,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   /// <summary>
-  ///   Generates <see cref="SaveThisScriptCommand" />.
+  ///   Generates <see cref="SaveScriptCommand" />.
   /// </summary>
   [RelayCommand]
-  private async Task SaveThisScript() {
+  private async Task SaveScript() {
     string? path = await DialogService.SaveFile(
       "Save Batch Script", "XML files", "xml");
     if (path != null) {

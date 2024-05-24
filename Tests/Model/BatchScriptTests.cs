@@ -58,16 +58,6 @@ public class BatchScriptTests {
       Is.EqualTo(BatchScript.SequencedConfigTasks[lastSequencedIndex]));
   }
 
-  // [Test]
-  // public void SequenceTasks() {
-  //   var sequencedTasks = BatchScript.SequenceTasks();
-  //   Assert.That(sequencedTasks[0], Is.EqualTo(BatchScript.Tasks[3]));
-  //   Assert.That(sequencedTasks[1], Is.SameAs(BatchScript.Tasks[4]));
-  //   Assert.That(sequencedTasks[2], Is.SameAs(BatchScript.Tasks[2]));
-  //   Assert.That(sequencedTasks[3], Is.SameAs(BatchScript.Tasks[0]));
-  //   Assert.That(sequencedTasks[4], Is.SameAs(BatchScript.Tasks[1]));
-  // }
-
   [Test]
   public void Write() {
     Assert.That(BatchScript.Path, Is.EqualTo(BatchScriptPath));

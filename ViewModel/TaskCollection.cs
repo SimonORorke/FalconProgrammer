@@ -30,22 +30,31 @@ public class TaskCollection : DataGridItemCollectionBase<TaskItem> {
     CutItemTyped((TaskItem)itemToCut);
   }
 
+  internal void LoadFromScript(BatchScript script) {
+    Update(script.Tasks);
+    AppendAdditionItem();
+  }
+
   protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     PasteBeforeItemTyped((TaskItem)itemBeforeWhichToPaste);
   }
 
   internal void Populate(Settings settings) {
-    IsPopulating = true;
     Settings = settings;
-    Clear();
-    foreach (string task in Settings.Batch.Tasks) {
-      AddItem(task);
-    }
+    IsPopulating = true;
+    Update(Settings.Batch.Tasks);
     IsPopulating = false;
   }
 
   protected override void RemoveItem(DataGridItemBase itemToRemove) {
     RemoveItemTyped((TaskItem)itemToRemove);
+  }
+
+  private void Update(IEnumerable<string> tasks) {
+    Clear();
+    foreach (string task in tasks) {
+      AddItem(task);
+    }
   }
 
   internal void UpdateSettings() {

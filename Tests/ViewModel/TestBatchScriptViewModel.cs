@@ -25,7 +25,7 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
   }
 
   [ExcludeFromCodeCoverage]
-  protected override async Task EditSavedScript() {
+  protected override async Task EditScriptFile() {
     await Task.Delay(0);
   }
 

@@ -37,8 +37,8 @@ public partial class BatchScriptView : UserControl {
   ///   disabled.)
   /// </remarks>
   private void ViewModelOnRunBeginning(object? sender, EventArgs e) {
-    RunThisScriptButton.IsEnabled = false;
-    RunSavedScriptButton.IsEnabled = false;
+    RunScriptButton.IsEnabled = false;
+    LoadScriptButton.IsEnabled = false;
     SaveLogButton.IsEnabled = false;
     CancelBatchRunButton.IsEnabled = true;
   }
@@ -51,8 +51,8 @@ public partial class BatchScriptView : UserControl {
   ///   setting CanExecute for the button commands.
   /// </remarks>
   private void ViewModelOnRunEnded(object? sender, EventArgs e) {
-    RunThisScriptButton.IsEnabled = true;
-    RunSavedScriptButton.IsEnabled = true;
+    RunScriptButton.IsEnabled = true;
+    LoadScriptButton.IsEnabled = true;
     SaveLogButton.IsEnabled = true;
     CancelBatchRunButton.IsEnabled = false;
   }

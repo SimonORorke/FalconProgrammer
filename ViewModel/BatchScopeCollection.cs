@@ -19,6 +19,10 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
     throw new NotSupportedException();
   }
 
+  internal void LoadFromScript(BatchScript script) {
+    Update(script.Scope);
+  }
+
   [ExcludeFromCodeCoverage]
   protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
     throw new NotSupportedException();
@@ -30,25 +34,29 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
   }
 
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
-    IsPopulating = true;
     Settings = settings;
     var soundBankList = soundBanks.ToList();
     soundBankList.Insert(0, SoundBankItem.AllCaption);
     SoundBanks = soundBankList.ToImmutableList();
+    IsPopulating = true;
+    Update(Settings.Batch.Scope);
+    IsPopulating = false;
+  }
+
+  private void Update(BatchScope scope) {
     Clear();
     AddItem(new ProgramItem(Settings, FileSystemService, false, true) {
       SoundBanks = SoundBanks,
-      SoundBank = Settings.Batch.Scope.SoundBank != string.Empty
-        ? Settings.Batch.Scope.SoundBank
+      SoundBank = scope.SoundBank != string.Empty
+        ? scope.SoundBank
         : SoundBankItem.AllCaption,
-      Category = Settings.Batch.Scope.Category != string.Empty
-        ? Settings.Batch.Scope.Category
+      Category = scope.Category != string.Empty
+        ? scope.Category
         : SoundBankItem.AllCaption,
-      Program = Settings.Batch.Scope.Program != string.Empty
-        ? Settings.Batch.Scope.Program
+      Program = scope.Program != string.Empty
+        ? scope.Program
         : SoundBankItem.AllCaption
     });
-    IsPopulating = false;
   }
 
   internal override void UpdateSettings() {
