@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace FalconProgrammer.Model;
 
-[XmlRoot("Batch")]
+[XmlRoot]
 public class BatchScript : SerialisationBase {
   static BatchScript() {
     // The second of these two statics depends on the first.
@@ -13,9 +13,12 @@ public class BatchScript : SerialisationBase {
     OrderedConfigTasks = OrderConfigTasks();
   }
 
+  [XmlElement]
+  public BatchScope Scope { get; [ExcludeFromCodeCoverage] set; } = new BatchScope();
+
   [XmlArray(nameof(Tasks))]
   [XmlArrayItem("Task")]
-  public List<BatchTask> Tasks { get; [ExcludeFromCodeCoverage] set; } = [];
+  public List<string> Tasks { get; [ExcludeFromCodeCoverage] set; } = [];
 
   [XmlIgnore] public string Path { get; set; } = string.Empty;
 
@@ -57,18 +60,17 @@ public class BatchScript : SerialisationBase {
     ];
   }
 
-  public List<BatchTask> SequenceTasks() {
-    var unsequenced = Tasks.ToList();
-    var result = new List<BatchTask>();
-    foreach (var sameConfigTask in SequencedConfigTasks.Select(
-               configTask => (
-                 from batchTask in unsequenced
-                 where batchTask.ConfigTask == configTask
-                 select batchTask).ToList())) {
-      result.AddRange(sameConfigTask);
-      foreach (var batchTask in sameConfigTask) {
-        unsequenced.Remove(batchTask);
-      }
+  public List<ConfigTask> SequenceTasks() {
+    var configTasks = Enum.GetValues<ConfigTask>()
+      .ToDictionary(configTask => configTask.ToString());
+    var unsequenced = (
+      from task in Tasks
+      select configTasks[task]).ToList();
+    var result = new List<ConfigTask>();
+    foreach (var sequencedConfigTask in SequencedConfigTasks.Where(sequencedConfigTask =>
+               unsequenced.Contains(sequencedConfigTask))) {
+      result.Add(sequencedConfigTask);
+      unsequenced.Remove(sequencedConfigTask);
     }
     // Any tasks that don't have to be run in a particular sequence. 
     result.AddRange(unsequenced);
@@ -76,47 +78,25 @@ public class BatchScript : SerialisationBase {
   }
 
   public void Validate() {
+    // Throw an ApplicationException if any Task does not match a ConfigTask. 
+    var configTaskNames = Enum.GetNames(typeof(ConfigTask)).ToList();
+    foreach (string task in Tasks.Where(task => !configTaskNames.Contains(task))) {
+      throw new ApplicationException($"'{task}' is not a valid task name.");
+    }
+    // Check for duplicates
     foreach (
-      var batchTask in from batchTask in Tasks
-      // Throws an ApplicationException if the BatchTask's Name does not match a
-      // ConfigTask. 
-      let dummy = batchTask.ConfigTask
+      string task in from batchTask in Tasks
       let count = (
-        from batchTask2 in Tasks
-        where batchTask2.Name == batchTask.Name
-              && batchTask2.SoundBank == batchTask.SoundBank
-              && batchTask2.Category == batchTask.Category
-              && batchTask2.Program == batchTask.Program
-        select batchTask2).Count()
+        from task2 in Tasks
+        where task2 == batchTask
+        select task2).Count()
       where count > 1
       select batchTask) {
-      throw new ApplicationException(
-        "Duplicate task: " +
-        $"Task = {batchTask.Name}, SoundBank = '{batchTask.SoundBank}', " +
-        $"Category = '{batchTask.Category}', " +
-        $"Program = '{batchTask.Program}'");
+      throw new ApplicationException($"Duplicate task: Task = {task}");
     }
   }
 
   public void Write() {
     Serialiser.Serialise(this, Path);
-  }
-
-  public class BatchTask {
-    private ConfigTask? _configTask;
-    [XmlAttribute] public string Name { get; set; } = string.Empty;
-    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
-    [XmlAttribute] public string Category { get; set; } = string.Empty;
-    [XmlAttribute] public string Program { get; set; } = string.Empty;
-
-    [XmlIgnore] public ConfigTask ConfigTask => _configTask ??= GetConfigTask();
-
-    private ConfigTask GetConfigTask() {
-      try {
-        return (ConfigTask)Enum.Parse(typeof(ConfigTask), Name);
-      } catch (ArgumentException ex) {
-        throw new ApplicationException($"'{Name}' is not a valid task name.", ex);
-      }
-    }
   }
 }

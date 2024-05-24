@@ -38,22 +38,22 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
     Clear();
     AddItem(new ProgramItem(Settings, FileSystemService, false, true) {
       SoundBanks = SoundBanks,
-      SoundBank = Settings.Batch.SoundBank != string.Empty
-        ? Settings.Batch.SoundBank
+      SoundBank = Settings.Batch.Scope.SoundBank != string.Empty
+        ? Settings.Batch.Scope.SoundBank
         : SoundBankItem.AllCaption,
-      Category = Settings.Batch.Category != string.Empty
-        ? Settings.Batch.Category
+      Category = Settings.Batch.Scope.Category != string.Empty
+        ? Settings.Batch.Scope.Category
         : SoundBankItem.AllCaption,
-      Program = Settings.Batch.Program != string.Empty
-        ? Settings.Batch.Program
+      Program = Settings.Batch.Scope.Program != string.Empty
+        ? Settings.Batch.Scope.Program
         : SoundBankItem.AllCaption
     });
     IsPopulating = false;
   }
 
   internal override void UpdateSettings() {
-    Settings.Batch.SoundBank = this[0].SoundBank;
-    Settings.Batch.Category = this[0].Category;
-    Settings.Batch.Program = this[0].Program;
+    Settings.Batch.Scope.SoundBank = this[0].SoundBank;
+    Settings.Batch.Scope.Category = this[0].Category;
+    Settings.Batch.Scope.Program = this[0].Program;
   }
 }

@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Batch>
+<BatchScript>
+    <Scope>
+        <SoundBank>Factory</SoundBank>
+        <Category>Keys</Category>
+        <Program>Morning Keys</Program>
+    </Scope>
     <Tasks>
-        <Task Name="QueryAdsrMacros" SoundBank="SB" Category="Cat" Program="P1"/>
-        <Task Name="QueryDelayTypes" SoundBank="SB" Category="Cat" Program="P1"/>
+        <Task>QueryAdsrMacros</Task>
     </Tasks>
-</Batch>
+</BatchScript>

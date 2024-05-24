@@ -23,7 +23,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
-  private CancellationTokenSource RunCancellationTokenSource { get; set; } = null!;
+  protected CancellationTokenSource RunCancellationTokenSource { get; private set; } =
+    new CancellationTokenSource();
 
   internal ProgramItem Scope => Scopes[0];
 
@@ -78,16 +79,9 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     return result;
   }
 
-  protected List<BatchScript.BatchTask> CreateBatchTasks() {
-    return (
-      from task in Tasks
-      where !task.IsAdditionItem
-      select new BatchScript.BatchTask {
-        Name = task.Name,
-        SoundBank = Scope.SoundBank,
-        Category = Scope.Category,
-        Program = Scope.Program
-      }).ToList();
+  [ExcludeFromCodeCoverage]
+  protected virtual BatchScript CreateBatchScript() {
+    return new BatchScript();
   }
 
   private Batch CreateInitialisedBatch() {
@@ -96,11 +90,16 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     return result;
   }
 
-  [ExcludeFromCodeCoverage]
-  protected virtual BatchScript CreateThisBatchScript() {
-    return new BatchScript {
-      Tasks = CreateBatchTasks()
-    };
+  private BatchScript CreateInitialisedBatchScript() {
+    var result = CreateBatchScript();
+    result.Scope.SoundBank = Scope.SoundBank;
+    result.Scope.Category = Scope.Category;
+    result.Scope.Program = Scope.Program;
+    result.Tasks = (
+      from task in Tasks
+      where !task.IsAdditionItem
+      select task.Name).ToList();
+    return result;
   }
 
   /// <summary>
@@ -134,7 +133,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     Tasks.Populate(Settings);
   }
 
-  private void PrepareForRun() {
+  protected virtual void PrepareForRun() {
     Log.Clear();
     RunCancellationTokenSource = new CancellationTokenSource();
     OnRunBeginning();
@@ -172,7 +171,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [RelayCommand]
   private void RunThisScript() {
-    var script = CreateThisBatchScript();
+    var script = CreateInitialisedBatchScript();
     PrepareForRun();
     StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token),
       nameof(RunThisScript));
@@ -203,7 +202,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     string? path = await DialogService.SaveFile(
       "Save Batch Script", "XML files", "xml");
     if (path != null) {
-      var script = CreateThisBatchScript();
+      var script = CreateInitialisedBatchScript();
       script.Serialiser.Serialise(script, path);
     }
   }

@@ -180,11 +180,10 @@ public class BatchTests {
   public void RunScriptForProgram() {
     Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(Batch.HasScriptRunEnded);
-    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(4));
-    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
-    Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo("Delay Types:"));
-    Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo(@"QueryDelayTypes: 'SB\Cat\P1'"));
-    Assert.That(Batch.MockBatchLog.Lines[3], Is.EqualTo("The batch run has finished."));
+    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
+    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
+      @"QueryAdsrMacros: 'Factory\Keys\Morning Keys'"));
+    Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo("The batch run has finished."));
   }
 
   [Test]

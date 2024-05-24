@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Batch>
+<BatchScript>
+    <Scope>
+        <SoundBank>Factory</SoundBank>
+        <Category>Keys</Category>
+        <Program>Morning Keys</Program>
+    </Scope>
     <Tasks>
-        <Task Name="QueryAdsrMacros" SoundBank="" Category="" Program=""/>
-        <Task Name="PrependPathLineToDescription" SoundBank="" Category="" Program=""/>
-        <Task Name="UpdateMacroCcs" SoundBank="" Category="" Program=""/>
-        <Task Name="InitialiseLayout" SoundBank="SB" Category="Cat" Program="P2"/>
-        <Task Name="InitialiseLayout" SoundBank="SB" Category="Cat" Program="P1"/>
+        <Task>QueryAdsrMacros</Task>
+        <Task>PrependPathLineToDescription</Task>
+        <Task>UpdateMacroCcs</Task>
+        <Task>InitialiseLayout</Task>
     </Tasks>
-</Batch>
+</BatchScript>

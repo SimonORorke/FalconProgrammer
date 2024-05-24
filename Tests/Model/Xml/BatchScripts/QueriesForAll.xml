@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Batch>
+<BatchScript>
+    <Scope>
+        <SoundBank>All</SoundBank>
+    </Scope>
     <Tasks>
-        <Task Name="QueryReverbTypes" SoundBank="All" Category="" Program=""/>
+        <Task>QueryReverbTypes</Task>
     </Tasks>
-</Batch>
+</BatchScript>

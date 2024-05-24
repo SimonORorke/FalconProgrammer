@@ -62,7 +62,12 @@
             </ToggleCcNoRange>
         </ToggleCcNoRanges>
     </MidiForMacros>
-    <Batch SoundBank="All" Category="All" Program="All">
+    <Batch>
+        <Scope>
+            <SoundBank>All</SoundBank>
+            <Category>All</Category>
+            <Program>All Keys</Program>
+        </Scope>
         <Tasks>
             <Task>InitialiseLayout</Task>
             <Task>UpdateMacroCcs</Task>

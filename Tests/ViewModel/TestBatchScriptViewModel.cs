@@ -20,16 +20,24 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
     return new TestBatch(BatchLog) { UpdatePrograms = false };
   }
 
-  protected override BatchScript CreateThisBatchScript() {
-    TestBatchScript = new TestBatchScript {
-      Tasks = CreateBatchTasks()
-    };
-    return TestBatchScript;
+  protected override BatchScript CreateBatchScript() {
+    return TestBatchScript = new TestBatchScript();
   }
 
   [ExcludeFromCodeCoverage]
   protected override async Task EditSavedScript() {
     await Task.Delay(0);
+  }
+
+  protected override void PrepareForRun() {
+    bool isCancelling = RunCancellationTokenSource.IsCancellationRequested;
+    base.PrepareForRun();
+    // RunCancellationTokenSource will have been replaced with a new instance.
+    // But we want to test cancelling before any tasks have been run.
+    if (isCancelling) {
+      // CancelBatchRunCommand was executed before RunThisScriptCommand.
+      RunCancellationTokenSource.Cancel();
+    }
   }
 
   protected override void SaveLogToFile(string outputPath) {

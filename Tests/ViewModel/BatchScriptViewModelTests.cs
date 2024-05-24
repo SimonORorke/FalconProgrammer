@@ -76,9 +76,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task RunSavedScript() {
     await ViewModel.RunSavedScriptCommand.ExecuteAsync(null);
-    // TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
-    //   "Batch script run has ended.");
-    Assert.That(ViewModel.Log[0], Is.EqualTo(@"QueryAdsrMacros: 'SB\Cat\P1'"));
+    Assert.That(ViewModel.Log[0], Is.EqualTo(
+      @"QueryAdsrMacros: 'Factory\Keys\Morning Keys'"));
   }
 
   [Test]
@@ -100,10 +99,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     ViewModel.TestBatch.UpdatePrograms = true;
     ViewModel.CancelBatchRunCommand.Execute(null);
     ViewModel.RunThisScriptCommand.Execute(null);
-    // TestHelper.WaitUntil(() => ViewModel.TestBatch.HasScriptRunEnded, 
-    //   "Batch script run has ended.");
-    Assert.That(ViewModel.Log, Does.Contain(
-      @"The batch run has been cancelled."));
+    Assert.That(ViewModel.Log, Does.Contain("The batch run has been cancelled."));
   }
 
   [Test]
@@ -154,9 +150,9 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     ViewModel.Scope.Category = category;
     ViewModel.Scope.Program = program;
     await ViewModel.QueryClose();
-    Assert.That(ViewModel.Settings.Batch.SoundBank, Is.EqualTo(soundBank));
-    Assert.That(ViewModel.Settings.Batch.Category, Is.EqualTo(category));
-    Assert.That(ViewModel.Settings.Batch.Program, Is.EqualTo(program));
+    Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
+    Assert.That(ViewModel.Settings.Batch.Scope.Category, Is.EqualTo(category));
+    Assert.That(ViewModel.Settings.Batch.Scope.Program, Is.EqualTo(program));
   }
 
   [Test]

@@ -78,7 +78,12 @@
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Wonder Land" />
         <ProgramPath SoundBank="Spectre" Category="Leads" Program="LD Showteker" />
     </DoNotZeroReverb>
-    <Batch SoundBank="All" Category="All" Program="All">
+    <Batch>
+        <Scope>
+            <SoundBank>All</SoundBank>
+            <Category>All</Category>
+            <Program>All</Program>
+        </Scope>
         <Tasks>
             <Task>InitialiseLayout</Task>
             <Task>UpdateMacroCcs</Task>

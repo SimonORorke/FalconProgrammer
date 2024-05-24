@@ -298,12 +298,11 @@ public class Batch {
     RunCancellationToken = cancellationToken;
     try {
       batchScript.Validate();
-      foreach (var batchTask in batchScript.SequenceTasks()) {
-        RunTask(
-          batchTask.ConfigTask,
-          GetScopeParameter(batchTask.SoundBank),
-          GetScopeParameter(batchTask.Category),
-          GetScopeParameter(batchTask.Program));
+      string? soundBankName = GetScopeParameter(batchScript.Scope.SoundBank); 
+      string? categoryName = GetScopeParameter(batchScript.Scope.Category); 
+      string? programName = GetScopeParameter(batchScript.Scope.Program); 
+      foreach (var configTask in batchScript.SequenceTasks()) {
+        RunTask(configTask, soundBankName, categoryName, programName);  
       }
       Log.WriteLine("The batch run has finished.");
     } catch (OperationCanceledException) {
