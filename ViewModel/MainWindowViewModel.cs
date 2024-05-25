@@ -12,11 +12,6 @@ public partial class MainWindowViewModel : ViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
   private ColourSchemeId _colourSchemeId;
   private string _currentPageTitle = string.Empty;
-  
-  // /// <summary>
-  // ///   Generates <see cref="CurrentPageTitle" /> property.
-  // /// </summary>
-  // [ObservableProperty] private string _currentPageTitle = string.Empty;
 
   /// <summary>
   ///   Generates <see cref="SelectedTab" />  property
