@@ -88,12 +88,12 @@ public abstract class DataGridItemCollectionBase<T> : ObservableCollection<T>
     CutItem(e);
   }
 
-  private void OnItemChanged() {
+  protected virtual void OnItemChanged(DataGridItemBase changedItem) {
     HasBeenChanged = true;
   }
 
-  private void OnItemChanged(object? sender, EventArgs e) {
-    OnItemChanged();
+  private void OnItemChanged(object? sender, DataGridItemBase e) {
+    OnItemChanged(e);
   }
 
   private void OnPasteBeforeItem(object? sender, DataGridItemBase e) {

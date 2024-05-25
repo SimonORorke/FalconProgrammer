@@ -62,7 +62,7 @@ public abstract partial class DataGridItemBase : ObservableValidator {
 
   internal event EventHandler? AppendAdditionItem;
   internal event EventHandler<DataGridItemBase>? CutItem;
-  internal event EventHandler? ItemChanged;
+  internal event EventHandler<DataGridItemBase>? ItemChanged;
   internal event EventHandler<DataGridItemBase>? PasteBeforeItem;
   internal event EventHandler<DataGridItemBase>? RemoveItem;
 
@@ -86,7 +86,7 @@ public abstract partial class DataGridItemBase : ObservableValidator {
   }
 
   private void OnItemChanged() {
-    ItemChanged?.Invoke(null, EventArgs.Empty);
+    ItemChanged?.Invoke(null, this);
   }
 
   private void OnPasteBeforeItem() {
