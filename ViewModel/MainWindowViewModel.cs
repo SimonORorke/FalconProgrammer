@@ -11,11 +11,12 @@ namespace FalconProgrammer.ViewModel;
 public partial class MainWindowViewModel : ViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
   private ColourSchemeId _colourSchemeId;
-
-  /// <summary>
-  ///   Generates <see cref="CurrentPageTitle" /> property.
-  /// </summary>
-  [ObservableProperty] private string _currentPageTitle = string.Empty;
+  private string _currentPageTitle = string.Empty;
+  
+  // /// <summary>
+  // ///   Generates <see cref="CurrentPageTitle" /> property.
+  // /// </summary>
+  // [ObservableProperty] private string _currentPageTitle = string.Empty;
 
   /// <summary>
   ///   Generates <see cref="SelectedTab" />  property
@@ -61,6 +62,13 @@ public partial class MainWindowViewModel : ViewModelBase,
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
+  public string CurrentPageTitle {
+    get => _currentPageTitle;
+    private set => SetProperty(ref _currentPageTitle, value);
+  }
+  
+  
+  
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
