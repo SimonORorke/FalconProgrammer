@@ -68,7 +68,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     // the GUI Script Processor page.
     // If implemented, this needs to allow for window closing, as with the
     // TrySaveSettings error message above.
-    // if (GetErrors().Any()) {
+    // if (HasErrors) {
     //   await DialogService.ShowErrorMessageBox(
     //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
     //   return false;
