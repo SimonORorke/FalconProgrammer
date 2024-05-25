@@ -52,8 +52,8 @@
                     <AccessText Text="Save _Log..." Classes="top" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding CancelBatchRunCommand}"
-                    x:Name="CancelBatchRunButton"
+            <Button Command="{Binding CancelRunCommand}"
+                    x:Name="CancelRunButton"
                     Classes="top"
                     IsEnabled="False">
                 <Button.Content>
@@ -63,6 +63,12 @@
         </StackPanel>
         <ContentControl DockPanel.Dock="Top"
                         Content="{Binding Scopes}" />
+        <TextBlock DockPanel.Dock="Bottom" Height="10" />
+        <TextBlock DockPanel.Dock="Bottom"
+                   Text="{Binding Status}"
+                   FontSize="18"
+                   HorizontalAlignment="Center" />
+        <TextBlock DockPanel.Dock="Bottom" Height="10" />
         <Grid ColumnDefinitions="Auto, 10, *" RowDefinitions="*">
             <ContentControl
                 Grid.Column="0"
@@ -78,8 +84,7 @@
                 </Label>
                 <Border Grid.Row="1"
                         BorderBrush="{DynamicResource SystemBaseLowColor}"
-                        BorderThickness="2"
-                        Margin="0, 0, 0, 10">
+                        BorderThickness="2">
                     <ScrollViewer x:Name="LogScrollViewer">
                         <ItemsControl x:Name="LogItemsControl"
                                       ItemsSource="{Binding Log}"

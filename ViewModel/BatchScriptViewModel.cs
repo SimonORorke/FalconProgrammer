@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -11,7 +12,9 @@ namespace FalconProgrammer.ViewModel;
 public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private Batch? _batch;
   private BatchLog? _batchLog;
+  
   private BatchScopeCollection? _scopes;
+  private string _status = string.Empty;
   private TaskCollection? _tasks;
 
   public BatchScriptViewModel(IDialogService dialogService,
@@ -19,13 +22,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
   internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
-
   public ObservableCollection<string> Log { get; } = [];
-
+  private ConcurrentQueue<string> LogLineQueue { get; set; } = [];
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
   protected CancellationTokenSource RunCancellationTokenSource { get; private set; } =
     new CancellationTokenSource();
+
+  private DateTime RunCurrentTime { get; set; }
+  private DateTime RunStartTime { get; set; }
 
   internal ProgramItem Scope => Scopes[0];
 
@@ -33,26 +38,48 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     ??= new BatchScopeCollection(FileSystemService, DispatcherService);
 
   private ImmutableList<string> SoundBanks { get; set; } = [];
+
+  public string Status {
+    get => _status;
+    private set => SetProperty(ref _status, value);
+  }
+
   public override string TabTitle => "Batch Script";
 
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
-  public event EventHandler? LogLineWritten;
+  public event EventHandler? LogUpdated;
   public event EventHandler? RunBeginning;
   public event EventHandler? RunEnded;
 
   private void BatchLogOnLineWritten(object? sender, string text) {
-    // The batch thread needs to tak a breather to give the GUI an opportunity to repaint
-    // when necessary and to allow the batch to be cancelled.
-    Thread.Sleep(1);
-    DispatcherService.Dispatch(() => {
-      Log.Add(text);
-      LogLineWritten?.Invoke(this, EventArgs.Empty);
-    });
+    LogLineQueue.Enqueue(text);
+    // We need to give the GUI opportunities to repaint when necessary and allow the
+    // batch run to be cancelled. So, once every 10th of a second, pause the batch thread
+    // for a millisecond and update the displayed log. This makes a huge difference to
+    // performance compared with pausing the batch thread and updating the log every time
+    // a new log line had been produced. Making the periodic pause and update once per
+    // second sped up the run slightly: 50 seconds compared with 55 seconds for a a roll
+    // forward of all programs, for example. But every 10th of a second makes it look
+    // like it is going faster!
+    var currentTime = DateTime.Now;
+    if (currentTime - RunCurrentTime >= TimeSpan.FromMilliseconds(100)) {
+      RunCurrentTime = currentTime;
+      Thread.Sleep(1);
+      DispatcherService.Dispatch(UpdateLog);
+    }
   }
 
   private void BatchOnScriptRunEnded(object? sender, EventArgs e) {
-    RunCancellationTokenSource.Dispose();
-    DispatcherService.Dispatch(OnRunEnded);
+    RunCancellationTokenSource.Dispose(); // Stops next run cancelling immediately.
+    DispatcherService.Dispatch(() => {
+      // The displayed log has only been updating once every 10th of a second.
+      // So there will almost certainly be some lines still to be displayed.
+      UpdateLog(); 
+      OnRunEnded();
+      var runEndTime = DateTime.Now;
+      var runDuration = runEndTime - RunStartTime;
+      Status = $"Run ended at {runEndTime:HH:mm:ss}. Duration: {runDuration:g}.";
+    });
   }
 
   private async Task<string?> BrowseForBatchScriptFile(string purpose) {
@@ -62,10 +89,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   /// <summary>
-  ///   Generates <see cref="CancelBatchRunCommand" />.
+  ///   Generates <see cref="CancelRunCommand" />.
   /// </summary>
   [RelayCommand]
-  private void CancelBatchRun() {
+  private void CancelRun() {
     RunCancellationTokenSource.Cancel();
   }
 
@@ -136,6 +163,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  private void OnLogUpdated() {
+    LogUpdated?.Invoke(this, EventArgs.Empty);
+  }
+
   private void OnRunBeginning() {
     RunBeginning?.Invoke(this, EventArgs.Empty);
   }
@@ -155,7 +186,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   protected virtual void PrepareForRun() {
     Log.Clear();
+    LogLineQueue = [];
+    //Log = string.Empty;
+    //LogWriter = new StringWriter();
     RunCancellationTokenSource = new CancellationTokenSource();
+    RunCurrentTime = RunStartTime = DateTime.Now;
+    Status = $"Run started at {RunStartTime:HH:mm:ss}.";
     OnRunBeginning();
   }
 
@@ -221,6 +257,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
         Name = threadName
       };
     thread.Start();
+  }
+
+  private void UpdateLog() {
+    while (!LogLineQueue.IsEmpty) {
+      if (LogLineQueue.TryDequeue(out string? line)) {
+        Log.Add(line);  
+      }
+    }
+    OnLogUpdated();
   }
 
   private async Task<bool> ValidateAndPopulateSoundBanks() {

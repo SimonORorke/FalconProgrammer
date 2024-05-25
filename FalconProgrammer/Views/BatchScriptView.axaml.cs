@@ -19,12 +19,12 @@ public partial class BatchScriptView : UserControl {
 
   protected override void OnLoaded(RoutedEventArgs e) {
     var viewModel = (BatchScriptViewModel)DataContext!;
-    viewModel.LogLineWritten += ViewModelOnLogLineWritten;
+    viewModel.LogUpdated += ViewModelOnLogUpdated;
     viewModel.RunBeginning += ViewModelOnRunBeginning;
     viewModel.RunEnded += ViewModelOnRunEnded;
   }
 
-  private void ViewModelOnLogLineWritten(object? sender, EventArgs e) {
+  private void ViewModelOnLogUpdated(object? sender, EventArgs e) {
     LogScrollViewer.ScrollToEnd();
   }
 
@@ -40,7 +40,7 @@ public partial class BatchScriptView : UserControl {
     RunScriptButton.IsEnabled = false;
     LoadScriptButton.IsEnabled = false;
     SaveLogButton.IsEnabled = false;
-    CancelBatchRunButton.IsEnabled = true;
+    CancelRunButton.IsEnabled = true;
   }
 
   /// <summary>
@@ -54,6 +54,6 @@ public partial class BatchScriptView : UserControl {
     RunScriptButton.IsEnabled = true;
     LoadScriptButton.IsEnabled = true;
     SaveLogButton.IsEnabled = true;
-    CancelBatchRunButton.IsEnabled = false;
+    CancelRunButton.IsEnabled = false;
   }
 }

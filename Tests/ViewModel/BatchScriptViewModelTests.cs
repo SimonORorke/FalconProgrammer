@@ -117,7 +117,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ConfigureScript();
     // This should cancel the batch immediately, before any Falcon programs are updated.
     ViewModel.TestBatch.UpdatePrograms = true;
-    ViewModel.CancelBatchRunCommand.Execute(null);
+    ViewModel.CancelRunCommand.Execute(null);
     ViewModel.RunScriptCommand.Execute(null);
     Assert.That(ViewModel.Log, Does.Contain("The batch run has been cancelled."));
   }
