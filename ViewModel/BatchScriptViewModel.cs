@@ -23,7 +23,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
   internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
   public ObservableCollection<string> Log { get; } = [];
-  private ConcurrentQueue<string> LogLineQueue { get; set; } = [];
+  private ConcurrentQueue<string> LogLineQueue { get; } = [];
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
 
   protected CancellationTokenSource RunCancellationTokenSource { get; private set; } =
@@ -55,12 +55,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     LogLineQueue.Enqueue(text);
     // We need to give the GUI opportunities to repaint when necessary and allow the
     // batch run to be cancelled. So, once every 10th of a second, pause the batch thread
-    // for a millisecond and update the displayed log. This makes a huge difference to
-    // performance compared with pausing the batch thread and updating the log every time
-    // a new log line had been produced. Making the periodic pause and update once per
-    // second sped up the run slightly: 50 seconds compared with 55 seconds for a a roll
-    // forward of all programs, for example. But every 10th of a second makes it look
-    // like it is going faster!
+    // for a millisecond and update the displayed log. This is over 10 times faster than
+    // pausing the batch thread and updating the log every time a new log line had been
+    // produced. Making the periodic pause and update once per second sped up the run
+    // slightly: 50 seconds compared with 55 seconds for a a roll forward of all
+    // programs, for example. But every 10th of a second makes it look like it is going
+    // faster!
     var currentTime = DateTime.Now;
     if (currentTime - RunCurrentTime >= TimeSpan.FromMilliseconds(100)) {
       RunCurrentTime = currentTime;
@@ -186,9 +186,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   protected virtual void PrepareForRun() {
     Log.Clear();
-    LogLineQueue = [];
-    //Log = string.Empty;
-    //LogWriter = new StringWriter();
     RunCancellationTokenSource = new CancellationTokenSource();
     RunCurrentTime = RunStartTime = DateTime.Now;
     Status = $"Run started at {RunStartTime:HH:mm:ss}.";
