@@ -92,7 +92,7 @@ public class BatchScript : SerialisationBase {
         select task2).Count()
       where count > 1
       select batchTask) {
-      throw new ApplicationException($"Duplicate task: Task = {task}");
+      throw new ApplicationException($"Duplicate task: {task}");
     }
   }
 

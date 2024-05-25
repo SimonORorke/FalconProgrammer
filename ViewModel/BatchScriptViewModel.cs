@@ -12,7 +12,7 @@ namespace FalconProgrammer.ViewModel;
 public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private Batch? _batch;
   private BatchLog? _batchLog;
-  
+
   private BatchScopeCollection? _scopes;
   private string _status = string.Empty;
   private TaskCollection? _tasks;
@@ -22,6 +22,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
   internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
+  private bool IsRunStarting { get; set; }
   public ObservableCollection<string> Log { get; } = [];
   private ConcurrentQueue<string> LogLineQueue { get; } = [];
   [ExcludeFromCodeCoverage] public override string PageTitle => "Run a batch Script";
@@ -62,10 +63,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     // programs, for example. But every 10th of a second makes it look like it is going
     // faster!
     var currentTime = DateTime.Now;
+    if (IsRunStarting) {
+      // Provide an initial progress update, showing that the first task is running.
+      IsRunStarting = false;
+      DispatcherService.Dispatch(UpdateLogAndProgress);
+    }
     if (currentTime - RunCurrentTime >= TimeSpan.FromMilliseconds(100)) {
       RunCurrentTime = currentTime;
       Thread.Sleep(1);
-      DispatcherService.Dispatch(UpdateLog);
+      DispatcherService.Dispatch(UpdateLogAndProgress);
     }
   }
 
@@ -74,7 +80,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     DispatcherService.Dispatch(() => {
       // The displayed log has only been updating once every 10th of a second.
       // So there will almost certainly be some lines still to be displayed.
-      UpdateLog(); 
+      UpdateLogAndProgress();
       OnRunEnded();
       var runEndTime = DateTime.Now;
       var runDuration = runEndTime - RunStartTime;
@@ -189,6 +195,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     RunCancellationTokenSource = new CancellationTokenSource();
     RunCurrentTime = RunStartTime = DateTime.Now;
     Status = $"Run started at {RunStartTime:HH:mm:ss}.";
+    IsRunStarting = true;
     OnRunBeginning();
   }
 
@@ -256,12 +263,14 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     thread.Start();
   }
 
-  private void UpdateLog() {
+  private void UpdateLogAndProgress() {
     while (!LogLineQueue.IsEmpty) {
       if (LogLineQueue.TryDequeue(out string? line)) {
-        Log.Add(line);  
+        Log.Add(line);
       }
     }
+    Status = $"Run started at {RunStartTime:HH:mm:ss}. Running {Batch.Task}, " +
+             $"task {Batch.TaskNo} of {Batch.TaskCount}.";
     OnLogUpdated();
   }
 

@@ -41,7 +41,9 @@ public class Batch {
 
   protected string SoundBankFolderPath { get; private set; } = null!;
   [PublicAPI] protected string SoundBankName => Path.GetFileName(SoundBankFolderPath);
-  protected ConfigTask Task { get; private set; }
+  public ConfigTask Task { get; private set; }
+  public int TaskCount { get; private set; }
+  public int TaskNo { get; private set; }
   public event EventHandler? ScriptRunEnded;
 
   protected virtual void ConfigureProgram() {
@@ -304,8 +306,11 @@ public class Batch {
       batchScript.Validate();
       string? soundBankName = GetScopeParameter(batchScript.Scope.SoundBank); 
       string? categoryName = GetScopeParameter(batchScript.Scope.Category); 
-      string? programName = GetScopeParameter(batchScript.Scope.Program); 
-      foreach (var configTask in batchScript.SequenceTasks()) {
+      string? programName = GetScopeParameter(batchScript.Scope.Program);
+      var configTasks = batchScript.SequenceTasks();
+      TaskCount = configTasks.Count;
+      TaskNo = 0;
+      foreach (var configTask in configTasks) {
         RunTask(configTask, soundBankName, categoryName, programName);  
       }
       Log.WriteLine("The batch run has finished.");
@@ -359,6 +364,7 @@ public class Batch {
   internal void RunTask(ConfigTask task,
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = task;
+    TaskNo++;
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 
