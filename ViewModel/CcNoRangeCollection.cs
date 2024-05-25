@@ -11,16 +11,8 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
   }
 
   private IDialogService DialogService { get; }
-  
-  private IEnumerable<CcNoRangeItem> Ranges => 
-    from range in this
-    where !range.IsAdditionItem
-    select range;
-  
   private string RangeType { get; }
   private List<Settings.IntegerRange> SettingsRanges { get; set; } = null!;
-
-  public event EventHandler<string>? Overlap;
 
   protected override void AppendAdditionItem() {
     AddItem();
@@ -45,19 +37,6 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
       AddItem(settingsRange.Start, settingsRange.End);
     }
     IsPopulating = false;
-  }
-
-  // protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
-  //   base.OnCollectionChanged(e);
-  // }
-
-  protected override void OnItemChanged(DataGridItemBase changedItem) {
-    base.OnItemChanged(changedItem);
-    CheckRangeForOverlap((CcNoRangeItem)changedItem);
-  }
-
-  private void OnOverlap(string errorMessage) {
-    Overlap?.Invoke(this, errorMessage);    
   }
 
   protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {
@@ -86,22 +65,6 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
         End = range.End ?? range.Start ?? 0
       });
     return new ClosingValidationResult(true, true);
-  }
-
-  private void CheckRangeForOverlap(CcNoRangeItem range) {
-    var otherRanges =
-      from otherRange in Ranges
-      where otherRange != range
-      select otherRange;
-    var overlappingRange = (
-      from otherRange in otherRanges
-      where otherRange.Start <= range.End && range.Start <= otherRange.End
-      select otherRange).FirstOrDefault();
-    if (overlappingRange != null) {
-      OnOverlap(
-        $"{RangeType} CC No range {range.Start} to {range.End} " +
-        $"overlaps with range {overlappingRange.Start} to {overlappingRange.End}");
-    }
   }
 
   private async Task<ClosingValidationResult> Validate(
