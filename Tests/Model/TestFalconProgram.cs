@@ -33,6 +33,9 @@ public class TestFalconProgram : FalconProgram {
     }
   }
 
+  protected override void CopyFile(string sourcePath, string destinationPath) {
+  }
+
   /// <summary>
   ///   Only used for Organic Pads sound bank in <see cref="FalconProgram.FixCData" />.
   /// </summary>

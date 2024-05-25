@@ -142,6 +142,11 @@ public class FalconProgram {
     return true;
   }
 
+  [ExcludeFromCodeCoverage]
+  protected virtual void CopyFile(string sourcePath, string destinationPath) {
+    File.Copy(sourcePath, destinationPath, true);
+  }
+
   private List<Macro> CreateMacrosFromElements() {
     var result = (
       from macroElement in ProgramXml.MacroElements
@@ -809,11 +814,11 @@ public class FalconProgram {
       SoundBankName,
       Category.Name,
       System.IO.Path.GetFileName(Path));
-    if (!File.Exists(originalPath)) {
+    if (!Batch.FileSystemService.File.Exists(originalPath)) {
       throw new ApplicationException(
         $"Cannot find original file '{originalPath}' to restore to '{Path}'.");
     }
-    File.Copy(originalPath, Path, true);
+    CopyFile(originalPath, Path);
     Log.WriteLine($"{PathShort}: Restored to Original");
   }
 

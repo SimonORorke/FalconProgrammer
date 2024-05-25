@@ -62,8 +62,6 @@ public partial class MainWindowViewModel : ViewModelBase,
     private set => SetProperty(ref _currentPageTitle, value);
   }
   
-  
-  
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>

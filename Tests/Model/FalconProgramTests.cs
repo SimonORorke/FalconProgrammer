@@ -53,4 +53,20 @@ public class FalconProgramTests {
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
     }
   }
+
+  [Test]
+  public void RestoreOriginal() {
+    Batch.RunTask(ConfigTask.RestoreOriginal,
+      "Factory", "Bass", "Imagination");
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Restored to Original"));
+  }
+
+  [Test]
+  public void RestoreOriginalCannotFindOriginalFile() {
+    Batch.MockFileSystemService.File.SimulatedExists = false;
+    var exception = Assert.Catch<ApplicationException>(() =>
+      Batch.RunTask(ConfigTask.RestoreOriginal,
+        "Factory", "Bass", "Imagination"));
+    Assert.That(exception.Message, Does.StartWith("Cannot find original file"));
+  }
 }
