@@ -30,7 +30,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   protected CancellationTokenSource RunCancellationTokenSource { get; private set; } =
     new CancellationTokenSource();
 
-  private DateTime RunCurrentTime { get; set; }
+  [ExcludeFromCodeCoverage] private DateTime RunCurrentTime { get; set; }
   private DateTime RunStartTime { get; set; }
 
   internal ProgramItem Scope => Scopes[0];
@@ -54,6 +54,12 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private void BatchLogOnLineWritten(object? sender, string text) {
     LogLineQueue.Enqueue(text);
+    if (IsRunStarting) {
+      // Provide an initial progress update, showing that the first task is running.
+      IsRunStarting = false;
+      DispatcherService.Dispatch(UpdateLogAndProgress);
+      return;
+    }
     // We need to give the GUI opportunities to repaint when necessary and allow the
     // batch run to be cancelled. So, once every 10th of a second, pause the batch thread
     // for a millisecond and update the displayed log. This is over 10 times faster than
@@ -63,12 +69,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     // programs, for example. But every 10th of a second makes it look like it is going
     // faster!
     var currentTime = DateTime.Now;
-    if (IsRunStarting) {
-      // Provide an initial progress update, showing that the first task is running.
-      IsRunStarting = false;
-      DispatcherService.Dispatch(UpdateLogAndProgress);
-    }
-    if (currentTime - RunCurrentTime >= TimeSpan.FromMilliseconds(100)) {
+    if (IsTimeToUpdateLogAndProgress(currentTime, 100)) {
       RunCurrentTime = currentTime;
       Thread.Sleep(1);
       DispatcherService.Dispatch(UpdateLogAndProgress);
@@ -148,6 +149,13 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
         UseShellExecute = true
       });
     }
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual bool IsTimeToUpdateLogAndProgress(
+    DateTime currentTime, int intervalMilliseconds) {
+    return currentTime - RunCurrentTime >=
+           TimeSpan.FromMilliseconds(intervalMilliseconds);
   }
 
   /// <summary>

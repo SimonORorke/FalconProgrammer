@@ -24,7 +24,7 @@ public class BatchScriptTests {
     BatchScript.Tasks[1] = BatchScript.Tasks[0];
     var exception = Assert.Catch<ApplicationException>(() => BatchScript.Validate());
     Assert.That(exception, Is.Not.Null);
-    Assert.That(exception.Message, Is.EqualTo("Duplicate task: Task = QueryAdsrMacros"));
+    Assert.That(exception.Message, Is.EqualTo("Duplicate task: QueryAdsrMacros"));
   }
 
   [Test]

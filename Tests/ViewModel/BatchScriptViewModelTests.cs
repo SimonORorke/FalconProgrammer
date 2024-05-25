@@ -110,6 +110,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
       @"InitialiseLayout: 'Factory\Keys\Morning Keys'"));
     await ViewModel.SaveLogCommand.ExecuteAsync(null);
     Assert.That(ViewModel.SavedLog, Is.EqualTo(ViewModel.BatchLog.ToString()));
+    Assert.That(ViewModel.Status, Does.StartWith("Run ended"));
   }
 
   [Test]

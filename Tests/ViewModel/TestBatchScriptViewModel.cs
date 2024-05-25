@@ -29,6 +29,11 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
     await Task.Delay(0);
   }
 
+  protected override bool IsTimeToUpdateLogAndProgress(
+    DateTime currentTime, int intervalMilliseconds) {
+    return true;
+  }
+
   protected override void PrepareForRun() {
     bool isCancelling = RunCancellationTokenSource.IsCancellationRequested;
     base.PrepareForRun();
