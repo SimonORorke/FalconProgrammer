@@ -246,7 +246,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   protected virtual void SaveLogToFile(string outputPath) {
-    File.WriteAllText(outputPath, BatchLog.ToString());
+    File.WriteAllText(outputPath, GetLogText());
+  }
+
+  protected string GetLogText() {
+    var writer = new StringWriter();
+    foreach (string line in Log) {
+      writer.WriteLine(line);
+    }
+    return writer.ToString();
   }
 
   /// <summary>

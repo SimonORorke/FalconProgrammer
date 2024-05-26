@@ -49,7 +49,7 @@
                     x:Name="SaveLogButton"
                     Classes="top">
                 <Button.Content>
-                    <AccessText Text="Save _Log..." Classes="top" />
+                    <AccessText Text="Sa_ve Log..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding CancelRunCommand}"
