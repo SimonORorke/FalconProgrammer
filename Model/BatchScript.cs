@@ -23,10 +23,15 @@ public class BatchScript : SerialisationBase {
   [XmlIgnore] public string Path { get; set; } = string.Empty;
 
   /// <summary>
-  ///   Get all <see cref="ConfigTask " />s, with those that need to be run in a
+  ///   Gets all <see cref="ConfigTask " />s, with those that need to be run in a
   ///   particular order first, in the order in which they need to be run, followed by
   ///   all the others. Queries are excluded.
   /// </summary>
+  /// <remarks>
+  ///   For display in the list of available tasks.
+  ///   Currently all non-query tasks are in <see cref="SequencedConfigTasks "/>.
+  ///   So the two lists are identical. 
+  /// </remarks>
   public static ImmutableList<ConfigTask> OrderedConfigTasks { get; }
 
   /// <summary>
@@ -40,6 +45,8 @@ public class BatchScript : SerialisationBase {
     var unsequenced =
       from constant in Enum.GetValues<ConfigTask>()
       where !SequencedConfigTasks.Contains(constant)
+            // Queries are currently for developers only, to be added by manually editing
+            // a script file.
             && !constant.ToString().StartsWith("Query")
       select constant;
     list.AddRange(unsequenced);

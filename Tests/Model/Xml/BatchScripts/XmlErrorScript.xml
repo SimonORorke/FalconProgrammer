@@ -7,7 +7,7 @@ BatchScript>
     </Scope>
     <Tasks>
         <Task>QueryAdsrMacros</Task>
-        <Task>PrependPathLineToDescription</Task>
+        <Task>ReuseCc1</Task>
         <Task>UpdateMacroCcs</Task>
         <Task>InitialiseLayout</Task>
     </Tasks>

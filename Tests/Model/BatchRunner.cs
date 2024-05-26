@@ -60,7 +60,6 @@ public class BatchRunner {
     // batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, "Factory", "RetroWave 2.5", "PAD Midnight Organ");
     // batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, "Fluidity", "Electronic", "Fluid Sweeper");
     // batch.RunTask(ConfigTask.RestoreOriginal, "Organic Pads");
-    // batch.RunTask(ConfigTask.PrependPathLineToDescription, "Organic Pads", "Light", "Crystal Caves");
     // batch.RunTask(ConfigTask.QueryAdsrMacros, null);
     // batch.RunTask(ConfigTask.QueryCountMacros, null);
     // batch.RunTask(ConfigTask.QueryDelayTypes, null);

@@ -372,6 +372,7 @@ public class FalconProgram {
   }
 
   public void InitialiseLayout() {
+    PrependPathLineToDescription();
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
     // processor, if there is one, unless there is a need to keep it.
@@ -589,7 +590,7 @@ public class FalconProgram {
     Effects = effects.ToImmutableList();
   }
 
-  public void PrependPathLineToDescription() {
+  private void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
     const string crLf = "\r\n";
     string oldDescription = ProgramXml.GetDescription();

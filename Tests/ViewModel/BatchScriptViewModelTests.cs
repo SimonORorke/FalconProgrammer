@@ -183,7 +183,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Settings.Batch.Tasks, Has.Count.EqualTo(2));
     var taskItem = ViewModel.Tasks[0];
     Assert.That(taskItem.Name, Is.EqualTo("InitialiseLayout"));
-    const string task = "PrependPathLineToDescription";
+    const string task = "ReuseCc1";
     taskItem.Name = task;
     await ViewModel.QueryClose();
     Assert.That(ViewModel.Settings.Batch.Tasks[0], Is.EqualTo(task));

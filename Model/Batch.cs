@@ -69,9 +69,6 @@ public class Batch {
       case ConfigTask.QueryDahdsrModulations:
         Program.QueryDahdsrModulations();
         break;
-      case ConfigTask.PrependPathLineToDescription:
-        Program.PrependPathLineToDescription();
-        break;
       case ConfigTask.QueryDelayTypes:
         UpdateEffectTypes(Program.QueryDelayTypes());
         break;
@@ -288,7 +285,6 @@ public class Batch {
   public void RollForward(
     string? soundBankName, string? categoryName = null, string? programName = null) {
     RunTask(ConfigTask.RestoreOriginal, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.PrependPathLineToDescription, soundBankName, categoryName, programName);
     RunTask(ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
     RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
     RunTask(ConfigTask.RemoveDelayEffectsAndMacros, soundBankName, categoryName, programName);

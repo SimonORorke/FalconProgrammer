@@ -49,8 +49,9 @@ public class BatchScriptTests {
 
   [Test]
   public void OrderedConfigTasks() {
+    // The two task lists are currently identical.
     Assert.That(BatchScript.OrderedConfigTasks,
-      Has.Count.GreaterThan(BatchScript.SequencedConfigTasks.Count));
+      Has.Count.EqualTo(BatchScript.SequencedConfigTasks.Count));
     Assert.That(BatchScript.OrderedConfigTasks[0],
       Is.EqualTo(BatchScript.SequencedConfigTasks[0]));
     int lastSequencedIndex = BatchScript.SequencedConfigTasks.Count - 1;
