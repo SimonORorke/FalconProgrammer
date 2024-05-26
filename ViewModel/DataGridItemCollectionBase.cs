@@ -17,7 +17,7 @@ public abstract class DataGridItemCollectionBase<T> : ObservableCollection<T>
   /// <summary>
   ///   Gets whether the collection has changed since being populated.
   /// </summary>
-  internal bool HasBeenChanged { get; private set; }
+  internal virtual bool HasBeenChanged { get; private set; }
 
   protected bool IsAddingAdditionItem => !IsPopulating;
 

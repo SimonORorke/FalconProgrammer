@@ -23,6 +23,13 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   internal IFileSystemService FileSystemService =>
     _fileSystemService ??= ModelServices.FileSystemService;
 
+  /// <summary>
+  ///   Gets or sets whether the page is being reopened to fix one or more errors, in
+  ///   which case, to ensure that the error data is still there to be fixed, when the
+  ///   page is reopened, its data will not be refreshed from saved settings.
+  /// </summary>
+  internal bool IsFixingError { get; set; }
+  
   protected bool IsVisible { get; private set; }
 
   /// <summary>
@@ -62,6 +69,10 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     IsVisible = true;
     // Start listening for ObservableRecipient messages.
     Messenger.RegisterAll(this);
+    if (IsFixingError) {
+      IsFixingError = false;
+      return;
+    }
     await ReadSettings();
   }
 

@@ -9,8 +9,11 @@ public interface IDialogService {
   ///   returning whether Yes has been clicked.
   /// </summary>
   /// <param name="text">The message text to be shown.</param>
+  /// <param name="tabTitle">
+  ///   Optionally specifies a tab title to be appended to the message box title.
+  /// </param>
   /// <returns>True if Yes, false if No.</returns>
-  Task<bool> AskYesNoQuestion(string text);
+  Task<bool> AskYesNoQuestion(string text, string tabTitle = "");
 
   /// <summary>
   ///   Asynchronously shows an open folder dialog, returning the path of the selected

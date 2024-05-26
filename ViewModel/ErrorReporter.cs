@@ -23,22 +23,35 @@ internal class ErrorReporter {
   /// <param name="isClosingWindow">
   ///   True if the window is closing, false if another tab has been selected.
   /// </param>
+  /// <param name="askOnChangingTabs">
+  ///   If another tab has been selected, specifies whether the user is to be asked
+  ///   to confirm the tab change. If false, the current tab will be reopened.
+  /// </param>
   /// <returns>
   ///   True if the user has been asked whether the window is to be closed and answered
   ///   yes, otherwise false.
   /// </returns>
   /// <remarks>
-  ///   Assumptions: if another tab is selected, the user is to be forced to return to
-  ///   the current tab to fix the error; if the main window is being closed, the user
-  ///   can opt to close the window anyway or resume to fix the error.
+  ///   Assumptions:
+  ///   If the main window is being closed, the user can opt to close the window anyway
+  ///   or resume to fix the error.
+  ///   When another tab is selected, the user may to be forced to return
+  ///   to the current tab to fix the error or given the option, depending on
+  ///   <paramref name="askOnChangingTabs "/>;
   /// </remarks>
   public async Task<bool> CanClosePageOnError(
-    string errorMessage, string tabTitle, bool isClosingWindow) {
+    string errorMessage, string tabTitle, bool isClosingWindow, bool askOnChangingTabs) {
     if (isClosingWindow) {
       errorMessage +=
         $"\r\n\r\nAnswer Yes (Enter) to close {Global.ApplicationName}, " +
         "No (Esc) to resume.";
-      return await DialogService.AskYesNoQuestion(errorMessage);
+      return await DialogService.AskYesNoQuestion(errorMessage, tabTitle);
+    }
+    if (askOnChangingTabs) {
+      errorMessage +=
+        $"\r\n\r\nAnswer Yes (Enter) to close the {tabTitle} page and lose all " +
+        $"changes, No (Esc) to return to the {tabTitle} page to fix errors.";
+      return await DialogService.AskYesNoQuestion(errorMessage, tabTitle);
     }
     await DialogService.ShowErrorMessageBox(errorMessage, tabTitle);
     return false;

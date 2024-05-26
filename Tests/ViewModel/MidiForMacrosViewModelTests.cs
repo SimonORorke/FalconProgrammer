@@ -23,8 +23,17 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
       ViewModel.Settings.MidiForMacros.ContinuousCcNoRanges;
     Assert.That(rangesInSettings[0].Start, Is.EqualTo(31));
     Assert.That(rangesInSettings[0].End, Is.EqualTo(34));
+    // Simulate user opting to return to the page to fix errors.
+    MockDialogService.SimulatedYesNoAnswer = false;
     await DisallowOverlappingCcNoRange(
       32, 35, ViewModel.ContinuousCcNoRanges);
+    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastYesNoAnswer, Is.False);
+    await ViewModel.Open();
+    // Check that the invalid data in the row previously added (now the last for before
+    // the addition item) is still shown.
+    Assert.That(ViewModel.ContinuousCcNoRanges[^2].Start, Is.EqualTo(32));
+    Assert.That(ViewModel.ContinuousCcNoRanges[^2].End, Is.EqualTo(35));
   }
 
   [Test]

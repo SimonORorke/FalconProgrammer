@@ -19,9 +19,9 @@ public class DialogService : IDialogService {
   private Window? CurrentDialog { get; set; }
   private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
 
-  public async Task<bool> AskYesNoQuestion(string text) {
+  public async Task<bool> AskYesNoQuestion(string text, string tabTitle = "") {
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
-      ApplicationTitle, text, ButtonEnum.YesNo, Icon.Question);
+      GetMessageBoxTitle(tabTitle), text, ButtonEnum.YesNo, Icon.Question);
     var result = await messageBox.ShowAsync();
     return result == ButtonResult.Yes;
   }
@@ -35,6 +35,12 @@ public class DialogService : IDialogService {
         }
       );
     return folders.Count == 1 ? folders[0].Path.LocalPath : null;
+  }
+
+  private string GetMessageBoxTitle(string tabTitle) {
+    return tabTitle == string.Empty 
+      ? ApplicationTitle 
+      : $"{ApplicationTitle} - {tabTitle}";
   }
 
   public async Task<string?> OpenFile(
@@ -95,11 +101,8 @@ public class DialogService : IDialogService {
   }
 
   public async Task ShowErrorMessageBox(string text, string tabTitle = "") {
-    string title = tabTitle == string.Empty 
-      ? ApplicationTitle 
-      : $"{ApplicationTitle} - {tabTitle}"; 
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
-      title, text, ButtonEnum.Ok, Icon.Error);
+      GetMessageBoxTitle(tabTitle), text, ButtonEnum.Ok, Icon.Error);
     await messageBox.ShowAsync();
   }
 

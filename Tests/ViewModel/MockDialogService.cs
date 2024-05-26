@@ -18,7 +18,7 @@ public class MockDialogService : IDialogService {
   internal string SimulatedPath { get; set; } = string.Empty;
   internal bool SimulatedYesNoAnswer { get; set; }
 
-  public async Task<bool> AskYesNoQuestion(string text) {
+  public async Task<bool> AskYesNoQuestion(string text, string tabTitle = "") {
     await Task.Delay(0);
     AskYesNoQuestionCount++;
     LastYesNoQuestion = text;

@@ -56,7 +56,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
       if (!TrySaveSettings(out string errorMessage)) {
         var errorReporter = new ErrorReporter(DialogService);
         bool canClosePage = await errorReporter.CanClosePageOnError(
-          errorMessage, TabTitle, isClosingWindow);
+          errorMessage, TabTitle, isClosingWindow, false);
         if (!canClosePage) {
           GoToLocationsPage();
         }

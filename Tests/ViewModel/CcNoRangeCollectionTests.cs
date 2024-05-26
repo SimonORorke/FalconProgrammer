@@ -56,6 +56,17 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task DisallowInconsistentRange() {
+    var ranges = CreateContinuousCcNoRanges();
+    ranges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
+    var lastRange = ranges[^2]; // Last before addition item
+    lastRange.Start = lastRange.End + 1;
+    var updateResult = await ranges.UpdateSettings(false);
+    Assert.That(!updateResult.Success);
+    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+  }
+
+  [Test]
   public async Task DisallowOverlappingRange() {
     var ranges = CreateContinuousCcNoRanges();
     ranges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
@@ -65,7 +76,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     ranges.Add(overlappingRange);
     var updateResult = await ranges.UpdateSettings(false);
     Assert.That(!updateResult.Success);
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
   }
 
   [Test]
