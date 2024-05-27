@@ -227,6 +227,12 @@ public class FalconProgram {
     if (matchingScriptProcessor != null) {
       // Names match but Scripts do not.
       // Example: Titanium\Basses\Aggression
+      if (SoundBankName == "Organic Pads"
+          && matchingScriptProcessor.Script.Contains("DahdsrController")) {
+        // This is not a GUI script processor but the special script processor added in
+        // InitialiseLayout.
+        return null;
+      }
       return matchingScriptProcessor;
     }
     // Neither Scripts nor Names match. So assume the last ScriptProcessor. 
@@ -848,6 +854,11 @@ public class FalconProgram {
       // See paragraph in summary.
       return;
     }
+    // if (SoundBankName == "Organic Pads") {
+    //   Log.WriteLine(
+    //     $"{PathShort}: ReuseCc1 is not allowed for sound bank '{SoundBankName}'.");
+    //   return;
+    // }
     if (ProgramXml.GetModulationElementsWithCcNo(1).Count > 0
         && !WheelMacroExists()) {
       // There are modulations whose MIDI CC number is 1, but they have not been
