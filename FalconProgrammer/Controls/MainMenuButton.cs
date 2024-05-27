@@ -15,14 +15,14 @@ namespace FalconProgrammer.Controls;
 /// </remarks>
 public class MainMenuButton : MenuButtonBase {
   public static readonly StyledProperty<ICommand?> AboutCommandProperty =
-    AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(AboutCommand));
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(nameof(AboutCommand));
 
   public static readonly StyledProperty<ICommand?> SelectColourSchemeCommandProperty =
-    AvaloniaProperty.Register<ItemActionButton, ICommand?>(
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(
       nameof(SelectColourSchemeCommand));
 
   public static readonly StyledProperty<ICommand?> ManualCommandProperty =
-    AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(ManualCommand));
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(nameof(ManualCommand));
 
   protected override string AccessibleButtonText => "_Menu...";
 

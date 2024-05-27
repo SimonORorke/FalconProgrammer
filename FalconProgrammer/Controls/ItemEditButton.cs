@@ -9,29 +9,29 @@ namespace FalconProgrammer.Controls;
 ///   An edit action button for a data item. Clicking the button shows a flyout menu with
 ///   Cut, Paste Before and Remove items.
 /// </summary>
-public class ItemActionButton : MenuButtonBase {
+public class ItemEditButton : MenuButtonBase {
   // As commands are never going to be styled, I looked at using DirectProperty rather
   // than StyledProperty to make them accessible in XAML. However, I did not get
   // DirectProperty to work. I concluded that DirectProperty would probably be tricky to
   // use in this class because the ICommand properties to be referenced are two levels
-  // down, in MenuItems owned by the MenuFlyout owned by this ItemActionButton. I imagine
+  // down, in MenuItems owned by the MenuFlyout owned by this ItemEditButton. I imagine
   // it could be done with nested use of AvaloniaProperty.AddOwner. So StyledProperty is
   // the way to go, in this class at least.
   public static readonly StyledProperty<ICommand?> CutCommandProperty =
-    AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(CutCommand));
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(nameof(CutCommand));
 
   public static readonly StyledProperty<ICommand?> PasteBeforeCommandProperty =
-    AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(PasteBeforeCommand));
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(nameof(PasteBeforeCommand));
 
   public static readonly StyledProperty<ICommand?> RemoveCommandProperty =
-    AvaloniaProperty.Register<ItemActionButton, ICommand?>(nameof(RemoveCommand));
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(nameof(RemoveCommand));
 
-  public ItemActionButton() {
+  public ItemEditButton() {
     // Align left edge with left edge of column header text
     Margin = new Thickness(13, 0, 0, 0);
   }
 
-  protected override string AccessibleButtonText => "Action...";
+  protected override string AccessibleButtonText => "Edit...";
 
   public ICommand? CutCommand {
     get => GetValue(CutCommandProperty);

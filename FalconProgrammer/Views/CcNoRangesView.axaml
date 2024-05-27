@@ -61,13 +61,13 @@
             <DataGridTemplateColumn Width="101">
                 <DataGridTemplateColumn.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="Action"
+                        <TextBlock Text="Edit"
                                    Classes="actionHeader" />
                     </DataTemplate>
                 </DataGridTemplateColumn.HeaderTemplate>
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <ct:ItemActionButton
+                        <ct:ItemEditButton
                             CutCommand="{Binding CutCommand}"
                             PasteBeforeCommand="{Binding PasteBeforeCommand}"
                             RemoveCommand="{Binding RemoveCommand}" />

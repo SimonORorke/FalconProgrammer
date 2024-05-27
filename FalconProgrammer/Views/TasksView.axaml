@@ -41,16 +41,16 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110">
+                <DataGridTemplateColumn Width="90">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Text="Action"
+                            <TextBlock Text="Edit"
                                        FontSize="20" />
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="vm:TaskItem">
-                            <ct:ItemActionButton
+                            <ct:ItemEditButton
                                 CutCommand="{Binding CutCommand}"
                                 PasteBeforeCommand="{Binding PasteBeforeCommand}"
                                 RemoveCommand="{Binding RemoveCommand}" />
