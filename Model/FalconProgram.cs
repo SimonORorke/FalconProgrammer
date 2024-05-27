@@ -854,16 +854,19 @@ public class FalconProgram {
       // See paragraph in summary.
       return;
     }
-    // if (SoundBankName == "Organic Pads") {
-    //   Log.WriteLine(
-    //     $"{PathShort}: ReuseCc1 is not allowed for sound bank '{SoundBankName}'.");
-    //   return;
-    // }
     if (ProgramXml.GetModulationElementsWithCcNo(1).Count > 0
         && !WheelMacroExists()) {
       // There are modulations whose MIDI CC number is 1, but they have not been
       // assigned to a wheel macro. If anything, that should be done instead of
       // assigning MIDI CC 1 to a different macro. 
+      return;
+    }
+    if (SoundBankName == "Organic Pads") {
+      // In InitialiseLayout, the Organic Pads wheel macro will have been placed at the
+      // end, by design. So the normal algorithm for reusing MIDI CC 1 won't work.  
+      var wheelMacro = FindWheelMacro()!;
+      wheelMacro.ChangeCcNoTo(1);
+      NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
       return;
     }
     var macroBeforeCc1Macro = (
