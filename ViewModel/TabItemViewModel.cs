@@ -5,7 +5,7 @@
 ///   the page content.
 /// </summary>
 /// <remarks>
-///   Not to be renamed to TabItem, as we need to access the TabItem control in view code.
+///   Not to be renamed to TabItem, as we access the TabItem control in view code.
 /// </remarks>
 public class TabItemViewModel {
   public TabItemViewModel(ViewModelBase viewModel) {
