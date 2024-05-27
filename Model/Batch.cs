@@ -31,7 +31,11 @@ public class Batch {
 
   public IBatchLog Log { get; }
   protected FalconProgram Program { get; private set; } = null!;
-  internal Settings Settings => _settings ??= SettingsReader.Read();
+  
+  internal Settings Settings {
+    get => _settings ??= SettingsReader.Read();
+    private set => _settings = value;
+  }
 
   internal SettingsReader SettingsReader {
     get => _settingsReader ??= new SettingsReader();
@@ -300,6 +304,8 @@ public class Batch {
     RunCancellationToken = cancellationToken;
     try {
       batchScript.Validate();
+      // Refresh the settings, as they may have changed between runs.
+      Settings = SettingsReader.Read();
       string? soundBankName = GetScopeParameter(batchScript.Scope.SoundBank); 
       string? categoryName = GetScopeParameter(batchScript.Scope.Category); 
       string? programName = GetScopeParameter(batchScript.Scope.Program);

@@ -199,11 +199,11 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   }
 
   protected virtual void PrepareForRun() {
+    IsRunStarting = true;
     Log.Clear();
     RunCancellationTokenSource = new CancellationTokenSource();
     RunCurrentTime = RunStartTime = DateTime.Now;
     Status = $"Run started at {RunStartTime:HH:mm:ss}.";
-    IsRunStarting = true;
     OnRunBeginning();
   }
 
