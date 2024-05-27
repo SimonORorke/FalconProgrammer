@@ -381,6 +381,9 @@ public class FalconProgram {
     if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
       RemoveGuiScriptProcessor();
     }
+    if (GuiScriptProcessor != null) {
+      return;
+    }
     if (Settings.TryGetSoundBankBackgroundImagePath(
           SoundBankName, out string path)) {
       SetBackgroundImagePath();
