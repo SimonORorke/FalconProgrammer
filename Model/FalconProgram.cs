@@ -877,7 +877,6 @@ public class FalconProgram {
     }
     // Required for first call of GetNextCcNo to return 1.
     CurrentContinuousCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
-    // CurrentContinuousCcNo = 34; // Required for first call of GetNextCcNo to return 1.
     CurrentToggleCcNo = 0; // Required by GetNextCcNo but won't be used in this case.
     for (int i = minVisibleContinuousMacrosCount - 1;
          i < continuousMacrosByLocation.Count;
