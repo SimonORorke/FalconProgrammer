@@ -315,12 +315,15 @@ public class Batch {
       foreach (var configTask in configTasks) {
         RunTask(configTask, soundBankName, categoryName, programName);  
       }
+      Log.Prefix = string.Empty;
       Log.WriteLine("The batch run has finished.");
     } catch (OperationCanceledException) {
+      Log.Prefix = string.Empty;
       Log.WriteLine("==========================================");
       Log.WriteLine("The batch run has been cancelled.");
       Log.WriteLine("==========================================");
     } catch (Exception exception) {
+      Log.Prefix = string.Empty;
       Log.WriteLine("==========================================");
       Log.WriteLine("The batch run terminated with this error:");
       Log.WriteLine("==========================================");
@@ -367,6 +370,7 @@ public class Batch {
     string? soundBankName, string? categoryName = null, string? programName = null) {
     Task = task;
     TaskNo++;
+    Log.Prefix = $"{task} - ";
     ConfigurePrograms(soundBankName, categoryName, programName);
   }
 

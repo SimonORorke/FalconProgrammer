@@ -5,7 +5,9 @@ namespace FalconProgrammer.Tests.Model;
 
 [ExcludeFromCodeCoverage]
 public class ConsoleBatchLog : IBatchLog {
+  public string Prefix { get; set; } = string.Empty;
+  
   public void WriteLine(string text) {
-    Console.WriteLine(text);
+    Console.WriteLine($"{Prefix}{text}");
   }
 }

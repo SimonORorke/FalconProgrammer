@@ -168,11 +168,11 @@ public class BatchTests {
     Batch.EmbeddedScriptFileName = "QueriesForAll.xml";
     Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(4));
-    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo("Reverb Types:"));
+    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo("QueryReverbTypes - Reverb Types:"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo(
-      @"QueryReverbTypes: 'Fluidity\Electronic\Cream Synth'"));
+      @"QueryReverbTypes - 'Fluidity\Electronic\Cream Synth'"));
     Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo(
-      @"QueryReverbTypes: 'Fluidity\Electronic\Fluid Sweeper'"));
+      @"QueryReverbTypes - 'Fluidity\Electronic\Fluid Sweeper'"));
     Assert.That(Batch.MockBatchLog.Lines[3], Is.EqualTo("The batch run has finished."));
   }
 
@@ -182,7 +182,7 @@ public class BatchTests {
     Assert.That(Batch.HasScriptRunEnded);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(2));
     Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-      @"QueryAdsrMacros: 'Spectre\Bells\BL Xylophone'"));
+      @"QueryAdsrMacros - 'Spectre\Bells\BL Xylophone'"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo("The batch run has finished."));
   }
 

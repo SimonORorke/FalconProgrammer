@@ -1,8 +1,10 @@
 ﻿namespace FalconProgrammer.Model;
 
 public class BatchLog : IBatchLog {
+  public string Prefix { get; set; } = string.Empty;
+
   public void WriteLine(string text) {
-    OnLineWritten(text);
+    OnLineWritten($"{Prefix}{text}");
   }
 
   public event EventHandler<string>? LineWritten;

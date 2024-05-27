@@ -5,9 +5,10 @@ namespace FalconProgrammer.Tests.Model;
 public class MockBatchLog : IBatchLog {
   internal string Text => ToString();
   internal List<string> Lines { get; } = [];
+  public string Prefix { get; set; } = string.Empty;
 
   public void WriteLine(string text) {
-    Lines.Add(text);
+    Lines.Add($"{Prefix}{text}");
   }
 
   public override string ToString() {

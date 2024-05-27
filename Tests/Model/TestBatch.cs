@@ -42,7 +42,8 @@ public class TestBatch : Batch {
       base.ConfigureProgram();
       return;
     }
-    Log.WriteLine($"{Task}: '{Program.PathShort}'");
+    // This will have the task prefix added.
+    Log.WriteLine($"'{Program.PathShort}'");
   }
 
   protected override Category CreateCategory(string categoryName) {
