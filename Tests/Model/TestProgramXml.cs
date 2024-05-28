@@ -11,13 +11,13 @@ public class TestProgramXml : ProgramXml {
   ///   <see cref="ReadProgramRootElementFromFile" /> will read the embedded resource
   ///   file with this name in the Tests assembly.
   /// </summary>
-  internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
   /// <summary>
   ///   <see cref="ReadTemplateRootElementFromFile" /> will read the embedded resource
   ///   file with this name in the Tests assembly.
   /// </summary>
-  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
   private void OnSaved(string savedXml) {
     Saved?.Invoke(this, savedXml);

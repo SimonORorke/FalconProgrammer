@@ -36,11 +36,14 @@ public class TestFalconProgram : FalconProgram {
   protected override void CopyFile(string sourcePath, string destinationPath) {
   }
 
-  /// <summary>
-  ///   Only used for Organic Pads sound bank in <see cref="FalconProgram.FixCData" />.
-  /// </summary>
-  protected override TextReader CreateProgramReader() {
-    return new StringReader(SavedXml);
+  protected override TextReader CreateProgramTextReader() {
+    return new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
+  }
+
+  internal TextWriter? ProgramTextWriter { get; private set; }
+
+  protected override TextWriter CreateProgramTextWriter() {
+    return ProgramTextWriter = new StringWriter();
   }
 
   protected override ProgramXml CreateProgramXml() {
@@ -51,10 +54,7 @@ public class TestFalconProgram : FalconProgram {
     SavedXml = e;
   }
 
-  /// <summary>
-  ///   Only used for Organic Pads sound bank in <see cref="FalconProgram.FixCData" />.
-  /// </summary>
-  protected override void UpdateProgramFileWithFixedCData(string newContents) {
-    SavedXml = newContents;
-  }
+  // protected override void UpdateProgramContents(string newContents) {
+  //   SavedXml = newContents;
+  // }
 }

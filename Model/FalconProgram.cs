@@ -159,12 +159,14 @@ public class FalconProgram {
     return result;
   }
 
-  /// <summary>
-  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
-  /// </summary>
   [ExcludeFromCodeCoverage]
-  protected virtual TextReader CreateProgramReader() {
+  protected virtual TextReader CreateProgramTextReader() {
     return new StreamReader(Path);
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual TextWriter CreateProgramTextWriter() {
+    return new StreamWriter(Path);
   }
 
   protected virtual ProgramXml CreateProgramXml() {
@@ -285,17 +287,15 @@ public class FalconProgram {
   ///   To fix that, the batch needs to call this method after the Save for
   ///   InitialiseLayout.
   /// </summary>
-  public void FixCData() {
-    if (SoundBankName != "Organic Pads") {
-      return;
-    }
-    var reader = CreateProgramReader();
+  public void FixOrganicPadsCData() {
+    var reader = CreateProgramTextReader();
     string oldContents = reader.ReadToEnd();
     reader.Close();
     string newContents = oldContents
       .Replace("<script>&lt;", "<script><")
       .Replace("&gt;</script>", "></script>");
-    UpdateProgramFileWithFixedCData(newContents);
+    using var writer = CreateProgramTextWriter();
+    writer.Write(newContents);
   }
 
   /// <summary>
@@ -378,7 +378,6 @@ public class FalconProgram {
   }
 
   public void InitialiseLayout() {
-    PrependPathLineToDescription();
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
     // processor, if there is one, unless there is a need to keep it.
@@ -599,19 +598,61 @@ public class FalconProgram {
     Effects = effects.ToImmutableList();
   }
 
-  private void PrependPathLineToDescription() {
+  public void PrependPathLineToDescription() {
+    const string descriptionPrefix = "description=\"";
     const string pathIndicator = "PATH: ";
-    const string crLf = "\r\n";
-    string oldDescription = ProgramXml.GetDescription();
-    string oldPathLine =
-      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf)
-        ? oldDescription[..(oldDescription.IndexOf(crLf, StringComparison.Ordinal) + 2)]
-        : string.Empty;
-    string newPathLine = pathIndicator + PathShort + crLf;
-    string newDescription = oldPathLine != string.Empty
-      ? oldDescription.Replace(oldPathLine, newPathLine)
-      : newPathLine + oldDescription;
-    ProgramXml.SetDescription(newDescription);
+    ProgramXml.LoadFromFile(Path);
+    if (ProgramXml.InitialiseDescription()) {
+      Save();
+    }
+    string oldContents;
+    using (var programReader = CreateProgramTextReader()) {
+      oldContents = programReader.ReadToEnd();
+    }
+    using var reader = new StringReader(oldContents);
+    using var writer = CreateProgramTextWriter();
+    string oldDescriptionStartLine = string.Empty;
+    while (true) {
+      string? line = reader.ReadLine();
+      if (line == null) {
+        break;
+      }
+      if (!line.Contains(descriptionPrefix)) {
+        Console.WriteLine($"Writing:{Environment.NewLine}{line}");
+        writer.WriteLine(line);
+      } else {
+        oldDescriptionStartLine = line;
+        Console.WriteLine($"Not writing oldDescriptionStartLine:{Environment.NewLine}{oldDescriptionStartLine}");
+        break;
+      }
+    }
+    string newDescriptionStartLine;
+    if (oldDescriptionStartLine.Contains(pathIndicator)) {
+      newDescriptionStartLine = oldDescriptionStartLine[
+        (oldDescriptionStartLine.IndexOf(pathIndicator) + pathIndicator.Length)..]
+        + PathShort;
+      Console.WriteLine($"Writing updated newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
+      writer.WriteLine(newDescriptionStartLine);
+    } else {
+      newDescriptionStartLine = oldDescriptionStartLine[..
+        (oldDescriptionStartLine.IndexOf(descriptionPrefix) + descriptionPrefix.Length)]
+      + pathIndicator + PathShort;
+      Console.WriteLine($"Writing newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
+      writer.WriteLine(newDescriptionStartLine);
+      string restOfOldDescriptionStartLine = oldDescriptionStartLine[
+        (oldDescriptionStartLine.IndexOf(
+          descriptionPrefix) + descriptionPrefix.Length)..];
+      Console.WriteLine($"Writing restOfOldDescriptionStartLine:{Environment.NewLine}{restOfOldDescriptionStartLine}");
+      writer.WriteLine(restOfOldDescriptionStartLine);
+    }
+    while (true) {
+      string? line = reader.ReadLine();
+      if (line == null) {
+        break;
+      }
+      Console.WriteLine($"Writing:{Environment.NewLine}{line}");
+      writer.WriteLine(line);
+    }
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
   }
 
@@ -992,15 +1033,12 @@ public class FalconProgram {
       }
     }
   }
-
-  /// <summary>
-  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
-  /// </summary>
-  [ExcludeFromCodeCoverage]
-  protected virtual void UpdateProgramFileWithFixedCData(string newContents) {
-    using var writer = new StreamWriter(Path);
-    writer.Write(newContents);
-  }
+  
+  // [ExcludeFromCodeCoverage]
+  // protected virtual void UpdateProgramContents(string newContents) {
+  //   using var writer = new StreamWriter(Path);
+  //   writer.Write(newContents);
+  // }
 
   private bool WheelMacroExists() {
     return FindWheelMacro() != null;

@@ -13,13 +13,13 @@ public class TestBatch : Batch {
       TestBatchScriptReaderEmbedded = new TestBatchScriptReaderEmbedded();
   }
 
-  internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedProgramFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
   [PublicAPI]
   internal string EmbeddedScriptFileName { get; set; } =
     "QueriesForProgram.xml";
 
-  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
   internal bool HasScriptRunEnded { get; private set; }
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
   internal MockFileSystemService MockFileSystemService { get; }

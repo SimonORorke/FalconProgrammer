@@ -36,7 +36,7 @@ public class FalconProgramTests {
     SoundBankBackground("Modular Noise", "Dark Forest.png");
     SoundBankBackground("Savage", "Heath.png");
     SoundBankBackground("Titanium", "Dull Purple.png");
-    Batch.EmbeddedProgramFileName = "Tibetan Horns.uvip";
+    Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
     Batch.EmbeddedTemplateFileName = "Crystal Caves.uvip";
     SoundBankBackground("Organic Pads", "Bluish Teal.png");
     return;
@@ -52,6 +52,15 @@ public class FalconProgramTests {
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(expectedPath));
       Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
     }
+  }
+
+  [Test]
+  public void PrependPathLineToDescription() {
+    Batch.EmbeddedProgramFileName = "Voltage.xml";
+    Batch.RunTask(ConfigTask.InitialiseLayout, 
+      "Factory", "Bass", "Imagination");
+    string programText = Batch.TestProgram.ProgramTextWriter!.ToString()!; 
+    Assert.That(programText, Does.Contain("Blah"));
   }
 
   [Test]

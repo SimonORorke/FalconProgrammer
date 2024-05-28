@@ -109,9 +109,12 @@ public class Batch {
     }
     if (Program.HasBeenUpdated) {
       Program.Save();
-      if (Task == ConfigTask.InitialiseLayout) {
-        Program.FixCData();
+      if (Task == ConfigTask.InitialiseLayout && SoundBankName == "Organic Pads") {
+        Program.FixOrganicPadsCData();
       }
+    }
+    if (Task == ConfigTask.InitialiseLayout) {
+      Program.PrependPathLineToDescription();
     }
   }
 

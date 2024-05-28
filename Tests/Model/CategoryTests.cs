@@ -19,7 +19,7 @@ public class CategoryTests {
   public void CannotFindTemplateScriptProcessor() {
     var category = new TestCategory(GetSoundBankFolderName("Factory"),
       "Organic Texture 2.8", Settings) {
-      EmbeddedTemplateFileName = "NoGuiScriptProcessor.uvip"
+      EmbeddedTemplateFileName = "NoGuiScriptProcessor.xml"
     };
     category.ConfigureMockFileSystemService(
       @"Factory\Organic Texture 2.8",
@@ -44,7 +44,7 @@ public class CategoryTests {
   public void FactoryCategorySpecificTemplate() {
     var category = new TestCategory(GetSoundBankFolderName("Factory"),
       "Organic Texture 2.8", Settings) {
-      EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
     };
     category.ConfigureMockFileSystemService(
       @"Factory\Organic Texture 2.8",
@@ -73,7 +73,7 @@ public class CategoryTests {
   public void Main() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     category.ConfigureMockFileSystemService(
       @"Fluidity\Strings", "Guitar Stream.uvip");
@@ -139,7 +139,7 @@ public class CategoryTests {
   public void NoProgramFilesToEdit() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     var exception = Assert.Catch<ApplicationException>(
       () => category.GetPathsOfProgramFilesToEdit());
@@ -152,7 +152,7 @@ public class CategoryTests {
   public void NoTemplateProgramsFolder() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     category.Settings.TemplateProgramsFolder.Path = string.Empty;
     var exception = Assert.Catch<ApplicationException>(
@@ -166,7 +166,7 @@ public class CategoryTests {
   public void ProgramDoesNotExist() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip",
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml",
         MockFileSystemService = {
           File = {
             SimulatedExists = false
@@ -183,7 +183,7 @@ public class CategoryTests {
   public void ProgramExists() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     Assert.DoesNotThrow(
       () => category.GetProgramPath("Blah"));
@@ -193,7 +193,7 @@ public class CategoryTests {
   public void ProgramXml() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     var programXml = new ProgramXml(category);
     category.ProgramXml = programXml;
@@ -204,7 +204,7 @@ public class CategoryTests {
   public void PulsarHasCategorySpecificTemplates() {
     var category = new TestCategory(
       GetSoundBankFolderName("Pulsar"), "Bass", Settings) {
-      EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+      EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
     };
     category.ConfigureMockFileSystemService(
       @"Pulsar\Bass", "Warped.uvip");
@@ -232,7 +232,7 @@ public class CategoryTests {
   public void TemplateProgramsFolderDoesNotExist() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.uvip"
+        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     category.ConfigureMockFileSystemService(
       @"Fluidity\Strings", "Guitar Stream.uvip");

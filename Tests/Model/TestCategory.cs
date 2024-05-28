@@ -13,7 +13,7 @@ public class TestCategory : Category {
   ///   <see cref="CreateTemplateXml" /> will read the embedded resource file
   ///   with this name in the Tests assembly, ignoring its inputPath parameter.
   /// </summary>
-  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.uvip";
+  internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
   internal MockFileSystemService MockFileSystemService =>
     _mockFileSystemService ??= new MockFileSystemService();

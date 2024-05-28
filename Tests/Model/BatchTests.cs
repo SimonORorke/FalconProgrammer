@@ -34,8 +34,8 @@ public class BatchTests {
     const string category = "Organic Texture 2.8";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName, category));
-    Batch.EmbeddedProgramFileName = "GuiScriptProcessor.uvip";
-    Batch.EmbeddedTemplateFileName = "GuiScriptProcessor.uvip";
+    Batch.EmbeddedProgramFileName = "GuiScriptProcessor.xml";
+    Batch.EmbeddedTemplateFileName = "GuiScriptProcessor.xml";
     Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, category);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(

@@ -131,15 +131,6 @@ public class ProgramXml : EntityBase {
       .ToList();
   }
 
-  public string GetDescription() {
-    var propertiesElement = Element.Element("Properties");
-    if (propertiesElement == null) {
-      return string.Empty;
-    }
-    var descriptionAttribute = propertiesElement.Attribute("description");
-    return descriptionAttribute != null ? descriptionAttribute.Value : string.Empty;
-  }
-
   protected override XElement GetElement() {
     return RootElement.Element("Program")!;
   }
@@ -166,6 +157,22 @@ public class ProgramXml : EntityBase {
       where GetAttributeValue(
         modulationElement, nameof(Modulation.Source)) == source
       select modulationElement).ToList();
+  }
+
+  public bool InitialiseDescription() {
+    bool result = false;
+    var propertiesElement = Element.Element("Properties");
+    if (propertiesElement == null) {
+      propertiesElement = new XElement("Properties");
+      Element.Add(propertiesElement);
+      result = true;
+    }
+    var descriptionAttribute = propertiesElement.Attribute("description");
+    if (descriptionAttribute == null) {
+      SetAttribute(propertiesElement, "description", string.Empty);
+      result = true;
+    }
+    return result;
   }
 
   public void LoadFromFile(string inputProgramPath) {
@@ -318,14 +325,5 @@ public class ProgramXml : EntityBase {
       // AddFirst does not work for adding attributes!
       // propertiesElement.AddFirst(backgroundImagePathAttribute);
     }
-  }
-
-  public void SetDescription(string text) {
-    var propertiesElement = Element.Element("Properties");
-    if (propertiesElement == null) {
-      propertiesElement = new XElement("Properties");
-      Element.Add(propertiesElement);
-    }
-    SetAttribute(propertiesElement, "description", text);
   }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UVI4>
     <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="DX Mania" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Falcon Factory.ufs/Presets/Keys/DX Mania.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
-        <Properties BackgroundImagePath="$Falcon Factory.ufs/Artwork/ffs_bkg_wavetable.png" description="PATH: Factory\Keys\DX Mania&#xD;&#xA;Falcon Factory  Covering everything from classic synthesis, percussion, physical modeling, sample-driven granular and multi granular soundscapes to multi-oscillator hybrids—the Falcon Factory sound bank provides instant gratification with hundreds of high-quality, ready to perform patches.  " />
+        <Properties BackgroundImagePath="$Falcon Factory.ufs/Artwork/ffs_bkg_wavetable.png" />
         <ControlSignalSources>
             <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Filter Cutoff" Bipolar="1" Style="0" Value="0.5">
                 <Connections>
