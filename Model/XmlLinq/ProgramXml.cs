@@ -159,20 +159,16 @@ public class ProgramXml : EntityBase {
       select modulationElement).ToList();
   }
 
-  public bool InitialiseDescription() {
-    bool result = false;
+  public void InitialiseDescription() {
     var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {
       propertiesElement = new XElement("Properties");
       Element.Add(propertiesElement);
-      result = true;
     }
     var descriptionAttribute = propertiesElement.Attribute("description");
     if (descriptionAttribute == null) {
       SetAttribute(propertiesElement, "description", string.Empty);
-      result = true;
     }
-    return result;
   }
 
   public void LoadFromFile(string inputProgramPath) {

@@ -26,7 +26,6 @@ public class FalconProgram {
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
   private ScriptProcessor? GuiScriptProcessor { get; set; }
-  public bool HasBeenUpdated { get; private set; }
 
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
@@ -281,13 +280,13 @@ public class FalconProgram {
   }
 
   /// <summary>
-  ///   If the InitialiseLayout batch task has just run for the "Organic Pads"
-  ///   sound bank, the chevron delimiters of the DAHDSR Controller script CDATA will
-  ///   have been incorrectly written as their corresponding HTML substitutes.
-  ///   To fix that, the batch needs to call this method after the Save for
-  ///   InitialiseLayout.
+  ///   In <see cref="InitialiseLayout"/>, when run for the "Organic Pads" sound bank,
+  ///   the chevron delimiters of the DAHDSR Controller script CDATA will have been
+  ///   incorrectly written as their corresponding HTML substitutes.
+  ///   This method fixes that by modifying the program as plain text rather than via
+  ///   Linq for XML.
   /// </summary>
-  public void FixOrganicPadsCData() {
+  private void FixOrganicPadsCData() {
     var reader = CreateProgramTextReader();
     string oldContents = reader.ReadToEnd();
     reader.Close();
@@ -410,6 +409,13 @@ public class FalconProgram {
       default:
         return;
     }
+    ProgramXml.LoadFromFile(Path);
+    ProgramXml.InitialiseDescription();
+    Save();
+    if (SoundBankName == "Organic Pads") {
+      FixOrganicPadsCData();
+    }
+    PrependPathLineToDescription();
     NotifyUpdate($"{PathShort}: Initialised layout.");
     return;
 
@@ -560,7 +566,6 @@ public class FalconProgram {
 
   public void NotifyUpdate(string message) {
     Log.WriteLine(message);
-    HasBeenUpdated = true;
   }
 
   private void PopulateConnectionsParentsAndEffects() {
@@ -601,10 +606,6 @@ public class FalconProgram {
   public void PrependPathLineToDescription() {
     const string descriptionPrefix = "description=\"";
     const string pathIndicator = "PATH: ";
-    ProgramXml.LoadFromFile(Path);
-    if (ProgramXml.InitialiseDescription()) {
-      Save();
-    }
     string oldContents;
     using (var programReader = CreateProgramTextReader()) {
       oldContents = programReader.ReadToEnd();
@@ -943,7 +944,7 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
   }
 
-  public void Save() {
+  private void Save() {
     ProgramXml.SaveToFile(Path);
   }
 
@@ -1033,12 +1034,6 @@ public class FalconProgram {
       }
     }
   }
-
-  // [ExcludeFromCodeCoverage]
-  // protected virtual void UpdateProgramContents(string newContents) {
-  //   using var writer = new StreamWriter(Path);
-  //   writer.Write(newContents);
-  // }
 
   private bool WheelMacroExists() {
     return FindWheelMacro() != null;
