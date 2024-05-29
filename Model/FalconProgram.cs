@@ -618,11 +618,11 @@ public class FalconProgram {
         break;
       }
       if (!line.Contains(descriptionPrefix)) {
-        Console.WriteLine($"Writing:{Environment.NewLine}{line}");
+        // Console.WriteLine($"Writing:{Environment.NewLine}{line}");
         writer.WriteLine(line);
       } else {
         oldDescriptionStartLine = line;
-        Console.WriteLine($"Not writing oldDescriptionStartLine:{Environment.NewLine}{oldDescriptionStartLine}");
+        // Console.WriteLine($"Not writing oldDescriptionStartLine:{Environment.NewLine}{oldDescriptionStartLine}");
         break;
       }
     }
@@ -631,26 +631,29 @@ public class FalconProgram {
       newDescriptionStartLine = oldDescriptionStartLine[
         (oldDescriptionStartLine.IndexOf(pathIndicator) + pathIndicator.Length)..]
         + PathShort;
-      Console.WriteLine($"Writing updated newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
+      // Console.WriteLine($"Writing updated newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
       writer.WriteLine(newDescriptionStartLine);
     } else {
       newDescriptionStartLine = oldDescriptionStartLine[..
         (oldDescriptionStartLine.IndexOf(descriptionPrefix) + descriptionPrefix.Length)]
       + pathIndicator + PathShort;
-      Console.WriteLine($"Writing newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
+      // Console.WriteLine($"Writing newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
       writer.WriteLine(newDescriptionStartLine);
       string restOfOldDescriptionStartLine = oldDescriptionStartLine[
         (oldDescriptionStartLine.IndexOf(
           descriptionPrefix) + descriptionPrefix.Length)..];
-      Console.WriteLine($"Writing restOfOldDescriptionStartLine:{Environment.NewLine}{restOfOldDescriptionStartLine}");
-      writer.WriteLine(restOfOldDescriptionStartLine);
+      // Console.WriteLine($"Not writing restOfOldDescriptionStartLine:{Environment.NewLine}{restOfOldDescriptionStartLine}");
+      string fixedRestOfDescription = restOfOldDescriptionStartLine.Replace(
+        "  ", "&#xD;&#xA;&#xD;&#xA;");
+      // Console.WriteLine($"Writing fixedRestOfDescription:{Environment.NewLine}{fixedRestOfDescription}");
+      writer.WriteLine(fixedRestOfDescription);
     }
     while (true) {
       string? line = reader.ReadLine();
       if (line == null) {
         break;
       }
-      Console.WriteLine($"Writing:{Environment.NewLine}{line}");
+      // Console.WriteLine($"Writing:{Environment.NewLine}{line}");
       writer.WriteLine(line);
     }
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
