@@ -611,49 +611,46 @@ public class FalconProgram {
     }
     using var reader = new StringReader(oldContents);
     using var writer = CreateProgramTextWriter();
-    string oldDescriptionStartLine = string.Empty;
+    string oldDescriptionLine = string.Empty;
     while (true) {
       string? line = reader.ReadLine();
       if (line == null) {
         break;
       }
       if (!line.Contains(descriptionPrefix)) {
-        // Console.WriteLine($"Writing:{Environment.NewLine}{line}");
         writer.WriteLine(line);
       } else {
-        oldDescriptionStartLine = line;
-        // Console.WriteLine($"Not writing oldDescriptionStartLine:{Environment.NewLine}{oldDescriptionStartLine}");
+        oldDescriptionLine = line;
         break;
       }
     }
-    string newDescriptionStartLine;
-    if (oldDescriptionStartLine.Contains(pathIndicator)) {
-      newDescriptionStartLine = oldDescriptionStartLine[
-        (oldDescriptionStartLine.IndexOf(pathIndicator) + pathIndicator.Length)..]
-        + PathShort;
-      // Console.WriteLine($"Writing updated newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
-      writer.WriteLine(newDescriptionStartLine);
-    } else {
-      newDescriptionStartLine = oldDescriptionStartLine[..
-        (oldDescriptionStartLine.IndexOf(descriptionPrefix) + descriptionPrefix.Length)]
-      + pathIndicator + PathShort;
-      // Console.WriteLine($"Writing newDescriptionStartLine:{Environment.NewLine}{newDescriptionStartLine}");
-      writer.WriteLine(newDescriptionStartLine);
-      string restOfOldDescriptionStartLine = oldDescriptionStartLine[
-        (oldDescriptionStartLine.IndexOf(
-          descriptionPrefix) + descriptionPrefix.Length)..];
-      // Console.WriteLine($"Not writing restOfOldDescriptionStartLine:{Environment.NewLine}{restOfOldDescriptionStartLine}");
-      string fixedRestOfDescription = restOfOldDescriptionStartLine.Replace(
-        "  ", "&#xD;&#xA;&#xD;&#xA;");
-      // Console.WriteLine($"Writing fixedRestOfDescription:{Environment.NewLine}{fixedRestOfDescription}");
-      writer.WriteLine(fixedRestOfDescription);
-    }
+    string pathLine = !oldDescriptionLine.Contains(pathIndicator) 
+      ? oldDescriptionLine[..
+          (oldDescriptionLine.IndexOf(descriptionPrefix) + descriptionPrefix.Length)]
+        + pathIndicator + PathShort
+      : throw new ApplicationException(
+        "PrependPathLineToDescription found an existing path line, " + 
+        "which is not currently supported.");
+    writer.WriteLine(pathLine);
+    string restOfOldDescriptionLine = oldDescriptionLine[
+      (oldDescriptionLine.IndexOf(
+        descriptionPrefix) + descriptionPrefix.Length)..];
+    // For unknown reason, reading the description has unhelpfully stripped off
+    // whatever format effectors were making new lines within the description, replacing
+    // them with spaces.  As a result, it has made the description look like one line
+    // instead of multiple lines.  Our workaround is to assume that two spaces indicate
+    // where there should be a blank line and replace each occurrence of two spaces with
+    // the HTML code for 2 carriage return/line throw pairs.  That's probably what the 
+    // original had, though to confirm that we would need to examine an original file
+    // at the byte level.
+    string fixedRestOfDescriptionLine = restOfOldDescriptionLine.Replace(
+      "  ", "&#xD;&#xA;&#xD;&#xA;");
+    writer.WriteLine(fixedRestOfDescriptionLine);
     while (true) {
       string? line = reader.ReadLine();
       if (line == null) {
         break;
       }
-      // Console.WriteLine($"Writing:{Environment.NewLine}{line}");
       writer.WriteLine(line);
     }
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
@@ -1036,7 +1033,7 @@ public class FalconProgram {
       }
     }
   }
-  
+
   // [ExcludeFromCodeCoverage]
   // protected virtual void UpdateProgramContents(string newContents) {
   //   using var writer = new StreamWriter(Path);

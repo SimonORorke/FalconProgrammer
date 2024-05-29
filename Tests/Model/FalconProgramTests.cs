@@ -60,7 +60,8 @@ public class FalconProgramTests {
     Batch.RunTask(ConfigTask.InitialiseLayout, 
       "Factory", "Bass", "Imagination");
     string programText = Batch.TestProgram.ProgramTextWriter!.ToString()!; 
-    Assert.That(programText, Does.Contain("Blah"));
+    Assert.That(programText, Does.Contain(
+      @"PATH: Factory\Bass\Imagination"));
   }
 
   [Test]
