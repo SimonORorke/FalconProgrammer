@@ -34,17 +34,10 @@ public partial class ColourSchemeWindowViewModel : SettingsWriterViewModelBase {
     ChangeColourScheme?.Invoke(this, colourSchemeId);
   }
 
-  // Code coverage highlighting does not work for these partial methods.
   partial void OnColourSchemeChanged(string value) {
-    OnColourSchemeChanged1(value);
-  }
-
-  // Because code coverage highlighting does not work for partial method
-  // OnColourSchemeChanged. 
-  private void OnColourSchemeChanged1(string colourScheme) {
     if (IsVisible) {
-      Settings.ColourScheme = colourScheme;
-      var colourSchemeId = StringToColourSchemeId(colourScheme);
+      Settings.ColourScheme = value;
+      var colourSchemeId = StringToColourSchemeId(value);
       OnChangeColourScheme(colourSchemeId);
     }
   }

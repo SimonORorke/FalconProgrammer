@@ -24,9 +24,11 @@ public partial class SoundBankItem : DataGridItemBase {
   protected IFileSystemService FileSystemService { get; }
   protected Settings Settings { get; }
 
-  // Code coverage highlighting does not work for these partial methods.
-  // I reported this to JetBrains on 1st April 2024:
-  // https://youtrack.jetbrains.com/issue/DCVR-12514
+  // Unit test code coverage highlighting for partial methods that are based on generated
+  // code requires this setting change in Jetbrains Rider: 
+  // File | Settings | Build, Execution, Deployment | dotCover | Filtering |
+  // Do not analyze code marked with attributes |
+  // Disable System.CodeDom.Compiler.GeneratedCodeAttribute 
   partial void OnSoundBankChanged(string value) {
     OnSoundBankChanged1(value);
   }

@@ -139,14 +139,11 @@ public partial class MainWindowViewModel : ViewModelBase,
   }
 
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
-    if (value == null) {
-      return;
-    }
     if (!IsVisible) {
       // Start listening for ObservableRecipient messages. Set IsVisible to true.
       Task.Run(async () => await Open()).Wait();
     }
-    DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value));
+    DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value!));
   }
 
   private async void OnSelectedTabChangedAsync(TabItemViewModel value) {
