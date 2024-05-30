@@ -38,7 +38,7 @@ public class ProgramXml : EntityBase {
   ///   To avoid confusion, navigate to other elements using Element, not RootElement
   ///   as the starting point.
   /// </summary>
-  private XElement RootElement { get; set; } = null!;
+  protected XElement RootElement { get; private set; } = null!;
 
   public ImmutableList<XElement> ScriptProcessorElements =>
     _scriptProcessorElements ??= GetScriptProcessorElements();
@@ -159,35 +159,6 @@ public class ProgramXml : EntityBase {
       select modulationElement).ToList();
   }
 
-  public void InitialiseDescription() {
-    var propertiesElement = Element.Element("Properties");
-    if (propertiesElement == null) {
-      propertiesElement = new XElement("Properties");
-      Element.Add(propertiesElement);
-    }
-    var descriptionAttribute = propertiesElement.Attribute("description");
-    if (descriptionAttribute == null) {
-      SetAttribute(propertiesElement, "description", string.Empty);
-    }
-  }
-
-  public void LoadFromFile(string inputProgramPath) {
-    InputProgramPath = inputProgramPath;
-    try {
-      RootElement = ReadProgramRootElementFromFile();
-      ControlSignalSourcesElement =
-        Element.Elements("ControlSignalSources").FirstOrDefault() ??
-        throw new InvalidOperationException(
-          $"Cannot find ControlSignalSources element in '{InputProgramPath}'.");
-    } catch (XmlException ex) {
-      // Simple test to get ReadRootElementFromFile to throw this:
-      // Change the open root element line to "UVI4>".
-      // But remember the template file is loaded before the updatable file!
-      throw new ApplicationException(
-        $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
-    }
-  }
-
   public List<XElement> GetConnectionsParentElements() {
     var connectionsElements = Element.Descendants("Connections");
     return (
@@ -256,6 +227,40 @@ public class ProgramXml : EntityBase {
     // return document.Root!;
   }
 
+  /// <summary>
+  ///   If there is no Program.Properties.Description attribute, create an empty one
+  ///   in preparation for update by
+  ///   <see cref="FalconProgram.PrependPathLineToDescription"/>
+  /// </summary>
+  public void InitialiseDescription() {
+    var propertiesElement = Element.Element("Properties");
+    if (propertiesElement == null) {
+      propertiesElement = new XElement("Properties");
+      Element.Add(propertiesElement);
+    }
+    var descriptionAttribute = propertiesElement.Attribute("description");
+    if (descriptionAttribute == null) {
+      propertiesElement.Add(new XAttribute("description", string.Empty));
+    }
+  }
+
+  public void LoadFromFile(string inputProgramPath) {
+    InputProgramPath = inputProgramPath;
+    try {
+      RootElement = ReadProgramRootElementFromFile();
+      ControlSignalSourcesElement =
+        Element.Elements("ControlSignalSources").FirstOrDefault() ??
+        throw new InvalidOperationException(
+          $"Cannot find ControlSignalSources element in '{InputProgramPath}'.");
+    } catch (XmlException ex) {
+      // Simple test to get ReadRootElementFromFile to throw this:
+      // Change the open root element line to "UVI4>".
+      // But remember the template file is loaded before the updatable file!
+      throw new ApplicationException(
+        $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
+    }
+  }
+
   [ExcludeFromCodeCoverage]
   protected virtual XElement ReadProgramRootElementFromFile() {
     return ReadRootElementFromFile(InputProgramPath);
@@ -278,7 +283,7 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  public void SaveToFile(string outputProgramPath) {
+  public virtual void SaveToFile(string outputProgramPath) {
     using var stringWriterUtf8 = new StringWriterUtf8();
     try {
       using var xmlWriter = XmlWriter.Create(

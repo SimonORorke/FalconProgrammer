@@ -37,7 +37,8 @@ public class TestFalconProgram : FalconProgram {
   }
 
   protected override TextReader CreateProgramTextReader() {
-    return new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
+    return new StringReader(SavedXml);
+    // return new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
   }
 
   internal TextWriter? ProgramTextWriter { get; private set; }

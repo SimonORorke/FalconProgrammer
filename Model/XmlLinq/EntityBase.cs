@@ -11,6 +11,15 @@ public abstract class EntityBase {
     MustAddNewElement = mustAddNewElement;
   }
 
+  private string InputProgramPath {
+    get {
+      if (this is ProgramXml programXml) {
+        return programXml.InputProgramPath;
+      }
+      return ProgramXml.InputProgramPath;
+    }
+  }
+
   public bool Bypass {
     get => GetAttributeValue(nameof(Bypass)) == "1";
     set => SetAttribute(nameof(Bypass), value ? "1" : "0");
@@ -47,14 +56,11 @@ public abstract class EntityBase {
   }
 
   private XAttribute GetAttribute(XElement element, string attributeName) {
-    // if (element.Attribute(attributeName) == null) {
-    //   Debug.Assert(true);
-    // }
     return
       element.Attribute(attributeName) ??
       throw new InvalidOperationException(
         $"Cannot find {element.Name}.{attributeName} attribute in " +
-        $"'{ProgramXml.InputProgramPath}'.");
+        $"'{InputProgramPath}'.");
   }
 
   protected string GetAttributeValue(string attributeName) {

@@ -284,7 +284,7 @@ public class FalconProgram {
   ///   the chevron delimiters of the DAHDSR Controller script CDATA will have been
   ///   incorrectly written as their corresponding HTML substitutes.
   ///   This method fixes that by modifying the program as plain text rather than via
-  ///   Linq for XML.
+  ///   Linq to XML.
   /// </summary>
   private void FixOrganicPadsCData() {
     var reader = CreateProgramTextReader();
@@ -386,6 +386,7 @@ public class FalconProgram {
       RemoveGuiScriptProcessor();
     }
     if (GuiScriptProcessor != null) {
+      InitialiseLayoutPostProcess();
       return;
     }
     if (Settings.TryGetSoundBankBackgroundImagePath(
@@ -406,16 +407,8 @@ public class FalconProgram {
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
         break;
-      default:
-        return;
     }
-    ProgramXml.LoadFromFile(Path);
-    ProgramXml.InitialiseDescription();
-    Save();
-    if (SoundBankName == "Organic Pads") {
-      FixOrganicPadsCData();
-    }
-    PrependPathLineToDescription();
+    InitialiseLayoutPostProcess();
     NotifyUpdate($"{PathShort}: Initialised layout.");
     return;
 
@@ -426,6 +419,20 @@ public class FalconProgram {
       ProgramXml.SetBackgroundImagePath(falconFormatPath);
       NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
     }
+  }
+
+  /// <summary>
+  ///   Implements some modifications required by <see cref="InitialiseLayout"/> that
+  ///   need to be done via plain text updates rather than via Linq to XML.  
+  /// </summary>
+  private void InitialiseLayoutPostProcess() {
+    ProgramXml.LoadFromFile(Path);
+    ProgramXml.InitialiseDescription();
+    Save();
+    if (SoundBankName == "Organic Pads") {
+      FixOrganicPadsCData();
+    }
+    PrependPathLineToDescription();
   }
 
   private void InitialiseOrganicPadsProgram() {
@@ -603,7 +610,15 @@ public class FalconProgram {
     Effects = effects.ToImmutableList();
   }
 
-  public void PrependPathLineToDescription() {
+  /// <summary>
+  ///   Prepends a line to the program's description, which is viewable in Falcon when
+  ///   the Info page's  "i" button is clicked.
+  /// </summary>
+  /// <remarks>
+  ///   This needs to be done via plain text updates rather than via Linq to XML,
+  ///   otherwise the original multi-line description would turn into one long line. 
+  /// </remarks>
+  private void PrependPathLineToDescription() {
     const string descriptionPrefix = "description=\"";
     const string pathIndicator = "PATH: ";
     string oldContents;
@@ -641,9 +656,7 @@ public class FalconProgram {
     // them with spaces.  As a result, it has made the description look like one line
     // instead of multiple lines.  Our workaround is to assume that two spaces indicate
     // where there should be a blank line and replace each occurrence of two spaces with
-    // the HTML code for 2 carriage return/line throw pairs.  That's probably what the 
-    // original had, though to confirm that we would need to examine an original file
-    // at the byte level.
+    // the HTML code for 2 carriage return/line throw pairs.
     string fixedRestOfDescriptionLine = restOfOldDescriptionLine.Replace(
       "  ", "&#xD;&#xA;&#xD;&#xA;");
     writer.WriteLine(fixedRestOfDescriptionLine);

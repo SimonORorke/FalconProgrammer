@@ -19,6 +19,8 @@ public class TestProgramXml : ProgramXml {
   /// </summary>
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
+  private string? SavedXml { get; set; }
+
   private void OnSaved(string savedXml) {
     Saved?.Invoke(this, savedXml);
   }
@@ -28,7 +30,9 @@ public class TestProgramXml : ProgramXml {
   ///   will be read from the Tests assembly and deserialised.
   /// </summary>
   protected override XElement ReadProgramRootElementFromFile() {
-    var reader = new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
+    TextReader reader = SavedXml != null
+      ? new StringReader(SavedXml)
+      : new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
     string programXmlText = reader.ReadToEnd();
     return ReadRootElementFromXmlText(programXmlText);
   }
@@ -43,7 +47,14 @@ public class TestProgramXml : ProgramXml {
     return ReadRootElementFromXmlText(programXmlText);
   }
 
+  public override void SaveToFile(string outputProgramPath) {
+    RootElement.RemoveNodes();
+    RootElement.Add(Element);
+    base.SaveToFile(outputProgramPath);
+  }
+
   protected override void SaveXmlTextToFile(string outputProgramPath, string xmlText) {
+    SavedXml = xmlText;
     OnSaved(xmlText);
   }
 

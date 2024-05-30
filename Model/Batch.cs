@@ -107,15 +107,6 @@ public class Batch {
         Program.ZeroReverbMacros();
         break;
     }
-    // if (Program.HasBeenUpdated) {
-    //   Program.Save();
-    //   if (Task == ConfigTask.InitialiseLayout && SoundBankName == "Organic Pads") {
-    //     Program.FixOrganicPadsCData();
-    //   }
-    // }
-    // if (Task == ConfigTask.InitialiseLayout) {
-    //   Program.PrependPathLineToDescription();
-    // }
   }
 
   /// <summary>
