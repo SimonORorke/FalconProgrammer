@@ -409,7 +409,6 @@ public class FalconProgram {
         break;
     }
     InitialiseLayoutPostProcess();
-    NotifyUpdate($"{PathShort}: Initialised layout.");
     return;
 
     void SetBackgroundImagePath() {
@@ -434,6 +433,7 @@ public class FalconProgram {
       FixOrganicPadsCData();
     }
     PrependPathLineToDescription();
+    NotifyUpdate($"{PathShort}: Initialised layout.");
   }
 
   private void InitialiseOrganicPadsProgram() {

@@ -55,13 +55,33 @@ public class FalconProgramTests {
   }
 
   [Test]
-  public void PrependPathLineToDescription() {
-    Batch.EmbeddedProgramFileName = "Voltage.xml";
+  public void InitialiseOrganicPadsProgram() {
+    Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
+    Batch.EmbeddedTemplateFileName = "Crystal Caves.uvip";
     Batch.RunTask(ConfigTask.InitialiseLayout, 
-      "Factory", "Bass", "Imagination");
-    string programText = Batch.TestProgram.ProgramTextWriter!.ToString()!; 
-    Assert.That(programText, Does.Contain(
-      @"PATH: Factory\Bass\Imagination"));
+      "Organic Pads", "Mystical", "Tibetan Horns");
+    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
+  }
+
+  [Test]
+  public void PrependPathLineToDescription() {
+    // Program.Properties.description attribute already exists
+    PrependPathForEmbeddedFile("Voltage.xml"); 
+    // Program.Properties.description attribute must be added.
+    PrependPathForEmbeddedFile("NoGuiScriptProcessor.xml"); 
+    // Program.Properties element must be added with description attribute.
+    PrependPathForEmbeddedFile("GuiScriptProcessor.xml"); 
+    return;
+
+    void PrependPathForEmbeddedFile(string embeddedProgramFileName) {
+      Batch.EmbeddedProgramFileName = embeddedProgramFileName;
+      Batch.RunTask(ConfigTask.InitialiseLayout, 
+        "Factory", "Bass", "Imagination");
+      Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
+        @"PATH: Factory\Bass\Imagination"));
+      Assert.That(Batch.MockBatchLog.Lines[^1], Is.EqualTo(
+        @"InitialiseLayout - Factory\Bass\Imagination: Initialised layout."));
+    }
   }
 
   [Test]

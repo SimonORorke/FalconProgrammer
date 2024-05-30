@@ -4,6 +4,7 @@ using FalconProgrammer.Model.XmlLinq;
 namespace FalconProgrammer.Tests.Model;
 
 public class TestFalconProgram : FalconProgram {
+  private string _savedXml = string.Empty;
   private TestProgramXml? _testProgramXml;
 
   public TestFalconProgram(
@@ -16,7 +17,16 @@ public class TestFalconProgram : FalconProgram {
 
   private string EmbeddedProgramFileName { get; }
   private string EmbeddedTemplateFileName { get; }
-  internal string SavedXml { get; private set; } = string.Empty;
+
+  internal string SavedXml {
+    get {
+      if (ProgramTextWriter != null) {
+        _savedXml = ProgramTextWriter.ToString();
+      }
+      return _savedXml;
+    }
+    private set => _savedXml = value;
+  }
 
   private TestProgramXml TestProgramXml {
     get {
@@ -38,10 +48,9 @@ public class TestFalconProgram : FalconProgram {
 
   protected override TextReader CreateProgramTextReader() {
     return new StringReader(SavedXml);
-    // return new StreamReader(Global.GetEmbeddedFileStream(EmbeddedProgramFileName));
   }
 
-  internal TextWriter? ProgramTextWriter { get; private set; }
+  private StringWriter? ProgramTextWriter { get; set; }
 
   protected override TextWriter CreateProgramTextWriter() {
     return ProgramTextWriter = new StringWriter();
@@ -54,8 +63,4 @@ public class TestFalconProgram : FalconProgram {
   private void TestProgramXmlOnSaved(object? sender, string e) {
     SavedXml = e;
   }
-
-  // protected override void UpdateProgramContents(string newContents) {
-  //   SavedXml = newContents;
-  // }
 }
