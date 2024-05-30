@@ -429,7 +429,8 @@ public class FalconProgram {
     ProgramXml.LoadFromFile(Path);
     ProgramXml.InitialiseDescription();
     Save();
-    if (SoundBankName == "Organic Pads") {
+    if (SoundBankName == "Organic Pads" 
+        && !Settings.MustUseGuiScriptProcessor("Organic Pads")) {
       FixOrganicPadsCData();
     }
     PrependPathLineToDescription();
