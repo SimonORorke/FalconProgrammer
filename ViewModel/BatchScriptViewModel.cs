@@ -161,6 +161,14 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  private string GetLogText() {
+    var writer = new StringWriter();
+    foreach (string line in Log) {
+      writer.WriteLine(line);
+    }
+    return writer.ToString();
+  }
+
   [ExcludeFromCodeCoverage]
   protected virtual bool IsTimeToUpdateLogAndProgress(
     DateTime currentTime, int intervalMilliseconds) {
@@ -184,6 +192,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       }
       Scopes.LoadFromScript(script);
       Tasks.LoadFromScript(script);
+      Status = $"Loaded script '{Path.GetFileName(path)}'.";
     }
   }
 
@@ -247,14 +256,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       nameof(RunScript));
   }
 
-  protected string GetLogText() {
-    var writer = new StringWriter();
-    foreach (string line in Log) {
-      writer.WriteLine(line);
-    }
-    return writer.ToString();
-  }
-
   /// <summary>
   ///   Generates <see cref="SaveScriptCommand" />.
   /// </summary>
@@ -265,6 +266,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     if (path != null) {
       var script = CreateInitialisedBatchScript();
       script.Serialiser.Serialise(script, path);
+      Status = $"Saved script to '{Path.GetFileName(path)}'.";
     }
   }
 

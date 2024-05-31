@@ -51,6 +51,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Settings.Batch.Scope.Program, Is.EqualTo("BL Xylophone"));
     Assert.That(ViewModel.Settings.Batch.Tasks, Has.Count.EqualTo(1));
     Assert.That(ViewModel.Settings.Batch.Tasks[0], Is.EqualTo("QueryAdsrMacros"));
+    Assert.That(ViewModel.Status, Does.StartWith("Loaded script"));
   }
 
   [Test]
@@ -106,6 +107,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     ViewModel.RunScriptCommand.Execute(null);
     Assert.That(ViewModel.Log[0], Is.EqualTo(
       @"InitialiseLayout - 'Factory\Keys\Morning Keys'"));
+    Assert.That(ViewModel.Status, Does.StartWith("Run ended"));
     ViewModel.CopyLogCommand.Execute(null);
     Assert.That(ViewModel.SavedLog, Does.Contain(@"Factory\Keys\Morning Keys"));
     Assert.That(ViewModel.Status, Is.EqualTo("Copied log to clipboard."));
@@ -128,6 +130,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.TestBatchScript, Is.Not.Null);
     Assert.That(ViewModel.TestBatchScript.MockSerialiser.LastOutputPath,
       Is.EqualTo(BatchScriptPath));
+    Assert.That(ViewModel.Status, Does.StartWith("Saved script to "));
   }
 
   [Test]
