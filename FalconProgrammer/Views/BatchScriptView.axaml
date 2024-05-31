@@ -50,7 +50,7 @@
                     Classes="top"
                     Width="170">
                 <Button.Content>
-                    <AccessText Text="C_opy Log to Clipboard" Classes="top" />
+                    <AccessText Text="Co_py Log to Clipboard" Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding CancelRunCommand}"
