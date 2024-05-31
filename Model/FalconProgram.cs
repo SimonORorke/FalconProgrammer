@@ -411,7 +411,7 @@ public class FalconProgram {
       default:
         return;
     }
-    NotifyUpdate($"{PathShort}: Initialised layout.");
+    // NotifyUpdate($"{PathShort}: Initialised layout.");
     return;
 
     void SetBackgroundImagePath() {
