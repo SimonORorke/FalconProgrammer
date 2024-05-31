@@ -219,6 +219,23 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
+  /// <summary>
+  ///   If there is no Program.Properties.Description attribute, create an empty one
+  ///   in preparation for update by
+  ///   <see cref="FalconProgram.PrependPathLineToDescription" />
+  /// </summary>
+  public void InitialiseDescription() {
+    var propertiesElement = Element.Element("Properties");
+    if (propertiesElement == null) {
+      propertiesElement = new XElement("Properties");
+      Element.Add(propertiesElement);
+    }
+    var descriptionAttribute = propertiesElement.Attribute("description");
+    if (descriptionAttribute == null) {
+      propertiesElement.Add(new XAttribute("description", string.Empty));
+    }
+  }
+
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
     try {

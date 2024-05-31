@@ -613,6 +613,7 @@ public class FalconProgram {
   private void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
     const string crLf = "\r\n";
+    ProgramXml.InitialiseDescription();
     string oldDescription = ProgramXml.GetDescription();
     string oldPathLine =
       oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf)
