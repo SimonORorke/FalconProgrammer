@@ -106,9 +106,9 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     ViewModel.RunScriptCommand.Execute(null);
     Assert.That(ViewModel.Log[0], Is.EqualTo(
       @"InitialiseLayout - 'Factory\Keys\Morning Keys'"));
-    await ViewModel.SaveLogCommand.ExecuteAsync(null);
+    ViewModel.CopyLogCommand.Execute(null);
     Assert.That(ViewModel.SavedLog, Does.Contain(@"Factory\Keys\Morning Keys"));
-    Assert.That(ViewModel.Status, Does.StartWith("Run ended"));
+    Assert.That(ViewModel.Status, Is.EqualTo("Copied log to clipboard."));
   }
 
   [Test]

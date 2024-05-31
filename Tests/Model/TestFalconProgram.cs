@@ -4,7 +4,6 @@ using FalconProgrammer.Model.XmlLinq;
 namespace FalconProgrammer.Tests.Model;
 
 public class TestFalconProgram : FalconProgram {
-  private string _savedXml = string.Empty;
   private TestProgramXml? _testProgramXml;
 
   public TestFalconProgram(
@@ -17,16 +16,7 @@ public class TestFalconProgram : FalconProgram {
 
   private string EmbeddedProgramFileName { get; }
   private string EmbeddedTemplateFileName { get; }
-
-  internal string SavedXml {
-    get {
-      if (ProgramTextWriter != null) {
-        _savedXml = ProgramTextWriter.ToString();
-      }
-      return _savedXml;
-    }
-    private set => _savedXml = value;
-  }
+  internal string SavedXml { get; private set; } = string.Empty;
 
   private TestProgramXml TestProgramXml {
     get {
@@ -46,14 +36,11 @@ public class TestFalconProgram : FalconProgram {
   protected override void CopyFile(string sourcePath, string destinationPath) {
   }
 
-  protected override TextReader CreateProgramTextReader() {
+  /// <summary>
+  ///   Only used for Organic Pads sound bank in <see cref="FalconProgram.FixCData" />.
+  /// </summary>
+  protected override TextReader CreateProgramReader() {
     return new StringReader(SavedXml);
-  }
-
-  private StringWriter? ProgramTextWriter { get; set; }
-
-  protected override TextWriter CreateProgramTextWriter() {
-    return ProgramTextWriter = new StringWriter();
   }
 
   protected override ProgramXml CreateProgramXml() {
@@ -62,5 +49,12 @@ public class TestFalconProgram : FalconProgram {
 
   private void TestProgramXmlOnSaved(object? sender, string e) {
     SavedXml = e;
+  }
+
+  /// <summary>
+  ///   Only used for Organic Pads sound bank in <see cref="FalconProgram.FixCData" />.
+  /// </summary>
+  protected override void UpdateProgramFileWithFixedCData(string newContents) {
+    SavedXml = newContents;
   }
 }

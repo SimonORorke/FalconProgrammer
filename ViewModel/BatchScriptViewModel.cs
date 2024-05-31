@@ -187,7 +187,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
-  private void OnCopyToClipboard(string text) {
+  protected virtual void OnCopyToClipboard(string text) {
     CopyToClipboard?.Invoke(this, text);
   }
 

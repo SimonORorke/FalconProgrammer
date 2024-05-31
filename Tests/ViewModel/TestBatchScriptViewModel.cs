@@ -34,6 +34,11 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
     return true;
   }
 
+  protected override void OnCopyToClipboard(string text) {
+    base.OnCopyToClipboard(text);
+    SavedLog = text;
+  }
+
   protected override void PrepareForRun() {
     bool isCancelling = RunCancellationTokenSource.IsCancellationRequested;
     base.PrepareForRun();
@@ -43,10 +48,6 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
       // CancelBatchRunCommand was executed before RunThisScriptCommand.
       RunCancellationTokenSource.Cancel();
     }
-  }
-
-  protected override void SaveLogToFile(string outputPath) {
-    SavedLog = GetLogText();
   }
 
   /// <summary>
