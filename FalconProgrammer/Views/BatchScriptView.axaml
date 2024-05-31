@@ -45,11 +45,12 @@
                     <AccessText Text="_Load Script..." Classes="top" />
                 </Button.Content>
             </Button>
-            <Button Command="{Binding SaveLogCommand}"
-                    x:Name="SaveLogButton"
-                    Classes="top">
+            <Button Command="{Binding CopyLogCommand}"
+                    x:Name="CopyLogButton"
+                    Classes="top"
+                    Width="170">
                 <Button.Content>
-                    <AccessText Text="Sa_ve Log..." Classes="top" />
+                    <AccessText Text="C_opy Log to Clipboard" Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding CancelRunCommand}"

@@ -48,6 +48,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   public override string TabTitle => "Batch Script";
 
   public TaskCollection Tasks => _tasks ??= new TaskCollection(DispatcherService);
+  public event EventHandler<string>? CopyToClipboard;
   public event EventHandler? LogUpdated;
   public event EventHandler? RunBeginning;
   public event EventHandler? RunEnded;
@@ -101,6 +102,15 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   [RelayCommand]
   private void CancelRun() {
     RunCancellationTokenSource.Cancel();
+  }
+
+  /// <summary>
+  ///   Generates <see cref="CopyLogCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private void CopyLog() {
+    OnCopyToClipboard(GetLogText());
+    Status = "Copied log to clipboard.";
   }
 
   [ExcludeFromCodeCoverage]
@@ -177,6 +187,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
   }
 
+  private void OnCopyToClipboard(string text) {
+    CopyToClipboard?.Invoke(this, text);
+  }
+
   private void OnLogUpdated() {
     LogUpdated?.Invoke(this, EventArgs.Empty);
   }
@@ -231,23 +245,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     PrepareForRun();
     StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token),
       nameof(RunScript));
-  }
-
-  /// <summary>
-  ///   Generates <see cref="SaveLogCommand" />.
-  /// </summary>
-  [RelayCommand]
-  private async Task SaveLog() {
-    string? path = await DialogService.SaveFile(
-      "Save Log", "Text files", "txt");
-    if (path != null) {
-      SaveLogToFile(path);
-    }
-  }
-
-  [ExcludeFromCodeCoverage]
-  protected virtual void SaveLogToFile(string outputPath) {
-    File.WriteAllText(outputPath, GetLogText());
   }
 
   protected string GetLogText() {

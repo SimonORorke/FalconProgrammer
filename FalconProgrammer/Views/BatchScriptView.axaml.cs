@@ -1,4 +1,5 @@
 ﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using FalconProgrammer.Services;
@@ -19,9 +20,14 @@ public partial class BatchScriptView : UserControl {
 
   protected override void OnLoaded(RoutedEventArgs e) {
     var viewModel = (BatchScriptViewModel)DataContext!;
+    viewModel.CopyToClipboard += ViewModelOnCopyToClipboard;
     viewModel.LogUpdated += ViewModelOnLogUpdated;
     viewModel.RunBeginning += ViewModelOnRunBeginning;
     viewModel.RunEnded += ViewModelOnRunEnded;
+  }
+
+  private static async void ViewModelOnCopyToClipboard(object? sender, string text) {
+    await ((App)Application.Current!).MainWindow.Clipboard!.SetTextAsync(text);
   }
 
   private void ViewModelOnLogUpdated(object? sender, EventArgs e) {
@@ -39,7 +45,7 @@ public partial class BatchScriptView : UserControl {
   private void ViewModelOnRunBeginning(object? sender, EventArgs e) {
     RunScriptButton.IsEnabled = false;
     LoadScriptButton.IsEnabled = false;
-    SaveLogButton.IsEnabled = false;
+    CopyLogButton.IsEnabled = false;
     CancelRunButton.IsEnabled = true;
   }
 
@@ -53,7 +59,7 @@ public partial class BatchScriptView : UserControl {
   private void ViewModelOnRunEnded(object? sender, EventArgs e) {
     RunScriptButton.IsEnabled = true;
     LoadScriptButton.IsEnabled = true;
-    SaveLogButton.IsEnabled = true;
+    CopyLogButton.IsEnabled = true;
     CancelRunButton.IsEnabled = false;
   }
 }
