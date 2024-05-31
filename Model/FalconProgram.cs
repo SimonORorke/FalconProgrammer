@@ -26,6 +26,7 @@ public class FalconProgram {
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
   private ScriptProcessor? GuiScriptProcessor { get; set; }
+  public bool HasBeenUpdated { get; private set; }
 
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
@@ -158,14 +159,12 @@ public class FalconProgram {
     return result;
   }
 
+  /// <summary>
+  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
+  /// </summary>
   [ExcludeFromCodeCoverage]
-  protected virtual TextReader CreateProgramTextReader() {
+  protected virtual TextReader CreateProgramReader() {
     return new StreamReader(Path);
-  }
-
-  [ExcludeFromCodeCoverage]
-  protected virtual TextWriter CreateProgramTextWriter() {
-    return new StreamWriter(Path);
   }
 
   protected virtual ProgramXml CreateProgramXml() {
@@ -280,21 +279,23 @@ public class FalconProgram {
   }
 
   /// <summary>
-  ///   In <see cref="InitialiseLayout"/>, when run for the "Organic Pads" sound bank,
-  ///   the chevron delimiters of the DAHDSR Controller script CDATA will have been
-  ///   incorrectly written as their corresponding HTML substitutes.
-  ///   This method fixes that by modifying the program as plain text rather than via
-  ///   Linq to XML.
+  ///   If the InitialiseLayout batch task has just run for the "Organic Pads"
+  ///   sound bank, the chevron delimiters of the DAHDSR Controller script CDATA will
+  ///   have been incorrectly written as their corresponding HTML substitutes.
+  ///   To fix that, the batch needs to call this method after the Save for
+  ///   InitialiseLayout.
   /// </summary>
-  private void FixOrganicPadsCData() {
-    var reader = CreateProgramTextReader();
+  public void FixCData() {
+    if (SoundBankName != "Organic Pads") {
+      return;
+    }
+    var reader = CreateProgramReader();
     string oldContents = reader.ReadToEnd();
     reader.Close();
     string newContents = oldContents
       .Replace("<script>&lt;", "<script><")
       .Replace("&gt;</script>", "></script>");
-    using var writer = CreateProgramTextWriter();
-    writer.Write(newContents);
+    UpdateProgramFileWithFixedCData(newContents);
   }
 
   /// <summary>
@@ -377,6 +378,7 @@ public class FalconProgram {
   }
 
   public void InitialiseLayout() {
+    PrependPathLineToDescription();
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
     // processor, if there is one, unless there is a need to keep it.
@@ -386,7 +388,6 @@ public class FalconProgram {
       RemoveGuiScriptProcessor();
     }
     if (GuiScriptProcessor != null) {
-      InitialiseLayoutPostProcess();
       return;
     }
     if (Settings.TryGetSoundBankBackgroundImagePath(
@@ -407,8 +408,10 @@ public class FalconProgram {
       case "Organic Pads":
         InitialiseOrganicPadsProgram();
         break;
+      default:
+        return;
     }
-    InitialiseLayoutPostProcess();
+    NotifyUpdate($"{PathShort}: Initialised layout.");
     return;
 
     void SetBackgroundImagePath() {
@@ -418,22 +421,6 @@ public class FalconProgram {
       ProgramXml.SetBackgroundImagePath(falconFormatPath);
       NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
     }
-  }
-
-  /// <summary>
-  ///   Implements some modifications required by <see cref="InitialiseLayout"/> that
-  ///   need to be done via plain text updates rather than via Linq to XML.  
-  /// </summary>
-  private void InitialiseLayoutPostProcess() {
-    ProgramXml.LoadFromFile(Path);
-    ProgramXml.InitialiseDescription();
-    Save();
-    if (SoundBankName == "Organic Pads" 
-        && !Settings.MustUseGuiScriptProcessor("Organic Pads")) {
-      FixOrganicPadsCData();
-    }
-    PrependPathLineToDescription();
-    NotifyUpdate($"{PathShort}: Initialised layout.");
   }
 
   private void InitialiseOrganicPadsProgram() {
@@ -574,6 +561,7 @@ public class FalconProgram {
 
   public void NotifyUpdate(string message) {
     Log.WriteLine(message);
+    HasBeenUpdated = true;
   }
 
   private void PopulateConnectionsParentsAndEffects() {
@@ -612,62 +600,29 @@ public class FalconProgram {
   }
 
   /// <summary>
-  ///   Prepends a line to the program's description, which is viewable in Falcon when
-  ///   the Info page's  "i" button is clicked.
+  ///   Prepends a line indicating the program's short path to the program's description,
+  ///   which is viewable in Falcon when the Info page's  "i" button is clicked.
   /// </summary>
   /// <remarks>
-  ///   This needs to be done via plain text updates rather than via Linq to XML,
-  ///   otherwise the original multi-line description would turn into one long line. 
+  ///   This has the unwanted effect of replacing the line breaks in the description with
+  ///   spaces. See the comment in <see cref="ProgramXml.ReadRootElementFromXmlText" />.
+  ///   I tried a workaround by updating the description by parsing plain text updates
+  ///   rather than via Linq to XML. But updates by later tasks caused further
+  ///   description changes and somehow messed up wheel macro changes.
   /// </remarks>
   private void PrependPathLineToDescription() {
-    const string descriptionPrefix = "description=\"";
     const string pathIndicator = "PATH: ";
-    string oldContents;
-    using (var programReader = CreateProgramTextReader()) {
-      oldContents = programReader.ReadToEnd();
-    }
-    using var reader = new StringReader(oldContents);
-    using var writer = CreateProgramTextWriter();
-    string oldDescriptionLine = string.Empty;
-    while (true) {
-      string? line = reader.ReadLine();
-      if (line == null) {
-        break;
-      }
-      if (!line.Contains(descriptionPrefix)) {
-        writer.WriteLine(line);
-      } else {
-        oldDescriptionLine = line;
-        break;
-      }
-    }
-    string pathLine = !oldDescriptionLine.Contains(pathIndicator) 
-      ? oldDescriptionLine[..
-          (oldDescriptionLine.IndexOf(descriptionPrefix) + descriptionPrefix.Length)]
-        + pathIndicator + PathShort
-      : throw new ApplicationException(
-        "PrependPathLineToDescription found an existing path line, " + 
-        "which is not currently supported.");
-    writer.WriteLine(pathLine);
-    string restOfOldDescriptionLine = oldDescriptionLine[
-      (oldDescriptionLine.IndexOf(
-        descriptionPrefix) + descriptionPrefix.Length)..];
-    // For unknown reason, reading the description has unhelpfully stripped off
-    // whatever format effectors were making new lines within the description, replacing
-    // them with spaces.  As a result, it has made the description look like one line
-    // instead of multiple lines.  Our workaround is to assume that two spaces indicate
-    // where there should be a blank line and replace each occurrence of two spaces with
-    // the HTML code for 2 carriage return/line throw pairs.
-    string fixedRestOfDescriptionLine = restOfOldDescriptionLine.Replace(
-      "  ", "&#xD;&#xA;&#xD;&#xA;");
-    writer.WriteLine(fixedRestOfDescriptionLine);
-    while (true) {
-      string? line = reader.ReadLine();
-      if (line == null) {
-        break;
-      }
-      writer.WriteLine(line);
-    }
+    const string crLf = "\r\n";
+    string oldDescription = ProgramXml.GetDescription();
+    string oldPathLine =
+      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf)
+        ? oldDescription[..(oldDescription.IndexOf(crLf, StringComparison.Ordinal) + 2)]
+        : string.Empty;
+    string newPathLine = pathIndicator + PathShort + crLf;
+    string newDescription = oldPathLine != string.Empty
+      ? oldDescription.Replace(oldPathLine, newPathLine)
+      : newPathLine + oldDescription;
+    ProgramXml.SetDescription(newDescription);
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
   }
 
@@ -958,7 +913,7 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
   }
 
-  private void Save() {
+  public void Save() {
     ProgramXml.SaveToFile(Path);
   }
 
@@ -1047,6 +1002,15 @@ public class FalconProgram {
         }
       }
     }
+  }
+
+  /// <summary>
+  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
+  protected virtual void UpdateProgramFileWithFixedCData(string newContents) {
+    using var writer = new StreamWriter(Path);
+    writer.Write(newContents);
   }
 
   private bool WheelMacroExists() {

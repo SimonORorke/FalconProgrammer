@@ -122,6 +122,13 @@ public class ProgramXml : EntityBase {
       : null;
   }
 
+  public List<XElement> GetConnectionsParentElements() {
+    var connectionsElements = Element.Descendants("Connections");
+    return (
+      from connectionsElement in connectionsElements
+      select connectionsElement.Parent).ToList();
+  }
+
   [PublicAPI]
   public List<Dahdsr> GetDahdsrs() {
     var dahdsrElements = Element.Descendants("DAHDSR");
@@ -129,6 +136,24 @@ public class ProgramXml : EntityBase {
         from dahdsrElement in dahdsrElements
         select new Dahdsr(dahdsrElement, this))
       .ToList();
+  }
+
+  public string GetDescription() {
+    var propertiesElement = Element.Element("Properties");
+    if (propertiesElement == null) {
+      return string.Empty;
+    }
+    var descriptionAttribute = propertiesElement.Attribute("description");
+    return descriptionAttribute != null ? descriptionAttribute.Value : string.Empty;
+  }
+
+  public List<XElement> GetEffectElements() {
+    var insertsElements = Element.Descendants("Inserts");
+    var result = new List<XElement>();
+    foreach (var insertsElement in insertsElements) {
+      result.AddRange(insertsElement.Elements());
+    }
+    return result;
   }
 
   protected override XElement GetElement() {
@@ -157,22 +182,6 @@ public class ProgramXml : EntityBase {
       where GetAttributeValue(
         modulationElement, nameof(Modulation.Source)) == source
       select modulationElement).ToList();
-  }
-
-  public List<XElement> GetConnectionsParentElements() {
-    var connectionsElements = Element.Descendants("Connections");
-    return (
-      from connectionsElement in connectionsElements
-      select connectionsElement.Parent).ToList();
-  }
-
-  public List<XElement> GetEffectElements() {
-    var insertsElements = Element.Descendants("Inserts");
-    var result = new List<XElement>();
-    foreach (var insertsElement in insertsElements) {
-      result.AddRange(insertsElement.Elements());
-    }
-    return result;
   }
 
   private ImmutableList<XElement> GetScriptProcessorElements() {
@@ -210,40 +219,6 @@ public class ProgramXml : EntityBase {
     return result;
   }
 
-  protected static XElement ReadRootElementFromXmlText(string xmlText) {
-    // In the following newer way of loading the XML to an object hierarchy,
-    // there's no way to stop line breaks from being replaced by spaces.
-    // But line breaks are correct when inserting or removing elements.
-    return XElement.Load(new StringReader(xmlText));
-    // This way of loading the XML to an object hierarchy
-    // stops line breaks from being replaced by spaces in Description
-    // when PrependPathLineToDescription updates it.
-    // However, formatting is messed up when inserting or removing elements:
-    // an inserted element does not start on a new line;
-    // and removing an element leaves a blank line.
-    // using var reader = new XmlTextReader(programStream);
-    // reader.Normalization = false;
-    // var document = XDocument.Load(reader);
-    // return document.Root!;
-  }
-
-  /// <summary>
-  ///   If there is no Program.Properties.Description attribute, create an empty one
-  ///   in preparation for update by
-  ///   <see cref="FalconProgram.PrependPathLineToDescription" />
-  /// </summary>
-  public void InitialiseDescription() {
-    var propertiesElement = Element.Element("Properties");
-    if (propertiesElement == null) {
-      propertiesElement = new XElement("Properties");
-      Element.Add(propertiesElement);
-    }
-    var descriptionAttribute = propertiesElement.Attribute("description");
-    if (descriptionAttribute == null) {
-      propertiesElement.Add(new XAttribute("description", string.Empty));
-    }
-  }
-
   public void LoadFromFile(string inputProgramPath) {
     InputProgramPath = inputProgramPath;
     try {
@@ -275,6 +250,23 @@ public class ProgramXml : EntityBase {
   private static XElement ReadRootElementFromFile(string path) {
     string xmlText = File.ReadAllText(path);
     return ReadRootElementFromXmlText(xmlText);
+  }
+
+  protected static XElement ReadRootElementFromXmlText(string xmlText) {
+    // In the following newer way of loading the XML to an object hierarchy,
+    // there's no way to stop line breaks from being replaced by spaces.
+    // But line breaks are correct when inserting or removing elements.
+    return XElement.Load(new StringReader(xmlText));
+    // This way of loading the XML to an object hierarchy
+    // stops line breaks from being replaced by spaces in Description
+    // when PrependPathLineToDescription updates it.
+    // However, formatting is messed up when inserting or removing elements:
+    // an inserted element does not start on a new line;
+    // and removing an element leaves a blank line.
+    // using var reader = new XmlTextReader(programStream);
+    // reader.Normalization = false;
+    // var document = XDocument.Load(reader);
+    // return document.Root!;
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
@@ -327,5 +319,14 @@ public class ProgramXml : EntityBase {
       // AddFirst does not work for adding attributes!
       // propertiesElement.AddFirst(backgroundImagePathAttribute);
     }
+  }
+
+  public void SetDescription(string text) {
+    var propertiesElement = Element.Element("Properties");
+    if (propertiesElement == null) {
+      propertiesElement = new XElement("Properties");
+      Element.Add(propertiesElement);
+    }
+    SetAttribute(propertiesElement, "description", text);
   }
 }

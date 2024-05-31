@@ -107,6 +107,12 @@ public class Batch {
         Program.ZeroReverbMacros();
         break;
     }
+    if (Program.HasBeenUpdated) {
+      Program.Save();
+      if (Task == ConfigTask.InitialiseLayout) {
+        Program.FixCData();
+      }
+    }
   }
 
   /// <summary>
