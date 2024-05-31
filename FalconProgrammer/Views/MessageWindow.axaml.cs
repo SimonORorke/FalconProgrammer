@@ -20,8 +20,8 @@ public partial class MessageWindow : Window {
   ///   <see cref="TextBox.SelectedText" /> cannot be bound to the view model, due to a
   ///   known Avalonia error when binding one way from source. Binding
   ///   <see cref="TextBox.SelectionStart " /> and <see cref="TextBox.SelectionEnd " />
-  ///   instead does not work either. Without specifying one way from source, the view
-  ///   model values are always zero.
+  ///   instead does not work either. At least without specifying one way from source, the
+  ///   view model values are always zero.
   ///   Consequently, the whole copy operation is done here in code behind. 
   /// </summary>
   private async void CopyButtonOnClick(object? sender, RoutedEventArgs e) {
