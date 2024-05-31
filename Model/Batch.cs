@@ -319,11 +319,6 @@ public class Batch {
       }
       Log.Prefix = string.Empty;
       Log.WriteLine("The batch run has finished.");
-    // } catch (OperationCanceledException) {
-    //   Log.Prefix = string.Empty;
-    //   Log.WriteLine("==========================================");
-    //   Log.WriteLine("The batch run has been cancelled.");
-    //   Log.WriteLine("==========================================");
     } catch (Exception exception) {
       Log.Prefix = string.Empty;
       Log.WriteLine("==========================================");
