@@ -230,7 +230,7 @@ public class ProgramXml : EntityBase {
   /// <summary>
   ///   If there is no Program.Properties.Description attribute, create an empty one
   ///   in preparation for update by
-  ///   <see cref="FalconProgram.PrependPathLineToDescription"/>
+  ///   <see cref="FalconProgram.PrependPathLineToDescription" />
   /// </summary>
   public void InitialiseDescription() {
     var propertiesElement = Element.Element("Properties");
@@ -257,7 +257,8 @@ public class ProgramXml : EntityBase {
       // Change the open root element line to "UVI4>".
       // But remember the template file is loaded before the updatable file!
       throw new ApplicationException(
-        $"The following XML error was found in '{InputProgramPath}'\r\n:{ex.Message}");
+        "The following XML error was found in "
+        + $"'{InputProgramPath}'\r\n:{ex.Message}");
     }
   }
 

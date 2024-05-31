@@ -31,7 +31,7 @@ public class Batch {
 
   public IBatchLog Log { get; }
   protected FalconProgram Program { get; private set; } = null!;
-  
+
   internal Settings Settings {
     get => _settings ??= SettingsReader.Read();
     private set => _settings = value;
@@ -132,7 +132,7 @@ public class Batch {
       case ConfigTask.ReplaceModWheelWithMacro:
         if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
           Log.WriteLine(
-            "ReplaceModWheelWithMacro is not possible because a mod wheel " + 
+            "ReplaceModWheelWithMacro is not possible because a mod wheel " +
             "replacement CC number greater than 1 has not been specified.");
           return;
         }
@@ -285,11 +285,13 @@ public class Batch {
     RunTask(ConfigTask.RestoreOriginal, soundBankName, categoryName, programName);
     RunTask(ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
     RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.RemoveDelayEffectsAndMacros, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.RemoveDelayEffectsAndMacros, soundBankName, categoryName,
+      programName);
     RunTask(ConfigTask.ZeroReleaseMacro, soundBankName, categoryName, programName);
     RunTask(ConfigTask.ZeroReverbMacros, soundBankName, categoryName, programName);
     RunTask(ConfigTask.MoveZeroedMacrosToEnd, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, categoryName, programName);
+    RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, categoryName,
+      programName);
     RunTask(ConfigTask.ReuseCc1, soundBankName, categoryName, programName);
   }
 
@@ -300,14 +302,14 @@ public class Batch {
       batchScript.Validate();
       // Refresh the settings, as they may have changed between runs.
       Settings = SettingsReader.Read();
-      string? soundBankName = GetScopeParameter(batchScript.Scope.SoundBank); 
-      string? categoryName = GetScopeParameter(batchScript.Scope.Category); 
+      string? soundBankName = GetScopeParameter(batchScript.Scope.SoundBank);
+      string? categoryName = GetScopeParameter(batchScript.Scope.Category);
       string? programName = GetScopeParameter(batchScript.Scope.Program);
       var configTasks = batchScript.SequenceTasks();
       TaskCount = configTasks.Count;
       TaskNo = 0;
       foreach (var configTask in configTasks) {
-        RunTask(configTask, soundBankName, categoryName, programName);  
+        RunTask(configTask, soundBankName, categoryName, programName);
       }
       Log.Prefix = string.Empty;
       Log.WriteLine("The batch run has finished.");
@@ -319,7 +321,9 @@ public class Batch {
     } catch (Exception exception) {
       Log.Prefix = string.Empty;
       Log.WriteLine("==========================================");
-      Log.WriteLine("The batch run terminated with this error:");
+      Log.WriteLine(
+        $"While running configuration task {Task.ToString()} for program " + 
+        $"'{Program.Path}', the batch run terminated with this error:");
       Log.WriteLine("==========================================");
       Log.WriteLine(exception is ApplicationException
         ? exception.Message
