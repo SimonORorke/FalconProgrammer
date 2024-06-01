@@ -13,6 +13,7 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Template DefaultTemplate { get; set; } = new Template();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
+  [XmlElement] public int WindowState { get; set; }
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]

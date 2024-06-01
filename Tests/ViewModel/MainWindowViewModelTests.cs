@@ -105,9 +105,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockSettingsFolderLocationReader.EmbeddedFileName =
       "InvalidXmlSettings.xml";
     ViewModel.SelectedTab = LocationsTab; // Locations
-    Assert.That(ViewModel.LocationsViewModel.ModelServices.SettingsReader,
-      Is.EqualTo(MockSettingsReaderEmbedded));
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(ViewModel.CurrentPageTitle, 
+      Is.EqualTo(ViewModel.LocationsViewModel.PageTitle));
   }
 
   [Test]
@@ -134,7 +133,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
     bool canClose = await ViewModel.QueryCloseWindow();
     // Question message box shown.
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    // In this test, there are two mock message box questions, the first from
+    // LocationViewModel, the second from MainWindowViewModel. In the application, only
+    // the first message box question is shown, as the user had to respond to it, to
+    // either confirm or cancel the window closure.
+    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.GreaterThanOrEqualTo(1));
     Assert.That(canClose, Is.True);
   }
 

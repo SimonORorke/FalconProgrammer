@@ -28,6 +28,7 @@ public partial class MainWindow : Window {
   protected override void OnClosing(WindowClosingEventArgs e) {
     if (!ForceClose) {
       e.Cancel = true;
+      ViewModel.WindowState = (int)WindowState;  
       ViewModel.QueryCloseWindow().ContinueWith(
         task => {
           bool result;
@@ -61,6 +62,7 @@ public partial class MainWindow : Window {
   protected override void OnLoaded(RoutedEventArgs e) {
     ViewModel = (MainWindowViewModel)DataContext!;
     ColourScheme.Select(ViewModel.ColourSchemeId);
+    WindowState = (WindowState)ViewModel.WindowState;  
     var firstTabItem = TabControl.FindDescendantOfType<TabItem>();
     firstTabItem!.Focus(NavigationMethod.Tab); // Tab shows the focus rectangle
   }

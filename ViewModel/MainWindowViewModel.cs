@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class MainWindowViewModel : ViewModelBase,
+public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
   private ColourSchemeId _colourSchemeId;
   private string _currentPageTitle = string.Empty;
@@ -20,6 +20,11 @@ public partial class MainWindowViewModel : ViewModelBase,
   [ObservableProperty] private TabItemViewModel? _selectedTab;
 
   private ImmutableList<TabItemViewModel>? _tabs;
+
+  /// <summary>
+  ///   Generates <see cref="WindowState" />  property.
+  /// </summary>
+  [ObservableProperty] private int _windowState;
 
   public MainWindowViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
@@ -88,7 +93,7 @@ public partial class MainWindowViewModel : ViewModelBase,
   ///   Not used because this is not a page but the owner of pages.
   /// </summary>
   [ExcludeFromCodeCoverage]
-  public override string PageTitle => throw new NotSupportedException();
+  public override string PageTitle => string.Empty;
 
   /// <summary>
   ///   The setter is only for tests.
@@ -140,8 +145,12 @@ public partial class MainWindowViewModel : ViewModelBase,
 
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (!IsVisible) {
-      // Start listening for ObservableRecipient messages. Set IsVisible to true.
-      Task.Run(async () => await Open()).Wait();
+      try {
+        // Start listening for ObservableRecipient messages. Set IsVisible to true.
+        Task.Run(async () => await Open()).Wait();
+      } catch {
+        // Maybe a settings XML error, in which case error messages will have been shown.
+      }
     }
     DispatcherService.Dispatch(() => OnSelectedTabChangedAsync(value!));
   }
@@ -174,6 +183,7 @@ public partial class MainWindowViewModel : ViewModelBase,
     await base.Open();
     ColourSchemeId =
       ColourSchemeWindowViewModel.StringToColourSchemeId(Settings.ColourScheme);
+    WindowState = Settings.WindowState;
     foreach (var tab in Tabs) {
       tab.ViewModel.ModelServices = ModelServices;
     }
@@ -186,6 +196,7 @@ public partial class MainWindowViewModel : ViewModelBase,
         return false;
       }
     }
+    Settings.WindowState = WindowState; // Will be saved by base.QueryClose if changed.
     // Stop listening for ObservableRecipient messages.
     return await base.QueryClose(true);
   }

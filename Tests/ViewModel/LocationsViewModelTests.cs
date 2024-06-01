@@ -154,4 +154,13 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Settings cannot be saved: a settings folder has not been specified."));
   }
+
+  [Test]
+  public async Task SettingsXmlError() {
+    MockSettingsReaderEmbedded.EmbeddedFileName = "InvalidXmlSettings.xml";
+    await ViewModel.Open();
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+      "Invalid XML was found in embedded file '"));
+  }
 }
