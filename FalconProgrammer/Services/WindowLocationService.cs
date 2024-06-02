@@ -23,7 +23,7 @@ public class WindowLocationService : IWindowLocationService {
   public int? Height { get; set; }
   public int? WindowState { get; set; }
 
-  private Screen? GetScreenContainingPositionInWorkingArea(PixelPoint position) {
+  private Screen? FindScreenContainingPositionInWorkingArea(PixelPoint position) {
     return (
       // All active screens, not just any screens overlapping the window! 
       from screen in MainWindow.Screens.All 
@@ -47,7 +47,7 @@ public class WindowLocationService : IWindowLocationService {
       return;
     }
     var savedPosition = new PixelPoint(Left.Value, Top.Value);
-    var screen = GetScreenContainingPositionInWorkingArea(savedPosition);
+    var screen = FindScreenContainingPositionInWorkingArea(savedPosition);
     if (screen == null) {
       // The saved window position (its top left corner) is not in the working area of
       // an active screen.
