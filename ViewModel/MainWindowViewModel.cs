@@ -14,20 +14,17 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   private string _currentPageTitle = string.Empty;
 
   /// <summary>
-  ///   Generates <see cref="SelectedTab" />  property
+  ///   Generates <see cref="SelectedTab" /> property
   ///   and partial OnSelectedTabChanged method.
   /// </summary>
   [ObservableProperty] private TabItemViewModel? _selectedTab;
 
   private ImmutableList<TabItemViewModel>? _tabs;
 
-  /// <summary>
-  ///   Generates <see cref="WindowState" />  property.
-  /// </summary>
-  [ObservableProperty] private int _windowState;
-
   public MainWindowViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) {
+    IDispatcherService dispatcherService, IWindowLocationService windowLocationService)
+    : base(dialogService, dispatcherService) {
+    WindowLocationService = windowLocationService;
     BackgroundViewModel = new BackgroundViewModel(dialogService, dispatcherService);
     BatchScriptViewModel = new BatchScriptViewModel(dialogService, dispatcherService);
     GuiScriptProcessorViewModel =
@@ -66,7 +63,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     get => _currentPageTitle;
     private set => SetProperty(ref _currentPageTitle, value);
   }
-  
+
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
@@ -103,6 +100,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
+  public IWindowLocationService WindowLocationService { get; }
+
   public void Receive(GoToLocationsPageMessage message) {
     DispatcherService.Dispatch(() => SelectedTab = LocationsTab);
   }
@@ -138,7 +137,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       new TabItemViewModel(GuiScriptProcessorViewModel),
       new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BackgroundViewModel),
-      new TabItemViewModel(ReverbViewModel),
+      new TabItemViewModel(ReverbViewModel)
     };
     return list.ToImmutableList();
   }
@@ -165,7 +164,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       // If there is an error on the previous selected tab's page,
       // QueryClose will show an error message box and return false.
       bool canChangeTab = await CurrentPageViewModel.QueryClose();
-      if (!canChangeTab) { 
+      if (!canChangeTab) {
         SelectedTab = (
           from tab in Tabs
           where tab.ViewModel == CurrentPageViewModel
@@ -183,7 +182,13 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     await base.Open();
     ColourSchemeId =
       ColourSchemeWindowViewModel.StringToColourSchemeId(Settings.ColourScheme);
-    WindowState = Settings.WindowState;
+    if (Settings.WindowLocation != null) {
+      WindowLocationService.Left = Settings.WindowLocation.Left;
+      WindowLocationService.Top = Settings.WindowLocation.Top;
+      WindowLocationService.Width = Settings.WindowLocation.Width;
+      WindowLocationService.Height = Settings.WindowLocation.Height;
+      WindowLocationService.WindowState = Settings.WindowLocation.WindowState;
+    }
     foreach (var tab in Tabs) {
       tab.ViewModel.ModelServices = ModelServices;
     }
@@ -196,9 +201,40 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
         return false;
       }
     }
-    Settings.WindowState = WindowState; // Will be saved by base.QueryClose if changed.
-    // Stop listening for ObservableRecipient messages.
+    SaveWindowLocationSettingsIfChanged();
+    // Stop listening for ObservableRecipient messages. Save settings if changed.
     return await base.QueryClose(true);
+  }
+
+  private void SaveWindowLocationSettingsIfChanged() {
+    // The window location service settings should have just had its properties updated.
+    // But we should check. If the properties have never been restored from saved
+    // settings and have never been updated, they should all be null; once updated, none
+    // should.
+    if (WindowLocationService is {
+          Left: not null, Top: not null, Width: not null, Height: not null,
+          WindowState: not null
+        }) {
+      // Window location data is available.
+      if (Settings.WindowLocation == null // Never been saved before.
+          || Settings.WindowLocation.Left != WindowLocationService.Left.Value
+          || Settings.WindowLocation.Top != WindowLocationService.Top.Value 
+          || Settings.WindowLocation.Width != WindowLocationService.Width.Value
+          || Settings.WindowLocation.Height != WindowLocationService.Height.Value
+          || Settings.WindowLocation.WindowState !=
+          WindowLocationService.WindowState.Value) {
+        // Window location settings have changed or have not previously been saved. 
+        // Instantiate Settings.WindowLocation even if it already exists.
+        // This will ensure that a settings change will be detected and saved.
+        Settings.WindowLocation = new Settings.WindowLocationSettings {
+          Left = WindowLocationService.Left.Value,
+          Top = WindowLocationService.Top.Value,
+          Width = WindowLocationService.Width.Value,
+          Height = WindowLocationService.Height.Value,
+          WindowState = WindowLocationService.WindowState.Value
+        };
+      }
+    }
   }
 
   /// <summary>

@@ -9,6 +9,7 @@
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
     <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Factory\Keys\DX Mania.uvip"/>
     <ColourScheme>Forest</ColourScheme>
+    <WindowLocation Left="248" Top="159" Width="1137" Height="626" WindowState="2" />
     <MustUseGuiScriptProcessor>
         <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>

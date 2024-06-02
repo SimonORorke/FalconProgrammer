@@ -8,10 +8,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
+    MockWindowLocationService = new MockWindowLocationService();
     TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(
       MockDialogService, MockDispatcherService);
     ViewModel = new TestMainWindowViewModel(
-      MockDialogService, MockDispatcherService) {
+      MockDialogService, MockDispatcherService, MockWindowLocationService) {
       ModelServices = TestModelServices,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
@@ -21,6 +22,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private TabItemViewModel GuiScriptProcessorTab => ViewModel.Tabs[2];
   private TabItemViewModel LocationsTab => ViewModel.Tabs[1];
   private TabItemViewModel MidiForMacrosTab => ViewModel.Tabs[3];
+  private MockWindowLocationService MockWindowLocationService { get; set; } = null!;
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
     null!;
@@ -105,7 +107,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockSettingsFolderLocationReader.EmbeddedFileName =
       "InvalidXmlSettings.xml";
     ViewModel.SelectedTab = LocationsTab; // Locations
-    Assert.That(ViewModel.CurrentPageTitle, 
+    Assert.That(ViewModel.CurrentPageTitle,
       Is.EqualTo(ViewModel.LocationsViewModel.PageTitle));
   }
 
@@ -155,5 +157,50 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
     Assert.That(canClose, Is.False);
+  }
+
+  [Test]
+  public async Task WindowLocationNotPreviouslySaved() {
+    ViewModel.SelectedTab = BatchScriptTab;
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Left, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Top, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Width, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Height, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.WindowState, Is.Null);
+    const int left = 10;
+    const int top = 20;
+    const int width = 600;
+    const int height = 800;
+    const int windowState = 2;
+    ViewModel.WindowLocationService.Left = left;
+    ViewModel.WindowLocationService.Top = top;
+    ViewModel.WindowLocationService.Width = width;
+    ViewModel.WindowLocationService.Height = height;
+    ViewModel.WindowLocationService.WindowState = windowState;
+    await ViewModel.QueryCloseWindow();
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
+    Assert.That(ViewModel.Settings.WindowLocation.Top, Is.EqualTo(top));
+    Assert.That(ViewModel.Settings.WindowLocation.Width, Is.EqualTo(width));
+    Assert.That(ViewModel.Settings.WindowLocation.Height, Is.EqualTo(height));
+    Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
+  }
+
+  [Test]
+  public void WindowLocationPreviouslySaved() {
+    MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
+    ViewModel.SelectedTab = BatchScriptTab;
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+    Assert.That(ViewModel.WindowLocationService.Left,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
+    Assert.That(ViewModel.WindowLocationService.Top,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
+    Assert.That(ViewModel.WindowLocationService.Width,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Width));
+    Assert.That(ViewModel.WindowLocationService.Height,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
+    Assert.That(ViewModel.WindowLocationService.WindowState,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
   }
 }

@@ -13,7 +13,9 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Template DefaultTemplate { get; set; } = new Template();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
-  [XmlElement] public int WindowState { get; set; }
+
+  [XmlElement]
+  public WindowLocationSettings? WindowLocation { get; set; } 
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]
@@ -120,5 +122,13 @@ public class Settings : SerialisationBase {
 
   public class Template {
     [XmlAttribute] public string Path { get; set; } = string.Empty;
+  }
+
+  public class WindowLocationSettings {
+    [XmlAttribute] public int Left { get; set; }
+    [XmlAttribute] public int Top { get; set; }
+    [XmlAttribute] public int Width { get; set; }
+    [XmlAttribute] public int Height { get; set; }
+    [XmlAttribute] public int WindowState { get; set; }
   }
 }

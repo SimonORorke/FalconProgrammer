@@ -5,7 +5,8 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 public class TestMainWindowViewModel : MainWindowViewModel {
   public TestMainWindowViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
+    IDispatcherService dispatcherService, IWindowLocationService windowLocationService) 
+    : base(dialogService, dispatcherService, windowLocationService) { }
 
   protected override AboutWindowViewModel CreateAboutViewModel() {
     var result = base.CreateAboutViewModel();
