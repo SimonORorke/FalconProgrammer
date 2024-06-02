@@ -192,7 +192,8 @@ public class FalconProgram {
       return null;
     }
     if (ProgramXml.TemplateScriptProcessorElement == null) {
-      if (SoundBankName.StartsWith("Factory")) {
+      // TODO: EventProcessor2 for Factory2? Or Script is Category-specific.
+      if (SoundBankName == "Factory") {
         return (
           from scriptProcessor in ScriptProcessors
           // Examples of programs with GuiScriptProcessor
