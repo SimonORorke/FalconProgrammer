@@ -10,11 +10,34 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
   public TestBatchScriptViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
+  private MockFileSystemService MockFileSystemService =>
+    (MockFileSystemService)FileSystemService;
+  
   internal string SavedLog { get; private set; } = string.Empty;
-
   [ExcludeFromCodeCoverage] [PublicAPI] internal TestBatch TestBatch => (TestBatch)Batch;
-
   internal TestBatchScript? TestBatchScript { get; private set; }
+  
+  internal void AddSoundBankSubfolders(string folderPath) {
+    TestHelper.AddSoundBankSubfolders(MockFileSystemService.Folder, folderPath);
+  }
+  
+  internal void ConfigureValidMockFileSystemService(Settings settings) {
+    MockFileSystemService.Folder.ExistingPaths.Add(settings.SettingsPath);
+    MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
+    AddSoundBankSubfolders(settings.ProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(settings.OriginalProgramsFolder.Path);
+    AddSoundBankSubfolders(settings.OriginalProgramsFolder.Path);
+    MockFileSystemService.Folder.ExistingPaths.Add(settings.TemplateProgramsFolder.Path);
+    AddSoundBankSubfolders(settings.TemplateProgramsFolder.Path);
+    MockFileSystemService.Folder.SimulatedFilePaths.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Pulsar", "Plucks"), [
+        "Lighthouse.uvip", "Music Box.uvip", "Resonator.uvip"
+      ]);
+    MockFileSystemService.Folder.SimulatedFilePaths.Add(
+      Path.Combine(settings.ProgramsFolder.Path, "Factory", "Keys"), [
+        "Ballad Plucker.uvip", "Eighty Nine.uvip", "Morning Keys.uvip"
+      ]);
+  }
 
   protected override Batch CreateBatch() {
     return new TestBatch(BatchLog) { UpdatePrograms = false };

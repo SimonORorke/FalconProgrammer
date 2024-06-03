@@ -49,7 +49,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     set => _modelServices = value; // For tests
   }
 
-  internal Settings Settings { get; private set; } = null!;
+  internal Settings Settings { get; private protected set; } = null!;
 
   protected SettingsFolderLocationReader SettingsFolderLocationReader =>
     _settingsFolderLocationReader ??= ModelServices.SettingsFolderLocationReader;

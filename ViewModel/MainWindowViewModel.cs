@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -142,6 +143,18 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     return list.ToImmutableList();
   }
 
+  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
+    // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
+    // to flag that settings need to be saved when those properties change.
+    // ColourSchemeId changes are persisted in the Colour Scheme dialog. The only
+    // property this main window view model needs to persist to settings is
+    // WindowLocationService.
+    if (e.PropertyName == nameof(WindowLocationService)) {
+      // Flag that settings need to be saved.
+      base.OnPropertyChanged(e);
+    }
+  }
+
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (!IsVisible) {
       try {
@@ -189,6 +202,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       WindowLocationService.Height = Settings.WindowLocation.Height;
       WindowLocationService.WindowState = Settings.WindowLocation.WindowState;
     }
+    HaveSettingsBeenUpdated = false;
     foreach (var tab in Tabs) {
       tab.ViewModel.ModelServices = ModelServices;
     }
@@ -196,10 +210,15 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   public async Task<bool> QueryCloseWindow() {
     // throw new InvalidOperationException("This is a test QueryCloseWindow exception.");
+    // HaveSettingsBeenUpdated = false;
     if (CurrentPageViewModel != null) {
       if (!await CurrentPageViewModel.QueryClose(true)) {
         return false;
       }
+      // If any main window view model property change needs to be saved to settings
+      // (currently just the WindowLocationService property), the change needs to be
+      // added to any settings changes made on closing the current page.
+      Settings = CurrentPageViewModel.Settings;
     }
     SaveWindowLocationSettingsIfChanged();
     // Stop listening for ObservableRecipient messages. Save settings if changed.
@@ -223,16 +242,14 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
           || Settings.WindowLocation.Height != WindowLocationService.Height.Value
           || Settings.WindowLocation.WindowState !=
           WindowLocationService.WindowState.Value) {
-        // Window location settings have changed or have not previously been saved. 
-        // Instantiate Settings.WindowLocation even if it already exists.
-        // This will ensure that a settings change will be detected and saved.
-        Settings.WindowLocation = new Settings.WindowLocationSettings {
-          Left = WindowLocationService.Left.Value,
-          Top = WindowLocationService.Top.Value,
-          Width = WindowLocationService.Width.Value,
-          Height = WindowLocationService.Height.Value,
-          WindowState = WindowLocationService.WindowState.Value
-        };
+        Settings.WindowLocation ??= new Settings.WindowLocationSettings();
+        Settings.WindowLocation.Left = WindowLocationService.Left.Value;
+        Settings.WindowLocation.Top = WindowLocationService.Top.Value;
+        Settings.WindowLocation.Width = WindowLocationService.Width.Value;
+        Settings.WindowLocation.Height = WindowLocationService.Height.Value;
+        Settings.WindowLocation.WindowState = WindowLocationService.WindowState.Value;
+        // Ensure that a settings change will be detected and saved.
+        OnPropertyChanged(nameof(WindowLocationService));
       }
     }
   }

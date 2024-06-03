@@ -9,11 +9,18 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     MockWindowLocationService = new MockWindowLocationService();
+    TestBatchScriptViewModel = new TestBatchScriptViewModel(
+      MockDialogService, MockDispatcherService) {
+      ModelServices = TestModelServices
+    };
     TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(
-      MockDialogService, MockDispatcherService);
+      MockDialogService, MockDispatcherService) {
+      ModelServices = TestModelServices
+    };
     ViewModel = new TestMainWindowViewModel(
       MockDialogService, MockDispatcherService, MockWindowLocationService) {
       ModelServices = TestModelServices,
+      BatchScriptViewModel = TestBatchScriptViewModel,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
   }
@@ -23,6 +30,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private TabItemViewModel LocationsTab => ViewModel.Tabs[1];
   private TabItemViewModel MidiForMacrosTab => ViewModel.Tabs[3];
   private MockWindowLocationService MockWindowLocationService { get; set; } = null!;
+  private TestBatchScriptViewModel TestBatchScriptViewModel { get; set; } = null!;
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
     null!;
@@ -188,12 +196,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public void WindowLocationPreviouslySaved() {
-    MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
+  public async Task WindowLocationPreviouslySaved() {
+    var settings = ReadMockSettings("BatchSettings.xml");
+    TestBatchScriptViewModel.ConfigureValidMockFileSystemService(settings);
     ViewModel.SelectedTab = BatchScriptTab;
     Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
     Assert.That(ViewModel.WindowLocationService.Left,
       Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
+    Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
     Assert.That(ViewModel.WindowLocationService.Top,
       Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
     Assert.That(ViewModel.WindowLocationService.Width,
@@ -202,5 +212,15 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
     Assert.That(ViewModel.WindowLocationService.WindowState,
       Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
+    Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
+    const int left = 137;
+    const string soundBank = "Factory";
+    ViewModel.WindowLocationService.Left = left;
+    ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank; 
+    // Check that changes to page view model property and main window view model property
+    // are both saved to settings when the window is closed.
+    await ViewModel.QueryCloseWindow();
+    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
+    Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
   }
 }
