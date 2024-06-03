@@ -203,7 +203,6 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
     Assert.That(ViewModel.WindowLocationService.Left,
       Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
-    Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
     Assert.That(ViewModel.WindowLocationService.Top,
       Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
     Assert.That(ViewModel.WindowLocationService.Width,
@@ -212,10 +211,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
     Assert.That(ViewModel.WindowLocationService.WindowState,
       Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
-    Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
-    Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
     // Check that changes to page view model property and main window view model
     // properties are all saved to settings when the window is closed.
+    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
+    Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
+    Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
     const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
     const int left = 137;
     const string soundBank = "Factory";
