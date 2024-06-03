@@ -8,6 +8,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
+    Settings = ReadMockSettings(MockSettingsReaderEmbedded.EmbeddedFileName);
     MockWindowLocationService = new MockWindowLocationService();
     TestBatchScriptViewModel = new TestBatchScriptViewModel(
       MockDialogService, MockDispatcherService) {
@@ -30,6 +31,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private TabItemViewModel LocationsTab => ViewModel.Tabs[1];
   private TabItemViewModel MidiForMacrosTab => ViewModel.Tabs[3];
   private MockWindowLocationService MockWindowLocationService { get; set; } = null!;
+  private Settings Settings { get; set; } = null!;
   private TestBatchScriptViewModel TestBatchScriptViewModel { get; set; } = null!;
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
@@ -45,14 +47,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ColourSchemeInvalid() {
-    MockSettingsReaderEmbedded.EmbeddedFileName = "InvalidColourSchemeSettings.xml";
+    Settings = ReadMockSettings("InvalidColourSchemeSettings.xml");
     await ViewModel.Open();
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
   }
 
   [Test]
   public async Task ColourSchemeNotFound() {
-    MockSettingsReaderEmbedded.EmbeddedFileName = "LocationsSettings.xml";
+    Settings = ReadMockSettings("LocationsSettings.xml");
     await ViewModel.Open();
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Lavender));
   }
@@ -74,9 +76,21 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public void GoToLocationsPage() {
+    // Show Batch Script tab initially.
+    ViewModel.SelectedTab = BatchScriptTab;
+    // The GUI Script Processor page's initial validation will fail, resulting in the
+    // page immediately being replaced with the Locations page.
+    ViewModel.SelectedTab =
+      GuiScriptProcessorTab; // Test GUI Script Processor view model 
+    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
+    Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
+  }
+
+  [Test]
   public async Task Main() {
-    // Show Locations tab initially.
-    ViewModel.SelectedTab = LocationsTab;
+    // Show Batch Script tab initially.
+    ViewModel.SelectedTab = BatchScriptTab;
     Assert.That(BatchScriptTab.Header,
       Is.EqualTo(ViewModel.BatchScriptViewModel.TabTitle));
     Assert.That(LocationsTab.Header,
@@ -85,10 +99,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.GuiScriptProcessorViewModel.TabTitle));
     Assert.That(MidiForMacrosTab.Header,
       Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
-    // Skip the GUI Script Processor page's initial validation.
-    // Otherwise the validation might fail, resulting in the page immediately being
-    // replaced with the Locations page.
-    TestGuiScriptProcessorViewModel.SkipInitialisation = true;
+    Settings = ReadMockSettings("BatchSettings.xml");
+    TestGuiScriptProcessorViewModel.ConfigureMockFileSystemService(Settings);
     var selectedPageViewModel = TestGuiScriptProcessorViewModel;
     ViewModel.SelectedTab =
       GuiScriptProcessorTab; // Test GUI Script Processor view model 
@@ -96,18 +108,6 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
     await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
-  }
-
-  [Test]
-  public void GoToLocationsPage() {
-    // Show Locations tab initially.
-    ViewModel.SelectedTab = LocationsTab;
-    // The GUI Script Processor page's initial validation will fail, resulting in the
-    // page immediately being replaced with the Locations page.
-    ViewModel.SelectedTab =
-      GuiScriptProcessorTab; // Test GUI Script Processor view model 
-    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
-    Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
   }
 
   [Test]
@@ -213,14 +213,20 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.WindowLocationService.WindowState,
       Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
     Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
+    Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
+    // Check that changes to page view model property and main window view model
+    // properties are all saved to settings when the window is closed.
+    const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
     const int left = 137;
     const string soundBank = "Factory";
     ViewModel.WindowLocationService.Left = left;
-    ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank; 
-    // Check that changes to page view model property and main window view model property
-    // are both saved to settings when the window is closed.
+    ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank;
+    ViewModel.SimulatedNewColourSchemeId = colourSchemeId;
+    await ViewModel.SelectColourSchemeCommand.ExecuteAsync(null);
+    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(colourSchemeId));
     await ViewModel.QueryCloseWindow();
     Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
     Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
+    Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(colourSchemeId));
   }
 }

@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.ViewModel;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -22,7 +23,7 @@ public class ColourSchemeWindowViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task SettingFoundChange() {
+  public async Task FoundChange() {
     MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     var newColourSchemeId = ColourSchemeId.Default;
     ViewModel.ChangeColourScheme += (_, colourSchemeId) =>
@@ -31,7 +32,6 @@ public class ColourSchemeWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.ColourScheme, Is.EqualTo(ColourSchemeId.Forest.ToString()));
     string newColourScheme = ColourSchemeId.Nighttime.ToString();
     ViewModel.ColourScheme = newColourScheme;
-    Assert.That(ViewModel.Settings.ColourScheme, Is.EqualTo(newColourScheme));
     Assert.That(newColourSchemeId, Is.EqualTo(ColourSchemeId.Nighttime));
   }
 }

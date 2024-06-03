@@ -1,10 +1,11 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public partial class ColourSchemeWindowViewModel : SettingsWriterViewModelBase {
+public partial class ColourSchemeWindowViewModel : ViewModelBase {
   /// <summary>
   ///   Generates <see cref="ColourScheme" /> property.
   /// </summary>
@@ -13,9 +14,11 @@ public partial class ColourSchemeWindowViewModel : SettingsWriterViewModelBase {
   public ColourSchemeWindowViewModel(ColourSchemeId colourSchemeId,
     IDialogService dialogService, IDispatcherService dispatcherService) : base(
     dialogService, dispatcherService) {
+    ColourSchemeId = colourSchemeId;
     ColourScheme = colourSchemeId.ToString();
   }
 
+  internal ColourSchemeId ColourSchemeId { get; private set; }
   public ImmutableList<string> ColourSchemes { get; } = CreateColourSchemes();
 
   [ExcludeFromCodeCoverage]
@@ -35,23 +38,9 @@ public partial class ColourSchemeWindowViewModel : SettingsWriterViewModelBase {
   }
 
   partial void OnColourSchemeChanged(string value) {
+    ColourSchemeId = Settings.StringToColourSchemeId(value);
     if (IsVisible) {
-      Settings.ColourScheme = value;
-      var colourSchemeId = StringToColourSchemeId(value);
-      OnChangeColourScheme(colourSchemeId);
+      OnChangeColourScheme(ColourSchemeId);
     }
-  }
-
-  internal static ColourSchemeId StringToColourSchemeId(string colourScheme) {
-    if (colourScheme != string.Empty) {
-      var colourSchemes = Enum.GetNames<ColourSchemeId>().ToList();
-      if (colourSchemes.Contains(colourScheme)) {
-        return (
-          from schemeId in Enum.GetValues<ColourSchemeId>()
-          where schemeId.ToString() == colourScheme
-          select schemeId).Single();
-      }
-    }
-    return ColourSchemeId.Lavender;
   }
 }

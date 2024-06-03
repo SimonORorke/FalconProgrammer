@@ -36,6 +36,10 @@ public class Settings : SerialisationBase {
     [];
 
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
+
+  [XmlIgnore]
+  public ColourSchemeId ColourSchemeId => StringToColourSchemeId(ColourScheme);
+  
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   /// <summary>
@@ -77,6 +81,19 @@ public class Settings : SerialisationBase {
         select soundBankCategory).Any();
     }
     return result;
+  }
+
+  public static ColourSchemeId StringToColourSchemeId(string colourScheme) {
+    if (colourScheme != string.Empty) {
+      var colourSchemes = Enum.GetNames<ColourSchemeId>().ToList();
+      if (colourSchemes.Contains(colourScheme)) {
+        return (
+          from schemeId in Enum.GetValues<ColourSchemeId>()
+          where schemeId.ToString() == colourScheme
+          select schemeId).Single();
+      }
+    }
+    return ColourSchemeId.Lavender;
   }
 
   internal bool TryGetSoundBankBackgroundImagePath(

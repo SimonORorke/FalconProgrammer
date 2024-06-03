@@ -126,7 +126,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     return new AboutWindowViewModel(DialogService);
   }
 
-  private ColourSchemeWindowViewModel CreateColourSchemeWindowViewModel() {
+  protected virtual ColourSchemeWindowViewModel CreateColourSchemeWindowViewModel() {
     return new ColourSchemeWindowViewModel(
       ColourSchemeId, DialogService, DispatcherService);
   }
@@ -146,10 +146,9 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
     // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
     // to flag that settings need to be saved when those properties change.
-    // ColourSchemeId changes are persisted in the Colour Scheme dialog. The only
-    // property this main window view model needs to persist to settings is
-    // WindowLocationService.
-    if (e.PropertyName == nameof(WindowLocationService)) {
+    // The only properties this main window view model needs to persist to settings are
+    // ColourSchemeId and WindowLocationService.
+    if (e.PropertyName is nameof(ColourSchemeId) or nameof(WindowLocationService)) {
       // Flag that settings need to be saved.
       base.OnPropertyChanged(e);
     }
@@ -193,8 +192,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   internal override async Task Open() {
     await base.Open();
-    ColourSchemeId =
-      ColourSchemeWindowViewModel.StringToColourSchemeId(Settings.ColourScheme);
+    ColourSchemeId = Settings.ColourSchemeId;
     if (Settings.WindowLocation != null) {
       WindowLocationService.Left = Settings.WindowLocation.Left;
       WindowLocationService.Top = Settings.WindowLocation.Top;
@@ -215,11 +213,12 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       if (!await CurrentPageViewModel.QueryClose(true)) {
         return false;
       }
-      // If any main window view model property change needs to be saved to settings
-      // (currently just the WindowLocationService property), the change needs to be
-      // added to any settings changes made on closing the current page.
+      // If any main window view model property changes need to be saved to settings,
+      // those change needs to be added to any settings changes made on closing the
+      // current page.
       Settings = CurrentPageViewModel.Settings;
     }
+    Settings.ColourScheme = ColourSchemeId.ToString();
     SaveWindowLocationSettingsIfChanged();
     // Stop listening for ObservableRecipient messages. Save settings if changed.
     return await base.QueryClose(true);
@@ -263,8 +262,6 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     await colourSchemeWindowViewModel.Open();
     await DialogService.ShowColourSchemeDialog(colourSchemeWindowViewModel);
     await colourSchemeWindowViewModel.QueryClose();
-    ColourSchemeId =
-      ColourSchemeWindowViewModel.StringToColourSchemeId(
-        colourSchemeWindowViewModel.ColourScheme);
+    ColourSchemeId = colourSchemeWindowViewModel.ColourSchemeId;
   }
 }

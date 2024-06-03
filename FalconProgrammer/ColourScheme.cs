@@ -2,6 +2,7 @@
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
+using FalconProgrammer.Model;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer;

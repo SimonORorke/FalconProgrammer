@@ -1,5 +1,4 @@
 ﻿using FalconProgrammer.Model;
-using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -8,13 +7,13 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   // properties to before SetUp. This seems to be to do with there is a method that is
   // not a Test.
   private Settings Settings { get; set; } = null!;
-  private GuiScriptProcessorViewModel ViewModel { get; set; } = null!;
+  private TestGuiScriptProcessorViewModel ViewModel { get; set; } = null!;
 
   [SetUp]
   public override void Setup() {
     base.Setup();
     Settings = ReadMockSettings("LocationsSettings.xml");
-    ViewModel = new GuiScriptProcessorViewModel(
+    ViewModel = new TestGuiScriptProcessorViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
@@ -22,7 +21,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task CutAndPaste() {
-    ConfigureMockFileSystemService();
+    ViewModel.ConfigureMockFileSystemService(Settings);
     var settingsCategories =
       Settings.MustUseGuiScriptProcessorCategories;
     int initialSettingsCategoriesCount = settingsCategories.Count;
@@ -57,7 +56,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task Main() {
-    ConfigureMockFileSystemService();
+    ViewModel.ConfigureMockFileSystemService(Settings);
     await ViewModel.Open(); // Reads settings to populate the page.
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
@@ -151,10 +150,5 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Script processors cannot be updated: the programs folder has not been specified."));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
-  }
-
-  private void ConfigureMockFileSystemService() {
-    TestHelper.AddSoundBankSubfolders(
-      MockFileSystemService.Folder, Settings.ProgramsFolder.Path);
   }
 }

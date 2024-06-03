@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using FalconProgrammer.Model;
+using FalconProgrammer.Tests.Model;
 using FalconProgrammer.ViewModel;
 using JetBrains.Annotations;
 
@@ -9,13 +10,13 @@ public class TestGuiScriptProcessorViewModel : GuiScriptProcessorViewModel {
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   [PublicAPI] internal int ClosedCount { get; set; }
-  internal bool SkipInitialisation { get; set; }
 
-  [ExcludeFromCodeCoverage]
-  internal override async Task Open() {
-    if (!SkipInitialisation) {
-      await base.Open();
-    }
+  private MockFileSystemService MockFileSystemService =>
+    (MockFileSystemService)FileSystemService;
+  
+  internal void ConfigureMockFileSystemService(Settings settings) {
+    TestHelper.AddSoundBankSubfolders(
+      MockFileSystemService.Folder, settings.ProgramsFolder.Path);
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {

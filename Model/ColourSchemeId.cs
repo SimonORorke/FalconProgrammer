@@ -1,4 +1,4 @@
-﻿namespace FalconProgrammer.ViewModel;
+﻿namespace FalconProgrammer.Model;
 
 public enum ColourSchemeId {
   Default,
