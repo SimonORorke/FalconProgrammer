@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EventProcessors>
+    <ScriptProcessor Name="EventProcessor0" Bypass="0" API_version="20">
+        <Connections>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Custom_1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 32" Destination="Custom_2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 33" Destination="Custom_3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 34" Destination="Custom_4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 11" Destination="Custom_5" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 36" Destination="Custom_6" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 37" Destination="Custom_7" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 28" Destination="Custom_8" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 41" Destination="Custom_9" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 42" Destination="Custom_10" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 43" Destination="Custom_11" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+        </Connections>
+        <Properties OriginalProgramPath="$Fluidity.ufs/Presets/Strings/Guitar Stream.uvip" PresetPath="/Users/theogallienne/Desktop/Fluidity BASE/BASE/Scripts/FluidityStub.lua" ScriptPath="$Fluidity.ufs/Scripts/FluidityStub.lua"/>
+        <script><![CDATA[require "Fluidity"]]></script>
+        <ScriptData/>
+    </ScriptProcessor>
+</EventProcessors>

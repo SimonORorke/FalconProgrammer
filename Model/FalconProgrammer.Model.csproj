@@ -114,7 +114,39 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Xml\DefaultSettings.xml"/>
+      <EmbeddedResource Include="Xml\Settings\DefaultSettings.xml" />
+      <None Remove="Xml\ScriptProcessors\Voklm_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Voklm_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Titanium_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Titanium_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Savage_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Savage_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Pulsar_Plucks.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Pulsar_Plucks_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Pulsar_Pads.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Pulsar_Pads_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Pulsar_Leads_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Pulsar_Leads_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Pulsar_Bass_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Pulsar_Bass_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\OrganicPads_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\OrganicPads_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\OrganicKeys_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\OrganicKeys_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\ModularNoise_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\ModularNoise_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\InnerDimensions_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\InnerDimensions_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\HypnoticDrive_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\HypnoticDrive_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Fluidity_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Fluidity_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Factory2_5_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Factory_2_5_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\OrganicTexture_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Factory_OrganicTexture_Gui.xml" />
+      <None Remove="Xml\ScriptProcessors\Factory2_1_Gui.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\Factory_2_1_Gui.xml" />
     </ItemGroup>
 
 </Project>
