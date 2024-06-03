@@ -157,7 +157,7 @@ public class Macro : ModulationsOwner {
     }
   }
 
-  protected override XElement CreateElementFromTemplate() {
+  protected override XElement CreateMacroElementFromTemplate() {
     var result = new XElement(ProgramXml.TemplateMacroElement);
     // Remove any modulations (SignalConnections) that might have been copied over with
     // the template.

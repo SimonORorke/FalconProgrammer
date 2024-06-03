@@ -107,7 +107,7 @@ public class Modulation : EntityBase {
 
   public Macro? SourceMacro { get; set; }
 
-  protected override XElement CreateElementFromTemplate() {
+  protected override XElement CreateMacroElementFromTemplate() {
     return new XElement(ProgramXml.TemplateModulationElement);
   }
 
@@ -115,7 +115,7 @@ public class Modulation : EntityBase {
     // In case the template Modulation contains a non-default (< 1) Ratio,
     // set the Ratio to the default, 1.
     Ratio = 1;
-    var result = CreateElementFromTemplate();
+    var result = CreateMacroElementFromTemplate();
     return result;
   }
 }

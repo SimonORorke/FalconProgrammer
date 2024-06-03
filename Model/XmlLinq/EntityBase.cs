@@ -38,7 +38,7 @@ public abstract class EntityBase {
   }
 
   public XElement Element {
-    get => _element ??= MustAddNewElement ? CreateElementFromTemplate() : GetElement();
+    get => _element ??= MustAddNewElement ? CreateMacroElementFromTemplate() : GetElement();
     protected set => _element = value;
   }
 
@@ -50,7 +50,7 @@ public abstract class EntityBase {
     set => SetAttribute(nameof(Name), value);
   }
 
-  protected virtual XElement CreateElementFromTemplate() {
+  protected virtual XElement CreateMacroElementFromTemplate() {
     throw new NotSupportedException(
       $"{GetType().Name}.CreateElementFromTemplate is not supported.");
   }
