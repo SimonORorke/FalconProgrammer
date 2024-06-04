@@ -26,6 +26,7 @@ public class Category {
     Settings.ProgramsFolder.Path, SoundBankName, Name);
 
   /// <summary>
+  ///   TODO: Revise MustUseGuiScriptProcessor documentation.
   ///   I think the only categories where the GUI script processor cannot be
   ///   removed to allow a mod wheel replacement macro are when there are more than 4
   ///   macros. Theoretically that could be done by automatic code analysis, rather than

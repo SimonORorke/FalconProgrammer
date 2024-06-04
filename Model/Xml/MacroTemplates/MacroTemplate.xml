@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ControlSignalSources>
+    <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Synthesis" Bipolar="0" Style="0" Value="0">
+        <Properties customPosition="1" x="91" y="120"/>
+    </ConstantModulation>
+</ControlSignalSources>

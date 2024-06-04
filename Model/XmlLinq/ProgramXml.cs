@@ -182,12 +182,9 @@ public class ProgramXml : EntityBase {
       : ImmutableList<XElement>.Empty;
   }
 
-  private XElement GetTemplateMacroElement() {
-    var result =
-      TemplateRootElement.Descendants("ConstantModulation").FirstOrDefault() ??
-      throw new ApplicationException(
-        $"Cannot find ConstantModulation element in '{Category.TemplateProgramPath}'.");
-    return result;
+  private static XElement GetTemplateMacroElement() {
+    var template = new EmbeddedXmlLinq("MacroTemplate.xml");
+    return template.RootElement.Elements("ConstantModulation").First();
   }
 
   private XElement? GetTemplateScriptProcessorElement() {
