@@ -218,7 +218,13 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       // current page.
       Settings = CurrentPageViewModel.Settings;
     }
+    // As we have just copied settings from the current page, we need to update settings
+    // from main window view model properties now, on closing the window, rather than
+    // whenever a property has been set.
     Settings.ColourScheme = ColourSchemeId.ToString();
+    // And, in the case of the window location, another reason for updating the setting
+    // on closing the window is that the property is only updated by the view on closing,
+    // immediately before calling this method.
     SaveWindowLocationSettingsIfChanged();
     // Stop listening for ObservableRecipient messages. Save settings if changed.
     return await base.QueryClose(true);
