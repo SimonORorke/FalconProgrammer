@@ -425,7 +425,7 @@ public class FalconProgram {
   }
 
   private void InitialiseOrganicPadsProgram() {
-    ProgramXml.CopyMacroElementsFromTemplate();
+    ProgramXml.CopyMacroElementsFromTemplate("OrganicPads_Macros.xml");
     Macros = CreateMacrosFromElements();
     NotifyUpdate($"{PathShort}: Copied macros from template.");
     // The Wheel macro is Macro 9.
@@ -461,22 +461,8 @@ public class FalconProgram {
     NotifyUpdate($"{PathShort}: " +
                  "Added modulations to layers and initialised macros to layer gains.");
     // Add the DAHDSR Controller ScriptProcessor.
-    var scriptProcessor = ProgramXml.AddScriptProcessor(
-      "EventProcessor0", "Organic Pads",
-      "./../../../Scripts/DAHDSR Controller.lua",
-      "<![CDATA[require 'DahdsrController/DahdsrController']]>");
+    ProgramXml.AddScriptProcessorElementFromTemplate("OrganicPads_DahdsrController.xml");
     NotifyUpdate($"{PathShort}: Added ScriptProcessor.");
-    // Add the ScriptProcessor modulations.
-    var adsrMacros = GetAdsrMacros().Values;
-    foreach (var adsrMacro in adsrMacros) {
-      scriptProcessor.AddModulation(new Modulation(ProgramXml) {
-        Destination = adsrMacro.DisplayName,
-        Owner = scriptProcessor,
-        Source = $"$Program/{adsrMacro.Name}",
-        SourceMacro = adsrMacro
-      });
-    }
-    NotifyUpdate($"{PathShort}: Added ScriptProcessor Modulations.");
     // Initialise the DAHDSR attack and release times to subvert the original intention 
     // for the sound to be a pad!
     // A problem still to solve is that reducing the attack time to zero while playing

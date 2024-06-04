@@ -147,6 +147,10 @@
       <EmbeddedResource Include="Xml\ScriptProcessors\Factory_OrganicTexture_Gui.xml" />
       <None Remove="Xml\ScriptProcessors\Factory2_1_Gui.xml" />
       <EmbeddedResource Include="Xml\ScriptProcessors\Factory_2_1_Gui.xml" />
+      <None Remove="Xml\MacrosTemplate\OrganicPadsMacrosTemplate.xml" />
+      <EmbeddedResource Include="Xml\MacrosTemplate\OrganicPads_Macros.xml" />
+      <None Remove="Xml\ScriptProcessors\OrganicPads_DahdsrController.xml" />
+      <EmbeddedResource Include="Xml\ScriptProcessors\OrganicPads_DahdsrController.xml" />
     </ItemGroup>
 
 </Project>

@@ -55,30 +55,17 @@ public class ProgramXml : EntityBase {
   public XElement TemplateModulationElement =>
     _templateModulationElement ??= GetTemplateModulationElement();
 
-  public ScriptProcessor AddScriptProcessor(
-    string name, string soundBankName, string scriptPath, string script) {
+  public void AddScriptProcessorElementFromTemplate(string templateEmbeddedFileName) {
+    var template = new EmbeddedXmlLinq(templateEmbeddedFileName);
+    var templateScriptProcessorElement =
+      template.RootElement.Elements("ScriptProcessor").First();
+    var scriptProcessorElement = new XElement(templateScriptProcessorElement);
     var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
     if (eventProcessorsElement == null) {
       eventProcessorsElement = new XElement("EventProcessors");
       ControlSignalSourcesElement.AddAfterSelf(eventProcessorsElement);
     }
-    var scriptProcessorElement = new XElement("ScriptProcessor");
-    scriptProcessorElement.Add(new XAttribute("Name", name));
-    scriptProcessorElement.Add(new XAttribute("Bypass", 0));
-    scriptProcessorElement.Add(new XAttribute("API_version", 21));
-    var propertiesElement = new XElement("Properties");
-    propertiesElement.Add(new XAttribute("ScriptPath", scriptPath));
-    scriptProcessorElement.Add(propertiesElement);
-    var scriptElement = new XElement("script") {
-      // The < and > delimiting the script CDATA will be incorrectly
-      // written as their corresponding HTML substitutes.
-      // That will be fixed up in FalconProgram.FixCData.
-      Value = script
-    };
-    scriptProcessorElement.Add(scriptElement);
-    scriptProcessorElement.Add(new XElement("ScriptData"));
     eventProcessorsElement.Add(scriptProcessorElement);
-    return ScriptProcessor.Create(soundBankName, scriptProcessorElement, this);
   }
 
   public void ChangeModulationSource(
@@ -96,18 +83,15 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  public void CopyMacroElementsFromTemplate() {
+  public void CopyMacroElementsFromTemplate(string templateEmbeddedFileName) {
     var originalMacroElements = MacroElements.ToList();
     for (int i = originalMacroElements.Count - 1; i >= 0; i--) {
       // Just a MIDI CC 1 for Organic Pads
       originalMacroElements[i].Remove();
     }
-    var templateControlSignalSourcesElement =
-      TemplateRootElement.Descendants("ControlSignalSources").FirstOrDefault() ??
-      throw new InvalidOperationException(
-        $"Cannot find ControlSignalSources element in '{Category.TemplateProgramPath}'.");
+    var template = new EmbeddedXmlLinq(templateEmbeddedFileName);
     var templateMacroElements =
-      templateControlSignalSourcesElement.Elements("ConstantModulation");
+      template.RootElement.Elements("ConstantModulation");
     foreach (var templateMacroElement in templateMacroElements) {
       var newMacroElement = new XElement(templateMacroElement);
       ControlSignalSourcesElement.Add(newMacroElement);
