@@ -2,16 +2,16 @@
 <OrganicKeys_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" MuteLayer1="0" MuteLayer2="0" MuteLayer3="0" MuteLayer4="0" W2M="1" delaySend="0" reverbSend="0" API_version="20">
         <Connections>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="layerLevel1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 112" Destination="MuteLayer1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 32" Destination="layerLevel2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 113" Destination="MuteLayer2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 33" Destination="layerLevel3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 114" Destination="MuteLayer3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 34" Destination="layerLevel4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 115" Destination="MuteLayer4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="layerLevel1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T1" Destination="MuteLayer1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="layerLevel2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T2" Destination="MuteLayer2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="layerLevel3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T3" Destination="MuteLayer3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="layerLevel4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T4" Destination="MuteLayer4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 43" Destination="Macro" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 116" Destination="W2M" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T5" Destination="W2M" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 11" Destination="ampEnvAttackTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 36" Destination="ampEnvDecayTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 37" Destination="ampEnvSustainLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
