@@ -58,7 +58,7 @@ Falcon&apos;s versatility and pristine sound quality is evident throughout this 
             </ConstantModulation>
             <ConstantModulation Name="Macro 5" Bypass="0" DisplayName="Attack" Bipolar="0" Style="0" Value="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 11" Destination="Value"
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="Value"
                                       Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
                                       SignalConnectionVersion="1"/>
                 </Connections>
@@ -66,7 +66,7 @@ Falcon&apos;s versatility and pristine sound quality is evident throughout this 
             </ConstantModulation>
             <ConstantModulation Name="Macro 6" Bypass="0" DisplayName="Decay" Bipolar="0" Style="0" Value="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 36" Destination="Value"
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="Value"
                                       Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
                                       SignalConnectionVersion="1"/>
                 </Connections>
@@ -74,7 +74,7 @@ Falcon&apos;s versatility and pristine sound quality is evident throughout this 
             </ConstantModulation>
             <ConstantModulation Name="Macro 7" Bypass="0" DisplayName="Sustain" Bipolar="0" Style="0" Value="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 37" Destination="Value"
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C7" Destination="Value"
                                       Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
                                       SignalConnectionVersion="1"/>
                 </Connections>
@@ -82,7 +82,7 @@ Falcon&apos;s versatility and pristine sound quality is evident throughout this 
             </ConstantModulation>
             <ConstantModulation Name="Macro 8" Bypass="0" DisplayName="Release" Bipolar="0" Style="0" Value="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 28" Destination="Value"
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C8" Destination="Value"
                                       Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
                                       SignalConnectionVersion="1"/>
                 </Connections>

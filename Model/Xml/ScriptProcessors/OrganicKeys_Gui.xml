@@ -10,14 +10,14 @@
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T3" Destination="MuteLayer3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="layerLevel4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T4" Destination="MuteLayer4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 43" Destination="Macro" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C11" Destination="Macro" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T5" Destination="W2M" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 11" Destination="ampEnvAttackTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 36" Destination="ampEnvDecayTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 37" Destination="ampEnvSustainLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 28" Destination="ampEnvReleaseTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 41" Destination="delaySend" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 42" Destination="reverbSend" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="ampEnvAttackTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="ampEnvDecayTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C7" Destination="ampEnvSustainLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C8" Destination="ampEnvReleaseTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C9" Destination="delaySend" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C10" Destination="reverbSend" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
         </Connections>
         <Properties OriginalProgramPath="$Organic Keys.ufs/Presets/Acoustic Mood/A Rhapsody.uvip" PresetPath="/Users/theogallienne/Desktop/Organic Keys XP/Scripts/OrganicKeysStub.lua" ScriptPath="$Organic Keys.ufs/Scripts/OrganicKeysStub.lua"/>
         <script><![CDATA[require "OrganicKeys"]]></script>
