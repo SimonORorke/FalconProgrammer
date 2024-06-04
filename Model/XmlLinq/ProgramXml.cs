@@ -98,11 +98,11 @@ public class ProgramXml : EntityBase {
     }
   }
 
-  public Dahdsr? FindMainDahdsr() {
+  public Dahdsr? FindMainDahdsr(MidiForMacros midi) {
     var mainDahdsrElement =
       ControlSignalSourcesElement.Elements("DAHDSR").FirstOrDefault();
     return mainDahdsrElement != null
-      ? new Dahdsr(mainDahdsrElement, this)
+      ? new Dahdsr(mainDahdsrElement, this, midi)
       : null;
   }
 
@@ -114,11 +114,11 @@ public class ProgramXml : EntityBase {
   }
 
   [PublicAPI]
-  public List<Dahdsr> GetDahdsrs() {
+  public List<Dahdsr> GetDahdsrs(MidiForMacros midi) {
     var dahdsrElements = Element.Descendants("DAHDSR");
     return (
         from dahdsrElement in dahdsrElements
-        select new Dahdsr(dahdsrElement, this))
+        select new Dahdsr(dahdsrElement, this, midi))
       .ToList();
   }
 
@@ -144,7 +144,7 @@ public class ProgramXml : EntityBase {
     return RootElement.Element("Program")!;
   }
 
-  public ImmutableList<ModulationsOwner> GetLayers() {
+  public ImmutableList<ModulationsOwner> GetLayers(MidiForMacros midi) {
     var layersElement =
       Element.Elements("Layers").FirstOrDefault() ??
       throw new InvalidOperationException(
@@ -152,7 +152,7 @@ public class ProgramXml : EntityBase {
     var layerElements = layersElement.Elements("Layer");
     return (
       from layerElement in layerElements
-      select new ModulationsOwner(layerElement, this)).ToImmutableList();
+      select new ModulationsOwner(layerElement, this, midi)).ToImmutableList();
   }
 
   /// <summary>

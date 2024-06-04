@@ -9,8 +9,8 @@ public class ScriptProcessor : ModulationsOwner {
   ///   Use the <see cref="Create" /> static method for public instantiation of the
   ///   correct type of <see cref="ScriptProcessor" />.
   /// </summary>
-  protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml) :
-    base(programXml) {
+  protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml, 
+    MidiForMacros midi) : base(programXml, midi) {
     Element = scriptProcessorElement;
   }
 
@@ -18,11 +18,11 @@ public class ScriptProcessor : ModulationsOwner {
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
 
   public static ScriptProcessor Create(string soundBankName,
-    XElement scriptProcessorElement, ProgramXml programXml) {
+    XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) {
     return soundBankName switch {
       "Organic Keys" => new OrganicKeysScriptProcessor(
-        scriptProcessorElement, programXml),
-      _ => new ScriptProcessor(scriptProcessorElement, programXml)
+        scriptProcessorElement, programXml, midi),
+      _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
     };
   }
 

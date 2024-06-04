@@ -414,7 +414,7 @@ public class FalconProgram {
     // So make each of Macros 1 to 4 control the Gain property of the Layer with the
     // DisplayName matching the macro's DisplayName. And initialise the macros to the
     // corresponding Layer Gains.
-    var layers = ProgramXml.GetLayers();
+    var layers = ProgramXml.GetLayers(Settings.MidiForMacros);
     foreach (var layer in layers) {
       var sourceMacro = FindContinuousMacro(layer.DisplayName);
       if (sourceMacro == null) {
@@ -441,7 +441,7 @@ public class FalconProgram {
     // can cause low volume and then silence. See the comment at the top of the
     // DahdsrController script for details.
     // So, for safety, that's another reason to initialise the attack time to be fast.
-    var mainDahdsr = ProgramXml.FindMainDahdsr();
+    var mainDahdsr = ProgramXml.FindMainDahdsr(Settings.MidiForMacros);
     if (mainDahdsr == null) {
       throw new InvalidOperationException(
         $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
@@ -533,12 +533,14 @@ public class FalconProgram {
       // modulating Macros. 
       ConnectionsParent connectionsParent;
       if (effectElements.Contains(connectionsParentElement)) {
-        connectionsParent = new Effect(connectionsParentElement, ProgramXml);
+        connectionsParent = new Effect(connectionsParentElement, ProgramXml, 
+          Settings.MidiForMacros);
         effects.Add((Effect)connectionsParent);
         // Indicate that the Effect has now been added to Effects.
         effectElements.Remove(connectionsParentElement);
       } else {
-        connectionsParent = new ConnectionsParent(connectionsParentElement, ProgramXml);
+        connectionsParent = new ConnectionsParent(connectionsParentElement, ProgramXml, 
+          Settings.MidiForMacros);
       }
       foreach (var modulation in connectionsParent.Modulations) {
         modulation.SourceMacro = (
@@ -554,7 +556,7 @@ public class FalconProgram {
     // Example: Titanium\Keys\Synth Xylo 1.
     effects.AddRange(
       from effectElement in effectElements
-      select new Effect(effectElement, ProgramXml));
+      select new Effect(effectElement, ProgramXml, Settings.MidiForMacros));
     Effects = effects.ToImmutableList();
   }
 
@@ -610,7 +612,7 @@ public class FalconProgram {
     if (GuiScriptProcessor != null) {
       return;
     }
-    var dahdsrs = ProgramXml.GetDahdsrs();
+    var dahdsrs = ProgramXml.GetDahdsrs(Settings.MidiForMacros);
     foreach (var dahdsr in dahdsrs.Where(dahdsr => dahdsr.Modulations.Count > 1)) {
       using var writer = new StringWriter();
       writer.WriteAsync(
@@ -640,7 +642,7 @@ public class FalconProgram {
     // if (GuiScriptProcessor != null) {
     //   return;
     // }
-    var mainDahdsr = ProgramXml.FindMainDahdsr();
+    var mainDahdsr = ProgramXml.FindMainDahdsr(Settings.MidiForMacros);
     if (mainDahdsr != null) {
       Log.WriteLine($"{PathShort}: {mainDahdsr.DisplayName}");
     }
@@ -676,7 +678,8 @@ public class FalconProgram {
     ScriptProcessors = (
       from scriptProcessorElement in ProgramXml.ScriptProcessorElements
       select ScriptProcessor.Create(
-        SoundBankName, scriptProcessorElement, ProgramXml)).ToImmutableList();
+        SoundBankName, scriptProcessorElement, ProgramXml, 
+        Settings.MidiForMacros)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
       foreach (var modulation in scriptProcessor.Modulations) {
         // Needed for modulation.ModulatesMacro in FindGuiScriptProcessor 

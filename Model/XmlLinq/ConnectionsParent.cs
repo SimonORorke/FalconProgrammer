@@ -6,9 +6,13 @@ namespace FalconProgrammer.Model.XmlLinq;
 public class ConnectionsParent : EntityBase {
   private ImmutableList<Modulation>? _modulations;
 
-  public ConnectionsParent(XElement element, ProgramXml programXml) : base(programXml) {
+  public ConnectionsParent(XElement element, ProgramXml programXml, MidiForMacros midi) 
+    : base(programXml) {
     Element = element;
+    Midi = midi;
   }
+  
+  private MidiForMacros Midi { get; }
 
   /// <summary>
   ///   Modulations specifying MIDI CC numbers that modulate the effect.
@@ -40,7 +44,7 @@ public class ConnectionsParent : EntityBase {
     if (connectionsElement != null) {
       list.AddRange(connectionsElement.Elements("SignalConnection").Select(
         modulationElement => new Modulation(
-          this, modulationElement, ProgramXml)));
+          this, modulationElement, ProgramXml, Midi)));
     }
     return list.ToImmutableList();
   }

@@ -171,7 +171,8 @@ public class Category {
     // in all cases.
     if (templateXml.TemplateScriptProcessorElement != null) {
       return ScriptProcessor.Create(
-        SoundBankName, templateXml.TemplateScriptProcessorElement, ProgramXml);
+        SoundBankName, templateXml.TemplateScriptProcessorElement, ProgramXml, 
+        Settings.MidiForMacros);
     }
     if (!MustUseGuiScriptProcessor) {
       return null;

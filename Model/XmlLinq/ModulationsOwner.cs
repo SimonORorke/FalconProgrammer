@@ -6,17 +6,23 @@ namespace FalconProgrammer.Model.XmlLinq;
 public class ModulationsOwner : EntityBase {
   private ImmutableList<Modulation>? _modulations;
 
-  public ModulationsOwner(XElement element, ProgramXml programXml) : base(programXml) {
+  public ModulationsOwner(XElement element, ProgramXml programXml, MidiForMacros midi) 
+    : base(programXml) {
     Element = element;
+    Midi = midi;
   }
 
-  protected ModulationsOwner(ProgramXml programXml,
-    bool mustAddNewElement = false) : base(programXml, mustAddNewElement) { }
+  protected ModulationsOwner(ProgramXml programXml, MidiForMacros midi,
+    bool mustAddNewElement = false) : base(programXml, mustAddNewElement) {
+    Midi = midi;
+  }
 
   public float Gain {
     get => Convert.ToSingle(GetAttributeValue(nameof(Gain)));
     set => SetAttribute(nameof(Gain), value);
   }
+  
+  protected MidiForMacros Midi { get; }
 
   /// <summary>
   ///   For a Macro, modulations specifying MIDI CC numbers that modulate the macro.
@@ -65,7 +71,7 @@ public class ModulationsOwner : EntityBase {
     if (connectionsElement != null) {
       list.AddRange(connectionsElement.Elements("SignalConnection").Select(
         modulationElement => new Modulation(
-          this, modulationElement, ProgramXml)));
+          this, modulationElement, ProgramXml, Midi)));
     }
     return list.ToImmutableList();
   }

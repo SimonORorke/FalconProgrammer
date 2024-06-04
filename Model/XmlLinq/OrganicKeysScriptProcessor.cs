@@ -11,7 +11,8 @@ internal class OrganicKeysScriptProcessor : ScriptProcessor {
   ///   instantiation of the correct type of <see cref="ScriptProcessor" />.
   /// </summary>
   public OrganicKeysScriptProcessor(XElement scriptProcessorElement,
-    ProgramXml programXml) : base(scriptProcessorElement, programXml) { }
+    ProgramXml programXml, MidiForMacros midi) 
+    : base(scriptProcessorElement, programXml, midi) { }
 
   public float DelaySend {
     get => Convert.ToSingle(GetAttributeValue("delaySend"));

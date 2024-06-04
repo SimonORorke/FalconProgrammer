@@ -15,10 +15,12 @@ public class Modulation : EntityBase {
     ConnectionMode = 1;
   }
 
-  public Modulation(EntityBase owner, XElement modulationElement, ProgramXml programXml)
+  public Modulation(EntityBase owner, XElement modulationElement, ProgramXml programXml, 
+    MidiForMacros midi)
     : base(programXml) {
     Owner = owner;
     Element = modulationElement;
+    SubstituteCcNoForPlaceholder(midi);
   }
 
   public int? CcNo {
@@ -117,5 +119,20 @@ public class Modulation : EntityBase {
     Ratio = 1;
     var result = CreateMacroElementFromTemplate();
     return result;
+  }
+
+  private void SubstituteCcNoForPlaceholder(MidiForMacros midi) {
+    if (Source.StartsWith("@MIDI CC C")) {
+      Source = GetSourceWithCcNo('C', midi.ContinuousCcNos);
+    } else if (Source.StartsWith("@MIDI CC T")) {
+      Source = GetSourceWithCcNo('T', midi.ToggleCcNos);
+    }
+    return;
+
+    string GetSourceWithCcNo(char placeholderPrefix, IList<int> ccNos) {
+      int index = Convert.ToInt32(
+        Source.Replace($"@MIDI CC {placeholderPrefix}", string.Empty));
+      return $"@MIDI CC {ccNos[index]}";
+    }
   }
 }

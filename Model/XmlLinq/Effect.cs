@@ -6,7 +6,8 @@ public class Effect : ConnectionsParent {
   private bool? _isDelay;
   private bool? _isReverb;
 
-  public Effect(XElement element, ProgramXml programXml) : base(element, programXml) {
+  public Effect(XElement element, ProgramXml programXml, MidiForMacros midi) 
+    : base(element, programXml, midi) {
     EffectType = element.Name.ToString();
   }
 

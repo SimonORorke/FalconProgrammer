@@ -12,14 +12,12 @@ public class Macro : ModulationsOwner {
   private XElement? _propertiesElement;
 
   public Macro(ProgramXml programXml, MidiForMacros midi)
-    : base(programXml, true) {
-    Midi = midi;
+    : base(programXml, midi, true) {
   }
 
   public Macro(XElement macroElement, ProgramXml programXml, MidiForMacros midi)
-    : base(programXml) {
+    : base(programXml, midi) {
     Element = macroElement;
-    Midi = midi;
   }
 
   public int Bipolar {
@@ -72,7 +70,6 @@ public class Macro : ModulationsOwner {
   }
 
   internal bool IsModulatedByWheel => FindModulationWithCcNo(1) != null; 
-  private MidiForMacros Midi { get; }
   public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
