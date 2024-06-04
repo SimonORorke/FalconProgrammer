@@ -109,9 +109,6 @@ public class Batch {
     }
     if (Program.HasBeenUpdated) {
       Program.Save();
-      if (Task == ConfigTask.InitialiseLayout) {
-        Program.FixCData();
-      }
     }
   }
 

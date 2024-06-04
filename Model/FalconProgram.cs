@@ -159,14 +159,6 @@ public class FalconProgram {
     return result;
   }
 
-  /// <summary>
-  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
-  /// </summary>
-  [ExcludeFromCodeCoverage]
-  protected virtual TextReader CreateProgramReader() {
-    return new StreamReader(Path);
-  }
-
   protected virtual ProgramXml CreateProgramXml() {
     return Category.MustUseGuiScriptProcessor
       ? new ScriptProgramXml(Category)
@@ -277,26 +269,6 @@ public class FalconProgram {
       where continuousMacro.DisplayName.Equals(
         "wheel", StringComparison.CurrentCultureIgnoreCase)
       select continuousMacro).FirstOrDefault();
-  }
-
-  /// <summary>
-  ///   If the InitialiseLayout batch task has just run for the "Organic Pads"
-  ///   sound bank, the chevron delimiters of the DAHDSR Controller script CDATA will
-  ///   have been incorrectly written as their corresponding HTML substitutes.
-  ///   To fix that, the batch needs to call this method after the Save for
-  ///   InitialiseLayout.
-  /// </summary>
-  public void FixCData() {
-    if (SoundBankName != "Organic Pads") {
-      return;
-    }
-    var reader = CreateProgramReader();
-    string oldContents = reader.ReadToEnd();
-    reader.Close();
-    string newContents = oldContents
-      .Replace("<script>&lt;", "<script><")
-      .Replace("&gt;</script>", "></script>");
-    UpdateProgramFileWithFixedCData(newContents);
   }
 
   /// <summary>
@@ -990,15 +962,6 @@ public class FalconProgram {
         }
       }
     }
-  }
-
-  /// <summary>
-  ///   Only used for Organic Pads sound bank in <see cref="FixCData" />.
-  /// </summary>
-  [ExcludeFromCodeCoverage]
-  protected virtual void UpdateProgramFileWithFixedCData(string newContents) {
-    using var writer = new StreamWriter(Path);
-    writer.Write(newContents);
   }
 
   private bool WheelMacroExists() {
