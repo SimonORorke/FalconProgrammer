@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<EventProcessors>
+<OrganicKeys_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" MuteLayer1="0" MuteLayer2="0" MuteLayer3="0" MuteLayer4="0" W2M="1" delaySend="0" reverbSend="0" API_version="20">
         <Connections>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="layerLevel1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
@@ -23,4 +23,4 @@
         <script><![CDATA[require "OrganicKeys"]]></script>
         <ScriptData/>
     </ScriptProcessor>
-</EventProcessors>
+</OrganicKeys_Gui>

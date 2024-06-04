@@ -154,7 +154,7 @@ public class Macro : ModulationsOwner {
     }
   }
 
-  protected override XElement CreateMacroElementFromTemplate() {
+  protected override XElement CreateElementFromTemplate() {
     var result = new XElement(ProgramXml.TemplateMacroElement);
     ProgramXml.ControlSignalSourcesElement.Add(result);
     return result;

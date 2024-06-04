@@ -148,11 +148,13 @@
       <None Remove="Xml\ScriptProcessors\Factory2_1_Gui.xml" />
       <EmbeddedResource Include="Xml\ScriptProcessors\Factory_2_1_Gui.xml" />
       <None Remove="Xml\MacrosTemplate\OrganicPadsMacrosTemplate.xml" />
-      <EmbeddedResource Include="Xml\MacroTemplates\OrganicPads_Macros.xml" />
+      <EmbeddedResource Include="Xml\Macros\OrganicPads_Macros.xml" />
       <None Remove="Xml\ScriptProcessors\OrganicPads_DahdsrController.xml" />
       <EmbeddedResource Include="Xml\ScriptProcessors\OrganicPads_DahdsrController.xml" />
       <None Remove="Xml\MacroTemplates\MacroTemplate.xml" />
-      <EmbeddedResource Include="Xml\MacroTemplates\MacroTemplate.xml" />
+      <EmbeddedResource Include="Xml\Macros\MacroTemplate.xml" />
+      <None Remove="Xml\Modulations\ModulationTemplate.xml" />
+      <EmbeddedResource Include="Xml\Modulations\ModulationTemplate.xml" />
     </ItemGroup>
 
 </Project>

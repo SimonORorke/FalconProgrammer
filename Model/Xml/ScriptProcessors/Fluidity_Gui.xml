@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<EventProcessors>
+<Fluidity_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" API_version="20">
         <Connections>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Custom_1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
@@ -18,4 +18,4 @@
         <script><![CDATA[require "Fluidity"]]></script>
         <ScriptData/>
     </ScriptProcessor>
-</EventProcessors>
+</Fluidity_Gui>

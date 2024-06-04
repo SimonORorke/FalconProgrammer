@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModulationTemplate>
+    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0"/>
+</ModulationTemplate>

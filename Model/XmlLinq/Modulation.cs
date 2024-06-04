@@ -109,15 +109,12 @@ public class Modulation : EntityBase {
 
   public Macro? SourceMacro { get; set; }
 
-  protected override XElement CreateMacroElementFromTemplate() {
+  protected override XElement CreateElementFromTemplate() {
     return new XElement(ProgramXml.TemplateModulationElement);
   }
-
+  
   protected override XElement GetElement() {
-    // In case the template Modulation contains a non-default (< 1) Ratio,
-    // set the Ratio to the default, 1.
-    Ratio = 1;
-    var result = CreateMacroElementFromTemplate();
+    var result = CreateElementFromTemplate();
     return result;
   }
 
@@ -131,7 +128,7 @@ public class Modulation : EntityBase {
 
     string GetSourceWithCcNo(char placeholderPrefix, IList<int> ccNos) {
       int index = Convert.ToInt32(
-        Source.Replace($"@MIDI CC {placeholderPrefix}", string.Empty));
+        Source.Replace($"@MIDI CC {placeholderPrefix}", string.Empty)) - 1;
       return $"@MIDI CC {ccNos[index]}";
     }
   }

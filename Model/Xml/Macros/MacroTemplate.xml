@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MacroTemplate>
+    <ConstantModulation Name="" Bypass="0" DisplayName="" Bipolar="0" Style="0" Value="0">
+        <Properties customPosition="1" x="0" y="0"/>
+    </ConstantModulation>
+</MacroTemplate>

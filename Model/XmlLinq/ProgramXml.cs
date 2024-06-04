@@ -192,12 +192,8 @@ public class ProgramXml : EntityBase {
   }
 
   protected virtual XElement GetTemplateModulationElement() {
-    var result =
-      TemplateRootElement.Descendants("SignalConnection").FirstOrDefault() ??
-      throw new InvalidOperationException(
-        $"'{InputProgramPath}': Cannot find Modulation element in " +
-        $"'{Category.TemplateProgramPath}'.");
-    return result;
+    var template = new EmbeddedXmlLinq("ModulationTemplate.xml");
+    return template.RootElement.Elements("SignalConnection").First();
   }
 
   /// <summary>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<EventProcessors>
+<ModularNoise_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" VisualKnob_1="0.33105534" VisualKnob_2="0.25454503" VisualKnob_3="0.27999991" VisualKnob_4="0.41381797" Macro_1="0.33105534" Macro_2="0.25454503" Macro_3="0.27999991" Macro_4="0.41381797" API_version="21">
         <Connections>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Macro_1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
@@ -11,4 +11,4 @@
         <script><![CDATA[require "ModularNoise"]]></script>
         <ScriptData/>
     </ScriptProcessor>
-</EventProcessors>
+</ModularNoise_Gui>
