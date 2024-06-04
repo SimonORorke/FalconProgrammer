@@ -8,8 +8,8 @@
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C12" Destination="AmpRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C13" Destination="FilterAttack" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C14" Destination="FilterDecay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 47" Destination="FilterSustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 48" Destination="FilterRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C15" Destination="FilterSustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C16" Destination="FilterRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="M1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="M2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="M3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
