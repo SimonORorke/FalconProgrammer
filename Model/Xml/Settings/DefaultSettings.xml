@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings>
     <MustUseGuiScriptProcessor>
-        <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>
         <SoundBankCategory SoundBank="Organic Pads" Category=""/>
         <SoundBankCategory SoundBank="Pulsar" Category=""/>
         <SoundBankCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
     <DoNotZeroReverb>
-        <ProgramPath SoundBank="Factory" Category="Bass-Sub" Program="Coastal Halftones 1.4" />
-        <ProgramPath SoundBank="Factory" Category="Bass-Sub" Program="Metropolis 1.4" />
-        <ProgramPath SoundBank="Factory" Category="Leads" Program="Ali3n 1.4" />
-        <ProgramPath SoundBank="Factory" Category="Pads" Program="Arrival 1.4" />
-        <ProgramPath SoundBank="Factory" Category="Pads" Program="Novachord Noir 1.4" />
-        <ProgramPath SoundBank="Factory" Category="Pads" Program="Pad Motion 1.5" />
-        <ProgramPath SoundBank="Factory" Category="Synth Brass" Program="Gotham Brass 1.4" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Bass-Sub" Program="Coastal Halftones 1.4" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Bass-Sub" Program="Metropolis 1.4" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Leads" Program="Ali3n 1.4" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Arrival 1.4" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Novachord Noir 1.4" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Pad Motion 1.5" />
+        <ProgramPath SoundBank="Falcon Factory" Category="Synth Brass" Program="Gotham Brass 1.4" />
         <ProgramPath SoundBank="Inner Dimensions" Category="Pad" Program="GrainVoices 2" />
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Lunar Nashi" />
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Pad Chord Ram" />

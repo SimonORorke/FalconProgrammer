@@ -12,12 +12,16 @@ public class SoundBankCategoryCollection : ProgramHierarchyCollectionBase<SoundB
   }
 
   private void AddItem(string soundBank = "", string category = "") {
-    AddItem(new SoundBankCategory(
+    var item = new SoundBankCategory(
       Settings, FileSystemService, IsAddingAdditionItem, true) {
       SoundBanks = SoundBanks,
       SoundBank = soundBank,
       Category = category
-    });
+    };
+    AddItem(item);
+    if (item.Categories.Count == 1) { // 'All' only
+      item.Category = SoundBankCategory.SoundBankErrorMessage;
+    }
   }
 
   protected override void CutItem(DataGridItemBase itemToCut) {

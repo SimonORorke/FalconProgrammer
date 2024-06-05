@@ -25,6 +25,9 @@ public partial class ProgramItem : SoundBankCategory {
 
   private void PopulatePrograms() {
     Programs.Clear();
+    if (Category == SoundBankErrorMessage) {
+      return;
+    }
     if (AllowAll) {
       Programs.Add(AllCaption);
       if (Category == AllCaption) {
@@ -33,12 +36,18 @@ public partial class ProgramItem : SoundBankCategory {
     }
     string categoryFolderPath = Path.Combine(
       Settings.ProgramsFolder.Path, SoundBank, Category);
-    var programNames =
-      from programPath in FileSystemService.Folder.GetFilePaths(
-        categoryFolderPath, "*.uvip")
-      select Path.GetFileNameWithoutExtension(programPath);
-    foreach (string programName in programNames) {
-      Programs.Add(programName);
+    try {
+      var programNames =
+        from programPath in FileSystemService.Folder.GetFilePaths(
+          categoryFolderPath, "*.uvip")
+        select Path.GetFileNameWithoutExtension(programPath);
+      foreach (string programName in programNames) {
+        Programs.Add(programName);
+      }
+    } catch (DirectoryNotFoundException exception) {
+      // A sound bank folder in Settings.MustUseGuiScriptProcessorCategories
+      // does not exist or contains no category subfolders.
+      Console.WriteLine(exception.Message);
     }
   }
 }

@@ -5,6 +5,9 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public partial class SoundBankCategory : SoundBankItem {
+  internal const string SoundBankErrorMessage = 
+    "Sound bank folder does not exist or has no subfolders.";
+  
   /// <summary>
   ///   Generates <see cref="Category" /> property.
   /// </summary>
@@ -51,11 +54,17 @@ public partial class SoundBankCategory : SoundBankItem {
         return;
       }
     }
-    string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
-    var categoryFolderNames =
-      FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);
-    foreach (string categoryFolderName in categoryFolderNames) {
-      Categories.Add(categoryFolderName);
+    try {
+      string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
+      var categoryFolderNames =
+        FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);
+      foreach (string categoryFolderName in categoryFolderNames) {
+        Categories.Add(categoryFolderName);
+      }
+    } catch (DirectoryNotFoundException exception) {
+      // A sound bank folder in Settings.MustUseGuiScriptProcessorCategories
+      // does not exist or contains no category subfolders.
+      Console.WriteLine(exception.Message);
     }
   }
 }

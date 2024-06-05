@@ -24,6 +24,27 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
       Category = category,
       Program = program
     });
+    //
+    // If a sound bank folder in Settings.MustUseGuiScriptProcessorCategories does not
+    // exist or contains no category subfolders, it would be good to put an error
+    // message in the Category cell, as in SoundBankCategoryCollection.AddItem.
+    // But my attempts to do so looped.
+    //
+    // var item = new ProgramItem(
+    //   Settings, FileSystemService, IsAddingAdditionItem, false) {
+    //   SoundBanks = SoundBanks,
+    //   SoundBank = soundBank,
+    //   Category = category,
+    //   Program = program
+    // };
+    // AddItem(item);
+    // if (item.Category != SoundBankCategory.SoundBankErrorMessage 
+    //     && item.Categories.Count == 0) {
+    //   item.Category = SoundBankCategory.SoundBankErrorMessage;
+    // }
+    // if (item.Programs.Count == 0) {
+    //   item.Program = "Category folder does not exist or contains no programs.";
+    // }
   }
 
   protected override void CutItem(DataGridItemBase itemToCut) {
