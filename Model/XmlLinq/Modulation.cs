@@ -16,8 +16,7 @@ public class Modulation : EntityBase {
   }
 
   public Modulation(EntityBase owner, XElement modulationElement, ProgramXml programXml, 
-    MidiForMacros midi)
-    : base(programXml) {
+    MidiForMacros midi) : base(programXml) {
     Owner = owner;
     Element = modulationElement;
     SubstituteCcNoForPlaceholder(midi);
@@ -127,9 +126,25 @@ public class Modulation : EntityBase {
     return;
 
     string GetSourceWithCcNo(char placeholderPrefix, IList<int> ccNos) {
-      int index = Convert.ToInt32(
-        Source.Replace($"@MIDI CC {placeholderPrefix}", string.Empty)) - 1;
-      return $"@MIDI CC {ccNos[index]}";
+      string placeholder = string.Empty;
+      try {
+        placeholder =
+          Source.Replace($"@MIDI CC {placeholderPrefix}", string.Empty);
+        int index = Convert.ToInt32(placeholder) - 1;
+        int ccNo;
+        if (index < ccNos.Count) {
+          ccNo = ccNos[index];
+        } else {
+          int shortfall = index - ccNos.Count + 1;
+          int maxSpecifiedCcNo = ccNos[^1];
+          ccNo = maxSpecifiedCcNo + shortfall;
+        }
+        return $"@MIDI CC {ccNo}";
+      } catch {
+        throw new ApplicationException(
+          $"Source '{Source}' contains invalid MIDI CC number index " + 
+          $"'{placeholder}'. A positive integer is expected.");
+      }
     }
   }
 }

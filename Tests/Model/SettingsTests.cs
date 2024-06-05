@@ -119,9 +119,9 @@ public class SettingsTests {
         SettingsTestHelper.DefaultTemplatePath));
       Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
       Assert.That(!settings.MustUseGuiScriptProcessor(
-        "Factory", "Bass-Sub"));
+        "Falcon Factory", "Bass-Sub"));
       Assert.That(settings.MustUseGuiScriptProcessor(
-        "Factory", "Organic Texture 2.8"));
+        "Falcon Factory", "Organic Texture 2.8"));
       Assert.That(settings.MustUseGuiScriptProcessor(
         "Organic Keys", "Acoustic Mood"));
       Assert.That(!settings.MustUseGuiScriptProcessor(

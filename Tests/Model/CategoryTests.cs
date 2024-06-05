@@ -17,12 +17,12 @@ public class CategoryTests {
 
   [Test]
   public void CannotFindTemplateScriptProcessor() {
-    var category = new TestCategory(GetSoundBankFolderName("Factory"),
+    var category = new TestCategory(GetSoundBankFolderName("Falcon Factory"),
       "Organic Texture 2.8", Settings) {
       EmbeddedTemplateFileName = "NoGuiScriptProcessor.xml"
     };
     category.ConfigureMockFileSystemService(
-      @"Factory\Organic Texture 2.8",
+      @"Falcon Factory\Organic Texture 2.8",
       "BAS Biggy.uvip");
     Assert.Throws<ApplicationException>(() => category.Initialise());
   }
@@ -42,16 +42,16 @@ public class CategoryTests {
 
   [Test]
   public void FactoryCategorySpecificTemplate() {
-    var category = new TestCategory(GetSoundBankFolderName("Factory"),
+    var category = new TestCategory(GetSoundBankFolderName("Falcon Factory"),
       "Organic Texture 2.8", Settings) {
       EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
     };
     category.ConfigureMockFileSystemService(
-      @"Factory\Organic Texture 2.8",
+      @"Falcon Factory\Organic Texture 2.8",
       "BAS Biggy.uvip");
     category.Initialise();
     Assert.That(category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
     Assert.That(category.TemplateCategoryName, Is.EqualTo("Organic Texture 2.8"));
     Assert.That(category.TemplateProgramName, Is.EqualTo("BAS Biggy"));
   }
@@ -59,12 +59,12 @@ public class CategoryTests {
   [Test]
   public void FactoryDefaultTemplate() {
     var category =
-      new TestCategory(GetSoundBankFolderName("Factory"), "Bass-Sub", Settings);
+      new TestCategory(GetSoundBankFolderName("Falcon Factory"), "Bass-Sub", Settings);
     category.ConfigureMockFileSystemService(
-      @"Factory\Keys", "DX Mania.uvip");
+      @"Falcon Factory\Keys", "DX Mania.uvip");
     category.Initialise();
     Assert.That(!category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
     Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
     Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
   }
@@ -99,10 +99,10 @@ public class CategoryTests {
       // ReSharper disable once StringLiteralTypo
       new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
     category.ConfigureMockFileSystemService(
-      @"Factory\Keys", "DX Mania.uvip");
+      @"Falcon Factory\Keys", "DX Mania.uvip");
     category.Initialise();
     Assert.That(!category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Factory"));
+    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
     Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
     Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
   }
@@ -113,7 +113,7 @@ public class CategoryTests {
       // ReSharper disable once StringLiteralTypo
       new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
     category.ConfigureMockFileSystemService(
-      @"Factory\Keys", "DX Mania.uvip");
+      @"Falcon Factory\Keys", "DX Mania.uvip");
     category.MockFileSystemService.File.SimulatedExists = false;
     var exception = Assert.Catch<ApplicationException>(
       () => category.Initialise());
@@ -127,7 +127,7 @@ public class CategoryTests {
       // ReSharper disable once StringLiteralTypo
       new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
     category.ConfigureMockFileSystemService(
-      @"Factory\Keys", "DX Mania.uvip");
+      @"Falcon Factory\Keys", "DX Mania.uvip");
     category.Settings.DefaultTemplate.Path = string.Empty;
     var exception = Assert.Catch<ApplicationException>(
       () => category.Initialise());

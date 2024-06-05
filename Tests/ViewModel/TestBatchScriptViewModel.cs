@@ -34,7 +34,7 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
         "Lighthouse.uvip", "Music Box.uvip", "Resonator.uvip"
       ]);
     MockFileSystemService.Folder.SimulatedFilePaths.Add(
-      Path.Combine(settings.ProgramsFolder.Path, "Factory", "Keys"), [
+      Path.Combine(settings.ProgramsFolder.Path, "Falcon Factory", "Keys"), [
         "Ballad Plucker.uvip", "Eighty Nine.uvip", "Morning Keys.uvip"
       ]);
   }

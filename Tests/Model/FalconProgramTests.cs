@@ -76,18 +76,18 @@ public class FalconProgramTests {
     void PrependPathForEmbeddedFile(string embeddedProgramFileName) {
       Batch.EmbeddedProgramFileName = embeddedProgramFileName;
       Batch.RunTask(ConfigTask.InitialiseLayout, 
-        "Factory", "Bass", "Imagination");
+        "Falcon Factory", "Bass", "Imagination");
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
-        @"PATH: Factory\Bass\Imagination"));
+        @"PATH: Falcon Factory\Bass\Imagination"));
       Assert.That(Batch.MockBatchLog.Lines[^1], Is.EqualTo(
-        @"InitialiseLayout - Factory\Bass\Imagination: Prepended path line to description."));
+        @"InitialiseLayout - Falcon Factory\Bass\Imagination: Prepended path line to description."));
     }
   }
 
   [Test]
   public void RestoreOriginal() {
     Batch.RunTask(ConfigTask.RestoreOriginal,
-      "Factory", "Bass", "Imagination");
+      "Falcon Factory", "Bass", "Imagination");
     Assert.That(Batch.MockBatchLog.Text, Does.Contain("Restored to Original"));
   }
 
@@ -96,7 +96,7 @@ public class FalconProgramTests {
     Batch.MockFileSystemService.File.SimulatedExists = false;
     var exception = Assert.Catch<ApplicationException>(() =>
       Batch.RunTask(ConfigTask.RestoreOriginal,
-        "Factory", "Bass", "Imagination"));
+        "Falcon Factory", "Bass", "Imagination"));
     Assert.That(exception.Message, Does.StartWith("Cannot find original file"));
   }
 }

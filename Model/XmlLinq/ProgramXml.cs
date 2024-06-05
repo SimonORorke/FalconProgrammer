@@ -173,7 +173,7 @@ public class ProgramXml : EntityBase {
     // GuiScriptProcessor, which can only be a child of the EventProcessors
     // element, if any, that is a child of the Program element.
     // There can be EventProcessors elements lower in the tree, such as a child of a
-    // Layer. Example: Factory\RetroWave 2.5\PAD Midnight Organ. But we are not
+    // Layer. Example: Falcon Factory\RetroWave 2.5\PAD Midnight Organ. But we are not
     // interested in those.
     var eventProcessorsElement =
       Element.Elements("EventProcessors").FirstOrDefault();

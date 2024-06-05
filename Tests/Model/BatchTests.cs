@@ -30,7 +30,7 @@ public class BatchTests {
 
   [Test]
   public void CannotReplaceModWheelWithMacroForCategory() {
-    const string soundBankName = "Factory";
+    const string soundBankName = "Falcon Factory";
     const string category = "Organic Texture 2.8";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName, category));
@@ -192,7 +192,7 @@ public class BatchTests {
       Batch.Settings.ProgramsFolder.Path);
     var exception = Assert.Throws<ApplicationException>(
       () => Batch.RunTask(
-        ConfigTask.ReuseCc1, "Factory"));
+        ConfigTask.ReuseCc1, "Falcon Factory"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith("Cannot find sound bank folder '"));
   }

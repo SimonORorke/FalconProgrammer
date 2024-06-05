@@ -10,6 +10,6 @@ public class EmbeddedXmlLinqTests {
     var embeddedXmlLinq = new EmbeddedXmlLinq(embeddedFileName);
     Assert.That(embeddedXmlLinq.EmbeddedFileName, Is.EqualTo(embeddedFileName));
     Assert.That(embeddedXmlLinq.RootElement.Name.LocalName, 
-      Is.EqualTo("EventProcessors"));
+      Is.EqualTo("OrganicPads_DahdsrController"));
   }
 }

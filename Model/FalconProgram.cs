@@ -136,7 +136,7 @@ public class FalconProgram {
       Log.WriteLine(
         $"{PathShort}: The mod wheel has not been replaced, as it only modulates a " +
         "single macro 100%.");
-      // Example: Factory\Pads\DX FM Pad 2.0
+      // Example: Falcon Factory\Pads\DX FM Pad 2.0
       return false;
     }
     return true;
@@ -185,19 +185,19 @@ public class FalconProgram {
     }
     if (ProgramXml.TemplateScriptProcessorElement == null) {
       // TODO: EventProcessor2 for Factory2? Or Script is Category-specific.
-      if (SoundBankName == "Factory") {
+      if (SoundBankName == "Falcon Factory") {
         return (
           from scriptProcessor in ScriptProcessors
           // Examples of programs with GuiScriptProcessor
           // but no template ScriptProcessor:
-          // Factory\Bass-Sub\Balarbas 2.0
-          // Factory\Keys\Smooth E-piano 2.1.
+          // Falcon Factory\Bass-Sub\Balarbas 2.0
+          // Falcon Factory\Keys\Smooth E-piano 2.1.
           where scriptProcessor.Name == "EventProcessor9"
           select scriptProcessor).FirstOrDefault();
       }
       // Examples of programs with ScriptProcessors but no GuiScriptProcessor:
       // Ether Fields\Bells - Plucks\Cloche Esperer
-      // Factory\Bass-Sub\BA Shomp 1.2
+      // Falcon Factory\Bass-Sub\BA Shomp 1.2
       return null;
     }
     // Using a template ScriptProcessor
@@ -256,7 +256,7 @@ public class FalconProgram {
       // I changed this to look for DisplayName is 'Wheel' instead of DisplayName
       // contains 'Wheel'. The only two additional programs that subsequently got wheel
       // macros added were
-      // Factory\Hybrid Perfs\Louis Funky Dub and Factory\Pluck\Permuda 1.1.
+      // Falcon Factory\Hybrid Perfs\Louis Funky Dub and Falcon Factory\Pluck\Permuda 1.1.
       //
       // In Louis Funky Dub, the original 'Wheel me' macro did and does nothing I can
       // hear. The mod wheel did work, and the added wheel macro has successfully
@@ -306,7 +306,7 @@ public class FalconProgram {
         : new LeftToRightTopToBottomComparer());
     // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
     foreach (var macro in Macros) {
-      // This validation is not reliable. In "Factory\Bells\Glowing 1.2", the macros with
+      // This validation is not reliable. In "Falcon Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
       //macro.Validate();
       // for (int j = macro.Modulations.Count - 1; j >= 0; j--) {
@@ -919,8 +919,8 @@ public class FalconProgram {
   ///   There are different series of CCs for continuous and toggle macros.
   /// </summary>
   private void UpdateMacroCcsOwnedByMacros() {
-    // Most Factory programs list the ConstantModulation macro specifications in order
-    // top to bottom, left to right. But a few, e.g. Factory\Keys\Days Of Old 1.4, do not.
+    // Most Falcon Factory programs list the ConstantModulation macro specifications in order
+    // top to bottom, left to right. But a few, e.g. Falcon Factory\Keys\Days Of Old 1.4, do not.
     var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
     // Reinitialise CurrentContinuousCcNo, incremented by GetNextCcNo, in case
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
@@ -954,7 +954,7 @@ public class FalconProgram {
         // Ratio, and, with the exception below, just replace the CC number.
         var modulation = forMacroModulations[0];
         modulation.CcNo = ccNo;
-        // In Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1 instead
+        // In Falcon Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1 instead
         // of the usual 1. I don't know what the point of that is. But it prevents the
         // button controller mapped to the macro from working. To fix this, if a toggle
         // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing

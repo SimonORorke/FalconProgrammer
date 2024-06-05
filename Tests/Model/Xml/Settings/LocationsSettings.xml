@@ -7,9 +7,9 @@
     <ProgramsFolder Path="J:\FalconProgrammer\Programs"/>
     <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
-    <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Factory\Keys\DX Mania.uvip"/>
+    <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Falcon Factory\Keys\DX Mania.uvip"/>
     <MustUseGuiScriptProcessor>
-        <SoundBankCategory SoundBank="Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>
         <SoundBankCategory SoundBank="Pulsar" Category=""/>
         <SoundBankCategory SoundBank="Voklm" Category=""/>

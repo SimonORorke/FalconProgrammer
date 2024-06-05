@@ -19,7 +19,7 @@ public static class SettingsTestHelper {
   public const string TestAppDataFolderName = "TestFalconProgrammer";
 
   public static string DefaultTemplatePath => Path.Combine(
-    TemplateProgramsFolderPath, @"Factory\Keys\DX Mania.uvip");
+    TemplateProgramsFolderPath, @"Falcon Factory\Keys\DX Mania.uvip");
 
   public static string TestSettingsFolderPath { get; } = Path.Combine(
     TestContext.CurrentContext.TestDirectory, TestAppDataFolderName);
@@ -77,7 +77,7 @@ public static class SettingsTestHelper {
     };
     settings.MustUseGuiScriptProcessorCategories.Add(
       new Settings.SoundBankCategory {
-        SoundBank = "Factory",
+        SoundBank = "Falcon Factory",
         Category = "Organic Texture 2.8"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(

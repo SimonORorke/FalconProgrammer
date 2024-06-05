@@ -106,10 +106,10 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     await ConfigureScript();
     ViewModel.RunScriptCommand.Execute(null);
     Assert.That(ViewModel.Log[0], Is.EqualTo(
-      @"InitialiseLayout - 'Factory\Keys\Morning Keys'"));
+      @"InitialiseLayout - 'Falcon Factory\Keys\Morning Keys'"));
     Assert.That(ViewModel.Status, Does.StartWith("Run ended"));
     ViewModel.CopyLogCommand.Execute(null);
-    Assert.That(ViewModel.SavedLog, Does.Contain(@"Factory\Keys\Morning Keys"));
+    Assert.That(ViewModel.SavedLog, Does.Contain(@"Falcon Factory\Keys\Morning Keys"));
     Assert.That(ViewModel.Status, Is.EqualTo("Copied log to clipboard."));
   }
 
@@ -200,7 +200,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   private async Task ConfigureScript() {
     ViewModel.ConfigureValidMockFileSystemService(Settings);
     await ViewModel.Open();
-    const string soundBank = "Factory";
+    const string soundBank = "Falcon Factory";
     const string category = "Keys";
     const string program = "Morning Keys";
     ViewModel.Scope.SoundBank = soundBank;

@@ -43,7 +43,7 @@ public class ReverbViewModelTests : ViewModelTestsBase {
     int initialSettingsReverbCount = ViewModel.Settings.DoNotZeroReverb.Count;
     Assert.That(initialSettingsReverbCount, Is.EqualTo(13));
     Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
-      Is.EqualTo(@"Factory\Bass-Sub\Coastal Halftones 1.4"));
+      Is.EqualTo(@"Falcon Factory\Bass-Sub\Coastal Halftones 1.4"));
     var newProgramItem =
       new ProgramItem(ViewModel.Settings, ViewModel.FileSystemService,
           false, true) {

@@ -60,7 +60,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     await ViewModel.Open(); // Reads settings to populate the page.
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
     Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
-    Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Factory"));
+    Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Falcon Factory"));
     Assert.That(ViewModel.SoundBankCategories[0].Category,
       Is.EqualTo("Organic Texture 2.8"));
     Assert.That(ViewModel.SoundBankCategories[0].SoundBanks, Has.Count.EqualTo(8));

@@ -218,7 +218,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
     const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
     const int left = 137;
-    const string soundBank = "Factory";
+    const string soundBank = "Falcon Factory";
     ViewModel.WindowLocationService.Left = left;
     ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank;
     ViewModel.SimulatedNewColourSchemeId = colourSchemeId;

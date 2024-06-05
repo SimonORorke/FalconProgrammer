@@ -39,7 +39,7 @@ public class Category {
   ///     "Hypnotic Drive", ConstantModulation.Properties include the optional attribute
   ///     showValue="0", indicating that the coordinates specified in the Properties will
   ///     not actually be used to determine the locations of macros on the Info page.
-  ///     In still others, such as "Factory\Brutal Bass 2.1", the coordinates specified
+  ///     In still others, such as "Falcon Factory\Brutal Bass 2.1", the coordinates specified
   ///     in the ConstantModulation.Properties are inaccurate, despite not having the
   ///     showValue="0" attribute.
   ///   </para>
@@ -52,7 +52,7 @@ public class Category {
   ///   <para>
   ///     There is generally one template program file per sound bank, supporting a
   ///     common Info page layout defined in a single script for the whole sound bank.
-  ///     However, in the Factory sound bank, there are categories, such as
+  ///     However, in the Falcon Factory sound bank, there are categories, such as
   ///     "Organic Texture 2.8", or groups of categories for which a script defines the
   ///     Info page layout. In those cases, the template program file has to be specified
   ///     per category.
