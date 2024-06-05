@@ -126,11 +126,11 @@ public class Modulation : EntityBase {
     return;
 
     string GetSourceWithCcNo(char placeholderPrefix, IList<int> ccNos) {
-      string placeholder = string.Empty;
+      string placeholderIndex = string.Empty;
       try {
-        placeholder =
+        placeholderIndex =
           Source.Replace($"@MIDI CC {placeholderPrefix}", string.Empty);
-        int index = Convert.ToInt32(placeholder) - 1;
+        int index = Convert.ToInt32(placeholderIndex) - 1;
         int ccNo;
         if (index < ccNos.Count) {
           ccNo = ccNos[index];
@@ -142,8 +142,8 @@ public class Modulation : EntityBase {
         return $"@MIDI CC {ccNo}";
       } catch {
         throw new ApplicationException(
-          $"Source '{Source}' contains invalid MIDI CC number index " + 
-          $"'{placeholder}'. A positive integer is expected.");
+          $"Source '{Source}' contains a MIDI CC number placeholder with " + 
+          $"invalid index '{placeholderIndex}'. A positive integer is expected.");
       }
     }
   }
