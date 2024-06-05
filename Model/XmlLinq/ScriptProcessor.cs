@@ -3,6 +3,7 @@
 namespace FalconProgrammer.Model.XmlLinq;
 
 public class ScriptProcessor : ModulationsOwner {
+  private XElement? _propertiesElement;
   private XElement? _scriptElement;
 
   /// <summary>
@@ -14,8 +15,10 @@ public class ScriptProcessor : ModulationsOwner {
     Element = scriptProcessorElement;
   }
 
+  private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
   public string Script => ScriptElement.Value;
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
+  public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
 
   public static ScriptProcessor Create(string soundBankName,
     XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) {
@@ -24,6 +27,16 @@ public class ScriptProcessor : ModulationsOwner {
         scriptProcessorElement, programXml, midi),
       _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
     };
+  }
+
+  private XElement GetPropertiesElement() {
+    var result = Element.Element("Properties");
+    if (result == null) {
+      throw new InvalidOperationException(
+        "Cannot find ScriptProcessor.Properties "
+        + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
+    }
+    return result;
   }
 
   private XElement GetScriptElement() {
