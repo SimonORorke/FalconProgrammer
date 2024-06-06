@@ -170,11 +170,6 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
     Settings.ProgramsFolder.Path = ProgramsFolderPath;
     Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath;
-    if (HasErrors) {
-      // Ensures that attempts to go to another page that needs locations settings will
-      // evaluate whether the user should be made to stay on this page to fix the errors.
-      HaveSettingsBeenUpdated = true;
-    }
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 

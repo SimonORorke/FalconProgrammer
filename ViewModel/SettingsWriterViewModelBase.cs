@@ -35,6 +35,14 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     set => SetProperty(ref _settingsFolderPath, value, true);
   }
 
+  private async Task<bool> CanClosePageOnError(
+    string errorMessage, bool isClosingWindow) {
+    var errorReporter = new ErrorReporter(DialogService);
+    bool canClosePage = await errorReporter.CanClosePageOnError(
+      errorMessage, TabTitle, isClosingWindow, false);
+    return canClosePage;
+  }
+
   protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
     base.OnPropertyChanged(e);
     if (IsVisible
@@ -54,25 +62,26 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (HaveSettingsBeenUpdated) {
       if (!TrySaveSettings(out string errorMessage)) {
-        var errorReporter = new ErrorReporter(DialogService);
-        bool canClosePage = await errorReporter.CanClosePageOnError(
-          errorMessage, TabTitle, isClosingWindow, false);
+        GoToLocationsPage();
+        bool canClosePage = await CanClosePageOnError(errorMessage, isClosingWindow);
         if (!canClosePage) {
-          GoToLocationsPage();
+          return false;
         }
-        return canClosePage;
       }
     }
-    // I'm not sure whether insisting that all errors on the page are fixed is a good
-    // idea. A specific check for prerequisites is instead made when attempting to open
-    // the GUI Script Processor page.
-    // If implemented, this needs to allow for window closing, as with the
-    // TrySaveSettings error message above.
-    // if (HasErrors) {
-    //   await DialogService.ShowErrorMessageBox(
-    //     $"You must fix the error(s) on the {TabTitle} page before continuing.");
-    //   return false;
-    // }
+    if (HasErrors) {
+      var errors = GetErrors();
+      int errorCount = errors.Count();
+      string errorMessage = errorCount > 1
+        ? $"There are {errorCount} validation errors on the {TabTitle} page."
+        : $"There is a validation error on the {TabTitle} page.";
+      var errorReporter = new ErrorReporter(DialogService);
+      bool canClosePage = await errorReporter.CanClosePageOnError(
+        errorMessage, TabTitle, isClosingWindow, false);
+      if (!canClosePage) {
+        return false;
+      }
+    }
     return await base.QueryClose(isClosingWindow);
   }
 

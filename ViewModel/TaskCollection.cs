@@ -64,6 +64,5 @@ public class TaskCollection : DataGridItemCollectionBase<TaskItem> {
         Settings.Batch.Tasks.Add(taskItem.Name);
       }
     }
-    Settings.Write();
   }
 }

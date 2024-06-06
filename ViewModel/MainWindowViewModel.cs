@@ -207,7 +207,6 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   public async Task<bool> QueryCloseWindow() {
     // throw new InvalidOperationException("This is a test QueryCloseWindow exception.");
-    // HaveSettingsBeenUpdated = false;
     if (CurrentPageViewModel != null) {
       if (!await CurrentPageViewModel.QueryClose(true)) {
         return false;
