@@ -157,12 +157,12 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
   private void ShowPathSettings() {
     // We don't want to indicate that settings need to be saved when a new settings
     // file has just been read.
-    IsPropertyChangedNotificationEnabled = false;
+    FlagSettingsUpdateOnPropertyChanged = false;
     DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
     ProgramsFolderPath = Settings.ProgramsFolder.Path;
     TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path;
-    IsPropertyChangedNotificationEnabled = true;
+    FlagSettingsUpdateOnPropertyChanged = true;
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {

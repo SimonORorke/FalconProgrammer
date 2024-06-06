@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -33,6 +32,17 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
     ReverbViewModel = new ReverbViewModel(dialogService, dispatcherService);
+    // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
+    // to flag that settings need to be saved when those properties change.
+    // The only properties this main window view model needs to persist to settings are
+    // ColourSchemeId and WindowLocationService.
+    // So, instead of having SettingsWriterViewModelBase.OnPropertyChanged flag that
+    // settings need to be saved whenever any property changes, HaveSettingsBeenUpdated
+    // will be explicitly set whenever a property that is to be persisted to settings
+    // needs to be changed.
+    // I tried doing that by overriding OnPropertyChanged, but, for unknown reason, that
+    // stops GoToLocationPage from working.
+    FlagSettingsUpdateOnPropertyChanged = false;
     // throw new InvalidOperationException("This is a test exception.");
   }
 
@@ -143,17 +153,6 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     return list.ToImmutableList();
   }
 
-  protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
-    // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
-    // to flag that settings need to be saved when those properties change.
-    // The only properties this main window view model needs to persist to settings are
-    // ColourSchemeId and WindowLocationService.
-    if (e.PropertyName is nameof(ColourSchemeId) or nameof(WindowLocationService)) {
-      // Flag that settings need to be saved.
-      base.OnPropertyChanged(e);
-    }
-  }
-
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (!IsVisible) {
       try {
@@ -253,8 +252,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
         Settings.WindowLocation.Width = WindowLocationService.Width.Value;
         Settings.WindowLocation.Height = WindowLocationService.Height.Value;
         Settings.WindowLocation.WindowState = WindowLocationService.WindowState.Value;
-        // Ensure that a settings change will be detected and saved.
-        OnPropertyChanged(nameof(WindowLocationService));
+        HaveSettingsBeenUpdated = true;
       }
     }
   }
@@ -268,6 +266,9 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     await colourSchemeWindowViewModel.Open();
     await DialogService.ShowColourSchemeDialog(colourSchemeWindowViewModel);
     await colourSchemeWindowViewModel.QueryClose();
-    ColourSchemeId = colourSchemeWindowViewModel.ColourSchemeId;
+    if (colourSchemeWindowViewModel.ColourSchemeId != ColourSchemeId) {
+      ColourSchemeId = colourSchemeWindowViewModel.ColourSchemeId;
+      HaveSettingsBeenUpdated = true;
+    }
   }
 }
