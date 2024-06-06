@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
@@ -150,5 +151,18 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
       "Script processors cannot be updated: the programs folder has not been specified."));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+  }
+  
+  [Test]
+  public void SoundBankFolderDoesNotExist() {
+    MockFileSystemService.Folder.ThrowIfNoSimulatedSubfolders = true;
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    const string soundBank = "Falcon Factory";
+    string soundBankPath = Path.Combine(Settings.ProgramsFolder.Path, soundBank);
+    MockFileSystemService.Folder.SimulatedSubfolderNames.Remove(soundBankPath);
+    Assert.DoesNotThrowAsync(()=> ViewModel.Open());
+    Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo(soundBank));
+    Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo(
+      SoundBankCategory.SoundBankErrorMessage));
   }
 }

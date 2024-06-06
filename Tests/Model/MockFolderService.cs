@@ -6,12 +6,10 @@ namespace FalconProgrammer.Tests.Model;
 
 public class MockFolderService : IFolderService {
   internal bool CanCreate { get; set; } = true;
-  internal bool SimulatedExists { get; set; } = true;
   internal List<string> ExistingPaths { get; } = [];
-
-  internal Dictionary<string, IEnumerable<string>> SimulatedFilePaths { get; } =
-    [];
-
+  internal bool SimulatedExists { get; set; } = true;
+  internal bool ThrowIfNoSimulatedSubfolders { get; set; }
+  internal Dictionary<string, IEnumerable<string>> SimulatedFilePaths { get; } = [];
   internal Dictionary<string, IEnumerable<string>> SimulatedSubfolderNames { get; } = [];
 
   [ExcludeFromCodeCoverage]
@@ -35,12 +33,21 @@ public class MockFolderService : IFolderService {
   }
 
   public IEnumerable<string> GetFilePaths(string path, string searchPattern) {
-    return SimulatedFilePaths.TryGetValue(path, out var value)
-      ? value
-      : [];
+    if (SimulatedFilePaths.TryGetValue(
+          path, out var simulatedFilePaths)) {
+      return simulatedFilePaths;
+    }
+    if (!ThrowIfNoSimulatedSubfolders) {
+      return [];
+    }
+    throw new DirectoryNotFoundException($"'{path}' does not exist.");
   }
 
   public ImmutableList<string> GetSubfolderNames(string path) {
-    return SimulatedSubfolderNames[path].ToImmutableList();
+    if (SimulatedSubfolderNames.TryGetValue(
+          path, out var subfolderNames)) {
+      return subfolderNames.ToImmutableList();
+    }
+    throw new DirectoryNotFoundException($"'{path}' does not exist.");
   }
 }

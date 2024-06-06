@@ -34,7 +34,6 @@ public partial class SoundBankCategory : SoundBankItem {
   /// </summary>
   protected virtual void OnCategoryChanged1(string value) { }
 
-  // Code coverage highlighting does not work for these partial methods.
   protected override void OnSoundBankChanged1(string value) {
     // On addition after removal, the new sound bank is null. (Or it was at one stage.)
     // This fixes it.

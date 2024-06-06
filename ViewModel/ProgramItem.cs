@@ -25,9 +25,6 @@ public partial class ProgramItem : SoundBankCategory {
 
   private void PopulatePrograms() {
     Programs.Clear();
-    if (Category == SoundBankErrorMessage) {
-      return;
-    }
     if (AllowAll) {
       Programs.Add(AllCaption);
       if (Category == AllCaption) {
