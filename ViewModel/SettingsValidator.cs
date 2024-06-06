@@ -104,30 +104,4 @@ public class SettingsValidator {
     return await GetSoundBankNamesFromFolder(
       Settings.TemplateProgramsFolder.Path, "template programs");
   }
-
-  /// <summary>
-  ///   Validates the default template file and, if invalid,
-  ///   shows an error message box and goes to the Locations page.
-  /// </summary>
-  /// <returns>
-  ///   Whether valid.
-  /// </returns>
-  /// <remarks>
-  ///   The file is considered valid if it has been specified and exists.
-  /// </remarks>
-  public async Task<bool> ValidateDefaultTemplateFile() {
-    if (string.IsNullOrWhiteSpace(Settings.DefaultTemplate.Path)) {
-      await ShowErrorMessage("the default template file has not been specified.");
-      ViewModel.GoToLocationsPage();
-      return false;
-    }
-    if (!FileSystemService.File.Exists(Settings.DefaultTemplate.Path)) {
-      await ShowErrorMessage(
-        "cannot find default template file " + 
-        $"'{Settings.DefaultTemplate.Path}'.");
-      ViewModel.GoToLocationsPage();
-      return false;
-    }
-    return true;
-  }
 }

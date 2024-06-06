@@ -7,7 +7,6 @@
     <ProgramsFolder Path="J:\FalconProgrammer\Programs"/>
     <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
-    <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Falcon Factory\Keys\DX Mania.uvip"/>
     <ColourScheme>Forest</ColourScheme>
     <WindowLocation Left="248" Top="159" Width="1137" Height="626" WindowState="2" />
     <MustUseGuiScriptProcessor>

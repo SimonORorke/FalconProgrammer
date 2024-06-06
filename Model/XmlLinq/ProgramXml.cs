@@ -27,6 +27,7 @@ public class ProgramXml : EntityBase {
   public IEnumerable<XElement> MacroElements =>
     ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
 
+  private bool HasTemplateFileBeenRead { get; set; }
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
 
   /// <summary>
@@ -46,8 +47,15 @@ public class ProgramXml : EntityBase {
   public XElement TemplateMacroElement =>
     _templateMacroElement ??= GetTemplateMacroElement();
 
-  private XElement TemplateRootElement =>
-    _templateRootElement ??= ReadTemplateRootElementFromFile();
+  private XElement? TemplateRootElement {
+    get {
+      if (!HasTemplateFileBeenRead) {
+        _templateRootElement = ReadTemplateRootElementFromFile();
+        HasTemplateFileBeenRead = true;
+      }
+      return _templateRootElement;
+    }
+  }
 
   public XElement? TemplateScriptProcessorElement =>
     _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
@@ -188,7 +196,7 @@ public class ProgramXml : EntityBase {
   }
 
   private XElement? GetTemplateScriptProcessorElement() {
-    return TemplateRootElement.Descendants("ScriptProcessor").LastOrDefault();
+    return TemplateRootElement?.Descendants("ScriptProcessor").LastOrDefault();
   }
 
   protected virtual XElement GetTemplateModulationElement() {
@@ -237,8 +245,10 @@ public class ProgramXml : EntityBase {
   }
 
   [ExcludeFromCodeCoverage]
-  protected virtual XElement ReadTemplateRootElementFromFile() {
-    return ReadRootElementFromFile(Category.TemplateProgramPath);
+  protected virtual XElement? ReadTemplateRootElementFromFile() {
+    return Category.TemplateProgramPath != null 
+      ? ReadRootElementFromFile(Category.TemplateProgramPath) 
+      : null;
   }
 
   private static XElement ReadRootElementFromFile(string path) {

@@ -94,48 +94,6 @@ public class CategoryTests {
   }
 
   [Test]
-  public void NonFactoryDefaultTemplateSameAsFactory() {
-    var category =
-      // ReSharper disable once StringLiteralTypo
-      new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
-    category.ConfigureMockFileSystemService(
-      @"Falcon Factory\Keys", "DX Mania.uvip");
-    category.Initialise();
-    Assert.That(!category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
-    Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
-    Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
-  }
-
-  [Test]
-  public void NonFactoryDefaultTemplateDoesNotExist() {
-    var category =
-      // ReSharper disable once StringLiteralTypo
-      new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
-    category.ConfigureMockFileSystemService(
-      @"Falcon Factory\Keys", "DX Mania.uvip");
-    category.MockFileSystemService.File.SimulatedExists = false;
-    var exception = Assert.Catch<ApplicationException>(
-      () => category.Initialise());
-    Assert.That(exception, Is.Not.Null);
-    Assert.That(exception.Message, Does.Contain("Cannot find default template file"));
-  }
-
-  [Test]
-  public void NoNonFactoryDefaultTemplate() {
-    var category =
-      // ReSharper disable once StringLiteralTypo
-      new TestCategory(GetSoundBankFolderName("Spectre"), "Polysynth", Settings);
-    category.ConfigureMockFileSystemService(
-      @"Falcon Factory\Keys", "DX Mania.uvip");
-    category.Settings.DefaultTemplate.Path = string.Empty;
-    var exception = Assert.Catch<ApplicationException>(
-      () => category.Initialise());
-    Assert.That(exception, Is.Not.Null);
-    Assert.That(exception.Message, Does.Contain("A default Template must be specified"));
-  }
-
-  [Test]
   public void NoProgramFilesToEdit() {
     var category =
       new TestCategory(GetSoundBankFolderName("Fluidity"), "Electronic", Settings) {

@@ -7,7 +7,7 @@
              x:Class="FalconProgrammer.Views.LocationsView"
              x:DataType="vm:LocationsViewModel">
     <Grid ColumnDefinitions="10,205,10,795,10,100"
-          RowDefinitions="10,Auto,10,Auto,10,Auto,10,Auto,10,Auto">
+          RowDefinitions="10,Auto,10,Auto,10,Auto,10,Auto">
         <!-- There is no TextBox for Settings Folder. 
         Its only editing control is the Button.
         Although making the Label's target the Button would give the focus
@@ -53,15 +53,5 @@
                  Watermark="Full path of folder" />
         <Button Grid.Row="7" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForTemplateProgramsFolderCommand}" />
-        <Label Grid.Row="9" Grid.Column="1"
-               Target="DefaultTemplateFileTextBox">
-            <AccessText Text="_Default Template File" />
-        </Label>
-        <TextBox Grid.Row="9" Grid.Column="3"
-                 x:Name="DefaultTemplateFileTextBox"
-                 Text="{Binding DefaultTemplatePath}"
-                 Watermark="Full path of template Falcon program file" />
-        <Button Grid.Row="9" Grid.Column="5" Content="Browse..."
-                Command="{Binding BrowseForDefaultTemplateCommand}" />
     </Grid>
 </UserControl>

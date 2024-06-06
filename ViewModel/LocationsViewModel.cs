@@ -5,21 +5,12 @@ namespace FalconProgrammer.ViewModel;
 
 public partial class LocationsViewModel : SettingsWriterViewModelBase {
   // 'partial' allows CommunityToolkit.Mvvm code generation.
-  private string _defaultTemplatePath = string.Empty;
   private string _originalProgramsFolderPath = string.Empty;
   private string _programsFolderPath = string.Empty;
   private string _templateProgramsFolderPath = string.Empty;
 
   public LocationsViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
-
-  [Required]
-  [CustomValidation(typeof(LocationsViewModel),
-    nameof(ValidateDefaultTemplatePath))]
-  public string DefaultTemplatePath {
-    get => _defaultTemplatePath;
-    set => SetProperty(ref _defaultTemplatePath, value, true);
-  }
 
   private string FoundSettingsPath { get; set; } = string.Empty;
 
@@ -48,19 +39,6 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
   }
 
   public override string PageTitle => "Locations";
-
-  /// <summary>
-  ///   Generates <see cref="BrowseForDefaultTemplateCommand" />.
-  /// </summary>
-  [RelayCommand]
-  private async Task BrowseForDefaultTemplate() {
-    string? path = await DialogService.OpenFile(
-      "Select the default template Falcon program",
-      "Falcon Programs", "uvip");
-    if (path != null) {
-      DefaultTemplatePath = path;
-    }
-  }
 
   /// <summary>
   ///   Generates <see cref="BrowseForOriginalProgramsFolderCommand" />.
@@ -158,7 +136,6 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     // We don't want to indicate that settings need to be saved when a new settings
     // file has just been read.
     FlagSettingsUpdateOnPropertyChanged = false;
-    DefaultTemplatePath = Settings.DefaultTemplate.Path;
     OriginalProgramsFolderPath = Settings.OriginalProgramsFolder.Path;
     ProgramsFolderPath = Settings.ProgramsFolder.Path;
     TemplateProgramsFolderPath = Settings.TemplateProgramsFolder.Path;
@@ -166,16 +143,10 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
-    Settings.DefaultTemplate.Path = DefaultTemplatePath;
     Settings.OriginalProgramsFolder.Path = OriginalProgramsFolderPath;
     Settings.ProgramsFolder.Path = ProgramsFolderPath;
     Settings.TemplateProgramsFolder.Path = TemplateProgramsFolderPath;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
-  }
-
-  public static ValidationResult ValidateDefaultTemplatePath(
-    string filePath, ValidationContext context) {
-    return ValidateFilePath(nameof(DefaultTemplatePath), filePath, context);
   }
 
   public static ValidationResult ValidateOriginalProgramsFolderPath(

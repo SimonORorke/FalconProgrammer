@@ -71,10 +71,10 @@ public class Category {
   public string TemplateCategoryName => System.IO.Path.GetFileName(
     System.IO.Path.GetDirectoryName(TemplateProgramPath)!);
 
-  public string TemplateProgramName =>
+  public string? TemplateProgramName =>
     System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
-  public string TemplateProgramPath { get; private set; } = null!;
+  public string? TemplateProgramPath { get; private set; }
 
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
@@ -111,7 +111,7 @@ public class Category {
     return result;
   }
 
-  private string GetTemplateProgramPath() {
+  private string? GetTemplateProgramPath() {
     ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
@@ -139,17 +139,7 @@ public class Category {
         return templatePath;
       }
     }
-    if (string.IsNullOrEmpty(Settings.DefaultTemplate.Path)) {
-      throw new ApplicationException(
-        $"Category {PathShort}: A default Template must be specified in the " +
-        "Settings file, to specify TemplateScriptProcessor.");
-    }
-    if (!FileSystemService.File.Exists(Settings.DefaultTemplate.Path)) {
-      throw new ApplicationException(
-        $"Category {PathShort}: Cannot find default template file " +
-        $"'{Settings.DefaultTemplate.Path}'.");
-    }
-    return Settings.DefaultTemplate.Path;
+    return null;
   }
 
   [ExcludeFromCodeCoverage]
@@ -164,7 +154,7 @@ public class Category {
   /// </summary>
   private ScriptProcessor? GetTemplateScriptProcessor() {
     var templateXml = CreateTemplateXml();
-    templateXml.LoadFromFile(TemplateProgramPath);
+    templateXml.LoadFromFile(TemplateProgramPath!);
     // Testing for macro-modulating Modulations might be more reliable than
     // assuming the last ScriptProcessor.  But I think I tried that and there was 
     // a problem, don't know what though.  Can be revisited if assuming the last
@@ -188,7 +178,9 @@ public class Category {
         $"Category {PathShort}: Cannot find category folder '{Path}'.");
     }
     TemplateProgramPath = GetTemplateProgramPath();
-    TemplateScriptProcessor = GetTemplateScriptProcessor();
+    if (TemplateProgramPath != null) {
+      TemplateScriptProcessor = GetTemplateScriptProcessor();
+    }
   }
 
   private void ValidateTemplateProgramsFolderPath() {

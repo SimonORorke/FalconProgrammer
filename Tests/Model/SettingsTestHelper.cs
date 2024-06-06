@@ -18,9 +18,6 @@ public static class SettingsTestHelper {
 
   public const string TestAppDataFolderName = "TestFalconProgrammer";
 
-  public static string DefaultTemplatePath => Path.Combine(
-    TemplateProgramsFolderPath, @"Falcon Factory\Keys\DX Mania.uvip");
-
   public static string TestSettingsFolderPath { get; } = Path.Combine(
     TestContext.CurrentContext.TestDirectory, TestAppDataFolderName);
 
@@ -71,9 +68,6 @@ public static class SettingsTestHelper {
     };
     settings.TemplateProgramsFolder = new Settings.Folder {
       Path = TemplateProgramsFolderPath
-    };
-    settings.DefaultTemplate = new Settings.Template {
-      Path = DefaultTemplatePath
     };
     settings.MustUseGuiScriptProcessorCategories.Add(
       new Settings.SoundBankCategory {

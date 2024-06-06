@@ -20,23 +20,6 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task DefaultTemplateFileNotFound() {
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.TemplateProgramsFolder.Path);
-    MockFileSystemService.File.ExistingPaths.Add(
-      @"J:\FalconProgrammer\Settings\Settings.xml");
-    await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
-      "Batch scripts cannot be run: cannot find default template file '"));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
-  }
-
-  [Test]
   public async Task LoadScript() {
     await ConfigureScript();
     await ViewModel.LoadScriptCommand.ExecuteAsync(null);
@@ -72,22 +55,6 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
       "Batch scripts cannot be run: cannot find original programs folder '"));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
-  }
-
-  [Test]
-  public async Task NoDefaultTemplateFile() {
-    Settings = ReadMockSettings("NoDefaultTemplate.xml");
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.TemplateProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.TemplateProgramsFolder.Path);
-    await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
-      "Batch scripts cannot be run: the default template file has not been specified."));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
 

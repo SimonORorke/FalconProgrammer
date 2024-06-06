@@ -117,16 +117,6 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     SettingsFolderLocation.Write();
   }
 
-  protected static ValidationResult ValidateFilePath(
-    string propertyName,
-    string filePath, ValidationContext context) {
-    var instance = (SettingsWriterViewModelBase)context.ObjectInstance;
-    bool isValid = instance.FileSystemService.File.Exists(filePath);
-    return isValid
-      ? ValidationResult.Success!
-      : new ValidationResult("Cannot find file.", [propertyName]);
-  }
-
   protected static ValidationResult ValidateFolderPath(
     string propertyName,
     string folderPath, ValidationContext context) {

@@ -207,7 +207,7 @@ public class FalconProgram {
       // Examples where the Scripts match but the Names do not:
       // Inner Dimensions\Pluck\Pulse And Repeat
       // Voklm\Vox Instruments\*
-      where scriptProcessor.Script == Category.TemplateScriptProcessor!.Script
+      where scriptProcessor.Script == Category.TemplateScriptProcessor?.Script
       select scriptProcessor).FirstOrDefault();
     if (matchingScriptProcessor != null) {
       // Scripts match.
@@ -215,7 +215,7 @@ public class FalconProgram {
     }
     matchingScriptProcessor = (
       from scriptProcessor in ScriptProcessors
-      where scriptProcessor.Name == Category.TemplateScriptProcessor!.Name
+      where scriptProcessor.Name == Category.TemplateScriptProcessor?.Name
       select scriptProcessor).FirstOrDefault();
     if (matchingScriptProcessor != null) {
       // Names match but Scripts do not.

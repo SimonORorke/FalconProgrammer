@@ -38,18 +38,6 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task CancelBrowseForDefaultTemplate() {
-    await ViewModel.Open();
-    MockDialogService.Cancel = true;
-    MockDialogService.SimulatedPath =
-      @"K:\NewLeaf\Program Templates\My Sound.uvip";
-    var command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
-    await command.ExecuteAsync(null);
-    Assert.That(ViewModel.DefaultTemplatePath,
-      Is.Not.EqualTo(MockDialogService.SimulatedPath));
-  }
-
-  [Test]
   public async Task LoadSettingsFromAnotherSettingsFile() {
     await ViewModel.Open();
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
@@ -89,12 +77,6 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
       Is.EqualTo(MockDialogService.SimulatedPath));
-    MockDialogService.SimulatedPath =
-      @"K:\NewLeaf\Program Templates\My Sound.uvip";
-    command = (AsyncRelayCommand)ViewModel.BrowseForDefaultTemplateCommand;
-    await command.ExecuteAsync(null);
-    Assert.That(ViewModel.DefaultTemplatePath,
-      Is.EqualTo(MockDialogService.SimulatedPath));
     await ViewModel.QueryClose();
     var mockSerialiser = (MockSerialiser)ViewModel.Settings.Serialiser;
     Assert.That(mockSerialiser.LastOutputPath,
@@ -108,16 +90,14 @@ public class LocationsViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
     Assert.That(settings.TemplateProgramsFolder.Path,
       Is.EqualTo(ViewModel.TemplateProgramsFolderPath));
-    Assert.That(settings.DefaultTemplate.Path,
-      Is.EqualTo(ViewModel.DefaultTemplatePath));
     // Test that the settings folder path when writing settings is now already as
     // specified in the settings folder location file. 
     await ViewModel.Open();
-    ViewModel.DefaultTemplatePath = @"K:\Test\Dummy.uvip";
+    ViewModel.OriginalProgramsFolderPath= @"K:\Test";
     await ViewModel.QueryClose();
     settings = (Settings)mockSerialiser.LastObjectSerialised;
-    Assert.That(settings.DefaultTemplate.Path,
-      Is.EqualTo(ViewModel.DefaultTemplatePath));
+    Assert.That(settings.OriginalProgramsFolder.Path,
+      Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
   }
 
   [Test]

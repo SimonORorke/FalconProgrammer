@@ -11,7 +11,6 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
-  [XmlElement] public Template DefaultTemplate { get; set; } = new Template();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
 
   [XmlElement]
@@ -135,10 +134,6 @@ public class Settings : SerialisationBase {
   public class SoundBankCategory {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
-  }
-
-  public class Template {
-    [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
   public class WindowLocationSettings {

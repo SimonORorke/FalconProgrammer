@@ -32,6 +32,18 @@ public class BackgroundCollectionTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task BrowseCancelled() {
+    Collection.Populate(Settings, SoundBanks);
+    MockDialogService.SimulatedPath =
+      @"K:\NewLeaf\Background Images\Dark Forest.png";
+    MockDialogService.Cancel = true;
+    var command = (AsyncRelayCommand)Collection[0].BrowseCommand;
+    await command.ExecuteAsync(null);
+    Assert.That(Collection[0].Path,
+      Is.Not.EqualTo(MockDialogService.SimulatedPath));
+  }
+
+  [Test]
   public void Main() {
     int initialSettingsBackgroundCount = Settings.Backgrounds.Count;
     // Check that the test data is as expected

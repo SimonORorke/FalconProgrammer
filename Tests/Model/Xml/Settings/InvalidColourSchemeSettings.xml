@@ -7,7 +7,6 @@
     <ProgramsFolder Path="J:\FalconProgrammer\Programs"/>
     <OriginalProgramsFolder Path="J:\FalconProgrammer\Original Programs"/>
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
-    <DefaultTemplate Path="J:\FalconProgrammer\Template Programs\Falcon Factory\Keys\DX Mania.uvip"/>
     <Backgrounds>
         <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Images\Yellowish Mid-Green.png"/>
         <Background SoundBank="Fluidity" Path="J:\FalconProgrammer\Images\Midnight Blue.png"/>
