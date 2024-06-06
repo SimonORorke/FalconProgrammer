@@ -77,7 +77,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
       Is.EqualTo(MockDialogService.SimulatedPath));
-    await ViewModel.QueryClose();
+    bool canClose = await ViewModel.QueryClose();
+    Assert.That(canClose);
     var mockSerialiser = (MockSerialiser)ViewModel.Settings.Serialiser;
     Assert.That(mockSerialiser.LastOutputPath,
       Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
@@ -90,14 +91,6 @@ public class LocationsViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
     Assert.That(settings.TemplateProgramsFolder.Path,
       Is.EqualTo(ViewModel.TemplateProgramsFolderPath));
-    // Test that the settings folder path when writing settings is now already as
-    // specified in the settings folder location file. 
-    await ViewModel.Open();
-    ViewModel.OriginalProgramsFolderPath= @"K:\Test";
-    await ViewModel.QueryClose();
-    settings = (Settings)mockSerialiser.LastObjectSerialised;
-    Assert.That(settings.OriginalProgramsFolder.Path,
-      Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
   }
 
   [Test]
@@ -125,7 +118,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task SettingsFolderNotSpecified() {
-    await ViewModel.Open();
+    await ViewModel.Open(); // All folder fields are empty.
     MockFileSystemService.File.SimulatedExists = false;
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
@@ -142,5 +135,27 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
       "Invalid XML was found in embedded file '"));
+  }
+
+  [Test]
+  public async Task ValidationErrorsOnQueryClose() {
+    var settings = ReadMockSettings("LocationsSettings.xml");
+    MockFileSystemService.Folder.ExistingPaths.Add(settings.SettingsPath);
+    await ViewModel.Open();
+    ViewModel.ProgramsFolderPath = @"K:\Test\Programs";
+    ViewModel.OriginalProgramsFolderPath = string.Empty;
+    ViewModel.TemplateProgramsFolderPath = string.Empty;
+    Assert.That(ViewModel.HasErrors);
+    var errors = ViewModel.GetErrors().ToList();
+    Assert.That(errors, Has.Count.EqualTo(3));
+    // The errors are alphabetical by property name.
+    Assert.That(errors[0].ErrorMessage, Is.EqualTo(
+      "The OriginalProgramsFolderPath field is required."));
+    Assert.That(errors[1].MemberNames.ToList()[0], Is.EqualTo("ProgramsFolderPath"));
+    Assert.That(errors[1].ErrorMessage, Is.EqualTo("Cannot find folder."));
+    Assert.That(errors[2].ErrorMessage, Is.EqualTo(
+      "The TemplateProgramsFolderPath field is required."));
+    bool canClose = await ViewModel.QueryClose();
+    Assert.That(!canClose);
   }
 }
