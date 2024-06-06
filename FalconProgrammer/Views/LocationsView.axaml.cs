@@ -14,4 +14,8 @@ public partial class LocationsView : UserControl {
     }
     InitializeComponent();
   }
+
+  // protected override void OnLoaded(RoutedEventArgs e) {
+  //   Console.WriteLine("LocationsView.OnLoaded");
+  // }
 }
