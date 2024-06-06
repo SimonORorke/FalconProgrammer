@@ -175,7 +175,7 @@ public class FalconProgram {
   /// <summary>
   ///   Finds the ScriptProcessor, if any, that is to contain the Modulations that
   ///   map the macros to MIDI CC numbers. If the ScriptProcessor is not found, each
-  ///   macro's MIDI CC number must be defined in a Modulations owned by the
+  ///   macro's MIDI CC number must be defined in a Modulation owned by the
   ///   macro's ConstantModulation.
   /// </summary>
   [SuppressMessage("ReSharper", "CommentTypo")]
