@@ -900,12 +900,21 @@ public class FalconProgram {
   public void UpdateMacroCcs() {
     if (GuiScriptProcessor == null) {
       if (Category.MustUseGuiScriptProcessor) {
+        // If we don't throw this ApplicationException, a different exception will be
+        // thrown. The category may have some programs with GUI script processors, others
+        // without. Examples: Falcon Factory\Bass-Sub, Falcon Factory\Keys.
+        // Such categories only exist in the Falcon Factory (version 1) sound bank.
+        // There is a comment on this in FindGuiScriptProcessor.
+        // Supporting use of the GUI script processors in those categories is unlikely to
+        // be implemented, especially as all Falcon Factory rev2 programs have GUI script
+        // processors.
         throw new ApplicationException(
           "A GUI script processor is not not supported for sound bank " +
-          $"'{SoundBankName}' category '{Category.Name}'. Please go to the " +
+          $"'{SoundBankName}' category '{Category.Name}'. You nee to go to the " +
           "GUI Script Processor page and remove the sound bank or category from " + 
-          "the list. For the Falcon Factory sound bank, the only categories that " + 
-          "support a GUI script processor are 'Brutal Bass 2.1', 'Lo-Fi 2.5', " + 
+          "the list. For the Falcon Factory (version 1) sound bank, the only " + 
+          "categories that support a GUI script processor are " + 
+          "'Brutal Bass 2.1', 'Lo-Fi 2.5', " + 
           "'Organic Texture 2.8', 'RetroWave 2.5' and 'VCF-20 Synths 2.5'.");
       }
       // The CCs are specified in Modulations owned by the Macros
