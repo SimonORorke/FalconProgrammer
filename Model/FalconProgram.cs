@@ -222,10 +222,16 @@ public class FalconProgram {
         return scriptProcessor;
       }
       if (scriptProcessor is { SoundBankId: "FalconFactory", Name: "EventProcessor9" }) {
-        // TODO: Update macro CCs for programs with GuiScriptProcessor but no template file. 
         // Examples of programs with GuiScriptProcessor but no template ScriptProcessor:
         // Falcon Factory\Bass-Sub\Balarbas 2.0
         // Falcon Factory\Keys\Smooth E-piano 2.1.
+        // However, these are all in categories that also contain programs that do not
+        // have a GUI script processor. And currently MustUseGuiScriptProcessor is not
+        // supported for categories where not all prorams have a GUI script processor.
+        // If the user tries it, UpdateMacroCcs will throw an application.
+        // So currently these GUI script processors will always be removed by
+        // InitialiseLayout. We are indicating them as GUI script processors precisely
+        // so that they will be removed as unusable.
         return scriptProcessor;
       }
     }
@@ -893,6 +899,15 @@ public class FalconProgram {
   /// </summary>
   public void UpdateMacroCcs() {
     if (GuiScriptProcessor == null) {
+      if (Category.MustUseGuiScriptProcessor) {
+        throw new ApplicationException(
+          "A GUI script processor is not not supported for sound bank " +
+          $"'{SoundBankName}' category '{Category.Name}'. Please go to the " +
+          "GUI Script Processor page and remove the sound bank or category from " + 
+          "the list. For the Falcon Factory sound bank, the only categories that " + 
+          "support a GUI script processor are 'Brutal Bass 2.1', 'Lo-Fi 2.5', " + 
+          "'Organic Texture 2.8', 'RetroWave 2.5' and 'VCF-20 Synths 2.5'.");
+      }
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate
       UpdateMacroCcsOwnedByMacros();
