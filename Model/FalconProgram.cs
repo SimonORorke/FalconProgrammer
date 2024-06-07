@@ -185,60 +185,39 @@ public class FalconProgram {
     }
     // CDATA surrounds are stripped off in ScriptProcessor.Script.
     // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
+    // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
+    // with a category or colour parameter. So we parse Script with EndWith.
     foreach (var scriptProcessor in ScriptProcessors) {
-      if (scriptProcessor.ScriptPath.StartsWith("$Falcon Factory.ufs")) {
-        switch (scriptProcessor.Script) {
-          case "require(\"Factory2_1\")":
-            return scriptProcessor;
-          case "require 'Factory2_5'":
-            return scriptProcessor;
-          case "require \"OrganicTexture\"":
-            return scriptProcessor;
-        }
-      }
-      if (scriptProcessor.ScriptPath.StartsWith("$Fluidity.ufs") &&
-          scriptProcessor.Script == "require \"Fluidity\"") {
+      if (scriptProcessor.Script.EndsWith($"require \"{scriptProcessor.SoundBankId}\"")) {
+        // Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
+        // Organic Keys, Organic Pads.
         return scriptProcessor;
       }
-      if (scriptProcessor.ScriptPath.StartsWith("$Hypnotic Dive.ufs") &&
-          scriptProcessor.Script == "require \"HypnoticDive\"") {
+      if (scriptProcessor.Script.EndsWith(
+            $"require(\"{scriptProcessor.SoundBankId}\")")) {
+        // Works for Titanium.
         return scriptProcessor;
       }
-      if (scriptProcessor.ScriptPath.StartsWith("$Inner Dimensions.ufs") &&
-          scriptProcessor.Script == "require \"InnerDimensions\"") {
+      if (scriptProcessor.Script.EndsWith("require 'Factory2_5'")) {
+        // Works for Falcon Factory categories Lo-Fi 2.5, RetroWave 2.5,
+        // VCF-20 Synths 2.5.
         return scriptProcessor;
       }
-      if (scriptProcessor.ScriptPath.StartsWith("$Modular Noise.ufs") &&
-          scriptProcessor.Script == "require \"ModularNoise\"") {
+      if (scriptProcessor.Script.EndsWith("require(\"Factory2_1\")")) {
+        // Works for Falcon Factory\Brutal Bass 2.1.
         return scriptProcessor;
       }
-      if (scriptProcessor.ScriptPath.StartsWith("$Organic Keys.ufs") &&
-          scriptProcessor.Script == "require \"OrganicKeys\"") {
+      if (scriptProcessor.Script.EndsWith("require \"OrganicTexture\"")) {
+        // Works for Falcon Factory\Organic Texture 2.8.
         return scriptProcessor;
       }
-      if (scriptProcessor.ScriptPath.StartsWith("$Organic Pads.ufs") &&
-          scriptProcessor.Script.EndsWith("require \"OrganicPads\"")) {
+      if (scriptProcessor.Script.EndsWith("require(\"main\")")) {
+        // Works for Pulsar, Savage, Voklm\Vox Instruments.
         return scriptProcessor;
       }
-      if (scriptProcessor.ScriptPath.StartsWith("$Pulsar.ufs") &&
-          scriptProcessor.Script.EndsWith("require(\"main\")")) {
+      if (scriptProcessor.Script.EndsWith("require \"main\"")) {
+        // Works for Voklm\Synth Choirs.
         return scriptProcessor;
-      }
-      if (scriptProcessor.ScriptPath.StartsWith("$Savage.ufs") &&
-          scriptProcessor.Script == "require(\"main\")") {
-        return scriptProcessor;
-      }
-      if (scriptProcessor.ScriptPath.StartsWith("$Titanium.ufs") &&
-          scriptProcessor.Script.EndsWith("require(\"Titanium\")")) {
-        return scriptProcessor;
-      }
-      if (scriptProcessor.ScriptPath.StartsWith("$Voklm.ufs")) {
-        switch (scriptProcessor.Script) {
-          case "require \"main\"": // Synth Choirs
-            return scriptProcessor;
-          case "require(\"main\")": // Vox Instruments
-            return scriptProcessor;
-        }
       }
     }
     return null;

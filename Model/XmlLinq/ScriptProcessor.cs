@@ -10,7 +10,7 @@ public class ScriptProcessor : ModulationsOwner {
   ///   Use the <see cref="Create" /> static method for public instantiation of the
   ///   correct type of <see cref="ScriptProcessor" />.
   /// </summary>
-  protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml, 
+  protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml,
     MidiForMacros midi) : base(programXml, midi) {
     Element = scriptProcessorElement;
   }
@@ -19,6 +19,14 @@ public class ScriptProcessor : ModulationsOwner {
   public string Script => ScriptElement.Value;
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
+
+  /// <summary>
+  ///   Gets the Pascal-style (spaces removed) sound bank identifier from
+  ///   <see cref="ScriptPath" />.
+  ///   Example: "FalconFactory" from "$Falcon Factory.ufs/Scripts/Factory2_5_Stub.lua".
+  /// </summary>
+  public string SoundBankId =>
+    ScriptPath[..ScriptPath.IndexOf('.')][1..].Replace(" ", string.Empty);
 
   public static ScriptProcessor Create(string soundBankName,
     XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) {
