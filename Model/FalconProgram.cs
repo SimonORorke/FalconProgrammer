@@ -183,56 +183,114 @@ public class FalconProgram {
     if (ScriptProcessors.Count == 0) {
       return null;
     }
-    if (ProgramXml.TemplateScriptProcessorElement == null) {
-      // TODO: EventProcessor2 for Factory2? Or Script is Category-specific.
-      if (SoundBankName == "Falcon Factory") {
-        return (
-          from scriptProcessor in ScriptProcessors
-          // Examples of programs with GuiScriptProcessor
-          // but no template ScriptProcessor:
-          // Falcon Factory\Bass-Sub\Balarbas 2.0
-          // Falcon Factory\Keys\Smooth E-piano 2.1.
-          where scriptProcessor.Name == "EventProcessor9"
-          select scriptProcessor).FirstOrDefault();
+    // CDATA surrounds are stripped off in ScriptProcessor.Script.
+    // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
+    foreach (var scriptProcessor in ScriptProcessors) {
+      if (scriptProcessor.ScriptPath.StartsWith("$Falcon Factory.ufs")) {
+        switch (scriptProcessor.Script) {
+          case "require(\"Factory2_1\")":
+            return scriptProcessor;
+          case "require 'Factory2_5'":
+            return scriptProcessor;
+          case "require \"OrganicTexture\"":
+            return scriptProcessor;
+        }
       }
-      // Examples of programs with ScriptProcessors but no GuiScriptProcessor:
-      // Ether Fields\Bells - Plucks\Cloche Esperer
-      // Falcon Factory\Bass-Sub\BA Shomp 1.2
-      return null;
-    }
-    // Using a template ScriptProcessor
-    var matchingScriptProcessor = (
-      from scriptProcessor in ScriptProcessors
-      // Comparing the Scripts may be more reliable than comparing the Names.
-      // Examples where the Scripts match but the Names do not:
-      // Inner Dimensions\Pluck\Pulse And Repeat
-      // Voklm\Vox Instruments\*
-      where scriptProcessor.Script == Category.TemplateScriptProcessor?.Script
-      select scriptProcessor).FirstOrDefault();
-    if (matchingScriptProcessor != null) {
-      // Scripts match.
-      return matchingScriptProcessor;
-    }
-    matchingScriptProcessor = (
-      from scriptProcessor in ScriptProcessors
-      where scriptProcessor.Name == Category.TemplateScriptProcessor?.Name
-      select scriptProcessor).FirstOrDefault();
-    if (matchingScriptProcessor != null) {
-      // Names match but Scripts do not.
-      // Example: Titanium\Basses\Aggression
-      if (SoundBankName == "Organic Pads"
-          && matchingScriptProcessor.Script.Contains("DahdsrController")) {
-        // This is not a GUI script processor but the special script processor added in
-        // InitialiseLayout.
-        return null;
+      if (scriptProcessor.ScriptPath.StartsWith("$Fluidity.ufs") &&
+          scriptProcessor.Script == "require \"Fluidity\"") {
+        return scriptProcessor;
       }
-      return matchingScriptProcessor;
+      if (scriptProcessor.ScriptPath.StartsWith("$Hypnotic Dive.ufs") &&
+          scriptProcessor.Script == "require \"HypnoticDive\"") {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Inner Dimensions.ufs") &&
+          scriptProcessor.Script == "require \"InnerDimensions\"") {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Modular Noise.ufs") &&
+          scriptProcessor.Script == "require \"ModularNoise\"") {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Organic Keys.ufs") &&
+          scriptProcessor.Script == "require \"OrganicKeys\"") {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Organic Pads.ufs") &&
+          scriptProcessor.Script.EndsWith("require \"OrganicPads\"")) {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Pulsar.ufs") &&
+          scriptProcessor.Script.EndsWith("require(\"main\")")) {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Savage.ufs") &&
+          scriptProcessor.Script == "require(\"main\")") {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Titanium.ufs") &&
+          scriptProcessor.Script.EndsWith("require(\"Titanium\")")) {
+        return scriptProcessor;
+      }
+      if (scriptProcessor.ScriptPath.StartsWith("$Voklm.ufs")) {
+        switch (scriptProcessor.Script) {
+          case "require \"main\"": // Synth Choirs
+            return scriptProcessor;
+          case "require(\"main\")": // Vox Instruments
+            return scriptProcessor;
+        }
+      }
     }
-    // Neither Scripts nor Names match. So assume the last ScriptProcessor. 
-    // Example: Titanium\Basses\Noiser
-    return (
-      from scriptProcessor in ScriptProcessors
-      select scriptProcessor).Last();
+    return null;
+    // if (ProgramXml.TemplateScriptProcessorElement == null) {
+    //   if (SoundBankName == "Falcon Factory") {
+    //     return (
+    //       from scriptProcessor in ScriptProcessors
+    //       // Examples of programs with GuiScriptProcessor
+    //       // but no template ScriptProcessor:
+    //       // Falcon Factory\Bass-Sub\Balarbas 2.0
+    //       // Falcon Factory\Keys\Smooth E-piano 2.1.
+    //       where scriptProcessor.Name == "EventProcessor9"
+    //       select scriptProcessor).FirstOrDefault();
+    //   }
+    //   // Examples of programs with ScriptProcessors but no GuiScriptProcessor:
+    //   // Ether Fields\Bells - Plucks\Cloche Esperer
+    //   // Falcon Factory\Bass-Sub\BA Shomp 1.2
+    //   return null;
+    // }
+    // // Using a template ScriptProcessor
+    // var matchingScriptProcessor = (
+    //   from scriptProcessor in ScriptProcessors
+    //   // Comparing the Scripts may be more reliable than comparing the Names.
+    //   // Examples where the Scripts match but the Names do not:
+    //   // Inner Dimensions\Pluck\Pulse And Repeat
+    //   // Voklm\Vox Instruments\*
+    //   where scriptProcessor.Script == Category.TemplateScriptProcessor?.Script
+    //   select scriptProcessor).FirstOrDefault();
+    // if (matchingScriptProcessor != null) {
+    //   // Scripts match.
+    //   return matchingScriptProcessor;
+    // }
+    // matchingScriptProcessor = (
+    //   from scriptProcessor in ScriptProcessors
+    //   where scriptProcessor.Name == Category.TemplateScriptProcessor?.Name
+    //   select scriptProcessor).FirstOrDefault();
+    // if (matchingScriptProcessor != null) {
+    //   // Names match but Scripts do not.
+    //   // Example: Titanium\Basses\Aggression
+    //   if (SoundBankName == "Organic Pads"
+    //       && matchingScriptProcessor.Script.Contains("DahdsrController")) {
+    //     // This is not a GUI script processor but the special script processor added in
+    //     // InitialiseLayout.
+    //     return null;
+    //   }
+    //   return matchingScriptProcessor;
+    // }
+    // // Neither Scripts nor Names match. So assume the last ScriptProcessor. 
+    // // Example: Titanium\Basses\Noiser
+    // return (
+    //   from scriptProcessor in ScriptProcessors
+    //   select scriptProcessor).Last();
   }
 
   private Macro? FindReverbContinuousMacro() {

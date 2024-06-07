@@ -6,7 +6,7 @@ internal class ScriptProgramXml : ProgramXml {
   public ScriptProgramXml(Category category) : base(category) { }
 
   protected override XElement GetTemplateModulationElement() {
-    var rootElement = XElement.Load(Category.TemplateProgramPath);
+    var rootElement = XElement.Load(Category.TemplateProgramPath!);
     var scriptProcessorElement =
       (from s in rootElement.Descendants("ScriptProcessor")
         select s).LastOrDefault() ??
