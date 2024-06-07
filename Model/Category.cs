@@ -84,8 +84,8 @@ public class Category {
   internal ScriptProcessor? TemplateScriptProcessor { get; private set; }
 
   [PublicAPI]
-  public string TemplateSoundBankName =>
-    Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name!;
+  public string? TemplateSoundBankName =>
+    Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name;
 
   public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
     var programPaths = FileSystemService.Folder.GetFilePaths(

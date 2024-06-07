@@ -70,17 +70,20 @@ public class FalconProgramTests {
     // Program.Properties.description attribute must be added.
     PrependPathForEmbeddedFile("NoGuiScriptProcessor.xml"); 
     // Program.Properties element must be added with description attribute.
-    PrependPathForEmbeddedFile("GuiScriptProcessor.xml"); 
+    PrependPathForEmbeddedFile("GuiScriptProcessor.xml", "Pulsar"); 
     return;
   
-    void PrependPathForEmbeddedFile(string embeddedProgramFileName) {
+    void PrependPathForEmbeddedFile(string embeddedProgramFileName, 
+      string soundBankName = "Falcon Factory") {
+      Batch.MockBatchLog.Lines.Clear();
       Batch.EmbeddedProgramFileName = embeddedProgramFileName;
       Batch.RunTask(ConfigTask.InitialiseLayout, 
-        "Falcon Factory", "Bass", "Imagination");
+        soundBankName, "Bass", "Imagination");
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
-        @"PATH: Falcon Factory\Bass\Imagination"));
+        @$"PATH: {soundBankName}\Bass\Imagination"));
       Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-        @"InitialiseLayout - Falcon Factory\Bass\Imagination: Prepended path line to description."));
+        @$"InitialiseLayout - {soundBankName}\Bass\Imagination: " + 
+        "Prepended path line to description."));
     }
   }
 
