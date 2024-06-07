@@ -79,7 +79,7 @@ public class FalconProgramTests {
         "Falcon Factory", "Bass", "Imagination");
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
         @"PATH: Falcon Factory\Bass\Imagination"));
-      Assert.That(Batch.MockBatchLog.Lines[^1], Is.EqualTo(
+      Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
         @"InitialiseLayout - Falcon Factory\Bass\Imagination: Prepended path line to description."));
     }
   }
