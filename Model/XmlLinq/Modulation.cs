@@ -43,8 +43,12 @@ public class Modulation : EntityBase {
   /// <summary>
   ///   Indicates what is to be modulated.
   ///   If the <see cref="Modulation" /> belongs to the
-  ///   <see cref="FalconProgram.GuiScriptProcessor" />, this will be the
-  ///   name in the script of the macro to be modulated, like "Macro1".
+  ///   <see cref="FalconProgram.GuiScriptProcessor" />, this will be the name of the
+  ///   script parameter to be modulated. The script parameter name may indicate the
+  ///   macro to be modulated, like "Macro1". That does consistenly apply in
+  ///   Falcon Factory (version 1) and (need to confirm this) Falcon Factory rev2.
+  ///   But I think I've seen errors, where the script parameter indicates the wrong
+  ///   macro.
   ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, this will be "Value".
   /// </summary>
