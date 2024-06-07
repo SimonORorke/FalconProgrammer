@@ -183,10 +183,12 @@ public class FalconProgram {
     if (ScriptProcessors.Count == 0) {
       return null;
     }
-    // CDATA surrounds are stripped off in ScriptProcessor.Script.
+    // The CDATA wrapper is stripped off in ScriptProcessor.Script.
     // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
     // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
-    // with a category or colour parameter. So we parse Script with EndWith.
+    // with a category or colour parameter.
+    // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
+    // So we parse Script with EndWith.
     foreach (var scriptProcessor in ScriptProcessors) {
       if (scriptProcessor.Script.EndsWith($"require \"{scriptProcessor.SoundBankId}\"")) {
         // Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
