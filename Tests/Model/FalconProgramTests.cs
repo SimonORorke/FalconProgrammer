@@ -37,7 +37,7 @@ public class FalconProgramTests {
     SoundBankBackground("Savage", "Heath.png");
     SoundBankBackground("Titanium", "Dull Purple.png");
     Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
-    Batch.EmbeddedTemplateFileName = "Crystal Caves.uvip";
+    Batch.EmbeddedTemplateFileName = "Crystal Caves.xml";
     SoundBankBackground("Organic Pads", "Bluish Teal.png");
     return;
 
@@ -57,7 +57,7 @@ public class FalconProgramTests {
   [Test]
   public void InitialiseOrganicPadsProgram() {
     Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
-    Batch.EmbeddedTemplateFileName = "Crystal Caves.uvip";
+    Batch.EmbeddedTemplateFileName = "Crystal Caves.xml";
     Batch.RunTask(ConfigTask.InitialiseLayout, 
       "Organic Pads", "Mystical", "Tibetan Horns");
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
@@ -96,10 +96,52 @@ public class FalconProgramTests {
 
   [Test]
   public void RestoreOriginalCannotFindOriginalFile() {
-    Batch.MockFileSystemService.File.SimulatedExists = false;
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Bass";
+    const string programName = "Imagination";
+    string programPath = Path.Combine(Batch.Settings.ProgramsFolder.Path, 
+      soundBankName, categoryName, $"{programName}.uvip");
+    Batch.MockFileSystemService.File.ExistingPaths.Add(programPath);
     var exception = Assert.Catch<ApplicationException>(() =>
       Batch.RunTask(ConfigTask.RestoreOriginal,
-        "Falcon Factory", "Bass", "Imagination"));
+        soundBankName, categoryName, programName));
     Assert.That(exception.Message, Does.StartWith("Cannot find original file"));
+  }
+
+  [Test]
+  public void UpdateModulationsFromTemplateCcNoToFix() {
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Brutal Bass 2.1";
+    const string programName = "Magnetic 1";
+    const string templateProgramName = "808 Line";
+    string categoryTemplateFolderPath = Path.Combine(
+      Batch.Settings.TemplateProgramsFolder.Path, soundBankName, categoryName); 
+    Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
+      categoryTemplateFolderPath, [$"{templateProgramName}.uvp"]);
+    Batch.EmbeddedProgramFileName = $"{programName}.xml";
+    Batch.EmbeddedTemplateFileName = $"{templateProgramName}.xml";
+    Batch.RunTask(ConfigTask.UpdateMacroCcs, 
+      soundBankName, categoryName, programName);
+    Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
+      Is.EqualTo(34));
+    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
+  }
+
+  [Test]
+  public void UpdateModulationsFromTemplateNoCcNoToFix() {
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Brutal Bass 2.1";
+    const string programName = "World Up";
+    const string templateProgramName = "808 Line";
+    string categoryTemplateFolderPath = Path.Combine(
+      Batch.Settings.TemplateProgramsFolder.Path, soundBankName, categoryName); 
+    Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
+      categoryTemplateFolderPath, [$"{templateProgramName}.uvp"]);
+    Batch.EmbeddedProgramFileName = $"{programName}.xml";
+    Batch.EmbeddedTemplateFileName = $"{templateProgramName}.xml";
+    Batch.RunTask(ConfigTask.UpdateMacroCcs, 
+      soundBankName, categoryName, programName);
+    Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
+      Is.EqualTo(112));
   }
 }

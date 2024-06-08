@@ -322,6 +322,7 @@ public class Batch {
       if (exception is OperationCanceledException) {
         Log.WriteLine("The batch run has been cancelled.");
       } else {
+        // TODO: BatchTests throws instead of logging exception, as Program is null.
         Log.WriteLine(
           $"While running configuration task {Task.ToString()} for program " + 
           $"'{Program.Path}', the batch run terminated with this error:");

@@ -15,8 +15,20 @@ public class ScriptProcessor : ModulationsOwner {
     Element = scriptProcessorElement;
   }
 
+  /// <summary>
+  ///   Only needed when a GUI script processor's MIDI CC numbers are updated.
+  /// </summary>
+  private IList<Macro>? Macros { get; set; }
+
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
+  
+  /// <summary>
+  ///   Gets the script specification, which comes with the CDATA wrapper in the file
+  ///   stripped off.
+  ///   Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
+  /// </summary>
   public string Script => ScriptElement.Value;
+  
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
 
@@ -27,6 +39,14 @@ public class ScriptProcessor : ModulationsOwner {
   /// </summary>
   public string SoundBankId =>
     ScriptPath[..ScriptPath.IndexOf('.')][1..].Replace(" ", string.Empty);
+
+  public override void AddModulation(Modulation modulation) {
+    if (Script.EndsWith("require(\"Factory2_1\")")) {
+      // Falcon Factory\Brutal Bass 2.1
+      modulation.FixToggleOrContinuous(Macros!, Modulations);
+    }
+    base.AddModulation(modulation);
+  }
 
   public static ScriptProcessor Create(string soundBankName,
     XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) {
@@ -68,7 +88,8 @@ public class ScriptProcessor : ModulationsOwner {
   }
 
   public void UpdateModulationsFromTemplate(
-    IEnumerable<Modulation> templateModulations) {
+    IEnumerable<Modulation> templateModulations, IList<Macro> macros) {
+    Macros = macros;
     foreach (var modulation in templateModulations) {
       AddModulation(modulation);
     }

@@ -37,7 +37,9 @@ public static class Global {
       // Exception message is 'Sequence contains no matching element'
       throw new InvalidOperationException(
         $"'{embeddedResourceFileName}' is not in assembly " +
-        $"{assembly.GetName().Name}, or it is not an EmbeddedResource file.",
+        $"{assembly.GetName().Name}, or it is not an EmbeddedResource file, " +
+        "or there is another EmbeddedResource file with the same file name in the " +
+        "assembly.",
         exception);
     }
     return result;

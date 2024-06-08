@@ -72,18 +72,27 @@
         <None Remove="Model\Xml\Settings\InvalidColourSchemeSettings.xml"/>
         <EmbeddedResource Include="Model\Xml\Settings\InvalidColourSchemeSettings.xml"/>
         <None Remove="Model\Xml\Templates\Crystal Caves.uvip" />
-        <EmbeddedResource Include="Model\Xml\Templates\Crystal Caves.uvip" />
+        <None Include="Model\Xml\TemplatePrograms\Crystal Caves.xml" />
         <None Remove="Model\Xml\BatchScripts\XmlErrorScript.xml" />
         <EmbeddedResource Include="Model\Xml\BatchScripts\XmlErrorScript.xml" />
         <None Remove="Model\Xml\Programs\Iron.uvip" />
         <None Remove="Model\Xml\Programs\GuiScriptProcessor.xml" />
-        <EmbeddedResource Include="Model\Xml\Programs\GuiScriptProcessor.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\GuiScriptProcessor.xml" />
         <None Remove="Model\Xml\Programs\Iron.xml" />
-        <EmbeddedResource Include="Model\Xml\Programs\Voltage.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Voltage.xml" />
         <None Remove="Model\Xml\Programs\NoGuiScriptProcessor.xml" />
-        <EmbeddedResource Include="Model\Xml\Programs\NoGuiScriptProcessor.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\NoGuiScriptProcessor.xml" />
         <None Remove="Model\Xml\Programs\Tibetan Horns.xml" />
-        <EmbeddedResource Include="Model\Xml\Programs\Tibetan Horns.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Tibetan Horns.xml" />
+        <None Remove="Model\Xml\TemplatePrograms\BAS Biggy.xml" />
+        <None Remove="Model\Xml\Programs\PLK Zonophone.xml" />
+        <None Remove="Model\Xml\TemplatePrograms\808 Line.xml" />
+        <EmbeddedResource Include="Model\Xml\TemplatePrograms\808 Line.xml" />
+        <None Remove="Model\Xml\OriginalPrograms\Overdrive.xml" />
+        <None Remove="Model\Xml\OriginalPrograms\World Up.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\World Up.xml" />
+        <None Remove="Model\Xml\OriginalPrograms\Magnetic 1.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Magnetic 1.xml" />
     </ItemGroup>
 
     <ItemGroup>

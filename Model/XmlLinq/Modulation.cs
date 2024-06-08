@@ -15,11 +15,12 @@ public class Modulation : EntityBase {
     ConnectionMode = 1;
   }
 
-  public Modulation(EntityBase owner, XElement modulationElement, ProgramXml programXml, 
+  public Modulation(EntityBase owner, XElement modulationElement, ProgramXml programXml,
     MidiForMacros midi) : base(programXml) {
     Owner = owner;
     Element = modulationElement;
-    SubstituteCcNoForPlaceholder(midi);
+    Midi = midi;
+    SubstituteCcNoForPlaceholder();
   }
 
   public int? CcNo {
@@ -47,13 +48,14 @@ public class Modulation : EntityBase {
   ///   script parameter to be modulated. The script parameter name may indicate the
   ///   macro to be modulated, like "Macro1". That is consistenly the case in
   ///   Falcon Factory (version 1) and (I need to confirm this) Falcon Factory rev2.
-  ///   But I think I've seen errors, where the script parameter indicates the wrong
-  ///   macro.
+  ///   But there are errors, where the script parameter indicates the wrong
+  ///   macro. Example: Falcon Factory\Brutal Bass 2.1\808 Line and many others in that
+  ///   category.
   ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, this will be "Value".
   /// </summary>
   /// <remarks>
-  ///   UVI evidently only references macros by names like "Macro1" internally in
+  ///   UVI only references macros by names like "Macro1" internally in
   ///   scripts. In the ConstantModulation definition of the macro, even in programs with
   ///   Info page layout script processors, the name is like "Macro 1".
   /// </remarks>
@@ -76,13 +78,17 @@ public class Modulation : EntityBase {
   /// </summary>
   public string Source {
     get => GetAttributeValue(nameof(Source));
-    set => SetAttribute(nameof(Source), value);
+    set =>
+      SetAttribute(nameof(Source), value);
   }
+
+  private MidiForMacros? Midi { get; }
 
   /// <summary>
   ///   If the <see cref="Modulation" /> belongs to an effect or the
   ///   <see cref="FalconProgram.GuiScriptProcessor" />, returns the
-  ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated.
+  ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated,
+  ///   if a macro is modulated, otherwise null.
   ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, returns null.
   /// </summary>
@@ -115,17 +121,59 @@ public class Modulation : EntityBase {
   protected override XElement CreateElementFromTemplate() {
     return new XElement(ProgramXml.TemplateModulationElement);
   }
-  
+
+  /// <summary>
+  ///   Fixes the source MIDI CC number if it has been given a toggle CC number based on
+  ///   the template but the destination macro is continuous.
+  /// </summary>
+  /// <param name="macros">All the program's macros.</param>
+  /// <param name="modulations">All the GUI script processor's modulations.</param>
+  /// <remarks>
+  ///   Currently this only works for Falcon Factory\Brutal Bass 2.1.
+  ///   Examples: Magnetic 1, Overdrive.
+  /// </remarks>
+  public void FixToggleOrContinuous(IList<Macro> macros, IList<Modulation> modulations) {
+    // In many but not all programs in category Falcon Factory\Brutal Bass 2.1,
+    // Destination does not match the name of the modulated macro. For the potentially
+    // problematic modulation, Destination is "Macro4", while the macro Name is
+    // "Macro 3"! Examples: 808 Line, Overdrive.
+    // Some other programs in the category do have the consistent names, where
+    // the macro Name is "Macro 4". Example: World Up.
+    if (Destination != "Macro4") {
+      return;
+    }
+    // Fortunately Destination "Macro4" always modulates the Step Arp macro, a toggle
+    // macro, if it exists. If it does, there is no problem, as the template gives
+    // the "Macro4" a toggle MIDI CC number.
+    bool programHasStepArpMacro = (
+      from macro in macros
+      where macro.DisplayName == "Step Arp"
+      select macro).Any();
+    if (programHasStepArpMacro) {
+      return;
+    }
+    int maxExistingContinuousCcNo = (
+      from modulation in modulations
+      where Midi.ContinuousCcNos.Contains(modulation.CcNo!.Value)
+      select modulation.CcNo!.Value).Max();
+    int toggleCcNo = 0;
+    // The macro chosen for GetNextCcNo only needs to be continuous for GetNextCcNo to
+    // work.
+    int newCcNo = macros[0].GetNextCcNo(
+      ref maxExistingContinuousCcNo, ref toggleCcNo, false);
+    Source = Source.Replace(CcNo!.Value.ToString(), newCcNo.ToString());
+  }
+
   protected override XElement GetElement() {
     var result = CreateElementFromTemplate();
     return result;
   }
 
-  private void SubstituteCcNoForPlaceholder(MidiForMacros midi) {
+  private void SubstituteCcNoForPlaceholder() {
     if (Source.StartsWith("@MIDI CC C")) {
-      Source = GetSourceWithCcNo('C', midi.ContinuousCcNos);
+      Source = GetSourceWithCcNo('C', Midi!.ContinuousCcNos);
     } else if (Source.StartsWith("@MIDI CC T")) {
-      Source = GetSourceWithCcNo('T', midi.ToggleCcNos);
+      Source = GetSourceWithCcNo('T', Midi!.ToggleCcNos);
     }
     return;
 
@@ -146,7 +194,7 @@ public class Modulation : EntityBase {
         return $"@MIDI CC {ccNo}";
       } catch {
         throw new ApplicationException(
-          $"Source '{Source}' contains a MIDI CC number placeholder with " + 
+          $"Source '{Source}' contains a MIDI CC number placeholder with " +
           $"invalid index '{placeholderIndex}'. A positive integer is expected.");
       }
     }

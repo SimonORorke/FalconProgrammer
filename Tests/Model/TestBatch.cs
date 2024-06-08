@@ -47,14 +47,10 @@ public class TestBatch : Batch {
   }
 
   protected override Category CreateCategory(string categoryName) {
-    var result = new TestCategory(SoundBankFolderPath, categoryName, Settings);
-    if (MockFileSystemService.Folder.SimulatedFilePaths.TryGetValue(
-          result.Path, out var
-            categorySimulatedFilePaths)) {
-      result.MockFileSystemService.Folder.SimulatedFilePaths.Add(result.Path,
-        categorySimulatedFilePaths);
-    }
-    result.EmbeddedTemplateFileName = EmbeddedTemplateFileName;
+    var result = new TestCategory(SoundBankFolderPath, categoryName, Settings) {
+      MockFileSystemService = MockFileSystemService,
+      EmbeddedTemplateFileName = EmbeddedTemplateFileName
+    };
     result.Initialise();
     return result;
   }

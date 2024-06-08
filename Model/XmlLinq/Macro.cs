@@ -88,7 +88,7 @@ public class Macro : ModulationsOwner {
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
 
   /// <summary>
-  ///   0 indicates a toggle macro. 1 indicates a continuous macro.
+  ///   0 indicates a continuous macro. 1 indicates a toggle macro.
   /// </summary>
   public int Style {
     get => Convert.ToInt32(GetAttributeValue(nameof(Style)));

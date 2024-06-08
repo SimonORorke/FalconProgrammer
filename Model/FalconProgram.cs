@@ -25,7 +25,7 @@ public class FalconProgram {
   internal List<Macro> ContinuousMacros => GetContinuousMacros();
 
   private ImmutableList<Effect> Effects { get; set; } = null!;
-  private ScriptProcessor? GuiScriptProcessor { get; set; }
+  internal ScriptProcessor? GuiScriptProcessor { get; private set; }
   public bool HasBeenUpdated { get; private set; }
 
   private InfoPageLayout InfoPageLayout =>
@@ -926,7 +926,7 @@ public class FalconProgram {
       // This applies to all programs in categories for which MustUseGuiScriptProcessor
       // is set to true in the settings file.
       GuiScriptProcessor.UpdateModulationsFromTemplate(
-        Category.TemplateScriptProcessor.Modulations);
+        Category.TemplateScriptProcessor.Modulations, Macros);
     }
     NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
@@ -954,7 +954,7 @@ public class FalconProgram {
     foreach (var macro in sortedByLocation) {
       // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
       // MIDI CC mapping that's not on the Info page.
-      // Example: Devinity/Bass/Comber Bass.
+      // Example: Devinity\Bass\Comber Bass.
       var forMacroModulations =
         macro.GetForMacroModulations();
       if (forMacroModulations.Count > 1) {

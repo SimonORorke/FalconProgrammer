@@ -39,7 +39,7 @@ public class ModulationsOwner : EntityBase {
     private set => _modulations = value;
   }
 
-  public void AddModulation(Modulation modulation) {
+  public virtual void AddModulation(Modulation modulation) {
     modulation.Owner = this;
     GetConnectionsElement().Add(modulation.Element);
     Modulations = Modulations.Add(modulation);

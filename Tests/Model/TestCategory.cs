@@ -15,8 +15,10 @@ public class TestCategory : Category {
   /// </summary>
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
-  internal MockFileSystemService MockFileSystemService =>
-    _mockFileSystemService ??= new MockFileSystemService();
+  internal MockFileSystemService MockFileSystemService {
+    get => _mockFileSystemService ??= new MockFileSystemService();
+    set =>  _mockFileSystemService = value;
+  }
 
   protected override IFileSystemService FileSystemService => MockFileSystemService;
 
