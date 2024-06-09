@@ -11,6 +11,16 @@ public static class Global {
     set => _applicationName = value; // For tests
   }
 
+  public static bool EmbeddedFileExists(string embeddedFileName) {
+    var assembly = Assembly.GetCallingAssembly();
+    try {
+      GetEmbeddedResourceName(embeddedFileName, assembly);
+      return true;
+    } catch (InvalidOperationException) {
+      return false;
+    }
+  }
+
   public static Stream GetEmbeddedFileStream(string embeddedFileName) {
     var assembly = Assembly.GetCallingAssembly();
     string resourceName = GetEmbeddedResourceName(

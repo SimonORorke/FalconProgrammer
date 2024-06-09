@@ -118,7 +118,8 @@ public class FalconProgramTests {
     const string programName1 = "Magnetic 1";
     // This program requires Modulation.FixToggleOrContinuous to leave
     // the fourth MIDI CC number unaltered as the one provided by the template.
-    // This test proves that the result is not affected by fixing the previous program.
+    // This test proves that the result is not affected (any more!) by fixing the
+    // previous program.
     const string programName2 = "World Up";
     const string templateProgramName = "808 Line";
     string categoryFolderPath = Path.Combine(

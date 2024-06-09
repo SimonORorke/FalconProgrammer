@@ -41,13 +41,11 @@ public class TestBatch : Batch {
       throw ExceptionWhenConfiguringProgram;
     }
     if (UpdatePrograms) {
-      // TODO: Set TestBatch.EmbeddedProgramFileName to match program name if available?
-      EmbeddedProgramFileName = TestProgram.Name switch {
-        "Magnetic 1" => "Magnetic 1.xml",
-        "World Up" => "World Up.xml",
-        _ => EmbeddedProgramFileName
-      };
-      TestProgram.EmbeddedProgramFileName = EmbeddedProgramFileName; 
+      string candidateEmbeddedProgramFileName = $"{TestProgram.Name}.xml";
+      if (Global.EmbeddedFileExists(candidateEmbeddedProgramFileName)) {
+        TestProgram.EmbeddedProgramFileName =
+          EmbeddedProgramFileName = candidateEmbeddedProgramFileName;
+      }
       base.ConfigureProgram();
       OnProgramConfigured();
       return;
