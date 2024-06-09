@@ -5,7 +5,7 @@ namespace FalconProgrammer.Model;
 /// <summary>
 ///   A utility that can serialise an object to a file.
 /// </summary>
-public class Serialiser : ISerialiser {
+internal class Serialiser : ISerialiser {
   private static ISerialiser? _default;
   private Serialiser() { }
   public static ISerialiser Default => _default ??= new Serialiser();
