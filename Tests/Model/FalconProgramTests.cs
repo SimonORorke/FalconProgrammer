@@ -109,39 +109,44 @@ public class FalconProgramTests {
   }
 
   [Test]
-  public void UpdateModulationsFromTemplateCcNoToFix() {
+  public void UpdateModulationsFromTemplate() {
     const string soundBankName = "Falcon Factory";
-    const string categoryName = "Brutal Bass 2.1";
-    const string programName = "Magnetic 1";
+    // This category tests Modulation.FixToggleOrContinuous
+    const string categoryName = "Brutal Bass 2.1"; 
+    // This program requires Modulation.FixToggleOrContinuous to correct
+    // the fourth MIDI CC number from the one provided by the template.
+    const string programName1 = "Magnetic 1";
+    // This program requires Modulation.FixToggleOrContinuous to leave
+    // the fourth MIDI CC number unaltered as the one provided by the template.
+    // This test proves that the result is not affected by fixing the previous program.
+    const string programName2 = "World Up";
     const string templateProgramName = "808 Line";
+    string categoryFolderPath = Path.Combine(
+      Batch.Settings.ProgramsFolder.Path, soundBankName, categoryName);
+    List<string> programNames = [programName1, programName2]; 
+    Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
+      categoryFolderPath, programNames);
     string categoryTemplateFolderPath = Path.Combine(
       Batch.Settings.TemplateProgramsFolder.Path, soundBankName, categoryName); 
     Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
       categoryTemplateFolderPath, [$"{templateProgramName}.uvp"]);
-    Batch.EmbeddedProgramFileName = $"{programName}.xml";
     Batch.EmbeddedTemplateFileName = $"{templateProgramName}.xml";
-    Batch.RunTask(ConfigTask.UpdateMacroCcs, 
-      soundBankName, categoryName, programName);
-    Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
-      Is.EqualTo(34));
-    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
-  }
-
-  [Test]
-  public void UpdateModulationsFromTemplateNoCcNoToFix() {
-    const string soundBankName = "Falcon Factory";
-    const string categoryName = "Brutal Bass 2.1";
-    const string programName = "World Up";
-    const string templateProgramName = "808 Line";
-    string categoryTemplateFolderPath = Path.Combine(
-      Batch.Settings.TemplateProgramsFolder.Path, soundBankName, categoryName); 
-    Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
-      categoryTemplateFolderPath, [$"{templateProgramName}.uvp"]);
-    Batch.EmbeddedProgramFileName = $"{programName}.xml";
-    Batch.EmbeddedTemplateFileName = $"{templateProgramName}.xml";
-    Batch.RunTask(ConfigTask.UpdateMacroCcs, 
-      soundBankName, categoryName, programName);
-    Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
-      Is.EqualTo(112));
+    Batch.ProgramConfigured += (_, _) => {
+      switch (Batch.TestProgram.Name) {
+        case programName1:
+          Assert.That(Batch.TestProgram.SavedXml, Does.Contain(programName1));
+          Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
+            Is.EqualTo(34));
+          Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
+          break;
+        case programName2:
+          Assert.That(Batch.TestProgram.SavedXml, Does.Contain(programName2));
+          Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
+            Is.EqualTo(112));
+          Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 112"));
+          break;
+      }
+    };
+    Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName);
   }
 }

@@ -40,12 +40,15 @@ public class ScriptProcessor : ModulationsOwner {
   public string SoundBankId =>
     ScriptPath[..ScriptPath.IndexOf('.')][1..].Replace(" ", string.Empty);
 
-  public override void AddModulation(Modulation modulation) {
+  public override void AddModulation(Modulation templateModulation) {
+    // Clone the template modulation, to guard against updating it.
+    var newModulation = new Modulation(this, 
+      new XElement(templateModulation.Element), ProgramXml, Midi);
     if (Script.EndsWith("require(\"Factory2_1\")")) {
       // Falcon Factory\Brutal Bass 2.1
-      modulation.FixToggleOrContinuous(Macros!, Modulations);
+      newModulation.FixToggleOrContinuous(Macros!, Modulations);
     }
-    base.AddModulation(modulation);
+    base.AddModulation(newModulation);
   }
 
   public static ScriptProcessor Create(string soundBankName,
@@ -90,8 +93,8 @@ public class ScriptProcessor : ModulationsOwner {
   public void UpdateModulationsFromTemplate(
     IEnumerable<Modulation> templateModulations, IList<Macro> macros) {
     Macros = macros;
-    foreach (var modulation in templateModulations) {
-      AddModulation(modulation);
+    foreach (var templateModulation in templateModulations) {
+      AddModulation(templateModulation);
     }
   }
 }

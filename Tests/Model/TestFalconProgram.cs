@@ -14,7 +14,7 @@ public class TestFalconProgram : FalconProgram {
     EmbeddedTemplateFileName = embeddedTemplateFileName;
   }
 
-  private string EmbeddedProgramFileName { get; }
+  internal string EmbeddedProgramFileName { get; set; }
   private string EmbeddedTemplateFileName { get; }
   internal string SavedXml { get; private set; } = string.Empty;
 

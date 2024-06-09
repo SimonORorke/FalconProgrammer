@@ -34,12 +34,22 @@ public class TestBatch : Batch {
   /// </summary>
   internal bool UpdatePrograms { get; set; } = true;
 
+  internal event EventHandler? ProgramConfigured;
+
   protected override void ConfigureProgram() {
     if (ExceptionWhenConfiguringProgram != null) {
       throw ExceptionWhenConfiguringProgram;
     }
     if (UpdatePrograms) {
+      // TODO: Set TestBatch.EmbeddedProgramFileName to match program name if available?
+      EmbeddedProgramFileName = TestProgram.Name switch {
+        "Magnetic 1" => "Magnetic 1.xml",
+        "World Up" => "World Up.xml",
+        _ => EmbeddedProgramFileName
+      };
+      TestProgram.EmbeddedProgramFileName = EmbeddedProgramFileName; 
       base.ConfigureProgram();
+      OnProgramConfigured();
       return;
     }
     // This will have the task prefix added.
@@ -58,6 +68,10 @@ public class TestBatch : Batch {
   protected override FalconProgram CreateFalconProgram(string path) {
     return new TestFalconProgram(
       EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
+  }
+
+  private void OnProgramConfigured() {
+    ProgramConfigured?.Invoke(this, EventArgs.Empty);
   }
 
   protected override void OnScriptRunEnded() {

@@ -48,7 +48,7 @@ public class FalconProgram {
   ///   Trim in case there's a space before the dot in the file name. That would otherwise
   ///   show up when Name is combined into PathShort.
   /// </summary>
-  private string Name { get; }
+  public string Name { get; }
 
   private int CurrentContinuousCcNo { get; set; }
   private int CurrentToggleCcNo { get; set; }
