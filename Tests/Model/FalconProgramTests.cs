@@ -58,7 +58,7 @@ public class FalconProgramTests {
   public void InitialiseOrganicPadsProgram() {
     Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
     Batch.EmbeddedTemplateFileName = "Crystal Caves.xml";
-    Batch.RunTask(ConfigTask.InitialiseLayout, 
+    Batch.RunTask(ConfigTask.InitialiseLayout,
       "Organic Pads", "Mystical", "Tibetan Horns");
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
   }
@@ -66,23 +66,23 @@ public class FalconProgramTests {
   [Test]
   public void PrependPathLineToDescription() {
     // Program.Properties.description attribute already exists
-    PrependPathForEmbeddedFile("Voltage.xml"); 
+    PrependPathForEmbeddedFile("Voltage.xml");
     // Program.Properties.description attribute must be added.
-    PrependPathForEmbeddedFile("NoGuiScriptProcessor.xml"); 
+    PrependPathForEmbeddedFile("NoGuiScriptProcessor.xml");
     // Program.Properties element must be added with description attribute.
-    PrependPathForEmbeddedFile("GuiScriptProcessor.xml", "Pulsar"); 
+    PrependPathForEmbeddedFile("GuiScriptProcessor.xml", "Pulsar");
     return;
-  
-    void PrependPathForEmbeddedFile(string embeddedProgramFileName, 
+
+    void PrependPathForEmbeddedFile(string embeddedProgramFileName,
       string soundBankName = "Falcon Factory") {
       Batch.MockBatchLog.Lines.Clear();
       Batch.EmbeddedProgramFileName = embeddedProgramFileName;
-      Batch.RunTask(ConfigTask.InitialiseLayout, 
+      Batch.RunTask(ConfigTask.InitialiseLayout,
         soundBankName, "Bass", "Imagination");
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
         @$"PATH: {soundBankName}\Bass\Imagination"));
       Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-        @$"InitialiseLayout - {soundBankName}\Bass\Imagination: " + 
+        @$"InitialiseLayout - {soundBankName}\Bass\Imagination: " +
         "Prepended path line to description."));
     }
   }
@@ -99,7 +99,7 @@ public class FalconProgramTests {
     const string soundBankName = "Falcon Factory";
     const string categoryName = "Bass";
     const string programName = "Imagination";
-    string programPath = Path.Combine(Batch.Settings.ProgramsFolder.Path, 
+    string programPath = Path.Combine(Batch.Settings.ProgramsFolder.Path,
       soundBankName, categoryName, $"{programName}.uvip");
     Batch.MockFileSystemService.File.ExistingPaths.Add(programPath);
     var exception = Assert.Catch<ApplicationException>(() =>
@@ -112,7 +112,7 @@ public class FalconProgramTests {
   public void UpdateModulationsFromTemplate() {
     const string soundBankName = "Falcon Factory";
     // This category tests Modulation.FixToggleOrContinuous
-    const string categoryName = "Brutal Bass 2.1"; 
+    const string categoryName = "Brutal Bass 2.1";
     // This program requires Modulation.FixToggleOrContinuous to correct
     // the fourth MIDI CC number from the one provided by the template.
     const string programName1 = "Magnetic 1";
@@ -124,11 +124,11 @@ public class FalconProgramTests {
     const string templateProgramName = "808 Line";
     string categoryFolderPath = Path.Combine(
       Batch.Settings.ProgramsFolder.Path, soundBankName, categoryName);
-    List<string> programNames = [programName1, programName2]; 
+    List<string> programNames = [programName1, programName2];
     Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
       categoryFolderPath, programNames);
     string categoryTemplateFolderPath = Path.Combine(
-      Batch.Settings.TemplateProgramsFolder.Path, soundBankName, categoryName); 
+      Batch.Settings.TemplateProgramsFolder.Path, soundBankName, categoryName);
     Batch.MockFileSystemService.Folder.SimulatedFilePaths.Add(
       categoryTemplateFolderPath, [$"{templateProgramName}.uvp"]);
     Batch.EmbeddedTemplateFileName = $"{templateProgramName}.xml";
@@ -136,13 +136,13 @@ public class FalconProgramTests {
       switch (Batch.TestProgram.Name) {
         case programName1:
           Assert.That(Batch.TestProgram.SavedXml, Does.Contain(programName1));
-          Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
+          Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value,
             Is.EqualTo(34));
           Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
           break;
         case programName2:
           Assert.That(Batch.TestProgram.SavedXml, Does.Contain(programName2));
-          Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value, 
+          Assert.That(Batch.TestProgram.GuiScriptProcessor!.Modulations[3].CcNo!.Value,
             Is.EqualTo(112));
           Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 112"));
           break;

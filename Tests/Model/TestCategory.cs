@@ -3,7 +3,7 @@ using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
-public class TestCategory : Category {
+internal class TestCategory : Category {
   private MockFileSystemService? _mockFileSystemService;
 
   public TestCategory(string soundBankFolderPath, string name, Settings settings) :
@@ -17,7 +17,7 @@ public class TestCategory : Category {
 
   internal MockFileSystemService MockFileSystemService {
     get => _mockFileSystemService ??= new MockFileSystemService();
-    set =>  _mockFileSystemService = value;
+    set => _mockFileSystemService = value;
   }
 
   protected override IFileSystemService FileSystemService => MockFileSystemService;

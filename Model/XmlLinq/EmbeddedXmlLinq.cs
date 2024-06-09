@@ -3,7 +3,7 @@
 namespace FalconProgrammer.Model.XmlLinq;
 
 /// <summary>
-///   A Linq to XML object hierarchy read from an embedded file. 
+///   A Linq to XML object hierarchy read from an embedded file.
 /// </summary>
 internal class EmbeddedXmlLinq {
   private XElement? _rootElement;

@@ -17,7 +17,7 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
   private Settings Settings { get; set; } = null!;
 
   private static IEnumerable<string> SoundBanks => [
-    "Eternal Funk", "Ether Fields", "Falcon Factory", "Fluidity", "Hypnotic Drive", 
+    "Eternal Funk", "Ether Fields", "Falcon Factory", "Fluidity", "Hypnotic Drive",
     "Inner Dimensions", "Savage", "Spectre"
   ];
 

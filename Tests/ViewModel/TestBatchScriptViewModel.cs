@@ -12,15 +12,15 @@ public class TestBatchScriptViewModel : BatchScriptViewModel {
 
   private MockFileSystemService MockFileSystemService =>
     (MockFileSystemService)FileSystemService;
-  
+
   internal string SavedLog { get; private set; } = string.Empty;
   [ExcludeFromCodeCoverage] [PublicAPI] internal TestBatch TestBatch => (TestBatch)Batch;
   internal TestBatchScript? TestBatchScript { get; private set; }
-  
+
   internal void AddSoundBankSubfolders(string folderPath) {
     TestHelper.AddSoundBankSubfolders(MockFileSystemService.Folder, folderPath);
   }
-  
+
   internal void ConfigureValidMockFileSystemService(Settings settings) {
     MockFileSystemService.Folder.ExistingPaths.Add(settings.SettingsPath);
     MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);

@@ -54,7 +54,7 @@ public class TestBatch : Batch {
     Log.WriteLine($"'{Program.PathShort}'");
   }
 
-  protected override Category CreateCategory(string categoryName) {
+  private protected override Category CreateCategory(string categoryName) {
     var result = new TestCategory(SoundBankFolderPath, categoryName, Settings) {
       MockFileSystemService = MockFileSystemService,
       EmbeddedTemplateFileName = EmbeddedTemplateFileName
@@ -63,7 +63,7 @@ public class TestBatch : Batch {
     return result;
   }
 
-  protected override FalconProgram CreateFalconProgram(string path) {
+  private protected override FalconProgram CreateFalconProgram(string path) {
     return new TestFalconProgram(
       EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
   }

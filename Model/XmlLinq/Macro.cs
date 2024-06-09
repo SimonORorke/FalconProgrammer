@@ -8,12 +8,11 @@ namespace FalconProgrammer.Model.XmlLinq;
 ///   Called ConstantModulation in the program XML but corresponds to a macro,
 ///   as shown the Info page.
 /// </summary>
-public class Macro : ModulationsOwner {
+internal class Macro : ModulationsOwner {
   private XElement? _propertiesElement;
 
   public Macro(ProgramXml programXml, MidiForMacros midi)
-    : base(programXml, midi, true) {
-  }
+    : base(programXml, midi, true) { }
 
   public Macro(XElement macroElement, ProgramXml programXml, MidiForMacros midi)
     : base(programXml, midi) {
@@ -69,8 +68,8 @@ public class Macro : ModulationsOwner {
     set => Name = $"Macro {value}";
   }
 
-  internal bool IsModulatedByWheel => FindModulationWithCcNo(1) != null; 
-  public List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
+  internal bool IsModulatedByWheel => FindModulationWithCcNo(1) != null;
+  internal List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
   public bool ModulatesEnabledEffects => (

@@ -4,7 +4,7 @@ using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
-public class TestProgramXml : ProgramXml {
+internal class TestProgramXml : ProgramXml {
   public TestProgramXml(Category category) : base(category) { }
 
   /// <summary>

@@ -2,23 +2,47 @@
 <Voklm_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" API_version="17">
         <Connections>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C9" Destination="AmpAttack" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C10" Destination="AmpDecay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C11" Destination="AmpSustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C12" Destination="AmpRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C13" Destination="FilterAttack" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C14" Destination="FilterDecay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C15" Destination="FilterSustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C16" Destination="FilterRelease" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="M1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="M2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="M3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="M4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C7" Destination="FilterDepth" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="Resonance" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="Cutoff" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C9" Destination="AmpAttack" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C10" Destination="AmpDecay" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C11" Destination="AmpSustain"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C12" Destination="AmpRelease"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C13" Destination="FilterAttack"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C14" Destination="FilterDecay"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C15" Destination="FilterSustain"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C16" Destination="FilterRelease"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="M1" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="M2" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="M3" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="M4" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C7" Destination="FilterDepth"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="Resonance" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="Cutoff" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
         </Connections>
-        <Properties OriginalProgramPath="$Voklm.ufs/Presets/Synth Choirs/Breath Five.uvip" PresetPath="C:/Louis/Shared/VOKLM Template Alain/Base/Scripts/require.lua" ScriptPath="$Voklm.ufs/Scripts/require.lua"/>
+        <Properties OriginalProgramPath="$Voklm.ufs/Presets/Synth Choirs/Breath Five.uvip"
+                    PresetPath="C:/Louis/Shared/VOKLM Template Alain/Base/Scripts/require.lua"
+                    ScriptPath="$Voklm.ufs/Scripts/require.lua"/>
         <script><![CDATA[require "main"]]></script>
         <ScriptData/>
     </ScriptProcessor>

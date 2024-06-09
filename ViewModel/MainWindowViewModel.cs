@@ -240,7 +240,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       // Window location data is available.
       if (Settings.WindowLocation == null // Never been saved before.
           || Settings.WindowLocation.Left != WindowLocationService.Left.Value
-          || Settings.WindowLocation.Top != WindowLocationService.Top.Value 
+          || Settings.WindowLocation.Top != WindowLocationService.Top.Value
           || Settings.WindowLocation.Width != WindowLocationService.Width.Value
           || Settings.WindowLocation.Height != WindowLocationService.Height.Value
           || Settings.WindowLocation.WindowState !=

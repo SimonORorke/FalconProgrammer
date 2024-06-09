@@ -17,18 +17,17 @@ public class ProgramItemTests : ViewModelTestsBase {
       settings, MockFileSystemService, false, false) {
       SoundBank = soundBank
     };
-    Assert.DoesNotThrow(()=> item.Category = category);
+    Assert.DoesNotThrow(() => item.Category = category);
   }
-  
+
   [Test]
   public void SoundBankFolderNotFound() {
     var settings = ReadMockSettings("BatchSettings.xml");
     MockFileSystemService.Folder.ExistingPaths.Add(settings.ProgramsFolder.Path);
     const string soundBank = "Falcon Factory";
     var item = new ProgramItem(
-      settings, MockFileSystemService, false, false) {
-    };
-    Assert.DoesNotThrow(()=> item.SoundBank = soundBank);
+      settings, MockFileSystemService, false, false);
+    Assert.DoesNotThrow(() => item.SoundBank = soundBank);
     Assert.That(item.Categories, Is.Empty);
   }
 }

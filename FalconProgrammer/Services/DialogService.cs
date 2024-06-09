@@ -37,12 +37,6 @@ public class DialogService : IDialogService {
     return folders.Count == 1 ? folders[0].Path.LocalPath : null;
   }
 
-  private string GetMessageBoxTitle(string tabTitle) {
-    return tabTitle == string.Empty 
-      ? ApplicationTitle 
-      : $"{ApplicationTitle} - {tabTitle}";
-  }
-
   public async Task<string?> OpenFile(
     string dialogTitle, string filterName, string fileExtension) {
     var files = await MainWindow.StorageProvider.OpenFilePickerAsync(
@@ -115,5 +109,11 @@ public class DialogService : IDialogService {
     } catch {
       messageWindow.Show();
     }
+  }
+
+  private string GetMessageBoxTitle(string tabTitle) {
+    return tabTitle == string.Empty
+      ? ApplicationTitle
+      : $"{ApplicationTitle} - {tabTitle}";
   }
 }

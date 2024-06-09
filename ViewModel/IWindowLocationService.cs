@@ -10,13 +10,13 @@ public interface IWindowLocationService {
   int? Width { get; set; }
   int? Height { get; set; }
   int? WindowState { get; set; }
-  
+
   /// <summary>
-  ///  Uses previously saved data, if available, to size the window and position it on a
-  ///  screen. 
+  ///   Uses previously saved data, if available, to size the window and position it on a
+  ///   screen.
   /// </summary>
   void Restore();
-  
+
   /// <summary>
   ///   Updates the data to be saved to settings from the window's current
   ///   position/size/state.

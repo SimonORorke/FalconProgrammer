@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;
 
-public class FalconProgram {
+internal class FalconProgram {
   private InfoPageLayout? _infoPageLayout;
 
   public FalconProgram(string path, Category category, Batch batch) {
@@ -536,13 +536,13 @@ public class FalconProgram {
       // modulating Macros. 
       ConnectionsParent connectionsParent;
       if (effectElements.Contains(connectionsParentElement)) {
-        connectionsParent = new Effect(connectionsParentElement, ProgramXml, 
+        connectionsParent = new Effect(connectionsParentElement, ProgramXml,
           Settings.MidiForMacros);
         effects.Add((Effect)connectionsParent);
         // Indicate that the Effect has now been added to Effects.
         effectElements.Remove(connectionsParentElement);
       } else {
-        connectionsParent = new ConnectionsParent(connectionsParentElement, ProgramXml, 
+        connectionsParent = new ConnectionsParent(connectionsParentElement, ProgramXml,
           Settings.MidiForMacros);
       }
       foreach (var modulation in connectionsParent.Modulations) {
@@ -681,7 +681,7 @@ public class FalconProgram {
     ScriptProcessors = (
       from scriptProcessorElement in ProgramXml.ScriptProcessorElements
       select ScriptProcessor.Create(
-        SoundBankName, scriptProcessorElement, ProgramXml, 
+        SoundBankName, scriptProcessorElement, ProgramXml,
         Settings.MidiForMacros)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
       foreach (var modulation in scriptProcessor.Modulations) {
@@ -911,10 +911,10 @@ public class FalconProgram {
         throw new ApplicationException(
           "A GUI script processor is not not supported for sound bank " +
           $"'{SoundBankName}' category '{Category.Name}'. You nee to go to the " +
-          "GUI Script Processor page and remove the sound bank or category from " + 
-          "the list. For the Falcon Factory (version 1) sound bank, the only " + 
-          "categories that support a GUI script processor are " + 
-          "'Brutal Bass 2.1', 'Lo-Fi 2.5', " + 
+          "GUI Script Processor page and remove the sound bank or category from " +
+          "the list. For the Falcon Factory (version 1) sound bank, the only " +
+          "categories that support a GUI script processor are " +
+          "'Brutal Bass 2.1', 'Lo-Fi 2.5', " +
           "'Organic Texture 2.8', 'RetroWave 2.5' and 'VCF-20 Synths 2.5'.");
       }
       // The CCs are specified in Modulations owned by the Macros

@@ -152,7 +152,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
       "Script processors cannot be updated: the programs folder has not been specified."));
     Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
   }
-  
+
   [Test]
   public void SoundBankFolderDoesNotExist() {
     MockFileSystemService.Folder.ThrowIfNoSimulatedSubfolders = true;
@@ -160,7 +160,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     const string soundBank = "Falcon Factory";
     string soundBankPath = Path.Combine(Settings.ProgramsFolder.Path, soundBank);
     MockFileSystemService.Folder.SimulatedSubfolderNames.Remove(soundBankPath);
-    Assert.DoesNotThrowAsync(()=> ViewModel.Open());
+    Assert.DoesNotThrowAsync(() => ViewModel.Open());
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo(soundBank));
     Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo(
       SoundBankCategory.SoundBankErrorMessage));

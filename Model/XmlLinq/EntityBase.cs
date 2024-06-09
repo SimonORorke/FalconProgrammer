@@ -2,10 +2,7 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-/// <summary>
-///   TODO: EntityBase and inheritors should be internal.
-/// </summary>
-public abstract class EntityBase {
+internal abstract class EntityBase {
   private XElement? _element;
   protected EntityBase() { }
 

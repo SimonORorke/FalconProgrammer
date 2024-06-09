@@ -3,10 +3,10 @@ using System.Xml.Linq;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class ModulationsOwner : EntityBase {
+internal class ModulationsOwner : EntityBase {
   private ImmutableList<Modulation>? _modulations;
 
-  public ModulationsOwner(XElement element, ProgramXml programXml, MidiForMacros midi) 
+  public ModulationsOwner(XElement element, ProgramXml programXml, MidiForMacros midi)
     : base(programXml) {
     Element = element;
     Midi = midi;
@@ -21,7 +21,7 @@ public class ModulationsOwner : EntityBase {
     get => Convert.ToSingle(GetAttributeValue(nameof(Gain)));
     set => SetAttribute(nameof(Gain), value);
   }
-  
+
   protected MidiForMacros Midi { get; }
 
   /// <summary>

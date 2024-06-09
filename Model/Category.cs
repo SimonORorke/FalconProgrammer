@@ -8,7 +8,7 @@ namespace FalconProgrammer.Model;
 ///   A category of Falcon programs, with the program files stored in a folder with the
 ///   category name.
 /// </summary>
-public class Category {
+internal class Category {
   private IFileSystemService? _fileSystemService;
 
   public Category(string soundBankFolderPath, string name, Settings settings) {

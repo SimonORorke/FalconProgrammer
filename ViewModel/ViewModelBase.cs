@@ -29,7 +29,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   ///   page is reopened, its data will not be refreshed from saved settings.
   /// </summary>
   internal bool IsFixingError { get; set; }
-  
+
   protected bool IsVisible { get; private set; }
 
   /// <summary>

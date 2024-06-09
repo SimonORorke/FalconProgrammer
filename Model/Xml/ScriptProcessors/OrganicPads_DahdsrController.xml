@@ -2,13 +2,21 @@
 <OrganicPads_DahdsrController>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" API_version="21">
         <Connections>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 5" Destination="Attack" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Decay" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 7" Destination="Sustain" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 8" Destination="Release" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 5" Destination="Attack"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Decay"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 7" Destination="Sustain"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 8" Destination="Release"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
         </Connections>
-        <Properties ScriptPath="./../../../Scripts/DAHDSR Controller.lua" />
+        <Properties ScriptPath="./../../../Scripts/DAHDSR Controller.lua"/>
         <script><![CDATA[require 'DahdsrController/DahdsrController']]></script>
-        <ScriptData />
+        <ScriptData/>
     </ScriptProcessor>
 </OrganicPads_DahdsrController>

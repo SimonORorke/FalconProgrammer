@@ -1,18 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Factory_OrganicTexture_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" WheelDirection="0" W2M="0" API_version="20">
-        <Properties OriginalProgramPath="$Falcon Factory.ufs/Presets/Organic Texture 2.8/BAS Biggy.uvip" PresetPath="/Users/theogallienne/Desktop/Falcon 2.8/Organic Texture 2.8/Scripts/StubOrganicTexture.lua" ScriptPath="$Falcon Factory.ufs/Scripts/StubOrganicTexture.lua" />
+        <Properties OriginalProgramPath="$Falcon Factory.ufs/Presets/Organic Texture 2.8/BAS Biggy.uvip"
+                    PresetPath="/Users/theogallienne/Desktop/Falcon 2.8/Organic Texture 2.8/Scripts/StubOrganicTexture.lua"
+                    ScriptPath="$Falcon Factory.ufs/Scripts/StubOrganicTexture.lua"/>
         <script><![CDATA[require "OrganicTexture"]]></script>
-        <ScriptData />
+        <ScriptData/>
         <Connections>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="ampEnvAttackTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="ampEnvDecayTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="ampEnvSustainLevel" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="ampEnvReleaseTime" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="Macro1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="Macro2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T2" Destination="WheelDirection" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T1" Destination="W2M" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="ampEnvAttackTime"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="ampEnvDecayTime"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C5" Destination="ampEnvSustainLevel"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="ampEnvReleaseTime"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="Macro1" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="Macro2" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T2" Destination="WheelDirection"
+                              Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                              SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC T1" Destination="W2M" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
         </Connections>
     </ScriptProcessor>
 </Factory_OrganicTexture_Gui>

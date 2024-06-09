@@ -6,7 +6,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 public class TestMainWindowViewModel : MainWindowViewModel {
   public TestMainWindowViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService, IWindowLocationService windowLocationService) 
+    IDispatcherService dispatcherService, IWindowLocationService windowLocationService)
     : base(dialogService, dispatcherService, windowLocationService) { }
 
   internal ColourSchemeId SimulatedNewColourSchemeId { get; set; }

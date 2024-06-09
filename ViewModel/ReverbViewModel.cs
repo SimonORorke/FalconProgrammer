@@ -10,14 +10,14 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle =>
-    "Task ZeroReverbMacros must bypass these programs when initialising " + 
+    "Task ZeroReverbMacros must bypass these programs when initialising " +
     "Reverb macro values to zero.";
 
   public DoNotZeroReverbCollection DoNotZeroReverb => _doNotZeroReverb
-    ??= new DoNotZeroReverbCollection(DialogService, FileSystemService, DispatcherService);
+    ??= new DoNotZeroReverbCollection(DialogService, FileSystemService,
+      DispatcherService);
 
-  [ExcludeFromCodeCoverage]
-  public override string TabTitle => "Reverb";
+  [ExcludeFromCodeCoverage] public override string TabTitle => "Reverb";
 
   internal override async Task Open() {
     await base.Open();

@@ -22,7 +22,7 @@ public partial class MessageWindow : Window {
   ///   <see cref="TextBox.SelectionStart " /> and <see cref="TextBox.SelectionEnd " />
   ///   instead does not work either. At least without specifying one way from source, the
   ///   view model values are always zero.
-  ///   Consequently, the whole copy operation is done here in code behind. 
+  ///   Consequently, the whole copy operation is done here in code behind.
   /// </summary>
   private async void CopyButtonOnClick(object? sender, RoutedEventArgs e) {
     if (MessageTextBox.SelectedText.Length == 0) {

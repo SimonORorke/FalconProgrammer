@@ -17,9 +17,9 @@ public class TabItemViewModel {
   ///   Gets the tab header title.
   /// </summary>
   public string Header { get; }
-  
+
   /// <summary>
-  ///   Gets the view model for the page content. 
+  ///   Gets the view model for the page content.
   /// </summary>
   public ViewModelBase ViewModel { get; }
 }

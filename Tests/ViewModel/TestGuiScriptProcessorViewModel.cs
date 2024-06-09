@@ -13,7 +13,7 @@ public class TestGuiScriptProcessorViewModel : GuiScriptProcessorViewModel {
 
   private MockFileSystemService MockFileSystemService =>
     (MockFileSystemService)FileSystemService;
-  
+
   internal void ConfigureMockFileSystemService(Settings settings) {
     TestHelper.AddSoundBankSubfolders(
       MockFileSystemService.Folder, settings.ProgramsFolder.Path);

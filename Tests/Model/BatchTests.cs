@@ -168,7 +168,8 @@ public class BatchTests {
     Batch.EmbeddedScriptFileName = "QueriesForAll.xml";
     Batch.RunScript(BatchScriptPath, RunCancellationTokenSource.Token);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(4));
-    Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo("QueryReverbTypes - Reverb Types:"));
+    Assert.That(Batch.MockBatchLog.Lines[0],
+      Is.EqualTo("QueryReverbTypes - Reverb Types:"));
     Assert.That(Batch.MockBatchLog.Lines[1], Is.EqualTo(
       @"QueryReverbTypes - 'Fluidity\Electronic\Cream Synth'"));
     Assert.That(Batch.MockBatchLog.Lines[2], Is.EqualTo(

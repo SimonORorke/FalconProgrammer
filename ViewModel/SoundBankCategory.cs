@@ -5,9 +5,9 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public partial class SoundBankCategory : SoundBankItem {
-  internal const string SoundBankErrorMessage = 
+  internal const string SoundBankErrorMessage =
     "Sound bank folder does not exist or has no subfolders.";
-  
+
   /// <summary>
   ///   Generates <see cref="Category" /> property.
   /// </summary>

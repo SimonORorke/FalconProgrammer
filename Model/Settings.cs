@@ -13,8 +13,7 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
 
-  [XmlElement]
-  public WindowLocationSettings? WindowLocation { get; set; } 
+  [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]
@@ -38,7 +37,7 @@ public class Settings : SerialisationBase {
 
   [XmlIgnore]
   public ColourSchemeId ColourSchemeId => StringToColourSchemeId(ColourScheme);
-  
+
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
   /// <summary>

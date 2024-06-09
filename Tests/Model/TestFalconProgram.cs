@@ -3,7 +3,7 @@ using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
-public class TestFalconProgram : FalconProgram {
+internal class TestFalconProgram : FalconProgram {
   private TestProgramXml? _testProgramXml;
 
   public TestFalconProgram(
@@ -33,8 +33,7 @@ public class TestFalconProgram : FalconProgram {
     }
   }
 
-  protected override void CopyFile(string sourcePath, string destinationPath) {
-  }
+  protected override void CopyFile(string sourcePath, string destinationPath) { }
 
   protected override ProgramXml CreateProgramXml() {
     return TestProgramXml;

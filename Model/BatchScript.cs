@@ -29,8 +29,8 @@ public class BatchScript : SerialisationBase {
   /// </summary>
   /// <remarks>
   ///   For display in the list of available tasks.
-  ///   Currently all non-query tasks are in <see cref="SequencedConfigTasks "/>.
-  ///   So the two lists are identical. 
+  ///   Currently all non-query tasks are in <see cref="SequencedConfigTasks " />.
+  ///   So the two lists are identical.
   /// </remarks>
   public static ImmutableList<ConfigTask> OrderedConfigTasks { get; }
 

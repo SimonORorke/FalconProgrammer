@@ -42,7 +42,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
     MockDialogService.SimulatedYesNoAnswer = true;
-    string newSettingsPath = Path.Combine(MockDialogService.SimulatedPath, "Settings.xml");
+    string newSettingsPath =
+      Path.Combine(MockDialogService.SimulatedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
     MockSettingsFolderLocationReader.EmbeddedFileName =
       "SettingsFolderLocationK.xml";

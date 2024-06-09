@@ -9,7 +9,8 @@ internal static class TestHelper {
     MockFolderService mockFolderService, string folderPath) {
     mockFolderService.SimulatedSubfolderNames.Add(
       folderPath, [
-        "Ether Fields", "Falcon Factory", "Inner Dimensions", "Organic Keys", "Pulsar", "Savage",
+        "Ether Fields", "Falcon Factory", "Inner Dimensions", "Organic Keys", "Pulsar",
+        "Savage",
         "Spectre", "Voklm"
       ]);
     mockFolderService.SimulatedSubfolderNames.Add(
@@ -18,7 +19,7 @@ internal static class TestHelper {
       ]);
     mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Falcon Factory"), [
-        "Bass-Sub", "Keys", "Leads", "Organic Texture 2.8", "Pads", "Synth Brass" 
+        "Bass-Sub", "Keys", "Leads", "Organic Texture 2.8", "Pads", "Synth Brass"
       ]);
     mockFolderService.SimulatedSubfolderNames.Add(
       Path.Combine(folderPath, "Inner Dimensions"), [

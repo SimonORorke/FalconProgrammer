@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-BatchScript>
-    <Scope>
-        <SoundBank>Factory</SoundBank>
-        <Category>Keys</Category>
-        <Program>Morning Keys</Program>
-    </Scope>
-    <Tasks>
-        <Task>QueryAdsrMacros</Task>
-        <Task>ReuseCc1</Task>
-        <Task>UpdateMacroCcs</Task>
-        <Task>InitialiseLayout</Task>
-    </Tasks>
-</BatchScript>
+        BatchScript>
+<Scope>
+    <SoundBank>Factory</SoundBank>
+    <Category>Keys</Category>
+    <Program>Morning Keys</Program>
+</Scope>
+<Tasks>
+<Task>QueryAdsrMacros</Task>
+<Task>ReuseCc1</Task>
+<Task>UpdateMacroCcs</Task>
+<Task>InitialiseLayout</Task>
+</Tasks>
+        </BatchScript>

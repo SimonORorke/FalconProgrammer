@@ -20,7 +20,7 @@ public class Batch {
   }
 
   private CancellationToken RunCancellationToken { get; set; }
-  protected Category Category { get; private set; } = null!;
+  private protected Category Category { get; private set; } = null!;
   private List<string> EffectTypes { get; set; } = null!;
 
   internal IFileSystemService FileSystemService {
@@ -30,7 +30,7 @@ public class Batch {
   }
 
   public IBatchLog Log { get; }
-  protected FalconProgram Program { get; private set; } = null!;
+  private protected FalconProgram Program { get; private set; } = null!;
 
   internal Settings Settings {
     get => _settings ??= SettingsReader.Read();
@@ -217,14 +217,14 @@ public class Batch {
   }
 
   [ExcludeFromCodeCoverage]
-  protected virtual Category CreateCategory(string categoryName) {
+  private protected virtual Category CreateCategory(string categoryName) {
     var result = new Category(SoundBankFolderPath, categoryName, Settings);
     result.Initialise();
     return result;
   }
 
   [ExcludeFromCodeCoverage]
-  protected virtual FalconProgram CreateFalconProgram(string path) {
+  private protected virtual FalconProgram CreateFalconProgram(string path) {
     return new FalconProgram(path, Category, this);
   }
 
@@ -324,7 +324,7 @@ public class Batch {
       } else {
         // TODO: BatchTests throws instead of logging exception, as Program is null.
         Log.WriteLine(
-          $"While running configuration task {Task.ToString()} for program " + 
+          $"While running configuration task {Task.ToString()} for program " +
           $"'{Program.Path}', the batch run terminated with this error:");
         Log.WriteLine("==========================================");
         Log.WriteLine(exception is ApplicationException

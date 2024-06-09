@@ -2,11 +2,11 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class Effect : ConnectionsParent {
+internal class Effect : ConnectionsParent {
   private bool? _isDelay;
   private bool? _isReverb;
 
-  public Effect(XElement element, ProgramXml programXml, MidiForMacros midi) 
+  public Effect(XElement element, ProgramXml programXml, MidiForMacros midi)
     : base(element, programXml, midi) {
     EffectType = element.Name.ToString();
   }

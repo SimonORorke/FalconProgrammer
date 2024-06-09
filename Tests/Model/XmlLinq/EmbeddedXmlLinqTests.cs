@@ -9,7 +9,7 @@ public class EmbeddedXmlLinqTests {
     const string embeddedFileName = "OrganicPads_DahdsrController.xml";
     var embeddedXmlLinq = new EmbeddedXmlLinq(embeddedFileName);
     Assert.That(embeddedXmlLinq.EmbeddedFileName, Is.EqualTo(embeddedFileName));
-    Assert.That(embeddedXmlLinq.RootElement.Name.LocalName, 
+    Assert.That(embeddedXmlLinq.RootElement.Name.LocalName,
       Is.EqualTo("OrganicPads_DahdsrController"));
   }
 }

@@ -80,7 +80,7 @@ public class SettingsValidator {
       FileSystemService.Folder.GetSubfolderNames(path);
     if (soundBanks.Count == 0) {
       await ShowErrorMessage(
-        $"{description} folder " + 
+        $"{description} folder " +
         $"'{path}' contains no sound bank subfolders.");
       ViewModel.GoToLocationsPage();
       return [];

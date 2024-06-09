@@ -9,7 +9,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) {
     DialogService = dialogService;
   }
-  
+
   private IDialogService DialogService { get; }
 
   protected override void AppendAdditionItem() {
@@ -97,7 +97,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
         errorMessage =
           "Sound Bank, Category and Program must all be specified. " +
           "The following program path will not be saved:" + Environment.NewLine +
-          $"Sound Bank '{programItem.SoundBank}', Category '{programItem.Category}" + 
+          $"Sound Bank '{programItem.SoundBank}', Category '{programItem.Category}" +
           $"', Program '{programItem.Program}'";
       }
     }

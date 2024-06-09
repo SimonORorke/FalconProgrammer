@@ -11,7 +11,7 @@ public partial class ProgramItem : SoundBankCategory {
   [ObservableProperty] private string _program = string.Empty;
 
   public ProgramItem(Settings settings, IFileSystemService fileSystemService,
-    bool isAdditionItem, bool allowAll) : 
+    bool isAdditionItem, bool allowAll) :
     base(settings, fileSystemService, isAdditionItem, allowAll) { }
 
   public ObservableCollection<string> Programs { get; } = [];

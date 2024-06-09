@@ -2,12 +2,17 @@
 <Savage_Gui>
     <ScriptProcessor Name="EventProcessor9" Bypass="0" API_version="17">
         <Connections>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="Macro1" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="Macro2" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="Macro3" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
-            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="Macro4" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C1" Destination="Macro1" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C2" Destination="Macro2" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C4" Destination="Macro3" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C3" Destination="Macro4" Mapper=""
+                              ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
         </Connections>
-        <Properties OriginalProgramPath="$Savage.ufs/Presets/Leads/Plucker.uvip" ScriptPath="$Savage.ufs/Scripts/stub.lua"/>
+        <Properties OriginalProgramPath="$Savage.ufs/Presets/Leads/Plucker.uvip"
+                    ScriptPath="$Savage.ufs/Scripts/stub.lua"/>
         <script><![CDATA[require("main")]]></script>
         <ScriptData/>
     </ScriptProcessor>

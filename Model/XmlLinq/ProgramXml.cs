@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class ProgramXml : EntityBase {
+internal class ProgramXml : EntityBase {
   private ImmutableList<XElement>? _scriptProcessorElements;
   private XElement? _templateMacroElement;
   private XElement? _templateModulationElement;
@@ -246,8 +246,8 @@ public class ProgramXml : EntityBase {
 
   [ExcludeFromCodeCoverage]
   protected virtual XElement? ReadTemplateRootElementFromFile() {
-    return Category.TemplateProgramPath != null 
-      ? ReadRootElementFromFile(Category.TemplateProgramPath) 
+    return Category.TemplateProgramPath != null
+      ? ReadRootElementFromFile(Category.TemplateProgramPath)
       : null;
   }
 

@@ -2,7 +2,7 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-public class ScriptProcessor : ModulationsOwner {
+internal class ScriptProcessor : ModulationsOwner {
   private XElement? _propertiesElement;
   private XElement? _scriptElement;
 
@@ -21,14 +21,14 @@ public class ScriptProcessor : ModulationsOwner {
   private IList<Macro>? Macros { get; set; }
 
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
-  
+
   /// <summary>
   ///   Gets the script specification, which comes with the CDATA wrapper in the file
   ///   stripped off.
   ///   Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
   /// </summary>
   public string Script => ScriptElement.Value;
-  
+
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
 
@@ -42,7 +42,7 @@ public class ScriptProcessor : ModulationsOwner {
 
   public override void AddModulation(Modulation templateModulation) {
     // Clone the template modulation, to guard against updating it.
-    var newModulation = new Modulation(this, 
+    var newModulation = new Modulation(this,
       new XElement(templateModulation.Element), ProgramXml, Midi);
     if (Script.EndsWith("require(\"Factory2_1\")")) {
       // Falcon Factory\Brutal Bass 2.1

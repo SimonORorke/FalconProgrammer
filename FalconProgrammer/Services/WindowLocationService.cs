@@ -12,7 +12,7 @@ namespace FalconProgrammer.Services;
 /// </summary>
 /// <remarks>
 ///   This service does not actually read/save settings to/from storage. That is taken
-///   care of in the view model. 
+///   care of in the view model.
 /// </remarks>
 public class WindowLocationService : IWindowLocationService {
   private Window? _mainWindow;
@@ -23,17 +23,9 @@ public class WindowLocationService : IWindowLocationService {
   public int? Height { get; set; }
   public int? WindowState { get; set; }
 
-  private Screen? FindScreenContainingPositionInWorkingArea(PixelPoint position) {
-    return (
-      // All active screens, not just any screens overlapping the window! 
-      from screen in MainWindow.Screens.All 
-      where screen.WorkingArea.Contains(position)
-      select screen).FirstOrDefault();
-  }
-
   /// <summary>
-  ///  Uses previously saved data, if available, to size the window and position it on a
-  ///  screen. 
+  ///   Uses previously saved data, if available, to size the window and position it on a
+  ///   screen.
   /// </summary>
   public void Restore() {
     // If the settings have not previously been saved, they should all be null;
@@ -91,5 +83,13 @@ public class WindowLocationService : IWindowLocationService {
     // previously saved normal position rather than been being put in the top left
     // corner.
     WindowState = (int)MainWindow.WindowState;
+  }
+
+  private Screen? FindScreenContainingPositionInWorkingArea(PixelPoint position) {
+    return (
+      // All active screens, not just any screens overlapping the window! 
+      from screen in MainWindow.Screens.All
+      where screen.WorkingArea.Contains(position)
+      select screen).FirstOrDefault();
   }
 }

@@ -69,7 +69,7 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     var errorMessageWriter = new StringWriter();
     foreach (var range in Ranges) {
       if (range.HasErrors) {
-        errorMessageWriter.WriteLine( 
+        errorMessageWriter.WriteLine(
           $"{RangeType} CC No range {range.Start} to {range.End} " +
           "has a validation error.");
       }

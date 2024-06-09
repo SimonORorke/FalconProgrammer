@@ -1,5 +1,4 @@
 ﻿using FalconProgrammer.Model;
-using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -11,7 +10,7 @@ public class SettingsTests {
       EmbeddedFileName = "DefaultSettingsWithMidi.xml"
     };
     var settings = settingsReader.Read();
-    const string soundBank = "Eternal Funk"; 
+    const string soundBank = "Eternal Funk";
     Assert.That(settings.TryGetSoundBankBackgroundImagePath(
       soundBank, out _), Is.False);
     settingsReader = new TestSettingsReaderEmbedded {
@@ -22,7 +21,7 @@ public class SettingsTests {
       soundBank, out string path), Is.True);
     Assert.That(path, Does.EndWith("Yellowish Mid-Green.png"));
   }
-  
+
   [Test]
   public void Batch() {
     var settingsReader = new TestSettingsReaderEmbedded {

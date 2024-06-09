@@ -37,7 +37,7 @@ internal class ErrorReporter {
   ///   or resume to fix the error.
   ///   When another tab is selected, the user may to be forced to return
   ///   to the current tab to fix the error or given the option, depending on
-  ///   <paramref name="askOnChangingTabs "/>;
+  ///   <paramref name="askOnChangingTabs " />;
   /// </remarks>
   public async Task<bool> CanClosePageOnError(
     string errorMessage, string tabTitle, bool isClosingWindow, bool askOnChangingTabs) {

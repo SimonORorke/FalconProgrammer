@@ -46,13 +46,13 @@ public class ReverbViewModelTests : ViewModelTestsBase {
       Is.EqualTo(@"Falcon Factory\Bass-Sub\Coastal Halftones 1.4"));
     var newProgramItem =
       new ProgramItem(ViewModel.Settings, ViewModel.FileSystemService,
-          false, true) {
+        false, true) {
         SoundBank = "Pulsar", Category = "Plucks", Program = "C"
       };
     ViewModel.DoNotZeroReverb[0] = newProgramItem;
     bool canClose = await ViewModel.QueryClose(); // Updates and saves settings
     Assert.That(canClose, Is.EqualTo(true));
-    Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]), 
+    Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
       Is.EqualTo(Path.Combine(newProgramItem.SoundBank,
         newProgramItem.Category, newProgramItem.Program)));
     return;
