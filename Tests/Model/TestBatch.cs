@@ -64,8 +64,7 @@ public class TestBatch : Batch {
   }
 
   private protected override FalconProgram CreateFalconProgram(string path) {
-    return new TestFalconProgram(
-      EmbeddedProgramFileName, EmbeddedTemplateFileName, path, Category, this);
+    return new TestFalconProgram(EmbeddedProgramFileName, path, Category, this);
   }
 
   private void OnProgramConfigured() {

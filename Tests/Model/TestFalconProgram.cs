@@ -7,15 +7,13 @@ internal class TestFalconProgram : FalconProgram {
   private TestProgramXml? _testProgramXml;
 
   public TestFalconProgram(
-    string embeddedProgramFileName, string embeddedTemplateFileName,
+    string embeddedProgramFileName,
     string path, Category category, Batch batch)
     : base(path, category, batch) {
     EmbeddedProgramFileName = embeddedProgramFileName;
-    EmbeddedTemplateFileName = embeddedTemplateFileName;
   }
 
   internal string EmbeddedProgramFileName { get; set; }
-  private string EmbeddedTemplateFileName { get; }
   internal string SavedXml { get; private set; } = string.Empty;
 
   private TestProgramXml TestProgramXml {
@@ -24,8 +22,7 @@ internal class TestFalconProgram : FalconProgram {
 
       TestProgramXml CreateTestProgramXml() {
         var result = new TestProgramXml(Category) {
-          EmbeddedProgramFileName = EmbeddedProgramFileName,
-          EmbeddedTemplateFileName = EmbeddedTemplateFileName
+          EmbeddedProgramFileName = EmbeddedProgramFileName
         };
         result.Saved += TestProgramXmlOnSaved;
         return result;

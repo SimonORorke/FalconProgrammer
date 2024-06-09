@@ -60,7 +60,7 @@ internal class FalconProgram {
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
 
-  private ImmutableList<ScriptProcessor> ScriptProcessors { get; set; } =
+  public ImmutableList<ScriptProcessor> ScriptProcessors { get; private set; } =
     ImmutableList<ScriptProcessor>.Empty;
 
   public Settings Settings => Batch.Settings;
@@ -172,72 +172,6 @@ internal class FalconProgram {
       select macro).FirstOrDefault();
   }
 
-  /// <summary>
-  ///   Finds the ScriptProcessor, if any, that is to contain the Modulations that
-  ///   map the macros to MIDI CC numbers. If the ScriptProcessor is not found, each
-  ///   macro's MIDI CC number must be defined in a Modulation owned by the
-  ///   macro's ConstantModulation.
-  /// </summary>
-  [SuppressMessage("ReSharper", "CommentTypo")]
-  private ScriptProcessor? FindGuiScriptProcessor() {
-    if (ScriptProcessors.Count == 0) {
-      return null;
-    }
-    // The CDATA wrapper is stripped off in ScriptProcessor.Script.
-    // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
-    // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
-    // with a category or colour parameter.
-    // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
-    // So we parse Script with EndWith.
-    foreach (var scriptProcessor in ScriptProcessors) {
-      if (scriptProcessor.Script.EndsWith($"require \"{scriptProcessor.SoundBankId}\"")) {
-        // Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
-        // Organic Keys, Organic Pads.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith(
-            $"require(\"{scriptProcessor.SoundBankId}\")")) {
-        // Works for Titanium.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require 'Factory2_5'")) {
-        // Works for Falcon Factory categories Lo-Fi 2.5, RetroWave 2.5,
-        // VCF-20 Synths 2.5.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require(\"Factory2_1\")")) {
-        // Works for Falcon Factory\Brutal Bass 2.1.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require \"OrganicTexture\"")) {
-        // Works for Falcon Factory\Organic Texture 2.8.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require(\"main\")")) {
-        // Works for Pulsar, Savage, Voklm\Vox Instruments.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require \"main\"")) {
-        // Works for Voklm\Synth Choirs.
-        return scriptProcessor;
-      }
-      if (scriptProcessor is { SoundBankId: "FalconFactory", Name: "EventProcessor9" }) {
-        // Examples of programs with GuiScriptProcessor but no template ScriptProcessor:
-        // Falcon Factory\Bass-Sub\Balarbas 2.0
-        // Falcon Factory\Keys\Smooth E-piano 2.1.
-        // However, these are all in categories that also contain programs that do not
-        // have a GUI script processor. And currently MustUseGuiScriptProcessor is not
-        // supported for categories where not all prorams have a GUI script processor.
-        // If the user tries it, UpdateMacroCcs will throw an application.
-        // So currently these GUI script processors will always be removed by
-        // InitialiseLayout. We are indicating them as GUI script processors precisely
-        // so that they will be removed as unusable.
-        return scriptProcessor;
-      }
-    }
-    return null;
-  }
-
   private Macro? FindReverbContinuousMacro() {
     return (
       from macro in ContinuousMacros
@@ -347,7 +281,7 @@ internal class FalconProgram {
 
   private ScriptProcessor GetTemplateScriptProcessor() {
     return Category.TemplateProgramPath != null
-      ? Category.GetTemplateScriptProcessorFromFile()
+      ? Category.GetTemplateScriptProcessorFromFile(Batch)
       : GetTemplateScriptProcessorFromEmbeddedFiles();
   }
 
@@ -701,7 +635,7 @@ internal class FalconProgram {
         modulation.Owner = scriptProcessor;
       }
     }
-    GuiScriptProcessor = FindGuiScriptProcessor();
+    GuiScriptProcessor = Category.FindGuiScriptProcessor(ScriptProcessors);
     PopulateConnectionsParentsAndEffects();
   }
 

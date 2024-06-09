@@ -10,8 +10,6 @@ internal class ProgramXml : EntityBase {
   private ImmutableList<XElement>? _scriptProcessorElements;
   private XElement? _templateMacroElement;
   private XElement? _templateModulationElement;
-  private XElement? _templateRootElement;
-  private XElement? _templateScriptProcessorElement;
 
   public ProgramXml(Category category) {
     Category = category;
@@ -27,7 +25,6 @@ internal class ProgramXml : EntityBase {
   public IEnumerable<XElement> MacroElements =>
     ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
 
-  private bool HasTemplateFileBeenRead { get; set; }
   [PublicAPI] public string InputProgramPath { get; set; } = null!;
 
   /// <summary>
@@ -46,19 +43,6 @@ internal class ProgramXml : EntityBase {
 
   public XElement TemplateMacroElement =>
     _templateMacroElement ??= GetTemplateMacroElement();
-
-  private XElement? TemplateRootElement {
-    get {
-      if (!HasTemplateFileBeenRead) {
-        _templateRootElement = ReadTemplateRootElementFromFile();
-        HasTemplateFileBeenRead = true;
-      }
-      return _templateRootElement;
-    }
-  }
-
-  public XElement? TemplateScriptProcessorElement =>
-    _templateScriptProcessorElement ??= GetTemplateScriptProcessorElement();
 
   public XElement TemplateModulationElement =>
     _templateModulationElement ??= GetTemplateModulationElement();
@@ -195,10 +179,6 @@ internal class ProgramXml : EntityBase {
     return template.RootElement.Elements("ConstantModulation").First();
   }
 
-  private XElement? GetTemplateScriptProcessorElement() {
-    return TemplateRootElement?.Descendants("ScriptProcessor").LastOrDefault();
-  }
-
   protected virtual XElement GetTemplateModulationElement() {
     var template = new EmbeddedXmlLinq("ModulationTemplate.xml");
     return template.RootElement.Elements("SignalConnection").First();
@@ -242,13 +222,6 @@ internal class ProgramXml : EntityBase {
   [ExcludeFromCodeCoverage]
   protected virtual XElement ReadProgramRootElementFromFile() {
     return ReadRootElementFromFile(InputProgramPath);
-  }
-
-  [ExcludeFromCodeCoverage]
-  protected virtual XElement? ReadTemplateRootElementFromFile() {
-    return Category.TemplateProgramPath != null
-      ? ReadRootElementFromFile(Category.TemplateProgramPath)
-      : null;
   }
 
   private static XElement ReadRootElementFromFile(string path) {

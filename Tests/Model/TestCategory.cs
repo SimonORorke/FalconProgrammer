@@ -1,5 +1,4 @@
 ﻿using FalconProgrammer.Model;
-using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -10,7 +9,7 @@ internal class TestCategory : Category {
     base(soundBankFolderPath, name, settings) { }
 
   /// <summary>
-  ///   <see cref="CreateTemplateXml" /> will read the embedded resource file
+  ///   <see cref="CreateTemplateProgram" /> will read the embedded resource file
   ///   with this name in the Tests assembly, ignoring its inputPath parameter.
   /// </summary>
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
@@ -22,11 +21,9 @@ internal class TestCategory : Category {
 
   protected override IFileSystemService FileSystemService => MockFileSystemService;
 
-  protected override ProgramXml CreateTemplateXml() {
-    return new TestProgramXml(this) {
-      EmbeddedProgramFileName = EmbeddedTemplateFileName,
-      EmbeddedTemplateFileName = EmbeddedTemplateFileName
-    };
+  protected override FalconProgram CreateTemplateProgram(Batch batch) {
+    return new TestFalconProgram(
+      EmbeddedTemplateFileName, TemplateProgramPath!, this, batch);
   }
 
   internal void ConfigureMockFileSystemService(

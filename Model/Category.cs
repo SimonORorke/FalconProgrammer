@@ -76,16 +76,14 @@ internal class Category {
 
   public string? TemplateProgramPath { get; private set; }
 
-  /// <summary>
-  ///   For programs where the Info page layout is specified in a script, the template
-  ///   ScriptProcessor contains the Modulations that map the macros to MIDI CC
-  ///   numbers.
-  /// </summary>
-  internal ScriptProcessor? TemplateScriptProcessor { get; private set; }
-
   [PublicAPI]
   public string? TemplateSoundBankName =>
     Directory.GetParent(System.IO.Path.GetDirectoryName(TemplateProgramPath)!)?.Name;
+
+  [ExcludeFromCodeCoverage]
+  protected virtual FalconProgram CreateTemplateProgram(Batch batch) {
+    return new FalconProgram(TemplateProgramPath!, this, batch);
+  }
 
   public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
     var programPaths = FileSystemService.Folder.GetFilePaths(
@@ -111,9 +109,71 @@ internal class Category {
     return result;
   }
 
-  [ExcludeFromCodeCoverage]
-  protected virtual ProgramXml CreateTemplateXml() {
-    return new ProgramXml(this);
+  /// <summary>
+  ///   Finds the ScriptProcessor, if any, that is to contain the Modulations that
+  ///   map the macros to MIDI CC numbers. If the ScriptProcessor is not found, each
+  ///   macro's MIDI CC number must be defined in a Modulation owned by the
+  ///   macro's ConstantModulation.
+  /// </summary>
+  [SuppressMessage("ReSharper", "CommentTypo")]
+  public static ScriptProcessor? FindGuiScriptProcessor(
+    IList<ScriptProcessor> scriptProcessors) {
+    if (scriptProcessors.Count == 0) {
+      return null;
+    }
+    // The CDATA wrapper is stripped off in ScriptProcessor.Script.
+    // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
+    // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
+    // with a category or colour parameter.
+    // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
+    // So we parse Script with EndWith.
+    foreach (var scriptProcessor in scriptProcessors) {
+      if (scriptProcessor.Script.EndsWith($"require \"{scriptProcessor.SoundBankId}\"")) {
+        // Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
+        // Organic Keys, Organic Pads.
+        return scriptProcessor;
+      }
+      if (scriptProcessor.Script.EndsWith(
+            $"require(\"{scriptProcessor.SoundBankId}\")")) {
+        // Works for Titanium.
+        return scriptProcessor;
+      }
+      if (scriptProcessor.Script.EndsWith("require 'Factory2_5'")) {
+        // Works for Falcon Factory categories Lo-Fi 2.5, RetroWave 2.5,
+        // VCF-20 Synths 2.5.
+        return scriptProcessor;
+      }
+      if (scriptProcessor.Script.EndsWith("require(\"Factory2_1\")")) {
+        // Works for Falcon Factory\Brutal Bass 2.1.
+        return scriptProcessor;
+      }
+      if (scriptProcessor.Script.EndsWith("require \"OrganicTexture\"")) {
+        // Works for Falcon Factory\Organic Texture 2.8.
+        return scriptProcessor;
+      }
+      if (scriptProcessor.Script.EndsWith("require(\"main\")")) {
+        // Works for Pulsar, Savage, Voklm\Vox Instruments.
+        return scriptProcessor;
+      }
+      if (scriptProcessor.Script.EndsWith("require \"main\"")) {
+        // Works for Voklm\Synth Choirs.
+        return scriptProcessor;
+      }
+      if (scriptProcessor is { SoundBankId: "FalconFactory", Name: "EventProcessor9" }) {
+        // Examples of programs with GuiScriptProcessor but no template ScriptProcessor:
+        // Falcon Factory\Bass-Sub\Balarbas 2.0
+        // Falcon Factory\Keys\Smooth E-piano 2.1.
+        // However, these are all in categories that also contain programs that do not
+        // have a GUI script processor. And currently MustUseGuiScriptProcessor is not
+        // supported for categories where not all prorams have a GUI script processor.
+        // If the user tries it, UpdateMacroCcs will throw an application.
+        // So currently these GUI script processors will always be removed by
+        // InitialiseLayout. We are indicating them as GUI script processors precisely
+        // so that they will be removed as unusable.
+        return scriptProcessor;
+      }
+    }
+    return null;
   }
 
   private string? FindTemplateProgramPath() {
@@ -147,38 +207,21 @@ internal class Category {
     return null;
   }
 
-  // /// <summary>
-  // ///   For programs where the Info page layout is specified in a script, the template
-  // ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
-  // ///   case the template program.
-  // /// </summary>
-  // private ScriptProcessor? GetTemplateScriptProcessor() {
-  //   return TemplateProgramPath != null 
-  //     ? GetTemplateScriptProcessorFromFile() 
-  //     : null; // For now
-  // }
-
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
   ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
   ///   case the template program.
   /// </summary>
-  public ScriptProcessor GetTemplateScriptProcessorFromFile() {
-    var templateXml = CreateTemplateXml();
-    templateXml.LoadFromFile(TemplateProgramPath!);
-    // Testing for macro-modulating Modulations might be more reliable than
-    // assuming the last ScriptProcessor.  But I think I tried that and there was 
-    // a problem, don't know what though.  Can be revisited if assuming the last
-    // ScriptProcessor turns out not to be reliable.  But I think that's actually fine
-    // in all cases.
-    if (templateXml.TemplateScriptProcessorElement != null) {
-      return ScriptProcessor.Create(
-        SoundBankName, templateXml.TemplateScriptProcessorElement, ProgramXml,
-        Settings.MidiForMacros);
+  public ScriptProcessor GetTemplateScriptProcessorFromFile(Batch batch) {
+    var templateProgram = CreateTemplateProgram(batch);
+    templateProgram.Read();
+    var result = FindGuiScriptProcessor(templateProgram.ScriptProcessors);
+    if (result == null) {
+      throw new ApplicationException(
+        $"Category {PathShort}: " + 
+        $"Cannot find GUI ScriptProcessor in template file '{TemplateProgramPath}'.");
     }
-    throw new ApplicationException(
-      $"Category {PathShort}: " + 
-      $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
+    return result;
   }
 
   public void Initialise() {
@@ -187,9 +230,6 @@ internal class Category {
         $"Category {PathShort}: Cannot find category folder '{Path}'.");
     }
     TemplateProgramPath = FindTemplateProgramPath();
-    // if (TemplateProgramPath != null) {
-    //   TemplateScriptProcessor = GetTemplateScriptProcessorFromFile();
-    // }
   }
 
   private void ValidateTemplateProgramsFolderPath() {
