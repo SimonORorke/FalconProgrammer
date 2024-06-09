@@ -22,8 +22,9 @@ internal class TestCategory : Category {
   protected override IFileSystemService FileSystemService => MockFileSystemService;
 
   protected override FalconProgram CreateTemplateProgram(Batch batch) {
+    TemplateProgramPath = "Will be ignored.uvip";
     return new TestFalconProgram(
-      EmbeddedTemplateFileName, TemplateProgramPath!, this, batch);
+      EmbeddedTemplateFileName, TemplateProgramPath, this, batch);
   }
 
   internal void ConfigureMockFileSystemService(

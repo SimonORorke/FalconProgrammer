@@ -74,7 +74,7 @@ internal class Category {
   public string? TemplateProgramName =>
     System.IO.Path.GetFileNameWithoutExtension(TemplateProgramPath);
 
-  public string? TemplateProgramPath { get; private set; }
+  public string? TemplateProgramPath { get; protected set; }
 
   [PublicAPI]
   public string? TemplateSoundBankName =>
@@ -83,30 +83,6 @@ internal class Category {
   [ExcludeFromCodeCoverage]
   protected virtual FalconProgram CreateTemplateProgram(Batch batch) {
     return new FalconProgram(TemplateProgramPath!, this, batch);
-  }
-
-  public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
-    var programPaths = FileSystemService.Folder.GetFilePaths(
-      Path, "*.uvip");
-    var result = (
-      from programPath in programPaths
-      where programPath != TemplateProgramPath
-      select programPath).ToList();
-    if (result.Count == 0) {
-      throw new ApplicationException(
-        $"Category {PathShort}: " +
-        $"There are no program files to edit in folder '{Path}'.");
-    }
-    return result;
-  }
-
-  public string GetProgramPath(string programName) {
-    string result = System.IO.Path.Combine(Path, $"{programName}.uvip");
-    if (!FileSystemService.File.Exists(result)) {
-      throw new ApplicationException(
-        $"Category {PathShort}: Cannot find program file '{result}'.");
-    }
-    return result;
   }
 
   /// <summary>
@@ -205,6 +181,30 @@ internal class Category {
       }
     }
     return null;
+  }
+
+  public IEnumerable<string> GetPathsOfProgramFilesToEdit() {
+    var programPaths = FileSystemService.Folder.GetFilePaths(
+      Path, "*.uvip");
+    var result = (
+      from programPath in programPaths
+      where programPath != TemplateProgramPath
+      select programPath).ToList();
+    if (result.Count == 0) {
+      throw new ApplicationException(
+        $"Category {PathShort}: " +
+        $"There are no program files to edit in folder '{Path}'.");
+    }
+    return result;
+  }
+
+  public string GetProgramPath(string programName) {
+    string result = System.IO.Path.Combine(Path, $"{programName}.uvip");
+    if (!FileSystemService.File.Exists(result)) {
+      throw new ApplicationException(
+        $"Category {PathShort}: Cannot find program file '{result}'.");
+    }
+    return result;
   }
 
   /// <summary>

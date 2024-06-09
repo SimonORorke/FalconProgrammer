@@ -8,24 +8,28 @@ public class CategoryTests {
   [SetUp]
   public void Setup() {
     var reader = new TestSettingsReaderEmbedded {
-      EmbeddedFileName = "LocationsSettings.xml"
+      EmbeddedFileName = "BatchSettings.xml"
     };
     Settings = reader.Read();
   }
 
   private Settings Settings { get; set; } = null!;
 
-  // [Test]
-  // public void CannotFindTemplateScriptProcessor() {
-  //   var category = new TestCategory(GetSoundBankFolderName("Falcon Factory"),
-  //     "Organic Texture 2.8", Settings) {
-  //     EmbeddedTemplateFileName = "NoGuiScriptProcessor.xml"
-  //   };
-  //   category.ConfigureMockFileSystemService(
-  //     @"Falcon Factory\Organic Texture 2.8",
-  //     "BAS Biggy.uvip");
-  //   Assert.Throws<ApplicationException>(() => category.Initialise());
-  // }
+  [Test]
+  public void CannotFindTemplateScriptProcessor() {
+    var category = new TestCategory(GetSoundBankFolderName("Falcon Factory"),
+      "Organic Texture 2.8", Settings) {
+      EmbeddedTemplateFileName = "NoGuiScriptProcessor.xml"
+    };
+    category.ConfigureMockFileSystemService(
+      @"Falcon Factory\Organic Texture 2.8",
+      "BAS Biggy.uvip");
+    var exception = Assert.Catch(() => 
+      category.GetTemplateScriptProcessorFromFile(new TestBatch()));
+    Assert.That(exception, Is.Not.Null);
+    Assert.That(exception.Message, Does.Contain(
+      "Cannot find GUI ScriptProcessor in template file '"));
+  }
 
   [Test]
   public void CategoryFolderDoesNotExist() {

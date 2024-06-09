@@ -7,7 +7,7 @@ public class TestBatch : Batch {
   public TestBatch(IBatchLog? log = null) : base(log ?? new MockBatchLog()) {
     FileSystemService = MockFileSystemService = new MockFileSystemService();
     SettingsReader = TestSettingsReaderEmbedded = new TestSettingsReaderEmbedded {
-      EmbeddedFileName = "LocationsSettings.xml"
+      EmbeddedFileName = "BatchSettings.xml"
     };
     BatchScriptReader =
       TestBatchScriptReaderEmbedded = new TestBatchScriptReaderEmbedded();
