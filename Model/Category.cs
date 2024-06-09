@@ -111,7 +111,12 @@ internal class Category {
     return result;
   }
 
-  private string? GetTemplateProgramPath() {
+  [ExcludeFromCodeCoverage]
+  protected virtual ProgramXml CreateTemplateXml() {
+    return new ProgramXml(this);
+  }
+
+  private string? FindTemplateProgramPath() {
     ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
@@ -142,17 +147,23 @@ internal class Category {
     return null;
   }
 
-  [ExcludeFromCodeCoverage]
-  protected virtual ProgramXml CreateTemplateXml() {
-    return new ProgramXml(this);
-  }
+  // /// <summary>
+  // ///   For programs where the Info page layout is specified in a script, the template
+  // ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
+  // ///   case the template program.
+  // /// </summary>
+  // private ScriptProcessor? GetTemplateScriptProcessor() {
+  //   return TemplateProgramPath != null 
+  //     ? GetTemplateScriptProcessorFromFile() 
+  //     : null; // For now
+  // }
 
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
   ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
   ///   case the template program.
   /// </summary>
-  private ScriptProcessor? GetTemplateScriptProcessor() {
+  public ScriptProcessor GetTemplateScriptProcessorFromFile() {
     var templateXml = CreateTemplateXml();
     templateXml.LoadFromFile(TemplateProgramPath!);
     // Testing for macro-modulating Modulations might be more reliable than
@@ -165,11 +176,9 @@ internal class Category {
         SoundBankName, templateXml.TemplateScriptProcessorElement, ProgramXml,
         Settings.MidiForMacros);
     }
-    if (!MustUseGuiScriptProcessor) {
-      return null;
-    }
     throw new ApplicationException(
-      $"Category {PathShort}: Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
+      $"Category {PathShort}: " + 
+      $"Cannot find ScriptProcessor in file '{TemplateProgramPath}'.");
   }
 
   public void Initialise() {
@@ -177,10 +186,10 @@ internal class Category {
       throw new ApplicationException(
         $"Category {PathShort}: Cannot find category folder '{Path}'.");
     }
-    TemplateProgramPath = GetTemplateProgramPath();
-    if (TemplateProgramPath != null) {
-      TemplateScriptProcessor = GetTemplateScriptProcessor();
-    }
+    TemplateProgramPath = FindTemplateProgramPath();
+    // if (TemplateProgramPath != null) {
+    //   TemplateScriptProcessor = GetTemplateScriptProcessorFromFile();
+    // }
   }
 
   private void ValidateTemplateProgramsFolderPath() {
