@@ -232,8 +232,7 @@ internal class Macro : ModulationsOwner {
     var result = Element.Element("Properties");
     if (result == null) {
       throw new InvalidOperationException(
-        "Cannot find ConstantModulation.Properties "
-        + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
+        "Cannot find ConstantModulation.Properties element.");
     }
     return result;
   }

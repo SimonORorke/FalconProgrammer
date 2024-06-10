@@ -127,8 +127,7 @@ internal class ScriptProcessor : ModulationsOwner {
     var result = Element.Element("Properties");
     if (result == null) {
       throw new InvalidOperationException(
-        "Cannot find ScriptProcessor.Properties "
-        + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
+        "Cannot find ScriptProcessor.Properties element.");
     }
     return result;
   }
@@ -137,8 +136,7 @@ internal class ScriptProcessor : ModulationsOwner {
     var result = Element.Element("script");
     if (result == null) {
       throw new InvalidOperationException(
-        "Cannot find ScriptProcessor.script "
-        + $"element in '{ProgramXml.Category.TemplateProgramPath}'.");
+        "Cannot find ScriptProcessor.script element.");
     }
     return result;
   }
