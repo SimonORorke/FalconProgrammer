@@ -843,12 +843,13 @@ internal class FalconProgram {
         // be implemented, especially as all Falcon Factory rev2 programs have GUI script
         // processors.
         throw new ApplicationException(
-          "A GUI script processor is not not supported for sound bank " +
+          "Updating the macro MIDI CCs of a program with a GUI script " +
+          "processor is not supported for sound bank " +
           $"'{SoundBankName}' category '{Category.Name}'. You need to go to the " +
           "GUI Script Processor page and remove the sound bank or category from " +
           "the list. For the Falcon Factory (version 1) sound bank, the only " +
-          "categories that support a GUI script processor are " +
-          "'Brutal Bass 2.1', 'Lo-Fi 2.5', " +
+          "categories for which updating macro MIDI CCs for a GUI script processor " +
+          " is supported are Brutal Bass 2.1', 'Lo-Fi 2.5', " +
           "'Organic Texture 2.8', 'RetroWave 2.5' and 'VCF-20 Synths 2.5'.");
       }
       // The CCs are specified in Modulations owned by the Macros
