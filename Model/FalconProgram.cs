@@ -279,18 +279,6 @@ internal class FalconProgram {
     return ccNo;
   }
 
-  private ScriptProcessor GetTemplateScriptProcessor() {
-    return Category.TemplateProgramPath != null
-      ? Category.GetTemplateScriptProcessorFromFile(Batch)
-      : GetTemplateScriptProcessorFromEmbeddedFiles();
-  }
-
-  private ScriptProcessor GetTemplateScriptProcessorFromEmbeddedFiles() {
-    // For now!
-    throw new ApplicationException(
-      $"{PathShort}: Cannot find template script processor.");
-  }
-
   private bool HasUniqueLocation(Macro macro) {
     return (
       from m in Macros
@@ -867,7 +855,8 @@ internal class FalconProgram {
       // (ConstantModulations) that they modulate
       UpdateMacroCcsOwnedByMacros();
     } else {
-      var templateScriptProcessor = GetTemplateScriptProcessor();
+      var templateScriptProcessor = Category.GetTemplateScriptProcessor(
+        GuiScriptProcessor, Batch);
       // The CCs are specified Modulations owned by the GUI ScriptProcessor
       // and can be copied from a template ScriptProcessor.
       // This applies to all programs in categories for which MustUseGuiScriptProcessor

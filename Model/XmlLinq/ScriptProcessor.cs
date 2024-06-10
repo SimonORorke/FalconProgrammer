@@ -1,8 +1,51 @@
 ﻿using System.Xml.Linq;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ScriptProcessor : ModulationsOwner {
+  public enum ScriptId {
+    None,
+
+    /// <summary>
+    ///   Works for Falcon Factory\Brutal Bass 2.1.
+    /// </summary>
+    Factory2_1,
+
+    /// <summary>
+    ///   Works for Falcon Factory categories Lo-Fi 2.5, RetroWave 2.5,
+    ///   VCF-20 Synths 2.5.
+    /// </summary>
+    Factory2_5,
+
+    /// <summary>
+    ///   Works for Pulsar, Savage, Voklm\Vox Instruments.
+    /// </summary>
+    Main1,
+
+    /// <summary>
+    ///   Works for Voklm\Synth Choirs.
+    /// </summary>
+    Main2,
+
+    /// <summary>
+    ///   Works for Falcon Factory\Organic Texture 2.8.
+    /// </summary>
+    OrganicTexture,
+
+    /// <summary>
+    ///   Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
+    ///   Organic Keys, Organic Pads.
+    /// </summary>
+    Standard1,
+
+    /// <summary>
+    ///   Works for Titanium.
+    /// </summary>
+    Standard2
+  }
+
+  private ScriptId? _guiScriptId;
   private XElement? _propertiesElement;
   private XElement? _scriptElement;
 
@@ -14,6 +57,8 @@ internal class ScriptProcessor : ModulationsOwner {
     MidiForMacros midi) : base(programXml, midi) {
     Element = scriptProcessorElement;
   }
+
+  public ScriptId GuiScriptId => _guiScriptId ??= GetGuiScriptId();
 
   /// <summary>
   ///   Only needed when a GUI script processor's MIDI CC numbers are updated.
@@ -27,7 +72,7 @@ internal class ScriptProcessor : ModulationsOwner {
   ///   stripped off.
   ///   Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
   /// </summary>
-  public string Script => ScriptElement.Value;
+  [PublicAPI] public string Script => ScriptElement.Value;
 
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
@@ -44,7 +89,7 @@ internal class ScriptProcessor : ModulationsOwner {
     // Clone the template modulation, to guard against updating it.
     var newModulation = new Modulation(this,
       new XElement(templateModulation.Element), ProgramXml, Midi);
-    if (Script.EndsWith("require(\"Factory2_1\")")) {
+    if (GuiScriptId == ScriptId.Factory2_1) {
       // Falcon Factory\Brutal Bass 2.1
       newModulation.FixToggleOrContinuous(Macros!, Modulations);
     }
@@ -58,6 +103,36 @@ internal class ScriptProcessor : ModulationsOwner {
         scriptProcessorElement, programXml, midi),
       _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
     };
+  }
+
+  private ScriptId GetGuiScriptId() {
+    // The CDATA wrapper is stripped off in ScriptProcessor.Script.
+    // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
+    // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
+    // with a category or colour parameter.
+    // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
+    // So we parse Script with EndWith.
+    if (Script.EndsWith($"require \"{SoundBankId}\"")) {
+      return ScriptId.Standard1;
+    }
+    if (Script.EndsWith($"require(\"{SoundBankId}\")")) {
+      return ScriptId.Standard2;
+    }
+    if (Script.EndsWith("require(\"Factory2_1\")")) {
+      return ScriptId.Factory2_1;
+    }
+    if (Script.EndsWith("require 'Factory2_5'")) {
+      return ScriptId.Factory2_5;
+    }
+    if (Script.EndsWith("require(\"main\")")) {
+      return ScriptId.Main1;
+    }
+    if (Script.EndsWith("require \"main\"")) {
+      return ScriptId.Main2;
+    }
+    return Script.EndsWith("require \"OrganicTexture\"")
+      ? ScriptId.OrganicTexture
+      : ScriptId.None;
   }
 
   private XElement GetPropertiesElement() {

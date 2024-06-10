@@ -37,7 +37,6 @@ public class FalconProgramTests {
     SoundBankBackground("Savage", "Heath.png");
     SoundBankBackground("Titanium", "Dull Purple.png");
     Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
-    Batch.EmbeddedTemplateFileName = "Crystal Caves.xml";
     SoundBankBackground("Organic Pads", "Bluish Teal.png");
     return;
 
@@ -106,6 +105,18 @@ public class FalconProgramTests {
       Batch.RunTask(ConfigTask.RestoreOriginal,
         soundBankName, categoryName, programName));
     Assert.That(exception.Message, Does.StartWith("Cannot find original file"));
+  }
+
+  [Test]
+  public void EmbeddedGuiTemplate() {
+    const string soundBankName = "Falcon Factory";
+    // This category tests Modulation.FixToggleOrContinuous
+    const string categoryName = "Brutal Bass 2.1";
+    // This program requires Modulation.FixToggleOrContinuous to correct
+    // the fourth MIDI CC number from the one provided by the template.
+    const string programName = "Magnetic 1";
+    Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
+    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
   }
 
   [Test]

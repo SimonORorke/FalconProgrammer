@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="KEY Clockworks" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Falcon Factory.ufs/Presets/Organic Texture 2.8/KEY Clockworks.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Properties description="Falcon Factory
+
+Covering everything from classic synthesis, percussion, physical modeling, sample-driven granular and multi granular soundscapes to multi-oscillator hybrids—the Falcon Factory sound bank provides instant gratification with hundreds of high-quality, ready to perform patches.
+
+"/>
+        <ControlSignalSources>
+            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0" AttackCurve="0.5" HoldTime="0.01073166" DecayTime="6.9437208" DecayCurve="-0.97000003" SustainLevel="0" ReleaseTime="1.6740761" ReleaseCurve="-0.97000003" DisplayName="DAHDSR 1" VelocityAmount="0.88159961" VelocitySens="0.55200005" Retrigger="1" NoteOffRetrigger="0">
+                <Properties PresetPath="/Users/theogallienne/Documents/UVI/Falcon/User Presets/Modulations/DAHDSR/Amplitude.preset"/>
+            </DAHDSR>
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Texture" Bipolar="0" Style="0" Value="0.67569423">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 1" Destination="Value" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                </Connections>
+                <Properties customPosition="0" x="190" y="190"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Timbre" Bipolar="0" Style="0" Value="1">
+                <Properties customPosition="0" x="440" y="190"/>
+            </ConstantModulation>
+        </ControlSignalSources>
+        <EventProcessors>
+            <ScriptProcessor Name="EventProcessor0" Bypass="0" WheelDirection="0" W2M="0" API_version="20">
+                <Properties OriginalProgramPath="$Falcon Factory.ufs/Presets/Organic Texture 2.8/KEY Clockworks.uvip" PresetPath="/Users/theogallienne/Desktop/Falcon 2.8/Organic Texture 2.8/Scripts/StubOrganicTexture.lua" ScriptPath="$Falcon Factory.ufs/Scripts/StubOrganicTexture.lua"/>
+                <script><![CDATA[require "OrganicTexture"]]></script>
+                <ScriptData/>
+            </ScriptProcessor>
+        </EventProcessors>
+        <Inserts>
+            <DigitalEq Name="InsertFX0" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="0" Visible1="0" Type1="0" Slope1="1" Channels1="2" Freq1="1000" Q1="0.70710677" Gain1="0" Bandwidth1="1" Enabled2="0" Visible2="0" Type2="0" Slope2="1" Channels2="2" Freq2="1000" Q2="0.70710677" Gain2="0" Bandwidth2="1" Enabled3="0" Visible3="0" Type3="0" Slope3="1" Channels3="2" Freq3="1000" Q3="0.70710677" Gain3="0" Bandwidth3="1" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="2" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="2" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="2" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="2" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="2" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="2" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="2" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="2" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1"/>
+            <Gain Name="InsertFX4" Bypass="0" Volume="0.65879714"/>
+            <SparkVerb Name="InsertFX3" Bypass="0" ModDepth="11.0707" ModRate="0.44265699" Diffusion="0.75660199" DiffusionStart="5.3884301" Width="1" RoomSize="12.479" DecayTime="1.6535921" DecayLow="0.90915895" DecayHigh="2.2425499" FreqLow="190.226" FreqHigh="6644.0454" Shape="0.54066497" Mix="0.15334354" Quality="3" Mode="2" HiCut="1" LowCut="0" Rolloff="6266.5698" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/04 - Vocal/Medium Dark.preset"/>
+            </SparkVerb>
+            <DigitalEq Name="InsertFX2" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="1" Visible1="1" Type1="1" Slope1="3" Channels1="0" Freq1="13.912875" Q1="0.72745883" Gain1="0" Bandwidth1="1" Enabled2="1" Visible2="1" Type2="4" Slope2="0" Channels2="0" Freq2="133.92039" Q2="0.70710677" Gain2="-6.230772" Bandwidth2="1" Enabled3="1" Visible3="1" Type3="6" Slope3="0" Channels3="0" Freq3="682.22131" Q3="0.70710677" Gain3="1.384613" Bandwidth3="2.4705274" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="2" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="2" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="2" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="2" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="2" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="2" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="2" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="2" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1"/>
+            <Maximizer Name="InsertFX1" Bypass="0" Threshold="-3.9726562" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20"/>
+        </Inserts>
+        <Layers>
+            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Layer 1" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ff02b0ff"/>
+                <ControlSignalSources/>
+                <BusRouters/>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.4488509" Pan="0" DisplayName="Clockworks" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Program/Macro 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="20" SustainLevel="0" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="0.14113697" Depth="1" Phase="0" WaveFormType="2" Retrigger="0" Bipolar="1" Smooth="0"/>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <OnePole Name="InsertFX0" Bypass="0" Freq="70.47081" KeyTracking="1" Mode="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </OnePole>
+                        </Inserts>
+                        <BusRouters/>
+                        <Oscillators>
+                            <TextureOscillator Name="Oscillator 2" Bypass="0" SamplePath="$FalconResources.ufs/Samples/Textures/Keys/Clinky Toy.wav" SamplePath2="$FalconResources.ufs/Samples/Textures/Keys/Modivox.wav" Width="2" Pitch1="-0.038402557" Pitch2="0" Gain1="0" Gain2="0" Pan1="-0.46079981" Pan2="0.51839995" Mix="0.47759986" SampleStart="0" RandomStartDepth="0.67200011" Legato="1" Lowpass="22000" Highpass="10" PlaybackMode1="1" PlaybackMode2="1" BPOnOff="1" Bandpass="1068.5635" Bandwidth="0" PeakOnOff="0" PeakFreq="1000" PeakGain="0" PeakQ="1" CoarseTune="0" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.65517241" Source="$Keygroup/LFO 1" Destination="Pitch1" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.43448192" Source="$Keygroup/LFO 1" Destination="Pitch2" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </TextureOscillator>
+                            <TextureOscillator Name="Oscillator 3" Bypass="0" SamplePath="$FalconResources.ufs/Samples/Textures/Keys/Old Toy Piano.wav" SamplePath2="$FalconResources.ufs/Samples/Textures/Keys/Modivox.wav" Width="2" Pitch1="-0.038402557" Pitch2="0" Gain1="0" Gain2="0" Pan1="-0.45440042" Pan2="0.47360015" Mix="0.47759986" SampleStart="0" RandomStartDepth="0.67200011" Legato="1" Lowpass="22000" Highpass="10" PlaybackMode1="1" PlaybackMode2="1" BPOnOff="1" Bandpass="1590.7397" Bandwidth="0" PeakOnOff="0" PeakFreq="1000" PeakGain="0" PeakQ="1" CoarseTune="0" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 3">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                                <Properties PresetPath=""/>
+                            </TextureOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                    <Keygroup Name="Keygroup 1" Bypass="0" Gain="1" Pan="0" DisplayName="Piano" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="20" SustainLevel="0" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="0.11747444" Depth="1" Phase="0" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0"/>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <OnePole Name="InsertFX0" Bypass="0" Freq="100.42224" KeyTracking="0" Mode="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </OnePole>
+                            <DigitalEq Name="InsertFX1" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="1" Visible1="1" Type1="5" Slope1="0" Channels1="0" Freq1="8286.4102" Q1="0.70710677" Gain1="17.538456" Bandwidth1="1" Enabled2="0" Visible2="0" Type2="0" Slope2="1" Channels2="2" Freq2="1000" Q2="0.70710677" Gain2="0" Bandwidth2="1" Enabled3="0" Visible3="0" Type3="0" Slope3="1" Channels3="2" Freq3="1000" Q3="0.70710677" Gain3="0" Bandwidth3="1" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="2" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="2" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="2" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="2" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="2" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="2" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="2" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="2" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1"/>
+                        </Inserts>
+                        <BusRouters/>
+                        <Oscillators>
+                            <GranularOscillator Name="Oscillator 4" Bypass="0" CoarseTune="0" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 4" SamplePath="$Falcon Factory.ufs/Samples/Organic Textures 2.8 Samples/Tape_Piano_C3.wav" Direction="1" Speed="0.066992924" GrainSize="254.18413" GrainSymmetry="0.5" GrainFade="1" Density="4.4299617" Jitter="0" Position="0.22400001" PositionVariation="139.20007" PitchVariation="3.6382668" LoopMode="2" PitchCompMode="2" Window="0" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                                <PlaybackOptions Start="7731" Stop="422861" PlayDirection="0" PlayRelease="1">
+                                    <Loop Start="7731" End="161769" Type="0"/>
+                                </PlaybackOptions>
+                            </GranularOscillator>
+                            <SamplePlayer Name="Oscillator 5" Bypass="0" SampleStart="0" InterpolationMode="1" AllowStreaming="1" Reverse="0" CoarseTune="0" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 5" SamplePath="$Falcon Factory.ufs/Samples/Organic Textures 2.8 Samples/Tape_Piano_C3.wav" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </SamplePlayer>
+                        </Oscillators>
+                    </Keygroup>
+                    <Keygroup Name="Keygroup 2" Bypass="0" Gain="1" Pan="0" DisplayName="Piano" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Program/Macro 2" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="20" SustainLevel="0" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="0.11747444" Depth="1" Phase="0" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0"/>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <Convolver Name="InsertFX0" Bypass="0" Dry="0" Wet="1" SamplePath="$FalconResources.ufs/Samples/Convolver/Speaker/Bass Black.wav" NormalizePower="1" ConvolverVersion="1">
+                                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/Convolver/Speaker/Bass Black.preset"/>
+                            </Convolver>
+                            <Gain Name="InsertFX1" Bypass="0" Volume="3.9810717"/>
+                            <DigitalEq Name="InsertFX2" Bypass="0" StereoMode="0" Transpose="0" KeyTracking="0" OverallGain="0" GainScale="1" Enabled1="1" Visible1="1" Type1="5" Slope1="0" Channels1="0" Freq1="6202.6719" Q1="0.70710677" Gain1="12.923073" Bandwidth1="1" Enabled2="1" Visible2="1" Type2="1" Slope2="3" Channels2="0" Freq2="282.38712" Q2="0.83835149" Gain2="0" Bandwidth2="1" Enabled3="0" Visible3="0" Type3="0" Slope3="1" Channels3="0" Freq3="1000" Q3="0.70710677" Gain3="0" Bandwidth3="1" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="0" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="0" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="0" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="0" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="2" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="0" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="0" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="2" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="0" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="0" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="0" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="2" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1"/>
+                            <Autopan Name="InsertFX3" Bypass="0" SyncToHost="0" Depth="0.65120006" Speed="1.1442204" Mode="2" AutopanVersion="1"/>
+                        </Inserts>
+                        <BusRouters/>
+                        <Oscillators>
+                            <GranularOscillator Name="Oscillator 4" Bypass="0" CoarseTune="12" FineTune="0" Gain="0.38716829" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 4" SamplePath="$Falcon Factory.ufs/Samples/Organic Textures 2.8 Samples/Tape_Piano_C3.wav" Direction="1" Speed="0.066992924" GrainSize="254.18413" GrainSymmetry="0.5" GrainFade="1" Density="4.4299617" Jitter="0" Position="0.22400001" PositionVariation="139.20007" PitchVariation="3.6382668" LoopMode="2" PitchCompMode="2" Window="0" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                                <PlaybackOptions Start="7731" Stop="422861" PlayDirection="0" PlayRelease="1">
+                                    <Loop Start="7731" End="161769" Type="0"/>
+                                </PlaybackOptions>
+                            </GranularOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                    <Keygroup Name="Keygroup 3" Bypass="0" Gain="0.31421733" Pan="0" DisplayName="Attack" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="20" SustainLevel="0" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="0.11747444" Depth="1" Phase="0" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0"/>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <OnePole Name="InsertFX0" Bypass="0" Freq="40.330498" KeyTracking="0" Mode="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </OnePole>
+                        </Inserts>
+                        <BusRouters/>
+                        <Oscillators>
+                            <TextureOscillator Name="Oscillator" Bypass="0" SamplePath="$Falcon Factory.ufs/Samples/Organic Textures 2.8 Samples/Piano_Hammer_1.wav" SamplePath2="$Falcon Factory.ufs/Samples/Organic Textures 2.8 Samples/Piano_Hammer_2.wav" Width="2" Pitch1="14.438393" Pitch2="14.284805" Gain1="0" Gain2="0" Pan1="0" Pan2="0" Mix="0.5" SampleStart="0" RandomStartDepth="0" Legato="0" Lowpass="22000" Highpass="402.12665" PlaybackMode1="0" PlaybackMode2="0" BPOnOff="0" Bandpass="1000" Bandwidth="0" PeakOnOff="1" PeakFreq="2530.4612" PeakGain="12.415997" PeakQ="0.1" CoarseTune="0" FineTune="0" Gain="1.9952623" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.71034396" Source="@Random" Destination="Mix" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </TextureOscillator>
+                            <PluckOscillator Name="Oscillator 2" Bypass="0" CoarseTune="0" FineTune="0" Gain="1.9952623" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2" SamplePath="$Falcon Factory.ufs/Samples/Organic Textures 2.8 Samples/Tape_Piano_C3.wav" Decay="0.31604642" DecayType="0" NumStrings="1" ExcitationBrightness="0" ExcitationCutoff="20000" Inharmonicity="0" Release="0.67173767" Brightness="0.48399997" HFBridgeLoss="0.1" DecayFreqHigh="20000" PickPosition="0.13" PickDepth="0.5" PickFilterEnabled="1" Stretch="0" StretchProb="0.5" Detune="1" Coupling="0.1" Shape="0" HarmonicRatio="1" HarmonicDamp="1" DynamicRange="20" InterpolationMode="1" CouplingMode="5" StringCoarseTune="0" NoiseVolume="0.48087731" SynthVolume="0" SampleVolume="0" SampleStart="0" SampleDetune="0" SampleKeyFollow="0" Sustained="0" Stereo="0" SamplePurged="0">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="NoiseVolume" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </PluckOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 1" Bypass="0" Gain="0.42419064" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Layer 2" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffa398e8"/>
+                <ControlSignalSources/>
+                <Inserts>
+                    <SparkVerb Name="InsertFX0" Bypass="0" ModDepth="7.4400001" ModRate="0.25278801" Diffusion="0.95965701" DiffusionStart="9.0640001" Width="1" RoomSize="50" DecayTime="0.242103" DecayLow="10" DecayHigh="1.61436" FreqLow="10" FreqHigh="20000" Shape="0.84799999" Mix="0.255573" Quality="4" Mode="0" HiCut="0" LowCut="0" Rolloff="4842.0498" DiffusionOnOff="0" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/04 - Vocal/Dubbing Brother.preset"/>
+                    </SparkVerb>
+                </Inserts>
+                <BusRouters/>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1" Pan="0" DisplayName="Keygroup 1" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="20" SustainLevel="1" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <OnePole Name="InsertFX0" Bypass="0" Freq="255.85875" KeyTracking="0" Mode="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/DAHDSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </OnePole>
+                        </Inserts>
+                        <BusRouters/>
+                        <Oscillators>
+                            <FmOscillator Name="Oscillator" Bypass="0" CoarseTune="0" FineTune="0" Gain="0.34022844" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1" LevelA="1" LevelB="1" LevelC="1" LevelD="0.052734375" RatioA="1" RatioB="1" RatioC="1" RatioD="24" RatioFineA="0" RatioFineB="0" RatioFineC="0" RatioFineD="0" PhaseA="0" PhaseB="0" PhaseC="0" PhaseD="0" FreqA="0.1" FreqB="0.1" FreqC="0.1" FreqD="0.1" FreqMultiplierA="3" FreqMultiplierB="3" FreqMultiplierC="3" FreqMultiplierD="3" FixedFreqA="0" FixedFreqB="0" FixedFreqC="0" FixedFreqD="0" SnapRatioA="0" SnapRatioB="0" SnapRatioC="0" SnapRatioD="0" Feedback="0.14609277" Topology="7" FmOscillatorVersion="1">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </FmOscillator>
+                            <MinBlepGenerator Name="Oscillator 2" Bypass="0" Waveform="4" Pwm="0.4387548" StartPhase="0" Polarity="0" HardSync="0" HardSyncShift="0" NumOscillators="1" MultiOscSpread="0.1" Stereo="0" PhaseSpread="1" DetuneMode="0" StereoSpread="0.1" StereoSpreadMode="1" CoarseTune="24" FineTune="0" Gain="0.2539359" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </MinBlepGenerator>
+                            <MinBlepGenerator Name="Oscillator 3" Bypass="0" Waveform="4" Pwm="0.5" StartPhase="0" Polarity="0" HardSync="0" HardSyncShift="0" NumOscillators="1" MultiOscSpread="0.1" Stereo="0" PhaseSpread="1" DetuneMode="0" StereoSpread="0.1" StereoSpreadMode="1" CoarseTune="-12" FineTune="0" Gain="0.35848385" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 3">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </MinBlepGenerator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="C:/ProgramData/UVI/Falcon/FalconResources.ufs"/>
+    <NeededFS Source="D:/Libraries/UVI/Falcon Factory.ufs"/>
+</UVI4>

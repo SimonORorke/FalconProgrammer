@@ -39,12 +39,9 @@ public static class Global {
     string result;
     try {
       result = resourceNames.Single(
-        // resourcePath => resourcePath.Contains($".{embeddedResourceFileName}"));
-        // For unknown reason, EndsWith does always not work here.
-        // But this should be fixed now.
         resourcePath => resourcePath.EndsWith($".{embeddedResourceFileName}"));
     } catch (InvalidOperationException exception) {
-      // Exception message is 'Sequence contains no matching element'
+      // If not found, the exception message is 'Sequence contains no matching element'.
       throw new InvalidOperationException(
         $"'{embeddedResourceFileName}' is not in assembly " +
         $"{assembly.GetName().Name}, or it is not an EmbeddedResource file, " +

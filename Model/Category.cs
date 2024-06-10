@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
 using FalconProgrammer.Model.XmlLinq;
 using JetBrains.Annotations;
 
@@ -97,43 +98,16 @@ internal class Category {
     if (scriptProcessors.Count == 0) {
       return null;
     }
-    // The CDATA wrapper is stripped off in ScriptProcessor.Script.
-    // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
-    // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
-    // with a category or colour parameter.
-    // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
-    // So we parse Script with EndWith.
     foreach (var scriptProcessor in scriptProcessors) {
-      if (scriptProcessor.Script.EndsWith($"require \"{scriptProcessor.SoundBankId}\"")) {
-        // Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
-        // Organic Keys, Organic Pads.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith(
-            $"require(\"{scriptProcessor.SoundBankId}\")")) {
-        // Works for Titanium.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require 'Factory2_5'")) {
-        // Works for Falcon Factory categories Lo-Fi 2.5, RetroWave 2.5,
-        // VCF-20 Synths 2.5.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require(\"Factory2_1\")")) {
-        // Works for Falcon Factory\Brutal Bass 2.1.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require \"OrganicTexture\"")) {
-        // Works for Falcon Factory\Organic Texture 2.8.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require(\"main\")")) {
-        // Works for Pulsar, Savage, Voklm\Vox Instruments.
-        return scriptProcessor;
-      }
-      if (scriptProcessor.Script.EndsWith("require \"main\"")) {
-        // Works for Voklm\Synth Choirs.
-        return scriptProcessor;
+      switch (scriptProcessor.GuiScriptId) {
+        case ScriptProcessor.ScriptId.Standard1:
+        case ScriptProcessor.ScriptId.Standard2:
+        case ScriptProcessor.ScriptId.Factory2_5:
+        case ScriptProcessor.ScriptId.Factory2_1:
+        case ScriptProcessor.ScriptId.OrganicTexture:
+        case ScriptProcessor.ScriptId.Main1:
+        case ScriptProcessor.ScriptId.Main2:
+          return scriptProcessor;
       }
       if (scriptProcessor is { SoundBankId: "FalconFactory", Name: "EventProcessor9" }) {
         // Examples of programs with GuiScriptProcessor but no template ScriptProcessor:
@@ -207,12 +181,31 @@ internal class Category {
     return result;
   }
 
+  public ScriptProcessor GetTemplateScriptProcessor(
+    ScriptProcessor guiScriptProcessor, Batch batch) {
+    return TemplateProgramPath != null
+      ? GetTemplateScriptProcessorFromFile(batch)
+      : GetTemplateScriptProcessorFromEmbeddedFile(guiScriptProcessor);
+  }
+
+  private ScriptProcessor GetTemplateScriptProcessorFromEmbeddedFile(
+    ScriptProcessor guiScriptProcessor) {
+    if (guiScriptProcessor.GuiScriptId == ScriptProcessor.ScriptId.Factory2_1) {
+      var template = new ScriptProcessorEmbeddedXmlLinq("Factory_2_1_Gui.xml");
+      return ScriptProcessor.Create(SoundBankName, 
+        new XElement(template.ScriptProcessorElement),
+        ProgramXml, Settings.MidiForMacros);
+    }
+    throw new ApplicationException(
+      $"{PathShort}: Cannot find GUI ScriptProcessor template.");
+  }
+
   /// <summary>
   ///   For programs where the Info page layout is specified in a script, the template
   ///   ScriptProcessor is assumed to be the last ScriptProcessor in the program, in this
   ///   case the template program.
   /// </summary>
-  public ScriptProcessor GetTemplateScriptProcessorFromFile(Batch batch) {
+  private ScriptProcessor GetTemplateScriptProcessorFromFile(Batch batch) {
     var templateProgram = CreateTemplateProgram(batch);
     templateProgram.Read();
     var result = FindGuiScriptProcessor(templateProgram.ScriptProcessors);

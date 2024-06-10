@@ -5,8 +5,12 @@ namespace FalconProgrammer.Tests.Model;
 internal class TestCategory : Category {
   private MockFileSystemService? _mockFileSystemService;
 
-  public TestCategory(string soundBankFolderPath, string name, Settings settings) :
-    base(soundBankFolderPath, name, settings) { }
+  public TestCategory(string soundBankName, string name, Settings settings,
+    string? templateProgramPath = null) :
+    base(System.IO.Path.Combine(settings.ProgramsFolder.Path, soundBankName), name,
+      settings) {
+    TemplateProgramPath = templateProgramPath;
+  }
 
   /// <summary>
   ///   <see cref="CreateTemplateProgram" /> will read the embedded resource file
