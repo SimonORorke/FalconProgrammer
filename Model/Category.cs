@@ -216,17 +216,17 @@ internal class Category {
         ProgramXml, Settings.MidiForMacros);
     }
     throw new ApplicationException(
-      $"Cannot find a built-in GUI ScriptProcessor template for category '" +
-      $"{PathShort}'. " +
+      "A built-in GUI ScriptProcessor template is not available for " 
+      + $"sound bank '{SoundBankName}' category '{Name}'. " +
       $"You have two options:{Environment.NewLine}{Environment.NewLine}" +
-      "1) Add a template program file with MIDI CCs to a '[sound bank]\\[category]' " +
-      "subfolder of the Template Programs folder, whose location would need to be " +
-      "specified on the Locations page. " +
-      $" (See the manual for more details.){Environment.NewLine}{Environment.NewLine}" +
+      "1) Add a template program file with MIDI CCs for the sound bank or category to " +
+      "the Template Programs folder. " +
+      $" (See the manual for instructions.){Environment.NewLine}{Environment.NewLine}" +
       "2) Remove the sound bank or category from the list on the GUI Script Processor " +
       "page and run InitialiseLayout to remove the script-defined GUI before " +
       $"running UpdateMacroCcs.{Environment.NewLine}{Environment.NewLine}" +
-      "Also, consider asking the developers to implement a built-in template.");
+      "Also, consider asking the developers to implement a built-in " +
+      "template for the sound bank or category.");
   }
 
   /// <summary>
