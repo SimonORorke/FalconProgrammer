@@ -100,13 +100,13 @@ internal class Category {
     }
     foreach (var scriptProcessor in scriptProcessors) {
       switch (scriptProcessor.GuiScriptId) {
-        case ScriptProcessor.ScriptId.Standard1:
-        case ScriptProcessor.ScriptId.Standard2:
-        case ScriptProcessor.ScriptId.Factory2_5:
-        case ScriptProcessor.ScriptId.Factory2_1:
-        case ScriptProcessor.ScriptId.OrganicTexture:
-        case ScriptProcessor.ScriptId.Main1:
-        case ScriptProcessor.ScriptId.Main2:
+        case ScriptId.SoundBank1:
+        case ScriptId.SoundBank2:
+        case ScriptId.Factory2_5:
+        case ScriptId.Factory2_1:
+        case ScriptId.OrganicTexture:
+        case ScriptId.Main1:
+        case ScriptId.Main2:
           return scriptProcessor;
       }
       if (scriptProcessor is { SoundBankId: "FalconFactory", Name: "EventProcessor9" }) {
@@ -190,14 +190,36 @@ internal class Category {
 
   private ScriptProcessor GetTemplateScriptProcessorFromEmbeddedFile(
     ScriptProcessor guiScriptProcessor) {
-    if (guiScriptProcessor.GuiScriptId == ScriptProcessor.ScriptId.Factory2_1) {
-      var template = new ScriptProcessorEmbeddedXmlLinq("Factory_2_1_Gui.xml");
-      return ScriptProcessor.Create(SoundBankName, 
+    string? embeddedFileName = guiScriptProcessor.GuiScriptId switch {
+      ScriptId.Factory2_1 => "Factory_2_1_Gui.xml",
+      ScriptId.Factory2_5 => "Factory_2_5_Gui.xml",
+      ScriptId.OrganicTexture => "Factory_OrganicTexture_Gui.xml",
+      _ => null
+    };
+    if (embeddedFileName == null
+        && guiScriptProcessor.GuiScriptId != ScriptId.None) {
+      embeddedFileName = guiScriptProcessor.SoundBankId == "Pulsar"
+        ? $"{guiScriptProcessor.SoundBankId}_{guiScriptProcessor.Category}_Gui.xml"
+        : $"{guiScriptProcessor.SoundBankId}_Gui.xml";
+    }
+    if (embeddedFileName != null) {
+      var template = new ScriptProcessorXmlLinq(embeddedFileName);
+      return ScriptProcessor.Create(SoundBankName,
         new XElement(template.ScriptProcessorElement),
         ProgramXml, Settings.MidiForMacros);
     }
     throw new ApplicationException(
-      $"{PathShort}: Cannot find GUI ScriptProcessor template.");
+      $"Cannot find a built-in GUI ScriptProcessor template for category '" +
+      $"{PathShort}'. " +
+      $"You have two options:{Environment.NewLine}{Environment.NewLine}" +
+      "1) Add a template program file with MIDI CCs to a '[sound bank]\\[category]' " +
+      "subfolder of the Template Programs folder, whose location would need to be " +
+      "specified on the Locations page. " +
+      $" (See the manual for more details.){Environment.NewLine}{Environment.NewLine}" +
+      "2) Remove the sound bank or category from the list on the GUI Script Processor " +
+      "page and run InitialiseLayout to remove the script-defined GUI before " +
+      $"running UpdateMacroCcs.{Environment.NewLine}{Environment.NewLine}" +
+      "Also, consider asking the developers to implement a built-in template.");
   }
 
   /// <summary>
@@ -209,18 +231,29 @@ internal class Category {
     var templateProgram = CreateTemplateProgram(batch);
     templateProgram.Read();
     var result = FindGuiScriptProcessor(templateProgram.ScriptProcessors);
-    if (result == null) {
-      throw new ApplicationException(
-        $"Category {PathShort}: " + 
-        $"Cannot find GUI ScriptProcessor in template file '{TemplateProgramPath}'.");
+    if (result != null) {
+      return result;
     }
-    return result;
+    throw new ApplicationException(
+      $"Category '{PathShort}': " +
+      "Cannot find the GUI ScriptProcessor in template program file '" +
+      $"{TemplateProgramPath}'. " +
+      $"You have three options:{Environment.NewLine}{Environment.NewLine}" +
+      "1) Replace the template program file with one that contains a " +
+      "GUI ScriptProcessor with MIDI CCs specified for the macros. " +
+      $" (See the manual for details.){Environment.NewLine}{Environment.NewLine}" +
+      "2) Remove the template program file and use the built-in GUI ScriptProcessor " +
+      "template for the sound bank or category, if one is available." +
+      $"{Environment.NewLine}{Environment.NewLine}" +
+      "3) Remove the sound bank or category from the list on the GUI Script Processor " +
+      "page and run InitialiseLayout to remove the script-defined GUI before " +
+      "running UpdateMacroCcs.");
   }
 
   public void Initialise() {
     if (!FileSystemService.Folder.Exists(Path)) {
       throw new ApplicationException(
-        $"Category {PathShort}: Cannot find category folder '{Path}'.");
+        $"Category '{PathShort}': Cannot find category folder '{Path}'.");
     }
     TemplateProgramPath = FindTemplateProgramPath();
   }

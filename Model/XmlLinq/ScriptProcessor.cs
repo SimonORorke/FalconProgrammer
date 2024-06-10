@@ -4,47 +4,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ScriptProcessor : ModulationsOwner {
-  public enum ScriptId {
-    None,
-
-    /// <summary>
-    ///   Works for Falcon Factory\Brutal Bass 2.1.
-    /// </summary>
-    Factory2_1,
-
-    /// <summary>
-    ///   Works for Falcon Factory categories Lo-Fi 2.5, RetroWave 2.5,
-    ///   VCF-20 Synths 2.5.
-    /// </summary>
-    Factory2_5,
-
-    /// <summary>
-    ///   Works for Pulsar, Savage, Voklm\Vox Instruments.
-    /// </summary>
-    Main1,
-
-    /// <summary>
-    ///   Works for Voklm\Synth Choirs.
-    /// </summary>
-    Main2,
-
-    /// <summary>
-    ///   Works for Falcon Factory\Organic Texture 2.8.
-    /// </summary>
-    OrganicTexture,
-
-    /// <summary>
-    ///   Works for Fluidity, Hypnotic Drive, Inner Dimensions, Modular Noise,
-    ///   Organic Keys, Organic Pads.
-    /// </summary>
-    Standard1,
-
-    /// <summary>
-    ///   Works for Titanium.
-    /// </summary>
-    Standard2
-  }
-
   private ScriptId? _guiScriptId;
   private XElement? _propertiesElement;
   private XElement? _scriptElement;
@@ -56,6 +15,34 @@ internal class ScriptProcessor : ModulationsOwner {
   protected ScriptProcessor(XElement scriptProcessorElement, ProgramXml programXml,
     MidiForMacros midi) : base(programXml, midi) {
     Element = scriptProcessorElement;
+  }
+
+  /// <summary>
+  ///   Gets the category name from <see cref="Script" />.
+  ///   Currently only applies to the Pulsar sound bank, otherwise null.
+  ///   Example: 'Bass' from 'categorie = "bass"...'
+  /// </summary>
+  /// <remarks>
+  ///   For the Pulsar sound bank, the GUI Script process modulation destinations
+  ///   vary between categories. So category-specific templates are required.
+  ///   <para>
+  ///     The Organic Pads sound bank also includes a category parameter in
+  ///     <see cref="Script" />. However, it only affects the appearance of the GUI,
+  ///     not modulations. Therefore the same template can be uses for al categories.
+  ///     So the Organic Pads Category is not of interest and will be null.
+  ///   </para>
+  /// </remarks>
+  public string? Category {
+    get {
+      if (SoundBankId != "Pulsar") {
+        return null;
+      }
+      string scriptWithoutPrefix = Script[13..];
+      string lowerCaseCategory = scriptWithoutPrefix[..scriptWithoutPrefix.IndexOf('"')];
+      string result = string.Concat(
+        lowerCaseCategory[0].ToString().ToUpper(), lowerCaseCategory.AsSpan(1));
+      return result;
+    }
   }
 
   public ScriptId GuiScriptId => _guiScriptId ??= GetGuiScriptId();
@@ -72,7 +59,8 @@ internal class ScriptProcessor : ModulationsOwner {
   ///   stripped off.
   ///   Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
   /// </summary>
-  [PublicAPI] public string Script => ScriptElement.Value;
+  [PublicAPI]
+  public string Script => ScriptElement.Value;
 
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
@@ -106,17 +94,17 @@ internal class ScriptProcessor : ModulationsOwner {
   }
 
   private ScriptId GetGuiScriptId() {
-    // The CDATA wrapper is stripped off in ScriptProcessor.Script.
+    // The CDATA wrapper is stripped off in Script.
     // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
     // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
     // with a category or colour parameter.
     // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
     // So we parse Script with EndWith.
     if (Script.EndsWith($"require \"{SoundBankId}\"")) {
-      return ScriptId.Standard1;
+      return ScriptId.SoundBank1;
     }
     if (Script.EndsWith($"require(\"{SoundBankId}\")")) {
-      return ScriptId.Standard2;
+      return ScriptId.SoundBank2;
     }
     if (Script.EndsWith("require(\"Factory2_1\")")) {
       return ScriptId.Factory2_1;

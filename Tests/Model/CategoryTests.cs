@@ -191,17 +191,23 @@ public class CategoryTests {
 
   [Test]
   public void TemplateScriptProcessorFoundInEmbeddedFile() {
-    const string soundBankName = "Falcon Factory";
-    const string categoryName = "Brutal Bass 2.1";
-    const string programName = "Magnetic 1";
-    var category = new TestCategory(soundBankName, categoryName, Settings);
-    var batch = new TestBatch();
-    var program = new TestFalconProgram(
-      $"{programName}.xml", "Will be ignored.uvip", category, batch);
-    program.Read();
-    Assert.That(program.GuiScriptProcessor, Is.Not.Null);
-    Assert.DoesNotThrow(() =>
-      category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
+    LookForEmbeddedFile("Falcon Factory", "Brutal Bass 2.1",
+      "Magnetic 1");
+    LookForEmbeddedFile("Modular Noise", "Bass",
+      "Voltage");
+    return;
+
+    void LookForEmbeddedFile(string soundBankName, string categoryName, 
+      string programName) {
+      var category = new TestCategory(soundBankName, categoryName, Settings);
+      var batch = new TestBatch();
+      var program = new TestFalconProgram(
+        $"{programName}.xml", "Will be ignored.uvip", category, batch);
+      program.Read();
+      Assert.That(program.GuiScriptProcessor, Is.Not.Null);
+      Assert.DoesNotThrow(() =>
+        category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
+    }
   }
 
   [Test]
@@ -221,21 +227,21 @@ public class CategoryTests {
       category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
   }
 
-  [Test]
-  public void TemplateScriptProcessorNotFoundInEmbeddedFile() {
-    var category = new TestCategory("Falcon Factory",
-      "Organic Texture 2.8", Settings);
-    var batch = new TestBatch();
-    var program = new TestFalconProgram(
-      "KEY Clockworks.xml", "Will also be ignored.uvip", category, batch);
-    program.Read();
-    Assert.That(program.GuiScriptProcessor, Is.Not.Null);
-    var exception = Assert.Catch(() =>
-      category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
-    Assert.That(exception, Is.Not.Null);
-    Assert.That(exception.Message, Does.EndWith(
-      "Cannot find GUI ScriptProcessor template."));
-  }
+  // [Test]
+  // public void TemplateScriptProcessorNotFoundInEmbeddedFile() {
+  //   var category = new TestCategory("Falcon Factory",
+  //     "Organic Texture 2.8", Settings);
+  //   var batch = new TestBatch();
+  //   var program = new TestFalconProgram(
+  //     "KEY Clockworks.xml", "Will also be ignored.uvip", category, batch);
+  //   program.Read();
+  //   Assert.That(program.GuiScriptProcessor, Is.Not.Null);
+  //   var exception = Assert.Catch(() =>
+  //     category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
+  //   Assert.That(exception, Is.Not.Null);
+  //   Assert.That(exception.Message, Does.EndWith(
+  //     "Cannot find GUI ScriptProcessor template."));
+  // }
 
   [Test]
   public void TemplateScriptProcessorNotFoundInFile() {
@@ -254,6 +260,6 @@ public class CategoryTests {
       category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain(
-      "Cannot find GUI ScriptProcessor in template file '"));
+      "Cannot find the GUI ScriptProcessor in template program file '"));
   }
 }
