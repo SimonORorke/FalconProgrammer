@@ -858,7 +858,7 @@ internal class FalconProgram {
     } else {
       var templateScriptProcessor = Category.GetTemplateScriptProcessor(
         GuiScriptProcessor, Batch);
-      // The CCs are specified Modulations owned by the GUI ScriptProcessor
+      // The CCs are specified in Modulations owned by the GUI ScriptProcessor
       // and can be copied from a template ScriptProcessor.
       // This applies to all programs in categories for which MustUseGuiScriptProcessor
       // is set to true in the settings file.
