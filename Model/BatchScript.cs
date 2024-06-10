@@ -56,7 +56,6 @@ public class BatchScript : SerialisationBase {
   private static ImmutableList<ConfigTask> SequenceConfigTasks() {
     return [
       ConfigTask.RestoreOriginal,
-      ConfigTask.PrependPathLineToDescription,
       ConfigTask.InitialiseLayout,
       ConfigTask.UpdateMacroCcs,
       ConfigTask.RemoveDelayEffectsAndMacros,
@@ -64,7 +63,8 @@ public class BatchScript : SerialisationBase {
       ConfigTask.ZeroReverbMacros,
       ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
-      ConfigTask.ReuseCc1
+      ConfigTask.ReuseCc1,
+      ConfigTask.PrependPathLineToDescription
     ];
   }
 

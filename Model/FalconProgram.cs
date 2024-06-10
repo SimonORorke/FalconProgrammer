@@ -501,11 +501,9 @@ internal class FalconProgram {
   ///   which is viewable in Falcon when the Info page's  "i" button is clicked.
   /// </summary>
   /// <remarks>
-  ///   This has the unwanted effect of replacing the line breaks in the description with
-  ///   spaces. See the comment in <see cref="ProgramXml.ReadRootElementFromXmlText" />.
-  ///   I tried a workaround by updating the description by parsing plain text updates
-  ///   rather than via Linq to XML. But updates by later tasks caused further
-  ///   description changes and somehow messed up wheel macro changes.
+  ///   This task must be done last! Due to the fix required to conserve paragraph breaks
+  ///   in the description, updates by subsequent tasks causes further description
+  ///   changes and somehow messes up wheel macro changes.
   /// </remarks>
   public void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
@@ -513,13 +511,20 @@ internal class FalconProgram {
     ProgramXml.InitialiseDescription();
     string oldDescription = ProgramXml.GetDescription();
     string oldPathLine =
-      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf)
-        ? oldDescription[..(oldDescription.IndexOf(crLf, StringComparison.Ordinal) + 2)]
+      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf + crLf)
+        ? oldDescription[..(oldDescription.IndexOf(crLf + crLf) + 4)]
         : string.Empty;
-    string newPathLine = pathIndicator + PathShort + crLf;
-    string newDescription = oldPathLine != string.Empty
-      ? oldDescription.Replace(oldPathLine, newPathLine)
-      : newPathLine + oldDescription;
+    string oldRestOfDescription = oldPathLine == string.Empty
+      ? oldDescription
+      : oldDescription.Replace(oldPathLine, string.Empty);
+    string newPathLine = pathIndicator + PathShort + crLf + crLf;
+    // When the program file is read, the paragraph breaks (i.e. blank lines) are
+    // unhelpfully replaced with pairs of spaces.
+    // See the comment in ProgramXml.ReadRootElementFromXmlText".
+    // So reverse that to conserve the paragraph breaks.
+    string newRestOfDescription = oldRestOfDescription.Replace(
+      "  ", crLf + crLf);
+    string newDescription = newPathLine + newRestOfDescription;
     ProgramXml.SetDescription(newDescription);
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
   }
