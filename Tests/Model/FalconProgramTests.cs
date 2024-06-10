@@ -76,12 +76,12 @@ public class FalconProgramTests {
       string soundBankName = "Falcon Factory") {
       Batch.MockBatchLog.Lines.Clear();
       Batch.EmbeddedProgramFileName = embeddedProgramFileName;
-      Batch.RunTask(ConfigTask.InitialiseLayout,
+      Batch.RunTask(ConfigTask.PrependPathLineToDescription,
         soundBankName, "Bass", "Imagination");
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
         @$"PATH: {soundBankName}\Bass\Imagination"));
       Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-        @$"InitialiseLayout - {soundBankName}\Bass\Imagination: " +
+        @$"PrependPathLineToDescription - {soundBankName}\Bass\Imagination: " +
         "Prepended path line to description."));
     }
   }

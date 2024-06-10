@@ -64,6 +64,9 @@ public class Batch {
       case ConfigTask.MoveZeroedMacrosToEnd:
         Program.MoveZeroedMacrosToEnd();
         break;
+      case ConfigTask.PrependPathLineToDescription:
+        Program.PrependPathLineToDescription();
+        break;
       case ConfigTask.QueryAdsrMacros:
         Program.QueryAdsrMacros();
         break;

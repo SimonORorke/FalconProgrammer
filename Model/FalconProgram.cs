@@ -288,7 +288,6 @@ internal class FalconProgram {
   }
 
   public void InitialiseLayout() {
-    PrependPathLineToDescription();
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
     // processor, if there is one, unless there is a need to keep it.
@@ -508,7 +507,7 @@ internal class FalconProgram {
   ///   rather than via Linq to XML. But updates by later tasks caused further
   ///   description changes and somehow messed up wheel macro changes.
   /// </remarks>
-  private void PrependPathLineToDescription() {
+  public void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
     const string crLf = "\r\n";
     ProgramXml.InitialiseDescription();
