@@ -233,8 +233,7 @@ public class Batch {
       throw new ApplicationException(
         "The original programs folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-        "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath}'.");
+        "change the settings folder path on the Locations page.");
     }
     if (!FileSystemService.Folder.Exists(Settings.OriginalProgramsFolder.Path)) {
       throw new ApplicationException(
@@ -249,8 +248,7 @@ public class Batch {
       throw new ApplicationException(
         "The programs folder is not specified in settings file " +
         $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-        "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
+        "change the settings folder path on the Locations page.");
     }
     if (!FileSystemService.Folder.Exists(Settings.ProgramsFolder.Path)) {
       throw new ApplicationException(
@@ -322,9 +320,17 @@ public class Batch {
       if (exception is OperationCanceledException) {
         Log.WriteLine("The batch run has been cancelled.");
       } else {
-        Log.WriteLine(
-          $"While running configuration task {Task.ToString()} for program " +
-          $"'{Program.Path}', the batch run terminated with this error:");
+        try {
+          Log.WriteLine(
+            $"While running configuration task {Task.ToString()} for program " +
+            $"'{Program.Path}', the batch run terminated with this error:");
+        } catch (NullReferenceException) {
+          Log.WriteLine(
+            // Program is null, so it's an initial setup exception, which is unlikely
+            // unless you are a developer.
+            $"While running configuration task {Task.ToString()}, " + 
+            "the batch run terminated with this error:");
+        }
         Log.WriteLine("==========================================");
         Log.WriteLine(exception is ApplicationException
           ? exception.Message

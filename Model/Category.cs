@@ -127,6 +127,9 @@ internal class Category {
   }
 
   private string? FindTemplateProgramPath() {
+    if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
+      return null;
+    }
     ValidateTemplateProgramsFolderPath();
     string templatesFolderPath = Settings.TemplateProgramsFolder.Path;
     string categoryTemplateFolderPath = System.IO.Path.Combine(
@@ -198,9 +201,13 @@ internal class Category {
     };
     if (embeddedFileName == null
         && guiScriptProcessor.GuiScriptId != ScriptId.None) {
-      embeddedFileName = guiScriptProcessor.SoundBankId == "Pulsar"
-        ? $"{guiScriptProcessor.SoundBankId}_{guiScriptProcessor.Category}_Gui.xml"
-        : $"{guiScriptProcessor.SoundBankId}_Gui.xml";
+      embeddedFileName = guiScriptProcessor.SoundBankId switch {
+        // The Hypnotic Drive program files have a typo in the script sound bank name.
+        "HypnoticDive" => "HypnoticDrive_Gui.xml",
+        "Pulsar" => 
+          $"{guiScriptProcessor.SoundBankId}_{guiScriptProcessor.Category}_Gui.xml",
+        _ => $"{guiScriptProcessor.SoundBankId}_Gui.xml"
+      };
     }
     if (embeddedFileName != null) {
       var template = new ScriptProcessorXmlLinq(embeddedFileName);
@@ -259,13 +266,6 @@ internal class Category {
   }
 
   private void ValidateTemplateProgramsFolderPath() {
-    if (string.IsNullOrEmpty(Settings.TemplateProgramsFolder.Path)) {
-      throw new ApplicationException(
-        "The template programs folder is not specified in settings file " +
-        $"'{Settings.SettingsPath}'. If that's not the correct settings file, " +
-        "change the settings folder path in " +
-        $"'{SettingsFolderLocation.GetSettingsFolderLocationPath()}'.");
-    }
     if (!FileSystemService.Folder.Exists(Settings.TemplateProgramsFolder.Path)) {
       throw new ApplicationException(
         "Cannot find template programs folder " +

@@ -145,7 +145,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     ViewModel.ProgramsFolderPath = @"K:\Test\Programs";
     ViewModel.OriginalProgramsFolderPath = string.Empty;
-    ViewModel.TemplateProgramsFolderPath = string.Empty;
+    ViewModel.TemplateProgramsFolderPath = @"K:\Test\Template Programs";
     Assert.That(ViewModel.HasErrors);
     var errors = ViewModel.GetErrors().ToList();
     Assert.That(errors, Has.Count.EqualTo(3));
@@ -154,8 +154,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
       "The OriginalProgramsFolderPath field is required."));
     Assert.That(errors[1].MemberNames.ToList()[0], Is.EqualTo("ProgramsFolderPath"));
     Assert.That(errors[1].ErrorMessage, Is.EqualTo("Cannot find folder."));
-    Assert.That(errors[2].ErrorMessage, Is.EqualTo(
-      "The TemplateProgramsFolderPath field is required."));
+    Assert.That(errors[2].ErrorMessage, Is.EqualTo("Cannot find folder."));
     bool canClose = await ViewModel.QueryClose();
     Assert.That(!canClose);
   }

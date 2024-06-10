@@ -94,20 +94,6 @@ public class CategoryTests {
   }
 
   [Test]
-  public void NoTemplateProgramsFolder() {
-    var category =
-      new TestCategory("Fluidity", "Electronic", Settings) {
-        EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
-      };
-    category.Settings.TemplateProgramsFolder.Path = string.Empty;
-    var exception = Assert.Catch<ApplicationException>(
-      () => category.Initialise());
-    Assert.That(exception, Is.Not.Null);
-    Assert.That(exception.Message, Does.StartWith(
-      "The template programs folder is not specified in settings file"));
-  }
-
-  [Test]
   public void ProgramDoesNotExist() {
     var category =
       new TestCategory("Fluidity", "Electronic", Settings) {

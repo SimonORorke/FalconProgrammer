@@ -30,7 +30,6 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _programsFolderPath, value, true);
   }
 
-  [Required]
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateTemplateProgramsFolderPath))]
   public string TemplateProgramsFolderPath {
@@ -161,6 +160,8 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   public static ValidationResult ValidateTemplateProgramsFolderPath(
     string folderPath, ValidationContext context) {
-    return ValidateFolderPath(nameof(TemplateProgramsFolderPath), folderPath, context);
+    return !string.IsNullOrEmpty(folderPath)  
+      ? ValidateFolderPath(nameof(TemplateProgramsFolderPath), folderPath, context)
+      : ValidationResult.Success!;
   }
 }

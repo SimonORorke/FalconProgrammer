@@ -302,11 +302,6 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     }
     var originalSoundBanks =
       await validator.GetOriginalProgramsFolderSoundBankNames();
-    if (originalSoundBanks.Count == 0) {
-      return false;
-    }
-    var templateSoundBanks =
-      await validator.GetTemplateProgramsFolderSoundBankNames();
-    return templateSoundBanks.Count != 0;
+    return originalSoundBanks.Count != 0;
   }
 }

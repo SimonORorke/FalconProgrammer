@@ -50,7 +50,7 @@
         <TextBox Grid.Row="7" Grid.Column="3"
                  x:Name="TemplateProgramsFolderTextBox"
                  Text="{Binding TemplateProgramsFolderPath}"
-                 Watermark="Full path of folder" />
+                 Watermark="You may not need this." />
         <Button Grid.Row="7" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForTemplateProgramsFolderCommand}" />
     </Grid>

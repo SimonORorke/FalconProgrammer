@@ -109,19 +109,6 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task TemplateProgramsFolderNotFound() {
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.ProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.ProgramsFolder.Path);
-    MockFileSystemService.Folder.ExistingPaths.Add(Settings.OriginalProgramsFolder.Path);
-    ViewModel.AddSoundBankSubfolders(Settings.OriginalProgramsFolder.Path);
-    await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.Contain(
-      "Batch scripts cannot be run: cannot find template programs folder '"));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
-  }
-
-  [Test]
   public async Task UpdateScope() {
     ViewModel.ConfigureValidMockFileSystemService(Settings);
     await ViewModel.Open();

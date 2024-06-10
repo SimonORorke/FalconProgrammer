@@ -87,21 +87,4 @@ public class SettingsValidator {
     }
     return soundBanks;
   }
-
-  /// <summary>
-  ///   Validates the template programs folder and, if invalid,
-  ///   shows an error message box and goes to the Locations page.
-  /// </summary>
-  /// <returns>
-  ///   If valid, the names of the folder's sound bank subfolders, otherwise an empty
-  ///   list.
-  /// </returns>
-  /// <remarks>
-  ///   The folder is considered valid if it has been specified, exists and contains
-  ///   subfolders.
-  /// </remarks>
-  public async Task<ImmutableList<string>> GetTemplateProgramsFolderSoundBankNames() {
-    return await GetSoundBankNamesFromFolder(
-      Settings.TemplateProgramsFolder.Path, "template programs");
-  }
 }

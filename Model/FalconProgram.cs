@@ -844,7 +844,7 @@ internal class FalconProgram {
         // processors.
         throw new ApplicationException(
           "A GUI script processor is not not supported for sound bank " +
-          $"'{SoundBankName}' category '{Category.Name}'. You nee to go to the " +
+          $"'{SoundBankName}' category '{Category.Name}'. You need to go to the " +
           "GUI Script Processor page and remove the sound bank or category from " +
           "the list. For the Falcon Factory (version 1) sound bank, the only " +
           "categories that support a GUI script processor are " +
