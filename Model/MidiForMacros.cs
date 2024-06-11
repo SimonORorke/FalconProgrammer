@@ -49,21 +49,21 @@ public class MidiForMacros {
     return prevCcNo + 1;
   }
 
-  private int GetContinuousCcNoAfter(int prevContinuousCcNo, bool reuseCc1) {
+  private int GetContinuousCcNoAfter(bool reuseCc1) {
     if (HasModWheelReplacementCcNo) {
-      if (prevContinuousCcNo == 1) {
+      if (CurrentContinuousCcNo == 1) {
         return ContinuousCcNos[
           ContinuousCcNos.IndexOf(ModWheelReplacementCcNo) + 1];
       }
-      if (prevContinuousCcNo == ModWheelReplacementCcNo && reuseCc1) {
+      if (CurrentContinuousCcNo == ModWheelReplacementCcNo && reuseCc1) {
         return 1; // Wheel
       }
     }
-    return GetCcNoAfter(prevContinuousCcNo, ContinuousCcNos);
+    return GetCcNoAfter(CurrentContinuousCcNo, ContinuousCcNos);
   }
 
   public int GetNextContinuousCcNo(bool reuseCc1) {
-    CurrentContinuousCcNo = GetContinuousCcNoAfter(CurrentContinuousCcNo, reuseCc1);
+    CurrentContinuousCcNo = GetContinuousCcNoAfter(reuseCc1);
     return CurrentContinuousCcNo;
   }
 

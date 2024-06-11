@@ -156,7 +156,7 @@ internal class Modulation : EntityBase {
       from modulation in modulations
       where Midi!.ContinuousCcNos.Contains(modulation.CcNo!.Value)
       select modulation.CcNo!.Value).Max();
-    Midi!.CurrentToggleCcNo = maxExistingContinuousCcNo;
+    Midi!.CurrentContinuousCcNo = maxExistingContinuousCcNo;
     int newCcNo = Midi.GetNextContinuousCcNo(false);
     Source = Source.Replace(CcNo!.Value.ToString(), newCcNo.ToString());
   }

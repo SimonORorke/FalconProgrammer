@@ -97,12 +97,35 @@ public class SettingsTests {
   }
 
   [Test]
+  public void GetNextGetNextContinuousCcNo() {
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "DefaultSettingsWithMidi.xml"
+    };
+    var settings = settingsReader.Read();
+    settings.MidiForMacros.CurrentContinuousCcNo = 0;
+    int nextCcNo = settings.MidiForMacros.GetNextContinuousCcNo(false);
+    Assert.That(nextCcNo, Is.EqualTo(31));
+    nextCcNo = settings.MidiForMacros.GetNextContinuousCcNo(false);
+    Assert.That(nextCcNo, Is.EqualTo(32));
+    settings.MidiForMacros.CurrentContinuousCcNo = 1;
+    nextCcNo = settings.MidiForMacros.GetNextContinuousCcNo(false);
+    Assert.That(nextCcNo, Is.EqualTo(11));
+    settings.MidiForMacros.CurrentContinuousCcNo = 34;
+    nextCcNo = settings.MidiForMacros.GetNextContinuousCcNo(true);
+    Assert.That(nextCcNo, Is.EqualTo(1));
+  }
+
+  [Test]
   public void GetNextToggleCcNo() {
     var settingsReader = new TestSettingsReaderEmbedded {
       EmbeddedFileName = "DefaultSettingsWithMidi.xml"
     };
     var settings = settingsReader.Read();
-    settings.MidiForMacros.
+    settings.MidiForMacros.CurrentToggleCcNo = 0;
+    int nextCcNo = settings.MidiForMacros.GetNextToggleCcNo();
+    Assert.That(nextCcNo, Is.EqualTo(112));
+    nextCcNo = settings.MidiForMacros.GetNextToggleCcNo();
+    Assert.That(nextCcNo, Is.EqualTo(113));
   }
 
   [Test]
