@@ -166,32 +166,6 @@ internal class Macro : ModulationsOwner {
       select modulation).FirstOrDefault();
   }
 
-  private static int GetCcNoAfter(int prevCcNo, ImmutableList<int> ccNos) {
-    if (prevCcNo == 0) {
-      return ccNos[0];
-    }
-    int prevIndex = ccNos.IndexOf(prevCcNo);
-    if (prevIndex >= 0 && prevIndex <= ccNos.Count - 2) {
-      // There's at least 1 MIDI CC number after the previous MIDI CC number in the list
-      // of MIDI CC numbers.
-      return ccNos[prevIndex + 1];
-    }
-    return prevCcNo + 1;
-  }
-
-  private int GetContinuousCcNoAfter(int prevContinuousCcNo, bool reuseCc1) {
-    if (Midi.HasModWheelReplacementCcNo) {
-      if (prevContinuousCcNo == 1) {
-        return Midi.ContinuousCcNos[
-          Midi.ContinuousCcNos.IndexOf(Midi.ModWheelReplacementCcNo) + 1];
-      }
-      if (prevContinuousCcNo == Midi.ModWheelReplacementCcNo && reuseCc1) {
-        return 1; // Wheel
-      }
-    }
-    return GetCcNoAfter(prevContinuousCcNo, Midi.ContinuousCcNos);
-  }
-
   protected override XElement GetElement() {
     var result = (
       from macroElement in ProgramXml.MacroElements
@@ -213,19 +187,6 @@ internal class Macro : ModulationsOwner {
       from modulation in Modulations
       where modulation.ModulatesMacro
       select modulation).ToImmutableList();
-  }
-
-  public int GetNextCcNo(ref int continuousCcNo, ref int toggleCcNo,
-    bool reuseCc1) {
-    if (IsContinuous) {
-      // Map continuous controller CC (e.g. knob or expression pedal) to continuous
-      // macro.
-      continuousCcNo = GetContinuousCcNoAfter(continuousCcNo, reuseCc1);
-      return continuousCcNo;
-    }
-    // Map toggle controller CC (e.g. button or foot switch) to toggle macro.
-    toggleCcNo = GetCcNoAfter(toggleCcNo, Midi.ToggleCcNos);
-    return toggleCcNo;
   }
 
   private XElement GetPropertiesElement() {

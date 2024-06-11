@@ -97,6 +97,15 @@ public class SettingsTests {
   }
 
   [Test]
+  public void GetNextToggleCcNo() {
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "DefaultSettingsWithMidi.xml"
+    };
+    var settings = settingsReader.Read();
+    settings.MidiForMacros.
+  }
+
+  [Test]
   public void RealTestSettingsFile() {
     SettingsTestHelper.DeleteAnyData();
     Settings? settings = null;

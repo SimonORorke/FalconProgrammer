@@ -50,8 +50,6 @@ internal class FalconProgram {
   /// </summary>
   public string Name { get; }
 
-  private int CurrentContinuousCcNo { get; set; }
-  private int CurrentToggleCcNo { get; set; }
   [PublicAPI] public string Path { get; }
 
   [PublicAPI]
@@ -267,16 +265,6 @@ internal class FalconProgram {
       }
     }
     return result;
-  }
-
-  private int GetNextCcNo(Macro macro, bool reuseCc1) {
-    int currentContinuousCcNo = CurrentContinuousCcNo;
-    int currentToggleCcNo = CurrentToggleCcNo;
-    int ccNo = macro.GetNextCcNo(
-      ref currentContinuousCcNo, ref currentToggleCcNo, reuseCc1);
-    CurrentContinuousCcNo = currentContinuousCcNo;
-    CurrentToggleCcNo = currentToggleCcNo;
-    return ccNo;
   }
 
   private bool HasUniqueLocation(Macro macro) {
@@ -804,14 +792,14 @@ internal class FalconProgram {
       // Allow for macros with invalid locations: see GetMacrosSortedByLocation. 
       return;
     }
-    // Required for first call of GetNextCcNo to return 1.
-    CurrentContinuousCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
-    CurrentToggleCcNo = 0; // Required by GetNextCcNo but won't be used in this case.
+    // Required for first call of GetNextContinuousCcNo to return 1.
+    Settings.MidiForMacros.CurrentContinuousCcNo = 
+      Settings.MidiForMacros.ModWheelReplacementCcNo;
     for (int i = minVisibleContinuousMacrosCount - 1;
          i < continuousMacrosByLocation.Count;
          i++) {
       var macro = continuousMacrosByLocation[i];
-      int newCcNo = GetNextCcNo(macro, true);
+      int newCcNo = Settings.MidiForMacros.GetNextContinuousCcNo(true);
       macro.ChangeCcNoTo(newCcNo);
     }
     NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
@@ -895,10 +883,12 @@ internal class FalconProgram {
     // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
     // by RemoveGuiScriptProcessor, the second time via
     // ReplaceModWheelWithMacro.
-    // Make the first call of GetNextCcNo for a continuous macro return 31.
-    CurrentContinuousCcNo = 0;
-    // Make the first call of GetNextCcNo for a toggle macro return 112.
-    CurrentToggleCcNo = 0;
+    // Make the first call of GetNextContinuousCcNo return e first continuous
+    // CC number specified in settings.
+    Settings.MidiForMacros.CurrentContinuousCcNo = 0;
+    // Make the first call of GetNextToggleCcNo return the first
+    // toggle CC number specified in settings.
+    Settings.MidiForMacros.CurrentToggleCcNo = 0;
     foreach (var macro in sortedByLocation) {
       // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
       // MIDI CC mapping that's not on the Info page.
@@ -910,7 +900,9 @@ internal class FalconProgram {
           $"{PathShort}: Macro '{macro}' owns {forMacroModulations.Count} " +
           "'for macro' Modulations.");
       }
-      int ccNo = GetNextCcNo(macro, false);
+      int ccNo = macro.IsContinuous
+        ? Settings.MidiForMacros.GetNextContinuousCcNo(false)
+        : Settings.MidiForMacros.GetNextToggleCcNo();
       if (forMacroModulations.Count == 0) { // Will be 0 or 1
         // The macro is not already mapped to a non-mod wheel CC number.
         var modulation = new Modulation(ProgramXml) {

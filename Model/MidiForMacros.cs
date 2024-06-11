@@ -19,6 +19,8 @@ public class MidiForMacros {
   internal ImmutableList<int> ContinuousCcNos =>
     _continuousCcNos ??= CreateCcNoList(ContinuousCcNoRanges);
 
+  internal int CurrentContinuousCcNo { get; set; }
+  internal int CurrentToggleCcNo { get; set; }
   internal bool HasModWheelReplacementCcNo => ModWheelReplacementCcNo > 1;
 
   internal ImmutableList<int> ToggleCcNos =>
@@ -32,5 +34,41 @@ public class MidiForMacros {
       }
     }
     return list.ToImmutableList();
+  }
+
+  private static int GetCcNoAfter(int prevCcNo, ImmutableList<int> ccNos) {
+    if (prevCcNo == 0) {
+      return ccNos[0];
+    }
+    int prevIndex = ccNos.IndexOf(prevCcNo);
+    if (prevIndex >= 0 && prevIndex <= ccNos.Count - 2) {
+      // There's at least 1 MIDI CC number after the previous MIDI CC number in the list
+      // of MIDI CC numbers.
+      return ccNos[prevIndex + 1];
+    }
+    return prevCcNo + 1;
+  }
+
+  private int GetContinuousCcNoAfter(int prevContinuousCcNo, bool reuseCc1) {
+    if (HasModWheelReplacementCcNo) {
+      if (prevContinuousCcNo == 1) {
+        return ContinuousCcNos[
+          ContinuousCcNos.IndexOf(ModWheelReplacementCcNo) + 1];
+      }
+      if (prevContinuousCcNo == ModWheelReplacementCcNo && reuseCc1) {
+        return 1; // Wheel
+      }
+    }
+    return GetCcNoAfter(prevContinuousCcNo, ContinuousCcNos);
+  }
+
+  public int GetNextContinuousCcNo(bool reuseCc1) {
+    CurrentContinuousCcNo = GetContinuousCcNoAfter(CurrentContinuousCcNo, reuseCc1);
+    return CurrentContinuousCcNo;
+  }
+
+  public int GetNextToggleCcNo() {
+    CurrentToggleCcNo = GetCcNoAfter(CurrentToggleCcNo, ToggleCcNos);
+    return CurrentToggleCcNo;
   }
 }
