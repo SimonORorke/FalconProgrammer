@@ -283,22 +283,6 @@ public class Batch {
     return BatchScriptReader.Read(batchScriptPath);
   }
 
-  [PublicAPI]
-  public void RollForward(
-    string? soundBankName, string? categoryName = null, string? programName = null) {
-    RunTask(ConfigTask.RestoreOriginal, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.RemoveDelayEffectsAndMacros, soundBankName, categoryName,
-      programName);
-    RunTask(ConfigTask.ZeroReleaseMacro, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.ZeroReverbMacros, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.MoveZeroedMacrosToEnd, soundBankName, categoryName, programName);
-    RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, categoryName,
-      programName);
-    RunTask(ConfigTask.ReuseCc1, soundBankName, categoryName, programName);
-  }
-
   public void RunScript(
     BatchScript batchScript, CancellationToken cancellationToken) {
     RunCancellationToken = cancellationToken;
