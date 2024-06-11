@@ -507,23 +507,23 @@ internal class FalconProgram {
   /// </remarks>
   public void PrependPathLineToDescription() {
     const string pathIndicator = "PATH: ";
-    const string crLf = "\r\n";
+    string blankLine = Environment.NewLine + Environment.NewLine;
     ProgramXml.InitialiseDescription();
     string oldDescription = ProgramXml.GetDescription();
     string oldPathLine =
-      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(crLf + crLf)
-        ? oldDescription[..(oldDescription.IndexOf(crLf + crLf) + 4)]
+      oldDescription.StartsWith(pathIndicator) && oldDescription.Contains(blankLine)
+        ? oldDescription[..(oldDescription.IndexOf(blankLine) + 4)]
         : string.Empty;
     string oldRestOfDescription = oldPathLine == string.Empty
       ? oldDescription
       : oldDescription.Replace(oldPathLine, string.Empty);
-    string newPathLine = pathIndicator + PathShort + crLf + crLf;
+    string newPathLine = pathIndicator + PathShort + blankLine;
     // When the program file is read, the paragraph breaks (i.e. blank lines) are
     // unhelpfully replaced with pairs of spaces.
     // See the comment in ProgramXml.ReadRootElementFromXmlText".
     // So reverse that to conserve the paragraph breaks.
     string newRestOfDescription = oldRestOfDescription.Replace(
-      "  ", crLf + crLf);
+      "  ", blankLine);
     string newDescription = newPathLine + newRestOfDescription;
     ProgramXml.SetDescription(newDescription);
     NotifyUpdate($"{PathShort}: Prepended path line to description.");
