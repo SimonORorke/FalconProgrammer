@@ -120,6 +120,35 @@ public class FalconProgramTests {
   }
 
   [Test]
+  public void UpdateMacroCcsGuiScriptProcessorNotSupportedForSoundBank() {
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Leads";
+    const string programName = "Soft Mood";
+    Batch.Settings.MustUseGuiScriptProcessorCategories.Add(
+      new Settings.SoundBankCategory {
+        SoundBank = soundBankName,
+        Category = categoryName
+      });
+    var exception = Assert.Catch<ApplicationException>(() =>
+      Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName));
+    Assert.That(exception.Message, Does.StartWith(
+      "Updating the macro MIDI CCs of a program with a GUI script processor " +
+      "is not supported for sound bank"));
+  }
+
+  [Test]
+  public void UpdateMacroCcsMissingCcNos() {
+    Batch.Settings.MidiForMacros = new MidiForMacros();
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Brutal Bass 2.1";
+    const string programName = "Magnetic 1";
+    var exception = Assert.Catch<ApplicationException>(() =>
+      Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName));
+    Assert.That(exception.Message, Does.StartWith(
+      "The MIDI CC numbers assigned to macros cannot be updated"));
+  }
+
+  [Test]
   public void UpdateModulationsFromTemplate() {
     const string soundBankName = "Falcon Factory";
     // This category tests Modulation.FixToggleOrContinuous

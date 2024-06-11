@@ -836,6 +836,13 @@ internal class FalconProgram {
   ///   Configures macro CCs.
   /// </summary>
   public void UpdateMacroCcs() {
+    if (Settings.MidiForMacros.ContinuousCcNos.Count == 0
+        || Settings.MidiForMacros.ToggleCcNos.Count == 0) {
+      throw new ApplicationException(
+        "The MIDI CC numbers assigned to macros cannot be updated " +
+        "because ranges of continuous and/or toggle CC numbers have not yet " +
+        "been specified. You need to do that on the MIDI for Macros page.");
+    }
     if (GuiScriptProcessor == null) {
       if (Category.MustUseGuiScriptProcessor) {
         // If we don't throw this ApplicationException, a different exception will be

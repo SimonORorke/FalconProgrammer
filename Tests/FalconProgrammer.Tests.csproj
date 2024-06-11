@@ -96,6 +96,8 @@
         <EmbeddedResource Include="Model\Xml\TemplatePrograms\Falcon Factory\Organic Texture 2.8\BAS Biggy.xml" />
         <None Remove="Model\Xml\OriginalPrograms\Falcon Factory\Organic Texture 2.8\KEY Clockworks.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory\Organic Texture 2.8\KEY Clockworks.xml" />
+        <None Remove="Model\Xml\OriginalPrograms\Falcon Factory\Leads\Soft Mood.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory\Leads\Soft Mood.xml" />
     </ItemGroup>
 
     <ItemGroup>
