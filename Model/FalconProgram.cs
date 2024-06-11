@@ -915,11 +915,11 @@ internal class FalconProgram {
         // Ratio, and, with the exception below, just replace the CC number.
         var modulation = forMacroModulations[0];
         modulation.CcNo = ccNo;
-        // In Falcon Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1 instead
-        // of the usual 1. I don't know what the point of that is. But it prevents the
-        // button controller mapped to the macro from working. To fix this, if a toggle
-        // macro has Ratio -1, update Ratio to 1. I cannot see any disadvantage in doing
-        // that. 
+        // In Falcon Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1
+        // instead of the usual 1. I don't know what the point of that is. But it
+        // prevents the button controller mapped to the macro from working. To fix this,
+        // if a toggle macro has Ratio -1, update Ratio to 1. I cannot see any
+        // disadvantage in doing that. 
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         if (!macro.IsContinuous && modulation.Ratio == -1) {
           modulation.Ratio = 1;
