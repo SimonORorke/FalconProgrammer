@@ -35,7 +35,7 @@ internal class Macro : ModulationsOwner {
   }
 
   /// <summary>
-  ///   Indicates whether this is continuous macro.  If false, it's a toggle macro.
+  ///   Gets or sets whether this is continuous macro.  If false, it's a toggle macro.
   /// </summary>
   public bool IsContinuous {
     get =>
@@ -45,6 +45,11 @@ internal class Macro : ModulationsOwner {
           $"{nameof(Macro)}: {nameof(Style)} {Style} is not supported."));
     set => Style = value ? 0 : 1;
   }
+
+  /// <summary>
+  ///   Gets whether this is toggle macro. If false, it's a continuous macro.
+  /// </summary>
+  public bool IsToggle => !IsContinuous;
 
   /// <summary>
   ///   The macro number, derived from <see cref="EntityBase.Name" />.

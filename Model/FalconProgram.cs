@@ -180,7 +180,7 @@ internal class FalconProgram {
   private Macro? FindReverbToggleMacro() {
     return (
       from macro in Macros
-      where !macro.IsContinuous && macro.ModulatesReverb
+      where macro.IsToggle && macro.ModulatesReverb
       select macro).FirstOrDefault();
   }
 
@@ -921,7 +921,7 @@ internal class FalconProgram {
         // if a toggle macro has Ratio -1, update Ratio to 1. I cannot see any
         // disadvantage in doing that. 
         // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (!macro.IsContinuous && modulation.Ratio == -1) {
+        if (macro.IsToggle && modulation.Ratio == -1) {
           modulation.Ratio = 1;
         }
       }
