@@ -233,9 +233,9 @@ internal class FalconProgram {
       select macro).ToList();
   }
 
-  internal SortedSet<Macro> GetMacrosSortedByLocation(
+  internal List<Macro> GetMacrosSortedByLocation(
     LocationOrder macroCcLocationOrder) {
-    var result = new SortedSet<Macro>(
+    var sortedSet = new SortedSet<Macro>(
       macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
@@ -261,10 +261,10 @@ internal class FalconProgram {
       // do not need CC numbers, and attempting to add duplicates to the set would throw
       // an exception in ConstantModulationLocationComparer.
       if (HasUniqueLocation(macro)) {
-        result.Add(macro);
+        sortedSet.Add(macro);
       }
     }
-    return result;
+    return sortedSet.ToList();
   }
 
   private bool HasUniqueLocation(Macro macro) {
@@ -862,7 +862,7 @@ internal class FalconProgram {
       // This applies to all programs in categories for which MustUseGuiScriptProcessor
       // is set to true in the settings file.
       GuiScriptProcessor.UpdateModulationsFromTemplate(
-        templateScriptProcessor.Modulations, Macros);
+        templateScriptProcessor.Modulations, GetMacrosSortedByLocation(MacroCcLocationOrder));
     }
     NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
@@ -879,11 +879,7 @@ internal class FalconProgram {
     // Most Falcon Factory programs list the ConstantModulation macro specifications in order
     // top to bottom, left to right. But a few, e.g. Falcon Factory\Keys\Days Of Old 1.4, do not.
     var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
-    // Reinitialise CurrentContinuousCcNo, incremented by GetNextCcNo, in case
-    // UpdateMacroCcsInConstantModulations is called multiple times. It is called twice
-    // by RemoveGuiScriptProcessor, the second time via
-    // ReplaceModWheelWithMacro.
-    // Make the first call of GetNextContinuousCcNo return e first continuous
+    // Make the first call of GetNextContinuousCcNo return the first continuous
     // CC number specified in settings.
     Settings.MidiForMacros.CurrentContinuousCcNo = 0;
     // Make the first call of GetNextToggleCcNo return the first

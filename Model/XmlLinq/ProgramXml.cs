@@ -48,7 +48,7 @@ internal class ProgramXml : EntityBase {
     _templateModulationElement ??= GetTemplateModulationElement();
 
   public void AddScriptProcessorElementFromTemplate(string templateEmbeddedFileName) {
-    var template = new ScriptProcessorXmlLinq(templateEmbeddedFileName);
+    var template = new ScriptProcessorEmbeddedXmlLinq(templateEmbeddedFileName);
     var scriptProcessorElement = new XElement(template.ScriptProcessorElement);
     var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
     if (eventProcessorsElement == null) {

@@ -172,7 +172,7 @@ internal class Modulation : EntityBase {
   ///   Currently this only works for Falcon Factory\Brutal Bass 2.1.
   ///   Examples: Magnetic 1, Overdrive.
   /// </remarks>
-  public void FixToggleOrContinuous(IList<Macro> macros, IList<Modulation> modulations) {
+  public void FixToggleOrContinuous(IEnumerable<Macro> macros, IList<Modulation> modulations) {
     // In many but not all programs in category Falcon Factory\Brutal Bass 2.1,
     // Destination does not match the name of the modulated macro. For the potentially
     // problematic modulation, Destination is "Macro4", while the macro Name is

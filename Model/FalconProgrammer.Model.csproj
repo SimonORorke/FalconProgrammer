@@ -155,6 +155,8 @@
         <EmbeddedResource Include="Xml\Macros\MacroTemplate.xml"/>
         <None Remove="Xml\Modulations\ModulationTemplate.xml"/>
         <EmbeddedResource Include="Xml\Modulations\ModulationTemplate.xml"/>
+        <None Remove="Xml\ScriptProcessors\FactoryRev2_Gul.xml" />
+        <EmbeddedResource Include="Xml\ScriptProcessors\FactoryRev2_Gul.xml" />
     </ItemGroup>
 
 </Project>

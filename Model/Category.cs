@@ -102,8 +102,9 @@ internal class Category {
       switch (scriptProcessor.GuiScriptId) {
         case ScriptId.SoundBank1:
         case ScriptId.SoundBank2:
-        case ScriptId.Factory2_5:
         case ScriptId.Factory2_1:
+        case ScriptId.Factory2_5:
+        case ScriptId.FactoryRev2:
         case ScriptId.OrganicTexture:
         case ScriptId.Main1:
         case ScriptId.Main2:
@@ -210,7 +211,7 @@ internal class Category {
       };
     }
     if (embeddedFileName != null) {
-      var template = new ScriptProcessorXmlLinq(embeddedFileName);
+      var template = new ScriptProcessorEmbeddedXmlLinq(embeddedFileName);
       return ScriptProcessor.Create(SoundBankName,
         new XElement(template.ScriptProcessorElement),
         ProgramXml, Settings.MidiForMacros);
