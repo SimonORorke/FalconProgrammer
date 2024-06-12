@@ -118,15 +118,17 @@ internal class Macro : ModulationsOwner {
       PropertiesElement, nameof(Y).ToLower(), value);
   }
 
+  /// <summary>
+  ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />.
+  /// </summary>
   public void ChangeCcNoTo(int newCcNo) {
     // Convert MIDI CC 38, which does not work with macros on script-based Info
     // pages, to 28.
     int targetCcNo = newCcNo != 38 ? newCcNo : 28;
-    var forMacroModulation = GetForMacroModulations().FirstOrDefault();
+    var forMacroModulation = GetForMacroModulations().FirstOrDefault(); // ???
     if (forMacroModulation != null) {
       if (targetCcNo != forMacroModulation.CcNo) {
         forMacroModulation.CcNo = targetCcNo;
-        // forMacroModulation.Update();
       }
     } else {
       // ReSharper disable once CommentTypo
@@ -187,6 +189,9 @@ internal class Macro : ModulationsOwner {
       $"'{ProgramXml.InputProgramPath}'.");
   }
 
+  /// <summary>
+  ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />.
+  /// </summary>
   public ImmutableList<Modulation> GetForMacroModulations() {
     return (
       from modulation in Modulations

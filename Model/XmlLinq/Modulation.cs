@@ -43,21 +43,30 @@ internal class Modulation : EntityBase {
 
   /// <summary>
   ///   Indicates what is to be modulated.
-  ///   If the <see cref="Modulation" /> belongs to the
-  ///   <see cref="FalconProgram.GuiScriptProcessor" />, this will be the name of the
-  ///   script parameter to be modulated. The script parameter name may indicate the
-  ///   macro to be modulated, like "Macro1". That is consistenly the case in
-  ///   Falcon Factory (version 1) and (I need to confirm this) Falcon Factory rev2.
-  ///   But there are errors, where the script parameter indicates the wrong
-  ///   macro. Example: Falcon Factory\Brutal Bass 2.1\808 Line and many others in that
-  ///   category.
-  ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
-  ///   be modulated, this will be "Value".
   /// </summary>
   /// <remarks>
-  ///   UVI only references macros by names like "Macro1" internally in
-  ///   scripts. In the ConstantModulation definition of the macro, even in programs with
-  ///   Info page layout script processors, the name is like "Macro 1".
+  ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
+  ///   be modulated, this will be "Value".
+  ///   <para>
+  ///     If the <see cref="Modulation" /> belongs to the
+  ///     <see cref="FalconProgram.GuiScriptProcessor" />, this will be the name of the
+  ///     script parameter to be modulated. If the script parameter modulates a macro,
+  ///     Destination may start with "Macro, like "Macro1" in most Falcon Factory
+  ///     (version 1) categories and some other sound banks,
+  ///     or "Macro_1" in Falcon Factory rev2. But this is not consistent across sound
+  ///     banks. For Fluidity the Destination format is "Custom_n".
+  ///     For Factory\Organic Texture 2.8, Organic Keys, Organic Pads, Pulsar and Volkm,
+  ///     Destination indicates the modulation type and does not end with a number.
+  ///   </para>
+  ///   <para>
+  ///     Furthermore, if the Destination of a <see cref="Modulation" /> owned by the
+  ///     <see cref="FalconProgram.GuiScriptProcessor" /> does end with a number,
+  ///     there is no guarantee that the number matches the number at the end of the
+  ///     <see cref="Macro.Name" /> of the modulated <see cref="Macro" />.
+  ///     For example, in Falcon Factory\Brutal Bass 2.1\808 Line and many other programs
+  ///     in the same category, the Modulation with Destination "Macro4" modulates the
+  ///     Macro with Name "Macro 3".
+  ///   </para>
   /// </remarks>
   public string Destination {
     get => GetAttributeValue(nameof(Destination));
@@ -92,20 +101,51 @@ internal class Modulation : EntityBase {
   ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
   ///   be modulated, returns null.
   /// </summary>
-  private int? ModulatedMacroNo =>
-    Destination.StartsWith("Macro")
-      ? Convert.ToInt32(Destination.Replace("Macro", string.Empty))
-      : null;
+  /// <remarks>
+  ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />, and only
+  ///   for modulations that are owned by the
+  ///   <see cref="FalconProgram.GuiScriptProcessor" />.
+  ///   As it stands, this method will miss some modulated macros, as not all such
+  ///   modulations hav <see cref="Destination "/>s with the prefixes we check for.
+  ///   Currently, that does not matter, as ReuseCc1 is disabled for programs with a
+  ///   GUI script processor. If we were to implement support for those programs in
+  ///   ReuseCc1, we would have to look up the names of the macro-modulating modulations
+  ///   in the script processor template when Destination does not start with a prefix
+  ///   that is know to be followed by number.
+  ///   See the <see cref="Destination" /> remarks for further information. 
+  /// </remarks>
+  private int? ModulatedMacroNo {
+    get {
+      string? prefix = null;
+      if (Destination.StartsWith("Macro ")) {
+        prefix = "Macro ";
+      } else if (Destination.StartsWith("Macro_")) {
+        prefix = "Macro_";
+      } else if (Destination.StartsWith("Macro")) {
+        prefix = "Macro";
+      } else if (Destination.StartsWith("Custom_")) {
+        prefix = "Custom_";
+      }
+      return prefix != null
+        ? Convert.ToInt32(Destination.Replace(prefix, string.Empty))
+        : null;
+    }
+  }
 
   /// <summary>
   ///   Gets whether the MIDI CC mapping is to modulate a macro on the Info page.
   /// </summary>
+  /// <remarks>
+  ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />.
+  /// </remarks>
   public bool ModulatesMacro {
     get {
       return Owner switch {
         ConnectionsParent => false, // Includes derived type Effect
         Macro => ConnectionMode == 1, // 0 for modulation wheel (MIDI CC 1)
-        ScriptProcessor => ModulatedMacroNo.HasValue,
+        // This is not completely reliable, though currently that does not matter:
+        // see ModulatedMacroNo remarks. 
+        ScriptProcessor => ModulatedMacroNo.HasValue, 
         null => throw new InvalidOperationException(
           "Modulation.ModulatesMacro cannot be determined because " +
           "Owner has not been specified."),
