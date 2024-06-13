@@ -51,21 +51,22 @@ internal class InfoPageLayout {
       _ => 7
     };
     int rowCount = (int)Math.Ceiling((double)visibleMacros.Count / macrosPerRow);
-    int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 5;
+    // The maximum row count is now 3. So this row height logic is currently redundant.
+    // int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 5;
     int freeSpaceInRow = RightEdge - MacroWidth * macrosPerRow;
     int gapBetweenMacros = freeSpaceInRow / (macrosPerRow + 1);
     int top = rowCount switch {
-      1 => StandardBottommostY - rowHeight,
-      2 => StandardBottommostY - 2 * rowHeight,
-      3 => StandardBottommostY - 2 * rowHeight,
-      _ => StandardBottommostY - 3 * rowHeight
+      1 => StandardBottommostY - StandardRowHeight,
+      2 => StandardBottommostY - 2 * StandardRowHeight,
+      3 => StandardBottommostY - 2 * StandardRowHeight,
+      _ => StandardBottommostY - 3 * StandardRowHeight
     };
     switch (Program.Category.SoundBankName) {
       case "Ether Fields" when rowCount == 3:
         top -= 85;
         break;
       case "Devinity" when rowCount == 1:
-        top += rowHeight;
+        top += StandardRowHeight;
         break;
       default:
         top -= 5;
