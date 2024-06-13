@@ -35,7 +35,7 @@ internal class Macro : ModulationsOwner {
   }
 
   public string DisplayNameWithoutCc => DisplayName.Contains(" (CC")
-    ? DisplayName[..DisplayName.IndexOf(" (CC")]
+    ? DisplayName[..DisplayName.IndexOf(" (CC")].Trim()
     : DisplayName;
 
   /// <summary>
