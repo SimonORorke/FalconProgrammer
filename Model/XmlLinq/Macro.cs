@@ -34,6 +34,10 @@ internal class Macro : ModulationsOwner {
       "customPosition", value ? "1" : "0");
   }
 
+  public string DisplayNameWithoutCc => DisplayName.Contains(" (CC")
+    ? DisplayName[..DisplayName.IndexOf(" (CC")]
+    : DisplayName;
+
   /// <summary>
   ///   Gets or sets whether this is continuous macro.  If false, it's a toggle macro.
   /// </summary>

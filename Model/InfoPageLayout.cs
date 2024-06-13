@@ -39,13 +39,17 @@ internal class InfoPageLayout {
       // different approach to identify them.
       where macro.X < RightEdge
       select macro).ToList();
-    const int maxMacroCount = 20;
+    const int maxMacroCount = 21;
     if (visibleMacros.Count > maxMacroCount) {
       throw new InvalidOperationException(
         $"{Program.PathShort}: Cannot lay out {visibleMacros.Count} macros. " +
         $"The maximum is {maxMacroCount}.");
     }
-    int macrosPerRow = visibleMacros.Count <= 16 ? 4 : 5;
+    int macrosPerRow = visibleMacros.Count switch {
+      <= 12 => 4,
+      <= 15 => 5,
+      _ => 7
+    };
     int rowCount = (int)Math.Ceiling((double)visibleMacros.Count / macrosPerRow);
     int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 5;
     int freeSpaceInRow = RightEdge - MacroWidth * macrosPerRow;

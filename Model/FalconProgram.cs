@@ -201,7 +201,7 @@ internal class FalconProgram {
       // In Permuda 1.1, the original 'Modwheel' macro controlled the range of the mod
       // wheel and now controls the range of the 'Wheel' macro instead.  So that change
       // has worked too.
-      where continuousMacro.DisplayName.Equals(
+      where continuousMacro.DisplayNameWithoutCc.Equals(
         "wheel", StringComparison.CurrentCultureIgnoreCase)
       select continuousMacro).FirstOrDefault();
   }
@@ -921,6 +921,8 @@ internal class FalconProgram {
           modulation.Ratio = 1;
         }
       }
+      // Append CC number to macro's display name.
+      macro.DisplayName = $"{macro.DisplayNameWithoutCc} (CC{ccNo})";
     }
   }
 
