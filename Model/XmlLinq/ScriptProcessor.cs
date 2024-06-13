@@ -50,7 +50,7 @@ internal class ScriptProcessor : ModulationsOwner {
   /// <summary>
   ///   Only needed when a GUI script processor's MIDI CC numbers are updated.
   /// </summary>
-  private IList<Macro>? MacrosSortedByLocation { get; set; }
+  private IList<Macro>? Macros { get; set; }
 
   private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
 
@@ -70,11 +70,18 @@ internal class ScriptProcessor : ModulationsOwner {
   ///   <see cref="ScriptPath" />.
   ///   Example: "FalconFactory" from "$Falcon Factory.ufs/Scripts/Factory2_5_Stub.lua".
   /// </summary>
-  public string SoundBankId =>
-    ScriptPath.StartsWith("$Falcon Factory rev2")
-      ? "FactoryRev2"
-      : ScriptPath[..ScriptPath.IndexOf('.')][1..].Replace(
-        " ", string.Empty);
+  public string SoundBankId {
+    get {
+      if (!ScriptPath.StartsWith('$') || !ScriptPath.Contains('.')) {
+        // OrganicPads_DahdsrController.xml is currently the only one.
+        return string.Empty;
+      }
+      return ScriptPath.StartsWith("$Falcon Factory rev2")
+        ? "FactoryRev2"
+        : ScriptPath[..ScriptPath.IndexOf('.')][1..].Replace(
+          " ", string.Empty);
+    }
+  }
 
   public override void AddModulation(Modulation templateModulation) {
     // Clone the template modulation, to guard against updating it.
@@ -82,12 +89,12 @@ internal class ScriptProcessor : ModulationsOwner {
       new XElement(templateModulation.Element), ProgramXml, Midi);
     if (GuiScriptId == ScriptId.Factory2_1) {
       // Falcon Factory\Brutal Bass 2.1
-      newModulation.FixToggleOrContinuous(MacrosSortedByLocation!, Modulations);
+      newModulation.FixToggleOrContinuous(Macros!, Modulations);
     }
     base.AddModulation(newModulation);
   }
 
-  private void AddModulationTheSmartWay(
+  private void AddModulationBasedOnMacro(
     Modulation templateModulation, Macro correspondingMacro) {
     int newCcNo = correspondingMacro.IsContinuous
       ? Midi.GetNextContinuousCcNo(false)
@@ -114,16 +121,16 @@ internal class ScriptProcessor : ModulationsOwner {
     // with a category or colour parameter.
     // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
     // So we parse Script with EndWith.
+    if (SoundBankId == "FactoryRev2" &&
+        (Script.EndsWith("require 'FalconFactory'") ||
+         Script.EndsWith("require \"FalconFactory\""))) {
+      return ScriptId.FactoryRev2;
+    }
     if (Script.EndsWith($"require \"{SoundBankId}\"")) {
       return ScriptId.SoundBank1;
     }
     if (Script.EndsWith($"require(\"{SoundBankId}\")")) {
       return ScriptId.SoundBank2;
-    }
-    if (SoundBankId == "FalconFactoryRev2" &&
-        (Script.EndsWith("require 'FalconFactory'") ||
-         Script.EndsWith("require \"FalconFactory\""))) {
-      return ScriptId.FactoryRev2;
     }
     if (Script.EndsWith("require(\"Factory2_1\")")) {
       return ScriptId.Factory2_1;
@@ -172,13 +179,22 @@ internal class ScriptProcessor : ModulationsOwner {
 
   public void UpdateModulationsFromTemplate(
     IList<Modulation> templateModulations,
-    IList<Macro> macrosSortedByLocation) {
-    MacrosSortedByLocation = macrosSortedByLocation;
+    IList<Macro> macros) {
+    Macros = macros;
     if (GuiScriptId == ScriptId.FactoryRev2) {
       Midi.CurrentContinuousCcNo = 0;
       Midi.CurrentToggleCcNo = 0;
-      for (int i = 0; i < templateModulations.Count; i++) {
-        AddModulationTheSmartWay(templateModulations[i], macrosSortedByLocation[i]);
+      if (templateModulations.Count >= macros.Count) {
+        // This does not always accurately distinguish the continuous macros from
+        // the toggle macros.
+        // Example of where it does not work: Falcon Factory rev2\Bass\Big Sleep.
+        // But it seems to be more successful than having the macros in location order.
+        for (int i = 0; i < macros.Count; i++) {
+          AddModulationBasedOnMacro(templateModulations[i], macros[i]);
+        }
+      } else {
+        throw new ApplicationException(
+          "There are more macros than template modulations.");
       }
     } else {
       foreach (var templateModulation in templateModulations) {

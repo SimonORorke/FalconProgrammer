@@ -862,7 +862,7 @@ internal class FalconProgram {
       // This applies to all programs in categories for which MustUseGuiScriptProcessor
       // is set to true in the settings file.
       GuiScriptProcessor.UpdateModulationsFromTemplate(
-        templateScriptProcessor.Modulations, GetMacrosSortedByLocation(MacroCcLocationOrder));
+        templateScriptProcessor.Modulations, Macros);
     }
     NotifyUpdate($"{PathShort}: Updated Macro CCs.");
   }
