@@ -41,7 +41,7 @@ internal class InfoPageLayout {
       select macro).ToList();
     const int maxMacroCount = 21;
     if (visibleMacros.Count > maxMacroCount) {
-      throw new InvalidOperationException(
+      throw new ApplicationException(
         $"{Program.PathShort}: Cannot lay out {visibleMacros.Count} macros. " +
         $"The maximum is {maxMacroCount}.");
     }
