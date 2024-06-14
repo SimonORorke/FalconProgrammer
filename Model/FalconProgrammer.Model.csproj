@@ -111,6 +111,9 @@
         <None Update="Background Images\Yellowish Mid-Green.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Background Images\Heath Dark Blue Large Check.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.IO;
+using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 
@@ -11,5 +12,5 @@ public static class Converters {
   /// </summary>
   public static FuncValueConverter<string?, Bitmap?> PathToBitmap { get; } =
     new FuncValueConverter<string?, Bitmap?>(path =>
-      !string.IsNullOrEmpty(path) ? new Bitmap(path) : null);
+      !string.IsNullOrEmpty(path) && File.Exists(path) ? new Bitmap(path) : null);
 }
