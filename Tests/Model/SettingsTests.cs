@@ -5,6 +5,20 @@ namespace FalconProgrammer.Tests.Model;
 [TestFixture]
 public class SettingsTests {
   [Test]
+  public void AppendCcNoToMacroDisplayNames() {
+    var settingsReader = new TestSettingsReaderEmbedded {
+      EmbeddedFileName = "LocationsSettings.xml"
+    };
+    var settings = settingsReader.Read();
+    Assert.That(settings.MidiForMacros.AppendCcNoToMacroDisplayNames, Is.True);
+    settings.MidiForMacros.AppendCcNoToMacroDisplayNames = false;
+    settings.Write();
+    var writtenSettings =
+      (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
+    Assert.That(writtenSettings.MidiForMacros.AppendCcNoToMacroDisplayNames, Is.False);
+  }
+  
+  [Test]
   public void Background() {
     var settingsReader = new TestSettingsReaderEmbedded {
       EmbeddedFileName = "DefaultSettingsWithMidi.xml"

@@ -48,6 +48,15 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task UpdateAppendCcNoToMacroDisplayNames() {
+    Assert.That(ViewModel.AppendCcNoToMacroDisplayNames, Is.True);
+    ViewModel.AppendCcNoToMacroDisplayNames = false;
+    Assert.That(await ViewModel.QueryClose(), Is.True);
+    Assert.That(ViewModel.Settings.MidiForMacros.AppendCcNoToMacroDisplayNames,
+      Is.False);
+  }
+
+  [Test]
   public async Task UpdateContinuousCcNoRanges() {
     await UpdateCcNoRanges(
       ViewModel.ContinuousCcNoRanges,

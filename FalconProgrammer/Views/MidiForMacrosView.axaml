@@ -22,6 +22,13 @@
                      Width="45" />
             <TextBlock Text="{Binding ModWheelReplacementAdvice}" />
         </StackPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
+                    Height="35" Margin="10, 10, 0, 0">
+            <CheckBox IsChecked="{Binding AppendCcNoToMacroDisplayNames}" >
+                <AccessText Text="{Binding AppendCcNoCaption}"
+                            FontSize="16" />
+            </CheckBox>
+        </StackPanel>
         <Grid RowDefinitions="30, *" ColumnDefinitions="Auto, 10, Auto, 15, Auto"
               Margin="0,10,0,0">
             <Label Grid.Column="0" Grid.Row="0"

@@ -922,7 +922,9 @@ internal class FalconProgram {
         }
       }
       // Append CC number to macro's display name.
-      macro.DisplayName = $"{macro.DisplayNameWithoutCc} (CC{ccNo})";
+      if (Settings.MidiForMacros.AppendCcNoToMacroDisplayNames) {
+        macro.DisplayName = $"{macro.DisplayNameWithoutCc} (CC{ccNo})";
+      }
     }
   }
 

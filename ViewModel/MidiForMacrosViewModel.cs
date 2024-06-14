@@ -1,15 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FalconProgrammer.ViewModel;
 
-public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
+public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
+  /// <summary>
+  ///   Generates <see cref="AppendCcNoToMacroDisplayNames" /> property.
+  /// </summary>
+  [ObservableProperty] private bool _appendCcNoToMacroDisplayNames;
+
   private CcNoRangeCollection? _continuousCcNoRanges;
   private int _modWheelReplacementCcNo;
   private CcNoRangeCollection? _toggleCcNoRanges;
 
   public MidiForMacrosViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
+
+  [ExcludeFromCodeCoverage]
+  public static string AppendCcNoCaption =>
+    "_Append the CC number to each macro's display name when updating the CCs " + 
+    "for programs that do not have script-defined GUIs.";
 
   [ExcludeFromCodeCoverage]
   public static string CcNoRangeAdvice =>
@@ -48,6 +59,7 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   internal override async Task Open() {
     await base.Open();
+    AppendCcNoToMacroDisplayNames = Settings.MidiForMacros.AppendCcNoToMacroDisplayNames;
     ModWheelReplacementCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
     ContinuousCcNoRanges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
     ToggleCcNoRanges.Populate(Settings.MidiForMacros.ToggleCcNoRanges);
@@ -55,8 +67,9 @@ public class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     // Provided there are no validation errors for either of the two collections of
-    // ranges, base.QueryClose will automatically save this setting, if it has
-    // changed, as it is a property of this view model.
+    // ranges, base.QueryClose will automatically save these two setting, if changed,
+    // as they are properties of this view model.
+    Settings.MidiForMacros.AppendCcNoToMacroDisplayNames = AppendCcNoToMacroDisplayNames;
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
     bool canClosePage = true;
     bool haveRangesChanged = false;
