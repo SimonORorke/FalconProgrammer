@@ -71,7 +71,7 @@ internal class InfoPageLayout {
         break;
       case "Devinity" when rowCount == 1:
         if (Program.ProgramXml.BackgroundImagePath != null 
-            && Program.ProgramXml.BackgroundImagePath.StartsWith("Devinity.ufs")) {
+            && Program.ProgramXml.BackgroundImagePath.StartsWith("$Devinity.ufs")) {
           // Default background image. Place the row on the black space at the bottom. 
           top += StandardRowHeight;
         }
