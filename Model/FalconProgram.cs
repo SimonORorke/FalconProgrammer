@@ -314,7 +314,7 @@ internal class FalconProgram {
       string relativePath =
         System.IO.Path.GetRelativePath(Category.Path, path);
       string falconFormatPath = "./" + relativePath.Replace(@"\", "/");
-      ProgramXml.SetBackgroundImagePath(falconFormatPath);
+      ProgramXml.BackgroundImagePath = falconFormatPath;
       NotifyUpdate($"{PathShort}: Set BackgroundImagePath.");
     }
   }

@@ -15,6 +15,28 @@ internal class ProgramXml : EntityBase {
     Category = category;
   }
 
+  public string? BackgroundImagePath {
+    get => Element.Element("Properties")?.Attribute(
+      nameof(BackgroundImagePath))?.Value;
+    set {
+      var propertiesElement = Element.Element("Properties")!;
+      var backgroundImagePathAttribute =
+        propertiesElement.Attribute(nameof(BackgroundImagePath));
+      if (backgroundImagePathAttribute != null) {
+        backgroundImagePathAttribute.Value = value ?? string.Empty;
+      } else {
+        backgroundImagePathAttribute = 
+          new XAttribute("BackgroundImagePath",  string.Empty);
+        // Insert BackgroundImagePath as the first attribute of the Properties element.
+        var attributes = propertiesElement.Attributes().ToList();
+        attributes.Insert(0, backgroundImagePathAttribute);
+        propertiesElement.ReplaceAttributes(attributes);
+        // AddFirst does not work for adding attributes!
+        // propertiesElement.AddFirst(backgroundImagePathAttribute);
+      }
+    }
+  }
+
   [PublicAPI] public Category Category { get; }
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
 
@@ -279,26 +301,6 @@ internal class ProgramXml : EntityBase {
     File.WriteAllText(outputProgramPath, xmlText);
   }
   
-  public string? BackgroundImagePath => 
-    Element.Element("Properties")?.Attribute(nameof(BackgroundImagePath))?.Value;
-
-  public void SetBackgroundImagePath(string path) {
-    var propertiesElement = Element.Element("Properties")!;
-    var backgroundImagePathAttribute =
-      propertiesElement.Attribute(nameof(BackgroundImagePath));
-    if (backgroundImagePathAttribute != null) {
-      backgroundImagePathAttribute.Value = path;
-    } else {
-      backgroundImagePathAttribute = new XAttribute("BackgroundImagePath", path);
-      // Insert BackgroundImagePath as the first attribute of the Properties element.
-      var attributes = propertiesElement.Attributes().ToList();
-      attributes.Insert(0, backgroundImagePathAttribute);
-      propertiesElement.ReplaceAttributes(attributes);
-      // AddFirst does not work for adding attributes!
-      // propertiesElement.AddFirst(backgroundImagePathAttribute);
-    }
-  }
-
   public void SetDescription(string text) {
     var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {
