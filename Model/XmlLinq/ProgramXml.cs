@@ -25,8 +25,9 @@ internal class ProgramXml : EntityBase {
       if (backgroundImagePathAttribute != null) {
         backgroundImagePathAttribute.Value = value ?? string.Empty;
       } else {
+        // Example: Fluidity
         backgroundImagePathAttribute = 
-          new XAttribute("BackgroundImagePath",  string.Empty);
+          new XAttribute("BackgroundImagePath",  value ?? string.Empty);
         // Insert BackgroundImagePath as the first attribute of the Properties element.
         var attributes = propertiesElement.Attributes().ToList();
         attributes.Insert(0, backgroundImagePathAttribute);
