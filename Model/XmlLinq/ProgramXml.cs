@@ -278,11 +278,14 @@ internal class ProgramXml : EntityBase {
   protected virtual void SaveXmlTextToFile(string outputProgramPath, string xmlText) {
     File.WriteAllText(outputProgramPath, xmlText);
   }
+  
+  public string? BackgroundImagePath => 
+    Element.Element("Properties")?.Attribute(nameof(BackgroundImagePath))?.Value;
 
   public void SetBackgroundImagePath(string path) {
     var propertiesElement = Element.Element("Properties")!;
     var backgroundImagePathAttribute =
-      propertiesElement.Attribute("BackgroundImagePath");
+      propertiesElement.Attribute(nameof(BackgroundImagePath));
     if (backgroundImagePathAttribute != null) {
       backgroundImagePathAttribute.Value = path;
     } else {

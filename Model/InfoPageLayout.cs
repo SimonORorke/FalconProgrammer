@@ -63,10 +63,18 @@ internal class InfoPageLayout {
     };
     switch (Program.Category.SoundBankName) {
       case "Ether Fields" when rowCount == 3:
-        top -= 85;
+        if (Program.ProgramXml.BackgroundImagePath != null 
+            && Program.ProgramXml.BackgroundImagePath.StartsWith("$Ether Fields.ufs")) {
+          // Default background image. Avoid the text at bottom.
+          top -= 85;
+        }
         break;
       case "Devinity" when rowCount == 1:
-        top += StandardRowHeight;
+        if (Program.ProgramXml.BackgroundImagePath != null 
+            && Program.ProgramXml.BackgroundImagePath.StartsWith("Devinity.ufs")) {
+          // Default background image. Place the row on the black space at the bottom. 
+          top += StandardRowHeight;
+        }
         break;
       default:
         top -= 5;
