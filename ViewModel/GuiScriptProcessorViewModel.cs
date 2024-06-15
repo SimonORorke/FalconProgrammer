@@ -7,7 +7,8 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   public override string PageTitle =>
-    "Falcon program categories that must use a GUI script processor";
+    "Falcon program categories where the Info page's GUI must be specified in " +
+    "a script processor";
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
