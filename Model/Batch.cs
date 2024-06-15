@@ -190,7 +190,7 @@ public class Batch {
   private void ConfigureProgramsInCategory(
     string categoryName) {
     Category = CreateCategory(categoryName);
-    if (Task is ConfigTask.ReplaceModWheelWithMacro
+    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
         && Category.MustUseGuiScriptProcessor) {
       Log.WriteLine(
         $"Cannot {Task} for category " +
@@ -205,7 +205,7 @@ public class Batch {
   }
 
   private void ConfigureProgramsInSoundBank() {
-    if (Task is ConfigTask.ReplaceModWheelWithMacro
+    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
         && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
       Log.WriteLine(
         $"Cannot {Task} for sound bank " +
