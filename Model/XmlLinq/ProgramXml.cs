@@ -71,7 +71,7 @@ internal class ProgramXml : EntityBase {
     _templateModulationElement ??= GetTemplateModulationElement();
 
   public void AddScriptProcessorElementFromTemplate(string templateEmbeddedFileName) {
-    var template = new ScriptProcessorEmbeddedXmlLinq(templateEmbeddedFileName);
+    var template = new ScriptProcessorEmbeddedXml(templateEmbeddedFileName);
     var scriptProcessorElement = new XElement(template.ScriptProcessorElement);
     var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
     if (eventProcessorsElement == null) {
@@ -102,7 +102,7 @@ internal class ProgramXml : EntityBase {
       // Just a MIDI CC 1 for Organic Pads
       originalMacroElements[i].Remove();
     }
-    var template = new EmbeddedXmlLinq(templateEmbeddedFileName);
+    var template = new EmbeddedXml(templateEmbeddedFileName);
     var templateMacroElements =
       template.RootElement.Elements("ConstantModulation");
     foreach (var templateMacroElement in templateMacroElements) {
@@ -196,12 +196,12 @@ internal class ProgramXml : EntityBase {
   }
 
   private static XElement GetTemplateMacroElement() {
-    var template = new EmbeddedXmlLinq("MacroTemplate.xml");
+    var template = new EmbeddedXml("MacroTemplate.xml");
     return template.RootElement.Elements("ConstantModulation").First();
   }
 
   protected virtual XElement GetTemplateModulationElement() {
-    var template = new EmbeddedXmlLinq("ModulationTemplate.xml");
+    var template = new EmbeddedXml("ModulationTemplate.xml");
     return template.RootElement.Elements("SignalConnection").First();
   }
 

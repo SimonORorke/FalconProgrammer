@@ -211,7 +211,7 @@ internal class Category {
       };
     }
     if (embeddedFileName != null) {
-      var template = new ScriptProcessorEmbeddedXmlLinq(embeddedFileName);
+      var template = new ScriptProcessorEmbeddedXml(embeddedFileName);
       return ScriptProcessor.Create(SoundBankName,
         new XElement(template.ScriptProcessorElement),
         ProgramXml, Settings.MidiForMacros);
