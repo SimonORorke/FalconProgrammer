@@ -111,7 +111,10 @@
         <None Update="Background Images\Yellowish Mid-Green.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Background Images\Heath Dark Blue Large Check.png">
+        <None Update="Background Images\Heath Gunmetal Large Check.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Background Images\Gunmetal.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
