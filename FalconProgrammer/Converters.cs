@@ -7,7 +7,7 @@ namespace FalconProgrammer;
 
 public static class Converters {
   /// <summary>
-  ///   Converters an image file path to a <see cref="Bitmap" /> that can be bound to an
+  ///   Converts an image file path to a <see cref="Bitmap" /> that can be bound to an
   ///   <see cref="Image" />'s <see cref="Image.Source" />.
   /// </summary>
   public static FuncValueConverter<string?, Bitmap?> PathToBitmap { get; } =
