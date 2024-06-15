@@ -195,7 +195,7 @@ public class Batch {
       Log.WriteLine(
         $"Cannot {Task} for category " +
         $@"'{SoundBankName}\{categoryName}' " +
-        "because the category's GUI has to be defined in a script.");
+        "because the category's Info page GUI must be specified in a script processor.");
       return;
     }
     foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {
@@ -210,7 +210,7 @@ public class Batch {
       Log.WriteLine(
         $"Cannot {Task} for sound bank " +
         $"'{SoundBankName}' " +
-        "because the sound bank's GUI has to be defined in a script.");
+        "because the sound bank's Info page GUI must be specified in a script processor.");
       return;
     }
     foreach (string categoryName in FileSystemService.Folder.GetSubfolderNames(

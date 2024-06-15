@@ -107,8 +107,7 @@ internal class FalconProgram {
         && !CanRemoveGuiScriptProcessor()) {
       Log.WriteLine(
         $"{PathShort}: Replacing wheel with macro is not supported because " +
-        "there is a GUI script processor that is not feasible/desirable " +
-        "to remove.");
+        "because the program's Info page GUI is specified in a script processor.");
       return false;
     }
     int modulationsByModWheelCount =
@@ -390,8 +389,7 @@ internal class FalconProgram {
     if (GuiScriptProcessor != null) {
       Log.WriteLine(
         $"{PathShort}: Cannot move macros because " +
-        "there is a GUI script processor that is not feasible/desirable " +
-        "to remove.");
+        "because the program's Info page GUI is specified in a script processor.");
       return;
     }
     var macrosToMove = new List<Macro>();
@@ -658,8 +656,7 @@ internal class FalconProgram {
         && !CanRemoveGuiScriptProcessor()) {
       Log.WriteLine(
         $"{PathShort}: Cannot remove macros because " +
-        "there is a GUI script processor that is not feasible/desirable " +
-        "to remove.");
+        "because the program's Info page GUI is specified in a script processor.");
       return false;
     }
     foreach (var macro in removableMacros) {
