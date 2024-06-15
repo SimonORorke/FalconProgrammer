@@ -39,7 +39,7 @@ public class BatchTests {
     Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, category);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
-      "because the category's GUI has to be defined in a script."));
+      "because the category's Info page GUI must be specified in a script processor."));
   }
 
   [Test]
@@ -50,7 +50,7 @@ public class BatchTests {
     Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
-      "because the sound bank's GUI has to be defined in a script."));
+      "because the sound bank's Info page GUI must be specified in a script processor."));
   }
 
   [Test]
