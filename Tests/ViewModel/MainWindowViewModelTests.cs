@@ -9,6 +9,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     Settings = ReadMockSettings(MockSettingsReaderEmbedded.EmbeddedFileName);
+    MockCursorService = new MockCursorService();
     MockWindowLocationService = new MockWindowLocationService();
     TestBatchScriptViewModel = new TestBatchScriptViewModel(
       MockDialogService, MockDispatcherService) {
@@ -19,7 +20,8 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       ModelServices = TestModelServices
     };
     ViewModel = new TestMainWindowViewModel(
-      MockDialogService, MockDispatcherService, MockWindowLocationService) {
+      MockDialogService, MockDispatcherService, MockCursorService, 
+      MockWindowLocationService) {
       ModelServices = TestModelServices,
       BatchScriptViewModel = TestBatchScriptViewModel,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
@@ -30,6 +32,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private TabItemViewModel GuiScriptProcessorTab => ViewModel.Tabs[2];
   private TabItemViewModel LocationsTab => ViewModel.Tabs[1];
   private TabItemViewModel MidiForMacrosTab => ViewModel.Tabs[3];
+  private MockCursorService MockCursorService { get; set; } = null!;
   private MockWindowLocationService MockWindowLocationService { get; set; } = null!;
   private Settings Settings { get; set; } = null!;
   private TestBatchScriptViewModel TestBatchScriptViewModel { get; set; } = null!;
@@ -99,13 +102,19 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ViewModel.GuiScriptProcessorViewModel.TabTitle));
     Assert.That(MidiForMacrosTab.Header,
       Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
+    Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(2));
+    Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
     Settings = ReadMockSettings("BatchSettings.xml");
     TestGuiScriptProcessorViewModel.ConfigureMockFileSystemService(Settings);
     var selectedPageViewModel = TestGuiScriptProcessorViewModel;
+    MockCursorService.ShowDefaultCursorCount = 0;
+    MockCursorService.ShowWaitCursorCount = 0;
     ViewModel.SelectedTab =
       GuiScriptProcessorTab; // Test GUI Script Processor view model 
     Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
     Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
+    Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(1));
+    Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
     await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
   }

@@ -32,6 +32,7 @@ public class App : Application {
     var collection = new ServiceCollection();
     collection.AddSingleton<IDialogService, DialogService>();
     collection.AddSingleton<IDispatcherService, DispatcherService>();
+    collection.AddSingleton<ICursorService, CursorService>();
     collection.AddSingleton<IWindowLocationService, WindowLocationService>();
     // We only need to register the main window's view model as a service recipient,
     // as it will pass services on to other view models when it creates them.

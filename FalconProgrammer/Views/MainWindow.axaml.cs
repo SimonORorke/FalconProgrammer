@@ -17,6 +17,7 @@ public partial class MainWindow : Window {
       // This only sets the DataContext for the previewer in the IDE.
       Design.SetDataContext(this,
         new MainWindowViewModel(new DialogService(), new DispatcherService(),
+          new CursorService(),
           new WindowLocationService()));
     }
     InitializeComponent();
