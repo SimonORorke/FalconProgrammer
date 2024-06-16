@@ -750,6 +750,7 @@ internal class FalconProgram {
   ///     changing the MIDI CCs modulating macros is not (yet) supported by this method.
   ///     If it were to be implemented, 19 programs would be impacted, at last count by
   ///     <see cref="QueryReuseCc1NotSupported" />, all in Pulsar.
+  ///     See <see cref="Modulation.ModulatedMacroNo" /> remarks.
   ///   </para>
   /// </remarks>
   public void ReuseCc1() {
