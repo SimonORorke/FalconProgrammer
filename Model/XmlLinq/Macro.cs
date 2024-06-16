@@ -134,6 +134,17 @@ internal class Macro : ModulationsOwner {
   }
 
   /// <summary>
+  ///   Appends the specified MIDI CC number to the macro's
+  ///   <see cref="EntityBase.DisplayName" /> if setting
+  ///   <see cref="MidiForMacros.AppendCcNoToMacroDisplayNames" /> is true.
+  /// </summary>
+  public void AppendCcNoToDisplayName(int ccNo) {
+    if (Midi.AppendCcNoToMacroDisplayNames) {
+      DisplayName = $"{DisplayNameWithoutCc} (CC{ccNo})";
+    }
+  }
+
+  /// <summary>
   ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />.
   /// </summary>
   public void ChangeCcNoTo(int newCcNo) {

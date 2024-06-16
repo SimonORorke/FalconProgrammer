@@ -763,9 +763,11 @@ internal class FalconProgram {
     if (SoundBankName == "Organic Pads") {
       // In InitialiseLayout, the Organic Pads wheel macro will have been placed at the
       // end, by design. So the normal algorithm for reusing MIDI CC 1 won't work.  
-      var wheelMacro = FindWheelMacro()!;
-      wheelMacro.ChangeCcNoTo(1);
-      NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
+      var wheelMacro = FindWheelMacro();
+      if (wheelMacro != null) {
+        wheelMacro.ChangeCcNoTo(1);
+        NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
+      }
       return;
     }
     var macroBeforeCc1Macro = (
@@ -797,6 +799,7 @@ internal class FalconProgram {
       var macro = continuousMacrosByLocation[i];
       int newCcNo = Settings.MidiForMacros.GetNextContinuousCcNo(true);
       macro.ChangeCcNoTo(newCcNo);
+      macro.AppendCcNoToDisplayName(newCcNo);
     }
     NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
   }
@@ -917,10 +920,7 @@ internal class FalconProgram {
           modulation.Ratio = 1;
         }
       }
-      // Append CC number to macro's display name.
-      if (Settings.MidiForMacros.AppendCcNoToMacroDisplayNames) {
-        macro.DisplayName = $"{macro.DisplayNameWithoutCc} (CC{ccNo})";
-      }
+      macro.AppendCcNoToDisplayName(ccNo);
     }
   }
 
