@@ -192,13 +192,6 @@ internal class Macro : ModulationsOwner {
     return result;
   }
 
-  public Modulation? FindModulationWithCcNo(int ccNo) {
-    return (
-      from modulation in Modulations
-      where modulation.CcNo == ccNo
-      select modulation).FirstOrDefault();
-  }
-
   protected override XElement GetElement() {
     var result = (
       from macroElement in ProgramXml.MacroElements

@@ -177,6 +177,31 @@ internal class ScriptProcessor : ModulationsOwner {
     eventProcessorsElement!.Remove();
   }
 
+  /// <summary>
+  ///   Example: 19 Pulsar programs.
+  /// </summary>
+  public void ReuseCc1() {
+    var modulationBeforeCc1 = FindModulationWithCcNo(Midi.ModWheelReplacementCcNo);
+    if (modulationBeforeCc1 == null) {
+      return;
+    }
+    var midiModulations = ( 
+      from modulation in Modulations
+      where modulation.ModulatesMacro
+      select modulation).ToList();
+    // There needs to be at least one macro after the macro before the macro whose
+    // MIDI CC number is to be changed to 1!
+    int minMidiModulationCount =
+      midiModulations.IndexOf(modulationBeforeCc1) + 2;
+    // Required for first call of GetNextContinuousCcNo to return 1.
+    Midi.CurrentContinuousCcNo = Midi.ModWheelReplacementCcNo;
+    for (int i = minMidiModulationCount - 1;
+         i < midiModulations.Count;
+         i++) {
+      midiModulations[i].CcNo = Midi.GetNextContinuousCcNo(true);
+    }
+  }
+
   public void UpdateModulationsFromTemplate(
     IList<Modulation> templateModulations,
     IList<Macro> macros) {

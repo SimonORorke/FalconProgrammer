@@ -94,46 +94,6 @@ internal class Modulation : EntityBase {
   private MidiForMacros? Midi { get; }
 
   /// <summary>
-  ///   If the <see cref="Modulation" /> belongs to an effect or the
-  ///   <see cref="FalconProgram.GuiScriptProcessor" />, returns the
-  ///   number (derived from<see cref="Macro.Name" />) of the macro to be modulated,
-  ///   if a macro is modulated, otherwise null.
-  ///   If the <see cref="Modulation" /> belongs to the <see cref="Macro" /> to
-  ///   be modulated, returns null.
-  /// </summary>
-  /// <remarks>
-  ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />, and only
-  ///   for modulations that are owned by the
-  ///   <see cref="FalconProgram.GuiScriptProcessor" />.
-  ///   As it stands, this method will miss some modulated macros that are owned by the
-  ///   <see cref="FalconProgram.GuiScriptProcessor" />, as not all such
-  ///   modulations have <see cref="Destination "/>s with the prefixes we check for.
-  ///   Currently, that does not matter, as ReuseCc1 is disabled for programs with a
-  ///   GUI script processor. If we were to implement support for those programs in
-  ///   ReuseCc1, we would have to look up the names of the macro-modulating modulations
-  ///   in the script processor template when Destination does not start with a prefix
-  ///   that is know to be followed by number.
-  ///   See the <see cref="Destination" /> remarks for further information. 
-  /// </remarks>
-  private int? ModulatedMacroNo {
-    get {
-      string? prefix = null;
-      if (Destination.StartsWith("Macro ")) {
-        prefix = "Macro ";
-      } else if (Destination.StartsWith("Macro_")) {
-        prefix = "Macro_";
-      } else if (Destination.StartsWith("Macro")) {
-        prefix = "Macro";
-      } else if (Destination.StartsWith("Custom_")) {
-        prefix = "Custom_";
-      }
-      return prefix != null
-        ? Convert.ToInt32(Destination.Replace(prefix, string.Empty))
-        : null;
-    }
-  }
-
-  /// <summary>
   ///   Gets whether the MIDI CC mapping is to modulate a macro on the Info page.
   /// </summary>
   /// <remarks>
@@ -144,9 +104,7 @@ internal class Modulation : EntityBase {
       return Owner switch {
         ConnectionsParent => false, // Includes derived type Effect
         Macro => ConnectionMode == 1, // 0 for modulation wheel (MIDI CC 1)
-        // This is not completely reliable, though currently that does not matter:
-        // see ModulatedMacroNo remarks. 
-        ScriptProcessor => ModulatedMacroNo.HasValue, 
+        ScriptProcessor => CcNo.HasValue, 
         null => throw new InvalidOperationException(
           "Modulation.ModulatesMacro cannot be determined because " +
           "Owner has not been specified."),

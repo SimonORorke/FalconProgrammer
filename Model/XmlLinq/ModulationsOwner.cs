@@ -45,6 +45,13 @@ internal class ModulationsOwner : EntityBase {
     Modulations = Modulations.Add(modulation);
   }
 
+  public Modulation? FindModulationWithCcNo(int ccNo) {
+    return (
+      from modulation in Modulations
+      where modulation.CcNo == ccNo
+      select modulation).FirstOrDefault();
+  }
+
   /// <summary>
   ///   Always get the connections Element dynamically, to avoid the risk of adding one
   ///   when the are no modulations for it to be the parent of.

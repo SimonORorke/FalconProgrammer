@@ -740,32 +740,43 @@ internal class FalconProgram {
   ///   Increment MIDI CCs of any subsequent macros accordingly.
   /// </summary>
   /// <remarks>
-  ///   Prerequisites:
-  ///   setting <see cref="MidiForMacros.ModWheelReplacementCcNo" /> > 1;
-  ///   Sound bank\category not included in setting
-  ///   <see cref="Settings.MustUseGuiScriptProcessorCategories" />;
-  ///   GUI script processor removed by <see cref="InitialiseLayout" />. 
-  ///   <para>
-  ///     For programs with a GUI script processor,
-  ///     changing the MIDI CCs modulating macros is not (yet) supported by this method.
-  ///     If it were to be implemented, 19 programs would be impacted, at last count by
-  ///     <see cref="QueryReuseCc1NotSupported" />, all in Pulsar.
-  ///     See <see cref="Modulation.ModulatedMacroNo" /> remarks.
-  ///   </para>
+  ///   <list type="bullet">
+  ///     <listheader>
+  ///       <description>Prerequisites</description>
+  ///     </listheader>
+  ///     <item>
+  ///       <description>
+  ///         Setting <see cref="MidiForMacros.ModWheelReplacementCcNo" /> > 1.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         There is a macro modulation with source
+  ///         <see cref="MidiForMacros.ModWheelReplacementCcNo" /> and at least one
+  ///         more after it.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         For programs without GUI script processors only, no macro modulations
+  ///         whose MIDI CC number is 1, but have not been assigned to a wheel macro
+  ///         by <see cref="RemoveDelayEffectsAndMacros" />. If anything, that should be
+  ///         done instead of assigning MIDI CC 1 to a different macro. 
+  ///       </description>
+  ///     </item>
+  ///   </list>
   /// </remarks>
   public void ReuseCc1() {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       return;
     }
     if (GuiScriptProcessor != null) {
-      // See paragraph in summary.
+      GuiScriptProcessor.ReuseCc1();
+      NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
       return;
     }
     if (ProgramXml.GetModulationElementsWithCcNo(1).Count > 0
         && !WheelMacroExists()) {
-      // There are modulations whose MIDI CC number is 1, but they have not been
-      // assigned to a wheel macro. If anything, that should be done instead of
-      // assigning MIDI CC 1 to a different macro. 
       return;
     }
     if (SoundBankName == "Organic Pads") {
@@ -799,7 +810,7 @@ internal class FalconProgram {
       return;
     }
     // Required for first call of GetNextContinuousCcNo to return 1.
-    Settings.MidiForMacros.CurrentContinuousCcNo = 
+    Settings.MidiForMacros.CurrentContinuousCcNo =
       Settings.MidiForMacros.ModWheelReplacementCcNo;
     for (int i = minVisibleContinuousMacrosCount - 1;
          i < continuousMacrosByLocation.Count;
