@@ -104,6 +104,7 @@ internal class Modulation : EntityBase {
       return Owner switch {
         ConnectionsParent => false, // Includes derived type Effect
         Macro => ConnectionMode == 1, // 0 for modulation wheel (MIDI CC 1)
+        // Not used, as ReuseCc1 does not support GUI script processor.
         ScriptProcessor => CcNo.HasValue, 
         null => throw new InvalidOperationException(
           "Modulation.ModulatesMacro cannot be determined because " +

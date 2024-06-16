@@ -751,6 +751,18 @@ internal class FalconProgram {
   ///     </item>
   ///     <item>
   ///       <description>
+  ///         The sound bank\category is not included in setting
+  ///         <see cref="Settings.MustUseGuiScriptProcessorCategories" />.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         The GUI script processor, if any, has been removed by
+  ///         <see cref="InitialiseLayout" />. 
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
   ///         There is a macro modulation with source
   ///         <see cref="MidiForMacros.ModWheelReplacementCcNo" /> and at least one
   ///         more after it.
@@ -758,21 +770,27 @@ internal class FalconProgram {
   ///     </item>
   ///     <item>
   ///       <description>
-  ///         For programs without GUI script processors only, no macro modulations
-  ///         whose MIDI CC number is 1, but have not been assigned to a wheel macro
-  ///         by <see cref="RemoveDelayEffectsAndMacros" />. If anything, that should be
-  ///         done instead of assigning MIDI CC 1 to a different macro. 
+  ///         There are no macro modulations whose MIDI CC number is 1 but have not been
+  ///         assigned to a wheel macro by <see cref="RemoveDelayEffectsAndMacros" />.
+  ///         If anything, that should be done instead of assigning MIDI CC 1 to a
+  ///         different macro. 
   ///       </description>
   ///     </item>
   ///   </list>
+  ///   It would be possible but not desirable for ReuseCc1 to support programs with
+  ///   GUI script processors. For example, only 19 Pulsar programs (that I use anyway)
+  ///   don't use the mod wheel and so could reuse CC 1. Pulsar programs have 30 macros,
+  ///   all continuous. Using CC 1 for the fifth macro and incrementing the CC numbers
+  ///   of the following numbers for some Pulsar programs but not others would lead to
+  ///   two inconsistent CC numbering schemas. An it would not be easy to tell them
+  ///   apart, as it is not possible to append the CC number to the displayed name of
+  ///   a macro when the Info page's GUI is provided by a script. 
   /// </remarks>
   public void ReuseCc1() {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       return;
     }
     if (GuiScriptProcessor != null) {
-      GuiScriptProcessor.ReuseCc1();
-      NotifyUpdate($"{PathShort}: Reused MIDI CC 1.");
       return;
     }
     if (ProgramXml.GetModulationElementsWithCcNo(1).Count > 0
