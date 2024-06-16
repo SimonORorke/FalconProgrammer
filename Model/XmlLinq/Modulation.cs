@@ -106,7 +106,7 @@ internal class Modulation : EntityBase {
   ///   for modulations that are owned by the
   ///   <see cref="FalconProgram.GuiScriptProcessor" />.
   ///   As it stands, this method will miss some modulated macros, as not all such
-  ///   modulations hav <see cref="Destination "/>s with the prefixes we check for.
+  ///   modulations have <see cref="Destination "/>s with the prefixes we check for.
   ///   Currently, that does not matter, as ReuseCc1 is disabled for programs with a
   ///   GUI script processor. If we were to implement support for those programs in
   ///   ReuseCc1, we would have to look up the names of the macro-modulating modulations
