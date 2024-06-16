@@ -742,6 +742,8 @@ internal class FalconProgram {
   /// <remarks>
   ///   Prerequisites:
   ///   setting <see cref="MidiForMacros.ModWheelReplacementCcNo" /> > 1;
+  ///   Sound bank\category not included in setting
+  ///   <see cref="Settings.MustUseGuiScriptProcessorCategories" />;
   ///   GUI script processor removed by <see cref="InitialiseLayout" />. 
   ///   <para>
   ///     For programs with a GUI script processor,
