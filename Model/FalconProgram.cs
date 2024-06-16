@@ -738,13 +738,18 @@ internal class FalconProgram {
   ///   of the keyboard's hardware controllers by assigning MIDI CC 1 (mod wheel) to the
   ///   5th continuous macro and MIDI CC 11 (touch strip) to the 6th, if there is one.
   ///   Increment MIDI CCs of any subsequent macros accordingly.
+  /// </summary>
+  /// <remarks>
+  ///   Prerequisites:
+  ///   setting <see cref="MidiForMacros.ModWheelReplacementCcNo" /> > 1;
+  ///   GUI script processor removed by <see cref="InitialiseLayout" />. 
   ///   <para>
   ///     For programs with a GUI script processor,
   ///     changing the MIDI CCs modulating macros is not (yet) supported by this method.
   ///     If it were to be implemented, 19 programs would be impacted, at last count by
   ///     <see cref="QueryReuseCc1NotSupported" />, all in Pulsar.
   ///   </para>
-  /// </summary>
+  /// </remarks>
   public void ReuseCc1() {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
       return;
