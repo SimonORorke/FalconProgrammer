@@ -384,6 +384,31 @@ internal class FalconProgram {
   ///   we will assume that the player will use the wheel, and so the macro will still be
   ///   moved to the end.
   /// </summary>
+  /// <remarks>
+  ///   <list type="bullet">
+  ///     <listheader>
+  ///       <description>Prerequisites</description>
+  ///     </listheader>
+  ///     <item>
+  ///       <description>
+  ///         The sound bank\category is not included in setting
+  ///         <see cref="Settings.MustUseGuiScriptProcessorCategories" />.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         The GUI script processor, if any, has been removed by
+  ///         <see cref="InitialiseLayout" />. 
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         <see cref="ZeroReleaseMacro" /> and/or <see cref="ZeroReverbMacros" />
+  ///         have been run.
+  ///       </description>
+  ///     </item>
+  ///   </list>
+  /// </remarks>
   public void MoveZeroedMacrosToEnd() {
     if (GuiScriptProcessor != null) {
       Log.WriteLine(

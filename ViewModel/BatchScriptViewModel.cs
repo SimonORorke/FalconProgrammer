@@ -242,6 +242,11 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }
+    // If the user goes to another page when a long log is shown, there can be several
+    // seconds delay when later returning to this Batch Script page. So clear the log on
+    // closing this page.
+    Log.Clear();
+    Status = string.Empty;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 
