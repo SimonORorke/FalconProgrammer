@@ -61,15 +61,15 @@ internal class InfoPageLayout {
       3 => StandardBottommostY - 2 * StandardRowHeight,
       _ => StandardBottommostY - 3 * StandardRowHeight
     };
-    switch (Program.Category.SoundBankName) {
-      case "Ether Fields" when rowCount == 3:
+    switch (Program.SoundBankId) {
+      case SoundBankId.EtherFields when rowCount == 3:
         if (Program.ProgramXml.BackgroundImagePath != null 
             && Program.ProgramXml.BackgroundImagePath.StartsWith("$Ether Fields.ufs")) {
           // Default background image. Avoid the text at bottom.
           top -= 85;
         }
         break;
-      case "Devinity" when rowCount == 1:
+      case SoundBankId.Devinity when rowCount == 1:
         if (Program.ProgramXml.BackgroundImagePath != null 
             && Program.ProgramXml.BackgroundImagePath.StartsWith("$Devinity.ufs")) {
           // Default background image. Place the row on the black space at the bottom. 

@@ -1,4 +1,4 @@
-﻿namespace FalconProgrammer.Model.XmlLinq;
+﻿namespace FalconProgrammer.Model;
 
 public enum ScriptId {
   None,

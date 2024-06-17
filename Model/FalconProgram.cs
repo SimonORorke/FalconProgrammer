@@ -7,6 +7,7 @@ namespace FalconProgrammer.Model;
 
 internal class FalconProgram {
   private InfoPageLayout? _infoPageLayout;
+  private SoundBankId? _soundBankId;
 
   public FalconProgram(string path, Category category, Batch batch) {
     Path = path;
@@ -62,6 +63,7 @@ internal class FalconProgram {
     ImmutableList<ScriptProcessor>.Empty;
 
   public Settings Settings => Batch.Settings;
+  public SoundBankId SoundBankId => _soundBankId ??= ProgramXml.GetSoundBankId();
   private string SoundBankName => Category.SoundBankName;
 
   private void BypassDelayEffects() {
@@ -79,13 +81,13 @@ internal class FalconProgram {
   }
 
   private bool CanRemoveGuiScriptProcessor() {
-    if (Category.MustUseGuiScriptProcessor || Macros.Count > 4) {
+    if (Category.MustUseGuiScriptProcessor) {
       return false;
     }
     // I've customised this script processor and it looks too hard to get rid of.
     // It should be excluded anyway because it has the setting
     // Category.MustUseGuiScriptProcessor true.
-    return SoundBankName != "Organic Keys";
+    return SoundBankId != SoundBankId.OrganicKeys;
   }
 
   /// <summary>
@@ -98,7 +100,7 @@ internal class FalconProgram {
         $"{PathShort} already has a Wheel macro.");
       return false;
     }
-    if (SoundBankName == "Ether Fields") {
+    if (SoundBankId == SoundBankId.EtherFields) {
       // There are lots of macros in every program of this sound bank.
       // I tried adding wheel macros. But it's too busy to be feasible.
       return false;
@@ -290,18 +292,18 @@ internal class FalconProgram {
           SoundBankName, out string path)) {
       SetBackgroundImagePath();
     }
-    switch (SoundBankName) {
-      case "Ether Fields" or "Spectre":
+    switch (SoundBankId) {
+      case SoundBankId.EtherFields or SoundBankId.Spectre:
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;
-      case "Fluidity":
+      case SoundBankId.Fluidity:
         var attackMacro = FindContinuousMacro("Attack");
         if (attackMacro != null) {
           MoveMacroToEnd(attackMacro);
           RefreshMacroOrder();
         }
         break;
-      case "Organic Pads":
+      case SoundBankId.OrganicPads:
         InitialiseOrganicPadsProgram();
         break;
       default:
@@ -654,6 +656,11 @@ internal class FalconProgram {
       $"{PathShort}: Saved and reloaded on reordering macros.");
   }
 
+  /// <summary>
+  ///   Bypasses (disables) all known delay effects and then, if the program does not
+  ///   have a GUI script processor, removes any macro that no longer modulates any
+  ///   enabled effects.
+  /// </summary>
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
     if (RemoveDelayMacros()) {
@@ -725,9 +732,53 @@ internal class FalconProgram {
 
   /// <summary>
   ///   If feasible, replaces all modulations by the modulation wheel of effect
-  ///   parameters with modulations by a new 'Wheel' macro. Otherwise shows a message
-  ///   explaining why it is not feasible.
+  ///   parameters with modulations by a new 'Wheel' macro.
   /// </summary>
+  /// <remarks>
+  ///   <list type="bullet">
+  ///     <listheader>
+  ///       <description>Prerequisites</description>
+  ///     </listheader>
+  ///     <item>
+  ///       <description>
+  ///         The sound bank\category is not included in setting
+  ///         <see cref="Settings.MustUseGuiScriptProcessorCategories" />.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         The GUI script processor, if any, has been removed by
+  ///         <see cref="InitialiseLayout" />. 
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         There is not already a macro with display name 'Wheel'.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///       </description>
+  ///     </item>
+  ///   </list>
+  ///   <list type="bullet">
+  ///     <listheader>
+  ///       <description>Exclusions</description>
+  ///     </listheader>
+  ///     <item>
+  ///       <description>
+  ///         Not supported for sound banks Ether Fields or Organic Keys.
+  ///         The programs in these sound banks are too complex for this
+  ///         configuration task to be feasible, for now at least.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         The program already has a macro with display name 'Wheel'.
+  ///       </description>
+  ///     </item>
+  ///   </list>
+  /// </remarks>
   public void ReplaceModWheelWithMacro() {
     if (!CanReplaceModWheelWithMacro()) {
       return;
@@ -822,7 +873,7 @@ internal class FalconProgram {
         && !WheelMacroExists()) {
       return;
     }
-    if (SoundBankName == "Organic Pads") {
+    if (SoundBankId == SoundBankId.OrganicPads) {
       // In InitialiseLayout, the Organic Pads wheel macro will have been placed at the
       // end, by design. So the normal algorithm for reusing MIDI CC 1 won't work.  
       var wheelMacro = FindWheelMacro();

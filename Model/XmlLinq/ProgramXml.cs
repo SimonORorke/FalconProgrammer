@@ -14,7 +14,7 @@ internal class ProgramXml : EntityBase {
   public ProgramXml(Category category) {
     Category = category;
   }
-
+  
   public string? BackgroundImagePath {
     get => Element.Element("Properties")?.Attribute(
       nameof(BackgroundImagePath))?.Value;
@@ -27,7 +27,7 @@ internal class ProgramXml : EntityBase {
       } else {
         // Example: Fluidity
         backgroundImagePathAttribute = 
-          new XAttribute("BackgroundImagePath",  value ?? string.Empty);
+          new XAttribute(nameof(BackgroundImagePath),  value ?? string.Empty);
         // Insert BackgroundImagePath as the first attribute of the Properties element.
         var attributes = propertiesElement.Attributes().ToList();
         attributes.Insert(0, backgroundImagePathAttribute);
@@ -40,6 +40,7 @@ internal class ProgramXml : EntityBase {
 
   [PublicAPI] public Category Category { get; }
   public XElement ControlSignalSourcesElement { get; private set; } = null!;
+  [PublicAPI] public string InputProgramPath { get; set; } = null!;
 
   /// <summary>
   ///   Gets the program's macro elements. It's safest to query this each time. Otherwise
@@ -47,8 +48,6 @@ internal class ProgramXml : EntityBase {
   /// </summary>
   public IEnumerable<XElement> MacroElements =>
     ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
-
-  [PublicAPI] public string InputProgramPath { get; set; } = null!;
 
   /// <summary>
   ///   The XML file's root element, for use when reading and writing the file
@@ -193,6 +192,28 @@ internal class ProgramXml : EntityBase {
     return eventProcessorsElement != null
       ? eventProcessorsElement.Elements("ScriptProcessor").ToImmutableList()
       : ImmutableList<XElement>.Empty;
+  }
+
+  public SoundBankId GetSoundBankId() {
+    try {
+      var neededSoundBankElement = RootElement.Elements("NeededFS").Last();
+      string path = GetAttributeValue(neededSoundBankElement, "Source");
+      // Example: "FalconFactory" from "D:/Libraries/UVI/Falcon Factory.ufs".
+      string soundBankNamePascal = 
+        path[..path.IndexOf('.')][(path.LastIndexOf('/') + 1)..].Replace(
+        " ", string.Empty);
+      var soundBankIdNames = Enum.GetNames<SoundBankId>().ToList();
+      if (soundBankIdNames.Contains(soundBankNamePascal)) {
+        return (
+          from soundBankId in Enum.GetValues<SoundBankId>()
+          where soundBankId.ToString() == soundBankNamePascal
+          select soundBankId).Single();
+      }
+      return SoundBankId.Other;
+    } catch {
+      throw new ApplicationException(
+        "The sound bank cannot be identified from the program.");
+    }
   }
 
   private static XElement GetTemplateMacroElement() {
