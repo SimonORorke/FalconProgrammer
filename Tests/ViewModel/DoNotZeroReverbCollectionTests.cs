@@ -51,7 +51,7 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
     ConfigureMockFileSystemService();
     int initialSettingsDoNotZeroReverbCount = Settings.DoNotZeroReverb.Count;
     // Check that the test data is as expected
-    Assert.That(initialSettingsDoNotZeroReverbCount, Is.EqualTo(13));
+    Assert.That(initialSettingsDoNotZeroReverbCount, Is.EqualTo(20));
     // Populate
     Collection.Populate(Settings, SoundBanks);
     int initialCollectionCount = Collection.Count;

@@ -41,7 +41,7 @@ public class ReverbViewModelTests : ViewModelTestsBase {
     await ViewModel.Open(); // Reads settings to populate the page.
     // Check that the initial settings are as expected
     int initialSettingsReverbCount = ViewModel.Settings.DoNotZeroReverb.Count;
-    Assert.That(initialSettingsReverbCount, Is.EqualTo(13));
+    Assert.That(initialSettingsReverbCount, Is.EqualTo(20));
     Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
       Is.EqualTo(@"Falcon Factory\Bass-Sub\Coastal Halftones 1.4"));
     var newProgramItem =

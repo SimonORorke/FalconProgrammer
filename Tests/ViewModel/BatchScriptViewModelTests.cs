@@ -28,13 +28,14 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Scope.Program, Is.EqualTo("BL Xylophone"));
     Assert.That(ViewModel.Tasks, Has.Count.EqualTo(2));
     Assert.That(ViewModel.Tasks[0].Name, Is.EqualTo("QueryAdsrMacros"));
+    Assert.That(ViewModel.Status, Does.StartWith("Loaded script"));
     await ViewModel.QueryClose();
     Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo("Spectre"));
     Assert.That(ViewModel.Settings.Batch.Scope.Category, Is.EqualTo("Bells"));
     Assert.That(ViewModel.Settings.Batch.Scope.Program, Is.EqualTo("BL Xylophone"));
     Assert.That(ViewModel.Settings.Batch.Tasks, Has.Count.EqualTo(1));
     Assert.That(ViewModel.Settings.Batch.Tasks[0], Is.EqualTo("QueryAdsrMacros"));
-    Assert.That(ViewModel.Status, Does.StartWith("Loaded script"));
+    Assert.That(ViewModel.Status, Is.Empty);
   }
 
   [Test]
