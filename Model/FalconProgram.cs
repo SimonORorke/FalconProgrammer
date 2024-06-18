@@ -472,7 +472,8 @@ internal class FalconProgram {
     if (macro != Macros[^1]) {
       Macros.Remove(macro);
       Macros.Add(macro);
-      NotifyUpdate($"{PathShort}: Moved {macro.DisplayName} macro to end.");
+      NotifyUpdate(
+        $"{PathShort}: Moved {macro.DisplayNameWithoutCc} macro to end.");
     }
   }
 
@@ -703,7 +704,7 @@ internal class FalconProgram {
     foreach (var macro in removableMacros) {
       macro.RemoveElement();
       Macros.Remove(macro);
-      NotifyUpdate($"{PathShort}: Removed {macro}.");
+      NotifyUpdate($"{PathShort}: Removed {macro.DisplayNameWithoutCc}.");
     }
     return true;
   }
@@ -1015,8 +1016,8 @@ internal class FalconProgram {
         macro.GetForMacroModulations();
       if (forMacroModulations.Count > 1) {
         throw new NotSupportedException(
-          $"{PathShort}: Macro '{macro}' owns {forMacroModulations.Count} " +
-          "'for macro' Modulations.");
+          $"{PathShort}: Macro '{macro.DisplayNameWithoutCc}' " +
+          $"owns {forMacroModulations.Count} 'for macro' Modulations.");
       }
       int ccNo = macro.IsContinuous
         ? Settings.MidiForMacros.GetNextContinuousCcNo(false)
@@ -1058,11 +1059,11 @@ internal class FalconProgram {
     if (macro.IsModulatedByWheel) {
       // Example: Titanium\Pads\Children's Choir.
       Log.WriteLine(
-        $"{PathShort}: Not changing {macro.DisplayName} to zero because " +
+        $"{PathShort}: Not changing {macro.DisplayNameWithoutCc} to zero because " +
         "it is modulated by the wheel.");
     } else {
       macro.ChangeValueToZero();
-      NotifyUpdate($"{PathShort}: Changed {macro.DisplayName} to zero.");
+      NotifyUpdate($"{PathShort}: Changed {macro.DisplayNameWithoutCc} to zero.");
     }
   }
 

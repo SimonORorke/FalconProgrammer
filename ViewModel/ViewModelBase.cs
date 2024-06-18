@@ -17,6 +17,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     DispatcherService = dispatcherService;
   }
 
+  protected ICursorService? CursorService { get; set; }
   internal IDialogService DialogService { get; }
   protected IDispatcherService DispatcherService { get; }
 

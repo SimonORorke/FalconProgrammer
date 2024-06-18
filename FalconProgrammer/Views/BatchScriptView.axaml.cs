@@ -13,7 +13,8 @@ public partial class BatchScriptView : UserControl {
     if (Design.IsDesignMode) {
       // This only sets the DataContext for the previewer in the IDE.
       Design.SetDataContext(this,
-        new BatchScriptViewModel(new DialogService(), new DispatcherService()));
+        new BatchScriptViewModel(new DialogService(), new DispatcherService(), 
+          new CursorService()));
     }
     InitializeComponent();
   }

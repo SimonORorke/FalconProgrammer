@@ -5,6 +5,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 public class BatchScriptViewModelTests : ViewModelTestsBase {
   private const string BatchScriptPath = "This path will be ignored.xml";
+  private MockCursorService MockCursorService { get; set; } = null!;
   private Settings Settings { get; set; } = null!;
   private TestBatchScriptViewModel ViewModel { get; set; } = null!;
 
@@ -12,9 +13,10 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
   public override void Setup() {
     base.Setup();
     MockDialogService.SimulatedPath = BatchScriptPath;
+    MockCursorService = new MockCursorService();
     Settings = ReadMockSettings("BatchSettings.xml");
     ViewModel = new TestBatchScriptViewModel(
-      MockDialogService, MockDispatcherService) {
+      MockDialogService, MockDispatcherService, MockCursorService) {
       ModelServices = TestModelServices
     };
   }
@@ -76,6 +78,8 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Log[0], Is.EqualTo(
       @"InitialiseLayout - 'Falcon Factory\Keys\Morning Keys'"));
     Assert.That(ViewModel.Status, Does.StartWith("Run ended"));
+    Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
+    Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(1));
     ViewModel.CopyLogCommand.Execute(null);
     Assert.That(ViewModel.SavedLog, Does.Contain(@"Falcon Factory\Keys\Morning Keys"));
     Assert.That(ViewModel.Status, Is.EqualTo("Copied log to clipboard."));

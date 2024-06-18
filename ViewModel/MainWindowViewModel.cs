@@ -28,7 +28,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     CursorService = cursorService;
     WindowLocationService = windowLocationService;
     BackgroundViewModel = new BackgroundViewModel(dialogService, dispatcherService);
-    BatchScriptViewModel = new BatchScriptViewModel(dialogService, dispatcherService);
+    BatchScriptViewModel = new BatchScriptViewModel(
+      dialogService, dispatcherService, cursorService);
     GuiScriptProcessorViewModel =
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
@@ -76,8 +77,6 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     get => _currentPageTitle;
     private set => SetProperty(ref _currentPageTitle, value);
   }
-
-  private ICursorService CursorService { get; }
 
   /// <summary>
   ///   The setter is only for tests.
@@ -159,7 +158,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   partial void OnSelectedTabChanged(TabItemViewModel? value) {
     if (IsVisible) {
-      CursorService.ShowWaitCursor();
+      CursorService!.ShowWaitCursor();
     } else {
       try {
         // Start listening for ObservableRecipient messages. Set IsVisible to true.
@@ -192,7 +191,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     CurrentPageViewModel = value.ViewModel;
     CurrentPageTitle = CurrentPageViewModel.PageTitle;
     await CurrentPageViewModel.Open();
-    CursorService.ShowDefaultCursor();
+    CursorService!.ShowDefaultCursor();
     // throw new InvalidOperationException("This is a test async void exception.");
   }
 

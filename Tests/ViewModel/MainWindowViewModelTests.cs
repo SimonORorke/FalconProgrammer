@@ -12,7 +12,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockCursorService = new MockCursorService();
     MockWindowLocationService = new MockWindowLocationService();
     TestBatchScriptViewModel = new TestBatchScriptViewModel(
-      MockDialogService, MockDispatcherService) {
+      MockDialogService, MockDispatcherService, MockCursorService) {
       ModelServices = TestModelServices
     };
     TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(

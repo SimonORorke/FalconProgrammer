@@ -18,7 +18,10 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   private TaskCollection? _tasks;
 
   public BatchScriptViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
+    IDispatcherService dispatcherService, ICursorService cursorService)
+    : base(dialogService, dispatcherService) {
+    CursorService = cursorService;
+  }
 
   protected Batch Batch => _batch ??= CreateInitialisedBatch();
   internal BatchLog BatchLog => _batchLog ??= CreateBatchLog();
@@ -259,10 +262,16 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [RelayCommand]
   private void RunScript() {
-    var script = CreateInitialisedBatchScript();
-    PrepareForRun();
-    StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token),
-      nameof(RunScript));
+    // If the previous run had a long log, clearing it can take a few seconds.
+    // So show a wait cursor till the script actually starts running.
+    CursorService!.ShowWaitCursor();
+    DispatcherService.Dispatch(() => {
+      var script = CreateInitialisedBatchScript();
+      PrepareForRun();
+      StartThread(() => Batch.RunScript(script, RunCancellationTokenSource.Token),
+        nameof(RunScript));
+      CursorService!.ShowDefaultCursor();
+    });
   }
 
   /// <summary>

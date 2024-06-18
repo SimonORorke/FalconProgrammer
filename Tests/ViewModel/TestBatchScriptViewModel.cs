@@ -8,7 +8,8 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 public class TestBatchScriptViewModel : BatchScriptViewModel {
   public TestBatchScriptViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
+    IDispatcherService dispatcherService, ICursorService cursorService) : base(
+    dialogService, dispatcherService, cursorService) { }
 
   private MockFileSystemService MockFileSystemService =>
     (MockFileSystemService)FileSystemService;
