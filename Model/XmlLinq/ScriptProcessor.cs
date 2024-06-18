@@ -34,7 +34,7 @@ internal class ScriptProcessor : ModulationsOwner {
   /// </remarks>
   public string? Category {
     get {
-      if (SoundBankId != "Pulsar") {
+      if (SoundBankPascal != "Pulsar") {
         return null;
       }
       string scriptWithoutPrefix = Script[13..];
@@ -70,7 +70,7 @@ internal class ScriptProcessor : ModulationsOwner {
   ///   <see cref="ScriptPath" />.
   ///   Example: "FalconFactory" from "$Falcon Factory.ufs/Scripts/Factory2_5_Stub.lua".
   /// </summary>
-  public string SoundBankId {
+  public string SoundBankPascal {
     get {
       if (!ScriptPath.StartsWith('$') || !ScriptPath.Contains('.')) {
         // OrganicPads_DahdsrController.xml is currently the only one.
@@ -105,10 +105,10 @@ internal class ScriptProcessor : ModulationsOwner {
     AddModulation(templateModulation);
   }
 
-  public static ScriptProcessor Create(string soundBankName,
+  public static ScriptProcessor Create(SoundBankId soundBankId,
     XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) {
-    return soundBankName switch {
-      "Organic Keys" => new OrganicKeysScriptProcessor(
+    return soundBankId switch {
+      SoundBankId.OrganicKeys => new OrganicKeysScriptProcessor(
         scriptProcessorElement, programXml, midi),
       _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
     };
@@ -121,15 +121,15 @@ internal class ScriptProcessor : ModulationsOwner {
     // with a category or colour parameter.
     // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
     // So we parse Script with EndWith.
-    if (SoundBankId == "FactoryRev2" &&
+    if (SoundBankPascal == "FactoryRev2" &&
         (Script.EndsWith("require 'FalconFactory'") ||
          Script.EndsWith("require \"FalconFactory\""))) {
       return ScriptId.FactoryRev2;
     }
-    if (Script.EndsWith($"require \"{SoundBankId}\"")) {
+    if (Script.EndsWith($"require \"{SoundBankPascal}\"")) {
       return ScriptId.SoundBank1;
     }
-    if (Script.EndsWith($"require(\"{SoundBankId}\")")) {
+    if (Script.EndsWith($"require(\"{SoundBankPascal}\")")) {
       return ScriptId.SoundBank2;
     }
     if (Script.EndsWith("require(\"Factory2_1\")")) {

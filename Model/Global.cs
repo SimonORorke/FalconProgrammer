@@ -51,4 +51,15 @@ public static class Global {
     }
     return result;
   }
+
+  internal static SoundBankId GetSoundBankId(string soundBankPascal) {
+    var soundBankIdNames = Enum.GetNames<SoundBankId>().ToList();
+    if (soundBankIdNames.Contains(soundBankPascal)) {
+      return (
+        from soundBankId in Enum.GetValues<SoundBankId>()
+        where soundBankId.ToString() == soundBankPascal
+        select soundBankId).Single();
+    }
+    return SoundBankId.Other;
+  }
 }

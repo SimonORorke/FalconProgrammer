@@ -642,7 +642,7 @@ internal class FalconProgram {
     ScriptProcessors = (
       from scriptProcessorElement in ProgramXml.ScriptProcessorElements
       select ScriptProcessor.Create(
-        SoundBankName, scriptProcessorElement, ProgramXml,
+        SoundBankId, scriptProcessorElement, ProgramXml,
         Settings.MidiForMacros)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
       foreach (var modulation in scriptProcessor.Modulations) {

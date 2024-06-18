@@ -115,7 +115,7 @@ internal class Category {
         case ScriptId.Main2:
           return scriptProcessor;
       }
-      if (scriptProcessor is { SoundBankId: "FalconFactory", Name: "EventProcessor9" }) {
+      if (scriptProcessor is { SoundBankPascal: "FalconFactory", Name: "EventProcessor9" }) {
         // Examples of programs with GuiScriptProcessor but no template ScriptProcessor:
         // Falcon Factory\Bass-Sub\Balarbas 2.0
         // Falcon Factory\Keys\Smooth E-piano 2.1.
@@ -207,17 +207,18 @@ internal class Category {
     };
     if (embeddedFileName == null
         && guiScriptProcessor.GuiScriptId != ScriptId.None) {
-      embeddedFileName = guiScriptProcessor.SoundBankId switch {
+      embeddedFileName = guiScriptProcessor.SoundBankPascal switch {
         // The Hypnotic Drive program files have a typo in the script sound bank name.
         "HypnoticDive" => "HypnoticDrive_Gui.xml",
         "Pulsar" => 
-          $"{guiScriptProcessor.SoundBankId}_{guiScriptProcessor.Category}_Gui.xml",
-        _ => $"{guiScriptProcessor.SoundBankId}_Gui.xml"
+          $"{guiScriptProcessor.SoundBankPascal}_{guiScriptProcessor.Category}_Gui.xml",
+        _ => $"{guiScriptProcessor.SoundBankPascal}_Gui.xml"
       };
     }
     if (embeddedFileName != null) {
       var template = new ScriptProcessorEmbeddedXml(embeddedFileName);
-      return ScriptProcessor.Create(SoundBankName,
+      var soundBankId = Global.GetSoundBankId(guiScriptProcessor.SoundBankPascal);
+      return ScriptProcessor.Create(soundBankId,
         new XElement(template.ScriptProcessorElement),
         ProgramXml, Settings.MidiForMacros);
     }
