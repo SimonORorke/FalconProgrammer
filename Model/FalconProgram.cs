@@ -17,7 +17,7 @@ internal class FalconProgram {
   }
 
   private Batch Batch { get; }
-  public Category Category { get; }
+  protected Category Category { get; }
 
   /// <summary>
   ///   Gets continuous (as opposes to toggle) macros. It's safest to query this each
@@ -94,10 +94,33 @@ internal class FalconProgram {
     if (Category.MustUseGuiScriptProcessor) {
       return false;
     }
-    // I've customised this script processor and it looks too hard to get rid of.
-    // It should be excluded anyway because it has the setting
-    // Category.MustUseGuiScriptProcessor true.
-    return SoundBankId != SoundBankId.OrganicKeys;
+    if (GuiScriptProcessor?.GuiScriptId == ScriptId.OrganicTexture) {
+      throw new ApplicationException(
+        "Removing the GUI script processor is not currently supported " +
+        $"for programs of sound bank '{SoundBankName}' category '{Category.Name}', " +
+        "as multiple script parameters that can be controlled via the script-based " +
+        "Info page GUI " +
+        "are not represented by macros on the non-script-based Info page GUI. " +
+        $"You need to add sound bank '{SoundBankName}' category '{Category.Name}' " +
+        $"to the list on the GUI Script Processor page.");
+    }
+    return SoundBankId switch {
+      SoundBankId.OrganicKeys => throw new ApplicationException(
+        "Removing the GUI script processor is not currently supported " +
+        $"for programs of sound bank '{SoundBankName}', as the Delay and Reverb " +
+        "script parameters, which can be controlled via the script-based " +
+        "Info page GUI, " +
+        "are not represented by macros on the non-script-based Info page GUI. " +
+        $"You need to add sound bank '{SoundBankName}' to the list on the " +
+        "GUI Script Processor page."),
+      SoundBankId.Pulsar => throw new ApplicationException(
+        "Removing the GUI script processor is not currently supported " +
+        $"for programs of sound bank '{SoundBankName}', as there are too many " +
+        $"macros for the non-script-based Info page GUI. " +
+        $"You need to add sound bank '{SoundBankName}' to the list on the " +
+        $"GUI Script Processor page."),
+      _ => true
+    };
   }
 
   /// <summary>
@@ -292,7 +315,7 @@ internal class FalconProgram {
     // processor, if there is one, unless there is a need to keep it.
     // This saves having to decide later whether to remove the GUI script processor,
     // such as to add a wheel macro or remove a delay macro.
-    if (GuiScriptProcessor != null && !Category.MustUseGuiScriptProcessor) {
+    if (GuiScriptProcessor != null && CanRemoveGuiScriptProcessor()) {
       RemoveGuiScriptProcessor();
     }
     if (GuiScriptProcessor != null) {

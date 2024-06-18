@@ -217,8 +217,7 @@ internal class Category {
     }
     if (embeddedFileName != null) {
       var template = new ScriptProcessorEmbeddedXml(embeddedFileName);
-      var soundBankId = Global.GetSoundBankId(guiScriptProcessor.SoundBankPascal);
-      return ScriptProcessor.Create(soundBankId,
+      return ScriptProcessor.Create(guiScriptProcessor.SoundBankId,
         new XElement(template.ScriptProcessorElement),
         ProgramXml, Settings.MidiForMacros);
     }

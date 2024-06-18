@@ -34,7 +34,7 @@ internal class ScriptProcessor : ModulationsOwner {
   /// </remarks>
   public string? Category {
     get {
-      if (SoundBankPascal != "Pulsar") {
+      if (SoundBankId != SoundBankId.Pulsar) {
         return null;
       }
       string scriptWithoutPrefix = Script[13..];
@@ -64,6 +64,7 @@ internal class ScriptProcessor : ModulationsOwner {
 
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
+  public SoundBankId SoundBankId => Global.GetSoundBankId(SoundBankPascal);
 
   /// <summary>
   ///   Gets the Pascal-style (spaces removed) sound bank identifier from
