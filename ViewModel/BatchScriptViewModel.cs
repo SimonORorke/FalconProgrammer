@@ -223,6 +223,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   protected virtual void PrepareForRun() {
     IsRunStarting = true;
+    // I thought re-instantiating the log might be quicker than clearing a long log.
+    // But I don't think it makes any difference.
     Log.Clear();
     // Needs to be refreshed each time, in case the previous run was cancelled.
     RunCancellationTokenSource = new CancellationTokenSource();
@@ -245,6 +247,8 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
     // If the user goes to another page when a long log is shown, there can be several
     // seconds delay when later returning to this Batch Script page. So clear the log on
     // closing this page.
+    // I thought re-instantiating the log might be quicker than clearing a long log.
+    // But I don't think it makes any difference.
     Log.Clear();
     Status = string.Empty;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
