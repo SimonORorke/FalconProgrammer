@@ -63,7 +63,17 @@ internal class FalconProgram {
     ImmutableList<ScriptProcessor>.Empty;
 
   public Settings Settings => Batch.Settings;
+  
+  /// <summary>
+  ///   A sound bank identifier derived from program contents, so not dependent on
+  ///   each sound bank folder name being the same as the publisher's sound bank name. 
+  /// </summary>
   public SoundBankId SoundBankId => _soundBankId ??= ProgramXml.GetSoundBankId();
+  
+  /// <summary>
+  ///   The name of the sound bank folder. It does not necessarily need to be the same as
+  ///   the publisher's sound bank name.
+  /// </summary>
   private string SoundBankName => Category.SoundBankName;
 
   private void BypassDelayEffects() {

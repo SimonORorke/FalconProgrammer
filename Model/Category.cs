@@ -67,6 +67,11 @@ internal class Category {
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   private string SoundBankFolderPath { get; }
+  
+  /// <summary>
+  ///   The name of the sound bank folder. It does not necessarily need to be the same as
+  ///   the publisher's sound bank name.
+  /// </summary>
   public string SoundBankName => System.IO.Path.GetFileName(SoundBankFolderPath);
 
   public string TemplateCategoryName => System.IO.Path.GetFileName(
