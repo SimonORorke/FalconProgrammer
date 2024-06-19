@@ -223,7 +223,7 @@ internal class Category {
     }
     throw new ApplicationException(
       "A built-in GUI ScriptProcessor template is not available for " 
-      + $"sound bank '{SoundBankName}' category '{Name}'. " +
+      + $"sound bank {SoundBankName} category {Name}. " +
       $"You have two options:{Environment.NewLine}{Environment.NewLine}" +
       "1) Add a template program file with MIDI CCs for the sound bank or category to " +
       "the Template Programs folder. " +

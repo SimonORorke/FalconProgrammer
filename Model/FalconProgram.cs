@@ -63,13 +63,13 @@ internal class FalconProgram {
     ImmutableList<ScriptProcessor>.Empty;
 
   public Settings Settings => Batch.Settings;
-  
+
   /// <summary>
   ///   A sound bank identifier derived from program contents, so not dependent on
-  ///   each sound bank folder name being the same as the publisher's sound bank name. 
+  ///   each sound bank folder name being the same as the publisher's sound bank name.
   /// </summary>
   public SoundBankId SoundBankId => _soundBankId ??= ProgramXml.GetSoundBankId();
-  
+
   /// <summary>
   ///   The name of the sound bank folder. It does not necessarily need to be the same as
   ///   the publisher's sound bank name.
@@ -98,28 +98,28 @@ internal class FalconProgram {
       // Falcon Factory\Organic Texture 2.8
       throw new ApplicationException(
         "Removing the GUI script processor is not currently supported " +
-        $"for programs of sound bank '{SoundBankName}' category '{Category.Name}', " +
+        $"for programs of sound bank {SoundBankName} category {Category.Name}, " +
         "as multiple script parameters that can be controlled via the script-based " +
         "Info page GUI " +
         "are not represented by macros on the non-script-based Info page GUI. " +
-        $"You need to add sound bank '{SoundBankName}' category '{Category.Name}' " +
-        $"to the list on the GUI Script Processor page.");
+        $"You need to add sound bank {SoundBankName} category {Category.Name} " +
+        "to the list on the GUI Script Processor page.");
     }
     return SoundBankId switch {
       SoundBankId.OrganicKeys => throw new ApplicationException(
         "Removing the GUI script processor is not currently supported " +
-        $"for programs of sound bank '{SoundBankName}', as the Delay and Reverb " +
+        $"for programs of sound bank {SoundBankName}, as the Delay and Reverb " +
         "script parameters, which can be controlled via the script-based " +
         "Info page GUI, " +
         "are not represented by macros on the non-script-based Info page GUI. " +
-        $"You need to add sound bank '{SoundBankName}' to the list on the " +
+        $"You need to add sound bank {SoundBankName} to the list on the " +
         "GUI Script Processor page."),
       SoundBankId.Pulsar => throw new ApplicationException(
         "Removing the GUI script processor is not currently supported " +
-        $"for programs of sound bank '{SoundBankName}', as there are too many " +
-        $"macros for the non-script-based Info page GUI. " +
-        $"You need to add sound bank '{SoundBankName}' to the list on the " +
-        $"GUI Script Processor page."),
+        $"for programs of sound bank {SoundBankName}, as there are too many " +
+        "macros for the non-script-based Info page GUI. " +
+        $"You need to add sound bank {SoundBankName} to the list on the " +
+        "GUI Script Processor page."),
       _ => true
     };
   }
@@ -173,6 +173,47 @@ internal class FalconProgram {
       return false;
     }
     return true;
+  }
+
+  private void CheckForDahdsrControllerScripts() {
+    string superFolderPath = System.IO.Path.GetDirectoryName(
+      Settings.ProgramsFolder.Path)!;
+    string scriptsFolderPath = System.IO.Path.Combine(superFolderPath, "Scripts");
+    string stubScriptPath = System.IO.Path.Combine(
+      scriptsFolderPath, "DAHDSR Controller.lua");
+    string scriptSubFolderPath = System.IO.Path.Combine(
+      scriptsFolderPath, "DahdsrController");
+    string requireScriptPath = System.IO.Path.Combine(
+      scriptSubFolderPath, "DAHDSRController.lua");
+    if (!Batch.FileSystemService.File.Exists(stubScriptPath)) {
+      throw new ApplicationException(GetErrorMessage(stubScriptPath));
+    }
+    if (!Batch.FileSystemService.File.Exists(requireScriptPath)) {
+      throw new ApplicationException(GetErrorMessage(requireScriptPath));
+    }
+    return;
+
+    string GetErrorMessage(string scriptPath) {
+      string applicationFolderPath = AppDomain.CurrentDomain.BaseDirectory;
+      string applicationScriptsSubfolderPath =
+        System.IO.Path.Combine(applicationFolderPath, "Scripts");
+      var writer = new StringWriter();
+      writer.WriteLine($"Cannot find script file '{scriptPath}'.");
+      writer.WriteLine(
+        $"Removing the {SoundBankName} sound bank's GUI script processor requires " +
+        "a replacement non-GUI script processor that needs two script files: " +
+        $"'{stubScriptPath}' and '{requireScriptPath}'.");
+      writer.WriteLine("You have two options:");
+      writer.WriteLine();
+      writer.WriteLine(
+        $"1) Copy the script files from the {Global.ApplicationName} application " +
+        $"folder's Scripts subfolder '{applicationScriptsSubfolderPath}'.");
+      writer.WriteLine();
+      writer.Write(
+        $"2) Disable GUI script processor removal for the {SoundBankName} sound bank " +
+        "by adding the sound bank to the list on the the GUI Script Processor page.");
+      return writer.ToString();
+    }
   }
 
   [ExcludeFromCodeCoverage]
@@ -355,6 +396,9 @@ internal class FalconProgram {
   }
 
   private void InitialiseOrganicPadsProgram() {
+    // Check that the script files exist.
+    CheckForDahdsrControllerScripts();
+    // Script files exist. Good to go.
     ProgramXml.CopyMacroElementsFromTemplate("OrganicPads_Macros.xml");
     Macros = CreateMacrosFromElements();
     NotifyUpdate($"{PathShort}: Copied macros from template.");
@@ -439,7 +483,7 @@ internal class FalconProgram {
   ///     <item>
   ///       <description>
   ///         The GUI script processor, if any, has been removed by
-  ///         <see cref="InitialiseLayout" />. 
+  ///         <see cref="InitialiseLayout" />.
   ///       </description>
   ///     </item>
   ///     <item>
@@ -794,7 +838,7 @@ internal class FalconProgram {
   ///     <item>
   ///       <description>
   ///         The GUI script processor, if any, has been removed by
-  ///         <see cref="InitialiseLayout" />. 
+  ///         <see cref="InitialiseLayout" />.
   ///       </description>
   ///     </item>
   ///     <item>
@@ -880,7 +924,7 @@ internal class FalconProgram {
   ///     <item>
   ///       <description>
   ///         The GUI script processor, if any, has been removed by
-  ///         <see cref="InitialiseLayout" />. 
+  ///         <see cref="InitialiseLayout" />.
   ///       </description>
   ///     </item>
   ///     <item>
@@ -895,7 +939,7 @@ internal class FalconProgram {
   ///         There are no macro modulations whose MIDI CC number is 1 but have not been
   ///         assigned to a wheel macro by <see cref="RemoveDelayEffectsAndMacros" />.
   ///         If anything, that should be done instead of assigning MIDI CC 1 to a
-  ///         different macro. 
+  ///         different macro.
   ///       </description>
   ///     </item>
   ///   </list>
@@ -906,7 +950,7 @@ internal class FalconProgram {
   ///   of the following numbers for some Pulsar programs but not others would lead to
   ///   two inconsistent CC numbering schemas. An it would not be easy to tell them
   ///   apart, as it is not possible to append the CC number to the displayed name of
-  ///   a macro when the Info page's GUI is provided by a script. 
+  ///   a macro when the Info page's GUI is provided by a script.
   /// </remarks>
   public void ReuseCc1() {
     if (!Settings.MidiForMacros.HasModWheelReplacementCcNo) {
@@ -1002,7 +1046,7 @@ internal class FalconProgram {
         throw new ApplicationException(
           "Updating the macro MIDI CCs of a program with a GUI script " +
           "processor is not supported for sound bank " +
-          $"'{SoundBankName}' category '{Category.Name}'. You need to go to the " +
+          $"{SoundBankName} category {Category.Name}. You need to go to the " +
           "GUI Script Processor page and remove the sound bank or category from " +
           "the list. For the Falcon Factory (version 1) sound bank, the only " +
           "categories for which updating macro MIDI CCs for a GUI script processor " +

@@ -210,7 +210,7 @@ public class Batch {
         && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
       Log.WriteLine(
         $"Cannot {Task} for sound bank " +
-        $"'{SoundBankName}' " +
+        $"{SoundBankName} " +
         "because the sound bank's Info page GUI must be specified in a script" +
         " processor.");
       return;
