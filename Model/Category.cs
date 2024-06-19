@@ -219,7 +219,7 @@ internal class Category {
       var template = new ScriptProcessorEmbeddedXml(embeddedFileName);
       return ScriptProcessor.Create(guiScriptProcessor.SoundBankId,
         new XElement(template.ScriptProcessorElement),
-        ProgramXml, Settings.MidiForMacros);
+        ProgramXml, Settings.MidiForMacros, true);
     }
     throw new ApplicationException(
       "A built-in GUI ScriptProcessor template is not available for " 

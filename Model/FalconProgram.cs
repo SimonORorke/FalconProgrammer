@@ -95,6 +95,7 @@ internal class FalconProgram {
       return false;
     }
     if (GuiScriptProcessor?.GuiScriptId == ScriptId.OrganicTexture) {
+      // Falcon Factory\Organic Texture 2.8
       throw new ApplicationException(
         "Removing the GUI script processor is not currently supported " +
         $"for programs of sound bank '{SoundBankName}' category '{Category.Name}', " +
@@ -666,7 +667,7 @@ internal class FalconProgram {
       from scriptProcessorElement in ProgramXml.ScriptProcessorElements
       select ScriptProcessor.Create(
         SoundBankId, scriptProcessorElement, ProgramXml,
-        Settings.MidiForMacros)).ToImmutableList();
+        Settings.MidiForMacros, Category.MustUseGuiScriptProcessor)).ToImmutableList();
     foreach (var scriptProcessor in ScriptProcessors) {
       foreach (var modulation in scriptProcessor.Modulations) {
         // Needed for modulation.ModulatesMacro in FindGuiScriptProcessor 
@@ -701,6 +702,12 @@ internal class FalconProgram {
       RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
       ReUpdateMacroCcs();
+    }
+    if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
+      // "Organic Keys" or "Organic Pads" sound bank
+      organicScriptProcessor.DelaySend = 0;
+      NotifyUpdate(
+        $"{PathShort}: Changed '{organicScriptProcessor.Name}'.DelaySend to zero.");
     }
   }
 
@@ -1102,13 +1109,11 @@ internal class FalconProgram {
   }
 
   public void ZeroReverbMacros() {
-    if (GuiScriptProcessor is OrganicKeysScriptProcessor organicKeysScriptProcessor) {
-      // "Organic Keys" sound bank
-      organicKeysScriptProcessor.DelaySend = 0;
-      organicKeysScriptProcessor.ReverbSend = 0;
+    if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
+      // "Organic Keys" or "Organic Pads" sound bank
+      organicScriptProcessor.ReverbSend = 0;
       NotifyUpdate(
-        $"{PathShort}: Changed '{organicKeysScriptProcessor.Name}'.DelaySend " +
-        "and .ReverbSend to zero.");
+        $"{PathShort}: Changed '{organicScriptProcessor.Name}'.ReverbSend to zero.");
     }
     var reverbMacros = (
       from macro in Macros

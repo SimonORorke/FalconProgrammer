@@ -3,14 +3,15 @@
 namespace FalconProgrammer.Model.XmlLinq;
 
 /// <summary>
-///   ScriptProcessor for the "Organic Keys" sound bank.
+///   GUI ScriptProcessor for the "Organic Keys" sound bank.
+///   Base GUI ScriptProcessor for the "Organic Pads" sound bank.
 /// </summary>
-internal class OrganicKeysScriptProcessor : ScriptProcessor {
+internal class OrganicGuiScriptProcessor : ScriptProcessor {
   /// <summary>
   ///   Use the <see cref="ScriptProcessor.Create" /> static method for public
   ///   instantiation of the correct type of <see cref="ScriptProcessor" />.
   /// </summary>
-  public OrganicKeysScriptProcessor(XElement scriptProcessorElement,
+  public OrganicGuiScriptProcessor(XElement scriptProcessorElement,
     ProgramXml programXml, MidiForMacros midi)
     : base(scriptProcessorElement, programXml, midi) { }
 

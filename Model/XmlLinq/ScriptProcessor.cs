@@ -107,12 +107,18 @@ internal class ScriptProcessor : ModulationsOwner {
   }
 
   public static ScriptProcessor Create(SoundBankId soundBankId,
-    XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) {
-    return soundBankId switch {
-      SoundBankId.OrganicKeys => new OrganicKeysScriptProcessor(
-        scriptProcessorElement, programXml, midi),
-      _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
-    };
+    XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi, 
+    bool mustUseGuiScriptProcessor) {
+    if (mustUseGuiScriptProcessor) {
+      return soundBankId switch {
+        SoundBankId.OrganicKeys => new OrganicGuiScriptProcessor(
+          scriptProcessorElement, programXml, midi),
+        SoundBankId.OrganicPads => new OrganicPadsGuiScriptProcessor(
+          scriptProcessorElement, programXml, midi),
+        _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
+      };
+    }
+    return new ScriptProcessor(scriptProcessorElement, programXml, midi);
   }
 
   private ScriptId GetGuiScriptId() {

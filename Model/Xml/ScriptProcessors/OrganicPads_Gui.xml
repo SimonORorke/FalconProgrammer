@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<OrganicPads_DahdsrController>
+<OrganicPads_Gui>
     <ScriptProcessor Name="EventProcessor0" Bypass="0" Vertical_Slider="-0.087911963" Horizontal_Slider="-0.076124012"
-                     Xpad="-0.076124012" Ypad="-0.087911963" CCX="21" CCY="22" W2M="1" delaySend="0.63168824"
+                     Xpad="-0.076124012" Ypad="-0.087911963" CCX="" CCY="" W2M="1" delaySend="0"
                      reverbSend="0" API_version="21">
         <Connections>
             <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC C6" Destination="Vertical_Slider"
@@ -38,4 +38,4 @@
         <script><![CDATA[category = "Dark"; require "OrganicPads"]]></script>
         <ScriptData/>
     </ScriptProcessor>
-</OrganicPads_DahdsrController>
+</OrganicPads_Gui>
