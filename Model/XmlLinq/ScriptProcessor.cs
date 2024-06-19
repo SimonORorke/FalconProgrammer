@@ -128,7 +128,7 @@ internal class ScriptProcessor : ModulationsOwner {
     // with a category or colour parameter.
     // Example: <![CDATA[category = "Dark"; require "OrganicPads"]]>
     // So we parse Script with EndWith.
-    if (SoundBankPascal == "FactoryRev2" &&
+    if (SoundBankId == SoundBankId.FactoryRev2 &&
         (Script.EndsWith("require 'FalconFactory'") ||
          Script.EndsWith("require \"FalconFactory\""))) {
       return ScriptId.FactoryRev2;

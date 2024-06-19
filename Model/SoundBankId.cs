@@ -4,6 +4,7 @@ public enum SoundBankId {
   Other,
   Devinity,
   EtherFields,
+  FactoryRev2,
   Fluidity,
   OrganicKeys,
   OrganicPads,

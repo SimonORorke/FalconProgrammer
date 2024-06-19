@@ -409,6 +409,11 @@ internal class FalconProgram {
     NotifyUpdate(
       $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " +
       "and .ReleaseTime.");
+    // The GUI script processor has delaySend and reverbSend parameters, controllable 
+    // from the script-based GUI. With the new script processor, there's no way to
+    // replicate the delay and reverb modulations implemented int the GUI script.
+    // So we need to bypass all delay and reverb effects.
+    BypassDelayEffects();
     BypassReverbEffects();
   }
 
