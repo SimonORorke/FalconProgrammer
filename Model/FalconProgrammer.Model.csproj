@@ -117,6 +117,12 @@
         <None Update="Background Images\Gunmetal.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Scripts\DAHDSR Controller.lua">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Scripts\DahdsrController\DahdsrController.lua">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
