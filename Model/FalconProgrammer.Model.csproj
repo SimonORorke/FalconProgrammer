@@ -170,6 +170,8 @@
         <None Remove="Xml\ScriptProcessors\FactoryRev2_Gul.xml" />
         <None Remove="Xml\ScriptProcessors\FactoryRev2_Gui.xml" />
         <EmbeddedResource Include="Xml\ScriptProcessors\FactoryRev2_Gui.xml" />
+        <None Remove="Xml\Macros\Volkm_Macros.xml" />
+        <EmbeddedResource Include="Xml\Macros\Volkm_Macros.xml" />
     </ItemGroup>
 
 </Project>

@@ -36,7 +36,8 @@ public class Settings : SerialisationBase {
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
 
   [XmlIgnore]
-  public ColourSchemeId ColourSchemeId => StringToColourSchemeId(ColourScheme);
+  public ColourSchemeId ColourSchemeId => 
+    Global.GetEnumValue<ColourSchemeId>(ColourScheme);
 
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
 
@@ -81,18 +82,18 @@ public class Settings : SerialisationBase {
     return result;
   }
 
-  public static ColourSchemeId StringToColourSchemeId(string colourScheme) {
-    if (colourScheme != string.Empty) {
-      var colourSchemes = Enum.GetNames<ColourSchemeId>().ToList();
-      if (colourSchemes.Contains(colourScheme)) {
-        return (
-          from schemeId in Enum.GetValues<ColourSchemeId>()
-          where schemeId.ToString() == colourScheme
-          select schemeId).Single();
-      }
-    }
-    return ColourSchemeId.Lavender;
-  }
+  // public static ColourSchemeId StringToColourSchemeId(string colourScheme) {
+  //   if (colourScheme != string.Empty) {
+  //     var colourSchemes = Enum.GetNames<ColourSchemeId>().ToList();
+  //     if (colourSchemes.Contains(colourScheme)) {
+  //       return (
+  //         from schemeId in Enum.GetValues<ColourSchemeId>()
+  //         where schemeId.ToString() == colourScheme
+  //         select schemeId).Single();
+  //     }
+  //   }
+  //   return ColourSchemeId.Lavender;
+  // }
 
   internal bool TryGetSoundBankBackgroundImagePath(
     string soundBankName, out string path) {

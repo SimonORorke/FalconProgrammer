@@ -38,7 +38,7 @@ public partial class ColourSchemeWindowViewModel : ViewModelBase {
   }
 
   partial void OnColourSchemeChanged(string value) {
-    ColourSchemeId = Settings.StringToColourSchemeId(value);
+    ColourSchemeId = Global.GetEnumValue<ColourSchemeId>(value);
     if (IsVisible) {
       OnChangeColourScheme(ColourSchemeId);
     }

@@ -19,7 +19,8 @@ internal class ScriptProcessor : ModulationsOwner {
 
   /// <summary>
   ///   Gets the category name from <see cref="Script" />.
-  ///   Currently only applies to the Pulsar sound bank, otherwise null.
+  ///   Currently only applies to the Pulsar and Volkm sound banks,
+  ///   otherwise <see cref="CategoryId.Other" />.
   ///   Example: 'Bass' from 'categorie = "bass"...'
   /// </summary>
   /// <remarks>
@@ -29,19 +30,25 @@ internal class ScriptProcessor : ModulationsOwner {
   ///     The Organic Pads sound bank also includes a category parameter in
   ///     <see cref="Script" />. However, it only affects the appearance of the GUI,
   ///     not modulations. Therefore the same template can be uses for al categories.
-  ///     So the Organic Pads Category is not of interest and will be null.
+  ///     So the Organic Pads CategoryId is not of interest and will be
+  ///     <see cref="CategoryId.Other" />.
   ///   </para>
   /// </remarks>
-  public string? Category {
+  public CategoryId Category {
     get {
+      if (SoundBankId == SoundBankId.Volkm) {
+        return GuiScriptId == ScriptId.Main2
+          ? CategoryId.SynthChoirs
+          : CategoryId.VoxInstruments; // ScriptId.Main1
+      }
       if (SoundBankId != SoundBankId.Pulsar) {
-        return null;
+        return CategoryId.Other;
       }
       string scriptWithoutPrefix = Script[13..];
-      string lowerCaseCategory = scriptWithoutPrefix[..scriptWithoutPrefix.IndexOf('"')];
-      string result = string.Concat(
-        lowerCaseCategory[0].ToString().ToUpper(), lowerCaseCategory.AsSpan(1));
-      return result;
+      string categoryLowerCase = scriptWithoutPrefix[..scriptWithoutPrefix.IndexOf('"')];
+      string categoryPascal = string.Concat(
+        categoryLowerCase[0].ToString().ToUpper(), categoryLowerCase.AsSpan(1));
+      return Global.GetEnumValue<CategoryId>(categoryPascal);
     }
   }
 
@@ -64,7 +71,7 @@ internal class ScriptProcessor : ModulationsOwner {
 
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
-  public SoundBankId SoundBankId => Global.GetSoundBankId(SoundBankPascal);
+  public SoundBankId SoundBankId => Global.GetEnumValue<SoundBankId>(SoundBankPascal);
 
   /// <summary>
   ///   Gets the Pascal-style (spaces removed) sound bank identifier from

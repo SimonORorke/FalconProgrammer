@@ -202,7 +202,7 @@ internal class ProgramXml : EntityBase {
       string soundBankPascal = 
         path[..path.IndexOf('.')][(path.LastIndexOf('/') + 1)..].Replace(
         " ", string.Empty);
-      return Global.GetSoundBankId(soundBankPascal);
+      return Global.GetEnumValue<SoundBankId>(soundBankPascal);
     } catch {
       throw new ApplicationException(
         "The sound bank cannot be identified from the program.");
