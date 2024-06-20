@@ -19,7 +19,7 @@ public class ColourSchemeWindowViewModelTests : ViewModelTestsBase {
   [Test]
   public void ColourSchemes() {
     Assert.That(ViewModel.ColourSchemes[0],
-      Is.EqualTo(ColourSchemeId.Default.ToString()));
+      Is.EqualTo(ColourSchemeId.Lavender.ToString()));
   }
 
   [Test]
