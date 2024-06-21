@@ -173,9 +173,7 @@
         <None Remove="Xml\Macros\Voklm_Macros.xml" />
         <None Remove="Xml\Macros\Voklm_SynthChoirs_Macros.xml" />
         <None Remove="Xml\MacroTemplates\Voklm_VoxInstruments_Macros.xml" />
-        <EmbeddedResource Include="Xml\MacroTemplates\Voklm_VoxInstruments_Macros.xml" />
         <None Remove="Xml\MacroTemplates\Voklm_SynthChoirs_Macros.xml" />
-        <EmbeddedResource Include="Xml\MacroTemplates\Voklm_SynthChoirs_Macros.xml" />
     </ItemGroup>
 
 </Project>

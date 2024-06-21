@@ -88,7 +88,7 @@ public class FalconProgramTests {
   public void RestoreOriginal() {
     Batch.RunTask(ConfigTask.RestoreOriginal,
       "Falcon Factory", "Bass", "Imagination");
-    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Restored to Original"));
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Restored to original."));
   }
 
   [Test]
