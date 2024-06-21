@@ -236,6 +236,6 @@ internal class Macro : ModulationsOwner {
   }
 
   public override string ToString() {
-    return $"{DisplayName} ({Name})";
+    return $"{DisplayNameWithoutCc} ({Name})";
   }
 }

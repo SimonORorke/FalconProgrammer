@@ -55,7 +55,7 @@ internal class Modulation : EntityBase {
   ///     (version 1) categories and some other sound banks,
   ///     or "Macro_1" in Falcon Factory rev2. But this is not consistent across sound
   ///     banks. For Fluidity the Destination format is "Custom_n".
-  ///     For Factory\Organic Texture 2.8, Organic Keys, Organic Pads, Pulsar and Volkm,
+  ///     For Factory\Organic Texture 2.8, Organic Keys, Organic Pads, Pulsar and Voklm,
   ///     Destination indicates the modulation type and does not end with a number.
   ///   </para>
   ///   <para>

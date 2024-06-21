@@ -10,5 +10,5 @@ public enum SoundBankId {
   OrganicPads,
   Pulsar,
   Spectre,
-  Volkm
+  Voklm
 }

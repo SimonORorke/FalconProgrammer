@@ -211,7 +211,7 @@ internal class Category {
         // The Hypnotic Drive program files have a typo in the script sound bank name.
         "HypnoticDive" => "HypnoticDrive_Gui.xml",
         "Pulsar" => 
-          $"{guiScriptProcessor.SoundBankPascal}_{guiScriptProcessor.Category}_Gui.xml",
+          $"{guiScriptProcessor.SoundBankPascal}_{guiScriptProcessor.CategoryPascal}_Gui.xml",
         _ => $"{guiScriptProcessor.SoundBankPascal}_Gui.xml"
       };
     }

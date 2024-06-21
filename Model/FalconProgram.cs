@@ -134,16 +134,18 @@ internal class FalconProgram {
         $"{PathShort} already has a Wheel macro.");
       return false;
     }
-    if (SoundBankId == SoundBankId.EtherFields) {
-      // There are lots of macros in every program of this sound bank.
-      // I tried adding wheel macros. But it's too busy to be feasible.
+    if (SoundBankId is SoundBankId.EtherFields or SoundBankId.Voklm) {
+      Log.WriteLine(
+        $"{PathShort}: Replacing the mod wheel with a macro is not supported " +
+        $"for sound bank {SoundBankName}, " +
+        $"due to macro count and complexity.");
       return false;
     }
     if (GuiScriptProcessor != null
         && !CanRemoveGuiScriptProcessor()) {
       Log.WriteLine(
-        $"{PathShort}: Replacing wheel with macro is not supported because " +
-        "because the program's Info page GUI is specified in a script processor.");
+        $"{PathShort}: Replacing the mod wheel with a macro is not supported " +
+        $"because the program's Info page GUI is specified in a script processor.");
       return false;
     }
     int modulationsByModWheelCount =
@@ -381,6 +383,9 @@ internal class FalconProgram {
       case SoundBankId.OrganicPads:
         InitialiseOrganicPadsProgram();
         break;
+      case SoundBankId.Voklm:
+        InitialiseVoklmProgram();
+        break;
       default:
         return;
     }
@@ -459,6 +464,41 @@ internal class FalconProgram {
     // So we need to bypass all delay and reverb effects.
     BypassDelayEffects();
     BypassReverbEffects();
+  }
+
+  private void InitialiseVoklmProgram() {
+    var originalMacros = (
+        from macro in Macros
+        select new KeyValuePair<string, Macro>(macro.Name, macro))
+      .ToDictionary();
+    string categoryPascal = (
+      from macro in Macros
+      where macro.DisplayName.Contains("Grit")
+      select macro).Any()
+      ? "VoxInstruments"
+      : "SynthChoirs";
+    // Get the macro display names, positions and MIDI CC numbers from the category
+    // template.
+    ProgramXml.CopyMacroElementsFromTemplate($"Voklm_{categoryPascal}_Macros.xml");
+    Macros = CreateMacrosFromElements();
+    // Restore the original macro values, which are specific to each program.
+    foreach (var macro in Macros) {
+      if (originalMacros.TryGetValue(macro.Name, out var originalMacro)) {
+        macro.Value = originalMacro.Value;
+      } else if (macro.Name == "Macro 15" 
+                 && originalMacros["Macro 16"].DisplayName.Contains("Time")) { 
+        // Example: Voklm\Synth Choirs\Muted Voice 1
+        macro.Value = originalMacros["Macro 16"].Value;
+      } else {
+        throw new ApplicationException(
+          $"{PathShort}: Cannot restore value for macro '{macro}'.");
+        // macro.Value = 0.5f;
+        // Log.WriteLine(
+        //   $"{PathShort}: Cannot restore value for macro " +
+        //   $"'{macro}'. Using default 0.5.");
+      }
+    }
+    NotifyUpdate($"{PathShort}: Initialised Voklm program.");
   }
 
   /// <summary>
@@ -894,7 +934,7 @@ internal class FalconProgram {
         $"Cannot find original file '{originalPath}' to restore to '{Path}'.");
     }
     CopyFile(originalPath, Path);
-    Log.WriteLine($"{PathShort}: Restored to Original");
+    Log.WriteLine($"{PathShort}: Restored to original.");
   }
 
   /// <summary>

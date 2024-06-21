@@ -18,10 +18,9 @@ internal class ScriptProcessor : ModulationsOwner {
   }
 
   /// <summary>
-  ///   Gets the category name from <see cref="Script" />.
-  ///   Currently only applies to the Pulsar and Volkm sound banks,
-  ///   otherwise <see cref="CategoryId.Other" />.
-  ///   Example: 'Bass' from 'categorie = "bass"...'
+  ///   Gets the Pascal-style category name from <see cref="Script" />.
+  ///   Currently only applies to the Pulsar sound bank, otherwise null.
+  ///   Pulsar example: 'Bass' from 'categorie = "bass"...'
   /// </summary>
   /// <remarks>
   ///   For the Pulsar sound bank, the GUI Script process modulation destinations
@@ -30,25 +29,19 @@ internal class ScriptProcessor : ModulationsOwner {
   ///     The Organic Pads sound bank also includes a category parameter in
   ///     <see cref="Script" />. However, it only affects the appearance of the GUI,
   ///     not modulations. Therefore the same template can be uses for al categories.
-  ///     So the Organic Pads CategoryId is not of interest and will be
-  ///     <see cref="CategoryId.Other" />.
+  ///     So the Organic Pads CategoryId is not of interest and will be null.
   ///   </para>
   /// </remarks>
-  public CategoryId Category {
+  public string? CategoryPascal {
     get {
-      if (SoundBankId == SoundBankId.Volkm) {
-        return GuiScriptId == ScriptId.Main2
-          ? CategoryId.SynthChoirs
-          : CategoryId.VoxInstruments; // ScriptId.Main1
-      }
       if (SoundBankId != SoundBankId.Pulsar) {
-        return CategoryId.Other;
+        return null;
       }
       string scriptWithoutPrefix = Script[13..];
       string categoryLowerCase = scriptWithoutPrefix[..scriptWithoutPrefix.IndexOf('"')];
-      string categoryPascal = string.Concat(
+      string categoryUpperCase = string.Concat(
         categoryLowerCase[0].ToString().ToUpper(), categoryLowerCase.AsSpan(1));
-      return Global.GetEnumValue<CategoryId>(categoryPascal);
+      return categoryUpperCase;
     }
   }
 
