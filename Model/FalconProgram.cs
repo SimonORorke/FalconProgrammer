@@ -359,6 +359,65 @@ internal class FalconProgram {
       select m).Count() == 1;
   }
 
+  /// <summary>
+  ///   Initialises the program, with options specified on the Initialisation and
+  ///   Background pages.
+  ///   <para>
+  ///     First, unless the sound bank or category is on the GUI Script Processor list
+  ///     on the Initialisation page, removes any GUI script processor,
+  ///     so that the default Info Page layout will be shown. 
+  ///   </para>
+  ///   <list type="bullet">
+  ///     <listheader>
+  ///       <description>
+  ///         The remaining procedures are executed only
+  ///         if the program has had any GUI script processor removed, so that the
+  ///         default Info page layout is shown.
+  ///       </description>
+  ///     </listheader>
+  ///     <item>
+  ///       <description>
+  ///         Sets the background image for the Info page, if one had been specified
+  ///         for the sound bank on the Background page.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         For sound banks Ether Fields and Spectre, rearranges the macros into a
+  ///         standard layout.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         If specified by an option on the Initialisation page,
+  ///         for sound bank Fluidity, moves the Attack macro, if any, to be the last
+  ///         macro in the Info page layout.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         For sound bank Organic Pads:
+  ///         <para>
+  ///           Adds a macro for each Layer gain,
+  ///           to make variation of these parameters mutually independent,
+  ///           and as the X-Y control on the script-based GUI cannot be implemented
+  ///           on the default Info page layout.
+  ///         </para>
+  ///         <para>
+  ///           Bypasses all delay and reverb effects.
+  ///           The Organic Pads GUI script processor has delay and reverb
+  ///           parameters, controllable from the script-based GUI.
+  ///           There is no way to replicate control of these delay and reverb
+  ///           modulations with macros on a default Info page layout. 
+  ///         </para>
+  ///         <para>
+  ///           Optionally initialises attack time and release time to values
+  ///           specified the Initialisation page.
+  ///         </para>
+  ///       </description>
+  ///     </item>
+  ///   </list>
+  /// </summary>
   public void InitialiseLayout() {
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
