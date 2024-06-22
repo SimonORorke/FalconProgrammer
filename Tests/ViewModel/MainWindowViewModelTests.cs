@@ -15,7 +15,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       MockDialogService, MockDispatcherService, MockCursorService) {
       ModelServices = TestModelServices
     };
-    TestGuiScriptProcessorViewModel = new TestGuiScriptProcessorViewModel(
+    TestInitialisationViewModel = new TestInitialisationViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
@@ -24,7 +24,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       MockWindowLocationService) {
       ModelServices = TestModelServices,
       BatchScriptViewModel = TestBatchScriptViewModel,
-      GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
+      InitialisationViewModel = TestInitialisationViewModel
     };
   }
 
@@ -37,7 +37,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private Settings Settings { get; set; } = null!;
   private TestBatchScriptViewModel TestBatchScriptViewModel { get; set; } = null!;
 
-  private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
+  private TestInitialisationViewModel TestInitialisationViewModel { get; set; } =
     null!;
 
   private TestMainWindowViewModel ViewModel { get; set; } = null!;
@@ -99,14 +99,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(LocationsTab.Header,
       Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
     Assert.That(GuiScriptProcessorTab.Header,
-      Is.EqualTo(ViewModel.GuiScriptProcessorViewModel.TabTitle));
+      Is.EqualTo(ViewModel.InitialisationViewModel.TabTitle));
     Assert.That(MidiForMacrosTab.Header,
       Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
     Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(2));
     Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
     Settings = ReadMockSettings("BatchSettings.xml");
-    TestGuiScriptProcessorViewModel.ConfigureMockFileSystemService(Settings);
-    var selectedPageViewModel = TestGuiScriptProcessorViewModel;
+    TestInitialisationViewModel.ConfigureMockFileSystemService(Settings);
+    var selectedPageViewModel = TestInitialisationViewModel;
     MockCursorService.ShowDefaultCursorCount = 0;
     MockCursorService.ShowWaitCursorCount = 0;
     ViewModel.SelectedTab =

@@ -5,8 +5,8 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class TestGuiScriptProcessorViewModel : GuiScriptProcessorViewModel {
-  public TestGuiScriptProcessorViewModel(IDialogService dialogService,
+public class TestInitialisationViewModel : InitialisationViewModel {
+  public TestInitialisationViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   [PublicAPI] internal int ClosedCount { get; set; }

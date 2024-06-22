@@ -143,6 +143,12 @@ public class SettingsTests {
   }
 
   [Test]
+  public void Initialisation() {
+    var settings = new Settings();
+    Assert.That(settings.Initialisation.Fluidity.MoveAttackMacroToEnd, Is.True);
+  }
+
+  [Test]
   public void RealTestSettingsFile() {
     SettingsTestHelper.DeleteAnyData();
     Settings? settings = null;

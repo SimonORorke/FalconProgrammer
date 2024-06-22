@@ -183,47 +183,6 @@ internal class FalconProgram {
     return true;
   }
 
-  private void CheckForDahdsrControllerScripts() {
-    string superFolderPath = System.IO.Path.GetDirectoryName(
-      Settings.ProgramsFolder.Path)!;
-    string scriptsFolderPath = System.IO.Path.Combine(superFolderPath, "Scripts");
-    string stubScriptPath = System.IO.Path.Combine(
-      scriptsFolderPath, "DAHDSR Controller.lua");
-    string scriptSubFolderPath = System.IO.Path.Combine(
-      scriptsFolderPath, "DahdsrController");
-    string requireScriptPath = System.IO.Path.Combine(
-      scriptSubFolderPath, "DAHDSRController.lua");
-    if (!Batch.FileSystemService.File.Exists(stubScriptPath)) {
-      throw new ApplicationException(GetErrorMessage(stubScriptPath));
-    }
-    if (!Batch.FileSystemService.File.Exists(requireScriptPath)) {
-      throw new ApplicationException(GetErrorMessage(requireScriptPath));
-    }
-    return;
-
-    string GetErrorMessage(string scriptPath) {
-      string applicationFolderPath = AppDomain.CurrentDomain.BaseDirectory;
-      string applicationScriptsSubfolderPath =
-        System.IO.Path.Combine(applicationFolderPath, "Scripts");
-      var writer = new StringWriter();
-      writer.WriteLine($"Cannot find script file '{scriptPath}'.");
-      writer.WriteLine(
-        $"Removing the {SoundBankName} sound bank's GUI script processor requires " +
-        "a replacement non-GUI script processor that needs two script files: " +
-        $"'{stubScriptPath}' and '{requireScriptPath}'.");
-      writer.WriteLine("You have two options:");
-      writer.WriteLine();
-      writer.WriteLine(
-        $"1) Copy the script files from the {Global.ApplicationName} application " +
-        $"folder's Scripts subfolder '{applicationScriptsSubfolderPath}'.");
-      writer.WriteLine();
-      writer.Write(
-        $"2) Disable GUI script processor removal for the {SoundBankName} sound bank " +
-        "by adding the sound bank to the list on the the GUI Script Processor page.");
-      return writer.ToString();
-    }
-  }
-
   [ExcludeFromCodeCoverage]
   protected virtual void CopyFile(string sourcePath, string destinationPath) {
     File.Copy(sourcePath, destinationPath, true);
@@ -359,6 +318,64 @@ internal class FalconProgram {
       select m).Count() == 1;
   }
 
+  private void InitialiseDahdsrControllerScripts() {
+    string superFolderPath = System.IO.Path.GetDirectoryName(
+      Settings.ProgramsFolder.Path)!;
+    string scriptsFolderPath = System.IO.Path.Combine(superFolderPath, "Scripts");
+    string stubScriptPath = System.IO.Path.Combine(
+      scriptsFolderPath, "DAHDSR Controller.lua");
+    string scriptSubFolderPath = System.IO.Path.Combine(
+      scriptsFolderPath, "DahdsrController");
+    string requireScriptPath = System.IO.Path.Combine(
+      scriptSubFolderPath, "DAHDSRController.lua");
+    if (!Batch.FileSystemService.File.Exists(stubScriptPath)) {
+      throw new ApplicationException(GetErrorMessage(stubScriptPath));
+    }
+    if (!Batch.FileSystemService.File.Exists(requireScriptPath)) {
+      throw new ApplicationException(GetErrorMessage(requireScriptPath));
+    }
+    // Script parameter substitution.
+    const string attackPlaceholder = "MAX_ATTACK_SECONDS";
+    const string decayPlaceholder = "MAX_DECAY_SECONDS";
+    const string releasePlaceholder = "MAX_RELEASE_SECONDS";
+    string maxAttackSeconds = 
+      Settings.Initialisation.OrganicPads.MaxAttackSeconds.ToString();
+    string maxDecaySeconds = 
+      Settings.Initialisation.OrganicPads.MaxDecaySeconds.ToString();
+    string maxReleaseSeconds = 
+      Settings.Initialisation.OrganicPads.MaxReleaseSeconds.ToString();
+    using var reader = new StreamReader(
+      Global.GetEmbeddedFileStream("DahdsrController.lua"));
+    string template = reader.ReadToEnd();
+    string script = template.Replace(attackPlaceholder, maxAttackSeconds)
+      .Replace(decayPlaceholder, maxDecaySeconds)
+      .Replace(releasePlaceholder, maxReleaseSeconds);
+    WriteTextToFile(requireScriptPath, script);
+    return;
+
+    string GetErrorMessage(string scriptPath) {
+      string applicationFolderPath = AppDomain.CurrentDomain.BaseDirectory;
+      string applicationScriptsSubfolderPath =
+        System.IO.Path.Combine(applicationFolderPath, "Scripts");
+      var writer = new StringWriter();
+      writer.WriteLine($"Cannot find script file '{scriptPath}'.");
+      writer.WriteLine(
+        $"Removing the {SoundBankName} sound bank's GUI script processor requires " +
+        "a replacement non-GUI script processor that needs two script files: " +
+        $"'{stubScriptPath}' and '{requireScriptPath}'.");
+      writer.WriteLine("You have two options:");
+      writer.WriteLine();
+      writer.WriteLine(
+        $"1) Copy the script files from the {Global.ApplicationName} application " +
+        $"folder's Scripts subfolder '{applicationScriptsSubfolderPath}'.");
+      writer.WriteLine();
+      writer.Write(
+        $"2) Disable GUI script processor removal for the {SoundBankName} sound bank " +
+        "by adding the sound bank to the list on the the GUI Script Processor page.");
+      return writer.ToString();
+    }
+  }
+
   /// <summary>
   ///   Initialises the program, with options specified on the Initialisation and
   ///   Background pages.
@@ -439,10 +456,12 @@ internal class FalconProgram {
         InfoPageLayout.MoveMacrosToStandardLayout();
         break;
       case SoundBankId.Fluidity:
-        var attackMacro = FindContinuousMacro("Attack");
-        if (attackMacro != null) {
-          MoveMacroToEnd(attackMacro);
-          RefreshMacroOrder();
+        if (Settings.Initialisation.Fluidity.MoveAttackMacroToEnd) {
+          var attackMacro = FindContinuousMacro("Attack");
+          if (attackMacro != null) {
+            MoveMacroToEnd(attackMacro);
+            RefreshMacroOrder();
+          }
         }
         break;
       case SoundBankId.OrganicPads:
@@ -463,8 +482,7 @@ internal class FalconProgram {
   }
 
   private void InitialiseOrganicPadsProgram() {
-    // Check that the script files exist.
-    CheckForDahdsrControllerScripts();
+    InitialiseDahdsrControllerScripts();
     // Script files exist. Good to go.
     ProgramXml.CopyMacroElementsFromTemplate("OrganicPads_Macros.xml");
     Macros = CreateMacrosFromElements();
@@ -515,11 +533,16 @@ internal class FalconProgram {
       throw new InvalidOperationException(
         $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
     }
-    mainDahdsr.AttackTime = 0.02f;
-    mainDahdsr.ReleaseTime = 0.3f;
-    NotifyUpdate(
-      $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime " +
-      "and .ReleaseTime.");
+    if (Settings.Initialisation.OrganicPads.AttackSeconds.HasValue) {
+      mainDahdsr.AttackTime = Settings.Initialisation.OrganicPads.AttackSeconds.Value;
+      NotifyUpdate(
+        $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime.");
+    }
+    if (Settings.Initialisation.OrganicPads.ReleaseSeconds.HasValue) {
+      mainDahdsr.ReleaseTime = Settings.Initialisation.OrganicPads.ReleaseSeconds.Value;
+      NotifyUpdate(
+        $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.ReleaseTime.");
+    }
     // The GUI script processor has delaySend and reverbSend parameters, controllable 
     // from the script-based GUI. With the new script processor, there's no way to
     // replicate the delay and reverb modulations implemented int the GUI script.
@@ -1196,6 +1219,11 @@ internal class FalconProgram {
 
   private bool WheelMacroExists() {
     return FindWheelMacro() != null;
+  }
+
+  [ExcludeFromCodeCoverage]
+  protected virtual void WriteTextToFile(string path, string contents) {
+    File.WriteAllText(path, contents);
   }
 
   /// <summary>

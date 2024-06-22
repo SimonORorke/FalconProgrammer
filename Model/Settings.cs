@@ -12,8 +12,11 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
-
   [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
+
+  [XmlElement]
+  public InitialisationSettings Initialisation { get; set; } =
+    new InitialisationSettings();
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]
@@ -36,7 +39,7 @@ public class Settings : SerialisationBase {
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
 
   [XmlIgnore]
-  public ColourSchemeId ColourSchemeId => 
+  public ColourSchemeId ColourSchemeId =>
     Global.GetEnumValue<ColourSchemeId>(ColourScheme);
 
   [XmlIgnore] public string SettingsPath { get; set; } = string.Empty;
@@ -82,19 +85,6 @@ public class Settings : SerialisationBase {
     return result;
   }
 
-  // public static ColourSchemeId StringToColourSchemeId(string colourScheme) {
-  //   if (colourScheme != string.Empty) {
-  //     var colourSchemes = Enum.GetNames<ColourSchemeId>().ToList();
-  //     if (colourSchemes.Contains(colourScheme)) {
-  //       return (
-  //         from schemeId in Enum.GetValues<ColourSchemeId>()
-  //         where schemeId.ToString() == colourScheme
-  //         select schemeId).Single();
-  //     }
-  //   }
-  //   return ColourSchemeId.Lavender;
-  // }
-
   internal bool TryGetSoundBankBackgroundImagePath(
     string soundBankName, out string path) {
     path = (
@@ -116,13 +106,33 @@ public class Settings : SerialisationBase {
     [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
+  public class FluiditySettings {
+    [XmlAttribute] public bool MoveAttackMacroToEnd { get; set; } = true;
+  }
+
   public class Folder {
     [XmlAttribute] public string Path { get; set; } = string.Empty;
+  }
+
+  public class InitialisationSettings {
+    [XmlElement] public FluiditySettings Fluidity { get; set; } = new FluiditySettings();
+
+    [XmlElement]
+    public OrganicPadsSettings OrganicPads { get; set; } =
+      new OrganicPadsSettings();
   }
 
   public struct IntegerRange {
     public int Start;
     public int End;
+  }
+
+  public class OrganicPadsSettings {
+    [XmlAttribute] public float? AttackSeconds { get; set; } = 0.02f;
+    [XmlAttribute] public float? ReleaseSeconds { get; set; } = 0.3f;
+    [XmlAttribute] public float MaxAttackSeconds { get; set; } = 1;
+    [XmlAttribute] public float MaxDecaySeconds { get; set; } = 15;
+    [XmlAttribute] public float MaxReleaseSeconds { get; set; } = 2;
   }
 
   public class ProgramPath {

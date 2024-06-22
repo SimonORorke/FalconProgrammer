@@ -14,6 +14,8 @@ internal class TestFalconProgram : FalconProgram {
   }
 
   internal string EmbeddedProgramFileName { get; set; }
+  internal string LastWrittenFilePath { get; private set; } = string.Empty;
+  internal string LastWrittenFileContents { get; private set; } = string.Empty;
   internal string SavedXml { get; private set; } = string.Empty;
 
   private TestProgramXml TestProgramXml {
@@ -38,5 +40,10 @@ internal class TestFalconProgram : FalconProgram {
 
   private void TestProgramXmlOnSaved(object? sender, string e) {
     SavedXml = e;
+  }
+
+  protected override void WriteTextToFile(string path, string contents) {
+    LastWrittenFilePath = path;
+    LastWrittenFileContents = contents;
   }
 }

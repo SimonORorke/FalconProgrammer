@@ -30,8 +30,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     BackgroundViewModel = new BackgroundViewModel(dialogService, dispatcherService);
     BatchScriptViewModel = new BatchScriptViewModel(
       dialogService, dispatcherService, cursorService);
-    GuiScriptProcessorViewModel =
-      new GuiScriptProcessorViewModel(dialogService, dispatcherService);
+    InitialisationViewModel =
+      new InitialisationViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
     ReverbViewModel = new ReverbViewModel(dialogService, dispatcherService);
@@ -81,7 +81,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
+  internal InitialisationViewModel InitialisationViewModel { get; set; }
 
   private TabItemViewModel LocationsTab => Tabs[1];
 
@@ -148,7 +148,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     var list = new List<TabItemViewModel> {
       new TabItemViewModel(BatchScriptViewModel),
       new TabItemViewModel(LocationsViewModel),
-      new TabItemViewModel(GuiScriptProcessorViewModel),
+      new TabItemViewModel(InitialisationViewModel),
       new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BackgroundViewModel),
       new TabItemViewModel(ReverbViewModel)

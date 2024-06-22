@@ -3,18 +3,18 @@ using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
+public class InitialisationViewModelTests : ViewModelTestsBase {
   // In this test fixture but not most others, code cleanup insists on moving
   // properties to before SetUp. This seems to be to do with there is a method that is
   // not a Test.
   private Settings Settings { get; set; } = null!;
-  private TestGuiScriptProcessorViewModel ViewModel { get; set; } = null!;
+  private TestInitialisationViewModel ViewModel { get; set; } = null!;
 
   [SetUp]
   public override void Setup() {
     base.Setup();
     Settings = ReadMockSettings("LocationsSettings.xml");
-    ViewModel = new TestGuiScriptProcessorViewModel(
+    ViewModel = new TestInitialisationViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };

@@ -40,15 +40,15 @@ local Dahdsr = Program.modulations[DahdsrName]
 local DecayKnobValue
 -- DAHDSR's maximum AttackTime is 10 seconds.
 -- But, for my requirements, that's too much and unergonomic.
-local MaxAttackSeconds = 1
+local MaxAttackSeconds = MAX_ATTACK_SECONDS
 -- DAHDSR's maximum DecayTime is 30 seconds.
 -- But, for my requirements, that's too much and unergonomic.
 -- 15 seconds covers the DecayTime values in all but 1 
 -- (Nature\Whispering Waters) of the Organic Pads original programs.
-local MaxDecaySeconds = 15
+local MaxDecaySeconds = MAX_DECAY_SECONDS
 -- DAHDSR's maximum ReleaseTime is 20 seconds.
 -- But, for my requirements, that's too much and unergonomic.
-local MaxReleaseSeconds = 2
+local MaxReleaseSeconds = MAX_RELEASE_SECONDS
 local ReleaseKnobValue
 local SustainKnobValue
 

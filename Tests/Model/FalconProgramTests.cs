@@ -58,6 +58,7 @@ public class FalconProgramTests {
     Batch.RunTask(ConfigTask.InitialiseLayout,
       "Organic Pads", "Mystical", "Tibetan Horns");
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
+    Assert.That(Batch.TestProgram.LastWrittenFilePath, Does.EndWith("Tibetan Horns"));
   }
 
   [Test]
