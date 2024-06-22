@@ -57,8 +57,17 @@ public class FalconProgramTests {
     Batch.EmbeddedTemplateFileName = "Crystal Caves.xml";
     Batch.RunTask(ConfigTask.InitialiseLayout,
       "Organic Pads", "Mystical", "Tibetan Horns");
+    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("AttackTime=\"0.02\""));
+    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("ReleaseTime=\"0.3\""));
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
-    Assert.That(Batch.TestProgram.LastWrittenFilePath, Does.EndWith("Tibetan Horns"));
+    Assert.That(Batch.TestProgram.LastWrittenFilePath, Is.EqualTo(
+      @"J:\FalconProgrammer\Scripts\DahdsrController\DahdsrController.lua"));
+    Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
+      "MaxAttackSeconds = 1"));
+    Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
+      "MaxDecaySeconds = 15"));
+    Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
+      "MaxReleaseSeconds = 2"));
   }
 
   [Test]

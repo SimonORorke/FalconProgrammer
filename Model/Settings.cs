@@ -128,8 +128,8 @@ public class Settings : SerialisationBase {
   }
 
   public class OrganicPadsSettings {
-    [XmlAttribute] public float? AttackSeconds { get; set; } = 0.02f;
-    [XmlAttribute] public float? ReleaseSeconds { get; set; } = 0.3f;
+    [XmlAttribute] public float AttackSeconds { get; set; } = 0.02f;
+    [XmlAttribute] public float ReleaseSeconds { get; set; } = 0.3f;
     [XmlAttribute] public float MaxAttackSeconds { get; set; } = 1;
     [XmlAttribute] public float MaxDecaySeconds { get; set; } = 15;
     [XmlAttribute] public float MaxReleaseSeconds { get; set; } = 2;

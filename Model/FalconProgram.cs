@@ -327,7 +327,7 @@ internal class FalconProgram {
     string scriptSubFolderPath = System.IO.Path.Combine(
       scriptsFolderPath, "DahdsrController");
     string requireScriptPath = System.IO.Path.Combine(
-      scriptSubFolderPath, "DAHDSRController.lua");
+      scriptSubFolderPath, "DahdsrController.lua");
     if (!Batch.FileSystemService.File.Exists(stubScriptPath)) {
       throw new ApplicationException(GetErrorMessage(stubScriptPath));
     }
@@ -533,13 +533,13 @@ internal class FalconProgram {
       throw new InvalidOperationException(
         $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
     }
-    if (Settings.Initialisation.OrganicPads.AttackSeconds.HasValue) {
-      mainDahdsr.AttackTime = Settings.Initialisation.OrganicPads.AttackSeconds.Value;
+    if (Settings.Initialisation.OrganicPads.AttackSeconds >= 0) {
+      mainDahdsr.AttackTime = Settings.Initialisation.OrganicPads.AttackSeconds;
       NotifyUpdate(
         $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime.");
     }
-    if (Settings.Initialisation.OrganicPads.ReleaseSeconds.HasValue) {
-      mainDahdsr.ReleaseTime = Settings.Initialisation.OrganicPads.ReleaseSeconds.Value;
+    if (Settings.Initialisation.OrganicPads.ReleaseSeconds >= 0) {
+      mainDahdsr.ReleaseTime = Settings.Initialisation.OrganicPads.ReleaseSeconds;
       NotifyUpdate(
         $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.ReleaseTime.");
     }

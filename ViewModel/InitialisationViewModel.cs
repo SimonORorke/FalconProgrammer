@@ -27,7 +27,7 @@ public partial class InitialisationViewModel : SettingsWriterViewModelBase {
   }
 
   public override string PageTitle =>
-    "Options for the InitialiseLayout task. (See also the Backgrounds page.)";
+    "Options for the InitialiseLayout task. (See also the Background page.)";
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);

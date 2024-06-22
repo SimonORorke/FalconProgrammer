@@ -12,7 +12,8 @@ public class BackgroundViewModel : SettingsWriterViewModelBase {
     ??= new BackgroundCollection(DialogService, FileSystemService, DispatcherService);
 
   [ExcludeFromCodeCoverage]
-  public override string PageTitle => "Background Images for Info Page";
+  public override string PageTitle => 
+    "Background images for the Info Page, updated by the InitialiseLayout task.";
 
   [ExcludeFromCodeCoverage] public override string TabTitle => "Background";
 
