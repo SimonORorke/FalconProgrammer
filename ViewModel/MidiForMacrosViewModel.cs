@@ -11,7 +11,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   [ObservableProperty] private bool _appendCcNoToMacroDisplayNames;
 
   private CcNoRangeCollection? _continuousCcNoRanges;
-  private int _modWheelReplacementCcNo;
+  private int? _modWheelReplacementCcNo;
   private CcNoRangeCollection? _toggleCcNoRanges;
 
   public MidiForMacrosViewModel(IDialogService dialogService,
@@ -36,7 +36,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     "Must be > 1 to allow ReplaceModWheelWithMacro and ReuseCc1.";
 
   [Range(0, 127)]
-  public int ModWheelReplacementCcNo {
+  public int? ModWheelReplacementCcNo {
     get => _modWheelReplacementCcNo;
     set => SetProperty(ref _modWheelReplacementCcNo, value, true);
   }
@@ -70,7 +70,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     // ranges, base.QueryClose will automatically save these two setting, if changed,
     // as they are properties of this view model.
     Settings.MidiForMacros.AppendCcNoToMacroDisplayNames = AppendCcNoToMacroDisplayNames;
-    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo;
+    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo ?? 0;
     bool canClosePage = true;
     bool haveRangesChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {

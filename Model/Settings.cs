@@ -15,8 +15,8 @@ public class Settings : SerialisationBase {
   [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
 
   [XmlElement]
-  public InitialisationSettings Initialisation { get; set; } =
-    new InitialisationSettings();
+  public SoundBankSpecificSettings SoundBankSpecific { get; set; } =
+    new SoundBankSpecificSettings();
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]
@@ -114,14 +114,6 @@ public class Settings : SerialisationBase {
     [XmlAttribute] public string Path { get; set; } = string.Empty;
   }
 
-  public class InitialisationSettings {
-    [XmlElement] public FluiditySettings Fluidity { get; set; } = new FluiditySettings();
-
-    [XmlElement]
-    public OrganicPadsSettings OrganicPads { get; set; } =
-      new OrganicPadsSettings();
-  }
-
   public struct IntegerRange {
     public int Start;
     public int End;
@@ -144,6 +136,21 @@ public class Settings : SerialisationBase {
   public class SoundBankCategory {
     [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
     [XmlAttribute] public string Category { get; set; } = string.Empty;
+  }
+
+  public class SoundBankSpecificSettings {
+    [XmlElement] public FluiditySettings Fluidity { get; set; } = new FluiditySettings();
+
+    [XmlElement]
+    public OrganicPadsSettings OrganicPads { get; set; } =
+      new OrganicPadsSettings();
+    
+    [XmlArray(nameof(StandardLayoutSoundBanks))]
+    [XmlArrayItem("SoundBank")]
+    public List<SoundBankId> StandardLayoutSoundBanks {
+      get;
+      [ExcludeFromCodeCoverage] set;
+    } = [SoundBankId.EtherFields, SoundBankId.Spectre];
   }
 
   public class WindowLocationSettings {

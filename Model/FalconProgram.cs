@@ -338,12 +338,12 @@ internal class FalconProgram {
     const string attackPlaceholder = "MAX_ATTACK_SECONDS";
     const string decayPlaceholder = "MAX_DECAY_SECONDS";
     const string releasePlaceholder = "MAX_RELEASE_SECONDS";
-    string maxAttackSeconds = 
-      Settings.Initialisation.OrganicPads.MaxAttackSeconds.ToString();
-    string maxDecaySeconds = 
-      Settings.Initialisation.OrganicPads.MaxDecaySeconds.ToString();
-    string maxReleaseSeconds = 
-      Settings.Initialisation.OrganicPads.MaxReleaseSeconds.ToString();
+    string maxAttackSeconds =
+      Settings.SoundBankSpecific.OrganicPads.MaxAttackSeconds.ToString();
+    string maxDecaySeconds =
+      Settings.SoundBankSpecific.OrganicPads.MaxDecaySeconds.ToString();
+    string maxReleaseSeconds =
+      Settings.SoundBankSpecific.OrganicPads.MaxReleaseSeconds.ToString();
     using var reader = new StreamReader(
       Global.GetEmbeddedFileStream("DahdsrController.lua"));
     string template = reader.ReadToEnd();
@@ -381,60 +381,66 @@ internal class FalconProgram {
   ///   Background pages.
   ///   <para>
   ///     First, unless the sound bank or category is on the GUI Script Processor list
-  ///     on the Initialisation page, removes any GUI script processor,
-  ///     so that the default Info Page layout will be shown. 
+  ///     on the Initialisation page, removes the GUI script processor, if there is one,
+  ///     so that the default Info Page layout will be shown. The macros on the
+  ///     default Info Page will be arranged into a standard layout
   ///   </para>
-  ///   <list type="bullet">
-  ///     <listheader>
-  ///       <description>
-  ///         The remaining procedures are executed only
-  ///         if the program has had any GUI script processor removed, so that the
-  ///         default Info page layout is shown.
-  ///       </description>
-  ///     </listheader>
-  ///     <item>
-  ///       <description>
-  ///         Sets the background image for the Info page, if one had been specified
-  ///         for the sound bank on the Background page.
-  ///       </description>
-  ///     </item>
-  ///     <item>
-  ///       <description>
-  ///         For sound banks Ether Fields and Spectre, rearranges the macros into a
-  ///         standard layout.
-  ///       </description>
-  ///     </item>
-  ///     <item>
-  ///       <description>
-  ///         If specified by an option on the Initialisation page,
-  ///         for sound bank Fluidity, moves the Attack macro, if any, to be the last
-  ///         macro in the Info page layout.
-  ///       </description>
-  ///     </item>
-  ///     <item>
-  ///       <description>
-  ///         For sound bank Organic Pads:
-  ///         <para>
-  ///           Adds a macro for each Layer gain,
-  ///           to make variation of these parameters mutually independent,
-  ///           and as the X-Y control on the script-based GUI cannot be implemented
-  ///           on the default Info page layout.
-  ///         </para>
-  ///         <para>
-  ///           Bypasses all delay and reverb effects.
-  ///           The Organic Pads GUI script processor has delay and reverb
-  ///           parameters, controllable from the script-based GUI.
-  ///           There is no way to replicate control of these delay and reverb
-  ///           modulations with macros on a default Info page layout. 
-  ///         </para>
-  ///         <para>
-  ///           Optionally initialises attack time and release time to values
-  ///           specified the Initialisation page.
-  ///         </para>
-  ///       </description>
-  ///     </item>
-  ///   </list>
+  ///   <para>
+  ///     The remaining procedures are executed only if the default Info page layout
+  ///     is shown, with the GUI script processor, if there was one, having just
+  ///     been removed.
+  ///     <list type="bullet">
+  ///       <item>
+  ///         <description>
+  ///           Sets the background image for the Info page, if one had been specified
+  ///           for the sound bank on the Background page.
+  ///         </description>
+  ///       </item>
+  ///       <item>
+  ///         <description>
+  ///           If specified by options on the Initialisation page,
+  ///           for sound banks Ether Fields and Spectre, rearranges the macros into a
+  ///           standard layout.
+  ///         </description>
+  ///       </item>
+  ///       <item>
+  ///         <description>
+  ///           If specified by an option on the Initialisation page,
+  ///           for sound bank Fluidity, moves the Attack macro, if any, to be the last
+  ///           macro in the Info page layout.
+  ///         </description>
+  ///       </item>
+  ///       <item>
+  ///         <description>
+  ///           For sound bank Organic Pads:
+  ///           <para>
+  ///             Adds a macro for each Layer gain,
+  ///             to make variation of these parameters mutually independent,
+  ///             and as the X-Y control on the script-based GUI cannot be implemented
+  ///             on the default Info page layout.
+  ///           </para>
+  ///           <para>
+  ///             Bypasses all delay and reverb effects.
+  ///             The Organic Pads GUI script processor has delay and reverb
+  ///             parameters, controllable from the script-based GUI.
+  ///             There is no way to replicate control of these delay and reverb
+  ///             modulations with macros on a default Info page layout.
+  ///           </para>
+  ///           <para>
+  ///             Initialises maximum attack seconds, maximum delay seconds and
+  ///             maximum release seconds to values specified the Initialisation page.
+  ///           </para>
+  ///           <para>
+  ///             Optionally initialises attack seconds and release seconds to values
+  ///             specified the Initialisation page.
+  ///           </para>
+  ///         </description>
+  ///       </item>
+  ///     </list>
+  ///   </para>
   /// </summary>
+  /// <remarks>
+  /// </remarks>
   public void InitialiseLayout() {
     // There can be a delay loading programs with GUI script processors, for example
     // nearly 10 seconds for Modular Noise\Keys\Inscriptions. So remove the GUI script
@@ -453,10 +459,12 @@ internal class FalconProgram {
     }
     switch (SoundBankId) {
       case SoundBankId.EtherFields or SoundBankId.Spectre:
-        InfoPageLayout.MoveMacrosToStandardLayout();
+        if (Settings.SoundBankSpecific.StandardLayoutSoundBanks.Contains(SoundBankId)) {
+          InfoPageLayout.MoveMacrosToStandardLayout();
+        }
         break;
       case SoundBankId.Fluidity:
-        if (Settings.Initialisation.Fluidity.MoveAttackMacroToEnd) {
+        if (Settings.SoundBankSpecific.Fluidity.MoveAttackMacroToEnd) {
           var attackMacro = FindContinuousMacro("Attack");
           if (attackMacro != null) {
             MoveMacroToEnd(attackMacro);
@@ -533,13 +541,13 @@ internal class FalconProgram {
       throw new InvalidOperationException(
         $"{PathShort}: Cannot find DAHDSR in ControlSignalSources.");
     }
-    if (Settings.Initialisation.OrganicPads.AttackSeconds >= 0) {
-      mainDahdsr.AttackTime = Settings.Initialisation.OrganicPads.AttackSeconds;
+    if (Settings.SoundBankSpecific.OrganicPads.AttackSeconds >= 0) {
+      mainDahdsr.AttackTime = Settings.SoundBankSpecific.OrganicPads.AttackSeconds;
       NotifyUpdate(
         $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.AttackTime.");
     }
-    if (Settings.Initialisation.OrganicPads.ReleaseSeconds >= 0) {
-      mainDahdsr.ReleaseTime = Settings.Initialisation.OrganicPads.ReleaseSeconds;
+    if (Settings.SoundBankSpecific.OrganicPads.ReleaseSeconds >= 0) {
+      mainDahdsr.ReleaseTime = Settings.SoundBankSpecific.OrganicPads.ReleaseSeconds;
       NotifyUpdate(
         $"{PathShort}: Initialised '{mainDahdsr.DisplayName}'.ReleaseTime.");
     }
