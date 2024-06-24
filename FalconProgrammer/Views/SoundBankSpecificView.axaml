@@ -1,0 +1,96 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:FalconProgrammer.ViewModel"
+             mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
+             x:Class="FalconProgrammer.Views.SoundBankSpecificView"
+             x:DataType="vm:SoundBankSpecificViewModel">
+    
+    <UserControl.Styles>
+        <Style Selector="AccessText">
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="TextAlignment" Value="End" />
+            <Setter Property="Width" Value="50" />
+        </Style>
+    </UserControl.Styles>
+    
+    <StackPanel>
+        <CheckBox IsChecked="{Binding EtherFieldsStandardLayout}"
+                  Margin="10,10,0,0">
+            <AccessText
+                Text="{Binding EtherFieldsStandardLayoutCaption}" />
+        </CheckBox>
+        <CheckBox IsChecked="{Binding FluidityMoveAttackMacroToEnd}"
+                  Margin="10,10,0,0">
+            <AccessText Text="{Binding FluidityMoveAttackMacroToEndCaption}" />
+        </CheckBox>
+        <CheckBox IsChecked="{Binding SpectreStandardLayout}"
+                  Margin="10,10,0,0">
+            <AccessText
+                Text="{Binding SpectreStandardLayoutCaption}" />
+        </CheckBox>
+        <Border BorderBrush="{DynamicResource SystemBaseLowColor}"
+                BorderThickness="2"
+                Margin="0,10,0,0">
+            <StackPanel>
+                <TextBlock Text="{Binding OrganicPadsTitle}" 
+                           FontSize="18"
+                           Margin="10,10,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Target="OrganicPadsAttackSecondsTextBox"
+                           Margin="10, 10, 0, 0">
+                        <AccessText
+                            Text="{Binding OrganicPadsAttackSecondsCaption}" />
+                    </Label>
+                    <TextBox x:Name="OrganicPadsAttackSecondsTextBox"
+                             Text="{Binding OrganicPadsAttackSeconds}"
+                             Margin="10, 10, 0, 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Target="OrganicPadsReleaseSecondsTextBox"
+                           Margin="10, 10, 0, 0">
+                        <AccessText
+                            Text="{Binding OrganicPadsReleaseSecondsCaption}" />
+                    </Label>
+                    <TextBox x:Name="OrganicPadsReleaseSecondsTextBox"
+                             Text="{Binding OrganicPadsReleaseSeconds}"
+                             Margin="10, 10, 0, 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Target="OrganicPadsMaxAttackSecondsTextBox"
+                           Margin="10, 10, 0, 0">
+                        <AccessText
+                            Text="{Binding OrganicPadsMaxAttackSecondsCaption}" />
+                    </Label>
+                    <TextBox x:Name="OrganicPadsMaxAttackSecondsTextBox"
+                             Text="{Binding OrganicPadsMaxAttackSeconds}"
+                             Margin="10, 10, 10, 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Target="OrganicPadsMaxDecaySecondsTextBox"
+                           Margin="10, 10, 0, 0">
+                        <AccessText
+                            Text="{Binding OrganicPadsMaxDecaySecondsCaption}" />
+                    </Label>
+                    <TextBox x:Name="OrganicPadsMaxDecaySecondsTextBox"
+                             Text="{Binding OrganicPadsMaxDecaySeconds}"
+                             Margin="10, 10, 0, 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Target="OrganicPadsMaxReleaseSecondsTextBox"
+                           Margin="10, 10, 0, 0">
+                        <AccessText
+                            Text="{Binding OrganicPadsMaxReleaseSecondsCaption}" />
+                    </Label>
+                    <TextBox x:Name="OrganicPadsMaxReleaseSecondsTextBox"
+                             Text="{Binding OrganicPadsMaxReleaseSeconds}"
+                             Margin="10, 10, 0, 10" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

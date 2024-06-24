@@ -42,11 +42,12 @@ public class ViewLocator : IDataTemplate {
       BatchScriptViewModel => new BatchScriptView(),
       BatchScopeCollection => new BatchScopesView(),
       CcNoRangeCollection => new CcNoRangesView(),
-      InitialisationViewModel => new InitialisationView(),
+      GuiScriptProcessorViewModel => new GuiScriptProcessorView(),
       LocationsViewModel => new LocationsView(),
       MainWindowViewModel => new MainWindow(),
       MidiForMacrosViewModel => new MidiForMacrosView(),
       ReverbViewModel => new ReverbView(),
+      SoundBankSpecificViewModel => new SoundBankSpecificView(),
       TaskCollection => new TasksView(),
       _ => null
     };

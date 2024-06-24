@@ -30,11 +30,13 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     BackgroundViewModel = new BackgroundViewModel(dialogService, dispatcherService);
     BatchScriptViewModel = new BatchScriptViewModel(
       dialogService, dispatcherService, cursorService);
-    InitialisationViewModel =
-      new InitialisationViewModel(dialogService, dispatcherService);
+    GuiScriptProcessorViewModel =
+      new GuiScriptProcessorViewModel(dialogService, dispatcherService);
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
     ReverbViewModel = new ReverbViewModel(dialogService, dispatcherService);
+    SoundBankSpecificViewModel = 
+      new SoundBankSpecificViewModel(dialogService, dispatcherService);
     // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
     // to flag that settings need to be saved when those properties change.
     // The only properties this main window view model needs to persist to settings are
@@ -81,7 +83,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   /// <summary>
   ///   The setter is only for tests.
   /// </summary>
-  internal InitialisationViewModel InitialisationViewModel { get; set; }
+  internal GuiScriptProcessorViewModel GuiScriptProcessorViewModel { get; set; }
 
   private TabItemViewModel LocationsTab => Tabs[1];
 
@@ -111,6 +113,12 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   /// </summary>
   [PublicAPI]
   internal ReverbViewModel ReverbViewModel { get; [ExcludeFromCodeCoverage] set; }
+
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [PublicAPI]
+  internal SoundBankSpecificViewModel SoundBankSpecificViewModel { get; [ExcludeFromCodeCoverage] set; }
 
   public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
@@ -148,10 +156,11 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     var list = new List<TabItemViewModel> {
       new TabItemViewModel(BatchScriptViewModel),
       new TabItemViewModel(LocationsViewModel),
-      new TabItemViewModel(InitialisationViewModel),
+      new TabItemViewModel(GuiScriptProcessorViewModel),
       new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BackgroundViewModel),
-      new TabItemViewModel(ReverbViewModel)
+      new TabItemViewModel(ReverbViewModel),
+      new TabItemViewModel(SoundBankSpecificViewModel)
     };
     return list.ToImmutableList();
   }

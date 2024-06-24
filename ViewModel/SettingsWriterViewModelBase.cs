@@ -35,6 +35,17 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
     set => SetProperty(ref _settingsFolderPath, value, true);
   }
 
+  private async Task<bool> CanClosePageOnError(bool isClosingWindow) {
+    var errors = GetErrors();
+    int errorCount = errors.Count();
+    string errorMessage = errorCount > 1
+      ? $"There are {errorCount} validation errors on the {TabTitle} page."
+      : $"There is a validation error on the {TabTitle} page.";
+    var errorReporter = new ErrorReporter(DialogService);
+    return await errorReporter.CanClosePageOnError(
+      errorMessage, TabTitle, isClosingWindow, false);
+  }
+
   private async Task<bool> CanClosePageOnError(
     string errorMessage, bool isClosingWindow) {
     var errorReporter = new ErrorReporter(DialogService);
@@ -70,15 +81,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
       }
     }
     if (HasErrors) {
-      var errors = GetErrors();
-      int errorCount = errors.Count();
-      string errorMessage = errorCount > 1
-        ? $"There are {errorCount} validation errors on the {TabTitle} page."
-        : $"There is a validation error on the {TabTitle} page.";
-      var errorReporter = new ErrorReporter(DialogService);
-      bool canClosePage = await errorReporter.CanClosePageOnError(
-        errorMessage, TabTitle, isClosingWindow, false);
-      if (!canClosePage) {
+      if (!await CanClosePageOnError(isClosingWindow)) {
         return false;
       }
     }
