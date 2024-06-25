@@ -984,6 +984,11 @@ internal class FalconProgram {
     Log.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }
 
+  /// <summary>
+  ///   Restores the program file in a sound bank\category subfolder of the
+  ///   Program Files folder from the corresponding file in the Original Program Files
+  ///   folder. 
+  /// </summary>
   public void RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
       Batch.GetOriginalProgramsFolderPath(),
