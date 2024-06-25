@@ -458,8 +458,8 @@ internal class FalconProgram {
       SetBackgroundImagePath();
     }
     switch (SoundBankId) {
-      case SoundBankId.EtherFields or SoundBankId.Spectre:
-        if (Settings.SoundBankSpecific.StandardLayoutSoundBanks.Contains(SoundBankId)) {
+      case SoundBankId.EtherFields:
+        if (Settings.SoundBankSpecific.EtherFields.StandardLayout) {
           InfoPageLayout.MoveMacrosToStandardLayout();
         }
         break;
@@ -475,8 +475,11 @@ internal class FalconProgram {
       case SoundBankId.OrganicPads:
         InitialiseOrganicPadsProgram();
         break;
-      default:
-        return;
+      case SoundBankId.Spectre:
+        if (Settings.SoundBankSpecific.Spectre.StandardLayout) {
+          InfoPageLayout.MoveMacrosToStandardLayout();
+        }
+        break;
     }
     return;
 

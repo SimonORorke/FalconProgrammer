@@ -67,7 +67,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     // Provided there are no validation errors for either of the two collections of
-    // ranges, base.QueryClose will automatically save these two setting, if changed,
+    // ranges, base.QueryClose will automatically save these two settings, if changed,
     // as they are properties of this view model.
     Settings.MidiForMacros.AppendCcNoToMacroDisplayNames = AppendCcNoToMacroDisplayNames;
     Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo ?? 0;

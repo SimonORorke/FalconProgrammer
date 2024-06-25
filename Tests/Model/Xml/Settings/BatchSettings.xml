@@ -9,15 +9,6 @@
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
     <ColourScheme>Forest</ColourScheme>
     <WindowLocation Left="248" Top="159" Width="1137" Height="626" WindowState="2"/>
-    <SoundBankSpecific>
-        <Fluidity MoveAttackMacroToEnd="true"/>
-        <OrganicPads AttackSeconds="0.02" ReleaseSeconds="0.3"
-                     MaxAttackSeconds="1" MaxDecaySeconds="15" MaxReleaseSeconds="2"/>
-        <StandardLayoutSoundBanks>
-            <SoundBank>EtherFields</SoundBank>
-            <SoundBank>Spectre</SoundBank>
-        </StandardLayoutSoundBanks>
-    </SoundBankSpecific>
     <MustUseGuiScriptProcessor>
         <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>
@@ -94,6 +85,13 @@
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Wonder Land"/>
         <ProgramPath SoundBank="Spectre" Category="Leads" Program="LD Showteker"/>
     </DoNotZeroReverb>
+    <SoundBankSpecific>
+        <EtherFields StandardLayout="true"/>
+        <Fluidity MoveAttackMacroToEnd="true"/>
+        <OrganicPads AttackSeconds="0.02" ReleaseSeconds="0.3"
+                     MaxAttackSeconds="1" MaxDecaySeconds="15" MaxReleaseSeconds="2"/>
+        <Spectre StandardLayout="true"/>
+    </SoundBankSpecific>
     <Batch>
         <Scope>
             <SoundBank>All</SoundBank>

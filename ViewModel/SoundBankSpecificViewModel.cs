@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -29,9 +29,11 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   public SoundBankSpecificViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
+  [ExcludeFromCodeCoverage]
   public static string EtherFieldsStandardLayoutCaption =>
     "_Ether Fields sound bank: Reposition macros into a standard layout.";
 
+  [ExcludeFromCodeCoverage]
   public static string FluidityMoveAttackMacroToEndCaption =>
     "_Fluidity sound bank: If the GUI script processor is removed, " +
     "move the Attack macro to the end of the Info page layout.";
@@ -42,6 +44,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _organicPadsAttackSeconds, value, true);
   }
 
+  [ExcludeFromCodeCoverage]
   public static string OrganicPadsAttackSecondsCaption =>
     "_Attack seconds (0-10 decimal or, to conserve the program-specific value, blank)";
 
@@ -52,6 +55,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _organicPadsMaxAttackSeconds, value, true);
   }
 
+  [ExcludeFromCodeCoverage]
   public static string OrganicPadsMaxAttackSecondsCaption =>
     // ReSharper disable once StringLiteralTypo
     "Ma_ximum Attack seconds (1-10 decimal)";
@@ -63,6 +67,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _organicPadsMaxDecaySeconds, value, true);
   }
 
+  [ExcludeFromCodeCoverage]
   public static string OrganicPadsMaxDecaySecondsCaption =>
     "Maximum _Decay seconds (1-30 decimal)";
 
@@ -73,6 +78,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _organicPadsMaxReleaseSeconds, value, true);
   }
 
+  [ExcludeFromCodeCoverage]
   public static string OrganicPadsMaxReleaseSecondsCaption =>
     // ReSharper disable once StringLiteralTypo
     "Max_imum Release seconds (1-20 decimal)";
@@ -83,25 +89,29 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _organicPadsReleaseSeconds, value, true);
   }
 
+  [ExcludeFromCodeCoverage]
   public static string OrganicPadsReleaseSecondsCaption =>
     "_Release seconds (0-20 decimal or, to conserve the program-specific value, blank)";
   
+  [ExcludeFromCodeCoverage]
   public static string OrganicPadsTitle =>
     "Organic Pads sound bank options, if the GUI script processor is removed:";
 
+  [ExcludeFromCodeCoverage]
   public override string PageTitle =>
     "Sound bank-specific options for the InitialiseLayout task";
 
+  [ExcludeFromCodeCoverage]
   public static string SpectreStandardLayoutCaption =>
     "_Spectre sound bank: Reposition macros into a standard layout.";
 
+  [ExcludeFromCodeCoverage]
   public override string TabTitle => "Sound Bank-Specific";
 
   internal override async Task Open() {
     await base.Open();
     var specific = Settings.SoundBankSpecific; 
-    EtherFieldsStandardLayout = specific.StandardLayoutSoundBanks.Contains(
-      SoundBankId.EtherFields);
+    EtherFieldsStandardLayout = specific.EtherFields.StandardLayout;
     FluidityMoveAttackMacroToEnd = specific.Fluidity.MoveAttackMacroToEnd;
     OrganicPadsAttackSeconds = specific.OrganicPads.AttackSeconds >= 0
       ? specific.OrganicPads.AttackSeconds.ToString()
@@ -112,17 +122,15 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     OrganicPadsReleaseSeconds = specific.OrganicPads.ReleaseSeconds >= 0
       ? specific.OrganicPads.ReleaseSeconds.ToString()
       : string.Empty;
-    SpectreStandardLayout = specific.StandardLayoutSoundBanks.Contains(
-      SoundBankId.Spectre);
+    SpectreStandardLayout = specific.Spectre.StandardLayout;
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
     if (HasErrors) {
-      HaveSettingsBeenUpdated = false;
-      return await base.QueryClose(isClosingWindow);
+      return await CanClosePageOnError(isClosingWindow, true);
     }
-    UpdateStandardLayoutSoundBanks(SoundBankId.EtherFields, EtherFieldsStandardLayout);
     var specific = Settings.SoundBankSpecific;
+    specific.EtherFields.StandardLayout = EtherFieldsStandardLayout;
     specific.Fluidity.MoveAttackMacroToEnd = FluidityMoveAttackMacroToEnd;
     specific.OrganicPads.AttackSeconds =
       !string.IsNullOrWhiteSpace(OrganicPadsAttackSeconds)
@@ -135,19 +143,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
       !string.IsNullOrWhiteSpace(OrganicPadsReleaseSeconds)
         ? float.Parse(OrganicPadsReleaseSeconds)
         : -1;
-    UpdateStandardLayoutSoundBanks(SoundBankId.Spectre, SpectreStandardLayout);
+    specific.Spectre.StandardLayout = SpectreStandardLayout;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
-  }
-
-  private void UpdateStandardLayoutSoundBanks(SoundBankId soundBankId, bool value) {
-    var specific = Settings.SoundBankSpecific;
-    switch (value) {
-      case true when !specific.StandardLayoutSoundBanks.Contains(soundBankId):
-        specific.StandardLayoutSoundBanks.Add(soundBankId);
-        break;
-      case false when specific.StandardLayoutSoundBanks.Contains(soundBankId):
-        specific.StandardLayoutSoundBanks.Remove(soundBankId);
-        break;
-    }
   }
 }

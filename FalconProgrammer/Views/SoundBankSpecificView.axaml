@@ -14,7 +14,8 @@
         <Style Selector="TextBox">
             <Setter Property="Height" Value="30" />
             <Setter Property="TextAlignment" Value="End" />
-            <Setter Property="Width" Value="50" />
+            <!-- Wide enough to make room for the error icon to the right. -->
+            <Setter Property="Width" Value="85" /> 
         </Style>
     </UserControl.Styles>
     
@@ -68,7 +69,7 @@
                     </Label>
                     <TextBox x:Name="OrganicPadsMaxAttackSecondsTextBox"
                              Text="{Binding OrganicPadsMaxAttackSeconds}"
-                             Margin="10, 10, 10, 0" />
+                             Margin="10, 10, 0, 0" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsMaxDecaySecondsTextBox"

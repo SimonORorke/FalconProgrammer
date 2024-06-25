@@ -14,10 +14,6 @@ public class Settings : SerialisationBase {
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
   [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
 
-  [XmlElement]
-  public SoundBankSpecificSettings SoundBankSpecific { get; set; } =
-    new SoundBankSpecificSettings();
-
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]
   public List<SoundBankCategory> MustUseGuiScriptProcessorCategories {
@@ -35,6 +31,10 @@ public class Settings : SerialisationBase {
   [XmlArrayItem(nameof(ProgramPath))]
   public List<ProgramPath> DoNotZeroReverb { get; [ExcludeFromCodeCoverage] set; } =
     [];
+
+  [XmlElement]
+  public SoundBankSpecificSettings SoundBankSpecific { get; set; } =
+    new SoundBankSpecificSettings();
 
   [XmlElement] public BatchSettings Batch { get; set; } = new BatchSettings();
 
@@ -107,7 +107,7 @@ public class Settings : SerialisationBase {
   }
 
   public class FluiditySettings {
-    [XmlAttribute] public bool MoveAttackMacroToEnd { get; set; } = true;
+    [XmlAttribute] public bool MoveAttackMacroToEnd { get; set; }
   }
 
   public class Folder {
@@ -120,11 +120,11 @@ public class Settings : SerialisationBase {
   }
 
   public class OrganicPadsSettings {
-    [XmlAttribute] public float AttackSeconds { get; set; } = 0.02f;
-    [XmlAttribute] public float ReleaseSeconds { get; set; } = 0.3f;
-    [XmlAttribute] public float MaxAttackSeconds { get; set; } = 1;
-    [XmlAttribute] public float MaxDecaySeconds { get; set; } = 15;
-    [XmlAttribute] public float MaxReleaseSeconds { get; set; } = 2;
+    [XmlAttribute] public float AttackSeconds { get; set; }
+    [XmlAttribute] public float ReleaseSeconds { get; set; }
+    [XmlAttribute] public float MaxAttackSeconds { get; set; }
+    [XmlAttribute] public float MaxDecaySeconds { get; set; }
+    [XmlAttribute] public float MaxReleaseSeconds { get; set; }
   }
 
   public class ProgramPath {
@@ -139,18 +139,21 @@ public class Settings : SerialisationBase {
   }
 
   public class SoundBankSpecificSettings {
+    [XmlElement] public StandardLayoutSettings EtherFields { get; set; } =
+      new StandardLayoutSettings();
+    
     [XmlElement] public FluiditySettings Fluidity { get; set; } = new FluiditySettings();
 
     [XmlElement]
     public OrganicPadsSettings OrganicPads { get; set; } =
       new OrganicPadsSettings();
     
-    [XmlArray(nameof(StandardLayoutSoundBanks))]
-    [XmlArrayItem("SoundBank")]
-    public List<SoundBankId> StandardLayoutSoundBanks {
-      get;
-      [ExcludeFromCodeCoverage] set;
-    } = [SoundBankId.EtherFields, SoundBankId.Spectre];
+    [XmlElement] public StandardLayoutSettings Spectre { get; set; } =
+      new StandardLayoutSettings();
+  }
+
+  public class StandardLayoutSettings {
+    [XmlAttribute] public bool StandardLayout { get; set; }
   }
 
   public class WindowLocationSettings {
