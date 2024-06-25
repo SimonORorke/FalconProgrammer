@@ -17,11 +17,4 @@
         <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Background Images\Yellowish Mid-Green.png"/>
         <Background SoundBank="Fluidity" Path="J:\FalconProgrammer\Background Images\Midnight Blue.png"/>
     </Backgrounds>
-    <SoundBankSpecific>
-        <Fluidity MoveAttackMacroToEnd="true"/>
-        <OrganicPads AttackSeconds="0.02" ReleaseSeconds="0.3"
-                     MaxAttackSeconds="1" MaxDecaySeconds="15" MaxReleaseSeconds="2"/>
-        <StandardLayoutSoundBanks>
-        </StandardLayoutSoundBanks>
-    </SoundBankSpecific>
 </Settings>

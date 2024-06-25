@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using FalconProgrammer.ViewModel;
 using FalconProgrammer.Views;
@@ -20,6 +21,10 @@ public class DialogService : IDialogService {
   private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
 
   public async Task<bool> AskYesNoQuestion(string text, string tabTitle = "") {
+    // A wait cursor is shown when changing pages. A message box may be shown
+    // when the new page is shown, and before the default cursor is shown.
+    // So we need to show the default cursor before showing the message box.
+    MainWindow.Cursor = Cursor.Default;
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
       GetMessageBoxTitle(tabTitle), text, ButtonEnum.YesNo, Icon.Question);
     var result = await messageBox.ShowAsync();
@@ -95,6 +100,10 @@ public class DialogService : IDialogService {
   }
 
   public async Task ShowErrorMessageBox(string text, string tabTitle = "") {
+    // A wait cursor is shown when changing pages. A message box may be shown
+    // when the new page is shown, and before the default cursor is shown.
+    // So we need to show the default cursor before showing the message box.
+    MainWindow.Cursor = Cursor.Default;
     var messageBox = MessageBoxManager.GetMessageBoxStandard(
       GetMessageBoxTitle(tabTitle), text, ButtonEnum.Ok, Icon.Error);
     await messageBox.ShowAsync();
