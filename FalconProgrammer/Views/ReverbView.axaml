@@ -7,87 +7,92 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.ReverbView"
              x:DataType="vm:ReverbViewModel">
-    <DataGrid
-        ItemsSource="{Binding DoNotZeroReverb}"
-        RowHeight="35"
-        GridLinesVisibility="All">
-        <DataGrid.Columns>
-            <DataGridTemplateColumn Width="*">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Sound Bank"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding SoundBank}"
-                                   Margin="13,0, 0, 0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-                <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate>
-                        <ComboBox ItemsSource="{Binding SoundBanks}"
-                                  SelectedItem="{Binding SoundBank}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="*">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Category"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Category}"
-                                   Margin="13,0, 0, 0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-                <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate>
-                        <ComboBox ItemsSource="{Binding Categories}"
-                                  SelectedItem="{Binding Category}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="*">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Program"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="vm:ProgramItem">
-                        <TextBlock Text="{Binding Program}"
-                                   Margin="13,0, 0, 0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-                <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate>
-                        <ComboBox ItemsSource="{Binding Programs}"
-                                  SelectedItem="{Binding Program}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="90">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Edit"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <ct:ItemEditButton
-                            CutCommand="{Binding CutCommand}"
-                            PasteBeforeCommand="{Binding PasteBeforeCommand}"
-                            RemoveCommand="{Binding RemoveCommand}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-        </DataGrid.Columns>
-    </DataGrid>
+    <StackPanel>
+        <TextBlock Text="{Binding Advice}"
+                   TextWrapping="Wrap"
+                   Margin="10,10,10,10" />
+        <DataGrid
+            ItemsSource="{Binding DoNotZeroReverb}"
+            RowHeight="35"
+            GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Sound Bank"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding SoundBank}"
+                                       Margin="13,0, 0, 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding SoundBanks}"
+                                      SelectedItem="{Binding SoundBank}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Category"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Category}"
+                                       Margin="13,0, 0, 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Categories}"
+                                      SelectedItem="{Binding Category}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Program"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="vm:ProgramItem">
+                            <TextBlock Text="{Binding Program}"
+                                       Margin="13,0, 0, 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Programs}"
+                                      SelectedItem="{Binding Program}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="90">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Edit"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </UserControl>

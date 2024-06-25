@@ -9,13 +9,17 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
   [ExcludeFromCodeCoverage]
-  public override string PageTitle =>
-    "Task ZeroReverbMacros must bypass these programs when initialising " +
-    "Reverb macro values to zero.";
+  public static string Advice =>
+    "Some programs make no or very little sound if the Reverb macro is set to zero.";
 
   public DoNotZeroReverbCollection DoNotZeroReverb => _doNotZeroReverb
     ??= new DoNotZeroReverbCollection(DialogService, FileSystemService,
       DispatcherService);
+
+  [ExcludeFromCodeCoverage]
+  public override string PageTitle =>
+    "The ZeroReverbMacros task bypasses these programs when initialising " +
+    "Reverb macro values to zero.";
 
   [ExcludeFromCodeCoverage] public override string TabTitle => "Reverb";
 

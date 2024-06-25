@@ -8,7 +8,8 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   public GuiScriptProcessorViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  [ExcludeFromCodeCoverage] public static string Advice =>
+  [ExcludeFromCodeCoverage]
+  public static string Advice =>
     "The InitialiseLayout task will remove the GUI script processor, if found, " +
     "from any program whose sound bank or category is not listed here, " +
     "so that the default Info page layout will be shown. " +
