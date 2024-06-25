@@ -29,6 +29,9 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   ///   which case, to ensure that the error data is still there to be fixed, when the
   ///   page is reopened, its data will not be refreshed from saved settings.
   /// </summary>
+  /// <remarks>
+  ///   This does not work for field errors, only for inter-field consistency errors.
+  /// </remarks>
   internal bool IsFixingError { get; set; }
 
   protected bool IsVisible { get; private set; }

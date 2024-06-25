@@ -41,7 +41,11 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     set => SetProperty(ref _modWheelReplacementCcNo, value, true);
   }
 
-  public override string PageTitle => "MIDI for Macros";
+  [ExcludeFromCodeCoverage]
+  public override string PageTitle => 
+    "MIDI CC assignments for macros, for update by the UpdateMacroCcs task.";
+  
+  public override string TabTitle => "MIDI for Macros";
 
   public CcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
     ??= new CcNoRangeCollection("Toggle",

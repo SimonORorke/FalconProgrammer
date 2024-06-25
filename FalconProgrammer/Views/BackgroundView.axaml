@@ -8,98 +8,103 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BackgroundView"
              x:DataType="vm:BackgroundViewModel">
-    <DataGrid
-        ItemsSource="{Binding Backgrounds}"
-        RowHeight="35"
-        GridLinesVisibility="All">
-        <DataGrid.Columns>
-            <DataGridTemplateColumn Width="175">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Sound Bank"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="vm:SoundBankCategory">
-                        <TextBlock Text="{Binding SoundBank}"
-                                   Margin="13,0, 0, 0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-                <DataGridTemplateColumn.CellEditingTemplate>
-                    <DataTemplate>
-                        <ComboBox ItemsSource="{Binding SoundBanks}"
-                                  SelectedItem="{Binding SoundBank}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="*">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Background Image Path"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path}"
-                                   Margin="13,0, 0, 0" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="81">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Image"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Image
-                            Source="{Binding Path, Converter={x:Static 
+    <StackPanel>
+        <TextBlock Text="{Binding Advice}"
+                   TextWrapping="Wrap"
+                   Margin="10,10,10,10" />
+        <DataGrid
+            ItemsSource="{Binding Backgrounds}"
+            RowHeight="35"
+            GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="175">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Sound Bank"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="vm:SoundBankCategory">
+                            <TextBlock Text="{Binding SoundBank}"
+                                       Margin="13,0, 0, 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding SoundBanks}"
+                                      SelectedItem="{Binding SoundBank}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Background Image Path"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path}"
+                                       Margin="13,0, 0, 0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="81">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Image"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image
+                                Source="{Binding Path, Converter={x:Static 
                             local:Converters.PathToBitmap}}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="48"
-                            Height="32" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="110">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Browse"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Button Command="{Binding BrowseCommand}"
-                                Margin="13,0,0,0"
-                                Height="25"
-                                MinHeight="25">
-                            <TextBlock Text="Browse..." />
-                        </Button>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="90">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Edit"
-                                   FontSize="20" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <ct:ItemEditButton
-                            CutCommand="{Binding CutCommand}"
-                            PasteBeforeCommand="{Binding PasteBeforeCommand}"
-                            RemoveCommand="{Binding RemoveCommand}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-        </DataGrid.Columns>
-    </DataGrid>
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Width="48"
+                                Height="32" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="110">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Browse"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding BrowseCommand}"
+                                    Margin="13,0,0,0"
+                                    Height="25"
+                                    MinHeight="25">
+                                <TextBlock Text="Browse..." />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="90">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Edit"
+                                       FontSize="20" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </UserControl>

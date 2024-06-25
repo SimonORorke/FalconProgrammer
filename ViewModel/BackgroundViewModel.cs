@@ -8,12 +8,18 @@ public class BackgroundViewModel : SettingsWriterViewModelBase {
   public BackgroundViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
+  [ExcludeFromCodeCoverage]
+  public static string Advice =>
+    "Applies only to programs that show the default Info page layout. " +
+    "So the GUI script processor, if any, needs to be removed, which can be done " +
+    "by the same run of the InitialiseLayout task. See the GUI Script Processor page.";
+
   public BackgroundCollection Backgrounds => _backgrounds
     ??= new BackgroundCollection(DialogService, FileSystemService, DispatcherService);
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle => 
-    "Background images for the Info Page, updated by the InitialiseLayout task.";
+    "Info page background images, for update by the InitialiseLayout task.";
 
   [ExcludeFromCodeCoverage] public override string TabTitle => "Background";
 
