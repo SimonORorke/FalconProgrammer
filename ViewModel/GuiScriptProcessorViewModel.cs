@@ -1,4 +1,6 @@
-﻿namespace FalconProgrammer.ViewModel;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace FalconProgrammer.ViewModel;
 
 public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   private SoundBankCategoryCollection? _soundBankCategories;
@@ -6,9 +8,15 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
   public GuiScriptProcessorViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
+  [ExcludeFromCodeCoverage] public static string Advice =>
+    "The InitialiseLayout task will remove the GUI script processor, if found, " +
+    "from any program whose sound bank or category is not listed here, " +
+    "so that the default Info page layout will be shown. " +
+    "Please consult the manual for advice on what to include.";
+
   public override string PageTitle =>
-    "Falcon program categories where the Info page's GUI must be specified in " +
-    "a script processor";
+    "Sound banks and categories where the Info page's GUI must be " +
+    "specified in a script processor";
 
   public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
     ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
