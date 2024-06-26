@@ -49,7 +49,7 @@ public class SettingsTests {
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
-    const string task = nameof(ConfigTask.UpdateMacroCcs);
+    const string task = nameof(ConfigTask.AssignMacroCcs);
     settings.Batch.Scope.SoundBank = soundBank;
     settings.Batch.Scope.Category = category;
     settings.Batch.Scope.Program = program;

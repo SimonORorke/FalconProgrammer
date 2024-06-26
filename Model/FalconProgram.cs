@@ -76,6 +76,111 @@ internal class FalconProgram {
   /// </summary>
   private string SoundBankName => Category.SoundBankName;
 
+  /// <summary>
+  ///   Configures macro CCs.
+  /// </summary>
+  public void AssignMacroCcs() {
+    if (Settings.MidiForMacros.ContinuousCcNos.Count == 0
+        || Settings.MidiForMacros.ToggleCcNos.Count == 0) {
+      throw new ApplicationException(
+        "MIDI CC numbers cannot be assigned to macros " +
+        "because ranges of continuous and/or toggle CC numbers have not yet " +
+        "been specified. You need to do that on the MIDI for Macros page.");
+    }
+    if (GuiScriptProcessor == null) {
+      if (Category.MustUseGuiScriptProcessor) {
+        // If we don't throw this ApplicationException, a different exception will be
+        // thrown. The category may have some programs with GUI script processors, others
+        // without. Examples: Falcon Factory\Bass-Sub, Falcon Factory\Keys.
+        // Such categories only exist in the Falcon Factory (version 1) sound bank.
+        // There is a comment on this in FindGuiScriptProcessor.
+        // Supporting use of the GUI script processors in those categories is unlikely to
+        // be implemented, especially as all Falcon Factory rev2 programs have GUI script
+        // processors.
+        throw new ApplicationException(
+          "Assigning MIDI CCs to macros for a program with a GUI script " +
+          "processor is not supported for sound bank " +
+          $"{SoundBankName} category {Category.Name}. You need to go to the " +
+          "GUI Script Processor page and remove the sound bank or category from " +
+          "the list. For the Falcon Factory (version 1) sound bank, the only " +
+          "categories for which updating macro MIDI CCs for a GUI script processor " +
+          " is supported are Brutal Bass 2.1', 'Lo-Fi 2.5', " +
+          "'Organic Texture 2.8', 'RetroWave 2.5' and 'VCF-20 Synths 2.5'.");
+      }
+      // The CCs are specified in Modulations owned by the Macros
+      // (ConstantModulations) that they modulate
+      AssignMacroCcsOwnedByMacros();
+    } else {
+      var templateScriptProcessor = Category.GetTemplateScriptProcessor(
+        GuiScriptProcessor, Batch);
+      // The CCs are specified in Modulations owned by the GUI ScriptProcessor
+      // and can be copied from a template ScriptProcessor.
+      // This applies to all programs in categories for which MustUseGuiScriptProcessor
+      // is set to true in the settings file.
+      GuiScriptProcessor.AssignMacroCcsFromTemplate(
+        templateScriptProcessor.Modulations, Macros);
+    }
+    NotifyUpdate($"{PathShort}: Assigned Macro CCs.");
+  }
+
+  /// <summary>
+  ///   Where MIDI CC assignments to macros shown on the Info page are specified in
+  ///   ConstantModulations,
+  ///   updates the macro CCs so that the macros are successively assigned standard CCs
+  ///   in the order of their locations on the Info page (top to bottom, left to right or
+  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
+  ///   There are different series of CCs for continuous and toggle macros.
+  /// </summary>
+  private void AssignMacroCcsOwnedByMacros() {
+    // Most Falcon Factory programs list the ConstantModulation macro specifications in order
+    // top to bottom, left to right. But a few, e.g. Falcon Factory\Keys\Days Of Old 1.4, do not.
+    var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
+    // Make the first call of GetNextContinuousCcNo return the first continuous
+    // CC number specified in settings.
+    Settings.MidiForMacros.CurrentContinuousCcNo = 0;
+    // Make the first call of GetNextToggleCcNo return the first
+    // toggle CC number specified in settings.
+    Settings.MidiForMacros.CurrentToggleCcNo = 0;
+    foreach (var macro in sortedByLocation) {
+      // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
+      // MIDI CC mapping that's not on the Info page.
+      // Example: Devinity\Bass\Comber Bass.
+      var forMacroModulations =
+        macro.GetForMacroModulations();
+      if (forMacroModulations.Count > 1) {
+        throw new NotSupportedException(
+          $"{PathShort}: Macro '{macro.DisplayNameWithoutCc}' " +
+          $"owns {forMacroModulations.Count} 'for macro' Modulations.");
+      }
+      int ccNo = macro.IsContinuous
+        ? Settings.MidiForMacros.GetNextContinuousCcNo(false)
+        : Settings.MidiForMacros.GetNextToggleCcNo();
+      if (forMacroModulations.Count == 0) { // Will be 0 or 1
+        // The macro is not already mapped to a non-mod wheel CC number.
+        var modulation = new Modulation(ProgramXml) {
+          CcNo = ccNo
+        };
+        macro.AddModulation(modulation);
+      } else {
+        // The macro already has a Modulation mapping to a non-mod wheel CC number.
+        // We need to conserve the Modulation tag, which might contain a custom
+        // Ratio, and, with the exception below, just replace the CC number.
+        var modulation = forMacroModulations[0];
+        modulation.CcNo = ccNo;
+        // In Falcon Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1
+        // instead of the usual 1. I don't know what the point of that is. But it
+        // prevents the button controller mapped to the macro from working. To fix this,
+        // if a toggle macro has Ratio -1, update Ratio to 1. I cannot see any
+        // disadvantage in doing that. 
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        if (macro.IsToggle && modulation.Ratio == -1) {
+          modulation.Ratio = 1;
+        }
+      }
+      macro.AppendCcNoToDisplayName(ccNo);
+    }
+  }
+
   private void BypassDelayEffects() {
     foreach (var effect in Effects.Where(effect => effect.IsDelay)) {
       effect.Bypass = true;
@@ -630,7 +735,7 @@ internal class FalconProgram {
       }
       RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
-      ReUpdateMacroCcs();
+      UpdateMacroCcs();
       NotifyUpdate($"{PathShort}: Moved zeroed macros to end.");
     }
   }
@@ -851,7 +956,7 @@ internal class FalconProgram {
     if (RemoveDelayMacros()) {
       RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
-      ReUpdateMacroCcs();
+      UpdateMacroCcs();
     }
     if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
       // "Organic Keys" or "Organic Pads" sound bank
@@ -903,7 +1008,6 @@ internal class FalconProgram {
     // GuiScriptProcessor!.Remove will have removed the EventProcessors
     // element. So we should clear ScriptProcessors for consistency. 
     ScriptProcessors = ScriptProcessors.Clear();
-    // ReUpdateMacroCcs(); // ???
     foreach (var macro in Macros) {
       macro.CustomPosition = true;
       // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
@@ -975,13 +1079,8 @@ internal class FalconProgram {
       return;
     }
     InfoPageLayout.ReplaceModWheelWithMacro();
-    ReUpdateMacroCcs();
+    UpdateMacroCcs();
     NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
-  }
-
-  private void ReUpdateMacroCcs() {
-    UpdateMacroCcsOwnedByMacros();
-    Log.WriteLine($"{PathShort}: Re-updated macro Ccs.");
   }
 
   /// <summary>
@@ -1128,109 +1227,9 @@ internal class FalconProgram {
     return releaseMacro != null;
   }
 
-  /// <summary>
-  ///   Configures macro CCs.
-  /// </summary>
-  public void UpdateMacroCcs() {
-    if (Settings.MidiForMacros.ContinuousCcNos.Count == 0
-        || Settings.MidiForMacros.ToggleCcNos.Count == 0) {
-      throw new ApplicationException(
-        "The MIDI CC numbers assigned to macros cannot be updated " +
-        "because ranges of continuous and/or toggle CC numbers have not yet " +
-        "been specified. You need to do that on the MIDI for Macros page.");
-    }
-    if (GuiScriptProcessor == null) {
-      if (Category.MustUseGuiScriptProcessor) {
-        // If we don't throw this ApplicationException, a different exception will be
-        // thrown. The category may have some programs with GUI script processors, others
-        // without. Examples: Falcon Factory\Bass-Sub, Falcon Factory\Keys.
-        // Such categories only exist in the Falcon Factory (version 1) sound bank.
-        // There is a comment on this in FindGuiScriptProcessor.
-        // Supporting use of the GUI script processors in those categories is unlikely to
-        // be implemented, especially as all Falcon Factory rev2 programs have GUI script
-        // processors.
-        throw new ApplicationException(
-          "Updating the macro MIDI CCs of a program with a GUI script " +
-          "processor is not supported for sound bank " +
-          $"{SoundBankName} category {Category.Name}. You need to go to the " +
-          "GUI Script Processor page and remove the sound bank or category from " +
-          "the list. For the Falcon Factory (version 1) sound bank, the only " +
-          "categories for which updating macro MIDI CCs for a GUI script processor " +
-          " is supported are Brutal Bass 2.1', 'Lo-Fi 2.5', " +
-          "'Organic Texture 2.8', 'RetroWave 2.5' and 'VCF-20 Synths 2.5'.");
-      }
-      // The CCs are specified in Modulations owned by the Macros
-      // (ConstantModulations) that they modulate
-      UpdateMacroCcsOwnedByMacros();
-    } else {
-      var templateScriptProcessor = Category.GetTemplateScriptProcessor(
-        GuiScriptProcessor, Batch);
-      // The CCs are specified in Modulations owned by the GUI ScriptProcessor
-      // and can be copied from a template ScriptProcessor.
-      // This applies to all programs in categories for which MustUseGuiScriptProcessor
-      // is set to true in the settings file.
-      GuiScriptProcessor.UpdateModulationsFromTemplate(
-        templateScriptProcessor.Modulations, Macros);
-    }
-    NotifyUpdate($"{PathShort}: Updated Macro CCs.");
-  }
-
-  /// <summary>
-  ///   Where MIDI CC assignments to macros shown on the Info page are specified in
-  ///   ConstantModulations,
-  ///   updates the macro CCs so that the macros are successively assigned standard CCs
-  ///   in the order of their locations on the Info page (top to bottom, left to right or
-  ///   left to right, top to bottom, depending on <see cref="MacroCcLocationOrder" />).
-  ///   There are different series of CCs for continuous and toggle macros.
-  /// </summary>
-  private void UpdateMacroCcsOwnedByMacros() {
-    // Most Falcon Factory programs list the ConstantModulation macro specifications in order
-    // top to bottom, left to right. But a few, e.g. Falcon Factory\Keys\Days Of Old 1.4, do not.
-    var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
-    // Make the first call of GetNextContinuousCcNo return the first continuous
-    // CC number specified in settings.
-    Settings.MidiForMacros.CurrentContinuousCcNo = 0;
-    // Make the first call of GetNextToggleCcNo return the first
-    // toggle CC number specified in settings.
-    Settings.MidiForMacros.CurrentToggleCcNo = 0;
-    foreach (var macro in sortedByLocation) {
-      // Retain unaltered any mapping to the modulation wheel (MIDI CC 1) or any other
-      // MIDI CC mapping that's not on the Info page.
-      // Example: Devinity\Bass\Comber Bass.
-      var forMacroModulations =
-        macro.GetForMacroModulations();
-      if (forMacroModulations.Count > 1) {
-        throw new NotSupportedException(
-          $"{PathShort}: Macro '{macro.DisplayNameWithoutCc}' " +
-          $"owns {forMacroModulations.Count} 'for macro' Modulations.");
-      }
-      int ccNo = macro.IsContinuous
-        ? Settings.MidiForMacros.GetNextContinuousCcNo(false)
-        : Settings.MidiForMacros.GetNextToggleCcNo();
-      if (forMacroModulations.Count == 0) { // Will be 0 or 1
-        // The macro is not already mapped to a non-mod wheel CC number.
-        var modulation = new Modulation(ProgramXml) {
-          CcNo = ccNo
-        };
-        macro.AddModulation(modulation);
-      } else {
-        // The macro already has a Modulation mapping to a non-mod wheel CC number.
-        // We need to conserve the Modulation tag, which might contain a custom
-        // Ratio, and, with the exception below, just replace the CC number.
-        var modulation = forMacroModulations[0];
-        modulation.CcNo = ccNo;
-        // In Falcon Factory\Keys\Days Of Old 1.4, Macro 1, a toggle macro, has Ratio -1
-        // instead of the usual 1. I don't know what the point of that is. But it
-        // prevents the button controller mapped to the macro from working. To fix this,
-        // if a toggle macro has Ratio -1, update Ratio to 1. I cannot see any
-        // disadvantage in doing that. 
-        // ReSharper disable once CompareOfFloatsByEqualityOperator
-        if (macro.IsToggle && modulation.Ratio == -1) {
-          modulation.Ratio = 1;
-        }
-      }
-      macro.AppendCcNoToDisplayName(ccNo);
-    }
+  private void UpdateMacroCcs() {
+    AssignMacroCcsOwnedByMacros();
+    Log.WriteLine($"{PathShort}: Updated macro Ccs.");
   }
 
   private bool WheelMacroExists() {

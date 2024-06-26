@@ -113,7 +113,7 @@ public class BatchTests {
   public void ProgramsFolderNotSpecified() {
     Batch.Settings.ProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.RunTask(ConfigTask.UpdateMacroCcs, null));
+      () => Batch.RunTask(ConfigTask.AssignMacroCcs, null));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "The programs folder is not specified in settings file "));

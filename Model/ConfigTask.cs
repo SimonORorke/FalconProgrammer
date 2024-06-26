@@ -1,6 +1,7 @@
 ﻿namespace FalconProgrammer.Model;
 
 public enum ConfigTask {
+  AssignMacroCcs,
   InitialiseLayout,
   MoveZeroedMacrosToEnd,
   PrependPathLineToDescription,
@@ -15,7 +16,6 @@ public enum ConfigTask {
   ReplaceModWheelWithMacro,
   RestoreOriginal,
   ReuseCc1,
-  UpdateMacroCcs,
   ZeroReleaseMacro,
   ZeroReverbMacros
 }

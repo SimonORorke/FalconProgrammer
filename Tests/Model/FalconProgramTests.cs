@@ -26,6 +26,35 @@ public class FalconProgramTests {
   private TestBatch Batch { get; set; } = null!;
 
   [Test]
+  public void AssignMacroCcsGuiScriptProcessorNotSupportedForSoundBank() {
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Leads";
+    const string programName = "Soft Mood";
+    Batch.Settings.MustUseGuiScriptProcessorCategories.Add(
+      new Settings.SoundBankCategory {
+        SoundBank = soundBankName,
+        Category = categoryName
+      });
+    var exception = Assert.Catch<ApplicationException>(() =>
+      Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
+    Assert.That(exception.Message, Does.StartWith(
+      "Assigning MIDI CCs to macros for a program with a GUI script processor " +
+      "is not supported for sound bank"));
+  }
+
+  [Test]
+  public void AssignMacroCcsMissingCcNos() {
+    Batch.Settings.MidiForMacros = new MidiForMacros();
+    const string soundBankName = "Falcon Factory";
+    const string categoryName = "Brutal Bass 2.1";
+    const string programName = "Magnetic 1";
+    var exception = Assert.Catch<ApplicationException>(() =>
+      Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
+    Assert.That(exception.Message, Does.StartWith(
+      "MIDI CC numbers cannot be assigned to macros "));
+  }
+
+  [Test]
   public void Background() {
     SoundBankBackground("Eternal Funk", "Yellowish Mid-Green.png");
     SoundBankBackground("Fluidity", "Midnight Blue.png");
@@ -123,37 +152,8 @@ public class FalconProgramTests {
     // This program requires Modulation.FixToggleOrContinuous to correct
     // the fourth MIDI CC number from the one provided by the template.
     const string programName = "Magnetic 1";
-    Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName);
+    Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName);
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
-  }
-
-  [Test]
-  public void UpdateMacroCcsGuiScriptProcessorNotSupportedForSoundBank() {
-    const string soundBankName = "Falcon Factory";
-    const string categoryName = "Leads";
-    const string programName = "Soft Mood";
-    Batch.Settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
-        SoundBank = soundBankName,
-        Category = categoryName
-      });
-    var exception = Assert.Catch<ApplicationException>(() =>
-      Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName));
-    Assert.That(exception.Message, Does.StartWith(
-      "Updating the macro MIDI CCs of a program with a GUI script processor " +
-      "is not supported for sound bank"));
-  }
-
-  [Test]
-  public void UpdateMacroCcsMissingCcNos() {
-    Batch.Settings.MidiForMacros = new MidiForMacros();
-    const string soundBankName = "Falcon Factory";
-    const string categoryName = "Brutal Bass 2.1";
-    const string programName = "Magnetic 1";
-    var exception = Assert.Catch<ApplicationException>(() =>
-      Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName, programName));
-    Assert.That(exception.Message, Does.StartWith(
-      "The MIDI CC numbers assigned to macros cannot be updated"));
   }
 
   [Test]
@@ -196,6 +196,6 @@ public class FalconProgramTests {
           break;
       }
     };
-    Batch.RunTask(ConfigTask.UpdateMacroCcs, soundBankName, categoryName);
+    Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName);
   }
 }

@@ -100,7 +100,7 @@
         </Scope>
         <Tasks>
             <Task>InitialiseLayout</Task>
-            <Task>UpdateMacroCcs</Task>
+            <Task>AssignMacroCcs</Task>
         </Tasks>
     </Batch>
 </Settings>

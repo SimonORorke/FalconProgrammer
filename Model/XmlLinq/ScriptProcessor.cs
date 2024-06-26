@@ -48,7 +48,7 @@ internal class ScriptProcessor : ModulationsOwner {
   public ScriptId GuiScriptId => _guiScriptId ??= GetGuiScriptId();
 
   /// <summary>
-  ///   Only needed when a GUI script processor's MIDI CC numbers are updated.
+  ///   Only needed when a GUI script processor's MIDI CC numbers are assigned.
   /// </summary>
   private IList<Macro>? Macros { get; set; }
 
@@ -93,6 +93,32 @@ internal class ScriptProcessor : ModulationsOwner {
       newModulation.FixToggleOrContinuous(Macros!, Modulations);
     }
     base.AddModulation(newModulation);
+  }
+
+  public void AssignMacroCcsFromTemplate(
+    IList<Modulation> templateModulations,
+    IList<Macro> macros) {
+    Macros = macros;
+    if (GuiScriptId == ScriptId.FactoryRev2) {
+      Midi.CurrentContinuousCcNo = 0;
+      Midi.CurrentToggleCcNo = 0;
+      if (templateModulations.Count >= macros.Count) {
+        // This does not always accurately distinguish the continuous macros from
+        // the toggle macros.
+        // Example of where it does not work: Falcon Factory rev2\Bass\Big Sleep.
+        // But it seems to be more successful than having the macros in location order.
+        for (int i = 0; i < macros.Count; i++) {
+          AddModulationBasedOnMacro(templateModulations[i], macros[i]);
+        }
+      } else {
+        throw new ApplicationException(
+          "There are more macros than template modulations.");
+      }
+    } else {
+      foreach (var templateModulation in templateModulations) {
+        AddModulation(templateModulation);
+      }
+    }
   }
 
   private void AddModulationBasedOnMacro(
@@ -182,31 +208,5 @@ internal class ScriptProcessor : ModulationsOwner {
     // ReSharper disable once CommentTypo
     // Example: Falcon Factory\RetroWave 2.5\BAS Voltage Reso.
     eventProcessorsElement!.Remove();
-  }
-
-  public void UpdateModulationsFromTemplate(
-    IList<Modulation> templateModulations,
-    IList<Macro> macros) {
-    Macros = macros;
-    if (GuiScriptId == ScriptId.FactoryRev2) {
-      Midi.CurrentContinuousCcNo = 0;
-      Midi.CurrentToggleCcNo = 0;
-      if (templateModulations.Count >= macros.Count) {
-        // This does not always accurately distinguish the continuous macros from
-        // the toggle macros.
-        // Example of where it does not work: Falcon Factory rev2\Bass\Big Sleep.
-        // But it seems to be more successful than having the macros in location order.
-        for (int i = 0; i < macros.Count; i++) {
-          AddModulationBasedOnMacro(templateModulations[i], macros[i]);
-        }
-      } else {
-        throw new ApplicationException(
-          "There are more macros than template modulations.");
-      }
-    } else {
-      foreach (var templateModulation in templateModulations) {
-        AddModulation(templateModulation);
-      }
-    }
   }
 }

@@ -58,6 +58,9 @@ public class Batch {
       Program.Read();
     }
     switch (Task) {
+      case ConfigTask.AssignMacroCcs:
+        Program.AssignMacroCcs();
+        break;
       case ConfigTask.InitialiseLayout:
         Program.InitialiseLayout();
         break;
@@ -99,9 +102,6 @@ public class Batch {
         break;
       case ConfigTask.ReuseCc1:
         Program.ReuseCc1();
-        break;
-      case ConfigTask.UpdateMacroCcs:
-        Program.UpdateMacroCcs();
         break;
       case ConfigTask.ZeroReleaseMacro:
         Program.ZeroReleaseMacro();

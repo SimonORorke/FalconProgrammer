@@ -122,7 +122,7 @@ internal class Category {
         // However, these are all in categories that also contain programs that do not
         // have a GUI script processor. And currently MustUseGuiScriptProcessor is not
         // supported for categories where not all prorams have a GUI script processor.
-        // If the user tries it, UpdateMacroCcs will throw an application.
+        // If the user tries it, AssignMacroCcs will throw an application.
         // So currently these GUI script processors will always be removed by
         // InitialiseLayout. We are indicating them as GUI script processors precisely
         // so that they will be removed as unusable.
@@ -230,7 +230,7 @@ internal class Category {
       $" (See the manual for instructions.){Environment.NewLine}{Environment.NewLine}" +
       "2) Remove the sound bank or category from the list on the GUI Script Processor " +
       "page and run InitialiseLayout to remove the script-defined GUI before " +
-      $"running UpdateMacroCcs.{Environment.NewLine}{Environment.NewLine}" +
+      $"running AssignMacroCcs.{Environment.NewLine}{Environment.NewLine}" +
       "Also, consider asking the developers to implement a built-in " +
       "template for the sound bank or category.");
   }
@@ -260,7 +260,7 @@ internal class Category {
       $"{Environment.NewLine}{Environment.NewLine}" +
       "3) Remove the sound bank or category from the list on the GUI Script Processor " +
       "page and run InitialiseLayout to remove the script-defined GUI before " +
-      "running UpdateMacroCcs.");
+      "running AssignMacroCcs.");
   }
 
   public void Initialise() {

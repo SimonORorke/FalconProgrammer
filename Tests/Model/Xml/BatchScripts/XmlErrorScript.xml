@@ -8,7 +8,7 @@
 <Tasks>
 <Task>QueryAdsrMacros</Task>
 <Task>ReuseCc1</Task>
-<Task>UpdateMacroCcs</Task>
+<Task>AssignMacroCcs</Task>
 <Task>InitialiseLayout</Task>
 </Tasks>
         </BatchScript>

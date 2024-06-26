@@ -43,7 +43,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle => 
-    "MIDI CC assignments for macros, for update by the UpdateMacroCcs task.";
+    "MIDI CC assignments for macros, for update by the AssignMacroCcs task.";
   
   public override string TabTitle => "MIDI for Macros";
 
