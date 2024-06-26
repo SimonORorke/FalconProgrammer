@@ -77,8 +77,24 @@ internal class FalconProgram {
   private string SoundBankName => Category.SoundBankName;
 
   /// <summary>
-  ///   Configures macro CCs.
+  ///   Assigns MIDI CC numbers to macros.
+  ///   The CC number can optionally be appended to each macro's display name,
+  ///   provided the program uses the default Info page layout
+  ///   (the sound bank\category is not listed on the GUI Script Processor page,
+  ///   and the GUI script processor, if there was one, has been removed
+  ///   by <see cref="InitialiseLayout" />).
   /// </summary>
+  /// <remarks>
+  ///   The ranges of continuous and toggle CC numbers to be assigned must be
+  ///   specified on the MIDI for Macros page, which also includes the setting
+  ///   for whether the CC number is to be appended to each macro's display name.
+  ///   <para>
+  ///     If the sound bank\category is listed on the GUI Script Processor page,
+  ///     which indicates that the Info page layout must be defined in a script,
+  ///     the MIDI CC number ranges must be mapped to the GUI script processor's
+  ///     parameters in a built-in or user-defined template. 
+  ///   </para>
+  /// </remarks>
   public void AssignMacroCcs() {
     if (Settings.MidiForMacros.ContinuousCcNos.Count == 0
         || Settings.MidiForMacros.ToggleCcNos.Count == 0) {
@@ -662,40 +678,35 @@ internal class FalconProgram {
     // The GUI script processor has delaySend and reverbSend parameters, controllable 
     // from the script-based GUI. With the new script processor, there's no way to
     // replicate the delay and reverb modulations implemented int the GUI script.
-    // So we need to bypass all delay and reverb effects.
+    // So we need to bypass all known delay and reverb effects.
+    // Known delay effects are as specified by <see cref="Effect.IsDelay" />.
+    // Known reverb effects are as specified by <see cref="Effect.IsRevereb" />.
     BypassDelayEffects();
     BypassReverbEffects();
   }
 
   /// <summary>
   ///   Moves release and reverb macros with zero values to the end of the standard GUI
-  ///   layout. Run after <see cref="ZeroReleaseMacro" /> and
-  ///   <see cref="ZeroReverbMacros" />.
-  ///   If we only refrained from zeroing a macro because it is modulated by the wheel,
-  ///   we will assume that the player will use the wheel, and so the macro will still be
-  ///   moved to the end.
+  ///   layout.
+  ///   A non-zero macro will aslo be moved to the end if it is modulated by the wheel:
+  ///   in this case it is assumed that the player will use the wheel, and therefore does
+  ///   not require easy access to the macro on the screen.
   /// </summary>
   /// <remarks>
+  ///   Requirements:
   ///   <list type="bullet">
-  ///     <listheader>
-  ///       <description>Prerequisites</description>
-  ///     </listheader>
   ///     <item>
   ///       <description>
-  ///         The sound bank\category is not included in setting
-  ///         <see cref="Settings.MustUseGuiScriptProcessorCategories" />.
-  ///       </description>
-  ///     </item>
-  ///     <item>
-  ///       <description>
-  ///         The GUI script processor, if any, has been removed by
-  ///         <see cref="InitialiseLayout" />.
+  ///         The program uses the default Info page layout
+  ///         (so the sound bank\category is not listed on the GUI Script Processor page,
+  ///         and the GUI script processor, if there was one, has been removed
+  ///         by <see cref="InitialiseLayout" />).
   ///       </description>
   ///     </item>
   ///     <item>
   ///       <description>
   ///         <see cref="ZeroReleaseMacro" /> and/or <see cref="ZeroReverbMacros" />
-  ///         have been run.
+  ///         have already been run, if required.
   ///       </description>
   ///     </item>
   ///   </list>
@@ -947,10 +958,13 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Bypasses (disables) all known delay effects and then, if the program does not
-  ///   have a GUI script processor, removes any macro that no longer modulates any
-  ///   enabled effects.
+  ///   Bypasses (disables) all known delay effects.
+  ///   Then removes any macro that no longer modulates any enabled effects,
+  ///   provided the program uses the default Info page layout.
   /// </summary>
+  /// <remarks>
+  ///   Known delay effects are as specified by <see cref="Effect.IsDelay" />. 
+  /// </remarks>
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
     if (RemoveDelayMacros()) {
@@ -1030,20 +1044,14 @@ internal class FalconProgram {
   ///   parameters with modulations by a new 'Wheel' macro.
   /// </summary>
   /// <remarks>
+  ///   Requirements:
   ///   <list type="bullet">
-  ///     <listheader>
-  ///       <description>Prerequisites</description>
-  ///     </listheader>
   ///     <item>
   ///       <description>
-  ///         The sound bank\category is not included in setting
-  ///         <see cref="Settings.MustUseGuiScriptProcessorCategories" />.
-  ///       </description>
-  ///     </item>
-  ///     <item>
-  ///       <description>
-  ///         The GUI script processor, if any, has been removed by
-  ///         <see cref="InitialiseLayout" />.
+  ///         The program uses the default Info page layout
+  ///         (so the sound bank\category is not listed on the GUI Script Processor page,
+  ///         and the GUI script processor, if there was one, has been removed
+  ///         by <see cref="InitialiseLayout" />).
   ///       </description>
   ///     </item>
   ///     <item>
@@ -1051,25 +1059,20 @@ internal class FalconProgram {
   ///         There is not already a macro with display name 'Wheel'.
   ///       </description>
   ///     </item>
-  ///     <item>
-  ///       <description>
-  ///       </description>
-  ///     </item>
   ///   </list>
+  ///   Exclusions:
   ///   <list type="bullet">
-  ///     <listheader>
-  ///       <description>Exclusions</description>
-  ///     </listheader>
   ///     <item>
   ///       <description>
-  ///         Not supported for sound banks Ether Fields or Organic Keys.
+  ///         Sound banks Ether Fields or Organic Keys.
   ///         The programs in these sound banks are too complex for this
   ///         configuration task to be feasible, for now at least.
   ///       </description>
   ///     </item>
   ///     <item>
   ///       <description>
-  ///         The program already has a macro with display name 'Wheel'.
+  ///         The mod wheel only 100% modulates a single macro. In this case,
+  ///         there's not point replacing the mod wheel modulations with a Wheel macro.
   ///       </description>
   ///     </item>
   ///   </list>
@@ -1103,46 +1106,44 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Assuming any modulations by the wheel macro have already been reassigned to a
-  ///   wheel macro, if there are at least 5 continuous macros, i.e. at least 1 more than
-  ///   the usual number of expression pedals that can control them, make the best use
-  ///   of the keyboard's hardware controllers by assigning MIDI CC 1 (mod wheel) to the
-  ///   5th continuous macro and MIDI CC 11 (touch strip) to the 6th, if there is one.
-  ///   Increment MIDI CCs of any subsequent macros accordingly.
+  ///   If applicable, assign MIDI CC 1 (mod wheel) to the macro after the
+  ///   macro whose MIDI CC number as specified by the Modulation Wheel Replacement CC No
+  ///   setting, inncrementing the MIDI CCs of any subsequent macros accordingly.
   /// </summary>
   /// <remarks>
+  ///   Requirements:
   ///   <list type="bullet">
-  ///     <listheader>
-  ///       <description>Prerequisites</description>
-  ///     </listheader>
   ///     <item>
   ///       <description>
-  ///         Setting <see cref="MidiForMacros.ModWheelReplacementCcNo" /> > 1.
+  ///         The program uses the default Info page layout
+  ///         (so the sound bank\category is not listed on the GUI Script Processor page,
+  ///         and the GUI script processor, if there was one, has been removed
+  ///         by <see cref="InitialiseLayout" />).
   ///       </description>
   ///     </item>
   ///     <item>
   ///       <description>
-  ///         The sound bank\category is not included in setting
-  ///         <see cref="Settings.MustUseGuiScriptProcessorCategories" />.
+  ///         Any modulations by the wheel macro have already been reassigned to a
+  ///         wheel macro by <see cref="ReplaceModWheelWithMacro" />).
   ///       </description>
   ///     </item>
   ///     <item>
   ///       <description>
-  ///         The GUI script processor, if any, has been removed by
-  ///         <see cref="InitialiseLayout" />.
+  ///         Modulation Wheel Replacement CC No > 1 has been specified on the
+  ///         MIDI for Macros page.
   ///       </description>
   ///     </item>
   ///     <item>
   ///       <description>
-  ///         There is a macro modulation with source
-  ///         <see cref="MidiForMacros.ModWheelReplacementCcNo" /> and at least one
-  ///         more after it.
+  ///         There is a macro whose MIDI CC number as specified by the
+  ///         Modulation Wheel Replacement CC No setting
+  ///         and at least one more macro after it.
   ///       </description>
   ///     </item>
   ///     <item>
   ///       <description>
   ///         There are no macro modulations whose MIDI CC number is 1 but have not been
-  ///         assigned to a wheel macro by <see cref="RemoveDelayEffectsAndMacros" />.
+  ///         assigned to a wheel macro by <see cref="ReplaceModWheelWithMacro" />.
   ///         If anything, that should be done instead of assigning MIDI CC 1 to a
   ///         different macro.
   ///       </description>
@@ -1257,8 +1258,8 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   If a Release macro is not part of a set of four ADSR macros, set its initial
-  ///   value to zero.
+  ///   If a Release macro is not part of a set of four ADSR macros and
+  ///   the macro is not modulated by the mod wheel, set its initial value to zero.
   /// </summary>
   public void ZeroReleaseMacro() {
     if (TryGetNonAdsrReleaseMacro(out var releaseMacro)) {
@@ -1267,6 +1268,14 @@ internal class FalconProgram {
     }
   }
 
+  /// <summary>
+  ///   Sets the values of known reverb macros, with some exceptions, to zero. 
+  /// </summary>
+  /// <remarks>
+  ///   Known reverb macros are as specified by <see cref="Macro.ModulatesReverb" />.
+  ///   Reverb macros will not be set to zero if the program is listed on the
+  ///   Reverb page, or if the macro is modulated by the mod wheel.
+  /// </remarks>
   public void ZeroReverbMacros() {
     if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
       // "Organic Keys" or "Organic Pads" sound bank
