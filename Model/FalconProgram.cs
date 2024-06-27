@@ -475,9 +475,8 @@ internal class FalconProgram {
     return;
 
     string GetErrorMessage(string scriptPath) {
-      string applicationFolderPath = AppDomain.CurrentDomain.BaseDirectory;
       string applicationScriptsSubfolderPath =
-        System.IO.Path.Combine(applicationFolderPath, "Scripts");
+        System.IO.Path.Combine(Global.ApplicationFolderPath, "Scripts");
       var writer = new StringWriter();
       writer.WriteLine($"Cannot find script file '{scriptPath}'.");
       writer.WriteLine(
@@ -688,7 +687,7 @@ internal class FalconProgram {
   /// <summary>
   ///   Moves release and reverb macros with zero values to the end of the standard GUI
   ///   layout.
-  ///   A non-zero macro will aslo be moved to the end if it is modulated by the wheel:
+  ///   A non-zero macro will also be moved to the end if it is modulated by the wheel:
   ///   in this case it is assumed that the player will use the wheel, and therefore does
   ///   not require easy access to the macro on the screen.
   /// </summary>

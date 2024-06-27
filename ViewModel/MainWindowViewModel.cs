@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -22,7 +23,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   private ImmutableList<TabItemViewModel>? _tabs;
 
   public MainWindowViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService, ICursorService cursorService, 
+    IDispatcherService dispatcherService, ICursorService cursorService,
     IWindowLocationService windowLocationService)
     : base(dialogService, dispatcherService) {
     CursorService = cursorService;
@@ -35,7 +36,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     MidiForMacrosViewModel = new MidiForMacrosViewModel(dialogService, dispatcherService);
     LocationsViewModel = new LocationsViewModel(dialogService, dispatcherService);
     ReverbViewModel = new ReverbViewModel(dialogService, dispatcherService);
-    SoundBankSpecificViewModel = 
+    SoundBankSpecificViewModel =
       new SoundBankSpecificViewModel(dialogService, dispatcherService);
     // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
     // to flag that settings need to be saved when those properties change.
@@ -118,7 +119,10 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   [PublicAPI]
-  internal SoundBankSpecificViewModel SoundBankSpecificViewModel { get; [ExcludeFromCodeCoverage] set; }
+  internal SoundBankSpecificViewModel SoundBankSpecificViewModel {
+    get;
+    [ExcludeFromCodeCoverage] set;
+  }
 
   public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
 
@@ -141,7 +145,19 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   /// </summary>
   [RelayCommand]
   [ExcludeFromCodeCoverage]
-  private void Manual() { }
+  private void Manual() {
+    string manualPath = Path.Combine(
+      Global.ApplicationFolderPath, "Documentation", "Falcon Programmer Manual.pdf");
+    if (FileSystemService.File.Exists(manualPath)) {
+      new Process {
+        StartInfo = new ProcessStartInfo(manualPath) {
+          UseShellExecute = true
+        }
+      }.Start();
+    } else {
+      DialogService.ShowErrorMessageBox($"Cannot find Manual file '{manualPath}'.");
+    }
+  }
 
   protected virtual AboutWindowViewModel CreateAboutViewModel() {
     return new AboutWindowViewModel(DialogService);

@@ -68,4 +68,10 @@
     <ItemGroup>
         <ProjectReference Include="..\ViewModel\FalconProgrammer.ViewModel.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Documentation\Falcon Programmer Manual.pdf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>

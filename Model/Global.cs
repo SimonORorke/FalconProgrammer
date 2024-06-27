@@ -5,6 +5,8 @@ namespace FalconProgrammer.Model;
 
 public static class Global {
   private static string? _applicationName;
+  
+  public static string ApplicationFolderPath => AppDomain.CurrentDomain.BaseDirectory;
 
   public static string ApplicationName {
     get => _applicationName ??= new ApplicationInfo().Product;
