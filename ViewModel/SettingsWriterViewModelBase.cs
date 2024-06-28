@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
 public abstract class SettingsWriterViewModelBase : ViewModelBase {
   private ISettingsFolderLocation? _settingsFolderLocation;
-  private string _settingsFolderPath = string.Empty;
 
   protected SettingsWriterViewModelBase(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
@@ -16,24 +14,6 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
 
   private ISettingsFolderLocation SettingsFolderLocation =>
     _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
-
-  /// <summary>
-  ///   Gets or set the path of the settings folder, where a settings will be stored in a
-  ///   settings file with the invariant name 'Settings.xml'
-  /// </summary>
-  /// <remarks>
-  ///   Specification of the settings file name is not supported because the application
-  ///   saves settings automatically, without prompting the user for the file path.
-  ///   The path of a file that does not yet exist cannot be specified in advance,
-  ///   whereas the path of its containing folder can.
-  /// </remarks>
-  [Required]
-  [CustomValidation(typeof(SettingsWriterViewModelBase),
-    nameof(ValidateSettingsFolderPath))]
-  public string SettingsFolderPath {
-    get => _settingsFolderPath;
-    set => SetProperty(ref _settingsFolderPath, value, true);
-  }
 
   protected async Task<bool> CanClosePageOnError(
     bool isClosingWindow, bool askOnChangingTabs) {
@@ -119,20 +99,5 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   protected void UpdateSettingsFolderLocation() {
     SettingsFolderLocation.Path = SettingsFolderPath;
     SettingsFolderLocation.Write();
-  }
-
-  protected static ValidationResult ValidateFolderPath(
-    string propertyName,
-    string folderPath, ValidationContext context) {
-    var instance = (SettingsWriterViewModelBase)context.ObjectInstance;
-    bool isValid = instance.FileSystemService.Folder.Exists(folderPath);
-    return isValid
-      ? ValidationResult.Success!
-      : new ValidationResult("Cannot find folder.", [propertyName]);
-  }
-
-  public static ValidationResult ValidateSettingsFolderPath(
-    string folderPath, ValidationContext context) {
-    return ValidateFolderPath(nameof(SettingsFolderPath), folderPath, context);
   }
 }

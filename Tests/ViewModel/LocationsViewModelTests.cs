@@ -99,6 +99,13 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockSettingsFolderLocationReader.SimulatedFileExists = false;
     await ViewModel.Open();
     Assert.That(ViewModel.SettingsFolderPath, Is.Empty);
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
+    await command.ExecuteAsync(null);
+    Assert.That(ViewModel.SettingsFolderPath,
+      Is.EqualTo(MockDialogService.SimulatedPath));
+    bool canClose = await ViewModel.QueryClose();
+    Assert.That(canClose);
   }
 
   [Test]

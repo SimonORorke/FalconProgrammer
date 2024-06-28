@@ -1,4 +1,5 @@
-﻿using FalconProgrammer.Model;
+﻿using CommunityToolkit.Mvvm.Input;
+using FalconProgrammer.Model;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -117,6 +118,41 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
     await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
+  }
+
+  [Test]
+  public async Task NoSettingsFolderLocation() {
+    MockSettingsFolderLocationReader.SimulatedFileExists = false;
+    // Show Batch Script tab initially.
+    ViewModel.SelectedTab = BatchScriptTab;
+    // As the location of the settings file is not known,
+    // the window location, set by the view, will have to be saved when the application
+    // closes.
+    // And an error message box should be shown, then the Locations page.
+    const int left = 10;
+    const int top = 20;
+    const int width = 600;
+    const int height = 800;
+    const int windowState = 2;
+    // All window locations must be set in order for them to be persisted.
+    ViewModel.WindowLocationService.Left = left;
+    ViewModel.WindowLocationService.Top = top;
+    ViewModel.WindowLocationService.Width = width;
+    ViewModel.WindowLocationService.Height = height;
+    ViewModel.WindowLocationService.WindowState = windowState;
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+      "Folder locations must be specified in the settings."));
+    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
+    // Simulate selecting a Settings folder.
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    var command = 
+      (AsyncRelayCommand)ViewModel.LocationsViewModel.BrowseForSettingsFolderCommand;
+    await command.ExecuteAsync(null);
+    bool canClose = await ViewModel.QueryCloseWindow();
+    Assert.That(canClose);
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+    Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
   }
 
   [Test]
