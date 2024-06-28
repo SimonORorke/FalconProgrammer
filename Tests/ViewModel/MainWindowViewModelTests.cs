@@ -50,6 +50,41 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task ChangePropertyValues() {
+    var settings = ReadMockSettings("BatchSettings.xml");
+    TestBatchScriptViewModel.ConfigureValidMockFileSystemService(settings);
+    ViewModel.SelectedTab = BatchScriptTab;
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+    Assert.That(ViewModel.WindowLocationService.Left,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
+    Assert.That(ViewModel.WindowLocationService.Top,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
+    Assert.That(ViewModel.WindowLocationService.Width,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Width));
+    Assert.That(ViewModel.WindowLocationService.Height,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
+    Assert.That(ViewModel.WindowLocationService.WindowState,
+      Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
+    // Check that changes to page view model property and main window view model
+    // properties are all saved to settings when the window is closed.
+    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
+    Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
+    Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
+    const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
+    const int left = 137;
+    const string soundBank = "Falcon Factory";
+    ViewModel.WindowLocationService.Left = left;
+    ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank;
+    ViewModel.SimulatedNewColourSchemeId = colourSchemeId;
+    await ViewModel.SelectColourSchemeCommand.ExecuteAsync(null);
+    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(colourSchemeId));
+    await ViewModel.QueryCloseWindow();
+    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
+    Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
+    Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(colourSchemeId));
+  }
+
+  [Test]
   public async Task ColourSchemeInvalid() {
     Settings = ReadMockSettings("InvalidColourSchemeSettings.xml");
     await ViewModel.Open();
@@ -77,6 +112,52 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
     Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
     Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
+  }
+
+  [Test]
+  public async Task FirstTimeLoaded() {
+    // Settings folder location not known.
+    MockSettingsFolderLocationReader.SimulatedFileExists = false;
+    // Show Batch Script tab initially.
+    ViewModel.SelectedTab = BatchScriptTab;
+    // As the location of the settings file is not known,
+    // the window location, set by the view, will have to be saved when the application
+    // closes.
+    // And an error message box should be shown, then the Locations page.
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Left, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Top, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Width, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.Height, Is.Null);
+    Assert.That(ViewModel.WindowLocationService.WindowState, Is.Null);
+    const int left = 10;
+    const int top = 20;
+    const int width = 600;
+    const int height = 800;
+    const int windowState = 2;
+    // All window locations must be set in order for them to be persisted.
+    ViewModel.WindowLocationService.Left = left;
+    ViewModel.WindowLocationService.Top = top;
+    ViewModel.WindowLocationService.Width = width;
+    ViewModel.WindowLocationService.Height = height;
+    ViewModel.WindowLocationService.WindowState = windowState;
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+      "Folder locations must be specified in the settings."));
+    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
+    // Simulate selecting a Settings folder.
+    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    var command = 
+      (AsyncRelayCommand)ViewModel.LocationsViewModel.BrowseForSettingsFolderCommand;
+    await command.ExecuteAsync(null);
+    bool canClose = await ViewModel.QueryCloseWindow();
+    Assert.That(canClose);
+    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
+    Assert.That(ViewModel.Settings.WindowLocation.Top, Is.EqualTo(top));
+    Assert.That(ViewModel.Settings.WindowLocation.Width, Is.EqualTo(width));
+    Assert.That(ViewModel.Settings.WindowLocation.Height, Is.EqualTo(height));
+    Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
   }
 
   [Test]
@@ -118,41 +199,6 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
     await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
-  }
-
-  [Test]
-  public async Task NoSettingsFolderLocation() {
-    MockSettingsFolderLocationReader.SimulatedFileExists = false;
-    // Show Batch Script tab initially.
-    ViewModel.SelectedTab = BatchScriptTab;
-    // As the location of the settings file is not known,
-    // the window location, set by the view, will have to be saved when the application
-    // closes.
-    // And an error message box should be shown, then the Locations page.
-    const int left = 10;
-    const int top = 20;
-    const int width = 600;
-    const int height = 800;
-    const int windowState = 2;
-    // All window locations must be set in order for them to be persisted.
-    ViewModel.WindowLocationService.Left = left;
-    ViewModel.WindowLocationService.Top = top;
-    ViewModel.WindowLocationService.Width = width;
-    ViewModel.WindowLocationService.Height = height;
-    ViewModel.WindowLocationService.WindowState = windowState;
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
-      "Folder locations must be specified in the settings."));
-    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
-    // Simulate selecting a Settings folder.
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
-    var command = 
-      (AsyncRelayCommand)ViewModel.LocationsViewModel.BrowseForSettingsFolderCommand;
-    await command.ExecuteAsync(null);
-    bool canClose = await ViewModel.QueryCloseWindow();
-    Assert.That(canClose);
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
-    Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
   }
 
   [Test]
@@ -210,68 +256,5 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // Question message box shown.
     Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
     Assert.That(canClose, Is.False);
-  }
-
-  [Test]
-  public async Task WindowLocationNotPreviouslySaved() {
-    ViewModel.SelectedTab = BatchScriptTab;
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Left, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Top, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Width, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Height, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.WindowState, Is.Null);
-    const int left = 10;
-    const int top = 20;
-    const int width = 600;
-    const int height = 800;
-    const int windowState = 2;
-    ViewModel.WindowLocationService.Left = left;
-    ViewModel.WindowLocationService.Top = top;
-    ViewModel.WindowLocationService.Width = width;
-    ViewModel.WindowLocationService.Height = height;
-    ViewModel.WindowLocationService.WindowState = windowState;
-    await ViewModel.QueryCloseWindow();
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
-    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
-    Assert.That(ViewModel.Settings.WindowLocation.Top, Is.EqualTo(top));
-    Assert.That(ViewModel.Settings.WindowLocation.Width, Is.EqualTo(width));
-    Assert.That(ViewModel.Settings.WindowLocation.Height, Is.EqualTo(height));
-    Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
-  }
-
-  [Test]
-  public async Task WindowLocationPreviouslySaved() {
-    var settings = ReadMockSettings("BatchSettings.xml");
-    TestBatchScriptViewModel.ConfigureValidMockFileSystemService(settings);
-    ViewModel.SelectedTab = BatchScriptTab;
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
-    Assert.That(ViewModel.WindowLocationService.Left,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
-    Assert.That(ViewModel.WindowLocationService.Top,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
-    Assert.That(ViewModel.WindowLocationService.Width,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Width));
-    Assert.That(ViewModel.WindowLocationService.Height,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
-    Assert.That(ViewModel.WindowLocationService.WindowState,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
-    // Check that changes to page view model property and main window view model
-    // properties are all saved to settings when the window is closed.
-    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
-    Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
-    Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
-    const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
-    const int left = 137;
-    const string soundBank = "Falcon Factory";
-    ViewModel.WindowLocationService.Left = left;
-    ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank;
-    ViewModel.SimulatedNewColourSchemeId = colourSchemeId;
-    await ViewModel.SelectColourSchemeCommand.ExecuteAsync(null);
-    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(colourSchemeId));
-    await ViewModel.QueryCloseWindow();
-    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
-    Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
-    Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(colourSchemeId));
   }
 }
