@@ -79,7 +79,7 @@ internal class FalconProgram {
   /// <summary>
   ///   Assigns MIDI CC numbers to macros.
   ///   The CC number can optionally be appended to each macro's display name,
-  ///   provided the program uses the default Info page layout
+  ///   provided the program uses the standard Info page layout
   ///   (the sound bank\category is not listed on the GUI Script Processor page,
   ///   and the GUI script processor, if there was one, has been removed
   ///   by <see cref="InitialiseLayout" />).
@@ -497,16 +497,16 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Initialises the program, with options specified on the Initialisation and
-  ///   Background pages.
+  ///   Initialises the program's Info page, with options specified on the
+  ///   GUI Script Processor, Background and Sound Bank-Specific pages.
   ///   <para>
-  ///     First, unless the sound bank or category is on the GUI Script Processor list
-  ///     on the Initialisation page, removes the GUI script processor, if there is one,
-  ///     so that the default Info Page layout will be shown. The macros on the
-  ///     default Info Page will be arranged into a standard layout
+  ///     First, unless the sound bank or category is listed on the
+  ///     GUI Script Processor page, removes the GUI script processor, if there is one,
+  ///     so that the standard Info Page layout will be shown. The macros on the
+  ///     standard Info Page will be arranged into a standard layout
   ///   </para>
   ///   <para>
-  ///     The remaining procedures are executed only if the default Info page layout
+  ///     The remaining procedures are executed only if the standard Info page layout
   ///     is shown, with the GUI script processor, if there was one, having just
   ///     been removed.
   ///     <list type="bullet">
@@ -518,14 +518,14 @@ internal class FalconProgram {
   ///       </item>
   ///       <item>
   ///         <description>
-  ///           If specified by options on the Initialisation page,
+  ///           If specified by options on the Sound Bank-Specific page,
   ///           for sound banks Ether Fields and Spectre, rearranges the macros into a
   ///           standard layout.
   ///         </description>
   ///       </item>
   ///       <item>
   ///         <description>
-  ///           If specified by an option on the Initialisation page,
+  ///           If specified by an option on the Sound Bank-Specific page,
   ///           for sound bank Fluidity, moves the Attack macro, if any, to be the last
   ///           macro in the Info page layout.
   ///         </description>
@@ -537,22 +537,23 @@ internal class FalconProgram {
   ///             Adds a macro for each Layer gain,
   ///             to make variation of these parameters mutually independent,
   ///             and as the X-Y control on the script-based GUI cannot be implemented
-  ///             on the default Info page layout.
+  ///             on the standard Info page layout.
   ///           </para>
   ///           <para>
   ///             Bypasses all delay and reverb effects.
   ///             The Organic Pads GUI script processor has delay and reverb
   ///             parameters, controllable from the script-based GUI.
   ///             There is no way to replicate control of these delay and reverb
-  ///             modulations with macros on a default Info page layout.
+  ///             modulations with macros on a standard Info page layout.
   ///           </para>
   ///           <para>
   ///             Initialises maximum attack seconds, maximum delay seconds and
-  ///             maximum release seconds to values specified the Initialisation page.
+  ///             maximum release seconds to values specified
+  ///             on the Sound Bank-Specific page.
   ///           </para>
   ///           <para>
   ///             Optionally initialises attack seconds and release seconds to values
-  ///             specified the Initialisation page.
+  ///             specified the Sound Bank-Specific page.
   ///           </para>
   ///         </description>
   ///       </item>
@@ -685,8 +686,8 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Moves release and reverb macros with zero values to the end of the standard GUI
-  ///   layout.
+  ///   Moves release and reverb macros that have zero values to the end of the standard
+  ///   Info page layout.
   ///   A non-zero macro will also be moved to the end if it is modulated by the wheel:
   ///   in this case it is assumed that the player will use the wheel, and therefore does
   ///   not require easy access to the macro on the screen.
@@ -696,7 +697,7 @@ internal class FalconProgram {
   ///   <list type="bullet">
   ///     <item>
   ///       <description>
-  ///         The program uses the default Info page layout
+  ///         The program uses the standard Info page layout
   ///         (so the sound bank\category is not listed on the GUI Script Processor page,
   ///         and the GUI script processor, if there was one, has been removed
   ///         by <see cref="InitialiseLayout" />).
@@ -959,7 +960,7 @@ internal class FalconProgram {
   /// <summary>
   ///   Bypasses (disables) all known delay effects.
   ///   Then removes any macro that no longer modulates any enabled effects,
-  ///   provided the program uses the default Info page layout.
+  ///   provided the program uses the standard Info page layout.
   /// </summary>
   /// <remarks>
   ///   Known delay effects are as specified by <see cref="Effect.IsDelay" />. 
@@ -1039,15 +1040,15 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   If feasible, replaces all modulations by the modulation wheel of effect
-  ///   parameters with modulations by a new 'Wheel' macro.
+  ///   If feasible, replaces all modulations by the modulation wheel
+  ///   with modulations by a new 'Wheel' macro.
   /// </summary>
   /// <remarks>
   ///   Requirements:
   ///   <list type="bullet">
   ///     <item>
   ///       <description>
-  ///         The program uses the default Info page layout
+  ///         The program uses the standard Info page layout
   ///         (so the sound bank\category is not listed on the GUI Script Processor page,
   ///         and the GUI script processor, if there was one, has been removed
   ///         by <see cref="InitialiseLayout" />).
@@ -1105,16 +1106,22 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   If applicable, assign MIDI CC 1 (mod wheel) to the macro after the
-  ///   macro whose MIDI CC number as specified by the Modulation Wheel Replacement CC No
-  ///   setting, inncrementing the MIDI CCs of any subsequent macros accordingly.
+  ///   If the modulation wheel's modulations have been reassigned to a Wheel macro by
+  ///   by <see cref="ReplaceModWheelWithMacro" />, reuses MIDI CC 1 (the mod wheel)
+  ///   for a subsequent macro, where feasible.
+  ///   <para>
+  ///     MIDI CC 1 is assigned to the macro after the macro whose MIDI CC number
+  ///     is as specified by the Modulation Wheel Replacement CC No setting
+  ///     on the MIDI for Macros page. The MIDI CCs of any subsequent macros
+  ///     are incremented accordingly.
+  ///   </para>
   /// </summary>
   /// <remarks>
   ///   Requirements:
   ///   <list type="bullet">
   ///     <item>
   ///       <description>
-  ///         The program uses the default Info page layout
+  ///         The program uses the standard Info page layout
   ///         (so the sound bank\category is not listed on the GUI Script Processor page,
   ///         and the GUI script processor, if there was one, has been removed
   ///         by <see cref="InitialiseLayout" />).
@@ -1258,7 +1265,7 @@ internal class FalconProgram {
 
   /// <summary>
   ///   If a Release macro is not part of a set of four ADSR macros and
-  ///   the macro is not modulated by the mod wheel, set its initial value to zero.
+  ///   the macro is not modulated by the mod wheel, sets its initial value to zero.
   /// </summary>
   public void ZeroReleaseMacro() {
     if (TryGetNonAdsrReleaseMacro(out var releaseMacro)) {

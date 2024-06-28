@@ -310,7 +310,7 @@ public partial class BatchScriptViewModel : SettingsWriterViewModelBase {
 
   private async Task<bool> ValidateAndPopulateSoundBanks() {
     var validator = new SettingsValidator(this,
-      "All folder/file locations must be " +
+      "Folder locations must be " +
       "specified in the settings." + Environment.NewLine + Environment.NewLine +
       "Batch scripts cannot be run", TabTitle);
     SoundBanks =
