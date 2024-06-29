@@ -10,16 +10,25 @@
         Icon="/Assets/falcon_svg_repo_com.png"
         CanResize="False"
         Width="500"
-        Height="85"
+        Height="220"
         WindowStartupLocation="CenterOwner">
     <StackPanel>
-        <TextBlock Height="10" />
         <TextBlock Text="{Binding PageTitle}"
-                   HorizontalAlignment="Center" />
-        <TextBlock Height="10" />
-        <ComboBox x:Name="ColourSchemeComboBox"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,0" />
+        <!-- Using a ListBox instead of a ComboBox because of an Avalonia issue where
+        if, having already used the ComboBox once to change the theme, the user then 
+        attempts to open the ComboBox's drop-down list (Popup),
+        either with the mouse or with the F4 keyboard shortcut,
+        the application crashes with 
+            InvalidOperationException: The control already has a visual parent
+        See https://github.com/AvaloniaUI/Avalonia/issues/15115. -->
+        <ListBox x:Name="ColourSchemeListBox"
                   ItemsSource="{Binding ColourSchemes}"
                   SelectedItem="{Binding ColourScheme}"
-                  HorizontalAlignment="Center" />
+                  HorizontalAlignment="Center"
+                  Width="240"
+                  Height="165"
+                  Margin="0,10,0,0"  />
     </StackPanel>
 </Window>
