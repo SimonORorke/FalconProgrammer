@@ -22,24 +22,16 @@ public partial class ColourSchemeWindow : Window {
       from descendant in ColourSchemeListBox.GetVisualDescendants()
       where descendant is ListBoxItem
       select (ListBoxItem)descendant).ToList();
-    // This fails to give ListBox items a focus rectangle.
-    // foreach (var listBoxItem in listBoxItems) {
-    //   listBoxItem.FocusAdorner = new FocusAdornerTemplate {
-    //     Content = new Border {
-    //       BorderBrush = new SolidColorBrush(Colors.White),
-    //       BorderThickness = new Thickness(2)
-    //     }
-    //   }!;
-    // }
     var selectedListBoxItem = listBoxItems[ColourSchemeListBox.SelectedIndex];
     selectedListBoxItem.Focus();
     // We could give the focused item a focus rectangle, like this:
     //   selectedListBoxItem.Focus(NavigationMethod.Directional);
     // or this for a fatter rectangle:
     //   selectedListBoxItem.Focus(NavigationMethod.Tab);
-    // But the focus rectangle will be lost as soon as another item is selected.
+    // But the focus rectangle would be lost as soon as another item was selected.
     // The trick should be to instead define a FocusAdorner for the ListBoxItems.
-    // But I have not bee able to get that to work.
+    // But I have not bee able to get that to work. See commented out
+    // Style for ListBoxItem in App.xaml.
   }
 
   private static void ViewModelOnChangeColourScheme(object? sender, ColourSchemeId e) {
