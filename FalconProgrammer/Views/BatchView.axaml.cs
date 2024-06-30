@@ -7,20 +7,20 @@ using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Views;
 
-public partial class BatchScriptView : UserControl {
-  public BatchScriptView() {
+public partial class BatchView : UserControl {
+  public BatchView() {
     // Prevent the previewer's DataContext from being created when the application is run.
     if (Design.IsDesignMode) {
       // This only sets the DataContext for the previewer in the IDE.
       Design.SetDataContext(this,
-        new BatchScriptViewModel(new DialogService(), new DispatcherService(), 
+        new BatchViewModel(new DialogService(), new DispatcherService(), 
           new CursorService()));
     }
     InitializeComponent();
   }
 
   protected override void OnLoaded(RoutedEventArgs e) {
-    var viewModel = (BatchScriptViewModel)DataContext!;
+    var viewModel = (BatchViewModel)DataContext!;
     viewModel.CopyToClipboard += ViewModelOnCopyToClipboard;
     viewModel.LogUpdated += ViewModelOnLogUpdated;
     viewModel.RunBeginning += ViewModelOnRunBeginning;

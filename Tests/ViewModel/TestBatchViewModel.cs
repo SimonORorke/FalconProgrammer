@@ -6,8 +6,8 @@ using JetBrains.Annotations;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class TestBatchScriptViewModel : BatchScriptViewModel {
-  public TestBatchScriptViewModel(IDialogService dialogService,
+public class TestBatchViewModel : BatchViewModel {
+  public TestBatchViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService, ICursorService cursorService) : base(
     dialogService, dispatcherService, cursorService) { }
 

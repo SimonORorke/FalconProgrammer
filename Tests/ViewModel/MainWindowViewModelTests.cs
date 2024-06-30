@@ -12,7 +12,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Settings = ReadMockSettings(MockSettingsReaderEmbedded.EmbeddedFileName);
     MockCursorService = new MockCursorService();
     MockWindowLocationService = new MockWindowLocationService();
-    TestBatchScriptViewModel = new TestBatchScriptViewModel(
+    TestBatchViewModel = new TestBatchViewModel(
       MockDialogService, MockDispatcherService, MockCursorService) {
       ModelServices = TestModelServices
     };
@@ -24,7 +24,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       MockDialogService, MockDispatcherService, MockCursorService, 
       MockWindowLocationService) {
       ModelServices = TestModelServices,
-      BatchScriptViewModel = TestBatchScriptViewModel,
+      BatchViewModel = TestBatchViewModel,
       GuiScriptProcessorViewModel = TestGuiScriptProcessorViewModel
     };
   }
@@ -36,7 +36,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   private MockCursorService MockCursorService { get; set; } = null!;
   private MockWindowLocationService MockWindowLocationService { get; set; } = null!;
   private Settings Settings { get; set; } = null!;
-  private TestBatchScriptViewModel TestBatchScriptViewModel { get; set; } = null!;
+  private TestBatchViewModel TestBatchViewModel { get; set; } = null!;
 
   private TestGuiScriptProcessorViewModel TestGuiScriptProcessorViewModel { get; set; } =
     null!;
@@ -52,7 +52,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task ChangePropertyValues() {
     var settings = ReadMockSettings("BatchSettings.xml");
-    TestBatchScriptViewModel.ConfigureValidMockFileSystemService(settings);
+    TestBatchViewModel.ConfigureValidMockFileSystemService(settings);
     ViewModel.SelectedTab = BatchScriptTab;
     Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
     Assert.That(ViewModel.WindowLocationService.Left,
@@ -69,12 +69,12 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // properties are all saved to settings when the window is closed.
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
     Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
-    Assert.That(ViewModel.BatchScriptViewModel.Scope.SoundBank, Is.EqualTo("All"));
+    Assert.That(ViewModel.BatchViewModel.Scope.SoundBank, Is.EqualTo("All"));
     const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
     const int left = 137;
     const string soundBank = "Falcon Factory";
     ViewModel.WindowLocationService.Left = left;
-    ViewModel.BatchScriptViewModel.Scope.SoundBank = soundBank;
+    ViewModel.BatchViewModel.Scope.SoundBank = soundBank;
     ViewModel.SimulatedNewColourSchemeId = colourSchemeId;
     await ViewModel.SelectColourSchemeCommand.ExecuteAsync(null);
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(colourSchemeId));
@@ -177,7 +177,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // Show Batch Script tab initially.
     ViewModel.SelectedTab = BatchScriptTab;
     Assert.That(BatchScriptTab.Header,
-      Is.EqualTo(ViewModel.BatchScriptViewModel.TabTitle));
+      Is.EqualTo(ViewModel.BatchViewModel.TabTitle));
     Assert.That(LocationsTab.Header,
       Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
     Assert.That(GuiScriptProcessorTab.Header,

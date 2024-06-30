@@ -39,7 +39,7 @@ public class ViewLocator : IDataTemplate {
   private static Control? CreateView(object viewModel) {
     return viewModel switch {
       BackgroundViewModel => new BackgroundView(),
-      BatchScriptViewModel => new BatchScriptView(),
+      BatchViewModel => new BatchView(),
       BatchScopeCollection => new BatchScopesView(),
       CcNoRangeCollection => new CcNoRangesView(),
       GuiScriptProcessorViewModel => new GuiScriptProcessorView(),

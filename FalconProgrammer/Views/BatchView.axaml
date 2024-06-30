@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FalconProgrammer.ViewModel"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
-             x:Class="FalconProgrammer.Views.BatchScriptView"
-             x:DataType="vm:BatchScriptViewModel">
+             x:Class="FalconProgrammer.Views.BatchView"
+             x:DataType="vm:BatchViewModel">
     <UserControl.Styles>
         <Style Selector="AccessText.top">
             <Setter Property="TextAlignment" Value="Center" />

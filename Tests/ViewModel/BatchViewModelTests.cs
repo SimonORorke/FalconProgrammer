@@ -3,11 +3,11 @@ using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
 
-public class BatchScriptViewModelTests : ViewModelTestsBase {
+public class BatchViewModelTests : ViewModelTestsBase {
   private const string BatchScriptPath = "This path will be ignored.xml";
   private MockCursorService MockCursorService { get; set; } = null!;
   private Settings Settings { get; set; } = null!;
-  private TestBatchScriptViewModel ViewModel { get; set; } = null!;
+  private TestBatchViewModel ViewModel { get; set; } = null!;
 
   [SetUp]
   public override void Setup() {
@@ -15,7 +15,7 @@ public class BatchScriptViewModelTests : ViewModelTestsBase {
     MockDialogService.SimulatedPath = BatchScriptPath;
     MockCursorService = new MockCursorService();
     Settings = ReadMockSettings("BatchSettings.xml");
-    ViewModel = new TestBatchScriptViewModel(
+    ViewModel = new TestBatchViewModel(
       MockDialogService, MockDispatcherService, MockCursorService) {
       ModelServices = TestModelServices
     };

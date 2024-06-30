@@ -29,7 +29,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     CursorService = cursorService;
     WindowLocationService = windowLocationService;
     BackgroundViewModel = new BackgroundViewModel(dialogService, dispatcherService);
-    BatchScriptViewModel = new BatchScriptViewModel(
+    BatchViewModel = new BatchViewModel(
       dialogService, dispatcherService, cursorService);
     GuiScriptProcessorViewModel =
       new GuiScriptProcessorViewModel(dialogService, dispatcherService);
@@ -64,7 +64,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   [PublicAPI]
-  internal BatchScriptViewModel BatchScriptViewModel {
+  internal BatchViewModel BatchViewModel {
     get;
     [ExcludeFromCodeCoverage] set;
   }
@@ -170,7 +170,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   private ImmutableList<TabItemViewModel> CreateTabs() {
     var list = new List<TabItemViewModel> {
-      new TabItemViewModel(BatchScriptViewModel),
+      new TabItemViewModel(BatchViewModel),
       new TabItemViewModel(LocationsViewModel),
       new TabItemViewModel(GuiScriptProcessorViewModel),
       new TabItemViewModel(MidiForMacrosViewModel),
