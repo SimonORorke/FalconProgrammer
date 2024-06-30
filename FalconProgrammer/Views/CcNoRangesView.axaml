@@ -24,56 +24,70 @@
             <Setter Property="TextAlignment" Value="End" />
         </Style>
     </UserControl.Styles>
-    <DataGrid
-        x:Name="ContinuousDataGrid"
-        ItemsSource="{Binding}"
-        RowHeight="30"
-        GridLinesVisibility="All">
-        <DataGrid.Columns>
-            <!-- Extra width needed for error icon at right -->
-            <DataGridTemplateColumn Width="76">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Start"
-                                   Classes="ccHeader" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBox Text="{Binding Start}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <!-- Extra width needed for error icon at right -->
-            <DataGridTemplateColumn Width="76">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="End"
-                                   Classes="ccHeader" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBox Text="{Binding End}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn Width="101">
-                <DataGridTemplateColumn.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="Edit"
-                                   Classes="actionHeader" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.HeaderTemplate>
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <ct:ItemEditButton
-                            CutCommand="{Binding CutCommand}"
-                            PasteBeforeCommand="{Binding PasteBeforeCommand}"
-                            RemoveCommand="{Binding RemoveCommand}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-        </DataGrid.Columns>
-    </DataGrid>
+    <StackPanel>
+        <Label Target="DataGrid">
+            <AccessText Text="{Binding AccessibleTitle}"
+                        TextAlignment="Center" />
+        </Label>
+        <DataGrid
+            x:Name="DataGrid"
+            ItemsSource="{Binding}"
+            RowHeight="30"
+            GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <!-- Extra width needed for error icon at right -->
+                <DataGridTemplateColumn Width="76">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Start"
+                                       Classes="ccHeader" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Start}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!-- Extra width needed for error icon at right -->
+                <DataGridTemplateColumn Width="76">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="End"
+                                       Classes="ccHeader" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding End}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="101">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Edit"
+                                       Classes="actionHeader" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </UserControl>
