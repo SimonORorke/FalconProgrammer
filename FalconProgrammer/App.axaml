@@ -14,9 +14,7 @@
         reserves space at the right end of the column header cell for a sort icon.
         The resulting big right margin looks ugly on the right-aligned CC No columns in the 
         DataGrids on the MIDI for Macros page. As sorting is not (so far) wanted 
-        for DataGrids in this application,the fix is to override the reserved space to zero. 
-        If we want add any grids that require the sort icon, we can move this resource to
-        the MIDI for Macros page. -->
+        for DataGrids in this application,the fix is to override the reserved space to zero. -->
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double> <!-- Default: 32 -->
     </Application.Resources>
 
