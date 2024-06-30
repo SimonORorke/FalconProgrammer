@@ -20,10 +20,13 @@ public partial class ColourSchemeWindow : Window {
   }
 
   private void FocusSelectedItem() {
-    var selectedListBoxItem = (ListBoxItem)ColourSchemeListBox.ContainerFromIndex(
-      ColourSchemeListBox.SelectedIndex)!;
-    // NavigationMethod.Directional puts a focus rectangle round the selected item.
-    selectedListBoxItem.Focus(NavigationMethod.Directional);
+    if (ColourSchemeListBox.SelectedIndex >= 0) {
+      // Should always be the case, as there is a default selected item.
+      var selectedListBoxItem = (ListBoxItem)ColourSchemeListBox.ContainerFromIndex(
+        ColourSchemeListBox.SelectedIndex)!;
+      // NavigationMethod.Directional puts a focus rectangle round the selected item.
+      selectedListBoxItem.Focus(NavigationMethod.Directional);
+    }
   }
 
   protected override void OnLoaded(RoutedEventArgs e) {
