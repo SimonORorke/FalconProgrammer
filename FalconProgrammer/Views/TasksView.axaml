@@ -9,13 +9,13 @@
              x:DataType="vm:TaskCollection">
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto">
         <Label Grid.Column="0" Grid.Row="0"
-               Target="TasksDataGrid"
+               Target="DataGrid"
                Margin="0, 10, 0, 0">
             <AccessText Text="Configuration _Tasks"
                         Classes="dataGridLabel" />
         </Label>
         <DataGrid Grid.Column="0" Grid.Row="1"
-                  x:Name="TasksDataGrid"
+                  x:Name="DataGrid"
                   ItemsSource="{Binding}"
                   RowHeight="35"
                   GridLinesVisibility="All">
