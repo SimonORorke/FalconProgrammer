@@ -8,11 +8,27 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BackgroundView"
              x:DataType="vm:BackgroundViewModel">
+    <!-- There is something wrong with this Style.
+    If it's used, the page won't display. -->
+    <!-- <UserControl.Styles> -->
+    <!--     <Style Selector="Button.browse"> -->
+    <!--         <Setter Property="Content"> -->
+    <!--             <TextBlock Text="Browse..." /> -->
+    <!--         </Setter> -->
+    <!--         <Setter Property="Height" Value="25" /> -->
+    <!--         <Setter Property="Margin" Value="13,0,0,0" /> -->
+    <!--     </Style> -->
+    <!-- </UserControl.Styles> -->
     <StackPanel>
         <TextBlock Text="{Binding Advice}"
                    TextWrapping="Wrap"
                    Margin="10,10,10,10" />
+        <Label Target="DataGrid">
+            <AccessText Text="_Sound Banks"
+                        Classes="dataGridLabel" />
+        </Label>
         <DataGrid
+            x:Name="DataGrid"
             ItemsSource="{Binding Backgrounds}"
             RowHeight="35"
             GridLinesVisibility="All">
@@ -85,8 +101,22 @@
                                     MinHeight="25">
                                 <TextBlock Text="Browse..." />
                             </Button>
+                            <!-- <Button Command="{Binding BrowseCommand}" -->
+                            <!--         Classes="browse" /> -->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding BrowseCommand}"
+                                    Margin="13,0,0,0"
+                                    Height="25"
+                                    MinHeight="25">
+                                <TextBlock Text="Browse..." />
+                            </Button>
+                            <!-- <Button Command="{Binding BrowseCommand}" -->
+                            <!--         Classes="browse" /> -->
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="90">
                     <DataGridTemplateColumn.HeaderTemplate>
@@ -103,6 +133,14 @@
                                 RemoveCommand="{Binding RemoveCommand}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>

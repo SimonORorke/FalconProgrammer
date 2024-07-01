@@ -13,5 +13,6 @@ public partial class BackgroundView : UserControl {
         new BackgroundViewModel(new DialogService(), new DispatcherService()));
     }
     InitializeComponent();
+    DataGrid.PreparingCellForEdit += DataGridHelper.OnPreparingCellForEdit;
   }
 }

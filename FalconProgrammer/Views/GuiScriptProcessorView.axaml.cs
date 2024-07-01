@@ -13,5 +13,6 @@ public partial class GuiScriptProcessorView : UserControl {
         new GuiScriptProcessorViewModel(new DialogService(), new DispatcherService()));
     }
     InitializeComponent();
+    DataGrid.PreparingCellForEdit += DataGridHelper.OnPreparingCellForEdit;
   }
 }

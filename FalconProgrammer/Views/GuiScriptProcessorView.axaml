@@ -11,7 +11,12 @@
         <TextBlock Text="{Binding Advice}"
                    TextWrapping="Wrap"
                    Margin="10,10,10,10" />
+        <Label Target="DataGrid">
+            <AccessText Text="_Sound Bank Categories"
+                        Classes="dataGridLabel" />
+        </Label>
         <DataGrid
+            x:Name="DataGrid"
             ItemsSource="{Binding SoundBankCategories}"
             RowHeight="35"
             GridLinesVisibility="All">
@@ -71,6 +76,14 @@
                                 RemoveCommand="{Binding RemoveCommand}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>

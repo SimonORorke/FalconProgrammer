@@ -12,8 +12,7 @@
                Target="TasksDataGrid"
                Margin="0, 10, 0, 0">
             <AccessText Text="Configuration _Tasks"
-                        FontSize="18"
-                        TextAlignment="Center" />
+                        Classes="dataGridLabel" />
         </Label>
         <DataGrid Grid.Column="0" Grid.Row="1"
                   x:Name="TasksDataGrid"

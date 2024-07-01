@@ -13,5 +13,7 @@ public partial class CcNoRangesView : UserControl {
         "Design", new DialogService(), new DispatcherService()));
     }
     InitializeComponent();
+    // For unknown reason, this does not work here. The event handler is never called.
+    DataGrid.PreparingCellForEdit += DataGridHelper.OnPreparingCellForEdit;
   }
 }

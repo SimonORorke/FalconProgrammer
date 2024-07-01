@@ -26,12 +26,20 @@
         <Style Selector="AccessText">
             <Setter Property="ShowAccessKey" Value="True" />
         </Style>
+        <Style Selector="AccessText.dataGridLabel">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Foreground" 
+                    Value="{DynamicResource SystemBaseMediumHighColor}" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
         <Style Selector="Label">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <!-- Give the focused ListBox item a focus rectangle.
-        This does nothing.  I've asked a question:
+        This does nothing, though it might if the ListBox on
+        ColourSchemeWindow was not the only control on the window
+        and so could be tabbed to. See
         https://github.com/AvaloniaUI/Avalonia/discussions/16173 -->
         <!-- <Style Selector="ListBoxItem"> -->
         <!--     <Setter Property="FocusAdorner"> -->

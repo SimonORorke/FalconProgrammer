@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
+using CommunityToolkit.Mvvm.Input;
 
 namespace FalconProgrammer.Controls;
 
@@ -44,6 +45,10 @@ public abstract class MenuButtonBase : Button {
 
   protected abstract ICommand GetMenuItemCommand(MenuItem menuItem);
 
+  protected override void OnClick() {
+    Flyout!.ShowAt(this);
+  }
+
   protected override void OnInitialized() {
     base.OnInitialized();
     Content = new AccessText {
@@ -53,6 +58,7 @@ public abstract class MenuButtonBase : Button {
       VerticalAlignment = VerticalAlignment.Center
     };
     Flyout = CreateFlyout();
+    Command = new RelayCommand(OnClick);
   }
 
   protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {

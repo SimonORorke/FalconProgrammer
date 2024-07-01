@@ -27,7 +27,8 @@
     <StackPanel>
         <Label Target="DataGrid">
             <AccessText Text="{Binding AccessibleTitle}"
-                        TextAlignment="Center" />
+                        Classes="dataGridLabel"
+                        FontSize="16" />
         </Label>
         <DataGrid
             x:Name="DataGrid"

@@ -13,5 +13,6 @@ public partial class ReverbView : UserControl {
         new ReverbViewModel(new DialogService(), new DispatcherService()));
     }
     InitializeComponent();
+    DataGrid.PreparingCellForEdit += DataGridHelper.OnPreparingCellForEdit;
   }
 }
