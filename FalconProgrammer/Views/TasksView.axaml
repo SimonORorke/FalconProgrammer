@@ -55,6 +55,14 @@
                                 RemoveCommand="{Binding RemoveCommand}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate DataType="vm:TaskItem">
+                            <ct:ItemEditButton
+                                CutCommand="{Binding CutCommand}"
+                                PasteBeforeCommand="{Binding PasteBeforeCommand}"
+                                RemoveCommand="{Binding RemoveCommand}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>

@@ -12,5 +12,6 @@ public partial class TasksView : UserControl {
       Design.SetDataContext(this, new TaskCollection(new DispatcherService()));
     }
     InitializeComponent();
+    TasksDataGrid.PreparingCellForEdit += DataGridHelper.OnPreparingCellForEdit;
   }
 }
