@@ -12,6 +12,7 @@ public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundIte
   }
 
   private IDialogService DialogService { get; }
+  public event EventHandler? Browsed;
 
   protected override void AppendAdditionItem() {
     AddItem();
@@ -33,10 +34,15 @@ public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundIte
     if (path != null) {
       item.Path = path;
     }
+    OnBrowsed();
   }
 
   protected override void CutItem(DataGridItemBase itemToCut) {
     CutItemTyped((BackgroundItem)itemToCut);
+  }
+
+  private void OnBrowsed() {
+    Browsed?.Invoke(this, EventArgs.Empty);
   }
 
   protected override void PasteBeforeItem(DataGridItemBase itemBeforeWhichToPaste) {

@@ -95,7 +95,8 @@
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Command="{Binding BrowseCommand}"
+                            <Button x:Name="BrowseButton"
+                                    Command="{Binding BrowseCommand}"
                                     Margin="13,0,0,0"
                                     Height="25"
                                     MinHeight="25">

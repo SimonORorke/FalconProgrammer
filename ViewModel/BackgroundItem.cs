@@ -11,18 +11,18 @@ public partial class BackgroundItem : SoundBankItem {
   [ObservableProperty] private string _path = string.Empty;
 
   public BackgroundItem(Settings settings, IFileSystemService fileSystemService,
-    bool isAdditionItem, Func<BackgroundItem, Task> browseForItemPath) :
+    bool isAdditionItem, Func<BackgroundItem, Task> browseForPath) :
     base(settings, fileSystemService, isAdditionItem) {
-    BrowseForItemPath = browseForItemPath;
+    BrowseForPath = browseForPath;
   }
 
-  private Func<BackgroundItem, Task> BrowseForItemPath { get; }
+  private Func<BackgroundItem, Task> BrowseForPath { get; }
 
   /// <summary>
   ///   Generates <see cref="BrowseCommand" />.
   /// </summary>
   [RelayCommand]
   private async Task Browse() {
-    await BrowseForItemPath(this);
+    await BrowseForPath(this);
   }
 }
