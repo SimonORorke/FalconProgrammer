@@ -199,8 +199,9 @@ internal class ProgramXml : EntityBase {
       var neededSoundBankElement = RootElement.Elements("NeededFS").Last();
       string path = GetAttributeValue(neededSoundBankElement, "Source");
       // Example: "FalconFactory" from "D:/Libraries/UVI/Falcon Factory.ufs".
-      string soundBankPascal = 
-        path[..path.IndexOf('.')][(path.LastIndexOf('/') + 1)..].Replace(
+      string soundBankPascal = path.EndsWith(@"/Falcon Factory rev2.ufs") 
+        ? "FactoryRev2"
+        : path[..path.IndexOf('.')][(path.LastIndexOf('/') + 1)..].Replace(
         " ", string.Empty);
       return Global.GetEnumValue<SoundBankId>(soundBankPascal);
     } catch {

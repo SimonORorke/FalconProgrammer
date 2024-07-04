@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
@@ -100,6 +101,8 @@ internal class ScriptProcessor : ModulationsOwner {
     IList<Macro> macros) {
     Macros = macros;
     if (GuiScriptId == ScriptId.FactoryRev2) {
+      // This code is not used at present, as assigning MIDI CC numbers to macros on a
+      // script-based Info page is not supported for the Falcon Factory rev2 sound bank.
       Midi.CurrentContinuousCcNo = 0;
       Midi.CurrentToggleCcNo = 0;
       if (templateModulations.Count >= macros.Count) {
@@ -121,6 +124,11 @@ internal class ScriptProcessor : ModulationsOwner {
     }
   }
 
+  /// <summary>
+  ///   This code is not used at present, as assigning MIDI CC numbers to macros on a
+  ///   script-based Info page is not supported for the Falcon Factory rev2 sound bank.
+  /// </summary>
+  [ExcludeFromCodeCoverage]
   private void AddModulationBasedOnMacro(
     Modulation templateModulation, Macro correspondingMacro) {
     int newCcNo = correspondingMacro.IsContinuous

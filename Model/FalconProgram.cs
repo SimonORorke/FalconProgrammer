@@ -126,6 +126,13 @@ internal class FalconProgram {
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate
       AssignMacroCcsOwnedByMacros();
+    } else if (SoundBankId == SoundBankId.FactoryRev2) {
+      throw new ApplicationException(
+        "Assigning MIDI CCs to macros for a program with a GUI script " +
+        "processor is not supported for sound bank " +
+        $"{SoundBankName}. You need to go to the " +
+        "GUI Script Processor page and remove the sound bank from " +
+        "the list.");
     } else {
       var templateScriptProcessor = Category.GetTemplateScriptProcessor(
         GuiScriptProcessor, Batch);
@@ -229,7 +236,7 @@ internal class FalconProgram {
     return SoundBankId switch {
       SoundBankId.OrganicKeys => throw new ApplicationException(
         "Removing the GUI script processor is not currently supported " +
-        $"for programs of sound bank {SoundBankName}, as the Delay and Reverb " +
+        $"for programs of sound bank {SoundBankName}, as most " +
         "script parameters, which can be controlled via the script-based " +
         "Info page GUI, " +
         "are not represented by macros on the non-script-based Info page GUI. " +

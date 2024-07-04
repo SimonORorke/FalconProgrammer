@@ -26,7 +26,7 @@ public class FalconProgramTests {
   private TestBatch Batch { get; set; } = null!;
 
   [Test]
-  public void AssignMacroCcsGuiScriptProcessorNotSupportedForSoundBank() {
+  public void AssignMacroCcsGuiScriptProcessorNotSupportedForCategory() {
     const string soundBankName = "Falcon Factory";
     const string categoryName = "Leads";
     const string programName = "Soft Mood";
@@ -39,7 +39,23 @@ public class FalconProgramTests {
       Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
     Assert.That(exception.Message, Does.StartWith(
       "Assigning MIDI CCs to macros for a program with a GUI script processor " +
-      "is not supported for sound bank"));
+      $"is not supported for sound bank {soundBankName} category {categoryName}."));
+  }
+
+  [Test]
+  public void AssignMacroCcsGuiScriptProcessorNotSupportedForSoundBank() {
+    const string soundBankName = "Falcon Factory rev2";
+    const string categoryName = "Bass";
+    const string programName = "Big Sleep";
+    Batch.Settings.MustUseGuiScriptProcessorCategories.Add(
+      new Settings.SoundBankCategory {
+        SoundBank = soundBankName
+      });
+    var exception = Assert.Catch<ApplicationException>(() =>
+      Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
+    Assert.That(exception.Message, Does.StartWith(
+      "Assigning MIDI CCs to macros for a program with a GUI script processor " +
+      $"is not supported for sound bank {soundBankName}."));
   }
 
   [Test]
