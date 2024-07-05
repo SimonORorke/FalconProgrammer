@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BatchScript>
+    <Tasks>
+        <Task>QueryAdsrMacros</Task>
+        <Task>ReuseCc1</Task>
+        <Task>AssignMacroCcs</Task>
+        <Task>InitialiseLayout</Task>
+    </Tasks>
+</BatchScript>

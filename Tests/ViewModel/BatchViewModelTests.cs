@@ -41,6 +41,26 @@ public class BatchViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task LoadScriptConservingExistingScope() {
+    // This script file does not specify a scope. So we expect the Batch page's existing
+    // scope to be conserved while the tasks in the script file are loaded. 
+    ViewModel.TestBatch.EmbeddedScriptFileName = "BatchScriptForAny.xml";
+    await ConfigureScript();
+    const string existingSoundBank = "Falcon Factory";
+    const string existingCategory = "Keys";
+    const string existingProgram = "Morning Keys";
+    Assert.That(ViewModel.Scope.SoundBank, Is.EqualTo(existingSoundBank));
+    Assert.That(ViewModel.Scope.Category, Is.EqualTo(existingCategory));
+    Assert.That(ViewModel.Scope.Program, Is.EqualTo(existingProgram));
+    Assert.That(ViewModel.Tasks, Has.Count.EqualTo(3));
+    await ViewModel.LoadScriptCommand.ExecuteAsync(null);
+    Assert.That(ViewModel.Scope.SoundBank, Is.EqualTo(existingSoundBank));
+    Assert.That(ViewModel.Scope.Category, Is.EqualTo(existingCategory));
+    Assert.That(ViewModel.Scope.Program, Is.EqualTo(existingProgram));
+    Assert.That(ViewModel.Tasks, Has.Count.EqualTo(5));
+  }
+
+  [Test]
   public async Task LoadScriptXmlError() {
     await ConfigureScript();
     ViewModel.TestBatch.EmbeddedScriptFileName = "XmlErrorScript.xml";

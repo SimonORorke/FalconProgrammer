@@ -100,6 +100,8 @@
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory\Leads\Soft Mood.xml" />
         <None Remove="Model\Xml\OriginalPrograms\Falcon Factory rev2\Big Sleep.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory rev2\Big Sleep.xml" />
+        <None Remove="Model\Xml\BatchScripts\BatchScriptForAny.xml" />
+        <EmbeddedResource Include="Model\Xml\BatchScripts\BatchScriptForAny.xml" />
     </ItemGroup>
 
     <ItemGroup>

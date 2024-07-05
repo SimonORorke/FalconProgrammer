@@ -44,19 +44,14 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
   }
 
   private void Update(BatchScope scope) {
-    Clear();
-    AddItem(new ProgramItem(Settings, FileSystemService, false, true) {
-      SoundBanks = SoundBanks,
-      SoundBank = scope.SoundBank != string.Empty
-        ? scope.SoundBank
-        : SoundBankItem.AllCaption,
-      Category = scope.Category != string.Empty
-        ? scope.Category
-        : SoundBankItem.AllCaption,
-      Program = scope.Program != string.Empty
-        ? scope.Program
-        : SoundBankItem.AllCaption
-    });
+    if (Count == 0) {
+      AddItem(new ProgramItem(Settings, FileSystemService, false, true) {
+        SoundBanks = SoundBanks,
+      });
+      this[0].Update(scope.SoundBank, scope.Category, scope.Program);
+    } else if (scope.SoundBank != string.Empty) {
+      this[0].Update(scope.SoundBank, scope.Category, scope.Program);
+    }
   }
 
   internal override void UpdateSettings() {

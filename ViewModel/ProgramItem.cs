@@ -47,4 +47,10 @@ public partial class ProgramItem : SoundBankCategory {
       Console.WriteLine(exception.Message);
     }
   }
+
+  public void Update(string soundBank, string category, string program) {
+    SoundBank = soundBank != string.Empty ? soundBank : AllCaption;
+    Category = category != string.Empty ? category : AllCaption;
+    Program = program != string.Empty ? program : AllCaption;
+  }
 }
