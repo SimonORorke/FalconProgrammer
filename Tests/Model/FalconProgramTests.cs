@@ -37,7 +37,7 @@ public class FalconProgramTests {
       });
     var exception = Assert.Catch<ApplicationException>(() =>
       Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
-    Assert.That(exception.Message, Does.StartWith(
+    Assert.That(exception.Message, Does.Contain(
       "Assigning MIDI CCs to macros for a program with a GUI script processor " +
       $"is not supported for sound bank {soundBankName} category {categoryName}."));
   }

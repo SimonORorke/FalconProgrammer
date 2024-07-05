@@ -39,7 +39,7 @@ internal class InfoPageLayout {
       // different approach to identify them.
       where macro.X < RightEdge
       select macro).ToList();
-    const int maxMacroCount = 21;
+    const int maxMacroCount = 32; 
     if (visibleMacros.Count > maxMacroCount) {
       throw new ApplicationException(
         $"{Program.PathShort}: Cannot lay out {visibleMacros.Count} macros. " +
@@ -48,18 +48,18 @@ internal class InfoPageLayout {
     int macrosPerRow = visibleMacros.Count switch {
       <= 12 => 4,
       <= 15 => 5,
-      _ => 7
+      <= 21 => 7,
+      _ => 8
     };
     int rowCount = (int)Math.Ceiling((double)visibleMacros.Count / macrosPerRow);
-    // The maximum row count is now 3. So this row height logic is currently redundant.
-    // int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 5;
+    int rowHeight = rowCount < 4 ? StandardRowHeight : StandardRowHeight - 10;
     int freeSpaceInRow = RightEdge - MacroWidth * macrosPerRow;
     int gapBetweenMacros = freeSpaceInRow / (macrosPerRow + 1);
     int top = rowCount switch {
-      1 => StandardBottommostY - StandardRowHeight,
-      2 => StandardBottommostY - 2 * StandardRowHeight,
-      3 => StandardBottommostY - 2 * StandardRowHeight,
-      _ => StandardBottommostY - 3 * StandardRowHeight
+      1 => StandardBottommostY - rowHeight,
+      2 => StandardBottommostY - 2 * rowHeight,
+      3 => StandardBottommostY - 2 * rowHeight,
+      _ => StandardBottommostY - 3 * rowHeight
     };
     switch (Program.SoundBankId) {
       case SoundBankId.EtherFields when rowCount == 3:
@@ -73,7 +73,7 @@ internal class InfoPageLayout {
         if (Program.ProgramXml.BackgroundImagePath != null 
             && Program.ProgramXml.BackgroundImagePath.StartsWith("$Devinity.ufs")) {
           // Default background image. Place the row on the black space at the bottom. 
-          top += StandardRowHeight;
+          top += rowHeight;
         }
         break;
       default:
@@ -92,7 +92,7 @@ internal class InfoPageLayout {
       } else {
         macrosOnCurrentRow = 0;
         x = gapBetweenMacros;
-        y += StandardRowHeight;
+        y += rowHeight;
       }
     }
     Program.NotifyUpdate(

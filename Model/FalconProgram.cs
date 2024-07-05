@@ -114,6 +114,7 @@ internal class FalconProgram {
         // be implemented, especially as all Falcon Factory rev2 programs have GUI script
         // processors.
         throw new ApplicationException(
+          $"{PathShort} does not contain a GUI script processor. " +
           "Assigning MIDI CCs to macros for a program with a GUI script " +
           "processor is not supported for sound bank " +
           $"{SoundBankName} category {Category.Name}. You need to go to the " +
@@ -242,18 +243,6 @@ internal class FalconProgram {
         "are not represented by macros on the non-script-based Info page GUI. " +
         $"You need to add sound bank {SoundBankName} to the list on the " +
         "GUI Script Processor page."),
-      SoundBankId.Pulsar => throw new ApplicationException(
-        "Removing the GUI script processor is not currently supported " +
-        $"for programs of sound bank {SoundBankName}, as there are too many " +
-        "macros for the non-script-based Info page GUI. " +
-        $"You need to add sound bank {SoundBankName} to the list on the " +
-        "GUI Script Processor page."),
-      SoundBankId.Voklm => throw new ApplicationException(
-        "Removing the GUI script processor is not currently supported " +
-        $"for programs of sound bank {SoundBankName}, as MIDI modulations cannot be " +
-        "reliably assigned to macros on the non-script-based Info page GUI. " +
-        $"You need to add sound bank {SoundBankName} to the list on the " +
-        "GUI Script Processor page."),
       _ => true
     };
   }
@@ -268,7 +257,8 @@ internal class FalconProgram {
         $"{PathShort} already has a Wheel macro.");
       return false;
     }
-    if (SoundBankId is SoundBankId.EtherFields) {
+    if (SoundBankId is SoundBankId.EtherFields or SoundBankId.Pulsar 
+        or SoundBankId.Voklm) {
       Log.WriteLine(
         $"{PathShort}: Replacing the mod wheel with a macro is not supported " +
         $"for sound bank {SoundBankName}, " +
@@ -1071,7 +1061,7 @@ internal class FalconProgram {
   ///   <list type="bullet">
   ///     <item>
   ///       <description>
-  ///         Sound banks Ether Fields or Organic Keys.
+  ///         Sound banks Ether Fields, Pulsar and Voklm.
   ///         The programs in these sound banks are too complex for this
   ///         configuration task to be feasible, for now at least.
   ///       </description>

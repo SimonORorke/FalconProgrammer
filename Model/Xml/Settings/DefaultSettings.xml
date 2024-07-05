@@ -4,8 +4,6 @@
         <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>
         <SoundBankCategory SoundBank="Organic Pads" Category=""/>
-        <SoundBankCategory SoundBank="Pulsar" Category=""/>
-        <SoundBankCategory SoundBank="Voklm" Category=""/>
     </MustUseGuiScriptProcessor>
     <DoNotZeroReverb>
         <ProgramPath SoundBank="Falcon Factory" Category="Bass-Sub" Program="Coastal Halftones 1.4"/>
