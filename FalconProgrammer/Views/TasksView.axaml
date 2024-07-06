@@ -7,6 +7,10 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.TasksView"
              x:DataType="vm:TaskCollection">
+    <!-- DataGrid must not be in a StackPanel. Otherwise the addition row won't be 
+    shown when a new row is added; and the vertical scroll bar will be missing when 
+    maximised and won't work when normal. A DockPanel with the DataGrid as its filler
+    works. So does putting the DataGrid in a filler (*) row of a Grid.  -->
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto">
         <Label Grid.Column="0" Grid.Row="0"
                Target="DataGrid"

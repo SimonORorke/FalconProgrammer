@@ -7,11 +7,17 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.ReverbView"
              x:DataType="vm:ReverbViewModel">
-    <StackPanel>
-        <TextBlock Text="{Binding Advice}"
+    <!-- DataGrid must not be in a StackPanel. Otherwise the addition row won't be 
+    shown when a new row is added; and the vertical scroll bar will be missing when 
+    maximised and won't work when normal. A DockPanel with the DataGrid as its filler
+    works. So does putting the DataGrid in a filler (*) row of a Grid.  -->
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" 
+                   Text="{Binding Advice}"
                    TextWrapping="Wrap"
                    Margin="10,10,10,10" />
-        <Label Target="DataGrid">
+        <Label DockPanel.Dock="Top" 
+               Target="DataGrid">
             <AccessText Text="_Programs"
                         Classes="dataGridLabel" />
         </Label>
@@ -107,5 +113,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </StackPanel>
+    </DockPanel>
 </UserControl>

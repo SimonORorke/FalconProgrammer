@@ -24,8 +24,13 @@
             <Setter Property="TextAlignment" Value="End" />
         </Style>
     </UserControl.Styles>
-    <StackPanel>
-        <Label Target="DataGrid">
+    <!-- DataGrid must not be in a StackPanel. Otherwise the addition row won't be 
+    shown when a new row is added; and the vertical scroll bar will be missing when 
+    maximised and won't work when normal. A DockPanel with the DataGrid as its filler
+    works. So does putting the DataGrid in a filler (*) row of a Grid.  -->
+    <DockPanel>
+        <Label DockPanel.Dock="Top" 
+               Target="DataGrid">
             <AccessText Text="{Binding AccessibleTitle}"
                         Classes="dataGridLabel"
                         FontSize="16" />
@@ -90,5 +95,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </StackPanel>
+    </DockPanel>
 </UserControl>
