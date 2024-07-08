@@ -219,6 +219,14 @@ internal class FalconProgram {
     }
   }
 
+  /// <summary>
+  ///   Returns whether certain conditions are fulfilled indicating that the program's
+  ///   GUI script processor may be removed.
+  /// </summary>
+  /// <remarks>
+  ///   Sound bank folder and category folder exclusions specified on
+  ///   the GUI Script Processor page will have been checked in <see cref="Batch" />.
+  /// </remarks>
   private bool CanRemoveGuiScriptProcessor() {
     if (Category.MustUseGuiScriptProcessor) {
       return false;
@@ -251,25 +259,14 @@ internal class FalconProgram {
   ///   Returns whether certain conditions are fulfilled indicating that the program's
   ///   mod wheel modulations may be reassigned to a new macro.
   /// </summary>
+  /// <remarks>
+  ///   Sound bank folder exclusions specified on the MIDI for Macros page
+  ///   will have been checked in <see cref="Batch" />.
+  /// </remarks>
   private bool CanReplaceModWheelWithMacro() {
     if (WheelMacroExists()) {
       Log.WriteLine(
         $"{PathShort} already has a Wheel macro.");
-      return false;
-    }
-    if (SoundBankId is SoundBankId.EtherFields or SoundBankId.Pulsar 
-        or SoundBankId.Voklm) {
-      Log.WriteLine(
-        $"{PathShort}: Replacing the mod wheel with a macro is not supported " +
-        $"for sound bank {SoundBankName}, " +
-        $"due to macro count and complexity.");
-      return false;
-    }
-    if (GuiScriptProcessor != null
-        && !CanRemoveGuiScriptProcessor()) {
-      Log.WriteLine(
-        $"{PathShort}: Replacing the mod wheel with a macro is not supported " +
-        $"because the program's Info page GUI is specified in a script processor.");
       return false;
     }
     int modulationsByModWheelCount =

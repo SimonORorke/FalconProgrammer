@@ -4,24 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ct="clr-namespace:FalconProgrammer.Controls"
              xmlns:vm="using:FalconProgrammer.ViewModel"
-             mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
-             x:Class="FalconProgrammer.Views.CcNoRangesView"
-             x:DataType="vm:CcNoRangeCollection">
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FalconProgrammer.Views.DoNotReplaceModWheelView"
+             x:DataType="vm:DoNotReplaceModWheelSoundBankCollection">
     <UserControl.Styles>
         <Style Selector="TextBlock.editHeader">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Margin" Value="9,0,0,0" />
-        </Style>
-        <Style Selector="TextBlock.ccHeader">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="Padding" Value="0,0, 10,0" />
-            <Setter Property="TextAlignment" Value="End" />
-        </Style>
-        <Style Selector="TextBox"> <!-- For CC Numbers -->
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="Padding" Value="0,6, 12,0" />
-            <Setter Property="TextAlignment" Value="End" />
         </Style>
     </UserControl.Styles>
     <!-- DataGrid must not be in a StackPanel. Otherwise the addition row won't be 
@@ -33,6 +22,9 @@
                Target="DataGrid">
             <AccessText Text="{Binding AccessibleTitle}"
                         Classes="dataGridLabel"
+                        Width="270"
+                        TextAlignment="Start"
+                        TextWrapping="Wrap"
                         FontSize="16" />
         </Label>
         <DataGrid
@@ -41,33 +33,25 @@
             RowHeight="30"
             GridLinesVisibility="All">
             <DataGrid.Columns>
-                <!-- Extra width needed for error icon at right -->
-                <DataGridTemplateColumn Width="76">
+                <DataGridTemplateColumn Width="175">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Text="Start"
-                                       Classes="ccHeader" />
+                            <TextBlock Text="Sound Bank"
+                                       FontSize="20" />
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Start}" />
+                        <DataTemplate DataType="vm:SoundBankItem">
+                            <TextBlock Text="{Binding SoundBank}"
+                                       Margin="13,0, 0, 0" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Extra width needed for error icon at right -->
-                <DataGridTemplateColumn Width="76">
-                    <DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBlock Text="End"
-                                       Classes="ccHeader" />
+                            <ComboBox ItemsSource="{Binding SoundBanks}"
+                                      SelectedItem="{Binding SoundBank}" />
                         </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding End}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="101">
                     <DataGridTemplateColumn.HeaderTemplate>

@@ -11,6 +11,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   [ObservableProperty] private bool _appendCcNoToMacroDisplayNames;
 
   private CcNoRangeCollection? _continuousCcNoRanges;
+  private DoNotReplaceModWheelSoundBankCollection? _doNotReplaceModWheelSoundBanks;
   private int? _modWheelReplacementCcNo;
   private CcNoRangeCollection? _toggleCcNoRanges;
 
@@ -31,6 +32,10 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     ??= new CcNoRangeCollection("Continuous",
       DialogService, DispatcherService);
 
+  public DoNotReplaceModWheelSoundBankCollection DoNotReplaceModWheelSoundBanks => 
+    _doNotReplaceModWheelSoundBanks ??= new DoNotReplaceModWheelSoundBankCollection(
+      FileSystemService, DispatcherService);
+
   [ExcludeFromCodeCoverage]
   public static string ModWheelReplacementAdvice =>
     "Must be > 1 to allow ReplaceModWheelWithMacro and ReuseCc1.";
@@ -43,7 +48,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle => 
-    "MIDI CC assignments for macros, for update by the AssignMacroCcs task.";
+    "MIDI CC assignments for macros.";
   
   public override string TabTitle => "MIDI for Macros";
 
@@ -63,6 +68,14 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   internal override async Task Open() {
     await base.Open();
+    var validator = new SettingsValidator(this,
+      "Sound banks cannot be updated", TabTitle);
+    var soundBanks =
+      await validator.GetProgramsFolderSoundBankNames();
+    if (soundBanks.Count == 0) {
+      return;
+    }
+    DoNotReplaceModWheelSoundBanks.Populate(Settings, soundBanks);
     AppendCcNoToMacroDisplayNames = Settings.MidiForMacros.AppendCcNoToMacroDisplayNames;
     ModWheelReplacementCcNo = Settings.MidiForMacros.ModWheelReplacementCcNo;
     ContinuousCcNoRanges.Populate(Settings.MidiForMacros.ContinuousCcNoRanges);
@@ -93,7 +106,8 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
         return false;
       }
     }
-    if (haveRangesChanged) {
+    DoNotReplaceModWheelSoundBanks.UpdateSettings();
+    if (haveRangesChanged || DoNotReplaceModWheelSoundBanks.HasBeenChanged) {
       // Notify change, so that Settings will be saved.
       OnPropertyChanged();
     }

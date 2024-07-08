@@ -25,6 +25,10 @@ public class MidiForMacros {
   [XmlArrayItem("ToggleCcNoRange")]
   public List<Settings.IntegerRange> ToggleCcNoRanges { get; set; } = [];
 
+  [XmlArray(nameof(DoNotReplaceModWheelWithMacroSoundBanks))]
+  [XmlArrayItem("SoundBankName")]
+  public List<string> DoNotReplaceModWheelWithMacroSoundBanks { get; set; } = [];
+
   internal ImmutableList<int> ContinuousCcNos =>
     _continuousCcNos ??= CreateCcNoList(ContinuousCcNoRanges);
 
@@ -34,6 +38,10 @@ public class MidiForMacros {
 
   internal ImmutableList<int> ToggleCcNos =>
     _toggleCcNos ??= CreateCcNoList(ToggleCcNoRanges);
+  
+  internal bool CanReplaceModWheelWithMacro(string soundBankName) {
+    return !DoNotReplaceModWheelWithMacroSoundBanks.Contains(soundBankName);
+  }
 
   private static ImmutableList<int> CreateCcNoList(List<Settings.IntegerRange> ranges) {
     var list = new List<int>();

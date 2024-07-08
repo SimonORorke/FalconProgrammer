@@ -12,7 +12,7 @@ public partial class SoundBankItem : DataGridItemBase {
   /// </summary>
   [ObservableProperty] private string _soundBank = string.Empty;
 
-  protected SoundBankItem(
+  public SoundBankItem(
     Settings settings,
     IFileSystemService fileSystemService,
     bool isAdditionItem) : base(isAdditionItem) {

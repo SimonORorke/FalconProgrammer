@@ -42,6 +42,7 @@ public class ViewLocator : IDataTemplate {
       BatchViewModel => new BatchView(),
       BatchScopeCollection => new BatchScopesView(),
       CcNoRangeCollection => new CcNoRangesView(),
+      DoNotReplaceModWheelSoundBankCollection => new DoNotReplaceModWheelView(),
       GuiScriptProcessorViewModel => new GuiScriptProcessorView(),
       LocationsViewModel => new LocationsView(),
       MainWindowViewModel => new MainWindow(),

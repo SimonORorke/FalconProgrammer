@@ -160,14 +160,20 @@ public class Batch {
     }
     if (!string.IsNullOrEmpty(soundBankName)) {
       SoundBankFolderPath = GetSoundBankFolderPath(soundBankName);
+      if (!IsTaskAllowedForSoundBank()) {
+        return;
+      }
       if (!string.IsNullOrEmpty(categoryName)) {
+        Category = CreateCategory(categoryName);
+        if (!IsTaskAllowedForCategory()) {
+          return;
+        }
         if (!string.IsNullOrEmpty(programName)) {
-          Category = CreateCategory(categoryName);
           string programPath = Category.GetProgramPath(programName);
           Program = CreateFalconProgram(programPath);
           ConfigureProgram();
         } else {
-          ConfigureProgramsInCategory(categoryName);
+          ConfigureProgramsInCategory();
         }
       } else {
         ConfigureProgramsInSoundBank();
@@ -179,7 +185,9 @@ public class Batch {
             programsFolderPath)
           .Where(soundBankName1 => soundBankName1 != ".git")) {
         SoundBankFolderPath = Path.Combine(programsFolderPath, soundBankName1);
-        ConfigureProgramsInSoundBank();
+        if (IsTaskAllowedForSoundBank()) {
+          ConfigureProgramsInSoundBank();
+        }
       }
     }
     if (Task is ConfigTask.QueryDelayTypes or ConfigTask.QueryReverbTypes) {
@@ -187,18 +195,7 @@ public class Batch {
     }
   }
 
-  private void ConfigureProgramsInCategory(
-    string categoryName) {
-    Category = CreateCategory(categoryName);
-    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
-        && Category.MustUseGuiScriptProcessor) {
-      Log.WriteLine(
-        $"Cannot {Task} for category " +
-        $@"'{SoundBankName}\{categoryName}' " +
-        "because the category's Info page GUI must be specified in a script" +
-        " processor.");
-      return;
-    }
+  private void ConfigureProgramsInCategory() {
     foreach (string programPath in Category.GetPathsOfProgramFilesToEdit()) {
       Program = CreateFalconProgram(programPath);
       ConfigureProgram();
@@ -206,18 +203,12 @@ public class Batch {
   }
 
   private void ConfigureProgramsInSoundBank() {
-    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
-        && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
-      Log.WriteLine(
-        $"Cannot {Task} for sound bank " +
-        $"{SoundBankName} " +
-        "because the sound bank's Info page GUI must be specified in a script" +
-        " processor.");
-      return;
-    }
     foreach (string categoryName in FileSystemService.Folder.GetSubfolderNames(
                SoundBankFolderPath)) {
-      ConfigureProgramsInCategory(categoryName);
+      Category = CreateCategory(categoryName);
+      if (IsTaskAllowedForCategory()) {
+        ConfigureProgramsInCategory();
+      }
     }
   }
 
@@ -270,6 +261,40 @@ public class Batch {
         $"Cannot find sound bank folder '{result}'.");
     }
     return result;
+  }
+
+  private bool IsTaskAllowedForCategory() {
+    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
+        && Category.MustUseGuiScriptProcessor) {
+      Log.WriteLine(
+        $"Cannot {Task} for category '{Category.PathShort}' " +
+        "because the category's Info page GUI must be specified in a script" +
+        " processor. (See GUI Script processor page.)");
+      return false;
+    }
+    return true;
+  }
+
+  private bool IsTaskAllowedForSoundBank() {
+    // if (SoundBankId is SoundBankId.EtherFields or SoundBankId.Pulsar 
+    //     or SoundBankId.Voklm) {
+    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
+        && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
+      Log.WriteLine(
+        $"Cannot {Task} for sound bank " +
+        $"{SoundBankName} " +
+        "because the sound bank's Info page GUI must be specified in a script" +
+        " processor. (See GUI Script processor page.)");
+      return false;
+    }
+    if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.ReuseCc1
+        && Settings.MidiForMacros.CanReplaceModWheelWithMacro(SoundBankName)) {
+      Log.WriteLine(
+        $"Cannot {Task} for sound bank " +
+        $"{SoundBankName}, as specified on the MIDI for Macros page.");
+      return false;
+    }
+    return true;
   }
 
   protected virtual void OnScriptRunEnded() {
