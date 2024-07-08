@@ -29,12 +29,12 @@
                             FontSize="16" />
             </CheckBox>
         </StackPanel>
-        <!-- Width="450" -->
         <TextBlock DockPanel.Dock="Top"
                    Text="{Binding CcNoRangeAdvice}"
                    Margin="10,20,0,0"
                    TextWrapping="Wrap"
-                   VerticalAlignment="Top" />
+                   Width="500"
+                   HorizontalAlignment="Left" />
         <Grid RowDefinitions="*" ColumnDefinitions="Auto, 10, Auto, 50, Auto"
               Margin="10,10,0,0">
             <ContentControl
