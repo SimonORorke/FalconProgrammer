@@ -3,8 +3,8 @@ using FalconProgrammer.Model;
 
 namespace FalconProgrammer.ViewModel;
 
-public class DoNotReplaceModWheelSoundBankCollection : SoundBankCollection {
-  public DoNotReplaceModWheelSoundBankCollection(IFileSystemService fileSystemService,
+public class DoNotReplaceModWheelCollection : SoundBankCollection {
+  public DoNotReplaceModWheelCollection(IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(fileSystemService, dispatcherService) { }
 
   [ExcludeFromCodeCoverage]

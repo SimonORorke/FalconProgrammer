@@ -39,18 +39,32 @@ public class BatchTests {
     Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName, category);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
-      "because the category's Info page GUI must be specified in a script processor."));
+      "because the category's Info page GUI must be specified in a script " +
+      "processor. (See GUI Script processor page.)"));
   }
 
   [Test]
-  public void CannotReplaceModWheelWithMacroForSoundBank() {
+  public void CannotReplaceModWheelWithMacroForSoundBank1() {
     const string soundBankName = "Organic Keys";
     Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
     Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName));
     Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName);
     Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
     Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
-      "because the sound bank's Info page GUI must be specified in a script processor."));
+      "because the sound bank's Info page GUI must be specified in a script " +
+      "processor. (See GUI Script processor page.)"));
+  }
+
+  [Test]
+  public void CannotReplaceModWheelWithMacroForSoundBank2() {
+    const string soundBankName = "Ether Fields";
+    Assert.That(Batch.Settings.MidiForMacros.HasModWheelReplacementCcNo);
+    Assert.That(Batch.Settings.MustUseGuiScriptProcessor(soundBankName), Is.False);
+    Batch.RunTask(ConfigTask.ReplaceModWheelWithMacro, soundBankName);
+    Assert.That(Batch.MockBatchLog.Lines, Has.Count.EqualTo(1));
+    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
+      "Cannot ReplaceModWheelWithMacro for sound bank Ether Fields, " +
+      "as specified on the MIDI for Macros page."));
   }
 
   [Test]

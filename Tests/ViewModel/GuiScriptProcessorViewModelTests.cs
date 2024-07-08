@@ -141,7 +141,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
-  public async Task NoProgramsNotSpecified() {
+  public async Task ProgramsNotSpecified() {
     Settings = ReadMockSettings("DefaultSettingsWithMidi.xml");
     await ViewModel.Open();
     Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));

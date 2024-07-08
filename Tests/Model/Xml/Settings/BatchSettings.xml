@@ -51,6 +51,9 @@
                 <End>112</End>
             </ToggleCcNoRange>
         </ToggleCcNoRanges>
+        <DoNotReplaceModWheelWithMacroSoundBanks>
+            <SoundBankName>Ether Fields</SoundBankName>
+        </DoNotReplaceModWheelWithMacroSoundBanks>
     </MidiForMacros>
     <Backgrounds>
         <Background SoundBank="Eternal Funk" Path="J:\FalconProgrammer\Images\Yellowish Mid-Green.png"/>

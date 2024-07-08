@@ -288,7 +288,7 @@ public class Batch {
       return false;
     }
     if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.ReuseCc1
-        && Settings.MidiForMacros.CanReplaceModWheelWithMacro(SoundBankName)) {
+        && !Settings.MidiForMacros.CanReplaceModWheelWithMacro(SoundBankName)) {
       Log.WriteLine(
         $"Cannot {Task} for sound bank " +
         $"{SoundBankName}, as specified on the MIDI for Macros page.");

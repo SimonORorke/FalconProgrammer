@@ -11,7 +11,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   [ObservableProperty] private bool _appendCcNoToMacroDisplayNames;
 
   private CcNoRangeCollection? _continuousCcNoRanges;
-  private DoNotReplaceModWheelSoundBankCollection? _doNotReplaceModWheelSoundBanks;
+  private DoNotReplaceModWheelCollection? _doNotReplaceModWheelSoundBanks;
   private int? _modWheelReplacementCcNo;
   private CcNoRangeCollection? _toggleCcNoRanges;
 
@@ -32,8 +32,8 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     ??= new CcNoRangeCollection("Continuous",
       DialogService, DispatcherService);
 
-  public DoNotReplaceModWheelSoundBankCollection DoNotReplaceModWheelSoundBanks => 
-    _doNotReplaceModWheelSoundBanks ??= new DoNotReplaceModWheelSoundBankCollection(
+  public DoNotReplaceModWheelCollection DoNotReplaceModWheelSoundBanks => 
+    _doNotReplaceModWheelSoundBanks ??= new DoNotReplaceModWheelCollection(
       FileSystemService, DispatcherService);
 
   [ExcludeFromCodeCoverage]

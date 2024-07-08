@@ -8,16 +8,18 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    ViewModel = new MidiForMacrosViewModel(MockDialogService, MockDispatcherService) {
+    ViewModel = new TestMidiForMacrosViewModel(MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
     };
-    Task.Run(async () => await ViewModel.Open()).Wait();
+    //Task.Run(async () => await ViewModel.Open()).Wait();
   }
 
-  private MidiForMacrosViewModel ViewModel { get; set; } = null!;
+  private Settings Settings { get; set; } = null!;
+  private TestMidiForMacrosViewModel ViewModel { get; set; } = null!;
 
   [Test]
   public async Task DisallowOverlappingContinuousCcNoRange() {
+    await ViewModel.Open();
     // Check that data is as expected.
     var rangesInSettings =
       ViewModel.Settings.MidiForMacros.ContinuousCcNoRanges;
@@ -38,6 +40,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task DisallowOverlappingToggleCcNoRange() {
+    await ViewModel.Open();
     // Check that data is as expected.
     var rangesInSettings =
       ViewModel.Settings.MidiForMacros.ToggleCcNoRanges;
@@ -48,7 +51,20 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task ProgramsNotSpecified() {
+    Settings = ReadMockSettings("DefaultSettingsWithMidi.xml");
+    await ViewModel.Open();
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
+      "Sound banks cannot be updated: the programs folder has not been specified."));
+    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+  }
+
+  [Test]
   public async Task UpdateAppendCcNoToMacroDisplayNames() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    await ViewModel.Open();
     Assert.That(ViewModel.AppendCcNoToMacroDisplayNames, Is.True);
     ViewModel.AppendCcNoToMacroDisplayNames = false;
     Assert.That(await ViewModel.QueryClose(), Is.True);
@@ -58,6 +74,9 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task UpdateContinuousCcNoRanges() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    await ViewModel.Open();
     await UpdateCcNoRanges(
       ViewModel.ContinuousCcNoRanges,
       ViewModel.Settings.MidiForMacros.ContinuousCcNoRanges);
@@ -65,6 +84,9 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task UpdateModWheelReplacementCcNo() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    await ViewModel.Open();
     const int newCcNo = 18;
     ViewModel.ModWheelReplacementCcNo = newCcNo;
     Assert.That(await ViewModel.QueryClose(), Is.True);
@@ -74,13 +96,19 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task UpdateToggleCcNoRanges() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    await ViewModel.Open();
     await UpdateCcNoRanges(
       ViewModel.ToggleCcNoRanges,
       ViewModel.Settings.MidiForMacros.ToggleCcNoRanges);
   }
 
   [Test]
-  public void ValidateModWheelReplacementCcNo() {
+  public async Task ValidateModWheelReplacementCcNo() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    await ViewModel.Open();
     const int invalidCcNo = 128;
     ViewModel.ModWheelReplacementCcNo = invalidCcNo;
     var errors = ViewModel.GetErrors().ToList();
@@ -93,6 +121,9 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
 
   private async Task DisallowOverlappingCcNoRange(
     int newRangeStart, int newRangeEnd, CcNoRangeCollection ranges) {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    ViewModel.ConfigureMockFileSystemService(Settings);
+    await ViewModel.Open();
     // Add a new range.
     var newRange = TestHelper.CreateCcNoRangeAdditionItem(newRangeStart, newRangeEnd);
     ranges.Add(newRange);
