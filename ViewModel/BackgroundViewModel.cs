@@ -11,7 +11,7 @@ public class BackgroundViewModel : SettingsWriterViewModelBase {
   [ExcludeFromCodeCoverage]
   public static string Advice =>
     "Applies only to programs that show the standard Info page layout. " +
-    "So the GUI script processor, if any, needs to be removed, which also can be done " +
+    "So the GUI script processor, if any, needs to be removed, which can also be done " +
     "by the InitialiseLayout task. See the GUI Script Processor page.";
 
   public BackgroundCollection Backgrounds => _backgrounds
