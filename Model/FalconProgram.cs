@@ -1048,19 +1048,18 @@ internal class FalconProgram {
   ///         by <see cref="InitialiseLayout" />).
   ///       </description>
   ///     </item>
-  ///     <item>
-  ///       <description>
-  ///         There is not already a macro with display name 'Wheel'.
-  ///       </description>
-  ///     </item>
   ///   </list>
   ///   Exclusions:
   ///   <list type="bullet">
   ///     <item>
   ///       <description>
-  ///         Sound banks Ether Fields, Pulsar and Voklm.
-  ///         The programs in these sound banks are too complex for this
-  ///         configuration task to be feasible, for now at least.
+  ///         Sound banks on the "Do not run ReplaceModWheelWithMacro or ReuseCc1"
+  ///         list on the MIDI for Macros page.
+  ///       </description>
+  ///     </item>
+  ///     <item>
+  ///       <description>
+  ///         Programs that already have a macro with display name 'Wheel'.
   ///       </description>
   ///     </item>
   ///     <item>
@@ -1143,6 +1142,23 @@ internal class FalconProgram {
   ///     <item>
   ///       <description>
   ///         There are no macro modulations whose MIDI CC number is 1 but have not been
+  ///         assigned to a wheel macro by <see cref="ReplaceModWheelWithMacro" />.
+  ///         If anything, that should be done instead of assigning MIDI CC 1 to a
+  ///         different macro.
+  ///       </description>
+  ///     </item>
+  ///   </list>
+  ///   Exclusions:
+  ///   <list type="bullet">
+  ///     <item>
+  ///     <item>
+  ///       <description>
+  ///         Sound banks on the "Do not run ReplaceModWheelWithMacro or ReuseCc1"
+  ///         list on the MIDI for Macros page.
+  ///       </description>
+  ///     </item>
+  ///       <description>
+  ///         Programs with macro modulations whose MIDI CC number is 1 but have not been
   ///         assigned to a wheel macro by <see cref="ReplaceModWheelWithMacro" />.
   ///         If anything, that should be done instead of assigning MIDI CC 1 to a
   ///         different macro.

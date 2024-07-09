@@ -276,8 +276,6 @@ public class Batch {
   }
 
   private bool IsTaskAllowedForSoundBank() {
-    // if (SoundBankId is SoundBankId.EtherFields or SoundBankId.Pulsar 
-    //     or SoundBankId.Voklm) {
     if (Task is ConfigTask.ReplaceModWheelWithMacro or ConfigTask.MoveZeroedMacrosToEnd
         && Settings.MustUseGuiScriptProcessor(SoundBankName)) {
       Log.WriteLine(
