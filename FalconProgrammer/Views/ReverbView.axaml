@@ -90,8 +90,7 @@
                 <DataGridTemplateColumn Width="90">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Text="Edit"
-                                       FontSize="20" />
+                            <TextBlock Classes="editHeader" />
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
