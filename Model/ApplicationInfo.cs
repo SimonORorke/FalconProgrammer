@@ -57,7 +57,7 @@ public class ApplicationInfo : IApplicationInfo {
   private string GetVersion() {
     var versionObject = EntryAssembly.GetName().Version!;
     return $"{versionObject.Major}" +
-           $".{versionObject.Minor.ToString().PadLeft(2, '0')}" +
-           $".{versionObject.Revision.ToString().PadLeft(2, '0')}";
+           $".{versionObject.Minor.ToString()}" +
+           $".{versionObject.Revision.ToString()}";
   }
 }
