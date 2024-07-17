@@ -58,6 +58,6 @@ public class ApplicationInfo : IApplicationInfo {
     var versionObject = EntryAssembly.GetName().Version!;
     return $"{versionObject.Major}" +
            $".{versionObject.Minor.ToString()}" +
-           $".{versionObject.Revision.ToString()}";
+           $".{versionObject.Build.ToString()}";
   }
 }

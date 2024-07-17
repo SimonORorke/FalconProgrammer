@@ -17,12 +17,12 @@
         <Product>Falcon Programmer</Product> <!-- Shown in window titles too. -->
         <!-- FileVersion is shown for File version in the executable file's 
         properties. -->
-        <FileVersion>1.0.0.0</FileVersion>
+        <FileVersion>1.0.1.0</FileVersion>
         <!-- Version is the version shown in the About box. 
         Product version in the executable file's properties also derives from 
         Version, not ProductVersion. However, see ApplicationInfo.Version's summary.
         -->
-        <Version>1.0.0.0</Version>
+        <Version>1.0.1.0</Version>
         <Copyright>Copyright © 2024 Simon O'Rorke</Copyright>
         <!-- Though the Company attribute is not in the file properties and we 
         don't currently show it in the About box, it's here for completeness. -->
