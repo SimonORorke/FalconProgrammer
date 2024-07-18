@@ -75,15 +75,33 @@ internal class MpeScriptProcessor : ScriptProcessor {
     }
   }
 
+  /// <summary>
+  ///   For each modulation of an effect by the specified macro,
+  ///   add the same kind of modulation of the same effect by the specified
+  ///   MPE dimension.
+  /// </summary>
+  /// <remarks>
+  ///   Modulating a <see cref="Macro" /> with a <see cref="ScriptEventModulation" />
+  ///   does not work, at least when controlled by an MPE <see cref="ScriptProcessor" />.
+  ///   So this is a workaround. It has the disadvantage that the macro's value won't
+  ///   get changed when the MPE dimension's value is changed.
+  /// </remarks>
   private void EmulateMacroWithDimension(
     Macro macro, ScriptEventModulation dimensionModulation) {
     foreach (var connectionsParent in macro.ModulatedConnectionsParents) {
-      foreach (var modulation in connectionsParent.Modulations) {
-        // modulation.SourceMacro = (
-        //   from macro in Macros
-        //   where modulation.Source.EndsWith(macro.Name)
-        //   select macro).FirstOrDefault();
-        // modulation.SourceMacro?.ModulatedConnectionsParents.Add(connectionsParent);
+      var modulationsByMacro =
+        from modulation in connectionsParent.Modulations
+        where modulation.Source.EndsWith(macro.Name)
+        select modulation;
+      foreach (var modulationByMacro in modulationsByMacro) {
+        var modulationByDimension = new Modulation(ProgramXml) {
+          Name = dimensionModulation.Name,
+          Ratio = modulationByMacro.Ratio,
+          Source = $"$Program/{dimensionModulation.Name}",
+          Destination = modulationByMacro.Destination,
+          Owner = connectionsParent
+        };
+        connectionsParent.AddModulation(modulationByDimension);
       }
     }
   }

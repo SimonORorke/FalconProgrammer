@@ -3,23 +3,10 @@ using System.Xml.Linq;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-internal class ConnectionsParent : EntityBase {
-  private ImmutableList<Modulation>? _modulations;
+internal class ConnectionsParent : ModulationsOwner {
 
   public ConnectionsParent(XElement element, ProgramXml programXml, MidiForMacros midi)
-    : base(programXml) {
-    Element = element;
-    Midi = midi;
-  }
-
-  private MidiForMacros Midi { get; }
-
-  /// <summary>
-  ///   Modulations specifying MIDI CC numbers that modulate the effect.
-  /// </summary>
-  public ImmutableList<Modulation> Modulations {
-    get => _modulations ??= GetModulations();
-    private set => _modulations = value;
+    : base(element, programXml, midi) {
   }
 
   public override string Name => Element.Name.ToString();
@@ -36,17 +23,6 @@ internal class ConnectionsParent : EntityBase {
         // Example: Ether Fields\Bells - Plucks\Bali Plucker
       }
     }
-  }
-
-  private ImmutableList<Modulation> GetModulations() {
-    var list = new List<Modulation>();
-    var connectionsElement = Element.Element("Connections");
-    if (connectionsElement != null) {
-      list.AddRange(connectionsElement.Elements("SignalConnection").Select(
-        modulationElement => new Modulation(
-          this, modulationElement, ProgramXml, Midi)));
-    }
-    return list.ToImmutableList();
   }
 
   public void RemoveModulationsByMacro(Macro macro) {

@@ -31,7 +31,7 @@ internal class ModulationsOwner : EntityBase {
   /// </remarks>
   public ImmutableList<Modulation> Modulations {
     get => _modulations ??= GetModulations();
-    private set => _modulations = value;
+    protected set => _modulations = value;
   }
 
   public virtual void AddModulation(Modulation modulation) {
