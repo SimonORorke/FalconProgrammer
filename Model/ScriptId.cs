@@ -29,6 +29,11 @@ public enum ScriptId {
   ///   Works for Voklm\Synth Choirs.
   /// </summary>
   Main2,
+  
+  /// <summary>
+  ///   MPE script processor, for configuration of MIDI Polyphonic Expression.
+  /// </summary>
+  Mpe,
 
   /// <summary>
   ///   Works for Falcon Factory\Organic Texture 2.8.

@@ -2,8 +2,8 @@
 
 namespace FalconProgrammer.Model.XmlLinq;
 
-internal class ScriptProcessorEmbeddedXml : EmbeddedXml {
-  public ScriptProcessorEmbeddedXml(string embeddedFileName) :
+internal class ScriptProcessorTemplate : EmbeddedTemplate {
+  public ScriptProcessorTemplate(string embeddedFileName) :
     base(embeddedFileName) { }
   
   public XElement ScriptProcessorElement => 

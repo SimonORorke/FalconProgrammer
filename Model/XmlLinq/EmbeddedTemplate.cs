@@ -5,10 +5,10 @@ namespace FalconProgrammer.Model.XmlLinq;
 /// <summary>
 ///   A Linq to XML object hierarchy read from an embedded file.
 /// </summary>
-internal class EmbeddedXml {
+internal class EmbeddedTemplate {
   private XElement? _rootElement;
 
-  public EmbeddedXml(string embeddedFileName) {
+  public EmbeddedTemplate(string embeddedFileName) {
     EmbeddedFileName = embeddedFileName;
   }
 

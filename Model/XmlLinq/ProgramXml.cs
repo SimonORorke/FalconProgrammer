@@ -69,15 +69,16 @@ internal class ProgramXml : EntityBase {
   public XElement TemplateModulationElement =>
     _templateModulationElement ??= GetTemplateModulationElement();
 
-  public void AddScriptProcessorElementFromTemplate(string templateEmbeddedFileName) {
-    var template = new ScriptProcessorEmbeddedXml(templateEmbeddedFileName);
-    var scriptProcessorElement = new XElement(template.ScriptProcessorElement);
+  public XElement AddScriptProcessorElementFromTemplate(string templateEmbeddedFileName) {
+    var template = new ScriptProcessorTemplate(templateEmbeddedFileName);
+    var result = new XElement(template.ScriptProcessorElement);
     var eventProcessorsElement = Element.Elements("EventProcessors").FirstOrDefault();
     if (eventProcessorsElement == null) {
       eventProcessorsElement = new XElement("EventProcessors");
       ControlSignalSourcesElement.AddAfterSelf(eventProcessorsElement);
     }
-    eventProcessorsElement.Add(scriptProcessorElement);
+    eventProcessorsElement.Add(result);
+    return result;
   }
 
   public void ChangeModulationSource(
@@ -101,7 +102,7 @@ internal class ProgramXml : EntityBase {
       // Just a MIDI CC 1 for Organic Pads
       originalMacroElements[i].Remove();
     }
-    var template = new EmbeddedXml(templateEmbeddedFileName);
+    var template = new EmbeddedTemplate(templateEmbeddedFileName);
     var templateMacroElements =
       template.RootElement.Elements("ConstantModulation");
     foreach (var templateMacroElement in templateMacroElements) {
@@ -156,7 +157,7 @@ internal class ProgramXml : EntityBase {
     return RootElement.Element("Program")!;
   }
 
-  public ImmutableList<ModulationsOwner> GetLayers(MidiForMacros midi) {
+  public ImmutableList<Layer> GetLayers(MidiForMacros midi) {
     var layersElement =
       Element.Elements("Layers").FirstOrDefault() ??
       throw new InvalidOperationException(
@@ -164,7 +165,7 @@ internal class ProgramXml : EntityBase {
     var layerElements = layersElement.Elements("Layer");
     return (
       from layerElement in layerElements
-      select new ModulationsOwner(layerElement, this, midi)).ToImmutableList();
+      select new Layer(layerElement, this, midi)).ToImmutableList();
   }
 
   /// <summary>
@@ -211,12 +212,12 @@ internal class ProgramXml : EntityBase {
   }
 
   private static XElement GetTemplateMacroElement() {
-    var template = new EmbeddedXml("MacroTemplate.xml");
+    var template = new EmbeddedTemplate("MacroTemplate.xml");
     return template.RootElement.Elements("ConstantModulation").First();
   }
 
   protected virtual XElement GetTemplateModulationElement() {
-    var template = new EmbeddedXml("ModulationTemplate.xml");
+    var template = new EmbeddedTemplate("ModulationTemplate.xml");
     return template.RootElement.Elements("SignalConnection").First();
   }
 

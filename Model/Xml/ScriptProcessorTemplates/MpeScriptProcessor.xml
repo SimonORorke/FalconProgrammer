@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MpeScriptProcessor>
+    <ScriptProcessor Name="MpeScriptProcessor" Bypass="0" Y="3" Z="2" YValue="0" ZValue="0" 
+                     Y_ReleaseSmooth="0" Z_ReleaseSmooth="0" MainButton="1" AdvButton="0" 
+                     X="2" PitchBendRange="48" InitialPressure="0" GlobalChannel="1"
+                     GainMap="1" Z_AutoRelease="1" API_version="21">
+        <Properties PresetPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Utilities/MPE.lua" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Utilities/MPE.lua"/>
+        <script><![CDATA[require '_MPE/_MPE']]></script>
+        <ScriptData/>
+    </ScriptProcessor>
+</MpeScriptProcessor>

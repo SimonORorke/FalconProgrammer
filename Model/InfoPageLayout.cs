@@ -180,7 +180,7 @@ internal class InfoPageLayout {
     var result = new Macro(Program.ProgramXml, Program.Settings.MidiForMacros) {
       MacroNo = wheelMacroNo,
       DisplayName = "Wheel",
-      Bipolar = 0,
+      Bipolar = false,
       CustomPosition = true,
       IsContinuous = true,
       Value = 0
@@ -193,8 +193,7 @@ internal class InfoPageLayout {
   }
 
   private void OrderMacrosByLocation() {
-    var visibleMacrosSortedByLocation = Program.GetMacrosSortedByLocation(
-      Program.MacroCcLocationOrder);
+    var visibleMacrosSortedByLocation = Program.GetMacrosSortedByLocation();
     var newOrder = new List<Macro>();
     newOrder.AddRange(visibleMacrosSortedByLocation);
     var invisibleMacros =

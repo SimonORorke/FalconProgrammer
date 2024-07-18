@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
+using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
@@ -11,16 +13,20 @@ internal class OrganicGuiScriptProcessor : ScriptProcessor {
   ///   Use the <see cref="ScriptProcessor.Create" /> static method for public
   ///   instantiation of the correct type of <see cref="ScriptProcessor" />.
   /// </summary>
-  public OrganicGuiScriptProcessor(XElement scriptProcessorElement,
+  protected internal OrganicGuiScriptProcessor(XElement scriptProcessorElement,
     ProgramXml programXml, MidiForMacros midi)
     : base(scriptProcessorElement, programXml, midi) { }
 
   public float DelaySend {
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
     get => Convert.ToSingle(GetAttributeValue("delaySend"));
     set => SetAttribute("delaySend", value);
   }
 
   public float ReverbSend {
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
     get => Convert.ToSingle(GetAttributeValue("reverbSend"));
     set => SetAttribute("reverbSend", value);
   }

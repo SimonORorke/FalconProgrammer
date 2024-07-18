@@ -175,6 +175,10 @@
         <EmbeddedResource Include="Scripts\DahdsrController\DahdsrController.lua">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </EmbeddedResource>
+        <None Remove="Xml\ScriptProcessorTemplates\MpeScriptProcessor.xml" />
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\MpeScriptProcessor.xml" />
+        <None Remove="Xml\ScriptEventModulationTemplates\ScriptEventModulationTemplate.xml" />
+        <EmbeddedResource Include="Xml\ScriptEventModulationTemplates\ScriptEventModulationTemplate.xml" />
     </ItemGroup>
 
 </Project>

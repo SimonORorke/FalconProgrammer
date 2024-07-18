@@ -6,7 +6,7 @@ namespace FalconProgrammer.Model.XmlLinq;
 internal class ModulationsOwner : EntityBase {
   private ImmutableList<Modulation>? _modulations;
 
-  public ModulationsOwner(XElement element, ProgramXml programXml, MidiForMacros midi)
+  protected ModulationsOwner(XElement element, ProgramXml programXml, MidiForMacros midi)
     : base(programXml) {
     Element = element;
     Midi = midi;
@@ -15,11 +15,6 @@ internal class ModulationsOwner : EntityBase {
   protected ModulationsOwner(ProgramXml programXml, MidiForMacros midi,
     bool mustAddNewElement = false) : base(programXml, mustAddNewElement) {
     Midi = midi;
-  }
-
-  public float Gain {
-    get => Convert.ToSingle(GetAttributeValue(nameof(Gain)));
-    set => SetAttribute(nameof(Gain), value);
   }
 
   protected MidiForMacros Midi { get; }

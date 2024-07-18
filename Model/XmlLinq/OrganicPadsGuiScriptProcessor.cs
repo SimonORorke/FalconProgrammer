@@ -6,7 +6,7 @@ namespace FalconProgrammer.Model.XmlLinq;
 ///   GUI ScriptProcessor for the "Organic Pads" sound bank.
 /// </summary>
 internal class OrganicPadsGuiScriptProcessor : OrganicGuiScriptProcessor {
-  public OrganicPadsGuiScriptProcessor(XElement scriptProcessorElement,
+  protected internal OrganicPadsGuiScriptProcessor(XElement scriptProcessorElement,
     ProgramXml programXml, MidiForMacros midi) : base(scriptProcessorElement, programXml,
     midi) {
     // Remove the hard-coded MIDI CC number assignments 21 and 22 for parameters

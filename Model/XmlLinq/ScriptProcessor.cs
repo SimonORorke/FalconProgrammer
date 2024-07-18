@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ScriptProcessor : ModulationsOwner {
-  private ScriptId? _guiScriptId;
+  private ScriptId? _scriptId;
   private XElement? _propertiesElement;
   private XElement? _scriptElement;
 
@@ -46,8 +46,6 @@ internal class ScriptProcessor : ModulationsOwner {
     }
   }
 
-  public ScriptId GuiScriptId => _guiScriptId ??= GetGuiScriptId();
-
   /// <summary>
   ///   Only needed when a GUI script processor's MIDI CC numbers are assigned.
   /// </summary>
@@ -64,6 +62,7 @@ internal class ScriptProcessor : ModulationsOwner {
   public string Script => ScriptElement.Value;
 
   private XElement ScriptElement => _scriptElement ??= GetScriptElement();
+  public ScriptId ScriptId => _scriptId ??= GetScriptId();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
   public SoundBankId SoundBankId => Global.GetEnumValue<SoundBankId>(SoundBankPascal);
 
@@ -89,7 +88,7 @@ internal class ScriptProcessor : ModulationsOwner {
     // Clone the template modulation, to guard against updating it.
     var newModulation = new Modulation(this,
       new XElement(templateModulation.Element), ProgramXml, Midi);
-    if (GuiScriptId == ScriptId.Factory2_1) {
+    if (ScriptId == ScriptId.Factory2_1) {
       // Falcon Factory\Brutal Bass 2.1
       newModulation.FixToggleOrContinuous(Macros!, Modulations);
     }
@@ -100,7 +99,7 @@ internal class ScriptProcessor : ModulationsOwner {
     IList<Modulation> templateModulations,
     IList<Macro> macros) {
     Macros = macros;
-    if (GuiScriptId == ScriptId.FactoryRev2) {
+    if (ScriptId == ScriptId.FactoryRev2) {
       // This code is not used at present, as assigning MIDI CC numbers to macros on a
       // script-based Info page is not supported for the Falcon Factory rev2 sound bank.
       Midi.CurrentContinuousCcNo = 0;
@@ -155,7 +154,25 @@ internal class ScriptProcessor : ModulationsOwner {
     return new ScriptProcessor(scriptProcessorElement, programXml, midi);
   }
 
-  private ScriptId GetGuiScriptId() {
+  private XElement GetPropertiesElement() {
+    var result = Element.Element("Properties");
+    if (result == null) {
+      throw new InvalidOperationException(
+        "Cannot find ScriptProcessor.Properties element.");
+    }
+    return result;
+  }
+
+  private XElement GetScriptElement() {
+    var result = Element.Element("script");
+    if (result == null) {
+      throw new InvalidOperationException(
+        "Cannot find ScriptProcessor.script element.");
+    }
+    return result;
+  }
+
+  private ScriptId GetScriptId() {
     // The CDATA wrapper is stripped off in Script.
     // Example: instead of <![CDATA[require("Factory2_1")]]>, require("Factory2_1").
     // Also, some sound banks (including Organic Pads, Pulsar, Titanium) start the CDATA
@@ -185,27 +202,12 @@ internal class ScriptProcessor : ModulationsOwner {
     if (Script.EndsWith("require \"main\"")) {
       return ScriptId.Main2;
     }
+    if (Script.Contains("_MPE/_MPE")) {
+      return ScriptId.Mpe;
+    }
     return Script.EndsWith("require \"OrganicTexture\"")
       ? ScriptId.OrganicTexture
       : ScriptId.None;
-  }
-
-  private XElement GetPropertiesElement() {
-    var result = Element.Element("Properties");
-    if (result == null) {
-      throw new InvalidOperationException(
-        "Cannot find ScriptProcessor.Properties element.");
-    }
-    return result;
-  }
-
-  private XElement GetScriptElement() {
-    var result = Element.Element("script");
-    if (result == null) {
-      throw new InvalidOperationException(
-        "Cannot find ScriptProcessor.script element.");
-    }
-    return result;
   }
 
   public void Remove() {

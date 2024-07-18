@@ -104,7 +104,7 @@ internal class Category {
       return null;
     }
     foreach (var scriptProcessor in scriptProcessors) {
-      switch (scriptProcessor.GuiScriptId) {
+      switch (scriptProcessor.ScriptId) {
         case ScriptId.SoundBank1:
         case ScriptId.SoundBank2:
         case ScriptId.Factory2_1:
@@ -199,14 +199,14 @@ internal class Category {
 
   private ScriptProcessor GetTemplateScriptProcessorFromEmbeddedFile(
     ScriptProcessor guiScriptProcessor) {
-    string? embeddedFileName = guiScriptProcessor.GuiScriptId switch {
+    string? embeddedFileName = guiScriptProcessor.ScriptId switch {
       ScriptId.Factory2_1 => "Factory_2_1_Gui.xml",
       ScriptId.Factory2_5 => "Factory_2_5_Gui.xml",
       ScriptId.OrganicTexture => "Factory_OrganicTexture_Gui.xml",
       _ => null
     };
     if (embeddedFileName == null
-        && guiScriptProcessor.GuiScriptId != ScriptId.None) {
+        && guiScriptProcessor.ScriptId != ScriptId.None) {
       embeddedFileName = guiScriptProcessor.SoundBankPascal switch {
         // The Hypnotic Drive program files have a typo in the script sound bank name.
         "HypnoticDive" => "HypnoticDrive_Gui.xml",
@@ -216,7 +216,7 @@ internal class Category {
       };
     }
     if (embeddedFileName != null) {
-      var template = new ScriptProcessorEmbeddedXml(embeddedFileName);
+      var template = new ScriptProcessorTemplate(embeddedFileName);
       return ScriptProcessor.Create(guiScriptProcessor.SoundBankId,
         new XElement(template.ScriptProcessorElement),
         ProgramXml, Settings.MidiForMacros, true);

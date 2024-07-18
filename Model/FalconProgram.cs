@@ -39,7 +39,7 @@ internal class FalconProgram {
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
   ///   relative to their locations on the Info page.
   /// </summary>
-  public LocationOrder MacroCcLocationOrder =>
+  private LocationOrder MacroCcLocationOrder =>
     GuiScriptProcessor != null
       ? LocationOrder.LeftToRightTopToBottom
       : LocationOrder.TopToBottomLeftToRight;
@@ -158,7 +158,7 @@ internal class FalconProgram {
   private void AssignMacroCcsOwnedByMacros() {
     // Most Falcon Factory programs list the ConstantModulation macro specifications in order
     // top to bottom, left to right. But a few, e.g. Falcon Factory\Keys\Days Of Old 1.4, do not.
-    var sortedByLocation = GetMacrosSortedByLocation(MacroCcLocationOrder);
+    var sortedByLocation = GetMacrosSortedByLocation();
     // Make the first call of GetNextContinuousCcNo return the first continuous
     // CC number specified in settings.
     Settings.MidiForMacros.CurrentContinuousCcNo = 0;
@@ -231,7 +231,7 @@ internal class FalconProgram {
     if (Category.MustUseGuiScriptProcessor) {
       return false;
     }
-    if (GuiScriptProcessor?.GuiScriptId == ScriptId.OrganicTexture) {
+    if (GuiScriptProcessor?.ScriptId == ScriptId.OrganicTexture) {
       // Falcon Factory\Organic Texture 2.8
       throw new ApplicationException(
         "Removing the GUI script processor is not currently supported " +
@@ -391,10 +391,16 @@ internal class FalconProgram {
       select macro).ToList();
   }
 
-  internal List<Macro> GetMacrosSortedByLocation(
-    LocationOrder macroCcLocationOrder) {
+  private List<Macro> GetContinuousMacrosSortedByLocation() {
+    return (
+      from macro in GetMacrosSortedByLocation()
+      where macro.IsContinuous
+      select macro).ToList();
+  }
+
+  internal List<Macro> GetMacrosSortedByLocation() {
     var sortedSet = new SortedSet<Macro>(
-      macroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
+      MacroCcLocationOrder == LocationOrder.TopToBottomLeftToRight
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
     // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -1204,7 +1210,7 @@ internal class FalconProgram {
       return;
     }
     var continuousMacrosByLocation = (
-      from continuousMacro in GetMacrosSortedByLocation(MacroCcLocationOrder)
+      from continuousMacro in GetMacrosSortedByLocation()
       where continuousMacro.IsContinuous
       select continuousMacro).ToList();
     // There needs to be at least one macro after the macro before the macro whose
@@ -1231,6 +1237,20 @@ internal class FalconProgram {
 
   public void Save() {
     ProgramXml.SaveToFile(Path);
+  }
+
+  public void SupportMpe() {
+    if (MpeScriptProcessor.Exists(ScriptProcessors)) {
+      // ReSharper disable once CommentTypo
+      // Falcon Factory\Xtra MPE presets, Falcon Factory rev2\MPE.
+      Log.WriteLine(
+        $"{PathShort}: Cannot add MPE support, as the program already has " +
+        $"an MPE ScriptProcessor");
+      return;
+    }
+    var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
+    mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation());
+    NotifyUpdate($"{PathShort}: Added MPE support.");
   }
 
   private bool TryGetNonAdsrReleaseMacro(out Macro? releaseMacro) {
