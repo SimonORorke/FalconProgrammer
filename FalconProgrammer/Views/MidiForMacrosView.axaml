@@ -33,7 +33,6 @@
                    Text="{Binding CcNoRangeAdvice}"
                    Margin="10,20,0,0"
                    TextWrapping="Wrap"
-                   Width="500"
                    HorizontalAlignment="Left" />
         <Grid RowDefinitions="*" ColumnDefinitions="Auto, 10, Auto, 50, Auto"
               Margin="10,10,0,0">

@@ -148,19 +148,16 @@ internal class Macro : ModulationsOwner {
   ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />.
   /// </summary>
   public void ChangeCcNoTo(int newCcNo) {
-    // Convert MIDI CC 38, which does not work with macros on script-based Info
-    // pages, to 28.
-    int targetCcNo = newCcNo != 38 ? newCcNo : 28;
     var forMacroModulation = GetForMacroModulations().FirstOrDefault(); // ???
     if (forMacroModulation != null) {
-      if (targetCcNo != forMacroModulation.CcNo) {
-        forMacroModulation.CcNo = targetCcNo;
+      if (newCcNo != forMacroModulation.CcNo) {
+        forMacroModulation.CcNo = newCcNo;
       }
     } else {
       // ReSharper disable once CommentTypo
       // Example: Reverb Mix macro of Falcon Factory\Polysynth\Velocity Pluck 
       AddModulation(new Modulation(ProgramXml) {
-        CcNo = targetCcNo
+        CcNo = newCcNo
       });
     }
   }

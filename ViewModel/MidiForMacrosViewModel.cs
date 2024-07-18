@@ -26,7 +26,10 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   [ExcludeFromCodeCoverage]
   public static string CcNoRangeAdvice =>
     "For each of Continuous and Toggle CC Number Ranges, " +
-    "if the last End = the last Start, the last range will be extended indefinitely.";
+    "if the last End = the last Start, the last range will be extended indefinitely." +
+    Environment.NewLine + 
+    "MIDI CC 38 does not work when assigned to a control on a " +
+    "script-based Info page. (See manual.)";
 
   public CcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
     ??= new CcNoRangeCollection("Continuous",
