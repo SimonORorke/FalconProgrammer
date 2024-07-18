@@ -16,6 +16,7 @@ public enum ConfigTask {
   ReplaceModWheelWithMacro,
   RestoreOriginal,
   ReuseCc1,
+  SupportMpe,
   ZeroReleaseMacro,
   ZeroReverbMacros
 }

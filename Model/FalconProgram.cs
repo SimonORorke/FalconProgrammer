@@ -1241,6 +1241,7 @@ internal class FalconProgram {
 
   public void SupportMpe() {
     if (MpeScriptProcessor.Exists(ScriptProcessors)) {
+      // Known to be the case for categories
       // ReSharper disable once CommentTypo
       // Falcon Factory\Xtra MPE presets, Falcon Factory rev2\MPE.
       Log.WriteLine(

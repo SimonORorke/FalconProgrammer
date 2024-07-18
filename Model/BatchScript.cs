@@ -42,14 +42,17 @@ public class BatchScript : SerialisationBase {
 
   private static ImmutableList<ConfigTask> OrderConfigTasks() {
     var list = new List<ConfigTask>(SequencedConfigTasks);
-    var unsequenced =
+    var unsequenced = (
       from constant in Enum.GetValues<ConfigTask>()
       where !SequencedConfigTasks.Contains(constant)
             // Queries are currently for developers only, to be added by manually editing
             // a script file.
             && !constant.ToString().StartsWith("Query")
-      select constant;
-    list.AddRange(unsequenced);
+      select constant).ToList();
+    // Currently there should not be any non-query unsequenced tasks, because
+    // PrependPathLineToDescription needs to be run last.
+    ValidateSequencedConfigTasks(unsequenced);
+    //list.AddRange(unsequenced);
     return list.ToImmutableList();
   }
 
@@ -64,6 +67,7 @@ public class BatchScript : SerialisationBase {
       ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
       ConfigTask.ReuseCc1,
+      ConfigTask.SupportMpe,
       ConfigTask.PrependPathLineToDescription
     ];
   }
@@ -106,5 +110,13 @@ public class BatchScript : SerialisationBase {
 
   public void Write() {
     Serialiser.Serialise(this, Path);
+  }
+
+  [ExcludeFromCodeCoverage]
+  private static void ValidateSequencedConfigTasks(List<ConfigTask> unsequenced) {
+    if (unsequenced.Count != 0) {
+      throw new InvalidOperationException(
+        $"Configuration Task {unsequenced[0]} has not been sequenced.");
+    }
   }
 }

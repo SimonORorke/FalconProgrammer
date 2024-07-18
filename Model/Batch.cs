@@ -103,6 +103,9 @@ public class Batch {
       case ConfigTask.ReuseCc1:
         Program.ReuseCc1();
         break;
+      case ConfigTask.SupportMpe:
+        Program.SupportMpe();
+        break;
       case ConfigTask.ZeroReleaseMacro:
         Program.ZeroReleaseMacro();
         break;
