@@ -916,6 +916,9 @@ internal class FalconProgram {
   }
 
   public void QueryReuseCc1NotSupported() {
+    // if (GuiScriptProcessor == null && ContinuousMacros.Count == 0) {
+    //   Debug.Assert(true);
+    // }
     if (GuiScriptProcessor == null
         || ContinuousMacros.Count < 5
         || ProgramXml.GetModulationElementsWithCcNo(1).Count > 0) {
@@ -1018,10 +1021,8 @@ internal class FalconProgram {
   /// </summary>
   private void RemoveGuiScriptProcessor() {
     GuiScriptProcessor!.Remove();
+    ScriptProcessors = ScriptProcessors.Remove(GuiScriptProcessor);
     GuiScriptProcessor = null;
-    // GuiScriptProcessor!.Remove will have removed the EventProcessors
-    // element. So we should clear ScriptProcessors for consistency. 
-    ScriptProcessors = ScriptProcessors.Clear();
     foreach (var macro in Macros) {
       macro.CustomPosition = true;
       // As we are going to convert script processor-owned 'for macro' (i.e. as opposed to
@@ -1240,17 +1241,24 @@ internal class FalconProgram {
   }
 
   public void SupportMpe() {
-    if (MpeScriptProcessor.Exists(ScriptProcessors)) {
-      // Known to be the case for categories
-      // ReSharper disable once CommentTypo
-      // Falcon Factory\Xtra MPE presets, Falcon Factory rev2\MPE.
+    if (GuiScriptProcessor != null) {
       Log.WriteLine(
-        $"{PathShort}: Cannot add MPE support, as the program already has " +
-        $"an MPE ScriptProcessor");
+        $"{PathShort}: Cannot add MPE support " +
+        "because the program's Info page GUI is specified in a script processor.");
+      return;
+    }
+    if (MpeScriptProcessor.Exists(ScriptProcessors)) {
+      // Known to be the case for 
+      // ReSharper disable once CommentTypo
+      // categories 'Falcon Factory\Xtra MPE presets' and 'Falcon Factory rev2\MPE'.
+      Log.WriteLine(
+        $"{PathShort}: Cannot add MPE support because the program already has " +
+        $"an MPE script processor.");
       return;
     }
     var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
     mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation());
+    ScriptProcessors = ScriptProcessors.Add(mpeScriptProcessor);
     NotifyUpdate($"{PathShort}: Added MPE support.");
   }
 

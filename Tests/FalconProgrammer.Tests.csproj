@@ -43,10 +43,14 @@
     </ItemGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory rev2\Bass\Big Sleep.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory\Brutal Bass 2.1\Magnetic 1.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory\Brutal Bass 2.1\World Up.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Modular Noise\Bass\Voltage.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Organic Pads\Mystical\Tibetan Horns.xml" />
+        <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory rev2\Polysynth\Drama Queen.xml" />
+        <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory rev2\Polysynth\Guitar Distortion Booth.xml" />
+        <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory rev2\Polysynth\House Classic Gate.xml" />
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocation.xml" />
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationK.xml" />
         <EmbeddedResource Include="Model\Xml\Settings\DefaultSettingsWithMidi.xml" />
@@ -99,9 +103,17 @@
         <None Remove="Model\Xml\OriginalPrograms\Falcon Factory\Leads\Soft Mood.xml" />
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory\Leads\Soft Mood.xml" />
         <None Remove="Model\Xml\OriginalPrograms\Falcon Factory rev2\Big Sleep.xml" />
-        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory rev2\Big Sleep.xml" />
         <None Remove="Model\Xml\BatchScripts\BatchScriptForAny.xml" />
         <EmbeddedResource Include="Model\Xml\BatchScripts\BatchScriptForAny.xml" />
+        <None Remove="Model\Xml\OriginalPrograms\Falcon Factory rev2\MPE\Analog Cello.xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Falcon Factory rev2\MPE\Analog Cello.xml" />
+        <None Remove="Model\Xml\Programs\Polysynth\Drama Queen.xml" />
+        <None Remove="Model\Xml\Programs\Polysynth\Guitar Distortion Booth.xml" />
+        <None Remove="Model\Xml\Programs\Polysynth\House Classic Gate.xml" />
+        <None Remove="Model\Xml\Programs\Falcon Factory\Keys\FM Tremolo.xml" />
+        <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory\Keys\FM Tremolo.xml" />
+        <None Remove="Model\Xml\Programs\Falcon Factory rev2\MPE\Wave Guide.xml" />
+        <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory rev2\MPE\Wave Guide.xml" />
     </ItemGroup>
 
     <ItemGroup>

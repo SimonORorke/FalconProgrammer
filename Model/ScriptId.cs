@@ -31,7 +31,8 @@ public enum ScriptId {
   Main2,
   
   /// <summary>
-  ///   MPE script processor, for configuration of MIDI Polyphonic Expression.
+  ///   MPE script processor, for configuration of
+  ///   MIDI/Multidimensional Polyphonic Expression.
   /// </summary>
   Mpe,
 

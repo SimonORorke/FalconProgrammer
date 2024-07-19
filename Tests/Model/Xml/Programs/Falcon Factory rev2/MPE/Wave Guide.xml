@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="Wave Guide" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Wave Guide.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Mappers>
+            <ControlSignalMapper Name="Mapper 0" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Curve 0">0.000000 0.000013 0.000065 0.000167 0.000326 0.000547 0.000835 0.001195 0.001629 0.002142 0.002736 0.003413 0.004177 0.005031 0.005975 0.007013 0.008147 0.009378 0.010710 0.012142 0.013678 0.015319 0.017066 0.018921 0.020887 0.022963 0.025153 0.027456 0.029876 0.032412 0.035066 0.037840 0.040735 0.043752 0.046892 0.050157 0.053548 0.057065 0.060710 0.064485 0.068389 0.072425 0.076593 0.080894 0.085329 0.089900 0.094607 0.099451 0.104434 0.109555 0.114817 0.120219 0.125764 0.131451 0.137282 0.143257 0.149378 0.155645 0.162059 0.168620 0.175331 0.182191 0.189201 0.196362 0.203676 0.211141 0.218761 0.226534 0.234462 0.242546 0.250786 0.259184 0.267739 0.276453 0.285326 0.294358 0.303552 0.312907 0.322423 0.332103 0.341946 0.351952 0.362124 0.372461 0.382963 0.393633 0.404469 0.415473 0.426646 0.437988 0.449500 0.461182 0.473035 0.485059 0.497256 0.509625 0.522168 0.534885 0.547776 0.560842 0.574084 0.587502 0.601096 0.614869 0.628819 0.642947 0.657255 0.671742 0.686409 0.701256 0.716285 0.731496 0.746889 0.762464 0.778223 0.794166 0.810293 0.826605 0.843102 0.859785 0.876654 0.893711 0.910954 0.928386 0.946006 0.963814 0.981812 1.000000</ControlSignalMapper>
+            <ControlSignalMapper Name="Mapper 1" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Mapper 1">0.000000 0.000000 0.000001 0.000004 0.000010 0.000022 0.000039 0.000066 0.000103 0.000152 0.000215 0.000296 0.000395 0.000515 0.000659 0.000828 0.001026 0.001255 0.001518 0.001817 0.002154 0.002533 0.002956 0.003427 0.003947 0.004520 0.005149 0.005837 0.006587 0.007401 0.008283 0.009237 0.010264 0.011369 0.012554 0.013823 0.015179 0.016625 0.018165 0.019802 0.021540 0.023381 0.025330 0.027389 0.029563 0.031854 0.034267 0.036805 0.039471 0.042269 0.045203 0.048277 0.051494 0.054857 0.058372 0.062040 0.065867 0.069856 0.074011 0.078335 0.082833 0.087509 0.092366 0.097408 0.102640 0.108065 0.113687 0.119510 0.125539 0.131777 0.138229 0.144898 0.151789 0.158906 0.166253 0.173834 0.181653 0.189715 0.198024 0.206584 0.215399 0.224474 0.233812 0.243419 0.253299 0.263455 0.273892 0.284616 0.295629 0.306937 0.318543 0.330453 0.342671 0.355201 0.368048 0.381216 0.394710 0.408534 0.422693 0.437192 0.452034 0.467226 0.482770 0.498673 0.514938 0.531570 0.548575 0.565956 0.583718 0.601866 0.620405 0.639339 0.658674 0.678413 0.698563 0.719127 0.740110 0.761518 0.783354 0.805625 0.828335 0.851488 0.875090 0.899145 0.923659 0.948636 0.974081 1.000000</ControlSignalMapper>
+            <ControlSignalMapper Name="Mapper 2" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Curve 1">0.000000 0.000062 0.000248 0.000558 0.000992 0.001550 0.002232 0.003038 0.003968 0.005022 0.006200 0.007502 0.008928 0.010478 0.012152 0.013950 0.015872 0.017918 0.020088 0.022382 0.024800 0.027342 0.030008 0.032798 0.035712 0.038750 0.041912 0.045198 0.048608 0.052142 0.055800 0.059582 0.063488 0.067518 0.071672 0.075950 0.080352 0.084878 0.089528 0.094302 0.099200 0.104222 0.109368 0.114638 0.120032 0.125550 0.131192 0.136958 0.142848 0.148862 0.155000 0.161262 0.167648 0.174158 0.180792 0.187550 0.194432 0.201438 0.208568 0.215822 0.223200 0.230702 0.238328 0.246078 0.253953 0.261951 0.270073 0.278319 0.286689 0.295183 0.303801 0.312543 0.321409 0.330399 0.339513 0.348751 0.358113 0.367599 0.377209 0.386943 0.396801 0.406783 0.416889 0.427119 0.437473 0.447951 0.458553 0.469279 0.480129 0.491103 0.502201 0.513423 0.524769 0.536239 0.547833 0.559551 0.571393 0.583359 0.595449 0.607663 0.620001 0.632463 0.645049 0.657759 0.670593 0.683551 0.696633 0.709839 0.723169 0.736623 0.750202 0.763904 0.777730 0.791680 0.805754 0.819952 0.834274 0.848720 0.863290 0.877984 0.892802 0.907744 0.922810 0.938000 0.953314 0.968752 0.984314 1.000000</ControlSignalMapper>
+        </Mappers>
+        <Properties BackgroundImagePath="./../../../Images/Gunmetal.png" FXMultiPath="/Users/SentinelOuest/Documents/UVI/Falcon/User Presets/MultiFX/One again.fxm" Tags="mode=Dirty;mode=MPE;sub=Synth:Poly;mode=Processed;type=Synth;" description="PATH: Falcon Factory rev2\MPE\Wave Guide&#xD;&#xA;&#xD;&#xA;Preset Credits : SP" />
+        <ControlSignalSources>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Spring (CC31)" Bipolar="0" Style="0" Value="0.3464579">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="91" y="235" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="LFO (CC32)" Bipolar="0" Style="0" Value="0.047243003">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 32" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="242" y="235" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 4" Bypass="0" DisplayName="Phasor (CC33)" Bipolar="0" Style="0" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 33" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="393" y="235" />
+            </ConstantModulation>
+        </ControlSignalSources>
+        <Inserts>
+            <Phasor Name="InsertFX5" Bypass="0" SyncToHost="0" Speed="0.30000001" MinFreq="200" MaxFreq="3000" Feedback="0.69999999" Depth="0" Spread="1" Order="3" LFOSHape="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 4" Destination="Depth" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                </Connections>
+            </Phasor>
+            <DualDelay Name="InsertFX0" Bypass="1" SyncToHost="1" DelayTime="1" LowCut="144.61714" HighCut="10174.615" PeakFreq="1000" PeakGain="0" PeakQ="1" Feedback="0.60609561" Mix="0.1440226" Rotation="75" InputWidth="1" OutputWidth="1" DelayRatio="0.33333004" FeedbackRatio="0" InputRotation="0" OutputRotation="-0.15590626" ModDepth="0" ModRate="0.42650452" ModChannelOffset="1" Interpolation="1" DualDelayVersion="1">
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/01 - Delay/07 - Dual Delay/1 Stereo Delay/Stellar Rhythm.preset" />
+            </DualDelay>
+            <SampledReverb Name="InsertFX1" Bypass="0" Dry="1" Wet="0.040297132" Time="0.98014379" DampingLow="0" DampingHigh="0.16792583" PreDelay="19.345312" Width="0.99312496" SamplePath="$FalconResources.ufs/Samples/IR/04 Sound Design/08 Cymbalic Crash 2.aif" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.47225216" Source="$Program/Macro 2" Destination="Wet" Mapper="Mapper 0" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/03 - IR Verb/04 Sound Design/08 Cymbalic Crash 2.preset" />
+            </SampledReverb>
+            <Gain Name="InsertFX2" Bypass="0" Volume="0.79432815" />
+            <ThreeBandShelves Name="InsertFX3" Bypass="0" FreqLowMid="179.99998" FreqMidHigh="6000" GainLow="6" GainMid="-1" GainHigh="1">
+                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/3 Band Shelf/Super Hi-Fi.preset" />
+            </ThreeBandShelves>
+            <Maximizer Name="InsertFX4" Bypass="0" Threshold="-2" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20" />
+        </Inserts>
+        <Layers>
+            <Layer Name="Layer 0" Bypass="0" Gain="0.86907911" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Rint" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0.42872486" BypassInsertFX="0">
+                <Properties Color="ff02b0ff" />
+                <ControlSignalSources />
+                <BusRouters />
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1.0216204" Pan="0" DisplayName="Rint" OutputName="" ExclusiveGroup="0" LowKey="12" HighKey="109" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                            <SignalConnection Name="SignalConnection 0" Ratio="-0.7097252" Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.16067721" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="8.421875" SustainLevel="0.56793749" ReleaseTime="0.16439964" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.41190732" Source="@VoiceParam ReleaseVelocity" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-0.094827585" Source="@VoiceParam LinearKeyFollow" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <AnalogADSR Name="Analog ADSR 1" Bypass="0" AttackTime="0.001" DecayTime="0.49150229" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="4.5943747" SustainLevel="0.61273438" ReleaseTime="0.30271423" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Filt Env">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@PolyAfterTouch" Destination="SustainLevel" Mapper="Mapper 1" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.47036639" Source="@VoiceParam ReleaseVelocity" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </AnalogADSR>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="3.0064399" Depth="6.5565109e-07" Phase="0" WaveFormType="0" Retrigger="1" Bipolar="1" Smooth="0.002336839" />
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="1" DisplayName="SH filt" DelayTime="0" RiseTime="0" Freq="0.33333334" Depth="0.029011428" Phase="0" WaveFormType="6" Retrigger="1" Bipolar="1" Smooth="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.61408943" Source="$Program/Macro 3" Destination="Depth" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                                </Connections>
+                            </LFO>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <XpanderFilter Name="InsertFX0" Bypass="0" Freq="59.929508" Q="0.37366188" KeyTracking="0.31301561" Mode="3" DistortionType="0" Drive="8.5231247" Fat="0.62150002" Algorithm="1" Oversampling="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/Analog ADSR 1" Destination="Freq" Mapper="Mapper 2" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 2" Ratio="0.36408943" Source="$Keygroup/LFO 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.62459588" Source="$Program/Macro 3" Destination="Q" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0.34415409" SignalConnectionVersion="1" />
+                                </Connections>
+                            </XpanderFilter>
+                        </Inserts>
+                        <BusRouters />
+                        <Oscillators>
+                            <WaveTableOscillator Name="Oscillator" Bypass="1" WavetablePath="$FalconResources.ufs/Samples/Wavetables/X-Dist/rint.wav" StartPhase="0.06753125" PhaseDistortionAmount="0" PhaseDistortionMode="7" Spread="0.1041875" DetuneMode="0" WaveIndex="0.48207814" WaveIndexSpread="0.083750002" StereoSpread="0.48529688" StereoSpreadMode="1" NumOscs="2" FadeMipMap="0" FadeWaveIndex="1" Stereo="1" PhaseSpread="1" EnableFM="0" FMDepth="0.50665623" FMRatio="19.303497" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="0" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.46349677" Source="$Program/Script Event Modulation 1" Destination="PhaseDistortionAmount" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0.4362877" Source="$Keygroup/LFO 1" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.24420798" Source="$Keygroup/LFO 2" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Script Event Modulation 1" Destination="FMDepth" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0" />
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </WaveTableOscillator>
+                            <WaveTableOscillator Name="Oscillator 2" Bypass="0" WavetablePath="$FalconResources.ufs/Samples/Wavetables/X-Analog/Ring FM.wav" StartPhase="0" PhaseDistortionAmount="0" PhaseDistortionMode="3" Spread="0.06767188" DetuneMode="0" WaveIndex="0" WaveIndexSpread="0" StereoSpread="0.1" StereoSpreadMode="1" NumOscs="2" FadeMipMap="0" FadeWaveIndex="1" Stereo="0" PhaseSpread="1" EnableFM="0" FMDepth="0.1" FMRatio="0" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Script Event Modulation 1" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                </Connections>
+                            </WaveTableOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="C:/ProgramData/UVI/Falcon/FalconResources.ufs" />
+    <NeededFS Source="D:/Libraries/UVI/Falcon Factory rev2.ufs" />
+</UVI4>

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
@@ -142,6 +142,10 @@ internal class ScriptProcessor : ModulationsOwner {
   public static ScriptProcessor Create(SoundBankId soundBankId,
     XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi, 
     bool mustUseGuiScriptProcessor) {
+    var candidate = new ScriptProcessor(scriptProcessorElement, programXml, midi);
+    if (candidate.ScriptId == ScriptId.Mpe) {
+      return new MpeScriptProcessor(scriptProcessorElement, programXml, midi);
+    }
     if (mustUseGuiScriptProcessor) {
       return soundBankId switch {
         SoundBankId.OrganicKeys => new OrganicGuiScriptProcessor(
@@ -151,7 +155,7 @@ internal class ScriptProcessor : ModulationsOwner {
         _ => new ScriptProcessor(scriptProcessorElement, programXml, midi)
       };
     }
-    return new ScriptProcessor(scriptProcessorElement, programXml, midi);
+    return candidate;
   }
 
   private XElement GetPropertiesElement() {
@@ -202,7 +206,13 @@ internal class ScriptProcessor : ModulationsOwner {
     if (Script.EndsWith("require \"main\"")) {
       return ScriptId.Main2;
     }
-    if (Script.Contains("_MPE/_MPE")) {
+    // When an MPE ScriptProcessor has been added by the user or this application,
+    // it references a required script.
+    if (Script.Contains("_MPE/_MPE")
+        // ReSharper disable once CommentTypo
+        // In categories 'Falcon Factory\Xtra MPE presets' and 'Falcon Factory rev2\MPE',
+        // the MPE ScriptProcessor contains the full script.
+        || Script.Contains("Multidimensional Polyphonic Expression (MPE)")) {
       return ScriptId.Mpe;
     }
     return Script.EndsWith("require \"OrganicTexture\"")

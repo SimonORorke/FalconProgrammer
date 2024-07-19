@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.Mpe;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -97,6 +98,18 @@ public class FalconProgramTests {
   }
 
   [Test]
+  public void EmbeddedGuiTemplate() {
+    const string soundBankName = "Falcon Factory";
+    // This category tests Modulation.FixToggleOrContinuous
+    const string categoryName = "Brutal Bass 2.1";
+    // This program requires Modulation.FixToggleOrContinuous to correct
+    // the fourth MIDI CC number from the one provided by the template.
+    const string programName = "Magnetic 1";
+    Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName);
+    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
+  }
+
+  [Test]
   public void InitialiseOrganicPadsProgram() {
     Batch.EmbeddedProgramFileName = "Tibetan Horns.xml";
     Batch.EmbeddedTemplateFileName = "Crystal Caves.xml";
@@ -161,15 +174,80 @@ public class FalconProgramTests {
   }
 
   [Test]
-  public void EmbeddedGuiTemplate() {
+  public void SupportMpe1ContinuousMacro() {
+    const string soundBankName = "Falcon Factory rev2";
+    const string categoryName = "Polysynth";
+    const string programName = "Drama Queen";
+    Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
+    bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
+    Assert.That(found, Is.True);
+    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
+    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+  }
+
+  [Test]
+  public void SupportMpe2ContinuousMacros() {
+    const string soundBankName = "Falcon Factory rev2";
+    const string categoryName = "Polysynth";
+    const string programName = "Guitar Distortion Booth";
+    Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
+    bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
+    Assert.That(found, Is.True);
+    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
+    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ScriptEventMod0Binary));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+  }
+
+  [Test]
+  public void SupportMpe3ContinuousMacros() {
+    const string soundBankName = "Falcon Factory rev2";
+    const string categoryName = "Polysynth";
+    const string programName = "House Classic Gate";
+    Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
+    bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
+    Assert.That(found, Is.True);
+    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.ScriptEventMod2Binary));
+    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ScriptEventMod0Binary));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+  }
+
+  [Test]
+  public void SupportMpeGuiScriptProcessorExists() {
+    const string soundBankName = "Falcon Factory rev2";
+    const string categoryName = "MPE";
+    const string programName = "Analog Cello";
+    Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain(
+      "Cannot add MPE support because the program's Info page GUI " + 
+      "is specified in a script processor."));
+  }
+
+  [Test]
+  public void SupportMpeNoContinuousMacros() {
     const string soundBankName = "Falcon Factory";
-    // This category tests Modulation.FixToggleOrContinuous
-    const string categoryName = "Brutal Bass 2.1";
-    // This program requires Modulation.FixToggleOrContinuous to correct
-    // the fourth MIDI CC number from the one provided by the template.
-    const string programName = "Magnetic 1";
-    Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName);
-    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("@MIDI CC 34"));
+    const string categoryName = "Keys";
+    const string programName = "FM Tremolo";
+    Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
+    bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
+    Assert.That(found, Is.True);
+    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
+    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.PolyphonicAftertouch));
+  }
+
+  [Test]
+  public void SupportMpeScriptProcessorAlreadyExists() {
+    const string soundBankName = "Falcon Factory rev2";
+    const string categoryName = "MPE";
+    const string programName = "Wave Guide";
+    Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
+    Assert.That(Batch.MockBatchLog.Text, Does.Contain(
+      "Cannot add MPE support because the program already has an MPE script processor."));
   }
 
   [Test]

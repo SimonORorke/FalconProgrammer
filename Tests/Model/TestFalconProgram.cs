@@ -42,6 +42,15 @@ internal class TestFalconProgram : FalconProgram {
     SavedXml = e;
   }
 
+  internal bool TryGetMpeScriptProcessor(
+    out MpeScriptProcessor? mpeScriptProcessor) {
+    mpeScriptProcessor = (
+      from scriptProcessor in ScriptProcessors
+      where scriptProcessor is MpeScriptProcessor
+      select (MpeScriptProcessor)scriptProcessor).SingleOrDefault() ;
+    return mpeScriptProcessor != null;
+  }
+
   protected override void WriteTextToFile(string path, string contents) {
     LastWrittenFilePath = path;
     LastWrittenFileContents = contents;

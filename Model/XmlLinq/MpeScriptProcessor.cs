@@ -1,12 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Xml.Linq;
 using FalconProgrammer.Model.Mpe;
-using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;
 
 /// <summary>
 ///   MPE <see cref="ScriptProcessor" />,
-///   for configuration of MIDI Polyphonic Expression.
+///   for configuration of MIDI/Multidimensional Polyphonic Expression.
 /// </summary>
 internal class MpeScriptProcessor : ScriptProcessor {
   public MpeScriptProcessor(ProgramXml programXml,
@@ -14,25 +13,23 @@ internal class MpeScriptProcessor : ScriptProcessor {
     programXml.AddScriptProcessorElementFromTemplate("MpeScriptProcessor.xml"),
     programXml, midi) { }
 
-  private XTarget XTarget {
-    [PublicAPI]
-    [ExcludeFromCodeCoverage]
+  protected internal MpeScriptProcessor(
+    XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) : base(
+    scriptProcessorElement, programXml, midi) { }
+
+  public XTarget XTarget {
     get => (XTarget)Convert.ToInt32(GetAttributeValue("X"));
-    set => SetAttribute("X", (int)value);
+    private set => SetAttribute("X", (int)value);
   }
 
-  private YTarget YTarget {
-    [PublicAPI]
-    [ExcludeFromCodeCoverage]
+  public YTarget YTarget {
     get => (YTarget)Convert.ToInt32(GetAttributeValue("Y"));
-    set => SetAttribute("Y", (int)value);
+    private set => SetAttribute("Y", (int)value);
   }
 
-  private ZTarget ZTarget {
-    [PublicAPI]
-    [ExcludeFromCodeCoverage]
+  public ZTarget ZTarget {
     get => (ZTarget)Convert.ToInt32(GetAttributeValue("Z"));
-    set => SetAttribute("Z", (int)value);
+    private set => SetAttribute("Z", (int)value);
   }
 
   public void Configure(IList<Macro> macrosToEmulate) {
@@ -109,7 +106,7 @@ internal class MpeScriptProcessor : ScriptProcessor {
   public static bool Exists(IList<ScriptProcessor> scriptProcessors) {
     return (
       from scriptProcessor in scriptProcessors
-      where scriptProcessor.ScriptId == ScriptId.Mpe
+      where scriptProcessor is MpeScriptProcessor
       select scriptProcessor).Any();
   }
 }
