@@ -48,11 +48,11 @@ public class BatchScript : SerialisationBase {
             // Queries are currently for developers only, to be added by manually editing
             // a script file.
             && !constant.ToString().StartsWith("Query")
+            && constant != ConfigTask.SupportMpe // Hidden till ready to release. 
       select constant).ToList();
     // Currently there should not be any non-query unsequenced tasks, because
     // PrependPathLineToDescription needs to be run last.
     ValidateSequencedConfigTasks(unsequenced);
-    //list.AddRange(unsequenced);
     return list.ToImmutableList();
   }
 
@@ -67,7 +67,6 @@ public class BatchScript : SerialisationBase {
       ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
       ConfigTask.ReuseCc1,
-      ConfigTask.SupportMpe,
       ConfigTask.PrependPathLineToDescription
     ];
   }
@@ -108,15 +107,15 @@ public class BatchScript : SerialisationBase {
     }
   }
 
-  public void Write() {
-    Serialiser.Serialise(this, Path);
-  }
-
   [ExcludeFromCodeCoverage]
   private static void ValidateSequencedConfigTasks(List<ConfigTask> unsequenced) {
     if (unsequenced.Count != 0) {
       throw new InvalidOperationException(
         $"Configuration Task {unsequenced[0]} has not been sequenced.");
     }
+  }
+
+  public void Write() {
+    Serialiser.Serialise(this, Path);
   }
 }
