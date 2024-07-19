@@ -16,7 +16,7 @@ So I especially need a collaborator to give the application some basic testing o
 
 If you are new to .NET development, you will need an integrated development environment (IDE).  I can highly recommend what I use, [Jetbrains Rider](https://www.jetbrains.com/rider/) (Windows and macOS; commercial, but free for students and teachers).  Otherwise there is Microsoft's [Visual Studio](https://visualstudio.microsoft.com/) (Windows; commercial).  Microsoft are about to [discontinue support for Visual Studio for Mac](https://learn.microsoft.com/en-us/visualstudio/mac/what-happened-to-vs-for-mac).  [Visual Studio Community Edition](https://visualstudio.microsoft.com/vs/community/) (Windows only) is free for personal and open source use and has all the Visual Studio features that will be useful for developing Falcon Programmer.  [Visual Studio Code](https://code.visualstudio.com/) (Windows and macOS; free) is described as a "code editor" rather than an IDE, meaning it is feature-poor compared with any of the other options.
 
-All of the above support editing XML files.  Other XML editor options are discussed in [the Falcon Programmer manual](Documentation/Falcon%20Programmer%20Manual%20v1.0.pdf).
+All of the above support editing XML files.  Other XML editor options are discussed in [the Falcon Programmer manual](Documentation/Falcon%20Programmer%20Manual%20v1.0.1.pdf).
 
 Simon O'Rorke
 

@@ -30,7 +30,7 @@ Of these configuration tasks, assigning MIDI CC numbers to macros will be of use
 
 ### Further information
 
-For comprehensive documentation, please refer to [the manual](Documentation/Falcon%20Programmer%20Manual%20v1.0.pdf).  For the version history, see the [release notes](RELEASE_NOTES.md). 
+For comprehensive documentation, please refer to [the manual](Documentation/Falcon%20Programmer%20Manual%20v1.0.1.pdf).  For the version history, see the [release notes](RELEASE_NOTES.md). 
 
 ### Collaborators welcome
 
