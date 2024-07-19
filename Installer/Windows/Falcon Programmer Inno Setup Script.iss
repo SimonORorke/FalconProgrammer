@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Falcon Programmer"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Simon O'Rorke"
 #define MyAppURL "https://github.com/SimonORorke/FalconProgrammer"
 #define MyAppExeName "FalconProgrammer.exe"
