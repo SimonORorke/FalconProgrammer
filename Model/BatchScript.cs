@@ -75,6 +75,7 @@ public class BatchScript : SerialisationBase {
       ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
       ConfigTask.ReuseCc1,
+      // ConfigTask.SupportMpe,
       ConfigTask.PrependPathLineToDescription
     ];
   }

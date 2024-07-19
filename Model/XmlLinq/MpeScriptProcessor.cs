@@ -36,40 +36,38 @@ internal class MpeScriptProcessor : ScriptProcessor {
     List<ScriptEventModulation> dimensionModulations = [];
     if (macrosToEmulate.Count >= 3) {
       XTarget = XTarget.ScriptEventMod2Binary;
-      dimensionModulations.Add(new ScriptEventModulation(ProgramXml) {
-        Name = "MPE X Modulation",
-        DisplayName = Name,
-        Bipolar = true,
-        EventId = 2
-      });
+      dimensionModulations.Add(
+        CreateDimensionModulation("MPE X Modulation", 2));
     } else {
       XTarget = XTarget.Pitch;
     }
     if (macrosToEmulate.Count >= 2) {
       ZTarget = ZTarget.ScriptEventMod0Binary;
-      dimensionModulations.Add(new ScriptEventModulation(ProgramXml) {
-        Name = "MPE Z Modulation",
-        DisplayName = Name,
-        Bipolar = true,
-        EventId = 0
-      });
+      dimensionModulations.Add(
+        CreateDimensionModulation("MPE Z Modulation", 0));
     } else {
       ZTarget = ZTarget.Gain;
     }
     if (macrosToEmulate.Count >= 1) {
       YTarget = YTarget.ScriptEventMod1Binary;
-      dimensionModulations.Add(new ScriptEventModulation(ProgramXml) {
-        Name = "MPE Y Modulation",
-        DisplayName = Name,
-        Bipolar = true,
-        EventId = 1
-      });
+      dimensionModulations.Add(
+        CreateDimensionModulation("MPE Y Modulation", 1));
     } else {
       YTarget = YTarget.PolyphonicAftertouch;
     }
     for (int i = 0; i < dimensionModulations.Count; i++) {
       EmulateMacroWithDimension(macrosToEmulate[i], dimensionModulations[i]);
     }
+  }
+
+  private ScriptEventModulation CreateDimensionModulation(string name, int eventId) {
+    var result = new ScriptEventModulation(ProgramXml) {
+      Name = name,
+      Bipolar = true,
+      EventId = eventId
+    };
+    result.DisplayName = result.Name;
+    return result;
   }
 
   /// <summary>
