@@ -1,9 +1,11 @@
 # Falcon Programmer Release Notes
 
-## Version 2.0
+## Version 1.0.1
 
-### Enhancements
-
-Added configuration task **SupportMpe**, which provides support for MPE (MIDI Polyphonic Expression).
+### Enhancement
 
 **MIDI for Macros page**: Added advice 'MIDI CC 38 does not work when assigned to a control on a script-based Info page'.
+
+### Bug Fix
+
+Fixed a bug where, when the **InitialiseLayout** task removed a GUI script processor, all other script processors were removed too.
