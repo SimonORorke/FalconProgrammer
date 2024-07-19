@@ -221,12 +221,10 @@ internal class ScriptProcessor : ModulationsOwner {
   }
 
   public void Remove() {
-    var eventProcessorsElement = Element.Parent;
-    // We need to remove the EventProcessors element, including all its
-    // ScriptProcessor elements, if there are more than one.
-    // Just removing the Info page CCs ScriptProcessor element will not work.
-    // ReSharper disable once CommentTypo
-    // Example: Falcon Factory\RetroWave 2.5\BAS Voltage Reso.
-    eventProcessorsElement!.Remove();
+    var eventProcessorsElement = Element.Parent!;
+    Element.Remove();
+    if (!eventProcessorsElement.HasElements) {
+      eventProcessorsElement!.Remove();
+    }
   }
 }
