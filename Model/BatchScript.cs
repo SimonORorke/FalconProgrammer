@@ -40,6 +40,14 @@ public class BatchScript : SerialisationBase {
   /// </summary>
   internal static ImmutableList<ConfigTask> SequencedConfigTasks { get; }
 
+  [ExcludeFromCodeCoverage]
+  private static void CheckUnsequencedConfigTasks(List<ConfigTask> unsequenced) {
+    if (unsequenced.Count != 0) {
+      throw new InvalidOperationException(
+        $"Configuration Task {unsequenced[0]} has not been sequenced.");
+    }
+  }
+
   private static ImmutableList<ConfigTask> OrderConfigTasks() {
     var list = new List<ConfigTask>(SequencedConfigTasks);
     var unsequenced = (
@@ -52,7 +60,7 @@ public class BatchScript : SerialisationBase {
       select constant).ToList();
     // Currently there should not be any non-query unsequenced tasks, because
     // PrependPathLineToDescription needs to be run last.
-    ValidateSequencedConfigTasks(unsequenced);
+    CheckUnsequencedConfigTasks(unsequenced);
     return list.ToImmutableList();
   }
 
@@ -104,14 +112,6 @@ public class BatchScript : SerialisationBase {
       where count > 1
       select batchTask) {
       throw new ApplicationException($"Duplicate task: {task}");
-    }
-  }
-
-  [ExcludeFromCodeCoverage]
-  private static void ValidateSequencedConfigTasks(List<ConfigTask> unsequenced) {
-    if (unsequenced.Count != 0) {
-      throw new InvalidOperationException(
-        $"Configuration Task {unsequenced[0]} has not been sequenced.");
     }
   }
 
