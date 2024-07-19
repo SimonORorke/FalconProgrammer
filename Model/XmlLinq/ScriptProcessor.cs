@@ -209,15 +209,6 @@ internal class ScriptProcessor : ModulationsOwner {
     if (ScriptPath.EndsWith("/MPE.lua")) {
       return ScriptId.Mpe;
     }
-    // // When an MPE ScriptProcessor has been added by the user or this application,
-    // // it references a required script.
-    // if (Script.Contains("_MPE/_MPE")
-    //     // ReSharper disable once CommentTypo
-    //     // In categories 'Falcon Factory\Xtra MPE presets' and 'Falcon Factory rev2\MPE',
-    //     // the MPE ScriptProcessor contains the full script.
-    //     || Script.Contains("Multidimensional Polyphonic Expression (MPE)")) {
-    //   return ScriptId.Mpe;
-    // }
     return Script.EndsWith("require \"OrganicTexture\"")
       ? ScriptId.OrganicTexture
       : ScriptId.None;
