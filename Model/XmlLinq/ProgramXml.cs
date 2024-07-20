@@ -283,6 +283,24 @@ internal class ProgramXml : EntityBase {
     // return document.Root!;
   }
 
+  public bool RemoveArpeggiatorElements() {
+    return RemoveElements(Element.Descendants("Arpeggiator").ToList());
+  }
+
+  private static bool RemoveElements(IList<XElement> elements) {
+    if (elements.Count == 0) {
+      return false;
+    }
+    foreach (var element in elements) {
+      var parent = element.Parent!;
+      element.Remove();
+      if (parent is { HasAttributes : false, HasElements: false }) {
+        parent.Remove();
+      }
+    }
+    return true ;
+  }
+
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
     ControlSignalSourcesElement.RemoveNodes();
     foreach (var macro in macros) {

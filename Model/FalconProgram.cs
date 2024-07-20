@@ -961,6 +961,23 @@ internal class FalconProgram {
   }
 
   /// <summary>
+  ///   Removes Arpeggiators and Sequencing <see cref="ScriptProcessors"/>.
+  /// </summary>
+  public void RemoveArpeggiatorsAndSequencing() {
+    var sequencingScriptProcessors = (
+      from scriptProcessor in ScriptProcessors
+      where scriptProcessor.ScriptPath.Contains("/Sequencing/")
+      select scriptProcessor).ToList();
+    if (sequencingScriptProcessors.Count > 0) {
+      foreach (var sequencingScriptProcessor in sequencingScriptProcessors) {
+        sequencingScriptProcessor.Remove();
+        ScriptProcessors = ScriptProcessors.Remove(sequencingScriptProcessor);
+      }
+      NotifyUpdate($"{PathShort}: Removed sequencing script processor(s).");
+    }
+  }
+
+  /// <summary>
   ///   Bypasses (disables) all known delay effects.
   ///   Then removes any macro that no longer modulates any enabled effects,
   ///   provided the program uses the standard Info page layout.
