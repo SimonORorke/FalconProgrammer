@@ -95,7 +95,7 @@ internal class FalconProgram {
   ///     If the sound bank\category is listed on the GUI Script Processor page,
   ///     which indicates that the Info page layout must be defined in a script,
   ///     the MIDI CC number ranges must be mapped to the GUI script processor's
-  ///     parameters in a built-in or user-defined template. 
+  ///     parameters in a built-in or user-defined template.
   ///   </para>
   /// </remarks>
   public void AssignMacroCcs() {
@@ -327,8 +327,8 @@ internal class FalconProgram {
   private ScriptProcessor CreateScriptProcessorFromElement(
     XElement scriptProcessorElement) {
     return ScriptProcessor.Create(
-        SoundBankId, scriptProcessorElement, ProgramXml,
-        Settings.MidiForMacros, Category.MustUseGuiScriptProcessor);
+      SoundBankId, scriptProcessorElement, ProgramXml,
+      Settings.MidiForMacros, Category.MustUseGuiScriptProcessor);
   }
 
   private List<ScriptProcessor> CreateScriptProcessorsFromElements(
@@ -935,7 +935,6 @@ internal class FalconProgram {
     Macros = CreateMacrosFromElements();
     ScriptProcessors = CreateScriptProcessorsFromElements(
       ProgramXml.ScriptProcessorElementsProgramLevel);
-    
     (
       from scriptProcessorElement in ProgramXml.ScriptProcessorElementsProgramLevel
       select ScriptProcessor.Create(
@@ -952,8 +951,8 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Removes Arpeggiators and sequencing <see cref="ScriptProcessors"/>.
-  ///   Then, provided the program has a standard Info page, 
+  ///   Removes Arpeggiators and sequencing <see cref="ScriptProcessors" />.
+  ///   Then, provided the program has a standard Info page,
   ///   removes any macros that, because arpeggiators or sequencing script processors
   ///   they modulated have been removed, no longer modulate anything.
   /// </summary>
@@ -982,6 +981,8 @@ internal class FalconProgram {
         ScriptProcessors.Remove(sequencingScriptProcessor);
       }
       hasRemovedScriptProcessors = true;
+      NotifyUpdate(
+        $"{PathShort}: Removed program-level sequencing script processor(s).");
     }
     // Remove any sequencing ScriptProcessors on other levels.
     var scriptProcessorsAllLevels = CreateScriptProcessorsFromElements(
@@ -989,6 +990,9 @@ internal class FalconProgram {
     if (scriptProcessorsAllLevels.Count > 0) {
       if (RemoveSequencingScriptProcessors(scriptProcessorsAllLevels).Count > 0) {
         hasRemovedScriptProcessors = true;
+        NotifyUpdate(
+          $"{PathShort}: " +
+          $"Removed below-program-level sequencing script processor(s).");
       }
     }
     if (hasRemovedScriptProcessors) {
@@ -1005,7 +1009,7 @@ internal class FalconProgram {
           }
         }
       }
-      NotifyUpdate($"{PathShort}: Removed sequencing script processor(s).");
+      // NotifyUpdate($"{PathShort}: Removed sequencing script processor(s).");
     }
     // Remove any macros that, because arpeggiators or sequencing script processors they
     // modulated have been removed, no longer modulate anything.
@@ -1037,7 +1041,7 @@ internal class FalconProgram {
   ///   provided the program uses the standard Info page layout.
   /// </summary>
   /// <remarks>
-  ///   Known delay effects are as specified by <see cref="Effect.IsDelay" />. 
+  ///   Known delay effects are as specified by <see cref="Effect.IsDelay" />.
   /// </remarks>
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
@@ -1133,7 +1137,7 @@ internal class FalconProgram {
   /// <summary>
   ///   Restores the program file in a sound bank\category subfolder of the
   ///   Program Files folder from the corresponding file in the Original Program Files
-  ///   folder. 
+  ///   folder.
   /// </summary>
   public void RestoreOriginal() {
     string originalPath = System.IO.Path.Combine(
@@ -1202,12 +1206,12 @@ internal class FalconProgram {
   ///   Exclusions:
   ///   <list type="bullet">
   ///     <item>
-  ///     <item>
-  ///       <description>
-  ///         Sound banks on the "Do not run ReplaceModWheelWithMacro or ReuseCc1"
-  ///         list on the MIDI for Macros page.
-  ///       </description>
-  ///     </item>
+  ///       <item>
+  ///         <description>
+  ///           Sound banks on the "Do not run ReplaceModWheelWithMacro or ReuseCc1"
+  ///           list on the MIDI for Macros page.
+  ///         </description>
+  ///       </item>
   ///       <description>
   ///         Programs with macro modulations whose MIDI CC number is 1 but have not been
   ///         assigned to a wheel macro by <see cref="ReplaceModWheelWithMacro" />.
@@ -1358,7 +1362,7 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Sets the values of known reverb macros, with some exceptions, to zero. 
+  ///   Sets the values of known reverb macros, with some exceptions, to zero.
   /// </summary>
   /// <remarks>
   ///   Known reverb macros are as specified by <see cref="Macro.ModulatesReverb" />.

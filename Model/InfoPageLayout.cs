@@ -253,7 +253,7 @@ internal class InfoPageLayout {
       macro.RemoveElement();
       Macros.Remove(macro);
       Program.NotifyUpdate(
-        $"{Program.PathShort}: Removed {macro.DisplayNameWithoutCc}.");
+        $"{Program.PathShort}: Removed macro {macro}.");
     }
     RefreshMacroOrder();
     MoveMacrosToStandardLayout();

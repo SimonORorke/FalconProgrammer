@@ -91,6 +91,9 @@ public class Batch {
       case ConfigTask.QueryReuseCc1NotSupported:
         Program.QueryReuseCc1NotSupported();
         break;
+      case ConfigTask.RemoveArpeggiatorsAndSequencing:
+        Program.RemoveArpeggiatorsAndSequencing();
+        break;
       case ConfigTask.RemoveDelayEffectsAndMacros:
         Program.RemoveDelayEffectsAndMacros();
         break;
