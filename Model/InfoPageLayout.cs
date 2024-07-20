@@ -29,11 +29,29 @@ internal class InfoPageLayout {
     Program = program;
   }
 
+  private List<Macro> Macros => Program.Macros;
   private FalconProgram Program { get; }
+  private ProgramXml ProgramXml => Program.ProgramXml;
+
+  /// <summary>
+  ///   Moves the specified macros to the end of the layout of macros on the Info page.
+  /// </summary>
+  /// <remarks>
+  ///   After one or more calls to <see cref="MoveMacroToEnd" />,
+  ///   <see cref="RefreshMacroOrder" /> must be called.
+  /// </remarks>
+  public void MoveMacroToEnd(Macro macro) {
+    if (macro != Macros[^1]) {
+      Macros.Remove(macro);
+      Macros.Add(macro);
+      Program.NotifyUpdate(
+        $"{Program.PathShort}: Moved {macro.DisplayNameWithoutCc} macro to end.");
+    }
+  }
 
   public void MoveMacrosToStandardLayout() {
     var visibleMacros = (
-      from macro in Program.Macros
+      from macro in Macros
       // Exclude invisible macros.
       // See comment in Program.GetMacrosSortedByLocation, which uses a
       // different approach to identify them.
@@ -63,15 +81,15 @@ internal class InfoPageLayout {
     };
     switch (Program.SoundBankId) {
       case SoundBankId.EtherFields when rowCount == 3:
-        if (Program.ProgramXml.BackgroundImagePath != null 
-            && Program.ProgramXml.BackgroundImagePath.StartsWith("$Ether Fields.ufs")) {
+        if (ProgramXml.BackgroundImagePath != null 
+            && ProgramXml.BackgroundImagePath.StartsWith("$Ether Fields.ufs")) {
           // Default background image. Avoid the text at bottom.
           top -= 85;
         }
         break;
       case SoundBankId.Devinity when rowCount == 1:
-        if (Program.ProgramXml.BackgroundImagePath != null 
-            && Program.ProgramXml.BackgroundImagePath.StartsWith("$Devinity.ufs")) {
+        if (ProgramXml.BackgroundImagePath != null 
+            && ProgramXml.BackgroundImagePath.StartsWith("$Devinity.ufs")) {
           // Default background image. Place the row on the black space at the bottom. 
           top += rowHeight;
         }
@@ -146,17 +164,19 @@ internal class InfoPageLayout {
       // Examples: many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
       insertionIndex = visibleContinuousMacros.IndexOf(adsrMacros["Attack"]);
     }
-    Program.Macros.Insert(insertionIndex, wheelMacro);
-    Program.RefreshMacroOrder();
+    Macros.Insert(insertionIndex, wheelMacro);
+    RefreshMacroOrder();
     MoveMacrosToStandardLayout();
+    Program.UpdateMacroCcs();
+    Program.NotifyUpdate($"{Program.PathShort}: Replaced mod wheel with macro.");
     return;
 
     int AtEnd() {
-      return Program.Macros.IndexOf(visibleContinuousMacros[^1]) + 1;
+      return Macros.IndexOf(visibleContinuousMacros[^1]) + 1;
     }
 
     int Fourth() {
-      return Program.Macros.IndexOf(visibleContinuousMacros[3]);
+      return Macros.IndexOf(visibleContinuousMacros[3]);
     }
 
     bool IsLastMacroZeroedReverb() {
@@ -165,19 +185,19 @@ internal class InfoPageLayout {
     }
 
     bool NoToggleMacros() {
-      return Program.Macros.Count == visibleContinuousMacros.Count;
+      return Macros.Count == visibleContinuousMacros.Count;
     }
   }
 
   private Macro CreateWheelMacro() {
-    int wheelMacroNo = Program.Macros.Count > 1
+    int wheelMacroNo = Macros.Count > 1
       ? (
-        from macro in Program.Macros
+        from macro in Macros
         select macro.MacroNo).Max() + 1
       // ReSharper disable once CommentTypo
       // Example: Falcon Factory\Distorted\Doom Octaver after it has had its Delay macro removed.
       : 1;
-    var result = new Macro(Program.ProgramXml, Program.Settings.MidiForMacros) {
+    var result = new Macro(ProgramXml, Program.Settings.MidiForMacros) {
       MacroNo = wheelMacroNo,
       DisplayName = "Wheel",
       Bipolar = false,
@@ -185,7 +205,7 @@ internal class InfoPageLayout {
       IsContinuous = true,
       Value = 0
     };
-    result.AddModulation(new Modulation(Program.ProgramXml) {
+    result.AddModulation(new Modulation(ProgramXml) {
       CcNo = Program.Settings.MidiForMacros.ModWheelReplacementCcNo
     });
     result.ChangeModWheelModulationSourcesToMacro();
@@ -197,12 +217,46 @@ internal class InfoPageLayout {
     var newOrder = new List<Macro>();
     newOrder.AddRange(visibleMacrosSortedByLocation);
     var invisibleMacros =
-      from macro in Program.Macros
+      from macro in Macros
       where !newOrder.Contains(macro)
       select macro;
     newOrder.AddRange(invisibleMacros);
-    Program.Macros.Clear();
-    Program.Macros.AddRange(newOrder);
-    Program.RefreshMacroOrder();
+    Macros.Clear();
+    Macros.AddRange(newOrder);
+    RefreshMacroOrder();
+  }
+
+  /// <summary>
+  ///   If the macro order has changed, run this to refresh the XML.
+  /// </summary>
+  public void RefreshMacroOrder() {
+    ProgramXml.ReplaceMacroElements(Macros);
+    // If we don't reload, relocating the macros jumbles them.
+    // Perhaps there's a better way, but it broke when I tried.
+    Program.Save();
+    Program.Read();
+    Program.Log.WriteLine(
+      $"{Program.PathShort}: Saved and reloaded on reordering macros.");
+  }
+
+  public void RemoveMacros(List<Macro> removableMacros) {
+    if (removableMacros.Count == 0) {
+      return;
+    }
+    if (Program.GuiScriptProcessor != null) {
+      Program.Log.WriteLine(
+        $"{Program.PathShort}: Cannot remove macros because " +
+        "because the program's Info page GUI is specified in a script processor.");
+      return;
+    }
+    foreach (var macro in removableMacros) {
+      macro.RemoveElement();
+      Macros.Remove(macro);
+      Program.NotifyUpdate(
+        $"{Program.PathShort}: Removed {macro.DisplayNameWithoutCc}.");
+    }
+    RefreshMacroOrder();
+    MoveMacrosToStandardLayout();
+    Program.UpdateMacroCcs();
   }
 }

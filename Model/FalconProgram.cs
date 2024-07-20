@@ -33,8 +33,8 @@ internal class FalconProgram {
   private InfoPageLayout InfoPageLayout =>
     _infoPageLayout ??= new InfoPageLayout(this);
 
-  private IBatchLog Log => Batch.Log;
-  internal List<Macro> Macros { get; private set; } = null!;
+  public IBatchLog Log => Batch.Log;
+  public List<Macro> Macros { get; private set; } = null!;
 
   /// <summary>
   ///   Gets the order in which MIDI CC numbers are to be mapped to macros
@@ -605,8 +605,8 @@ internal class FalconProgram {
         if (Settings.SoundBankSpecific.Fluidity.MoveAttackMacroToEnd) {
           var attackMacro = FindContinuousMacro("Attack");
           if (attackMacro != null) {
-            MoveMacroToEnd(attackMacro);
-            RefreshMacroOrder();
+            InfoPageLayout.MoveMacroToEnd(attackMacro);
+            InfoPageLayout.RefreshMacroOrder();
           }
         }
         break;
@@ -759,28 +759,12 @@ internal class FalconProgram {
     }
     if (macrosToMove.Count > 0) {
       foreach (var macro in macrosToMove) {
-        MoveMacroToEnd(macro);
+        InfoPageLayout.MoveMacroToEnd(macro);
       }
-      RefreshMacroOrder();
+      InfoPageLayout.RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
       UpdateMacroCcs();
       NotifyUpdate($"{PathShort}: Moved zeroed macros to end.");
-    }
-  }
-
-  /// <summary>
-  ///   Moves the specified macros to the end of the layout of macros on the Info page.
-  /// </summary>
-  /// <remarks>
-  ///   After one or more calls to <see cref="MoveMacroToEnd" />,
-  ///   <see cref="RefreshMacroOrder" /> must be called.
-  /// </remarks>
-  private void MoveMacroToEnd(Macro macro) {
-    if (macro != Macros[^1]) {
-      Macros.Remove(macro);
-      Macros.Add(macro);
-      NotifyUpdate(
-        $"{PathShort}: Moved {macro.DisplayNameWithoutCc} macro to end.");
     }
   }
 
@@ -968,19 +952,6 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   If the macro order has changed, run this to refresh the XML.
-  /// </summary>
-  public void RefreshMacroOrder() {
-    ProgramXml.ReplaceMacroElements(Macros);
-    // If we don't reload, relocating the macros jumbles them.
-    // Perhaps there's a better way, but it broke when I tried.
-    Save();
-    Read();
-    Log.WriteLine(
-      $"{PathShort}: Saved and reloaded on reordering macros.");
-  }
-
-  /// <summary>
   ///   Removes Arpeggiators and sequencing <see cref="ScriptProcessors"/>.
   ///   Then, provided the program has a standard Info page, 
   ///   removes any macros that, because arpeggiators or sequencing script processors
@@ -1043,7 +1014,7 @@ internal class FalconProgram {
         from macro in Macros
         where !macro.ModulatesEnabledEffects
         select macro).ToList();
-      RemoveMacros(removableMacros);
+      InfoPageLayout.RemoveMacros(removableMacros);
     }
     return;
 
@@ -1077,7 +1048,7 @@ internal class FalconProgram {
       from macro in Macros
       where macro.ModulatesDelay || !macro.ModulatesEnabledEffects
       select macro).ToList();
-    RemoveMacros(removableMacros);
+    InfoPageLayout.RemoveMacros(removableMacros);
     if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
       // "Organic Keys" or "Organic Pads" sound bank
       organicScriptProcessor.DelaySend = 0;
@@ -1113,26 +1084,6 @@ internal class FalconProgram {
     }
     NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveMacrosToStandardLayout();
-  }
-
-  private void RemoveMacros(List<Macro> removableMacros) {
-    if (removableMacros.Count == 0) {
-      return;
-    }
-    if (GuiScriptProcessor != null) {
-      Log.WriteLine(
-        $"{PathShort}: Cannot remove macros because " +
-        "because the program's Info page GUI is specified in a script processor.");
-      return;
-    }
-    foreach (var macro in removableMacros) {
-      macro.RemoveElement();
-      Macros.Remove(macro);
-      NotifyUpdate($"{PathShort}: Removed {macro.DisplayNameWithoutCc}.");
-    }
-    RefreshMacroOrder();
-    InfoPageLayout.MoveMacrosToStandardLayout();
-    UpdateMacroCcs();
   }
 
   /// <summary>
@@ -1177,8 +1128,6 @@ internal class FalconProgram {
       return;
     }
     InfoPageLayout.ReplaceModWheelWithMacro();
-    UpdateMacroCcs();
-    NotifyUpdate($"{PathShort}: Replaced mod wheel with macro.");
   }
 
   /// <summary>
@@ -1368,7 +1317,7 @@ internal class FalconProgram {
     return releaseMacro != null;
   }
 
-  private void UpdateMacroCcs() {
+  public void UpdateMacroCcs() {
     AssignMacroCcsOwnedByMacros();
     Log.WriteLine($"{PathShort}: Updated macro Ccs.");
   }
