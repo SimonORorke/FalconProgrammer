@@ -7,5 +7,5 @@ internal class ScriptProcessorTemplate : EmbeddedTemplate {
     base(embeddedFileName) { }
   
   public XElement ScriptProcessorElement => 
-    RootElement.Elements("ScriptProcessor").First();
+    RootElement.Elements(nameof(ScriptProcessor)).First();
 }

@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ProgramXml : EntityBase {
-  private ImmutableList<XElement>? _scriptProcessorElements;
+  private List<XElement>? _scriptProcessorElements;
   private XElement? _templateMacroElement;
   private XElement? _templateModulationElement;
 
@@ -60,8 +60,11 @@ internal class ProgramXml : EntityBase {
   /// </summary>
   protected XElement RootElement { get; private set; } = null!;
 
-  public ImmutableList<XElement> ScriptProcessorElements =>
-    _scriptProcessorElements ??= GetScriptProcessorElements();
+  /// <summary>
+  ///   Program-level ScriptProcessor elements.
+  /// </summary>
+  public List<XElement> ScriptProcessorElementsProgramLevel =>
+    _scriptProcessorElements ??= GetScriptProcessorElementsProgramLevel();
 
   public XElement TemplateMacroElement =>
     _templateMacroElement ??= GetTemplateMacroElement();
@@ -181,7 +184,11 @@ internal class ProgramXml : EntityBase {
       select modulationElement).ToList();
   }
 
-  private ImmutableList<XElement> GetScriptProcessorElements() {
+  public List<XElement> GetScriptProcessorElementsAllLevels() {
+    return Element.Descendants(nameof(ScriptProcessor)).ToList();
+  }
+
+  private List<XElement> GetScriptProcessorElementsProgramLevel() {
     // We are only interested in ScriptProcessors that might include the
     // GuiScriptProcessor, which can only be a child of the EventProcessors
     // element, if any, that is a child of the Program element.
@@ -191,8 +198,8 @@ internal class ProgramXml : EntityBase {
     var eventProcessorsElement =
       Element.Elements("EventProcessors").FirstOrDefault();
     return eventProcessorsElement != null
-      ? eventProcessorsElement.Elements("ScriptProcessor").ToImmutableList()
-      : ImmutableList<XElement>.Empty;
+      ? eventProcessorsElement.Elements(nameof(ScriptProcessor)).ToList()
+      : [];
   }
 
   public SoundBankId GetSoundBankId() {

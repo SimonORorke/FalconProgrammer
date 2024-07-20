@@ -8,7 +8,7 @@ internal class ScriptProgramXml : ProgramXml {
   protected override XElement GetTemplateModulationElement() {
     var rootElement = XElement.Load(Category.TemplateProgramPath!);
     var scriptProcessorElement =
-      (from s in rootElement.Descendants("ScriptProcessor")
+      (from s in rootElement.Descendants(nameof(ScriptProcessor))
         select s).LastOrDefault() ??
       throw new ApplicationException(
         $"'{InputProgramPath}': Cannot find ScriptProcessor element " +

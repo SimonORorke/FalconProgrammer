@@ -215,10 +215,10 @@ internal class ScriptProcessor : ModulationsOwner {
   }
 
   public void Remove() {
-    var eventProcessorsElement = Element.Parent!;
+    var parent = Element.Parent!;
     Element.Remove();
-    if (!eventProcessorsElement.HasElements) {
-      eventProcessorsElement!.Remove();
+    if (!parent.HasElements) {
+      parent!.Remove();
     }
   }
 }

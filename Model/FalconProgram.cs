@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
 using FalconProgrammer.Model.XmlLinq;
 using JetBrains.Annotations;
 
@@ -59,8 +60,10 @@ internal class FalconProgram {
 
   internal ProgramXml ProgramXml { get; private set; } = null!;
 
-  public ImmutableList<ScriptProcessor> ScriptProcessors { get; private set; } =
-    ImmutableList<ScriptProcessor>.Empty;
+  /// <summary>
+  ///   Program-level script processors.
+  /// </summary>
+  public List<ScriptProcessor> ScriptProcessors { get; private set; } = [];
 
   public Settings Settings => Batch.Settings;
 
@@ -319,6 +322,20 @@ internal class FalconProgram {
     return Category.MustUseGuiScriptProcessor
       ? new ScriptProgramXml(Category)
       : new ProgramXml(Category);
+  }
+
+  private ScriptProcessor CreateScriptProcessorFromElement(
+    XElement scriptProcessorElement) {
+    return ScriptProcessor.Create(
+        SoundBankId, scriptProcessorElement, ProgramXml,
+        Settings.MidiForMacros, Category.MustUseGuiScriptProcessor);
+  }
+
+  private List<ScriptProcessor> CreateScriptProcessorsFromElements(
+    IEnumerable<XElement> scriptProcessorElements) {
+    return (
+      from scriptProcessorElement in scriptProcessorElements
+      select CreateScriptProcessorFromElement(scriptProcessorElement)).ToList();
   }
 
   private Macro? FindContinuousMacro(string displayName) {
@@ -932,8 +949,11 @@ internal class FalconProgram {
     ProgramXml.LoadFromFile(Path);
     Category.ProgramXml = ProgramXml;
     Macros = CreateMacrosFromElements();
-    ScriptProcessors = (
-      from scriptProcessorElement in ProgramXml.ScriptProcessorElements
+    ScriptProcessors = CreateScriptProcessorsFromElements(
+      ProgramXml.ScriptProcessorElementsProgramLevel);
+    
+    (
+      from scriptProcessorElement in ProgramXml.ScriptProcessorElementsProgramLevel
       select ScriptProcessor.Create(
         SoundBankId, scriptProcessorElement, ProgramXml,
         Settings.MidiForMacros, Category.MustUseGuiScriptProcessor)).ToImmutableList();
@@ -961,19 +981,82 @@ internal class FalconProgram {
   }
 
   /// <summary>
-  ///   Removes Arpeggiators and Sequencing <see cref="ScriptProcessors"/>.
+  ///   Removes Arpeggiators and sequencing <see cref="ScriptProcessors"/>.
+  ///   Then, provided the program has a standard Info page, 
+  ///   removes any macros that, because arpeggiators or sequencing script processors
+  ///   they modulated have been removed, no longer modulate anything.
   /// </summary>
   public void RemoveArpeggiatorsAndSequencing() {
-    var sequencingScriptProcessors = (
-      from scriptProcessor in ScriptProcessors
-      where scriptProcessor.ScriptPath.Contains("/Sequencing/")
-      select scriptProcessor).ToList();
-    if (sequencingScriptProcessors.Count > 0) {
-      foreach (var sequencingScriptProcessor in sequencingScriptProcessors) {
-        sequencingScriptProcessor.Remove();
-        ScriptProcessors = ScriptProcessors.Remove(sequencingScriptProcessor);
+    const string sequencingFolder = "/Sequencing/";
+    // Remove any Arpeggiators on any levels.
+    bool hasRemovedArpeggiators = ProgramXml.RemoveArpeggiatorElements();
+    if (hasRemovedArpeggiators) {
+      foreach (var macro in Macros) {
+        // Update macro.ModulatesEnabledEffects
+        for (int i = macro.ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
+          var connectionsParent = macro.ModulatedConnectionsParents[i];
+          if (connectionsParent.Name == "Arpeggiator") {
+            macro.ModulatedConnectionsParents.RemoveAt(i);
+          }
+        }
+      }
+      NotifyUpdate($"{PathShort}: Removed Arpeggiator(s).");
+    }
+    // Remove any program-level sequencing ScriptProcessors.
+    var removedScriptProcessorsProgramLevel =
+      RemoveSequencingScriptProcessors(ScriptProcessors);
+    bool hasRemovedScriptProcessors = false;
+    if (removedScriptProcessorsProgramLevel.Count > 0) {
+      foreach (var sequencingScriptProcessor in removedScriptProcessorsProgramLevel) {
+        ScriptProcessors.Remove(sequencingScriptProcessor);
+      }
+      hasRemovedScriptProcessors = true;
+    }
+    // Remove any sequencing ScriptProcessors on other levels.
+    var scriptProcessorsAllLevels = CreateScriptProcessorsFromElements(
+      ProgramXml.GetScriptProcessorElementsAllLevels());
+    if (scriptProcessorsAllLevels.Count > 0) {
+      if (RemoveSequencingScriptProcessors(scriptProcessorsAllLevels).Count > 0) {
+        hasRemovedScriptProcessors = true;
+      }
+    }
+    if (hasRemovedScriptProcessors) {
+      foreach (var macro in Macros) {
+        // Update macro.ModulatesEnabledEffects
+        for (int i = macro.ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
+          var connectionsParent = macro.ModulatedConnectionsParents[i];
+          if (connectionsParent.Name == nameof(ScriptProcessor)) {
+            var modulatedScriptProcessor = CreateScriptProcessorFromElement(
+              connectionsParent.Element);
+            if (modulatedScriptProcessor.ScriptPath.Contains(sequencingFolder)) {
+              macro.ModulatedConnectionsParents.RemoveAt(i);
+            }
+          }
+        }
       }
       NotifyUpdate($"{PathShort}: Removed sequencing script processor(s).");
+    }
+    // Remove any macros that, because arpeggiators or sequencing script processors they
+    // modulated have been removed, no longer modulate anything.
+    if (hasRemovedArpeggiators || hasRemovedScriptProcessors) {
+      var removableMacros = (
+        from macro in Macros
+        where !macro.ModulatesEnabledEffects
+        select macro).ToList();
+      RemoveMacros(removableMacros);
+    }
+    return;
+
+    List<ScriptProcessor> RemoveSequencingScriptProcessors(
+      IEnumerable<ScriptProcessor> scriptProcessors) {
+      var result = (
+        from scriptProcessor in scriptProcessors
+        where scriptProcessor.ScriptPath.Contains(sequencingFolder)
+        select scriptProcessor).ToList();
+      foreach (var sequencingScriptProcessor in result) {
+        sequencingScriptProcessor.Remove();
+      }
+      return result;
     }
   }
 
@@ -987,45 +1070,20 @@ internal class FalconProgram {
   /// </remarks>
   public void RemoveDelayEffectsAndMacros() {
     BypassDelayEffects();
-    if (RemoveDelayMacros()) {
-      RefreshMacroOrder();
-      InfoPageLayout.MoveMacrosToStandardLayout();
-      UpdateMacroCcs();
-    }
+    // Remove delay macros, if any.
+    // These are recognised by the macro's display name, or if all the effects the
+    // macro modulates have been bypassed by BypassDelayEffects.
+    var removableMacros = (
+      from macro in Macros
+      where macro.ModulatesDelay || !macro.ModulatesEnabledEffects
+      select macro).ToList();
+    RemoveMacros(removableMacros);
     if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
       // "Organic Keys" or "Organic Pads" sound bank
       organicScriptProcessor.DelaySend = 0;
       NotifyUpdate(
         $"{PathShort}: Changed '{organicScriptProcessor.Name}'.DelaySend to zero.");
     }
-  }
-
-  /// <summary>
-  ///   Removes delay macros, if any.
-  ///   These are recognised by the macro name, or if all the effects the
-  ///   macro modulates have been bypassed by <see cref="BypassDelayEffects" />.
-  /// </summary>
-  private bool RemoveDelayMacros() {
-    var removableMacros = (
-      from macro in Macros
-      where macro.ModulatesDelay || !macro.ModulatesEnabledEffects
-      select macro).ToList();
-    if (removableMacros.Count == 0) {
-      return false;
-    }
-    if (GuiScriptProcessor != null
-        && !CanRemoveGuiScriptProcessor()) {
-      Log.WriteLine(
-        $"{PathShort}: Cannot remove macros because " +
-        "because the program's Info page GUI is specified in a script processor.");
-      return false;
-    }
-    foreach (var macro in removableMacros) {
-      macro.RemoveElement();
-      Macros.Remove(macro);
-      NotifyUpdate($"{PathShort}: Removed {macro.DisplayNameWithoutCc}.");
-    }
-    return true;
   }
 
   /// <summary>
@@ -1038,7 +1096,7 @@ internal class FalconProgram {
   /// </summary>
   private void RemoveGuiScriptProcessor() {
     GuiScriptProcessor!.Remove();
-    ScriptProcessors = ScriptProcessors.Remove(GuiScriptProcessor);
+    ScriptProcessors.Remove(GuiScriptProcessor);
     GuiScriptProcessor = null;
     foreach (var macro in Macros) {
       macro.CustomPosition = true;
@@ -1055,6 +1113,26 @@ internal class FalconProgram {
     }
     NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveMacrosToStandardLayout();
+  }
+
+  private void RemoveMacros(List<Macro> removableMacros) {
+    if (removableMacros.Count == 0) {
+      return;
+    }
+    if (GuiScriptProcessor != null) {
+      Log.WriteLine(
+        $"{PathShort}: Cannot remove macros because " +
+        "because the program's Info page GUI is specified in a script processor.");
+      return;
+    }
+    foreach (var macro in removableMacros) {
+      macro.RemoveElement();
+      Macros.Remove(macro);
+      NotifyUpdate($"{PathShort}: Removed {macro.DisplayNameWithoutCc}.");
+    }
+    RefreshMacroOrder();
+    InfoPageLayout.MoveMacrosToStandardLayout();
+    UpdateMacroCcs();
   }
 
   /// <summary>
@@ -1275,7 +1353,7 @@ internal class FalconProgram {
     }
     var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
     mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation());
-    ScriptProcessors = ScriptProcessors.Add(mpeScriptProcessor);
+    ScriptProcessors.Add(mpeScriptProcessor);
     NotifyUpdate($"{PathShort}: Added MPE support.");
   }
 
