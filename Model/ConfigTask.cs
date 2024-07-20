@@ -12,6 +12,7 @@ public enum ConfigTask {
   QueryMainDahdsr,
   QueryReverbTypes,
   QueryReuseCc1NotSupported,
+  RemoveArpeggiatorsAndSequencing,
   RemoveDelayEffectsAndMacros,
   ReplaceModWheelWithMacro,
   RestoreOriginal,
