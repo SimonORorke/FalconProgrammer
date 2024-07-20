@@ -8,4 +8,4 @@
 
 ### Bug Fix
 
-Fixed a bug where, when the **InitialiseLayout** task removed a GUI script processor, all other script processors were removed too.
+Fixed a bug where, when the **InitialiseLayout** task removed a GUI script processor, all other program-level event processors were removed too.
