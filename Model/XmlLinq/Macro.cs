@@ -92,11 +92,6 @@ internal class Macro : ModulationsOwner {
   internal List<ConnectionsParent> ModulatedConnectionsParents { get; } = [];
   public bool ModulatesDelay => DisplayName.Contains("Delay");
 
-  public bool ModulatesEnabledEffects => (
-    from effect in ModulatedConnectionsParents
-    where !effect.Bypass
-    select effect).Any();
-
   public bool ModulatesReverb =>
     DisplayName.Contains("Reverb")
     || DisplayName.Contains("Room")

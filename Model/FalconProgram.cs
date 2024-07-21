@@ -962,7 +962,6 @@ internal class FalconProgram {
     bool hasRemovedArpeggiators = ProgramXml.RemoveArpeggiatorElements();
     if (hasRemovedArpeggiators) {
       foreach (var macro in Macros) {
-        // Update macro.ModulatesEnabledEffects
         for (int i = macro.ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
           var connectionsParent = macro.ModulatedConnectionsParents[i];
           if (connectionsParent.Name == "Arpeggiator") {
@@ -997,7 +996,6 @@ internal class FalconProgram {
     }
     if (hasRemovedScriptProcessors) {
       foreach (var macro in Macros) {
-        // Update macro.ModulatesEnabledEffects
         for (int i = macro.ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
           var connectionsParent = macro.ModulatedConnectionsParents[i];
           if (connectionsParent.Name == nameof(ScriptProcessor)) {
@@ -1016,7 +1014,9 @@ internal class FalconProgram {
     if (hasRemovedArpeggiators || hasRemovedScriptProcessors) {
       var removableMacros = (
         from macro in Macros
-        where !macro.ModulatesEnabledEffects
+        // We cannot ignore modulated connection parents that are bypassed, as they
+        // could be toggle macros that are off initially.
+        where macro.ModulatedConnectionsParents.Count == 0
         select macro).ToList();
       InfoPageLayout.RemoveMacros(removableMacros);
     }
@@ -1050,7 +1050,9 @@ internal class FalconProgram {
     // macro modulates have been bypassed by BypassDelayEffects.
     var removableMacros = (
       from macro in Macros
-      where macro.ModulatesDelay || !macro.ModulatesEnabledEffects
+      // We cannot ignore modulated connection parents that are bypassed, as they
+      // could be toggle macros that are off initially.
+      where macro.ModulatesDelay || macro.ModulatedConnectionsParents.Count == 0
       select macro).ToList();
     InfoPageLayout.RemoveMacros(removableMacros);
     if (GuiScriptProcessor is OrganicGuiScriptProcessor organicScriptProcessor) {
