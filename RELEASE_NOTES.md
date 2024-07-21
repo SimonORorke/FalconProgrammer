@@ -1,5 +1,15 @@
 # Falcon Programmer Release Notes
 
+## Version 1.1
+
+### Enhancement
+
+
+
+### Bug Fix
+
+Fixed a bug where the **RemoveDelayEffectsAndMacros** task removed toggle macros that were not delay macros but were initially toggled off.
+
 ## Version 1.0.1
 
 ### Enhancement
@@ -9,3 +19,4 @@
 ### Bug Fix
 
 Fixed a bug where, when the **InitialiseLayout** task removed a GUI script processor, all other program-level event processors were removed too.
+
