@@ -114,6 +114,8 @@
         <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory\Keys\FM Tremolo.xml" />
         <None Remove="Model\Xml\Programs\Falcon Factory rev2\MPE\Wave Guide.xml" />
         <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory rev2\MPE\Wave Guide.xml" />
+        <None Remove="Model\Xml\OriginalPrograms\Modular Noise\Chords\Buffers (F).xml" />
+        <EmbeddedResource Include="Model\Xml\OriginalPrograms\Modular Noise\Chords\Buffers (F).xml" />
     </ItemGroup>
 
     <ItemGroup>

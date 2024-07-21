@@ -58,7 +58,7 @@ internal class ProgramXml : EntityBase {
   ///   To avoid confusion, navigate to other elements using Element, not RootElement
   ///   as the starting point.
   /// </summary>
-  protected XElement RootElement { get; private set; } = null!;
+  private XElement RootElement { get; set; } = null!;
 
   /// <summary>
   ///   Program-level ScriptProcessor elements.
@@ -315,7 +315,7 @@ internal class ProgramXml : EntityBase {
     }
   }
 
-  public virtual void SaveToFile(string outputProgramPath) {
+  public void SaveToFile(string outputProgramPath) {
     using var stringWriterUtf8 = new StringWriterUtf8();
     try {
       using var xmlWriter = XmlWriter.Create(

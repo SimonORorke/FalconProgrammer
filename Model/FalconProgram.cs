@@ -1007,7 +1007,6 @@ internal class FalconProgram {
           }
         }
       }
-      // NotifyUpdate($"{PathShort}: Removed sequencing script processor(s).");
     }
     // Remove any macros that, because arpeggiators or sequencing script processors they
     // modulated have been removed, no longer modulate anything.

@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="Buffers (F)" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Modular Noise.ufs/Presets/Chords/Buffers (F).uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Mappers>
+            <ControlSignalMapper Name="Mapper 0" Min="-1" Max="0" Integer="0" Discrete="0" DisplayName="Mapper 0">-1.000000 -0.992126 -0.984252 -0.976378 -0.968504 -0.960630 -0.952756 -0.944882 -0.937008 -0.929134 -0.921260 -0.913386 -0.905512 -0.897638 -0.889764 -0.881890 -0.874016 -0.866142 -0.858268 -0.850394 -0.842520 -0.834646 -0.826772 -0.818898 -0.811024 -0.803150 -0.795276 -0.787402 -0.779528 -0.771654 -0.763780 -0.755906 -0.748031 -0.740157 -0.732283 -0.724409 -0.716535 -0.708661 -0.700787 -0.692913 -0.685039 -0.677165 -0.669291 -0.661417 -0.653543 -0.645669 -0.637795 -0.629921 -0.622047 -0.614173 -0.606299 -0.598425 -0.590551 -0.582677 -0.574803 -0.566929 -0.559055 -0.551181 -0.543307 -0.535433 -0.527559 -0.519685 -0.511811 -0.503937 -0.496063 -0.488189 -0.480315 -0.472441 -0.464567 -0.456693 -0.448819 -0.440945 -0.433071 -0.425197 -0.417323 -0.409449 -0.401575 -0.393701 -0.385827 -0.377953 -0.370079 -0.362205 -0.354331 -0.346457 -0.338583 -0.330709 -0.322835 -0.314961 -0.307087 -0.299213 -0.291339 -0.283465 -0.275591 -0.267717 -0.259843 -0.251969 -0.244094 -0.236220 -0.228346 -0.220472 -0.212598 -0.204724 -0.196850 -0.188976 -0.181102 -0.173228 -0.165354 -0.157480 -0.149606 -0.141732 -0.133858 -0.125984 -0.118110 -0.110236 -0.102362 -0.094488 -0.086614 -0.078740 -0.070866 -0.062992 -0.055118 -0.047244 -0.039370 -0.031496 -0.023622 -0.015748 -0.007874 0.000000</ControlSignalMapper>
+        </Mappers>
+        <Properties description="Modular Noise
+Hardware Modular Explorations
+
+- Expand Falcon with 100 sounds created from eurorack samples
+- Tweak and perform on-the-fly with macro controls
+- Deep editing capabilities of Falcon allow limitless customization
+
+Explore the amalgamation of software semi-modular and hardware modular with 100 Falcon presets covering Bass, Arps, Sequences, Drums and more. A torrid exploration of charactered sound design, Modular Noise delivers a diverse and inspiring range of patches ready to take your productions into new sonic territory with the uncompromising sound of analog filters, plasma distortion, wavefolders, and Falcon’s own deep toolbox of oscillators, effects, modulators, and scripts.
+
+Every patch in Modular Noise is constructed with custom macros giving you powerful top-level control over the sound, providing plenty of space for exploration and many sweet spots to discover. Dial-in reverb and delay to accentuate your sound, or crack open the Edit tab to expose the patch structure, where you can easily fine-tune or completely reshape the patch to follow your inspiration, wherever it may lead.
+
+Falcon&apos;s versatility and pristine sound quality is evident throughout this collection, utilizing numerous synthesis and sound design techniques and a robust use of effects and modulators. Sounds can all be quickly previewed, edited, layered or performed with nearly limitless variation thanks to Falcon&apos;s semi-modular architecture and rich component library.
+"/>
+        <ControlSignalSources>
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Cutoff" Bipolar="1" Style="0" Value="0.49760023">
+                <Properties customPosition="0" showValue="0" x="90" y="190"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Chord Morph" Bipolar="0" Style="0" Value="0.10998438">
+                <Properties customPosition="0" showValue="0" x="240" y="190"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="Rate" Bipolar="1" Style="0" Value="0.49600005">
+                <Properties customPosition="0" showValue="0" x="390" y="190"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 4" Bypass="0" DisplayName="Env" Bipolar="1" Style="0" Value="0.5024004">
+                <Properties customPosition="0" showValue="0" x="540" y="190"/>
+            </ConstantModulation>
+            <AnalogADSR Name="Analog ADSR 1" Bypass="0" AttackTime="9.9999997e-05" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="1" ReleaseTime="9.9999997e-05" TriggerMode="1" InvertVelocity="0" AttackDecayMode="0" DisplayName="Analog ADSR 1"/>
+            <MultiLFO Name="Multi LFO 1" Bypass="0" SyncToHost="1" DisplayName="2nd Buffer Time Automation" SineDepth="0.11520016" TriangleDepth="0" SawDepth="0" SquareDepth="0.019199729" NoiseDepth="1" PulseWidth="0.5" RiseTime="0" Freq="2" Depth="1" Phase="0.076799802" Retrigger="2" Bipolar="1" Invert="0" NormalizeOutput="1" Smooth="0.069433719"/>
+        </ControlSignalSources>
+        <EventProcessors>
+            <ScriptProcessor Name="EventProcessor3" Bypass="0" VisualKnob_1="0.49760023" VisualKnob_2="0.10998438" VisualKnob_3="0.49600005" VisualKnob_4="0.5024004" Macro_1="0.49760023" Macro_2="0.10998438" Macro_3="0.49600005" Macro_4="0.5024004" API_version="21">
+                <Properties OriginalProgramPath="$Modular Noise.ufs/Presets/Chords/Buffers (F).uvip" PresetPath="/Users/theogallienne/Documents/UVI/FALCON XP/Modular Noise XP/DEF/BASE/Scripts/ModularNoiseStub.lua" ScriptPath="$Modular Noise.ufs/Scripts/ModularNoiseStub.lua"/>
+                <script><![CDATA[require "ModularNoise"]]></script>
+                <ScriptData/>
+            </ScriptProcessor>
+            <ScriptProcessor Name="EventProcessor0" Bypass="0" numSteps="32" Period="2" MIDIcc="20" AutoPlay="1" API_version="21">
+                <Properties OriginalProgramPath="$Modular Noise.ufs/Presets/Chords/Buffers (F).uvip" PresetPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Sequencing/MIDI CC LFO.lua" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Sequencing/MIDI CC LFO.lua"/>
+                <script><![CDATA[require '_MIDICCLFO/MIDICCLFO']]></script>
+                <ScriptData LFOValues="0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000"/>
+            </ScriptProcessor>
+            <ScriptProcessor Name="EventProcessor1" Bypass="0" numSteps="32" Period="2" MIDIcc="21" AutoPlay="1" API_version="21">
+                <Properties OriginalProgramPath="$Modular Noise.ufs/Presets/Chords/Buffers (F).uvip" PresetPath="" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Sequencing/MIDI CC LFO.lua"/>
+                <script><![CDATA[require '_MIDICCLFO/MIDICCLFO']]></script>
+                <ScriptData LFOValues="0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 0.000000 0.000000"/>
+            </ScriptProcessor>
+            <ScriptProcessor Name="EventProcessor2" Bypass="0" numSteps="24" Period="7" MIDIcc="22" AutoPlay="1" API_version="21">
+                <Properties OriginalProgramPath="$Modular Noise.ufs/Presets/Chords/Buffers (F).uvip" PresetPath="" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Sequencing/MIDI CC LFO.lua"/>
+                <script><![CDATA[require '_MIDICCLFO/MIDICCLFO']]></script>
+                <ScriptData LFOValues="0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000"/>
+            </ScriptProcessor>
+        </EventProcessors>
+        <Inserts>
+            <EffectRack Name="InsertFX4" Bypass="0">
+                <Mappers>
+                    <ControlSignalMapper Name="Mapper 0" Min="0" Max="1" Integer="0" Discrete="1" DisplayName="Mapper 0">0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 1" Min="0" Max="1" Integer="0" Discrete="1" DisplayName="Mapper 1">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 2" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Mapper 2">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 3" Min="0" Max="1" Integer="0" Discrete="1" DisplayName="Mapper 3">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 4" Min="0" Max="1" Integer="0" Discrete="1" DisplayName="Mapper 4">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 5" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Mapper 5">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 6" Min="0" Max="1" Integer="0" Discrete="1" DisplayName="Mapper 6">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</ControlSignalMapper>
+                    <ControlSignalMapper Name="Mapper 7" Min="0" Max="1" Integer="0" Discrete="1" DisplayName="Mapper 7">0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000</ControlSignalMapper>
+                </Mappers>
+                <Properties PanelHeight="150" PresetPath="C:/Users/27olr/Documents/UVI/Falcon/User Presets/FXs/Effect Rack/Rez/Tengu.preset"/>
+                <ControlSignalSources>
+                    <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Morph" Bipolar="0" Style="0" Value="0.016000301">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Value" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <Properties customPosition="1" showValue="0" x="660" y="95"/>
+                    </ConstantModulation>
+                </ControlSignalSources>
+                <Chains>
+                    <AuxEffect Name="Chain1" Bypass="1" Gain="1" Pan="0" PreInsert="1" DisplayName="Thru">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain2" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX1">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 0" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 1.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain3" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX2">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="3.9810717">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 1" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 2.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain4" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX3">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 2" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 3.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain5" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX4">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 3" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 4.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain6" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX5">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 4" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 5.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain7" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX6">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 5" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 6.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain8" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX7">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 6" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 7.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                    <AuxEffect Name="Chain9" Bypass="0" Gain="0.12299557" Pan="0" PreInsert="1" DisplayName="FX8">
+                        <Inserts>
+                            <Gain Name="InsertFX0" Bypass="0" Volume="0">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="./../../Macro 1" Destination="Volume" Mapper="Mapper 7" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                                </Connections>
+                                <Properties PresetPath="C:/Users/Carlo De Gregorio/Documents/UVI/Falcon/User Presets/FXs/Gain/Zero Sum Game.preset"/>
+                            </Gain>
+                            <SampledReverb Name="InsertFX1" Bypass="0" Dry="0" Wet="1" Time="1" DampingLow="1" DampingHigh="1" PreDelay="0" Width="0" SamplePath="$Modular Noise.ufs/Samples/16-44/IR/Tengu 8.wav" NormalizePower="1" UseWindowAtOriginalSize="0" SampledReverbVersion="1"/>
+                        </Inserts>
+                    </AuxEffect>
+                </Chains>
+            </EffectRack>
+            <BeatRepeat Name="InsertFX1" Bypass="0" SyncToHost="1" Time="0.75" Mix="0" Active="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Analog ADSR 1" Destination="Mix" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 21" Destination="Active" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                </Connections>
+            </BeatRepeat>
+            <BeatRepeat Name="InsertFX3" Bypass="0" SyncToHost="1" Time="0.125" Mix="0" Active="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Analog ADSR 1" Destination="Mix" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 22" Destination="Active" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                </Connections>
+            </BeatRepeat>
+            <BeatRepeat Name="InsertFX0" Bypass="0" SyncToHost="1" Time="0.1875" Mix="0" Active="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Analog ADSR 1" Destination="Mix" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 20" Destination="Active" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                </Connections>
+            </BeatRepeat>
+            <DigitalEq Name="InsertFX2" Bypass="0" StereoMode="1" Transpose="0" KeyTracking="0" OverallGain="8.4375" GainScale="1" Enabled1="1" Visible1="1" Type1="1" Slope1="3" Channels1="1" Freq1="64.232101" Q1="0.068299837" Gain1="0" Bandwidth1="1" Enabled2="1" Visible2="1" Type2="6" Slope2="1" Channels2="2" Freq2="6488.6709" Q2="0.38048625" Gain2="6.5538559" Bandwidth2="4.4365602" Enabled3="1" Visible3="1" Type3="6" Slope3="0" Channels3="1" Freq3="6398.624" Q3="0.70710677" Gain3="-6.489233" Bandwidth3="2.1988001" Enabled4="0" Visible4="0" Type4="0" Slope4="1" Channels4="0" Freq4="1000" Q4="0.70710677" Gain4="0" Bandwidth4="1" Enabled5="0" Visible5="0" Type5="0" Slope5="1" Channels5="2" Freq5="1000" Q5="0.70710677" Gain5="0" Bandwidth5="1" Enabled6="0" Visible6="0" Type6="0" Slope6="1" Channels6="2" Freq6="1000" Q6="0.70710677" Gain6="0" Bandwidth6="1" Enabled7="0" Visible7="0" Type7="0" Slope7="1" Channels7="0" Freq7="1000" Q7="0.70710677" Gain7="0" Bandwidth7="1" Enabled8="0" Visible8="0" Type8="0" Slope8="1" Channels8="0" Freq8="1000" Q8="0.70710677" Gain8="0" Bandwidth8="1" Enabled9="0" Visible9="0" Type9="0" Slope9="1" Channels9="0" Freq9="1000" Q9="0.70710677" Gain9="0" Bandwidth9="1" Enabled10="0" Visible10="0" Type10="0" Slope10="1" Channels10="0" Freq10="1000" Q10="0.70710677" Gain10="0" Bandwidth10="1" Enabled11="0" Visible11="0" Type11="0" Slope11="1" Channels11="0" Freq11="1000" Q11="0.70710677" Gain11="0" Bandwidth11="1" Enabled12="0" Visible12="0" Type12="0" Slope12="1" Channels12="0" Freq12="1000" Q12="0.70710677" Gain12="0" Bandwidth12="1" Enabled13="0" Visible13="0" Type13="0" Slope13="1" Channels13="0" Freq13="1000" Q13="0.70710677" Gain13="0" Bandwidth13="1" Enabled14="0" Visible14="0" Type14="0" Slope14="1" Channels14="0" Freq14="1000" Q14="0.70710677" Gain14="0" Bandwidth14="1" Enabled15="0" Visible15="0" Type15="0" Slope15="1" Channels15="0" Freq15="1000" Q15="0.70710677" Gain15="0" Bandwidth15="1" Enabled16="0" Visible16="0" Type16="0" Slope16="1" Channels16="0" Freq16="1000" Q16="0.70710677" Gain16="0" Bandwidth16="1"/>
+            <MS20Dual Name="InsertFX5" Bypass="0" Freq="20000" Q="0" KeyTracking="0" FreqHP="20" Q_HP="0" ResonanceTrim="0.5" ReferenceVoltage="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="FreqHP" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                </Connections>
+            </MS20Dual>
+            <Shifter Name="InsertFX6" Bypass="0" Detune="0" FineTune="0" QuantizeTune="0" GrainSize="10" Mix="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.5" Source="@PitchBend" Destination="Detune" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 1" Destination="GrainSize" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                </Connections>
+            </Shifter>
+        </Inserts>
+        <Layers>
+            <Layer Name="Layer 1" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Layer 1" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffa398e8"/>
+                <ControlSignalSources/>
+                <EventProcessors>
+                    <ScriptProcessor Name="EventProcessor0" Bypass="0" resolution="7" gate="0.89999998" octave="0" numSteps="16" stepTypeSeqLength="1" stepRatioSeqLength="1" stepVelocitySeqLength="0" stepGateSeqLength="0" stepCCSeqLength="0" stepArpTypeSeqLength="1" numRepeatSeqLength="1" stepPanSeqLength="0" stepOctaveSeqLength="0" stepPitchSeqLength="0" stepProbabilitySeqLength="0" stepResetSeqLength="0" StepType1="3" StepRatio1="4" ArpType1="10" Repeat1="2" Octave1="0" Pitch1="0" Reset1="0" StepType2="2" StepRatio2="4" ArpType2="1" Repeat2="2" Octave2="0" Pitch2="0" Reset2="0" StepType3="2" StepRatio3="4" ArpType3="1" Repeat3="2" Octave3="0" Pitch3="0" Reset3="0" StepType4="2" StepRatio4="4" ArpType4="1" Repeat4="2" Octave4="0" Pitch4="0" Reset4="0" StepType5="2" StepRatio5="4" ArpType5="1" Repeat5="2" Octave5="0" Pitch5="0" Reset5="0" StepType6="2" StepRatio6="4" ArpType6="1" Repeat6="2" Octave6="0" Pitch6="0" Reset6="0" StepType7="2" StepRatio7="4" ArpType7="1" Repeat7="2" Octave7="0" Pitch7="0" Reset7="0" StepType8="2" StepRatio8="4" ArpType8="1" Repeat8="2" Octave8="0" Pitch8="0" Reset8="0" StepType9="2" StepRatio9="4" ArpType9="1" Repeat9="2" Octave9="0" Pitch9="0" Reset9="0" StepType10="2" StepRatio10="4" ArpType10="1" Repeat10="2" Octave10="0" Pitch10="0" Reset10="0" StepType11="2" StepRatio11="4" ArpType11="1" Repeat11="2" Octave11="0" Pitch11="0" Reset11="0" StepType12="2" StepRatio12="4" ArpType12="1" Repeat12="2" Octave12="0" Pitch12="0" Reset12="0" StepType13="2" StepRatio13="4" ArpType13="1" Repeat13="2" Octave13="0" Pitch13="0" Reset13="0" StepType14="2" StepRatio14="4" ArpType14="1" Repeat14="2" Octave14="0" Pitch14="0" Reset14="0" StepType15="2" StepRatio15="4" ArpType15="1" Repeat15="2" Octave15="0" Pitch15="0" Reset15="0" StepType16="2" StepRatio16="4" ArpType16="1" Repeat16="2" Octave16="0" Pitch16="0" Reset16="0" API_version="21">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 3" Destination="resolution" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                        </Connections>
+                        <Properties OriginalProgramPath="$Modular Noise.ufs/Presets/Chords/Buffers (F).uvip" PresetPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Sequencing/Step Arp.lua" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Sequencing/Step Arp.lua"/>
+                        <script><![CDATA[require "_StepArp.StepArp"]]></script>
+                        <ScriptData velocity="100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100" gate="100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100" probability="100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100" CC1="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" CC2="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" CC3="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" CC4="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" pan="0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000"/>
+                        <state><![CDATA[[1]]]></state>
+                    </ScriptProcessor>
+                </EventProcessors>
+                <BusRouters/>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1" Pan="0" DisplayName="Keygroup 1" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="$Keygroup/Multi Envelope 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <MultiEnvelope Name="Multi Envelope 1" Bypass="0" SyncToHost="1" DisplayName="Multi Envelope 1" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NumSteps="5" Speed="1.0200846" Smooth="0" Bipolar="0" NoteOffRetrigger="0">
+                                <Steps>
+                                    <Step Time="0" DestLevel="0" Curve="0"/>
+                                    <Step Time="0" DestLevel="1" Curve="-0.015625"/>
+                                    <Step Time="0.021472754" DestLevel="1" Curve="-0.34823573"/>
+                                    <Step Time="0.0051039178" DestLevel="0" Curve="-0.025148669"/>
+                                    <Step Time="0.098237306" DestLevel="0" Curve="-0.025148669"/>
+                                </Steps>
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.21875" Source="$Program/Macro 4" Destination="Speed" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="1"/>
+                                </Connections>
+                                <Properties PresetPath="$Resource/resource/FactoryPresets/Modulation/Multi Envelope/Envelopes One Shot/Env 01.preset"/>
+                            </MultiEnvelope>
+                        </ControlSignalSources>
+                        <BusRouters/>
+                        <Oscillators>
+                            <MinBlepGenerator Name="Oscillator" Bypass="0" Waveform="5" Pwm="0.5" StartPhase="0" Polarity="0" HardSync="0" HardSyncShift="0" NumOscillators="2" MultiOscSpread="0" Stereo="1" PhaseSpread="2" DetuneMode="0" StereoSpread="1" StereoSpreadMode="1" CoarseTune="0" FineTune="0" Gain="0.54100007" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </MinBlepGenerator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="x" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ffa398e8"/>
+                <ControlSignalSources/>
+                <BusRouters/>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0" Pan="0" DisplayName="Keygroup 1" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="9.9999997e-05" DecayTime="9.9999997e-05" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="0" ReleaseTime="9.9999997e-05" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                        </ControlSignalSources>
+                        <BusRouters/>
+                        <Oscillators>
+                            <MinBlepGenerator Name="Oscillator" Bypass="0" Waveform="4" Pwm="0.5" StartPhase="0" Polarity="0" HardSync="0" HardSyncShift="0" NumOscillators="1" MultiOscSpread="0.1" Stereo="0" PhaseSpread="1" DetuneMode="0" StereoSpread="0.1" StereoSpreadMode="1" CoarseTune="0" FineTune="0" Gain="0" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0" Source="$Program/Multi LFO 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0" Source="$Program/Analog ADSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </MinBlepGenerator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="D:/Libraries/UVI/Modular Noise.ufs"/>
+</UVI4>

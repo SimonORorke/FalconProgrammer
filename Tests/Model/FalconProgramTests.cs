@@ -153,6 +153,39 @@ public class FalconProgramTests {
   }
 
   [Test]
+  public void RemoveArpeggiatorsAndSequencing() {
+    Run("Falcon Factory rev2", "Bass", "Big Sleep");
+    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith("Removed Arpeggiator(s)."));
+    Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
+      "Removed macro Sequence (Macro 17)."));
+    Run("Modular Noise", "Bass", "Voltage");
+    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith("Removed Arpeggiator(s)."));
+    Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
+      "Removed program-level sequencing script processor(s)."));
+    Run("Modular Noise", "Chords", "Buffers (F)");
+    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
+      "Removed program-level sequencing script processor(s)."));
+    Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
+      "Removed below-program-level sequencing script processor(s)."));
+    Assert.That(Batch.MockBatchLog.Lines[2], Does.EndWith(
+      "Removed macro Rate (Macro 3)."));
+    return;
+
+    void Run(string soundBankName, string categoryName, string programName) {
+      // Remove GUI script processor first.
+      Batch.NextProgramTestXml = null;
+      Batch.MockBatchLog.Lines.Clear();
+      Batch.RunTask(
+        ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
+      Batch.NextProgramTestXml = Batch.TestProgram.SavedXml;
+      Batch.MockBatchLog.Lines.Clear();
+      Batch.RunTask(
+        ConfigTask.RemoveArpeggiatorsAndSequencing, soundBankName, categoryName, 
+        programName);
+    }
+  }
+
+  [Test]
   public void RestoreOriginal() {
     Batch.RunTask(ConfigTask.RestoreOriginal,
       "Falcon Factory", "Bass", "Imagination");

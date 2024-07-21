@@ -23,6 +23,7 @@ public class TestBatch : Batch {
   internal bool HasScriptRunEnded { get; private set; }
   internal MockBatchLog MockBatchLog => (MockBatchLog)Log;
   internal MockFileSystemService MockFileSystemService { get; }
+  internal string? NextProgramTestXml { get; set; }
   private TestBatchScriptReaderEmbedded TestBatchScriptReaderEmbedded { get; }
   internal TestFalconProgram TestProgram => (TestFalconProgram)Program;
   internal TestSettingsReaderEmbedded TestSettingsReaderEmbedded { get; }
@@ -41,6 +42,7 @@ public class TestBatch : Batch {
       throw ExceptionWhenConfiguringProgram;
     }
     if (UpdatePrograms) {
+      TestProgram.TestXml = NextProgramTestXml;
       string candidateEmbeddedProgramFileName = $"{TestProgram.Name}.xml";
       if (Global.EmbeddedFileExists(candidateEmbeddedProgramFileName)) {
         TestProgram.EmbeddedProgramFileName =

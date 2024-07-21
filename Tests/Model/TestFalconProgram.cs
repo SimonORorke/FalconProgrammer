@@ -17,6 +17,7 @@ internal class TestFalconProgram : FalconProgram {
   internal string LastWrittenFilePath { get; private set; } = string.Empty;
   internal string LastWrittenFileContents { get; private set; } = string.Empty;
   internal string SavedXml { get; private set; } = string.Empty;
+  internal string? TestXml { get; set; }
 
   private TestProgramXml TestProgramXml {
     get {
@@ -24,7 +25,8 @@ internal class TestFalconProgram : FalconProgram {
 
       TestProgramXml CreateTestProgramXml() {
         var result = new TestProgramXml(Category) {
-          EmbeddedProgramFileName = EmbeddedProgramFileName
+          EmbeddedProgramFileName = EmbeddedProgramFileName,
+          TestXml = TestXml 
         };
         result.Saved += TestProgramXmlOnSaved;
         return result;
