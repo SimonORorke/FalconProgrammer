@@ -1013,7 +1013,7 @@ internal class FalconProgram {
     if (hasRemovedArpeggiators || hasRemovedScriptProcessors) {
       var removableMacros = (
         from macro in Macros
-        // We cannot ignore modulated connection parents that are bypassed, as they
+        // We are not removing modulated connection parents that are bypassed: they
         // could be toggle macros that are off initially.
         where macro.ModulatedConnectionsParents.Count == 0
         select macro).ToList();
@@ -1049,7 +1049,7 @@ internal class FalconProgram {
     // macro modulates have been bypassed by BypassDelayEffects.
     var removableMacros = (
       from macro in Macros
-      // We cannot ignore modulated connection parents that are bypassed, as they
+      // We are not removing modulated connection parents that are bypassed: they
       // could be toggle macros that are off initially.
       where macro.ModulatesDelay || macro.ModulatedConnectionsParents.Count == 0
       select macro).ToList();
