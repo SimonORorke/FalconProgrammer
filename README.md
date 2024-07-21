@@ -12,7 +12,9 @@ There is currently an installer only for Windows. However, the source code shoul
 
 ·    Assign MIDI CC numbers to macros and, provided the program uses the standard Info page layout, optionally append each macro's MIDI CC number to its display name.
 
-·    Bypass (disable) all known delay effects and then, provided the program uses the standard Info page layout, remove any macro that no longer modulates any enabled effects.
+·    Remove arpeggiators and sequencing script processors and then, provided the program has a standard Info page, remove any macros that consequently no longer modulate anything.
+
+Bypass (disable) all known delay effects and then, provided the program uses the standard Info page layout, remove any macro that no longer modulates any enabled effects.
 
 ·    If a Release macro is not part of a set of four ADSR macros and the macro is not modulated by the mod wheel, set its initial value to zero.
 

@@ -953,8 +953,7 @@ internal class FalconProgram {
   /// <summary>
   ///   Removes Arpeggiators and sequencing <see cref="ScriptProcessors" />.
   ///   Then, provided the program has a standard Info page,
-  ///   removes any macros that, because arpeggiators or sequencing script processors
-  ///   they modulated have been removed, no longer modulate anything.
+  ///   removes any macros that consequently no longer modulate anything.
   /// </summary>
   public void RemoveArpeggiatorsAndSequencing() {
     const string sequencingFolder = "/Sequencing/";

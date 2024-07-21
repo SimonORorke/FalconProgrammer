@@ -4,7 +4,7 @@
 
 ### Enhancement
 
-
+New configuration task **RemoveArpeggiatorsAndSequencing**:  Removes arpeggiators and sequencing script processors. Then, provided the program has a standard Info page, removes any macros that consequently no longer modulate anything.
 
 ### Bug Fix
 
