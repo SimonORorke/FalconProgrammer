@@ -15,11 +15,17 @@
                 </Connections>
                 <Properties customPosition="1" x="242" y="235" />
             </ConstantModulation>
-            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="Wheel (CC33)" Bipolar="0" Style="0" Value="0">
+            <ConstantModulation Name="Macro 6" Bypass="0" DisplayName="Reverb (CC33)" Bipolar="0" Style="0" Value="0">
                 <Connections>
                     <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 33" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
                 </Connections>
                 <Properties customPosition="1" x="393" y="235" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 7" Bypass="0" DisplayName="Wheel (CC34)" Bipolar="0" Style="0" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 34" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="544" y="235" />
             </ConstantModulation>
         </ControlSignalSources>
         <Inserts>
@@ -29,7 +35,11 @@
             <DualDelay Name="InsertFX4" Bypass="1" SyncToHost="1" DelayTime="0.5" LowCut="43.462585" HighCut="4127.2471" PeakFreq="1000" PeakGain="0" PeakQ="1" Feedback="0.59999996" Mix="0.029999999" Rotation="90" InputWidth="0.099999994" OutputWidth="1" DelayRatio="0" FeedbackRatio="0" InputRotation="1" OutputRotation="0" ModDepth="0" ModRate="1" ModChannelOffset="1" Interpolation="1" DualDelayVersion="1">
                 <Properties PresetPath="$Resource/resource/FactoryPresets/FX/01 - Delay/07 - Dual Delay/1 Stereo Delay/Ping Pong 8.preset" />
             </DualDelay>
-            <SparkVerb Name="InsertFX1" Bypass="1" ModDepth="10.616" ModRate="0.473584" Diffusion="0.530267" DiffusionStart="4.13796" Width="1" RoomSize="20.716999" DecayTime="1.9621491" DecayLow="0.55433673" DecayHigh="0.41666701" FreqLow="241.82001" FreqHigh="4666.916" Shape="0.81606901" Mix="0.29999998" Quality="4" Mode="2" HiCut="1" LowCut="0" Rolloff="5560.5718" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1" />
+            <SparkVerb Name="InsertFX1" Bypass="1" ModDepth="10.616" ModRate="0.473584" Diffusion="0.530267" DiffusionStart="4.13796" Width="1" RoomSize="20.716999" DecayTime="1.9621491" DecayLow="0.55433673" DecayHigh="0.41666701" FreqLow="241.82001" FreqHigh="4666.916" Shape="0.81606901" Mix="0" Quality="4" Mode="2" HiCut="1" LowCut="0" Rolloff="5560.5718" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="/uvi/Part 0/Program/Macro 6" Destination="Mix" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+            </SparkVerb>
             <Maximizer Name="InsertFX0" Bypass="0" Threshold="-1" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20" />
         </Inserts>
         <Layers>
@@ -74,7 +84,7 @@
                                 <Connections>
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.25" Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 1" Ratio="0" Source="$Keygroup/Multi Envelope 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
-                                    <SignalConnection Name="SignalConnection 2" Ratio="-0.27586207" Source="$Program/Macro 3" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                    <SignalConnection Name="SignalConnection 2" Ratio="-0.27586207" Source="$Program/Macro 7" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 3" Ratio="1" Source="$Program/Macro 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                 </Connections>

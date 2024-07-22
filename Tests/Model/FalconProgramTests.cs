@@ -246,6 +246,21 @@ public class FalconProgramTests {
     Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.ScriptEventMod2Binary));
     Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ScriptEventMod0Binary));
     Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents, 
+      Has.Count.EqualTo(1));
+    Assert.That(
+      Batch.TestProgram.Macros[0].ModulatedConnectionsParents[0].Modulations[^2].Source, 
+      Is.EqualTo("$Program/MPE Y Modulation"));
+    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents, 
+      Has.Count.EqualTo(1));
+    Assert.That(
+      Batch.TestProgram.Macros[1].ModulatedConnectionsParents[0].Modulations[^1].Source, 
+      Is.EqualTo("$Program/MPE Z Modulation"));
+    Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents, 
+      Has.Count.EqualTo(1));
+    Assert.That(
+      Batch.TestProgram.Macros[2].ModulatedConnectionsParents[0].Modulations[^1].Source, 
+      Is.EqualTo("$Program/MPE X Modulation"));
   }
 
   [Test]

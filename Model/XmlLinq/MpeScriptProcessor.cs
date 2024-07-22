@@ -34,12 +34,12 @@ internal class MpeScriptProcessor : ScriptProcessor {
 
   public void Configure(IList<Macro> macrosToEmulate) {
     List<ScriptEventModulation> dimensionModulations = [];
-    if (macrosToEmulate.Count >= 3) {
-      XTarget = XTarget.ScriptEventMod2Binary;
+    if (macrosToEmulate.Count >= 1) {
+      YTarget = YTarget.ScriptEventMod1Binary;
       dimensionModulations.Add(
-        CreateDimensionModulation("MPE X Modulation", 2));
+        CreateDimensionModulation("MPE Y Modulation", 1));
     } else {
-      XTarget = XTarget.Pitch;
+      YTarget = YTarget.PolyphonicAftertouch;
     }
     if (macrosToEmulate.Count >= 2) {
       ZTarget = ZTarget.ScriptEventMod0Binary;
@@ -48,12 +48,12 @@ internal class MpeScriptProcessor : ScriptProcessor {
     } else {
       ZTarget = ZTarget.Gain;
     }
-    if (macrosToEmulate.Count >= 1) {
-      YTarget = YTarget.ScriptEventMod1Binary;
+    if (macrosToEmulate.Count >= 3) {
+      XTarget = XTarget.ScriptEventMod2Binary;
       dimensionModulations.Add(
-        CreateDimensionModulation("MPE Y Modulation", 1));
+        CreateDimensionModulation("MPE X Modulation", 2));
     } else {
-      YTarget = YTarget.PolyphonicAftertouch;
+      XTarget = XTarget.Pitch;
     }
     for (int i = 0; i < dimensionModulations.Count; i++) {
       EmulateMacroWithDimension(macrosToEmulate[i], dimensionModulations[i]);

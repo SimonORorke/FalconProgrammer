@@ -3,15 +3,39 @@
     <Program Name="Program" Bypass="0" Gain="1.1220186" Pan="0" DisplayName="Drama Queen" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="16" NotePolyphony="0" ProgramPath="$Falcon Factory rev2.ufs/Presets/Polysynth/Drama Queen.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
         <Properties BackgroundImagePath="./../../../Images/Gunmetal.png" Tags="mode=Digital;mode=Distorted;mode=Hard;sub=Synth:Poly;type=Synth;mode=Wet;" description="PATH: Falcon Factory rev2\Polysynth\Drama Queen&#xD;&#xA;&#xD;&#xA;Preset credits: MoozE" />
         <ControlSignalSources>
-            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Wheel (CC31)" Bipolar="0" Style="0" Value="0">
+            <ConstantModulation Name="Macro 6" Bypass="0" DisplayName="Wheel (CC31)" Bipolar="0" Style="0" Value="0">
                 <Connections>
                     <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 31" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
                 </Connections>
-                <Properties customPosition="1" x="91" y="235" />
+                <Properties customPosition="1" x="91" y="120" />
             </ConstantModulation>
-            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Reverb (CC112)" Bipolar="0" Style="1" Value="0">
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Auto Filter (CC112)" Bipolar="0" Style="1" Value="0">
                 <Connections>
                     <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 112" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="242" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="Chord (CC113)" Bipolar="0" Style="1" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 113" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="393" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 4" Bypass="0" DisplayName="FMizer (CC114)" Bipolar="0" Style="1" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 114" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="544" y="120" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 5" Bypass="0" DisplayName="Pluck Filter (CC115)" Bipolar="0" Style="1" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 115" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
+                </Connections>
+                <Properties customPosition="1" x="91" y="235" />
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Reverb (CC116)" Bipolar="0" Style="1" Value="0">
+                <Connections>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 116" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1" />
                 </Connections>
                 <Properties customPosition="1" x="242" y="235" />
             </ConstantModulation>
@@ -26,6 +50,9 @@
                 </ControlSignalSources>
                 <EventProcessors>
                     <ScriptProcessor Name="EventProcessor0" Bypass="1" Shift_1="19" Velocity_1="1" Shift_2="22" Velocity_2="1" Shift_3="12" Velocity_3="1" Shift_4="-12" Velocity_4="1" Shift_5="0" Velocity_5="1" Shift_6="0" Velocity_6="1" API_version="16">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 3" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
+                        </Connections>
                         <Properties OriginalProgramPath="$Falcon Factory rev2.ufs/Presets/Polysynth/Drama Queen.uvip" PresetPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Harmonization/Chorder.lua" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Harmonization/Chorder.lua" />
                         <script><![CDATA[require '_Chorder/Chorder']]></script>
                         <ScriptData />
@@ -34,6 +61,7 @@
                 <Inserts>
                     <XpanderFilter Name="InsertFX0" Bypass="1" Freq="479.79999" Q="0.079999998" KeyTracking="0" Mode="2" DistortionType="2" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
                         <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
                             <SignalConnection Name="SignalConnection 0" Ratio="0.034482758" Source="$Layer/LFO 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                             <SignalConnection Name="SignalConnection 1" Ratio="0.48275861" Source="$Layer/LFO 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                         </Connections>
@@ -44,7 +72,11 @@
                         </Connections>
                         <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/05 - Room/Ambience Room.preset" />
                     </SparkVerb>
-                    <Gain Name="InsertFX3" Bypass="1" Volume="0.56234133" />
+                    <Gain Name="InsertFX3" Bypass="1" Volume="0.56234133">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 3" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
+                        </Connections>
+                    </Gain>
                     <Maximizer Name="InsertFX2" Bypass="0" Threshold="0" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20" />
                 </Inserts>
                 <BusRouters />
@@ -64,12 +96,14 @@
                             <WaveShaper Name="InsertFX2" Bypass="0" InputGain="0" OutputGain="0" Amount="0.40799999" Knee="4.4000006" Mix="1" PreFreq="20000" PostFreq="20" Oversampling="2" Mode="8" />
                             <WaveShaper Name="InsertFX3" Bypass="1" InputGain="-2.5600014" OutputGain="0" Amount="0.39199999" Knee="0" Mix="1" PreFreq="22000" PostFreq="20" Oversampling="0" Mode="5">
                                 <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 4" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.10344828" Source="$Keygroup/Analog ADSR 1" Destination="Amount" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 1" Ratio="0.10344828" Source="$Keygroup/Analog ADSR 1" Destination="Amount" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                 </Connections>
                             </WaveShaper>
                             <XpanderFilter Name="InsertFX1" Bypass="1" Freq="79.621445" Q="0" KeyTracking="0" Mode="3" DistortionType="1" Drive="4.4799986" Fat="1" Algorithm="0" Oversampling="1">
                                 <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 5" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.40000001" Source="$Keygroup/Analog ADSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 1" Ratio="0.37931034" Source="$Keygroup/Analog ADSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.68965518" Source="$Keygroup/Analog ADSR 1" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
@@ -86,7 +120,7 @@
                                     <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 3" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                         </Connections>
                                     </SignalConnection>
                                 </Connections>
@@ -96,7 +130,7 @@
                                     <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 3" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                         </Connections>
                                     </SignalConnection>
                                 </Connections>
@@ -106,7 +140,7 @@
                                     <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 3" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                         </Connections>
                                     </SignalConnection>
                                 </Connections>
@@ -117,7 +151,7 @@
                                     <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 3" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                         </Connections>
                                     </SignalConnection>
                                 </Connections>
@@ -128,7 +162,7 @@
                                     <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                     <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 3" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 6" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0" />
                                         </Connections>
                                     </SignalConnection>
                                 </Connections>
