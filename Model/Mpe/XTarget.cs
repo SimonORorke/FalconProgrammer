@@ -3,5 +3,5 @@
 public enum XTarget {
   None = 1,
   Pitch = 2,
-  ScriptEventMod2Binary = 3
+  ContinuousMacro3Bipolar = 3
 }

@@ -32,39 +32,55 @@ internal class MpeScriptProcessor : ScriptProcessor {
     private set => SetAttribute("Z", (int)value);
   }
 
-  public void Configure(IList<Macro> macrosToEmulate) {
+  public void Configure(IList<Macro> macrosToEmulate, MpeSettings mpeSettings) {
+    YTarget =
+      mpeSettings.YTargetValue is YTarget.ContinuousMacro1Bipolar
+        or YTarget.ContinuousMacro1Unipolar
+        ? macrosToEmulate.Count >= 1
+          ? mpeSettings.YTargetValue
+          : YTarget.PolyphonicAftertouch
+        : mpeSettings.YTargetValue;
+    ZTarget =
+      mpeSettings.ZTargetValue is ZTarget.ContinuousMacro2Bipolar
+        or ZTarget.ContinuousMacro2Unipolar
+        ? macrosToEmulate.Count >= 2 ? mpeSettings.ZTargetValue : ZTarget.Gain
+        : mpeSettings.ZTargetValue;
+    XTarget =
+      mpeSettings.XTargetValue is XTarget.ContinuousMacro3Bipolar
+        ? macrosToEmulate.Count >= 3 ? mpeSettings.XTargetValue : XTarget.Pitch
+        : mpeSettings.XTargetValue;
     List<ScriptEventModulation> dimensionModulations = [];
-    if (macrosToEmulate.Count >= 1) {
-      YTarget = YTarget.ScriptEventMod1Binary;
-      dimensionModulations.Add(
-        CreateDimensionModulation("MPE Y Modulation", 1));
-    } else {
-      YTarget = YTarget.PolyphonicAftertouch;
+    switch (YTarget) {
+      case YTarget.ContinuousMacro1Bipolar:
+      case YTarget.ContinuousMacro1Unipolar:
+        dimensionModulations.Add(
+          CreateDimensionModulation(MpeEventId.Y, YTarget.ToString()));
+        break;
     }
-    if (macrosToEmulate.Count >= 2) {
-      ZTarget = ZTarget.ScriptEventMod0Binary;
-      dimensionModulations.Add(
-        CreateDimensionModulation("MPE Z Modulation", 0));
-    } else {
-      ZTarget = ZTarget.Gain;
+    switch (ZTarget) {
+      case ZTarget.ContinuousMacro2Bipolar:
+      case ZTarget.ContinuousMacro2Unipolar:
+        dimensionModulations.Add(
+          CreateDimensionModulation(MpeEventId.Z, ZTarget.ToString()));
+        break;
     }
-    if (macrosToEmulate.Count >= 3) {
-      XTarget = XTarget.ScriptEventMod2Binary;
-      dimensionModulations.Add(
-        CreateDimensionModulation("MPE X Modulation", 2));
-    } else {
-      XTarget = XTarget.Pitch;
+    switch (XTarget) {
+      case XTarget.ContinuousMacro3Bipolar:
+        dimensionModulations.Add(
+          CreateDimensionModulation(MpeEventId.X, XTarget.ToString()));
+        break;
     }
     for (int i = 0; i < dimensionModulations.Count; i++) {
       EmulateMacroWithDimension(macrosToEmulate[i], dimensionModulations[i]);
     }
   }
 
-  private ScriptEventModulation CreateDimensionModulation(string name, int eventId) {
+  private ScriptEventModulation CreateDimensionModulation(
+    MpeEventId eventId, string targetName) {
     var result = new ScriptEventModulation(ProgramXml) {
-      Name = name,
-      Bipolar = true,
-      EventId = eventId
+      Name = $"MPE {eventId} Modulation",
+      Bipolar = targetName.EndsWith("Bipolar"),
+      EventId = (int)eventId
     };
     result.DisplayName = result.Name;
     return result;

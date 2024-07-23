@@ -3,6 +3,6 @@
 public enum YTarget {
   None = 1,
   PolyphonicAftertouch = 2,
-  ScriptEventMod1 = 3,
-  ScriptEventMod1Binary = 4
+  ContinuousMacro1Unipolar = 3,
+  ContinuousMacro1Bipolar = 4
 }

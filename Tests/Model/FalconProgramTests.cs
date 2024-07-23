@@ -217,7 +217,7 @@ public class FalconProgramTests {
     Assert.That(found, Is.True);
     Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
     Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
   }
 
   [Test]
@@ -230,8 +230,8 @@ public class FalconProgramTests {
     bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
     Assert.That(found, Is.True);
     Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
-    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ScriptEventMod0Binary));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
   }
 
   [Test]
@@ -243,10 +243,16 @@ public class FalconProgramTests {
     Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
     bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
     Assert.That(found, Is.True);
-    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.ScriptEventMod2Binary));
-    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ScriptEventMod0Binary));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ScriptEventMod1Binary));
+    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
+    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
     Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents, 
+      Has.Count.EqualTo(1));
+    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents, 
+      Has.Count.EqualTo(1));
+    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents, 
+      Is.EqualTo(Batch.TestProgram.Macros[1].ModulatedConnectionsParents));
+    Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents, 
       Has.Count.EqualTo(1));
     Assert.That(
       Batch.TestProgram.Macros[0].ModulatedConnectionsParents[0].Modulations[^2].Source, 

@@ -1305,7 +1305,7 @@ internal class FalconProgram {
       return;
     }
     var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
-    mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation());
+    mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation(), Settings.Mpe);
     ScriptProcessors.Add(mpeScriptProcessor);
     NotifyUpdate($"{PathShort}: Added MPE support.");
   }

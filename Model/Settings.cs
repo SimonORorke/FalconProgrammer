@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
+using FalconProgrammer.Model.Mpe;
 
 namespace FalconProgrammer.Model;
 
@@ -13,6 +14,8 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
   [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
+  
+  [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings(); 
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem(nameof(SoundBankCategory))]
