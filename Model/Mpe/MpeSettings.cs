@@ -15,16 +15,16 @@ public class MpeSettings {
 
   internal YTarget YTargetValue {
     get => Global.GetEnumValue<YTarget>(YTarget);
-    set => YTarget = value.ToString();
+    private set => YTarget = value.ToString();
   }
 
   internal ZTarget ZTargetValue {
     get => Global.GetEnumValue<ZTarget>(ZTarget);
-    set => ZTarget = value.ToString();
+    private set => ZTarget = value.ToString();
   }
 
   internal XTarget XTargetValue {
     get => Global.GetEnumValue<XTarget>(XTarget);
-    set => XTarget = value.ToString();
+    private set => XTarget = value.ToString();
   }
 }

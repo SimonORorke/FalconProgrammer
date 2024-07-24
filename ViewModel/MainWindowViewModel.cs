@@ -38,6 +38,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     ReverbViewModel = new ReverbViewModel(dialogService, dispatcherService);
     SoundBankSpecificViewModel =
       new SoundBankSpecificViewModel(dialogService, dispatcherService);
+    MpeViewModel = new MpeViewModel(dialogService, dispatcherService);
     // SelectedTab and CurrentPageTitle are not persisted to settings. So we don't want
     // to flag that settings need to be saved when those properties change.
     // The only properties this main window view model needs to persist to settings are
@@ -99,6 +100,15 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   /// </summary>
   [PublicAPI]
   internal MidiForMacrosViewModel MidiForMacrosViewModel {
+    get;
+    [ExcludeFromCodeCoverage] set;
+  }
+
+  /// <summary>
+  ///   The setter is only for tests.
+  /// </summary>
+  [PublicAPI]
+  internal MpeViewModel MpeViewModel {
     get;
     [ExcludeFromCodeCoverage] set;
   }
@@ -176,7 +186,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BackgroundViewModel),
       new TabItemViewModel(ReverbViewModel),
-      new TabItemViewModel(SoundBankSpecificViewModel)
+      new TabItemViewModel(SoundBankSpecificViewModel),
+      new TabItemViewModel(MpeViewModel)
     };
     return list.ToImmutableList();
   }

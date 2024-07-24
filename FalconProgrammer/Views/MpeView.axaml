@@ -1,0 +1,44 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:FalconProgrammer.ViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FalconProgrammer.Views.MpeView"
+             x:DataType="vm:MpeViewModel">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label Target="YTargetComboBox"
+                   Margin="10, 10, 0, 0">
+                <AccessText
+                    Text="_Y Target" />
+            </Label>
+            <ComboBox x:Name="YTargetComboBox" 
+                      ItemsSource="{Binding YTargets}"
+                      SelectedItem="{Binding YTarget}"
+                      Margin="10, 10, 0, 0"  />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label Target="ZTargetComboBox"
+                   Margin="10, 10, 0, 0">
+                <AccessText
+                    Text="_Z Target" />
+            </Label>
+            <ComboBox x:Name="ZTargetComboBox" 
+                      ItemsSource="{Binding ZTargets}"
+                      SelectedItem="{Binding ZTarget}"
+                      Margin="10, 10, 0, 0"  />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label Target="XTargetComboBox"
+                   Margin="10, 10, 0, 0">
+                <AccessText
+                    Text="_X Target" />
+            </Label>
+            <ComboBox x:Name="XTargetComboBox" 
+                      ItemsSource="{Binding XTargets}"
+                      SelectedItem="{Binding XTarget}"
+                      Margin="10, 10, 0, 0"  />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

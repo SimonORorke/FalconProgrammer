@@ -55,8 +55,7 @@ public class BatchScript : SerialisationBase {
       where !SequencedConfigTasks.Contains(constant)
             // Queries are currently for developers only, to be added by manually editing
             // a script file.
-            && !constant.ToString().StartsWith("Query")
-            && constant != ConfigTask.SupportMpe // Hidden till ready to release. 
+            && !constant.ToString().StartsWith("Query") 
       select constant).ToList();
     // Currently there should not be any non-query unsequenced tasks, because
     // PrependPathLineToDescription needs to be run last.
@@ -76,7 +75,7 @@ public class BatchScript : SerialisationBase {
       ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
       ConfigTask.ReuseCc1,
-      // ConfigTask.SupportMpe,
+      ConfigTask.SupportMpe,
       ConfigTask.PrependPathLineToDescription
     ];
   }
