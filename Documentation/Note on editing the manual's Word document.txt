@@ -1,0 +1,1 @@
+In the Word document that is the source of the manual PDF, the pictures are all displayed from links, not embedded in the document. This makes it easier to update a picture if required. To see the pictures in the Word document, it is necessary to download the project, or at least the Documentation folder, and open the Word document in situ.

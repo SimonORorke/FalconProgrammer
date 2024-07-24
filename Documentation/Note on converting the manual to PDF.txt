@@ -1,0 +1,1 @@
+When converting the Falcon Programmer Manual to PDF, ensure that the PDF adheres to the PDF/A standard.  This fixes a problem where, when the PDF is viewed via its GitHub link in a browser, some of the pictures it contains are missing.
