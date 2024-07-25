@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -30,7 +31,7 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     $"_{RangeType} CC Number Ranges";
   
   private string RangeType { get; }
-  private List<Settings.IntegerRange> SettingsRanges { get; set; } = null!;
+  private List<IntegerRange> SettingsRanges { get; set; } = null!;
 
   protected override void AppendAdditionItem() {
     AddItem();
@@ -92,7 +93,7 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     return errorMessage;
   }
 
-  internal void Populate(List<Settings.IntegerRange> settingsRanges) {
+  internal void Populate(List<IntegerRange> settingsRanges) {
     IsPopulating = true;
     SettingsRanges = settingsRanges;
     Clear();
@@ -115,7 +116,7 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     SettingsRanges.Clear();
     SettingsRanges.AddRange(
       from range in Ranges
-      select new Settings.IntegerRange {
+      select new IntegerRange {
         Start = range.Start ?? 0,
         End = range.End ?? range.Start ?? 0
       });

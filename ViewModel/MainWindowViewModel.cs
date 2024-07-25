@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
@@ -288,7 +289,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
           || Settings.WindowLocation.Height != WindowLocationService.Height.Value
           || Settings.WindowLocation.WindowState !=
           WindowLocationService.WindowState.Value) {
-        Settings.WindowLocation ??= new Settings.WindowLocationSettings();
+        Settings.WindowLocation ??= new WindowLocationSettings();
         Settings.WindowLocation.Left = WindowLocationService.Left.Value;
         Settings.WindowLocation.Top = WindowLocationService.Top.Value;
         Settings.WindowLocation.Width = WindowLocationService.Width.Value;

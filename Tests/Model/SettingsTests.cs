@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -90,7 +91,7 @@ public class SettingsTests {
     const string category = "Plucks";
     const string program = "Music Box";
     Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.True);
-    var programPath = new Settings.ProgramPath {
+    var programPath = new ProgramPath {
       SoundBank = soundBank,
       Category = category,
       Program = program

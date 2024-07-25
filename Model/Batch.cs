@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FalconProgrammer.Model.Options;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model;

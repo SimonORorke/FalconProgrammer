@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using System.Xml.Linq;
+using FalconProgrammer.Model.Options;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;

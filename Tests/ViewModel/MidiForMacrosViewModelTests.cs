@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -132,7 +133,7 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   }
 
   private async Task UpdateCcNoRanges(
-    CcNoRangeCollection ranges, List<Settings.IntegerRange> rangesInSettings) {
+    CcNoRangeCollection ranges, List<IntegerRange> rangesInSettings) {
     // Add a new range.
     var newRange = TestHelper.CreateCcNoRangeAdditionItem(21, 24);
     ranges.Add(newRange);

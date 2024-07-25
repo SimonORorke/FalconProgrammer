@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 

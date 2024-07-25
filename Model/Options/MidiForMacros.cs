@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using FalconProgrammer.Model.XmlLinq;
 
-namespace FalconProgrammer.Model;
+namespace FalconProgrammer.Model.Options;
 
 public class MidiForMacros {
   private ImmutableList<int>? _continuousCcNos;
@@ -19,11 +19,11 @@ public class MidiForMacros {
 
   [XmlArray(nameof(ContinuousCcNoRanges))]
   [XmlArrayItem("ContinuousCcNoRange")]
-  public List<Settings.IntegerRange> ContinuousCcNoRanges { get; set; } = [];
+  public List<IntegerRange> ContinuousCcNoRanges { get; set; } = [];
 
   [XmlArray(nameof(ToggleCcNoRanges))]
   [XmlArrayItem("ToggleCcNoRange")]
-  public List<Settings.IntegerRange> ToggleCcNoRanges { get; set; } = [];
+  public List<IntegerRange> ToggleCcNoRanges { get; set; } = [];
 
   [XmlArray(nameof(DoNotReplaceModWheelWithMacroSoundBanks))]
   [XmlArrayItem("SoundBankName")]
@@ -43,7 +43,7 @@ public class MidiForMacros {
     return !DoNotReplaceModWheelWithMacroSoundBanks.Contains(soundBankName);
   }
 
-  private static ImmutableList<int> CreateCcNoList(List<Settings.IntegerRange> ranges) {
+  private static ImmutableList<int> CreateCcNoList(List<IntegerRange> ranges) {
     var list = new List<int>();
     foreach (var range in ranges) {
       for (int ccNo = range.Start; ccNo <= range.End; ccNo++) {

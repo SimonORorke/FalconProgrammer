@@ -2,13 +2,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using FalconProgrammer.Model.Mpe;
 
-namespace FalconProgrammer.Model;
+namespace FalconProgrammer.Model.Options;
 
 /// <summary>
 ///   To read the settings, use <see cref="SettingsReader" />.
 /// </summary>
 [XmlRoot(nameof(Settings))]
-public class Settings : SerialisationBase {
+public partial class Settings : SerialisationBase {
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
@@ -18,8 +18,8 @@ public class Settings : SerialisationBase {
   [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings(); 
 
   [XmlArray("MustUseGuiScriptProcessor")]
-  [XmlArrayItem(nameof(SoundBankCategory))]
-  public List<SoundBankCategory> MustUseGuiScriptProcessorCategories {
+  [XmlArrayItem("SoundBankCategory")]
+  public List<SoundBankCategorySetting> MustUseGuiScriptProcessorCategories {
     get;
     [ExcludeFromCodeCoverage] set;
   } = [];
@@ -27,8 +27,8 @@ public class Settings : SerialisationBase {
   [XmlElement] public MidiForMacros MidiForMacros { get; set; } = new MidiForMacros();
 
   [XmlArray(nameof(Backgrounds))]
-  [XmlArrayItem(nameof(Background))]
-  public List<Background> Backgrounds { get; [ExcludeFromCodeCoverage] set; } = [];
+  [XmlArrayItem("Background")]
+  public List<BackgroundSetting> Backgrounds { get; [ExcludeFromCodeCoverage] set; } = [];
 
   [XmlArray(nameof(DoNotZeroReverb))]
   [XmlArrayItem(nameof(ProgramPath))]
@@ -102,68 +102,5 @@ public class Settings : SerialisationBase {
       SettingsPath = GetSettingsPath(settingsFolderPath);
     }
     Serialiser.Serialise(this, SettingsPath);
-  }
-
-  public class Background {
-    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
-    [XmlAttribute] public string Path { get; set; } = string.Empty;
-  }
-
-  public class FluiditySettings {
-    [XmlAttribute] public bool MoveAttackMacroToEnd { get; set; }
-  }
-
-  public class Folder {
-    [XmlAttribute] public string Path { get; set; } = string.Empty;
-  }
-
-  public struct IntegerRange {
-    public int Start;
-    public int End;
-  }
-
-  public class OrganicPadsSettings {
-    [XmlAttribute] public float AttackSeconds { get; set; }
-    [XmlAttribute] public float ReleaseSeconds { get; set; }
-    [XmlAttribute] public float MaxAttackSeconds { get; set; }
-    [XmlAttribute] public float MaxDecaySeconds { get; set; }
-    [XmlAttribute] public float MaxReleaseSeconds { get; set; }
-  }
-
-  public class ProgramPath {
-    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
-    [XmlAttribute] public string Category { get; set; } = string.Empty;
-    [XmlAttribute] public string Program { get; set; } = string.Empty;
-  }
-
-  public class SoundBankCategory {
-    [XmlAttribute] public string SoundBank { get; set; } = string.Empty;
-    [XmlAttribute] public string Category { get; set; } = string.Empty;
-  }
-
-  public class SoundBankSpecificSettings {
-    [XmlElement] public StandardLayoutSettings EtherFields { get; set; } =
-      new StandardLayoutSettings();
-    
-    [XmlElement] public FluiditySettings Fluidity { get; set; } = new FluiditySettings();
-
-    [XmlElement]
-    public OrganicPadsSettings OrganicPads { get; set; } =
-      new OrganicPadsSettings();
-    
-    [XmlElement] public StandardLayoutSettings Spectre { get; set; } =
-      new StandardLayoutSettings();
-  }
-
-  public class StandardLayoutSettings {
-    [XmlAttribute] public bool StandardLayout { get; set; }
-  }
-
-  public class WindowLocationSettings {
-    [XmlAttribute] public int Left { get; set; }
-    [XmlAttribute] public int Top { get; set; }
-    [XmlAttribute] public int Width { get; set; }
-    [XmlAttribute] public int Height { get; set; }
-    [XmlAttribute] public int WindowState { get; set; }
   }
 }

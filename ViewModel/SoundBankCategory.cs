@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 

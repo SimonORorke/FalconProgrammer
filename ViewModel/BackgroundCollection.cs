@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -68,7 +69,7 @@ public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundIte
     Settings.Backgrounds.Clear();
     foreach (var backgroundItem in this) {
       if (!backgroundItem.IsAdditionItem && backgroundItem.SoundBank != string.Empty) {
-        Settings.Backgrounds.Add(new Settings.Background {
+        Settings.Backgrounds.Add(new BackgroundSetting {
           SoundBank = backgroundItem.SoundBank,
           Path = backgroundItem.Path
         });

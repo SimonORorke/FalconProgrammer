@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 

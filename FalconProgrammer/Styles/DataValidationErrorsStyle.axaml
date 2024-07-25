@@ -13,7 +13,7 @@ which works for TextBoxes but not DataGrid cells. -->
                                 Content="{Binding (DataValidationErrors.Errors)}"
                                 IsVisible="{Binding (DataValidationErrors.HasErrors)}" />
                 <ContentPresenter Name="PART_ContentPresenter"
-                                  Background="{TemplateBinding Background}"
+                                  Background="{TemplateBinding BackgroundSetting}"
                                   BorderBrush="{TemplateBinding BorderBrush}"
                                   BorderThickness="{TemplateBinding BorderThickness}"
                                   CornerRadius="{TemplateBinding CornerRadius}"

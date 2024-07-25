@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
+using FalconProgrammer.Model.Options;
 using FalconProgrammer.Model.XmlLinq;
 using JetBrains.Annotations;
 

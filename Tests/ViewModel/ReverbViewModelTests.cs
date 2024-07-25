@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -57,7 +58,7 @@ public class ReverbViewModelTests : ViewModelTestsBase {
         newProgramItem.Category, newProgramItem.Program)));
     return;
 
-    string GetPathShort(Settings.ProgramPath programPath) {
+    string GetPathShort(ProgramPath programPath) {
       return Path.Combine(programPath.SoundBank,
         programPath.Category, programPath.Program);
     }

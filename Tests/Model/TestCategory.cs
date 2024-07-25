@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.Tests.Model;
 

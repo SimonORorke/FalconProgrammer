@@ -1,5 +1,6 @@
 ﻿using FalconProgrammer.Model;
 using FalconProgrammer.Model.Mpe;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -32,7 +33,7 @@ public class FalconProgramTests {
     const string categoryName = "Leads";
     const string programName = "Soft Mood";
     Batch.Settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
+      new SoundBankCategorySetting {
         SoundBank = soundBankName,
         Category = categoryName
       });
@@ -49,7 +50,7 @@ public class FalconProgramTests {
     const string categoryName = "Bass";
     const string programName = "Big Sleep";
     Batch.Settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
+      new SoundBankCategorySetting {
         SoundBank = soundBankName
       });
     var exception = Assert.Catch<ApplicationException>(() =>

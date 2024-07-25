@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace FalconProgrammer.Model;
+namespace FalconProgrammer.Model.Options;
 
 public class BatchSettings {
   [XmlElement]

@@ -1,3 +1,5 @@
+using FalconProgrammer.Model.Options;
+
 namespace FalconProgrammer.Model;
 
 public class SettingsReader : XmlReaderBase<Settings> {

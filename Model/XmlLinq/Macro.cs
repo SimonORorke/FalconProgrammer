@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Xml.Linq;
+using FalconProgrammer.Model.Options;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.Model.XmlLinq;

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 

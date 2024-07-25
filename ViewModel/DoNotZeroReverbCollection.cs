@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -77,7 +78,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
           && programItem.SoundBank != string.Empty
           && programItem.Category != string.Empty
           && programItem.Program != string.Empty) {
-        Settings.DoNotZeroReverb.Add(new Settings.ProgramPath {
+        Settings.DoNotZeroReverb.Add(new ProgramPath {
           SoundBank = programItem.SoundBank,
           Category = programItem.Category,
           Program = programItem.Program

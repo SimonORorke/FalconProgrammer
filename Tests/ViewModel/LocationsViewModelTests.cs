@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 using FalconProgrammer.Tests.Model;
 using FalconProgrammer.ViewModel;
 

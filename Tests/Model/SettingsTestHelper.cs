@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -60,44 +61,44 @@ public static class SettingsTestHelper {
   /// </summary>
   [SuppressMessage("ReSharper", "StringLiteralTypo")]
   public static void WriteSettings(Settings settings) {
-    settings.ProgramsFolder = new Settings.Folder {
+    settings.ProgramsFolder = new Folder {
       Path = ProgramsFolderPath
     };
-    settings.OriginalProgramsFolder = new Settings.Folder {
+    settings.OriginalProgramsFolder = new Folder {
       Path = OriginalProgramsFolderPath
     };
-    settings.TemplateProgramsFolder = new Settings.Folder {
+    settings.TemplateProgramsFolder = new Folder {
       Path = TemplateProgramsFolderPath
     };
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
+      new SoundBankCategorySetting {
         SoundBank = "Falcon Factory",
         Category = "Organic Texture 2.8"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
+      new SoundBankCategorySetting {
         SoundBank = "Organic Keys"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
+      new SoundBankCategorySetting {
         SoundBank = "Pulsar"
       });
     settings.MustUseGuiScriptProcessorCategories.Add(
-      new Settings.SoundBankCategory {
+      new SoundBankCategorySetting {
         SoundBank = "Voklm"
       });
     settings.MidiForMacros.ModWheelReplacementCcNo = 34;
     settings.MidiForMacros.ContinuousCcNoRanges = [
-      new Settings.IntegerRange { Start = 31, End = 34 },
-      new Settings.IntegerRange { Start = 11, End = 11 },
-      new Settings.IntegerRange { Start = 36, End = 37 },
-      new Settings.IntegerRange { Start = 28, End = 28 },
-      new Settings.IntegerRange { Start = 41, End = 48 },
-      new Settings.IntegerRange { Start = 51, End = 58 },
-      new Settings.IntegerRange { Start = 61, End = 68 }
+      new IntegerRange { Start = 31, End = 34 },
+      new IntegerRange { Start = 11, End = 11 },
+      new IntegerRange { Start = 36, End = 37 },
+      new IntegerRange { Start = 28, End = 28 },
+      new IntegerRange { Start = 41, End = 48 },
+      new IntegerRange { Start = 51, End = 58 },
+      new IntegerRange { Start = 61, End = 68 }
     ];
     settings.MidiForMacros.ToggleCcNoRanges = [
-      new Settings.IntegerRange { Start = 112, End = 112 }
+      new IntegerRange { Start = 112, End = 112 }
     ];
     settings.Write();
   }

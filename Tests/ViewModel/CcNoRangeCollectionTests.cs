@@ -1,4 +1,5 @@
 ﻿using FalconProgrammer.Model;
+using FalconProgrammer.Model.Options;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -102,7 +103,7 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
   }
 
   private static async Task Update(
-    List<Settings.IntegerRange> settingsRanges, CcNoRangeCollection ranges) {
+    List<IntegerRange> settingsRanges, CcNoRangeCollection ranges) {
     int initialSettingsRangesCount = settingsRanges.Count;
     ranges.Populate(settingsRanges);
     ranges[0].RemoveCommand.Execute(null);
