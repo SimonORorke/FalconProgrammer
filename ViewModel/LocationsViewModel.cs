@@ -160,7 +160,7 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
 
   public static ValidationResult ValidateTemplateProgramsFolderPath(
     string folderPath, ValidationContext context) {
-    return !string.IsNullOrEmpty(folderPath)  
+    return !string.IsNullOrEmpty(folderPath)
       ? ValidateFolderPath(nameof(TemplateProgramsFolderPath), folderPath, context)
       : ValidationResult.Success!;
   }

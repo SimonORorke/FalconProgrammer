@@ -57,7 +57,7 @@ internal class InfoPageLayout {
       // different approach to identify them.
       where macro.X < RightEdge
       select macro).ToList();
-    const int maxMacroCount = 32; 
+    const int maxMacroCount = 32;
     if (visibleMacros.Count > maxMacroCount) {
       throw new ApplicationException(
         $"{Program.PathShort}: Cannot lay out {visibleMacros.Count} macros. " +
@@ -81,14 +81,14 @@ internal class InfoPageLayout {
     };
     switch (Program.SoundBankId) {
       case SoundBankId.EtherFields when rowCount == 3:
-        if (ProgramXml.BackgroundImagePath != null 
+        if (ProgramXml.BackgroundImagePath != null
             && ProgramXml.BackgroundImagePath.StartsWith("$Ether Fields.ufs")) {
           // Default background image. Avoid the text at bottom.
           top -= 85;
         }
         break;
       case SoundBankId.Devinity when rowCount == 1:
-        if (ProgramXml.BackgroundImagePath != null 
+        if (ProgramXml.BackgroundImagePath != null
             && ProgramXml.BackgroundImagePath.StartsWith("$Devinity.ufs")) {
           // Default background image. Place the row on the black space at the bottom. 
           top += rowHeight;

@@ -81,7 +81,7 @@ internal class MpeScriptProcessor : ScriptProcessor {
         dimensionModulations.Add(
           CreateDimensionModulation(MpeEventId.Z, ZTarget.ToString()));
         if (mpeSettings.InitialiseZToMacroValue) {
-          InitialZValue = macrosToEmulate[1].Value; 
+          InitialZValue = macrosToEmulate[1].Value;
         }
         break;
     }

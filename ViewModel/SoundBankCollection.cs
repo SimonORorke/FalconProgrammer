@@ -4,13 +4,12 @@ using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
 
-public abstract class SoundBankCollection : 
+public abstract class SoundBankCollection :
   ProgramHierarchyCollectionBase<SoundBankItem> {
   protected SoundBankCollection(
     IFileSystemService fileSystemService,
     IDispatcherService dispatcherService) : base(
-    fileSystemService, dispatcherService) {
-  }
+    fileSystemService, dispatcherService) { }
 
   protected abstract List<string> SettingsSoundBanks { get; }
 

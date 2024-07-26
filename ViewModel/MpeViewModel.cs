@@ -79,7 +79,7 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   public static string InitialiseZToMacroValueCaption =>
     "_Initialise Z's value to continuous macro 2's value, " +
     "if Z Target is an emulation of the macro and the macro exists.";
-  
+
   internal override async Task Open() {
     await base.Open();
     YTarget = Settings.Mpe.YTarget;

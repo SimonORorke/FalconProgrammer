@@ -8,14 +8,15 @@ public class MidiForMacros {
   private ImmutableList<int>? _continuousCcNos;
   private ImmutableList<int>? _toggleCcNos;
   [XmlAttribute] public int ModWheelReplacementCcNo { get; set; }
-  
+
   /// <summary>
   ///   Gets or sets whether to append the MIDI CC number of each <see cref="Macro" />'s
   ///   non-mod wheel <see cref="Modulation" /> to the macro's
-  ///   <see cref="EntityBase.DisplayName "/> when updating the MIDI Ccs assigned to
+  ///   <see cref="EntityBase.DisplayName " /> when updating the MIDI Ccs assigned to
   ///   macros of programs that do not have script-defined GUIs.
   /// </summary>
-  [XmlAttribute] public bool AppendCcNoToMacroDisplayNames { get; set; } = true;
+  [XmlAttribute]
+  public bool AppendCcNoToMacroDisplayNames { get; set; } = true;
 
   [XmlArray(nameof(ContinuousCcNoRanges))]
   [XmlArrayItem("ContinuousCcNoRange")]
@@ -38,7 +39,7 @@ public class MidiForMacros {
 
   internal ImmutableList<int> ToggleCcNos =>
     _toggleCcNos ??= CreateCcNoList(ToggleCcNoRanges);
-  
+
   internal bool CanReplaceModWheelWithMacro(string soundBankName) {
     return !DoNotReplaceModWheelWithMacroSoundBanks.Contains(soundBankName);
   }

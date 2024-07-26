@@ -58,21 +58,21 @@ local DecayKnob = Knob("Decay", 0, 0, 1)
 local SustainKnob = Knob("Sustain", 0, 0, 1)
 local ReleaseKnob = Knob("Release", 0, 0, 1)
 local MaxAttackSecondsKnob = Knob(
-    "MaxAttackSeconds", MaxAttackSeconds, 0, 10)
+        "MaxAttackSeconds", MaxAttackSeconds, 0, 10)
 MaxAttackSecondsKnob.displayName = "Max Attack Secs"
 -- Enough to show full display name full size
 MaxAttackSecondsKnob.width = 140
 MaxAttackSecondsKnob.x = AttackKnob.x
 MaxAttackSecondsKnob.y = 55
 local MaxDecaySecondsKnob = Knob(
-    "MaxDecaySeconds", MaxDecaySeconds, 0, 30)
+        "MaxDecaySeconds", MaxDecaySeconds, 0, 30)
 MaxDecaySecondsKnob.displayName = "Max Decay Secs"
 -- Enough to show full display name full size
 MaxDecaySecondsKnob.width = 140
 MaxDecaySecondsKnob.x = DecayKnob.x + 50
 MaxDecaySecondsKnob.y = 55
 local MaxReleaseSecondsKnob = Knob(
-    "MaxReleaseSeconds", MaxReleaseSeconds, 0, 20)
+        "MaxReleaseSeconds", MaxReleaseSeconds, 0, 20)
 MaxReleaseSecondsKnob.displayName = "Max Release Secs"
 -- Enough to show full display name full size
 MaxReleaseSecondsKnob.width = 140
@@ -82,13 +82,13 @@ MaxReleaseSecondsKnob.y = 55
 AttackKnob.changed = function(self)
     -- print("AttackKnob.changed")
     AttackKnobValue = onAdsrKnobOrMacroValueChanged(
-    self, AttackKnobValue, "AttackTime", MaxAttackSeconds)
+            self, AttackKnobValue, "AttackTime", MaxAttackSeconds)
 end
 
 DecayKnob.changed = function(self)
     -- print("DecayKnob.changed")
     DecayKnobValue = onAdsrKnobOrMacroValueChanged(
-    self, DecayKnobValue, "DecayTime", MaxDecaySeconds)
+            self, DecayKnobValue, "DecayTime", MaxDecaySeconds)
 end
 
 MaxAttackSecondsKnob.changed = function(self)
@@ -109,29 +109,29 @@ end
 ReleaseKnob.changed = function(self)
     -- print("ReleaseKnob.changed")
     ReleaseKnobValue = onAdsrKnobOrMacroValueChanged(
-    self, ReleaseKnobValue, "ReleaseTime", MaxReleaseSeconds)
+            self, ReleaseKnobValue, "ReleaseTime", MaxReleaseSeconds)
 end
 
 SustainKnob.changed = function(self)
     -- print("SustainKnob.changed")
     SustainKnobValue = onAdsrKnobOrMacroValueChanged(
-    self, SustainKnobValue, "SustainLevel", 1)
+            self, SustainKnobValue, "SustainLevel", 1)
 end
 
 function initialiseMacroAndKnobFromDahdsr(
-    macroName, parameterName, maxParameterValue)
+        macroName, parameterName, maxParameterValue)
     local macro = Program.modulations[macroName]
     if macro == nil then
-    error("Cannot find macro '" .. macroName ..
-    "' to modulate DAHDSR parameter '" .. parameterName .. "'.")
+        error("Cannot find macro '" .. macroName ..
+                "' to modulate DAHDSR parameter '" .. parameterName .. "'.")
     end
     local parameterValue = round(Dahdsr:getParameter(parameterName), 2)
     local scaled = scale(parameterValue, 0, maxParameterValue, 0, 1)
     local knobValue
     if scaled < 1 then
-    knobValue = scaled
+        knobValue = scaled
     else
-    knobValue = 1
+        knobValue = 1
     end
     -- print("initialiseMacroAndKnobFromDahdsr: parameterName = " .. parameterName .. 
     --     "; maxParameterValue = " .. maxParameterValue ..
@@ -146,14 +146,14 @@ end
 -- This will work when the corresponding macro's value has changed,
 -- provided the knob has been configured to be modulated by the macro.
 function onAdsrKnobOrMacroValueChanged(
-    knob, currentKnobValue, parameterName, maxParameterValue)
+        knob, currentKnobValue, parameterName, maxParameterValue)
     local newKnobValue = round(knob.value, 2)
     if newKnobValue ~= currentKnobValue then
-    if currentKnobValue ~= nil then
-    -- The knob has not just been initialised from the DAHDSR parameter. 
-    setDahdsrParameterValue(
-        parameterName, maxParameterValue, newKnobValue)
-    end
+        if currentKnobValue ~= nil then
+            -- The knob has not just been initialised from the DAHDSR parameter. 
+            setDahdsrParameterValue(
+                    parameterName, maxParameterValue, newKnobValue)
+        end
     end
     return newKnobValue
 end
@@ -161,20 +161,20 @@ end
 function onInit()
     -- print("Initialising")
     if Dahdsr == nil then
-    error("Cannot find DAHDSR '" .. DahdsrName .. "'.")
+        error("Cannot find DAHDSR '" .. DahdsrName .. "'.")
     end
     AttackKnobValue = initialiseMacroAndKnobFromDahdsr(
-    AttackMacroName, "AttackTime", MaxAttackSeconds)
+            AttackMacroName, "AttackTime", MaxAttackSeconds)
     DecayKnobValue = initialiseMacroAndKnobFromDahdsr(
-    DecayMacroName, "DecayTime", MaxDecaySeconds)
+            DecayMacroName, "DecayTime", MaxDecaySeconds)
     SustainKnobValue = initialiseMacroAndKnobFromDahdsr(
-    SustainMacroName, "SustainLevel", 1)
+            SustainMacroName, "SustainLevel", 1)
     ReleaseKnobValue = initialiseMacroAndKnobFromDahdsr(
-    ReleaseMacroName, "ReleaseTime", MaxReleaseSeconds)
+            ReleaseMacroName, "ReleaseTime", MaxReleaseSeconds)
 end
 
 function round(num, numDecimalPlaces)
-    local multiplier = 10^(numDecimalPlaces or 0)
+    local multiplier = 10 ^ (numDecimalPlaces or 0)
     return math.floor(num * multiplier + 0.5) / multiplier
 end
 

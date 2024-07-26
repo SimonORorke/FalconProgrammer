@@ -6,9 +6,9 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ScriptProcessor : ModulationsOwner {
-  private ScriptId? _scriptId;
   private XElement? _propertiesElement;
   private XElement? _scriptElement;
+  private ScriptId? _scriptId;
 
   /// <summary>
   ///   Use the <see cref="Create" /> static method for public instantiation of the
@@ -141,7 +141,7 @@ internal class ScriptProcessor : ModulationsOwner {
   }
 
   public static ScriptProcessor Create(SoundBankId soundBankId,
-    XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi, 
+    XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi,
     bool mustUseGuiScriptProcessor) {
     var candidate = new ScriptProcessor(scriptProcessorElement, programXml, midi);
     if (candidate.ScriptId == ScriptId.Mpe) {

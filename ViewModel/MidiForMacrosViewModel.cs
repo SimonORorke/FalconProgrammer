@@ -20,14 +20,14 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   public static string AppendCcNoCaption =>
-    "_Append the CC number to each macro's display name when updating the CCs " + 
+    "_Append the CC number to each macro's display name when updating the CCs " +
     "for programs that do not have script-defined GUIs.";
 
   [ExcludeFromCodeCoverage]
   public static string CcNoRangeAdvice =>
     "For each of Continuous and Toggle CC Number Ranges, " +
     "if the last End = the last Start, the last range will be extended indefinitely." +
-    Environment.NewLine + 
+    Environment.NewLine +
     "MIDI CC 38 does not work when assigned to a control on a " +
     "script-based Info page. (See manual.)";
 
@@ -35,7 +35,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     ??= new CcNoRangeCollection("Continuous",
       DialogService, DispatcherService);
 
-  public DoNotReplaceModWheelCollection DoNotReplaceModWheelSoundBanks => 
+  public DoNotReplaceModWheelCollection DoNotReplaceModWheelSoundBanks =>
     _doNotReplaceModWheelSoundBanks ??= new DoNotReplaceModWheelCollection(
       FileSystemService, DispatcherService);
 
@@ -50,9 +50,9 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   }
 
   [ExcludeFromCodeCoverage]
-  public override string PageTitle => 
+  public override string PageTitle =>
     "MIDI CC assignments for macros, for update by the AssignMacroCcs task.";
-  
+
   public override string TabTitle => "MIDI for Macros";
 
   public CcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges

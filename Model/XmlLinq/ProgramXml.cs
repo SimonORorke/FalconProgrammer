@@ -15,7 +15,7 @@ internal class ProgramXml : EntityBase {
   public ProgramXml(Category category) {
     Category = category;
   }
-  
+
   public string? BackgroundImagePath {
     get => Element.Element("Properties")?.Attribute(
       nameof(BackgroundImagePath))?.Value;
@@ -27,8 +27,8 @@ internal class ProgramXml : EntityBase {
         backgroundImagePathAttribute.Value = value ?? string.Empty;
       } else {
         // Example: Fluidity
-        backgroundImagePathAttribute = 
-          new XAttribute(nameof(BackgroundImagePath),  value ?? string.Empty);
+        backgroundImagePathAttribute =
+          new XAttribute(nameof(BackgroundImagePath), value ?? string.Empty);
         // Insert BackgroundImagePath as the first attribute of the Properties element.
         var attributes = propertiesElement.Attributes().ToList();
         attributes.Insert(0, backgroundImagePathAttribute);
@@ -208,10 +208,10 @@ internal class ProgramXml : EntityBase {
       var neededSoundBankElement = RootElement.Elements("NeededFS").Last();
       string path = GetAttributeValue(neededSoundBankElement, "Source");
       // Example: "FalconFactory" from "D:/Libraries/UVI/Falcon Factory.ufs".
-      string soundBankPascal = path.EndsWith(@"/Falcon Factory rev2.ufs") 
+      string soundBankPascal = path.EndsWith(@"/Falcon Factory rev2.ufs")
         ? "FactoryRev2"
         : path[..path.IndexOf('.')][(path.LastIndexOf('/') + 1)..].Replace(
-        " ", string.Empty);
+          " ", string.Empty);
       return Global.GetEnumValue<SoundBankId>(soundBankPascal);
     } catch {
       throw new ApplicationException(
@@ -306,7 +306,7 @@ internal class ProgramXml : EntityBase {
         parent.Remove();
       }
     }
-    return true ;
+    return true;
   }
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
@@ -343,7 +343,7 @@ internal class ProgramXml : EntityBase {
   protected virtual void SaveXmlTextToFile(string outputProgramPath, string xmlText) {
     File.WriteAllText(outputProgramPath, xmlText);
   }
-  
+
   public void SetDescription(string text) {
     var propertiesElement = Element.Element("Properties");
     if (propertiesElement == null) {

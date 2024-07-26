@@ -347,7 +347,7 @@ public class Batch {
           Log.WriteLine(
             // Program is null, so it's an initial setup exception, which is unlikely
             // unless you are a developer.
-            $"While running configuration task {Task.ToString()}, " + 
+            $"While running configuration task {Task.ToString()}, " +
             "the batch run terminated with this error:");
         }
         Log.WriteLine("==========================================");

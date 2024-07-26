@@ -28,7 +28,7 @@
         </Style>
         <Style Selector="AccessText.dataGridLabel">
             <Setter Property="FontSize" Value="18" />
-            <Setter Property="Foreground" 
+            <Setter Property="Foreground"
                     Value="{DynamicResource SystemBaseMediumHighColor}" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>

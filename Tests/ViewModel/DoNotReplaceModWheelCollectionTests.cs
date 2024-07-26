@@ -1,5 +1,4 @@
-﻿using FalconProgrammer.Model;
-using FalconProgrammer.Model.Options;
+﻿using FalconProgrammer.Model.Options;
 using FalconProgrammer.ViewModel;
 
 namespace FalconProgrammer.Tests.ViewModel;
@@ -22,7 +21,7 @@ public class DoNotReplaceModWheelCollectionTests : ViewModelTestsBase {
 
   [Test]
   public void Main() {
-    int initialSettingsSoundBankCount = 
+    int initialSettingsSoundBankCount =
       Settings.MidiForMacros.DoNotReplaceModWheelWithMacroSoundBanks.Count;
     // Check that the test data is as expected
     Assert.That(initialSettingsSoundBankCount, Is.EqualTo(1));
@@ -42,7 +41,7 @@ public class DoNotReplaceModWheelCollectionTests : ViewModelTestsBase {
     Assert.That(Collection, Has.Count.EqualTo(initialCollectionCount - 1));
     // Update Settings
     Collection.UpdateSettings();
-    Assert.That(Settings.MidiForMacros.DoNotReplaceModWheelWithMacroSoundBanks, 
+    Assert.That(Settings.MidiForMacros.DoNotReplaceModWheelWithMacroSoundBanks,
       Has.Count.EqualTo(initialSettingsSoundBankCount - 1));
   }
 }

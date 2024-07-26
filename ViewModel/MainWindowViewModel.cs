@@ -66,10 +66,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   [PublicAPI]
-  internal BatchViewModel BatchViewModel {
-    get;
-    [ExcludeFromCodeCoverage] set;
-  }
+  internal BatchViewModel BatchViewModel { get; [ExcludeFromCodeCoverage] set; }
 
   public ColourSchemeId ColourSchemeId {
     get => _colourSchemeId;
@@ -109,10 +106,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   ///   The setter is only for tests.
   /// </summary>
   [PublicAPI]
-  internal MpeViewModel MpeViewModel {
-    get;
-    [ExcludeFromCodeCoverage] set;
-  }
+  internal MpeViewModel MpeViewModel { get; [ExcludeFromCodeCoverage] set; }
 
   /// <summary>
   ///   Not used because this is not a page but the owner of pages.

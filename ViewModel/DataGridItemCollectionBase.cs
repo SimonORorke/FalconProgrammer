@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;

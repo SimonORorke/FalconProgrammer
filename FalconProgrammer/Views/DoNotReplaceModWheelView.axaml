@@ -12,7 +12,7 @@
     maximised and won't work when normal. A DockPanel with the DataGrid as its filler
     works. So does putting the DataGrid in a filler (*) row of a Grid.  -->
     <DockPanel>
-        <Label DockPanel.Dock="Top" 
+        <Label DockPanel.Dock="Top"
                Target="DataGrid">
             <AccessText Text="{Binding AccessibleTitle}"
                         Classes="dataGridLabel"

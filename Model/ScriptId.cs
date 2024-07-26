@@ -14,12 +14,11 @@ public enum ScriptId {
   /// </summary>
   Factory2_5,
 
-
   /// <summary>
   ///   Works for Falcon Factory rev2.
   /// </summary>
   FactoryRev2,
-  
+
   /// <summary>
   ///   Works for Pulsar, Savage, Voklm\Vox Instruments.
   /// </summary>
@@ -29,7 +28,7 @@ public enum ScriptId {
   ///   Works for Voklm\Synth Choirs.
   /// </summary>
   Main2,
-  
+
   /// <summary>
   ///   MPE script processor, for configuration of
   ///   MIDI/Multidimensional Polyphonic Expression.

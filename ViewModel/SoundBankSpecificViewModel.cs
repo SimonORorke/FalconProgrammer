@@ -92,7 +92,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   [ExcludeFromCodeCoverage]
   public static string OrganicPadsReleaseSecondsCaption =>
     "_Release seconds (0-20 decimal or, to conserve the program-specific value, blank)";
-  
+
   [ExcludeFromCodeCoverage]
   public static string OrganicPadsTitle =>
     "Organic Pads sound bank options, if the GUI script processor is removed:";
@@ -105,12 +105,11 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   public static string SpectreStandardLayoutCaption =>
     "_Spectre sound bank: Reposition macros into a standard layout.";
 
-  [ExcludeFromCodeCoverage]
-  public override string TabTitle => "Sound Bank-Specific";
+  [ExcludeFromCodeCoverage] public override string TabTitle => "Sound Bank-Specific";
 
   internal override async Task Open() {
     await base.Open();
-    var specific = Settings.SoundBankSpecific; 
+    var specific = Settings.SoundBankSpecific;
     EtherFieldsStandardLayout = specific.EtherFields.StandardLayout;
     FluidityMoveAttackMacroToEnd = specific.Fluidity.MoveAttackMacroToEnd;
     OrganicPadsAttackSeconds = specific.OrganicPads.AttackSeconds >= 0

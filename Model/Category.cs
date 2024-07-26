@@ -68,7 +68,7 @@ internal class Category {
   internal ProgramXml ProgramXml { get; set; } = null!;
   [PublicAPI] public Settings Settings { get; }
   private string SoundBankFolderPath { get; }
-  
+
   /// <summary>
   ///   The name of the sound bank folder. It does not necessarily need to be the same as
   ///   the publisher's sound bank name.
@@ -116,7 +116,8 @@ internal class Category {
         case ScriptId.Main2:
           return scriptProcessor;
       }
-      if (scriptProcessor is { SoundBankPascal: "FalconFactory", Name: "EventProcessor9" }) {
+      if (scriptProcessor is
+          { SoundBankPascal: "FalconFactory", Name: "EventProcessor9" }) {
         // Examples of programs with GuiScriptProcessor but no template ScriptProcessor:
         // Falcon Factory\Bass-Sub\Balarbas 2.0
         // Falcon Factory\Keys\Smooth E-piano 2.1.
@@ -211,7 +212,7 @@ internal class Category {
       embeddedFileName = guiScriptProcessor.SoundBankPascal switch {
         // The Hypnotic Drive program files have a typo in the script sound bank name.
         "HypnoticDive" => "HypnoticDrive_Gui.xml",
-        "Pulsar" => 
+        "Pulsar" =>
           $"{guiScriptProcessor.SoundBankPascal}_{guiScriptProcessor.CategoryPascal}_Gui.xml",
         _ => $"{guiScriptProcessor.SoundBankPascal}_Gui.xml"
       };
@@ -223,7 +224,7 @@ internal class Category {
         ProgramXml, Settings.MidiForMacros, true);
     }
     throw new ApplicationException(
-      "A built-in GUI ScriptProcessor template is not available for " 
+      "A built-in GUI ScriptProcessor template is not available for "
       + $"sound bank {SoundBankName} category {Name}. " +
       $"You have two options:{Environment.NewLine}{Environment.NewLine}" +
       "1) Add a template program file with MIDI CCs for the sound bank or category to " +

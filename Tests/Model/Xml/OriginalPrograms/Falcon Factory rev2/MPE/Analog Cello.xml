@@ -1,24 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UVI4>
-    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="Analog Cello" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="8" NotePolyphony="0" ProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Analog Cello.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+    <Program Name="Program" Bypass="0" Gain="1" Pan="0" DisplayName="Analog Cello" TransposeOctaves="0"
+             TransposeSemiTones="0" OutputName="" Polyphony="8" NotePolyphony="0"
+             ProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Analog Cello.uvip" LoopProgram="0" Streaming="1"
+             BypassInsertFX="0">
         <Mappers>
-            <ControlSignalMapper Name="Mapper 0" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Curve 1">0.000000 0.000062 0.000248 0.000558 0.000992 0.001550 0.002232 0.003038 0.003968 0.005022 0.006200 0.007502 0.008928 0.010478 0.012152 0.013950 0.015872 0.017918 0.020088 0.022382 0.024800 0.027342 0.030008 0.032798 0.035712 0.038750 0.041912 0.045198 0.048608 0.052142 0.055800 0.059582 0.063488 0.067518 0.071672 0.075950 0.080352 0.084878 0.089528 0.094302 0.099200 0.104222 0.109368 0.114638 0.120032 0.125550 0.131192 0.136958 0.142848 0.148862 0.155000 0.161262 0.167648 0.174158 0.180792 0.187550 0.194432 0.201438 0.208568 0.215822 0.223200 0.230702 0.238328 0.246078 0.253953 0.261951 0.270073 0.278319 0.286689 0.295183 0.303801 0.312543 0.321409 0.330399 0.339513 0.348751 0.358113 0.367599 0.377209 0.386943 0.396801 0.406783 0.416889 0.427119 0.437473 0.447951 0.458553 0.469279 0.480129 0.491103 0.502201 0.513423 0.524769 0.536239 0.547833 0.559551 0.571393 0.583359 0.595449 0.607663 0.620001 0.632463 0.645049 0.657759 0.670593 0.683551 0.696633 0.709839 0.723169 0.736623 0.750202 0.763904 0.777730 0.791680 0.805754 0.819952 0.834274 0.848720 0.863290 0.877984 0.892802 0.907744 0.922810 0.938000 0.953314 0.968752 0.984314 1.000000</ControlSignalMapper>
-            <ControlSignalMapper Name="Mapper 1" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Hard ceiling -1">0.000000 0.049262 0.075787 0.097507 0.116596 0.133941 0.150011 0.165093 0.179378 0.193002 0.206062 0.218637 0.230786 0.242557 0.253989 0.265117 0.275967 0.286563 0.296926 0.307073 0.317019 0.326779 0.336365 0.345787 0.355055 0.364178 0.373164 0.382020 0.390753 0.399368 0.407872 0.416269 0.424564 0.432762 0.440866 0.445714 0.457143 0.468571 0.474286 0.485714 0.497143 0.508571 0.520000 0.531429 0.542857 0.554286 0.565714 0.571429 0.582857 0.594286 0.605714 0.617143 0.628571 0.640000 0.645714 0.657143 0.668571 0.680000 0.691429 0.702857 0.714286 0.725714 0.731429 0.742857 0.754286 0.765714 0.777143 0.788571 0.800000 0.811429 0.817143 0.828571 0.840000 0.851429 0.862857 0.874286 0.880000 0.891429 0.902857 0.914286 0.925714 0.937143 0.948571 0.960000 0.971429 0.982857 0.988571 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000</ControlSignalMapper>
+            <ControlSignalMapper Name="Mapper 0" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Curve 1">0.000000
+                0.000062 0.000248 0.000558 0.000992 0.001550 0.002232 0.003038 0.003968 0.005022 0.006200 0.007502
+                0.008928 0.010478 0.012152 0.013950 0.015872 0.017918 0.020088 0.022382 0.024800 0.027342 0.030008
+                0.032798 0.035712 0.038750 0.041912 0.045198 0.048608 0.052142 0.055800 0.059582 0.063488 0.067518
+                0.071672 0.075950 0.080352 0.084878 0.089528 0.094302 0.099200 0.104222 0.109368 0.114638 0.120032
+                0.125550 0.131192 0.136958 0.142848 0.148862 0.155000 0.161262 0.167648 0.174158 0.180792 0.187550
+                0.194432 0.201438 0.208568 0.215822 0.223200 0.230702 0.238328 0.246078 0.253953 0.261951 0.270073
+                0.278319 0.286689 0.295183 0.303801 0.312543 0.321409 0.330399 0.339513 0.348751 0.358113 0.367599
+                0.377209 0.386943 0.396801 0.406783 0.416889 0.427119 0.437473 0.447951 0.458553 0.469279 0.480129
+                0.491103 0.502201 0.513423 0.524769 0.536239 0.547833 0.559551 0.571393 0.583359 0.595449 0.607663
+                0.620001 0.632463 0.645049 0.657759 0.670593 0.683551 0.696633 0.709839 0.723169 0.736623 0.750202
+                0.763904 0.777730 0.791680 0.805754 0.819952 0.834274 0.848720 0.863290 0.877984 0.892802 0.907744
+                0.922810 0.938000 0.953314 0.968752 0.984314 1.000000
+            </ControlSignalMapper>
+            <ControlSignalMapper Name="Mapper 1" Min="0" Max="1" Integer="0" Discrete="0" DisplayName="Hard ceiling -1">
+                0.000000 0.049262 0.075787 0.097507 0.116596 0.133941 0.150011 0.165093 0.179378 0.193002 0.206062
+                0.218637 0.230786 0.242557 0.253989 0.265117 0.275967 0.286563 0.296926 0.307073 0.317019 0.326779
+                0.336365 0.345787 0.355055 0.364178 0.373164 0.382020 0.390753 0.399368 0.407872 0.416269 0.424564
+                0.432762 0.440866 0.445714 0.457143 0.468571 0.474286 0.485714 0.497143 0.508571 0.520000 0.531429
+                0.542857 0.554286 0.565714 0.571429 0.582857 0.594286 0.605714 0.617143 0.628571 0.640000 0.645714
+                0.657143 0.668571 0.680000 0.691429 0.702857 0.714286 0.725714 0.731429 0.742857 0.754286 0.765714
+                0.777143 0.788571 0.800000 0.811429 0.817143 0.828571 0.840000 0.851429 0.862857 0.874286 0.880000
+                0.891429 0.902857 0.914286 0.925714 0.937143 0.948571 0.960000 0.971429 0.982857 0.988571 1.000000
+                1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+                1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+                1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+                1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+            </ControlSignalMapper>
         </Mappers>
-        <Properties BackgroundImagePath="$Falcon Factory rev2.ufs/Artwork/ffs_bkg_1-6_hybrid@2x.png" FXMultiPath="/Users/SentinelOuest/Documents/UVI/Falcon/User Presets/MultiFX/One again.fxm" Tags="mode=Analog;mode=Clean;mode=MPE;sub=Synth:Poly;type=Synth;" description="Preset Credits : SP"/>
+        <Properties BackgroundImagePath="$Falcon Factory rev2.ufs/Artwork/ffs_bkg_1-6_hybrid@2x.png"
+                    FXMultiPath="/Users/SentinelOuest/Documents/UVI/Falcon/User Presets/MultiFX/One again.fxm"
+                    Tags="mode=Analog;mode=Clean;mode=MPE;sub=Synth:Poly;type=Synth;"
+                    description="Preset Credits : SP"/>
         <ControlSignalSources>
             <ConstantModulation Name="MacroKnob 1" Bypass="0" DisplayName="Up Pitch" Bipolar="0" Style="1" Value="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="@MIDI CC 95" Destination="Value" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 94" Destination="Value" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="@MIDI CC 95" Destination="Value"
+                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 94" Destination="Value"
+                                      Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0"
+                                      SignalConnectionVersion="1"/>
                 </Connections>
                 <Properties customPosition="1" x="190" y="355"/>
             </ConstantModulation>
-            <ScriptEventModulation Name="Script Event Modulation 1" Bypass="0" DisplayName="Script Event Modulation 1" EventId="1" Bipolar="1"/>
+            <ScriptEventModulation Name="Script Event Modulation 1" Bypass="0" DisplayName="Script Event Modulation 1"
+                                   EventId="1" Bipolar="1"/>
             <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Reverb" Bipolar="0" Style="0" Value="0.43211126">
                 <Properties customPosition="1" x="440" y="355"/>
             </ConstantModulation>
-            <ScriptEventModulation Name="Script Event Modulation 2" Bypass="0" DisplayName="Script Event Modulation 2" EventId="1" Bipolar="0"/>
+            <ScriptEventModulation Name="Script Event Modulation 2" Bypass="0" DisplayName="Script Event Modulation 2"
+                                   EventId="1" Bipolar="0"/>
             <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Chorus" Bipolar="0" Style="0" Value="0.47351563">
                 <Properties customPosition="0" x="390" y="190"/>
             </ConstantModulation>
@@ -27,8 +64,11 @@
             </ConstantModulation>
         </ControlSignalSources>
         <EventProcessors>
-            <ScriptProcessor Name="EventProcessor0" Bypass="0" X="2" PitchBendRange="48" Y="4" Z="3" InitialPressure="0" GlobalChannel="1" GainMap="1" API_version="17">
-                <Properties OriginalProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Analog Cello.uvip" PresetPath="/Users/song-haven_c/Documents/UVI/Falcon/User Presets/EventProcessors/Script Processor/Song-Haven MPE.preset" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Utilities/MPE.lua"/>
+            <ScriptProcessor Name="EventProcessor0" Bypass="0" X="2" PitchBendRange="48" Y="4" Z="3" InitialPressure="0"
+                             GlobalChannel="1" GainMap="1" API_version="17">
+                <Properties OriginalProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Analog Cello.uvip"
+                            PresetPath="/Users/song-haven_c/Documents/UVI/Falcon/User Presets/EventProcessors/Script Processor/Song-Haven MPE.preset"
+                            ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Utilities/MPE.lua"/>
                 <script><![CDATA[--------------------------------------------------------------------------------
 -- Multidimensional Polyphonic Expression (MPE)
 -- 
@@ -255,96 +295,181 @@ end]]></script>
                 <ScriptData/>
             </ScriptProcessor>
             <ScriptProcessor Name="EventProcessor2" Bypass="0" API_version="21">
-                <Properties OriginalProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Analog Cello.uvip" ScriptPath="$Falcon Factory rev2.ufs/Scripts/stub.lua"/>
+                <Properties OriginalProgramPath="$Falcon Factory rev2.ufs/Presets/MPE/Analog Cello.uvip"
+                            ScriptPath="$Falcon Factory rev2.ufs/Scripts/stub.lua"/>
                 <script><![CDATA[category="MPE" require 'FalconFactory']]></script>
                 <ScriptData/>
             </ScriptProcessor>
         </EventProcessors>
         <Inserts>
-            <Chorus Name="InsertFX0" Bypass="0" SyncToHost="0" Speed="0.80000001" DelayTime="0.050000001" Depth="0.38" Mix="0">
+            <Chorus Name="InsertFX0" Bypass="0" SyncToHost="0" Speed="0.80000001" DelayTime="0.050000001" Depth="0.38"
+                    Mix="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Mix" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Mix"
+                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                 </Connections>
             </Chorus>
             <DiodeClipper Name="InsertFX5" Bypass="0" Drive="0" Tone="20000" HighPass="1" Asymmetry="0" OutputGain="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="0.59687495" Source="$Program/Macro 3" Destination="Drive" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.59687495" Source="$Program/Macro 3"
+                                      Destination="Drive" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                 </Connections>
             </DiodeClipper>
-            <SparkVerb Name="InsertFX1" Bypass="0" ModDepth="4.1999998" ModRate="1" Diffusion="0.80000001" DiffusionStart="5" Width="1" RoomSize="50" DecayTime="1.22786" DecayLow="0.42854899" DecayHigh="10" FreqLow="122.462" FreqHigh="10000" Shape="1" Mix="0.12077859" Quality="4" Mode="1" HiCut="0" LowCut="1" Rolloff="11000" DiffusionOnOff="1" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+            <SparkVerb Name="InsertFX1" Bypass="0" ModDepth="4.1999998" ModRate="1" Diffusion="0.80000001"
+                       DiffusionStart="5" Width="1" RoomSize="50" DecayTime="1.22786" DecayLow="0.42854899"
+                       DecayHigh="10" FreqLow="122.462" FreqHigh="10000" Shape="1" Mix="0.12077859" Quality="4" Mode="1"
+                       HiCut="0" LowCut="1" Rolloff="11000" DiffusionOnOff="1" PreDelay="0" MixMode="0"
+                       SparkVerbVersion="1">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="0.64682114" Source="$Program/Macro 1" Destination="Mix" Mapper="Mapper 0" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.64682114" Source="$Program/Macro 1"
+                                      Destination="Mix" Mapper="Mapper 0" ConnectionMode="1" Bypass="0" Inverted="0"
+                                      Offset="0" SignalConnectionVersion="1"/>
                 </Connections>
-                <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/02- Shimmer/Shimmer 2.fxps"/>
+                <Properties
+                        PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/02- Shimmer/Shimmer 2.fxps"/>
             </SparkVerb>
             <Gain Name="InsertFX2" Bypass="0" Volume="0.63095731"/>
-            <ThreeBandShelves Name="InsertFX3" Bypass="0" FreqLowMid="179.99998" FreqMidHigh="6000" GainLow="4" GainMid="-1" GainHigh="3">
+            <ThreeBandShelves Name="InsertFX3" Bypass="0" FreqLowMid="179.99998" FreqMidHigh="6000" GainLow="4"
+                              GainMid="-1" GainHigh="3">
                 <Properties PresetPath="$Resource/resource/FactoryPresets/FX/3 Band Shelf/Super Hi-Fi.preset"/>
             </ThreeBandShelves>
-            <Maximizer Name="InsertFX4" Bypass="0" Threshold="-2" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20"/>
+            <Maximizer Name="InsertFX4" Bypass="0" Threshold="-2" Attack="0" Lookahead="2" Release="10" Ceiling="-0.1"
+                       Knee="0" ReleaseBlend="0.1" SlewRate="20"/>
         </Inserts>
         <Layers>
-            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0.36000001" Mute="0" MidiMute="0" Solo="0" DisplayName="Male A" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="1" PortamentoTime="0" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0.36000001" Mute="0" MidiMute="0" Solo="0"
+                   DisplayName="Male A" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="1"
+                   PortamentoTime="0" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0"
+                   BypassInsertFX="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="0.39574355" Source="@MIDI CC 65" Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.39574355" Source="@MIDI CC 65"
+                                      Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0"
+                                      Inverted="0"/>
                 </Connections>
                 <Properties Color="fff11515"/>
                 <ControlSignalSources/>
                 <BusRouters/>
                 <Keygroups>
-                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1.14598" Pan="0" DisplayName="Wavetable" OutputName="" ExclusiveGroup="0" LowKey="24" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1.14598" Pan="0" DisplayName="Wavetable" OutputName=""
+                              ExclusiveGroup="0" LowKey="24" HighKey="127" LowVelocity="1" HighVelocity="127"
+                              LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2"
+                              TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0"
+                              BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                            <SignalConnection Name="SignalConnection 0" Ratio="-0.31999999" Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="-0.31999999"
+                                              Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="Amp. Env" Bypass="0" DelayTime="0" AttackTime="1.28661" AttackCurve="0.5" HoldTime="0.0643306" DecayTime="1.36116" DecayCurve="-0.97000003" SustainLevel="0.66666698" ReleaseTime="1.32172" ReleaseCurve="-0.97000003" DisplayName="Amp. Env" VelocityAmount="0.82999998" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="Amp. Env" Bypass="0" DelayTime="0" AttackTime="1.28661" AttackCurve="0.5"
+                                    HoldTime="0.0643306" DecayTime="1.36116" DecayCurve="-0.97000003"
+                                    SustainLevel="0.66666698" ReleaseTime="1.32172" ReleaseCurve="-0.97000003"
+                                    DisplayName="Amp. Env" VelocityAmount="0.82999998" VelocitySens="0.75" Retrigger="1"
+                                    NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="1"/>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="1" Source="@VoiceParam LinearKeyFollow" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="1"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="1"
+                                                      Source="@VoiceParam LinearKeyFollow" Destination="AttackTime"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0.116043" AttackCurve="0" HoldTime="0.115169" DecayTime="0.76610702" DecayCurve="0" SustainLevel="0.54603201" ReleaseTime="0.12727299" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.672396" VelocitySens="0.42199999" Retrigger="1" NoteOffRetrigger="0"/>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0.2" RiseTime="0.2" Freq="1.3457042" Depth="0.15865178" Phase="0.54166698" WaveFormType="0" Retrigger="2" Bipolar="1" Smooth="0.16751"/>
-                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="Vib" DelayTime="0.47999999" RiseTime="0.2" Freq="4.0280099" Depth="0.19167186" Phase="0" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.046086401"/>
-                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="0" AttackCurve="0" HoldTime="0" DecayTime="0.068058103" DecayCurve="0" SustainLevel="0" ReleaseTime="0.050000001" ReleaseCurve="0" DisplayName="Ptch Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0"/>
-                            <DAHDSR Name="DAHDSR 3" Bypass="0" DelayTime="0" AttackTime="0.00075133302" AttackCurve="0" HoldTime="0" DecayTime="0.722332" DecayCurve="0" SustainLevel="0.57777798" ReleaseTime="0.74216598" ReleaseCurve="0" DisplayName="HP " VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0"/>
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0.116043" AttackCurve="0"
+                                    HoldTime="0.115169" DecayTime="0.76610702" DecayCurve="0" SustainLevel="0.54603201"
+                                    ReleaseTime="0.12727299" ReleaseCurve="0" DisplayName="Filt Env"
+                                    VelocityAmount="0.672396" VelocitySens="0.42199999" Retrigger="1"
+                                    NoteOffRetrigger="0"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0.2"
+                                 RiseTime="0.2" Freq="1.3457042" Depth="0.15865178" Phase="0.54166698" WaveFormType="0"
+                                 Retrigger="2" Bipolar="1" Smooth="0.16751"/>
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="Vib" DelayTime="0.47999999"
+                                 RiseTime="0.2" Freq="4.0280099" Depth="0.19167186" Phase="0" WaveFormType="2"
+                                 Retrigger="1" Bipolar="1" Smooth="0.046086401"/>
+                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="0" AttackCurve="0" HoldTime="0"
+                                    DecayTime="0.068058103" DecayCurve="0" SustainLevel="0" ReleaseTime="0.050000001"
+                                    ReleaseCurve="0" DisplayName="Ptch Env" VelocityAmount="0" VelocitySens="0.75"
+                                    Retrigger="1" NoteOffRetrigger="0"/>
+                            <DAHDSR Name="DAHDSR 3" Bypass="0" DelayTime="0" AttackTime="0.00075133302" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0.722332" DecayCurve="0" SustainLevel="0.57777798"
+                                    ReleaseTime="0.74216598" ReleaseCurve="0" DisplayName="HP " VelocityAmount="0"
+                                    VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0"/>
                         </ControlSignalSources>
                         <Inserts>
                             <BiquadFilter Name="Filter 2" Bypass="0" Freq="165.959" Q="0" KeyTracking="0" Mode="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.12" Source="$Keygroup/DAHDSR 3" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="0.47999999" Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.248" Source="$Keygroup/DAHDSR 3" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="1"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.12" Source="$Keygroup/DAHDSR 3"
+                                                      Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0.47999999"
+                                                      Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.248"
+                                                      Source="$Keygroup/DAHDSR 3" Destination="Q" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="1"/>
                                 </Connections>
                             </BiquadFilter>
-                            <XpanderFilter Name="Filter" Bypass="0" Freq="142.243" Q="0" KeyTracking="0" Mode="1" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
+                            <XpanderFilter Name="Filter" Bypass="0" Freq="142.243" Q="0" KeyTracking="0" Mode="1"
+                                           DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.384" Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="-0.57599998" Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="0.352" Source="@VoiceParam KeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.384"
+                                                      Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-0.57599998"
+                                                      Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="0.352"
+                                                      Source="@VoiceParam KeyFollow" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
                                 </Connections>
                             </XpanderFilter>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <WaveTableOscillator Name="Oscillator" Bypass="0" WavetablePath="$Resource/resource/waveforms/Vox and Formant/Male A.wav" StartPhase="0" PhaseDistortionAmount="0.5" PhaseDistortionMode="0" Spread="0.112" DetuneMode="0" WaveIndex="0" WaveIndexSpread="0" StereoSpread="0.1" StereoSpreadMode="0" NumOscs="2" FadeMipMap="1" FadeWaveIndex="1" Stereo="1" PhaseSpread="0" EnableFM="1" FMDepth="0.56593752" FMRatio="0.43499756" FMRatioFine="0" FMRatioMode="3" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                            <WaveTableOscillator Name="Oscillator" Bypass="0"
+                                                 WavetablePath="$Resource/resource/waveforms/Vox and Formant/Male A.wav"
+                                                 StartPhase="0" PhaseDistortionAmount="0.5" PhaseDistortionMode="0"
+                                                 Spread="0.112" DetuneMode="0" WaveIndex="0" WaveIndexSpread="0"
+                                                 StereoSpread="0.1" StereoSpreadMode="0" NumOscs="2" FadeMipMap="1"
+                                                 FadeWaveIndex="1" Stereo="1" PhaseSpread="0" EnableFM="1"
+                                                 FMDepth="0.56593752" FMRatio="0.43499756" FMRatioFine="0"
+                                                 FMRatioMode="3" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3"
+                                                 CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1"
+                                                 BaseNote="60" DisplayName="Oscillator 1">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.39199999" Source="$Keygroup/LFO 1" Destination="PhaseDistortionAmount" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.39199999"
+                                                      Source="$Keygroup/LFO 1" Destination="PhaseDistortionAmount"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="0.63200003" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="0.63200003"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Script Event Modulation 1" Destination="FMDepth" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                      Source="$Program/Script Event Modulation 1" Destination="FMDepth"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 2"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="0.86400002" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="0.86400002"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="-1.304" Source="$Keygroup/DAHDSR 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-1.304"
+                                                      Source="$Keygroup/DAHDSR 2" Destination="Pitch" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="0.81599998" Source="@MIDI CC 66" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="0.81599998"
+                                                              Source="@MIDI CC 66" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
                                 </Connections>
@@ -353,303 +478,557 @@ end]]></script>
                     </Keygroup>
                 </Keygroups>
             </Layer>
-            <Layer Name="Layer 1" Bypass="0" Gain="1" Pan="-0.21600001" Mute="0" MidiMute="0" Solo="0" DisplayName="sawtooth" OutputName="" LowKey="0" HighKey="64" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0.16514042" BypassInsertFX="0">
+            <Layer Name="Layer 1" Bypass="0" Gain="1" Pan="-0.21600001" Mute="0" MidiMute="0" Solo="0"
+                   DisplayName="sawtooth" OutputName="" LowKey="0" HighKey="64" CustomPolyphony="0" PlayMode="0"
+                   PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1"
+                   VelocityCurve="0.16514042" BypassInsertFX="0">
                 <Properties Color="ff228b22"/>
                 <ControlSignalSources>
-                    <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vib" DelayTime="0" RiseTime="0.51999998" Freq="3.58566" Depth="0.10375" Phase="0" WaveFormType="0" Retrigger="2" Bipolar="1" Smooth="0">
+                    <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vib" DelayTime="0" RiseTime="0.51999998"
+                         Freq="3.58566" Depth="0.10375" Phase="0" WaveFormType="0" Retrigger="2" Bipolar="1" Smooth="0">
                         <Connections>
-                            <SignalConnection Name="SignalConnection 0" Ratio="0.088" Source="$Layer/AHD 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="0.088" Source="$Layer/AHD 1"
+                                              Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                     </LFO>
-                    <AHD Name="AHD 1" Bypass="0" DisplayName="vib rise" VelocityAmount="0" VelocitySens="0.029999999" Retrigger="1" NoteOffRetrigger="0" AttackTime="0.95954001" AttackCurve="0" HoldTime="10" DecayTime="17.5833" DecayCurve="0"/>
+                    <AHD Name="AHD 1" Bypass="0" DisplayName="vib rise" VelocityAmount="0" VelocitySens="0.029999999"
+                         Retrigger="1" NoteOffRetrigger="0" AttackTime="0.95954001" AttackCurve="0" HoldTime="10"
+                         DecayTime="17.5833" DecayCurve="0"/>
                 </ControlSignalSources>
                 <BusRouters/>
                 <Keygroups>
-                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.59370899" Pan="0" DisplayName="sawtooth" OutputName="" ExclusiveGroup="0" LowKey="48" HighKey="108" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.59370899" Pan="0" DisplayName="sawtooth"
+                              OutputName="" ExclusiveGroup="0" LowKey="48" HighKey="108" LowVelocity="1"
+                              HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0"
+                              FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0"
+                              FXPostGain="0" BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                            <SignalConnection Name="SignalConnection 0" Ratio="0.73922414" Source="$Program/Script Event Modulation 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="0.73922414"
+                                              Source="$Program/Script Event Modulation 1" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="Amp. Env" Bypass="0" DelayTime="0.022686001" AttackTime="0.240777" AttackCurve="0.5" HoldTime="0.0330429" DecayTime="0.9016" DecayCurve="-0.97000003" SustainLevel="0.80000001" ReleaseTime="1.57674" ReleaseCurve="-0.97000003" DisplayName="Amp. Env" VelocityAmount="0.65678126" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="Amp. Env" Bypass="0" DelayTime="0.022686001" AttackTime="0.240777"
+                                    AttackCurve="0.5" HoldTime="0.0330429" DecayTime="0.9016" DecayCurve="-0.97000003"
+                                    SustainLevel="0.80000001" ReleaseTime="1.57674" ReleaseCurve="-0.97000003"
+                                    DisplayName="Amp. Env" VelocityAmount="0.65678126" VelocitySens="0.75" Retrigger="1"
+                                    NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="1"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="1"/>
                                 </Connections>
                             </DAHDSR>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0.0057282802" AttackCurve="0" HoldTime="0.00321653" DecayTime="0.192992" DecayCurve="0" SustainLevel="0.75555599" ReleaseTime="0.381208" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.638933" VelocitySens="0.34999999" Retrigger="1" NoteOffRetrigger="0"/>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0.40000001" RiseTime="0.47999999" Freq="1.3457042" Depth="0.15865178" Phase="0" WaveFormType="0" Retrigger="2" Bipolar="1" Smooth="0.019998699"/>
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0.0057282802" AttackCurve="0"
+                                    HoldTime="0.00321653" DecayTime="0.192992" DecayCurve="0" SustainLevel="0.75555599"
+                                    ReleaseTime="0.381208" ReleaseCurve="0" DisplayName="Filt Env"
+                                    VelocityAmount="0.638933" VelocitySens="0.34999999" Retrigger="1"
+                                    NoteOffRetrigger="0"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0.40000001"
+                                 RiseTime="0.47999999" Freq="1.3457042" Depth="0.15865178" Phase="0" WaveFormType="0"
+                                 Retrigger="2" Bipolar="1" Smooth="0.019998699"/>
                         </ControlSignalSources>
                         <Inserts>
                             <Drive Name="Drive" Bypass="0" DriveAmount="0.31200001" Mode="0" Oversampling="1"/>
                             <Retro Name="Filter" Bypass="0" Freq="93.978798" Q="0.156" KeyTracking="0" Mode="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.58399999" Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="0.264" Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Program/Script Event Modulation 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.46470904" Source="$Program/Script Event Modulation 1" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.58399999"
+                                                      Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0.264"
+                                                      Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1"
+                                                      Source="$Program/Script Event Modulation 1" Destination="Freq"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.46470904"
+                                                      Source="$Program/Script Event Modulation 1" Destination="Q"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                                 </Connections>
                             </Retro>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <MinBlepGenerator Name="Oscillator" Bypass="0" Waveform="1" Pwm="0.49215999" StartPhase="0" Polarity="0" HardSync="1" HardSyncShift="0" NumOscillators="6" MultiOscSpread="0.228" Stereo="1" PhaseSpread="0" DetuneMode="0" StereoSpread="0.972" StereoSpreadMode="0" CoarseTune="-24" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                            <MinBlepGenerator Name="Oscillator" Bypass="0" Waveform="1" Pwm="0.49215999" StartPhase="0"
+                                              Polarity="0" HardSync="1" HardSyncShift="0" NumOscillators="6"
+                                              MultiOscSpread="0.228" Stereo="1" PhaseSpread="0" DetuneMode="0"
+                                              StereoSpread="0.972" StereoSpreadMode="0" CoarseTune="-24" FineTune="0"
+                                              Gain="1" Pitch="0" NoteTracking="1" BaseNote="60"
+                                              DisplayName="Oscillator 1">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.30399999" Source="$Keygroup/LFO 1" Destination="Pwm" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Layer/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.30399999"
+                                                      Source="$Keygroup/LFO 1" Destination="Pwm" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Layer/LFO 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="12" Source="$Program/MacroKnob 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="12" Source="$Program/MacroKnob 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0"/>
                                 </Connections>
                             </MinBlepGenerator>
                         </Oscillators>
                     </Keygroup>
                 </Keygroups>
             </Layer>
-            <Layer Name="Layer 2" Bypass="0" Gain="1" Pan="-0.21600001" Mute="0" MidiMute="0" Solo="0" DisplayName="sawtooth copy" OutputName="" LowKey="61" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+            <Layer Name="Layer 2" Bypass="0" Gain="1" Pan="-0.21600001" Mute="0" MidiMute="0" Solo="0"
+                   DisplayName="sawtooth copy" OutputName="" LowKey="61" HighKey="127" CustomPolyphony="0" PlayMode="0"
+                   PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1"
+                   VelocityCurve="0" BypassInsertFX="0">
                 <Properties Color="ff3cb371"/>
                 <ControlSignalSources>
-                    <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vib" DelayTime="0" RiseTime="0.51999998" Freq="3.58566" Depth="0.17662503" Phase="0" WaveFormType="0" Retrigger="2" Bipolar="1" Smooth="0">
+                    <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vib" DelayTime="0" RiseTime="0.51999998"
+                         Freq="3.58566" Depth="0.17662503" Phase="0" WaveFormType="0" Retrigger="2" Bipolar="1"
+                         Smooth="0">
                         <Connections>
-                            <SignalConnection Name="SignalConnection 0" Ratio="0.088" Source="$Layer/AHD 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="0.088" Source="$Layer/AHD 1"
+                                              Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                     </LFO>
-                    <AHD Name="AHD 1" Bypass="0" DisplayName="vib rise" VelocityAmount="0" VelocitySens="0.029999999" Retrigger="1" NoteOffRetrigger="0" AttackTime="0.95954001" AttackCurve="0" HoldTime="10" DecayTime="17.5833" DecayCurve="0"/>
+                    <AHD Name="AHD 1" Bypass="0" DisplayName="vib rise" VelocityAmount="0" VelocitySens="0.029999999"
+                         Retrigger="1" NoteOffRetrigger="0" AttackTime="0.95954001" AttackCurve="0" HoldTime="10"
+                         DecayTime="17.5833" DecayCurve="0"/>
                 </ControlSignalSources>
                 <BusRouters/>
                 <Keygroups>
-                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.52083701" Pan="0" DisplayName="sawtooth" OutputName="" ExclusiveGroup="0" LowKey="48" HighKey="108" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="0.52083701" Pan="0" DisplayName="sawtooth"
+                              OutputName="" ExclusiveGroup="0" LowKey="48" HighKey="108" LowVelocity="1"
+                              HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0"
+                              FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0"
+                              FXPostGain="0" BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                            <SignalConnection Name="SignalConnection 0" Ratio="-0.57139009" Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="-0.57139009"
+                                              Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="Amp. Env" Bypass="0" DelayTime="0.022686001" AttackTime="0.240777" AttackCurve="0.5" HoldTime="0.0330429" DecayTime="0.9016" DecayCurve="-0.97000003" SustainLevel="0.80000001" ReleaseTime="2.1989501" ReleaseCurve="-0.97000003" DisplayName="Amp. Env" VelocityAmount="0.66581249" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="Amp. Env" Bypass="0" DelayTime="0.022686001" AttackTime="0.240777"
+                                    AttackCurve="0.5" HoldTime="0.0330429" DecayTime="0.9016" DecayCurve="-0.97000003"
+                                    SustainLevel="0.80000001" ReleaseTime="2.1989501" ReleaseCurve="-0.97000003"
+                                    DisplayName="Amp. Env" VelocityAmount="0.66581249" VelocitySens="0.75" Retrigger="1"
+                                    NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="1"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="1"/>
                                 </Connections>
                             </DAHDSR>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0.0057282802" AttackCurve="0" HoldTime="0.00321653" DecayTime="0.192992" DecayCurve="0" SustainLevel="0.75555599" ReleaseTime="0.90744197" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.52491701" VelocitySens="0.214" Retrigger="1" NoteOffRetrigger="0"/>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0.40000001" RiseTime="0.47999999" Freq="1.3457042" Depth="0.15865178" Phase="0" WaveFormType="0" Retrigger="2" Bipolar="1" Smooth="0.019998699"/>
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="0.0057282802" AttackCurve="0"
+                                    HoldTime="0.00321653" DecayTime="0.192992" DecayCurve="0" SustainLevel="0.75555599"
+                                    ReleaseTime="0.90744197" ReleaseCurve="0" DisplayName="Filt Env"
+                                    VelocityAmount="0.52491701" VelocitySens="0.214" Retrigger="1"
+                                    NoteOffRetrigger="0"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0.40000001"
+                                 RiseTime="0.47999999" Freq="1.3457042" Depth="0.15865178" Phase="0" WaveFormType="0"
+                                 Retrigger="2" Bipolar="1" Smooth="0.019998699"/>
                         </ControlSignalSources>
                         <Inserts>
                             <Drive Name="Drive" Bypass="0" DriveAmount="0.31200001" Mode="0" Oversampling="1"/>
                             <Retro Name="Filter" Bypass="0" Freq="77.4515" Q="0.156" KeyTracking="0" Mode="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.58399999" Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="0.264" Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Program/Script Event Modulation 1" Destination="Freq" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.66002154" Source="@PolyAfterTouch" Destination="Q" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.58399999"
+                                                      Source="$Keygroup/DAHDSR 1" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0.264"
+                                                      Source="@VoiceParam LinearKeyFollow" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1"
+                                                      Source="$Program/Script Event Modulation 1" Destination="Freq"
+                                                      Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.66002154"
+                                                      Source="@PolyAfterTouch" Destination="Q" Mapper="Mapper 0"
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
                                 </Connections>
                             </Retro>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <MinBlepGenerator Name="Oscillator" Bypass="0" Waveform="1" Pwm="0.49215999" StartPhase="0" Polarity="0" HardSync="1" HardSyncShift="0" NumOscillators="6" MultiOscSpread="0.228" Stereo="1" PhaseSpread="0" DetuneMode="0" StereoSpread="0.972" StereoSpreadMode="0" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                            <MinBlepGenerator Name="Oscillator" Bypass="0" Waveform="1" Pwm="0.49215999" StartPhase="0"
+                                              Polarity="0" HardSync="1" HardSyncShift="0" NumOscillators="6"
+                                              MultiOscSpread="0.228" Stereo="1" PhaseSpread="0" DetuneMode="0"
+                                              StereoSpread="0.972" StereoSpreadMode="0" CoarseTune="-12" FineTune="0"
+                                              Gain="1" Pitch="0" NoteTracking="1" BaseNote="60"
+                                              DisplayName="Oscillator 1">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.30399999" Source="$Keygroup/LFO 1" Destination="Pwm" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Layer/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.30399999"
+                                                      Source="$Keygroup/LFO 1" Destination="Pwm" Mapper=""
+                                                      ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Layer/LFO 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="12" Source="@MIDI CC 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="12" Source="@MIDI CC 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
                                 </Connections>
                             </MinBlepGenerator>
                         </Oscillators>
                     </Keygroup>
                 </Keygroups>
             </Layer>
-            <Layer Name="Layer 3" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="B-Cello" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="1" PortamentoTime="0" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+            <Layer Name="Layer 3" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="B-Cello"
+                   OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="1" PortamentoTime="0"
+                   PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
                 <Connections>
-                    <SignalConnection Name="SignalConnection 0" Ratio="0.39587823" Source="@MIDI CC 65" Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                    <SignalConnection Name="SignalConnection 0" Ratio="0.39587823" Source="@MIDI CC 65"
+                                      Destination="PortamentoTime" Mapper="" ConnectionMode="0" Bypass="0"
+                                      Inverted="0"/>
                 </Connections>
                 <Properties Color="ffb8860b"/>
                 <ControlSignalSources/>
                 <BusRouters/>
                 <Keygroups>
-                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1.1770482" Pan="0" DisplayName="B.CELLO Eb1m" OutputName="" ExclusiveGroup="0" LowKey="40" HighKey="45" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1.1770482" Pan="0" DisplayName="B.CELLO Eb1m"
+                              OutputName="" ExclusiveGroup="0" LowKey="40" HighKey="45" LowVelocity="1"
+                              HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0"
+                              FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0"
+                              FXPostGain="0" BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1"
+                                              Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1" ReleaseTime="0.29776701" ReleaseCurve="0" DisplayName="Am Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1"
+                                    ReleaseTime="0.29776701" ReleaseCurve="0" DisplayName="Am Env" VelocityAmount="0"
+                                    VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0" RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0"
+                                 RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698"
+                                 WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998" Source="@ChanAfterTouch" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998"
+                                                      Source="@ChanAfterTouch" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="1" Inverted="0"/>
                                 </Connections>
-                                <Properties PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
+                                <Properties
+                                        PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
                             </LFO>
-                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299" VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197"
+                                    ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299"
+                                    VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0" RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8" Retrigger="1" Bipolar="1" Smooth="0"/>
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0"
+                                 RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8"
+                                 Retrigger="1" Bipolar="1" Smooth="0"/>
                         </ControlSignalSources>
                         <Inserts>
                             <IIRLFOFilter Name="Filter" Bypass="0" Freq="1599.5601" Q="0.2306875" KeyTracking="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2"
+                                                      Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
                                 </Connections>
                             </IIRLFOFilter>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1" AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="39" DisplayName="Oscillator 1" SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO Eb1m.wav" SamplePurged="0">
+                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1"
+                                          AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1"
+                                          Pitch="0" NoteTracking="1" BaseNote="39" DisplayName="Oscillator 1"
+                                          SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO Eb1m.wav"
+                                          SamplePurged="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0"/>
                                 </Connections>
                             </SamplePlayer>
                         </Oscillators>
                     </Keygroup>
-                    <Keygroup Name="Keygroup 1" Bypass="0" Gain="1.1770482" Pan="0" DisplayName="B.CELLO Bb1m" OutputName="" ExclusiveGroup="0" LowKey="46" HighKey="50" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 1" Bypass="0" Gain="1.1770482" Pan="0" DisplayName="B.CELLO Bb1m"
+                              OutputName="" ExclusiveGroup="0" LowKey="46" HighKey="50" LowVelocity="1"
+                              HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0"
+                              FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0"
+                              FXPostGain="0" BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1"
+                                              Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1" ReleaseTime="0.29776701" ReleaseCurve="0" DisplayName="Am Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1"
+                                    ReleaseTime="0.29776701" ReleaseCurve="0" DisplayName="Am Env" VelocityAmount="0"
+                                    VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0" RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0"
+                                 RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698"
+                                 WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998" Source="@ChanAfterTouch" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998"
+                                                      Source="@ChanAfterTouch" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="1" Inverted="0"/>
                                 </Connections>
-                                <Properties PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
+                                <Properties
+                                        PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
                             </LFO>
-                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299" VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197"
+                                    ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299"
+                                    VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0" RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8" Retrigger="1" Bipolar="1" Smooth="0"/>
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0"
+                                 RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8"
+                                 Retrigger="1" Bipolar="1" Smooth="0"/>
                         </ControlSignalSources>
                         <Inserts>
                             <IIRLFOFilter Name="Filter" Bypass="0" Freq="1599.5601" Q="0.2306875" KeyTracking="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2"
+                                                      Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
                                 </Connections>
                             </IIRLFOFilter>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1" AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="46" DisplayName="Oscillator 1" SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO Bb1m.wav" SamplePurged="0">
+                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1"
+                                          AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1"
+                                          Pitch="0" NoteTracking="1" BaseNote="46" DisplayName="Oscillator 1"
+                                          SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO Bb1m.wav"
+                                          SamplePurged="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0"/>
                                 </Connections>
                             </SamplePlayer>
                         </Oscillators>
                     </Keygroup>
-                    <Keygroup Name="Keygroup 2" Bypass="0" Gain="1.1770482" Pan="0" DisplayName="B.CELLO F2" OutputName="" ExclusiveGroup="0" LowKey="51" HighKey="65" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="10" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 2" Bypass="0" Gain="1.1770482" Pan="0" DisplayName="B.CELLO F2"
+                              OutputName="" ExclusiveGroup="0" LowKey="51" HighKey="65" LowVelocity="1"
+                              HighVelocity="127" LowKeyFade="0" HighKeyFade="10" LowVelocityFade="0"
+                              HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0"
+                              LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1"
+                                              Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1" ReleaseTime="0.29776701" ReleaseCurve="0" DisplayName="Am Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1"
+                                    ReleaseTime="0.29776701" ReleaseCurve="0" DisplayName="Am Env" VelocityAmount="0"
+                                    VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0" RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0"
+                                 RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698"
+                                 WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998" Source="@ChanAfterTouch" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998"
+                                                      Source="@ChanAfterTouch" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="1" Inverted="0"/>
                                 </Connections>
-                                <Properties PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
+                                <Properties
+                                        PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
                             </LFO>
-                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299" VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197"
+                                    ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299"
+                                    VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0" RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8" Retrigger="1" Bipolar="1" Smooth="0"/>
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0"
+                                 RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8"
+                                 Retrigger="1" Bipolar="1" Smooth="0"/>
                         </ControlSignalSources>
                         <Inserts>
                             <IIRLFOFilter Name="Filter" Bypass="0" Freq="1599.5601" Q="0.2306875" KeyTracking="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2"
+                                                      Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
                                 </Connections>
                             </IIRLFOFilter>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1" AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="53" DisplayName="Oscillator 1" SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO F2.wav" SamplePurged="0">
+                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1"
+                                          AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1"
+                                          Pitch="0" NoteTracking="1" BaseNote="53" DisplayName="Oscillator 1"
+                                          SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO F2.wav"
+                                          SamplePurged="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0"/>
                                 </Connections>
                             </SamplePlayer>
                         </Oscillators>
                     </Keygroup>
-                    <Keygroup Name="Keygroup 3" Bypass="0" Gain="0.71210051" Pan="0" DisplayName="B.CELLO Bb2" OutputName="" ExclusiveGroup="0" LowKey="55" HighKey="84" LowVelocity="1" HighVelocity="127" LowKeyFade="8" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                    <Keygroup Name="Keygroup 3" Bypass="0" Gain="0.71210051" Pan="0" DisplayName="B.CELLO Bb2"
+                              OutputName="" ExclusiveGroup="0" LowKey="55" HighKey="84" LowVelocity="1"
+                              HighVelocity="127" LowKeyFade="8" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0"
+                              FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0"
+                              FXPostGain="0" BypassInsertFX="0">
                         <Connections>
-                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                            <SignalConnection Name="SignalConnection 1" Ratio="-0.43709591" Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 1"
+                                              Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 1" Ratio="-0.43709591"
+                                              Source="@VoiceParam LinearKeyFollow" Destination="Gain" Mapper=""
+                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                         </Connections>
                         <ControlSignalSources>
-                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948" AttackCurve="-0.18360826" HoldTime="0" DecayTime="0" DecayCurve="-0.87693" SustainLevel="1" ReleaseTime="0.29776701" ReleaseCurve="-0.39210558" DisplayName="Am Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 1" Bypass="0" DelayTime="0" AttackTime="1.09948"
+                                    AttackCurve="-0.18360826" HoldTime="0" DecayTime="0" DecayCurve="-0.87693"
+                                    SustainLevel="1" ReleaseTime="0.29776701" ReleaseCurve="-0.39210558"
+                                    DisplayName="Am Env" VelocityAmount="0" VelocitySens="0.75" Retrigger="1"
+                                    NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.81438577" Source="@VoiceParam ReleaseVelocity" Destination="ReleaseTime" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.81438577"
+                                                      Source="@VoiceParam ReleaseVelocity" Destination="ReleaseTime"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0" RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698" WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="Vibrato" DelayTime="0"
+                                 RiseTime="1.6799999" Freq="1.3457042" Depth="0.15865178" Phase="0.66666698"
+                                 WaveFormType="2" Retrigger="1" Bipolar="1" Smooth="0.0015970001">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998" Source="@ChanAfterTouch" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.079999998"
+                                                      Source="@ChanAfterTouch" Destination="Freq" Mapper=""
+                                                      ConnectionMode="0" Bypass="1" Inverted="0"/>
                                 </Connections>
-                                <Properties PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
+                                <Properties
+                                        PresetPath="/Users/song-haven/Documents/MOTU/MachFive3/User Presets/Modulations/LFO/horn vibrato1.fxps"/>
                             </LFO>
-                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0" HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197" ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299" VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
+                            <DAHDSR Name="DAHDSR 2" Bypass="0" DelayTime="0" AttackTime="4.2913098" AttackCurve="0"
+                                    HoldTime="0" DecayTime="0" DecayCurve="0" SustainLevel="1" ReleaseTime="0.90744197"
+                                    ReleaseCurve="0" DisplayName="Filt Env" VelocityAmount="0.96735299"
+                                    VelocitySens="0.46200001" Retrigger="1" NoteOffRetrigger="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity" Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@VoiceParam Velocity"
+                                                      Destination="AttackTime" Mapper="Mapper 0" ConnectionMode="0"
+                                                      Bypass="0" Inverted="0"/>
                                 </Connections>
                             </DAHDSR>
-                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0" RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8" Retrigger="1" Bipolar="1" Smooth="0"/>
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="0" DisplayName="LFO 2" DelayTime="0"
+                                 RiseTime="0.80000001" Freq="6.7772198" Depth="0.12800001" Phase="0" WaveFormType="8"
+                                 Retrigger="1" Bipolar="1" Smooth="0"/>
                         </ControlSignalSources>
                         <Inserts>
                             <IIRLFOFilter Name="Filter" Bypass="0" Freq="1955.3972" Q="0.2306875" KeyTracking="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="-0.50080818" Source="$Program/Script Event Modulation 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/DAHDSR 2"
+                                                      Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-0.50080818"
+                                                      Source="$Program/Script Event Modulation 1" Destination="Freq"
+                                                      Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
                                 </Connections>
                             </IIRLFOFilter>
                         </Inserts>
                         <BusRouters/>
                         <Oscillators>
-                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1" AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1" Pitch="0" NoteTracking="1" BaseNote="58" DisplayName="Oscillator 1" SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO Bb2.wav" SamplePurged="0">
+                            <SamplePlayer Name="Oscillator" Bypass="0" SampleStart="0" InterpolationMode="1"
+                                          AllowStreaming="0" Reverse="0" CoarseTune="-12" FineTune="0" Gain="1"
+                                          Pitch="0" NoteTracking="1" BaseNote="58" DisplayName="Oscillator 1"
+                                          SamplePath="$Falcon Factory rev2.ufs/Samples/1.6 Samples/AnaCello Samples/B.CELLO Bb2.wav"
+                                          SamplePurged="0">
                                 <Connections>
-                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                    <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Keygroup/LFO 1"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0">
                                         <Connections>
-                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@ChanAfterTouch" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1"
+                                                              Source="@ChanAfterTouch" Destination="Ratio" Mapper=""
+                                                              ConnectionMode="0" Bypass="0" Inverted="0"/>
                                         </Connections>
                                     </SignalConnection>
-                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
-                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="7" Source="@PitchBend"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0"
+                                                      Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 2" Ratio="1" Source="$Keygroup/LFO 2"
+                                                      Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="1"
+                                                      Inverted="0"/>
                                 </Connections>
                             </SamplePlayer>
                         </Oscillators>

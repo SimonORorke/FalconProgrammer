@@ -1,5 +1,4 @@
-﻿using FalconProgrammer.Model;
-using FalconProgrammer.Model.Options;
+﻿using FalconProgrammer.Model.Options;
 using FalconProgrammer.Model.XmlLinq;
 
 namespace FalconProgrammer.Tests.Model;
@@ -184,7 +183,7 @@ public class CategoryTests {
       "Voltage");
     return;
 
-    void LookForEmbeddedFile(string soundBankName, string categoryName, 
+    void LookForEmbeddedFile(string soundBankName, string categoryName,
       string programName) {
       var category = new TestCategory(soundBankName, categoryName, Settings);
       var batch = new TestBatch();

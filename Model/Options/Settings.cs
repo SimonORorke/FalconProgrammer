@@ -8,14 +8,14 @@ namespace FalconProgrammer.Model.Options;
 ///   To read the settings, use <see cref="SettingsReader" />.
 /// </summary>
 [XmlRoot(nameof(Settings))]
-public partial class Settings : SerialisationBase {
+public class Settings : SerialisationBase {
   [XmlElement] public Folder ProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder OriginalProgramsFolder { get; set; } = new Folder();
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
   [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
-  
-  [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings(); 
+
+  [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings();
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem("SoundBankCategory")]

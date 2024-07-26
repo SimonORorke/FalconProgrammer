@@ -70,8 +70,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Documentation\Falcon Programmer Manual.pdf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="Documentation\Falcon Programmer Manual.pdf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>

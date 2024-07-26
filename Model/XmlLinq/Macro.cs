@@ -36,15 +36,15 @@ internal class Macro : ModulationsOwner {
   }
 
   /// <summary>
-  ///   Gets the macro's <see cref="EntityBase.DisplayName "/> with any MIDI CC number
-  ///   suffix removed. 
+  ///   Gets the macro's <see cref="EntityBase.DisplayName " /> with any MIDI CC number
+  ///   suffix removed.
   /// </summary>
   /// <remarks>
   ///   There is an option <see cref="MidiForMacros.AppendCcNoToMacroDisplayNames" /> in
   ///   settings to append the MIDI CC number of each macro's non-mod wheel
-  ///   <see cref="Modulation" /> to the macro's <see cref="EntityBase.DisplayName "/>
+  ///   <see cref="Modulation" /> to the macro's <see cref="EntityBase.DisplayName " />
   ///   when updating a program's macro MIDI Ccs.
-  ///   The format of the CC suffix is ' (CCn)'. 
+  ///   The format of the CC suffix is ' (CCn)'.
   /// </remarks>
   public string DisplayNameWithoutCc => DisplayName.Contains(" (CC")
     ? DisplayName[..DisplayName.IndexOf(" (CC")].Trim()

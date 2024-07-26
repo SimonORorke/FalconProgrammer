@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.SoundBankSpecificView"
              x:DataType="vm:SoundBankSpecificViewModel">
-    
+
     <UserControl.Styles>
         <Style Selector="AccessText">
             <Setter Property="FontSize" Value="16" />
@@ -15,10 +15,10 @@
             <Setter Property="Height" Value="30" />
             <Setter Property="TextAlignment" Value="End" />
             <!-- Wide enough to make room for the error icon to the right. -->
-            <Setter Property="Width" Value="85" /> 
+            <Setter Property="Width" Value="85" />
         </Style>
     </UserControl.Styles>
-    
+
     <StackPanel>
         <CheckBox IsChecked="{Binding EtherFieldsStandardLayout}"
                   Margin="10,10,0,0">
@@ -38,9 +38,9 @@
                 BorderThickness="2"
                 Margin="0,10,0,0">
             <StackPanel>
-                <TextBlock Text="{Binding OrganicPadsTitle}" 
+                <TextBlock Text="{Binding OrganicPadsTitle}"
                            FontSize="18"
-                           Margin="10,10,0,0"/>
+                           Margin="10,10,0,0" />
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsAttackSecondsTextBox"
                            Margin="10, 10, 0, 0">

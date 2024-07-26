@@ -24,11 +24,11 @@
             InvalidOperationException: The control already has a visual parent
         See https://github.com/AvaloniaUI/Avalonia/issues/15115. -->
         <ListBox x:Name="ColourSchemeListBox"
-                  ItemsSource="{Binding ColourSchemes}"
-                  SelectedItem="{Binding ColourScheme}"
-                  HorizontalAlignment="Center"
-                  Width="240"
-                  Height="165"
-                  Margin="0,10,0,0"  />
+                 ItemsSource="{Binding ColourSchemes}"
+                 SelectedItem="{Binding ColourScheme}"
+                 HorizontalAlignment="Center"
+                 Width="240"
+                 Height="165"
+                 Margin="0,10,0,0" />
     </StackPanel>
 </Window>

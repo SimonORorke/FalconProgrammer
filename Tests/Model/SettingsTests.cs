@@ -18,7 +18,7 @@ public class SettingsTests {
       (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
     Assert.That(writtenSettings.MidiForMacros.AppendCcNoToMacroDisplayNames, Is.False);
   }
-  
+
   [Test]
   public void Background() {
     var settingsReader = new TestSettingsReaderEmbedded {

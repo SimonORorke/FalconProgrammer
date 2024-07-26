@@ -5,10 +5,8 @@ using FalconProgrammer.Model.Options;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ConnectionsParent : ModulationsOwner {
-
   public ConnectionsParent(XElement element, ProgramXml programXml, MidiForMacros midi)
-    : base(element, programXml, midi) {
-  }
+    : base(element, programXml, midi) { }
 
   public override string Name => Element.Name.ToString();
 

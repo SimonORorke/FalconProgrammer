@@ -51,13 +51,13 @@
         <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Novachord Noir 1.4"/>
         <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Pad Motion 1.5"/>
         <ProgramPath SoundBank="Falcon Factory" Category="Synth Brass" Program="Gotham Brass 1.4"/>
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Bass" Program="Coastal Halftones" />
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Bass" Program="Metropolis" />
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Brass" Program="Gotham Brass" />
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Lead" Program="Ali3n" />
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Arrival" />
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Novachord Noir" />
-        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Pad Motion" />
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Bass" Program="Coastal Halftones"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Bass" Program="Metropolis"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Brass" Program="Gotham Brass"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Lead" Program="Ali3n"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Arrival"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Novachord Noir"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Pad Motion"/>
         <ProgramPath SoundBank="Inner Dimensions" Category="Pad" Program="GrainVoices 2"/>
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Lunar Nashi"/>
         <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Pad Chord Ram"/>

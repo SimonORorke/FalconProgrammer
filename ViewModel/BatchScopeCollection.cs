@@ -47,7 +47,7 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
   private void Update(BatchScope scope) {
     if (Count == 0) {
       AddItem(new ProgramItem(Settings, FileSystemService, false, true) {
-        SoundBanks = SoundBanks,
+        SoundBanks = SoundBanks
       });
       this[0].Update(scope.SoundBank, scope.Category, scope.Program);
     } else if (scope.SoundBank != string.Empty) {

@@ -26,9 +26,10 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     where !range.IsAdditionItem
     select range).ToList();
 
-  [ExcludeFromCodeCoverage] public string AccessibleTitle => 
+  [ExcludeFromCodeCoverage]
+  public string AccessibleTitle =>
     $"_{RangeType} CC Number Ranges";
-  
+
   private string RangeType { get; }
   private List<IntegerRange> SettingsRanges { get; set; } = null!;
 

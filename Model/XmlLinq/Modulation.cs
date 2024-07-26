@@ -106,7 +106,7 @@ internal class Modulation : EntityBase {
         ConnectionsParent => false, // Includes derived type Effect
         Macro => ConnectionMode == 1, // 0 for modulation wheel (MIDI CC 1)
         // Not used, as ReuseCc1 does not support GUI script processor.
-        ScriptProcessor => CcNo.HasValue, 
+        ScriptProcessor => CcNo.HasValue,
         null => throw new InvalidOperationException(
           "Modulation.ModulatesMacro cannot be determined because " +
           "Owner has not been specified."),
@@ -133,7 +133,8 @@ internal class Modulation : EntityBase {
   ///   Currently this only works for Falcon Factory\Brutal Bass 2.1.
   ///   Examples: Magnetic 1, Overdrive.
   /// </remarks>
-  public void FixToggleOrContinuous(IEnumerable<Macro> macros, IList<Modulation> modulations) {
+  public void FixToggleOrContinuous(IEnumerable<Macro> macros,
+    IList<Modulation> modulations) {
     // In many but not all programs in category Falcon Factory\Brutal Bass 2.1,
     // Destination does not match the name of the modulated macro. For the potentially
     // problematic modulation, Destination is "Macro4", while the macro Name is

@@ -24,7 +24,7 @@
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
                     Height="35" Margin="10, 10, 0, 0">
-            <CheckBox IsChecked="{Binding AppendCcNoToMacroDisplayNames}" >
+            <CheckBox IsChecked="{Binding AppendCcNoToMacroDisplayNames}">
                 <AccessText Text="{Binding AppendCcNoCaption}"
                             FontSize="16" />
             </CheckBox>

@@ -22,7 +22,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
       ModelServices = TestModelServices
     };
     ViewModel = new TestMainWindowViewModel(
-      MockDialogService, MockDispatcherService, MockCursorService, 
+      MockDialogService, MockDispatcherService, MockCursorService,
       MockWindowLocationService) {
       ModelServices = TestModelServices,
       BatchViewModel = TestBatchViewModel,
@@ -148,7 +148,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
     // Simulate selecting a Settings folder.
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
-    var command = 
+    var command =
       (AsyncRelayCommand)ViewModel.LocationsViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     bool canClose = await ViewModel.QueryCloseWindow();

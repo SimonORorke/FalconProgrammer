@@ -26,7 +26,7 @@ internal class TestFalconProgram : FalconProgram {
       TestProgramXml CreateTestProgramXml() {
         var result = new TestProgramXml(Category) {
           EmbeddedProgramFileName = EmbeddedProgramFileName,
-          TestXml = TestXml 
+          TestXml = TestXml
         };
         result.Saved += TestProgramXmlOnSaved;
         return result;
@@ -49,7 +49,7 @@ internal class TestFalconProgram : FalconProgram {
     mpeScriptProcessor = (
       from scriptProcessor in ScriptProcessors
       where scriptProcessor is MpeScriptProcessor
-      select (MpeScriptProcessor)scriptProcessor).SingleOrDefault() ;
+      select (MpeScriptProcessor)scriptProcessor).SingleOrDefault();
     return mpeScriptProcessor != null;
   }
 

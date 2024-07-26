@@ -112,73 +112,73 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Background Images\Heath Gunmetal Large Check.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Background Images\Gunmetal.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Scripts\DAHDSR Controller.lua">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Xml\Settings\DefaultSettings.xml" />
-        <None Remove="Xml\ScriptProcessors\Voklm_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Voklm_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Titanium_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Titanium_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Savage_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Savage_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Pulsar_Plucks.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Plucks_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Pulsar_Pads.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Pads_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Pulsar_Leads_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Leads_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Pulsar_Bass_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Bass_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\OrganicPads_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\OrganicPads_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\OrganicKeys_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\OrganicKeys_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\ModularNoise_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\ModularNoise_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\InnerDimensions_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\InnerDimensions_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\HypnoticDrive_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\HypnoticDrive_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Fluidity_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Fluidity_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Factory2_5_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Factory_2_5_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\OrganicTexture_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Factory_OrganicTexture_Gui.xml" />
-        <None Remove="Xml\ScriptProcessors\Factory2_1_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Factory_2_1_Gui.xml" />
-        <None Remove="Xml\MacrosTemplate\OrganicPadsMacrosTemplate.xml" />
-        <EmbeddedResource Include="Xml\MacroTemplates\OrganicPads_Macros.xml" />
-        <None Remove="Xml\ScriptProcessors\OrganicPads_DahdsrController.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\OrganicPads_DahdsrController.xml" />
-        <None Remove="Xml\MacroTemplates\MacroTemplate.xml" />
-        <EmbeddedResource Include="Xml\MacroTemplates\MacroTemplate.xml" />
-        <None Remove="Xml\Modulations\ModulationTemplate.xml" />
-        <EmbeddedResource Include="Xml\ModulationTemplates\ModulationTemplate.xml" />
-        <None Remove="Xml\ScriptProcessors\FactoryRev2_Gul.xml" />
-        <None Remove="Xml\ScriptProcessors\FactoryRev2_Gui.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\FactoryRev2_Gui.xml" />
-        <None Remove="Xml\Macros\Voklm_Macros.xml" />
-        <None Remove="Xml\Macros\Voklm_SynthChoirs_Macros.xml" />
-        <None Remove="Xml\MacroTemplates\Voklm_VoxInstruments_Macros.xml" />
-        <None Remove="Xml\MacroTemplates\Voklm_SynthChoirs_Macros.xml" />
-        <None Remove="Scripts\DahdsrController\DahdsrController.lua" />
+        <EmbeddedResource Include="Xml\Settings\DefaultSettings.xml"/>
+        <None Remove="Xml\ScriptProcessors\Voklm_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Voklm_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Titanium_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Titanium_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Savage_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Savage_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Pulsar_Plucks.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Plucks_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Pulsar_Pads.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Pads_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Pulsar_Leads_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Leads_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Pulsar_Bass_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Pulsar_Bass_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\OrganicPads_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\OrganicPads_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\OrganicKeys_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\OrganicKeys_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\ModularNoise_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\ModularNoise_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\InnerDimensions_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\InnerDimensions_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\HypnoticDrive_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\HypnoticDrive_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Fluidity_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Fluidity_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Factory2_5_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Factory_2_5_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\OrganicTexture_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Factory_OrganicTexture_Gui.xml"/>
+        <None Remove="Xml\ScriptProcessors\Factory2_1_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\Factory_2_1_Gui.xml"/>
+        <None Remove="Xml\MacrosTemplate\OrganicPadsMacrosTemplate.xml"/>
+        <EmbeddedResource Include="Xml\MacroTemplates\OrganicPads_Macros.xml"/>
+        <None Remove="Xml\ScriptProcessors\OrganicPads_DahdsrController.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\OrganicPads_DahdsrController.xml"/>
+        <None Remove="Xml\MacroTemplates\MacroTemplate.xml"/>
+        <EmbeddedResource Include="Xml\MacroTemplates\MacroTemplate.xml"/>
+        <None Remove="Xml\Modulations\ModulationTemplate.xml"/>
+        <EmbeddedResource Include="Xml\ModulationTemplates\ModulationTemplate.xml"/>
+        <None Remove="Xml\ScriptProcessors\FactoryRev2_Gul.xml"/>
+        <None Remove="Xml\ScriptProcessors\FactoryRev2_Gui.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\FactoryRev2_Gui.xml"/>
+        <None Remove="Xml\Macros\Voklm_Macros.xml"/>
+        <None Remove="Xml\Macros\Voklm_SynthChoirs_Macros.xml"/>
+        <None Remove="Xml\MacroTemplates\Voklm_VoxInstruments_Macros.xml"/>
+        <None Remove="Xml\MacroTemplates\Voklm_SynthChoirs_Macros.xml"/>
+        <None Remove="Scripts\DahdsrController\DahdsrController.lua"/>
         <EmbeddedResource Include="Scripts\DahdsrController\DahdsrController.lua">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </EmbeddedResource>
-        <None Remove="Xml\ScriptProcessorTemplates\MpeScriptProcessor.xml" />
-        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\MpeScriptProcessor.xml" />
-        <None Remove="Xml\ScriptEventModulationTemplates\ScriptEventModulationTemplate.xml" />
-        <EmbeddedResource Include="Xml\ScriptEventModulationTemplates\ScriptEventModulationTemplate.xml" />
+        <None Remove="Xml\ScriptProcessorTemplates\MpeScriptProcessor.xml"/>
+        <EmbeddedResource Include="Xml\ScriptProcessorTemplates\MpeScriptProcessor.xml"/>
+        <None Remove="Xml\ScriptEventModulationTemplates\ScriptEventModulationTemplate.xml"/>
+        <EmbeddedResource Include="Xml\ScriptEventModulationTemplates\ScriptEventModulationTemplate.xml"/>
     </ItemGroup>
 
 </Project>

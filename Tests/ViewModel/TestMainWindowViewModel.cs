@@ -6,7 +6,7 @@ namespace FalconProgrammer.Tests.ViewModel;
 
 public class TestMainWindowViewModel : MainWindowViewModel {
   public TestMainWindowViewModel(IDialogService dialogService,
-    IDispatcherService dispatcherService, ICursorService cursorService, 
+    IDispatcherService dispatcherService, ICursorService cursorService,
     IWindowLocationService windowLocationService)
     : base(dialogService, dispatcherService, cursorService, windowLocationService) { }
 

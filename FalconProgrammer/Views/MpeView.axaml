@@ -13,7 +13,7 @@
                 <AccessText
                     Text="_Y Target" />
             </Label>
-            <ComboBox x:Name="YTargetComboBox" 
+            <ComboBox x:Name="YTargetComboBox"
                       ItemsSource="{Binding YTargets}"
                       SelectedItem="{Binding YTarget}"
                       Margin="10, 10, 0, 0" />
@@ -24,7 +24,7 @@
                 <AccessText
                     Text="_Z Target" />
             </Label>
-            <ComboBox x:Name="ZTargetComboBox" 
+            <ComboBox x:Name="ZTargetComboBox"
                       ItemsSource="{Binding ZTargets}"
                       SelectedItem="{Binding ZTarget}"
                       Margin="10, 10, 0, 0" />
@@ -35,7 +35,7 @@
                 <AccessText
                     Text="_Gain Map" />
             </Label>
-            <ComboBox x:Name="GainMapComboBox" 
+            <ComboBox x:Name="GainMapComboBox"
                       ItemsSource="{Binding GainMapDisplayNames}"
                       SelectedItem="{Binding GainMapDisplayName}"
                       Margin="10, 10, 0, 0" />
@@ -52,7 +52,7 @@
                 <AccessText
                     Text="_X Target" />
             </Label>
-            <ComboBox x:Name="XTargetComboBox" 
+            <ComboBox x:Name="XTargetComboBox"
                       ItemsSource="{Binding XTargets}"
                       SelectedItem="{Binding XTarget}"
                       Margin="10, 10, 0, 0" />

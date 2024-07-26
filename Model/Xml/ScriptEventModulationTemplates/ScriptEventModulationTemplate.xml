@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ScriptEventModulationTemplate>
-    <ScriptEventModulation Name="MPE X Modulation" Bypass="0" DisplayName="MPE X Modulation" 
+    <ScriptEventModulation Name="MPE X Modulation" Bypass="0" DisplayName="MPE X Modulation"
                            EventId="2" Bipolar="1"/>
 </ScriptEventModulationTemplate>
