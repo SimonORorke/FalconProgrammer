@@ -90,7 +90,9 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     // ranges, base.QueryClose will automatically save these two settings, if changed,
     // as they are properties of this view model.
     Settings.MidiForMacros.AppendCcNoToMacroDisplayNames = AppendCcNoToMacroDisplayNames;
-    Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo ?? 0;
+    if (!GetErrors(nameof(ModWheelReplacementCcNo)).Any()) {
+      Settings.MidiForMacros.ModWheelReplacementCcNo = ModWheelReplacementCcNo ?? 0;
+    }
     bool canClosePage = true;
     bool haveRangesChanged = false;
     if (ContinuousCcNoRanges.HasBeenChanged) {

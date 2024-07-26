@@ -19,7 +19,7 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   [ObservableProperty] private bool _initialiseZToMacroValue;
 
   private bool _isInitialiseZEnabled;
-  private int _pitchBendRange;
+  private int? _pitchBendRange;
 
   /// <summary>
   ///   Generates <see cref="XTarget" /> property.
@@ -53,7 +53,7 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
 
   [Required]
   [Range(0, 48)]
-  public int PitchBendRange {
+  public int? PitchBendRange {
     get => _pitchBendRange;
     set => SetProperty(ref _pitchBendRange, value, true);
   }
@@ -96,7 +96,9 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
     Settings.Mpe.XTarget = XTarget;
     Settings.Mpe.GainMapValue = GetGainMapValue();
     Settings.Mpe.InitialiseZToMacroValue = InitialiseZToMacroValue;
-    Settings.Mpe.PitchBendRange = PitchBendRange;
+    if (!GetErrors(nameof(PitchBendRange)).Any()) {
+      Settings.Mpe.PitchBendRange = PitchBendRange!.Value;
+    }
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 

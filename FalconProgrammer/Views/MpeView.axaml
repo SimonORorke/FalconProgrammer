@@ -30,17 +30,6 @@
                       Margin="10, 10, 0, 0" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Label Target="XTargetComboBox"
-                   Margin="10, 10, 0, 0">
-                <AccessText
-                    Text="_X Target" />
-            </Label>
-            <ComboBox x:Name="XTargetComboBox" 
-                      ItemsSource="{Binding XTargets}"
-                      SelectedItem="{Binding XTarget}"
-                      Margin="10, 10, 0, 0" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
             <Label Target="GainMapComboBox"
                    Margin="10, 10, 0, 0">
                 <AccessText
@@ -58,6 +47,17 @@
                         TextWrapping="Wrap" />
         </CheckBox>
         <StackPanel Orientation="Horizontal">
+            <Label Target="XTargetComboBox"
+                   Margin="10, 10, 0, 0">
+                <AccessText
+                    Text="_X Target" />
+            </Label>
+            <ComboBox x:Name="XTargetComboBox" 
+                      ItemsSource="{Binding XTargets}"
+                      SelectedItem="{Binding XTarget}"
+                      Margin="10, 10, 0, 0" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
             <Label Target="PitchBendRangeTextBox"
                    Margin="10, 10, 0, 0">
                 <AccessText
@@ -69,7 +69,7 @@
                      Height="30"
                      MinWidth="10"
                      Margin="10,10,0,0"
-                     Width="45" />
+                     Width="55" /> <!-- Wide enough to include data validation icon. -->
         </StackPanel>
     </StackPanel>
 </UserControl>
