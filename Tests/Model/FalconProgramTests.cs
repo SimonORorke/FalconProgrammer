@@ -181,7 +181,7 @@ public class FalconProgramTests {
       Batch.NextProgramTestXml = Batch.TestProgram.SavedXml;
       Batch.MockBatchLog.Lines.Clear();
       Batch.RunTask(
-        ConfigTask.RemoveArpeggiatorsAndSequencing, soundBankName, categoryName, 
+        ConfigTask.RemoveArpeggiatorsAndSequencing, soundBankName, categoryName,
         programName);
     }
   }
@@ -219,6 +219,7 @@ public class FalconProgramTests {
     Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
     Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
     Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+    Assert.That(mpeScriptProcessor.InitialZValue, Is.EqualTo(0));
   }
 
   [Test]
@@ -247,26 +248,29 @@ public class FalconProgramTests {
     Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
     Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
     Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
-    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents, 
+    Assert.That(mpeScriptProcessor.GainMap, Is.EqualTo(GainMap.Linear));
+    Assert.That(mpeScriptProcessor.InitialZValue, 
+      Is.EqualTo(Batch.TestProgram.Macros[1].Value));
+    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents,
       Has.Count.EqualTo(1));
-    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents, 
+    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents,
       Has.Count.EqualTo(1));
-    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents, 
+    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents,
       Is.EqualTo(Batch.TestProgram.Macros[1].ModulatedConnectionsParents));
-    Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents, 
+    Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents,
       Has.Count.EqualTo(1));
     Assert.That(
-      Batch.TestProgram.Macros[0].ModulatedConnectionsParents[0].Modulations[^2].Source, 
+      Batch.TestProgram.Macros[0].ModulatedConnectionsParents[0].Modulations[^2].Source,
       Is.EqualTo("$Program/MPE Y Modulation"));
-    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents, 
+    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents,
       Has.Count.EqualTo(1));
     Assert.That(
-      Batch.TestProgram.Macros[1].ModulatedConnectionsParents[0].Modulations[^1].Source, 
+      Batch.TestProgram.Macros[1].ModulatedConnectionsParents[0].Modulations[^1].Source,
       Is.EqualTo("$Program/MPE Z Modulation"));
-    Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents, 
+    Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents,
       Has.Count.EqualTo(1));
     Assert.That(
-      Batch.TestProgram.Macros[2].ModulatedConnectionsParents[0].Modulations[^1].Source, 
+      Batch.TestProgram.Macros[2].ModulatedConnectionsParents[0].Modulations[^1].Source,
       Is.EqualTo("$Program/MPE X Modulation"));
   }
 
@@ -277,7 +281,7 @@ public class FalconProgramTests {
     const string programName = "Analog Cello";
     Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain(
-      "Cannot add MPE support because the program's Info page GUI " + 
+      "Cannot add MPE support because the program's Info page GUI " +
       "is specified in a script processor."));
   }
 

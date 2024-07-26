@@ -9,7 +9,6 @@ public class MpeViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
-    MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     ViewModel = new MpeViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
@@ -19,7 +18,33 @@ public class MpeViewModelTests : ViewModelTestsBase {
   private MpeViewModel ViewModel { get; set; } = null!;
 
   [Test]
+  public async Task Defaults() {
+    MockSettingsReaderEmbedded.EmbeddedFileName = "DefaultSettingsWithMidi.xml";
+    await ViewModel.Open();
+    Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget), 
+      Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+    Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget), 
+      Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+    Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget),
+      Is.EqualTo(XTarget.Pitch));
+    Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("20dB"));
+    Assert.That(ViewModel.InitialiseZToMacroValue, Is.False);
+    Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
+    const ZTarget newZTarget = ZTarget.ContinuousMacro2Bipolar;
+    const string newGainMapDisplayName = "Z^2";
+    const GainMap newGainMap = GainMap.ZAnd2;
+    ViewModel.ZTarget = newZTarget.ToString();
+    Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
+    ViewModel.GainMapDisplayName = newGainMapDisplayName;
+    bool hasClosed = await ViewModel.QueryClose();
+    Assert.That(hasClosed, Is.True);
+    Assert.That(ViewModel.Settings.Mpe.ZTargetValue, Is.EqualTo(newZTarget));
+    Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
+  }
+
+  [Test]
   public async Task Main() {
+    MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     await ViewModel.Open();
     Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTargets[0]), 
       Is.EqualTo(YTarget.None));
@@ -27,22 +52,33 @@ public class MpeViewModelTests : ViewModelTestsBase {
       Is.EqualTo(ZTarget.None));
     Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTargets[0]), 
       Is.EqualTo(XTarget.None));
+    Assert.That(ViewModel.GainMapDisplayNames[2], Is.EqualTo("Linear"));
     Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget), 
       Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
     Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget), 
       Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
     Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget), 
       Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
+    Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("Linear"));
+    Assert.That(ViewModel.InitialiseZToMacroValue, Is.True);
     const YTarget newYTarget = YTarget.PolyphonicAftertouch;
     const ZTarget newZTarget = ZTarget.Gain;
     const XTarget newXTarget = XTarget.Pitch;
+    const string newGainMapDisplayName = "20dB";
+    const GainMap newGainMap = GainMap.TwentyDb;
     ViewModel.YTarget = newYTarget.ToString();
+    Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
+    ViewModel.InitialiseZToMacroValue = false;
     ViewModel.ZTarget = newZTarget.ToString();
+    Assert.That(ViewModel.IsInitialiseZEnabled, Is.False);
     ViewModel.XTarget = newXTarget.ToString();
+    ViewModel.GainMapDisplayName = newGainMapDisplayName;
     bool hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
     Assert.That(ViewModel.Settings.Mpe.YTargetValue, Is.EqualTo(newYTarget));
     Assert.That(ViewModel.Settings.Mpe.ZTargetValue, Is.EqualTo(newZTarget));
     Assert.That(ViewModel.Settings.Mpe.XTargetValue, Is.EqualTo(newXTarget));
+    Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
+    Assert.That(ViewModel.Settings.Mpe.InitialiseZToMacroValue, Is.False);
   }
 }

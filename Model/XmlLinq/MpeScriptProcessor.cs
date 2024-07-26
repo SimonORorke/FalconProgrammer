@@ -33,7 +33,18 @@ internal class MpeScriptProcessor : ScriptProcessor {
     private set => SetAttribute("Z", (int)value);
   }
 
+  public GainMap GainMap {
+    get => (GainMap)Convert.ToInt32(GetAttributeValue("GainMap"));
+    private set => SetAttribute("GainMap", (int)value);
+  }
+
+  public float InitialZValue {
+    get => Convert.ToSingle(GetAttributeValue("InitialPressure"));
+    private set => SetAttribute("InitialPressure", value);
+  }
+
   public void Configure(IList<Macro> macrosToEmulate, MpeSettings mpeSettings) {
+    GainMap = mpeSettings.GainMapValue; 
     YTarget =
       mpeSettings.YTargetValue is YTarget.ContinuousMacro1Bipolar
         or YTarget.ContinuousMacro1Unipolar
@@ -63,6 +74,9 @@ internal class MpeScriptProcessor : ScriptProcessor {
       case ZTarget.ContinuousMacro2Unipolar:
         dimensionModulations.Add(
           CreateDimensionModulation(MpeEventId.Z, ZTarget.ToString()));
+        if (mpeSettings.InitialiseZToMacroValue) {
+          InitialZValue = macrosToEmulate[1].Value; 
+        }
         break;
     }
     switch (XTarget) {

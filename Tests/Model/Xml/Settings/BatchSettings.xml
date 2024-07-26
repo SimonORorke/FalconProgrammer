@@ -9,7 +9,9 @@
     <TemplateProgramsFolder Path="J:\FalconProgrammer\Template Programs"/>
     <ColourScheme>Forest</ColourScheme>
     <WindowLocation Left="248" Top="159" Width="1137" Height="626" WindowState="2"/>
-    <MPE YTarget="ContinuousMacro1Bipolar"  ZTarget="ContinuousMacro2Unipolar"  XTarget="ContinuousMacro3Bipolar"/>
+    <MPE YTarget="ContinuousMacro1Bipolar"  ZTarget="ContinuousMacro2Unipolar" 
+         XTarget="ContinuousMacro3Bipolar" GainMap="Linear"
+         InitialiseZToMacroValue="true"/>
     <MustUseGuiScriptProcessor>
         <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>

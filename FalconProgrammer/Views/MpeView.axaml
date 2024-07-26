@@ -16,7 +16,7 @@
             <ComboBox x:Name="YTargetComboBox" 
                       ItemsSource="{Binding YTargets}"
                       SelectedItem="{Binding YTarget}"
-                      Margin="10, 10, 0, 0"  />
+                      Margin="10, 10, 0, 0" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="ZTargetComboBox"
@@ -27,7 +27,7 @@
             <ComboBox x:Name="ZTargetComboBox" 
                       ItemsSource="{Binding ZTargets}"
                       SelectedItem="{Binding ZTarget}"
-                      Margin="10, 10, 0, 0"  />
+                      Margin="10, 10, 0, 0" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="XTargetComboBox"
@@ -38,7 +38,24 @@
             <ComboBox x:Name="XTargetComboBox" 
                       ItemsSource="{Binding XTargets}"
                       SelectedItem="{Binding XTarget}"
-                      Margin="10, 10, 0, 0"  />
+                      Margin="10, 10, 0, 0" />
         </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label Target="GainMapComboBox"
+                   Margin="10, 10, 0, 0">
+                <AccessText
+                    Text="_Gain Map" />
+            </Label>
+            <ComboBox x:Name="GainMapComboBox" 
+                      ItemsSource="{Binding GainMapDisplayNames}"
+                      SelectedItem="{Binding GainMapDisplayName}"
+                      Margin="10, 10, 0, 0" />
+        </StackPanel>
+        <CheckBox IsChecked="{Binding InitialiseZToMacroValue}"
+                  IsEnabled="{Binding IsInitialiseZEnabled}"
+                  Margin="10,10,0,0">
+            <AccessText Text="{Binding InitialiseZToMacroValueCaption}"
+                        TextWrapping="Wrap" />
+        </CheckBox>
     </StackPanel>
 </UserControl>
