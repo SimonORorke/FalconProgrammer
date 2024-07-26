@@ -8,11 +8,13 @@ public class MpeSettings {
     ZTargetValue = Mpe.ZTarget.ContinuousMacro2Unipolar;
     XTargetValue = Mpe.XTarget.Pitch;
     GainMapValue = Mpe.GainMap.TwentyDb;
+    PitchBendRange = 48;
   }
 
   [XmlAttribute] public string YTarget { get; set; } = null!;
   [XmlAttribute] public string ZTarget { get; set; } = null!;
   [XmlAttribute] public string XTarget { get; set; } = null!;
+  [XmlAttribute] public int PitchBendRange { get; set; }
   [XmlAttribute] public string GainMap { get; set; } = null!;
   [XmlAttribute] public bool InitialiseZToMacroValue { get; set; }
 

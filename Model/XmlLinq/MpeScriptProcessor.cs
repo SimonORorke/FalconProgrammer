@@ -43,8 +43,14 @@ internal class MpeScriptProcessor : ScriptProcessor {
     private set => SetAttribute("InitialPressure", value);
   }
 
+  public int PitchBendRange {
+    get => Convert.ToInt32(GetAttributeValue("PitchBendRange"));
+    private set => SetAttribute("PitchBendRange", value);
+  }
+
   public void Configure(IList<Macro> macrosToEmulate, MpeSettings mpeSettings) {
-    GainMap = mpeSettings.GainMapValue; 
+    GainMap = mpeSettings.GainMapValue;
+    PitchBendRange = mpeSettings.PitchBendRange;
     YTarget =
       mpeSettings.YTargetValue is YTarget.ContinuousMacro1Bipolar
         or YTarget.ContinuousMacro1Unipolar

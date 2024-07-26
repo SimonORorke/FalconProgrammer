@@ -57,5 +57,19 @@
             <AccessText Text="{Binding InitialiseZToMacroValueCaption}"
                         TextWrapping="Wrap" />
         </CheckBox>
+        <StackPanel Orientation="Horizontal">
+            <Label Target="PitchBendRangeTextBox"
+                   Margin="10, 10, 0, 0">
+                <AccessText
+                    Text="_Pitch Bend Range (semitones)" />
+            </Label>
+            <TextBox x:Name="PitchBendRangeTextBox"
+                     Text="{Binding PitchBendRange}"
+                     TextAlignment="End"
+                     Height="30"
+                     MinWidth="10"
+                     Margin="10,10,0,0"
+                     Width="45" />
+        </StackPanel>
     </StackPanel>
 </UserControl>

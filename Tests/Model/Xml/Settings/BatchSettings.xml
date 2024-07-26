@@ -11,7 +11,7 @@
     <WindowLocation Left="248" Top="159" Width="1137" Height="626" WindowState="2"/>
     <MPE YTarget="ContinuousMacro1Bipolar"  ZTarget="ContinuousMacro2Unipolar" 
          XTarget="ContinuousMacro3Bipolar" GainMap="Linear"
-         InitialiseZToMacroValue="true"/>
+         InitialiseZToMacroValue="true" PitchBendRange="24"/>
     <MustUseGuiScriptProcessor>
         <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
         <SoundBankCategory SoundBank="Organic Keys" Category=""/>

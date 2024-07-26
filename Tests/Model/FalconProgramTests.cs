@@ -251,6 +251,7 @@ public class FalconProgramTests {
     Assert.That(mpeScriptProcessor.GainMap, Is.EqualTo(GainMap.Linear));
     Assert.That(mpeScriptProcessor.InitialZValue, 
       Is.EqualTo(Batch.TestProgram.Macros[1].Value));
+    Assert.That(mpeScriptProcessor.PitchBendRange, Is.EqualTo(24));
     Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents,
       Has.Count.EqualTo(1));
     Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents,

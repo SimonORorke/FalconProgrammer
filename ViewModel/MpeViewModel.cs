@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FalconProgrammer.Model;
@@ -18,6 +19,7 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   [ObservableProperty] private bool _initialiseZToMacroValue;
 
   private bool _isInitialiseZEnabled;
+  private int _pitchBendRange;
 
   /// <summary>
   ///   Generates <see cref="XTarget" /> property.
@@ -49,6 +51,13 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
     private set => SetProperty(ref _isInitialiseZEnabled, value);
   }
 
+  [Required]
+  [Range(0, 48)]
+  public int PitchBendRange {
+    get => _pitchBendRange;
+    set => SetProperty(ref _pitchBendRange, value, true);
+  }
+
   [ExcludeFromCodeCoverage]
   public override string PageTitle =>
     "Multidimensional/MIDI Polyphonic Expression (MPE)";
@@ -78,6 +87,7 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
     XTarget = Settings.Mpe.XTarget;
     GainMapDisplayName = GetGainMapDisplayName();
     InitialiseZToMacroValue = Settings.Mpe.InitialiseZToMacroValue;
+    PitchBendRange = Settings.Mpe.PitchBendRange;
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
@@ -86,25 +96,17 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
     Settings.Mpe.XTarget = XTarget;
     Settings.Mpe.GainMapValue = GetGainMapValue();
     Settings.Mpe.InitialiseZToMacroValue = InitialiseZToMacroValue;
+    Settings.Mpe.PitchBendRange = PitchBendRange;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 
-  [ExcludeFromCodeCoverage]
   private string GetGainMapDisplayName() {
-    return Settings.Mpe.GainMapValue switch {
-      GainMap.TwentyDb => GainMapDisplayNames[0],
-      GainMap.ZAnd2 => GainMapDisplayNames[1],
-      _ => GainMapDisplayNames[2]
-    };
+    int index = (int)Settings.Mpe.GainMapValue - 1;
+    return GainMapDisplayNames[index];
   }
 
-  [ExcludeFromCodeCoverage]
   private GainMap GetGainMapValue() {
     int index = GainMapDisplayNames.IndexOf(GainMapDisplayName);
-    return index switch {
-      0 => GainMap.TwentyDb,
-      1 => GainMap.ZAnd2,
-      _ => GainMap.Linear
-    };
+    return Enum.GetValues<GainMap>().ToList()[index];
   }
 }

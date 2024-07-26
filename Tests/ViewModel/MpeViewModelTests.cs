@@ -30,6 +30,7 @@ public class MpeViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("20dB"));
     Assert.That(ViewModel.InitialiseZToMacroValue, Is.False);
     Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
+    Assert.That(ViewModel.PitchBendRange, Is.EqualTo(48));
     const ZTarget newZTarget = ZTarget.ContinuousMacro2Bipolar;
     const string newGainMapDisplayName = "Z^2";
     const GainMap newGainMap = GainMap.ZAnd2;
@@ -61,11 +62,13 @@ public class MpeViewModelTests : ViewModelTestsBase {
       Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
     Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("Linear"));
     Assert.That(ViewModel.InitialiseZToMacroValue, Is.True);
+    Assert.That(ViewModel.PitchBendRange, Is.EqualTo(24));
     const YTarget newYTarget = YTarget.PolyphonicAftertouch;
     const ZTarget newZTarget = ZTarget.Gain;
     const XTarget newXTarget = XTarget.Pitch;
     const string newGainMapDisplayName = "20dB";
     const GainMap newGainMap = GainMap.TwentyDb;
+    const int newPitchBendRange = 12;
     ViewModel.YTarget = newYTarget.ToString();
     Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
     ViewModel.InitialiseZToMacroValue = false;
@@ -73,6 +76,7 @@ public class MpeViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.IsInitialiseZEnabled, Is.False);
     ViewModel.XTarget = newXTarget.ToString();
     ViewModel.GainMapDisplayName = newGainMapDisplayName;
+    ViewModel.PitchBendRange = newPitchBendRange;
     bool hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
     Assert.That(ViewModel.Settings.Mpe.YTargetValue, Is.EqualTo(newYTarget));
@@ -80,5 +84,6 @@ public class MpeViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.Settings.Mpe.XTargetValue, Is.EqualTo(newXTarget));
     Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
     Assert.That(ViewModel.Settings.Mpe.InitialiseZToMacroValue, Is.False);
+    Assert.That(ViewModel.Settings.Mpe.PitchBendRange, Is.EqualTo(newPitchBendRange));
   }
 }
