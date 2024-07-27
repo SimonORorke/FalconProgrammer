@@ -125,17 +125,24 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
-    if (HasErrors) {
-      return await CanClosePageOnError(isClosingWindow, true);
-    }
     var specific = Settings.SoundBankSpecific;
     specific.EtherFields.StandardLayout = EtherFieldsStandardLayout;
     specific.Fluidity.MoveAttackMacroToEnd = FluidityMoveAttackMacroToEnd;
-    specific.OrganicPads.AttackSeconds = OrganicPadsAttackSeconds ?? -1;
-    specific.OrganicPads.MaxAttackSeconds = OrganicPadsMaxAttackSeconds!.Value;
-    specific.OrganicPads.MaxDecaySeconds = OrganicPadsMaxDecaySeconds!.Value;
-    specific.OrganicPads.MaxReleaseSeconds = OrganicPadsMaxReleaseSeconds!.Value;
-    specific.OrganicPads.ReleaseSeconds = OrganicPadsReleaseSeconds ?? -1;
+    if (!GetErrors(nameof(OrganicPadsAttackSeconds)).Any()) {
+      specific.OrganicPads.AttackSeconds = OrganicPadsAttackSeconds ?? -1;
+    }
+    if (!GetErrors(nameof(OrganicPadsMaxAttackSeconds)).Any()) {
+      specific.OrganicPads.MaxAttackSeconds = OrganicPadsMaxAttackSeconds!.Value;
+    }
+    if (!GetErrors(nameof(OrganicPadsMaxDecaySeconds)).Any()) {
+      specific.OrganicPads.MaxDecaySeconds = OrganicPadsMaxDecaySeconds!.Value;
+    }
+    if (!GetErrors(nameof(OrganicPadsMaxReleaseSeconds)).Any()) {
+      specific.OrganicPads.MaxReleaseSeconds = OrganicPadsMaxReleaseSeconds!.Value;
+    }
+    if (!GetErrors(nameof(OrganicPadsReleaseSeconds)).Any()) {
+      specific.OrganicPads.ReleaseSeconds = OrganicPadsReleaseSeconds ?? -1;
+    }
     specific.Spectre.StandardLayout = SpectreStandardLayout;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }

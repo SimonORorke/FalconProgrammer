@@ -35,8 +35,7 @@ public class SoundBankSpecificViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.HasErrors, Is.True);
     MockDialogService.SimulatedYesNoAnswer = true;
     hasClosed = await ViewModel.QueryClose();
-    Assert.That(hasClosed, Is.True);
-    await ViewModel.Open();
+    Assert.That(hasClosed, Is.False);
     ViewModel.OrganicPadsReleaseSeconds = 3;
     hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
