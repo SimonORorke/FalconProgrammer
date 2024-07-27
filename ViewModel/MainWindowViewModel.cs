@@ -219,7 +219,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
         return;
       }
     }
-    if (!string.IsNullOrWhiteSpace(CurrentPageViewModel?.SettingsFolderPath)) {
+    if (CurrentPageViewModel != null 
+        && CurrentPageViewModel.Equals(LocationsViewModel)) {
       SettingsFolderPath = CurrentPageViewModel.SettingsFolderPath;
     }
     CurrentPageViewModel = value.ViewModel;
@@ -258,10 +259,9 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       // those change needs to be added to any settings changes made on closing the
       // current page.
       Settings = CurrentPageViewModel.Settings;
-      if (!string.IsNullOrWhiteSpace(CurrentPageViewModel.SettingsFolderPath)) {
+      if (CurrentPageViewModel.Equals(LocationsViewModel)) {
         SettingsFolderPath = CurrentPageViewModel.SettingsFolderPath;
       }
-      // SettingsFolderPath = CurrentPageViewModel.SettingsFolderPath;
     }
     // As we have just copied settings from the current page, we need to update settings
     // from main window view model properties now, on closing the window, rather than

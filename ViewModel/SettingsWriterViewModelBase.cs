@@ -48,7 +48,9 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
 
   internal override async Task Open() {
     await base.Open();
-    SettingsFolderPath = SettingsFolderLocation.Path;
+    if (string.IsNullOrWhiteSpace(SettingsFolderPath)) {
+      SettingsFolderPath = SettingsFolderLocation.Path;
+    }
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {

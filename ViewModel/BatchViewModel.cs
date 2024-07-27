@@ -41,16 +41,6 @@ public partial class BatchViewModel : SettingsWriterViewModelBase {
   public BatchScopeCollection Scopes => _scopes
     ??= new BatchScopeCollection(FileSystemService, DispatcherService);
 
-  public override string SettingsFolderPath {
-    get => base.SettingsFolderPath;
-    set {
-      if (string.IsNullOrWhiteSpace(value)) {
-        Debug.Assert(true);
-      }
-      base.SettingsFolderPath = value;
-    }
-  }
-
   private ImmutableList<string> SoundBanks { get; set; } = [];
 
   public string Status {

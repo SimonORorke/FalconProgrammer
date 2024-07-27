@@ -58,7 +58,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   [Required]
   [CustomValidation(typeof(ViewModelBase),
     nameof(ValidateSettingsFolderPath))]
-  public virtual string SettingsFolderPath {
+  public string SettingsFolderPath {
     get => _settingsFolderPath;
     set => SetProperty(ref _settingsFolderPath, value, true);
   }
@@ -86,7 +86,6 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
     // using CommunityToolkit.Mvvm.Messaging is needed to provide this Send extension
     // method.
     Messenger.Send(new GoToLocationsPageMessage());
-    // DispatcherService.Dispatch(() => Messenger.Send(new GoToLocationsPageMessage()));
   }
 
   internal virtual async Task Open() {
