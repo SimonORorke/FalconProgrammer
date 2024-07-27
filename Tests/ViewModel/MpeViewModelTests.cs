@@ -29,13 +29,11 @@ public class MpeViewModelTests : ViewModelTestsBase {
       Is.EqualTo(XTarget.Pitch));
     Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("20dB"));
     Assert.That(ViewModel.InitialiseZToMacroValue, Is.False);
-    Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
     Assert.That(ViewModel.PitchBendRange, Is.EqualTo(48));
     const ZTarget newZTarget = ZTarget.ContinuousMacro2Bipolar;
     const string newGainMapDisplayName = "Z^2";
     const GainMap newGainMap = GainMap.ZAnd2;
     ViewModel.ZTarget = newZTarget.ToString();
-    Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
     ViewModel.GainMapDisplayName = newGainMapDisplayName;
     bool hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
@@ -70,10 +68,8 @@ public class MpeViewModelTests : ViewModelTestsBase {
     const GainMap newGainMap = GainMap.TwentyDb;
     const int newPitchBendRange = 12;
     ViewModel.YTarget = newYTarget.ToString();
-    Assert.That(ViewModel.IsInitialiseZEnabled, Is.True);
     ViewModel.InitialiseZToMacroValue = false;
     ViewModel.ZTarget = newZTarget.ToString();
-    Assert.That(ViewModel.IsInitialiseZEnabled, Is.False);
     ViewModel.XTarget = newXTarget.ToString();
     ViewModel.GainMapDisplayName = newGainMapDisplayName;
     ViewModel.PitchBendRange = newPitchBendRange;

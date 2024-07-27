@@ -41,7 +41,6 @@
                       Margin="10, 10, 0, 0" />
         </StackPanel>
         <CheckBox IsChecked="{Binding InitialiseZToMacroValue}"
-                  IsEnabled="{Binding IsInitialiseZEnabled}"
                   Margin="10,10,0,0">
             <AccessText Text="{Binding InitialiseZToMacroValueCaption}"
                         TextWrapping="Wrap" />

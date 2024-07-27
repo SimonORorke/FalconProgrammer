@@ -18,21 +18,6 @@ internal class MpeScriptProcessor : ScriptProcessor {
     XElement scriptProcessorElement, ProgramXml programXml, MidiForMacros midi) : base(
     scriptProcessorElement, programXml, midi) { }
 
-  public XTarget XTarget {
-    get => (XTarget)Convert.ToInt32(GetAttributeValue("X"));
-    private set => SetAttribute("X", (int)value);
-  }
-
-  public YTarget YTarget {
-    get => (YTarget)Convert.ToInt32(GetAttributeValue("Y"));
-    private set => SetAttribute("Y", (int)value);
-  }
-
-  public ZTarget ZTarget {
-    get => (ZTarget)Convert.ToInt32(GetAttributeValue("Z"));
-    private set => SetAttribute("Z", (int)value);
-  }
-
   public GainMap GainMap {
     get => (GainMap)Convert.ToInt32(GetAttributeValue("GainMap"));
     private set => SetAttribute("GainMap", (int)value);
@@ -46,6 +31,21 @@ internal class MpeScriptProcessor : ScriptProcessor {
   public int PitchBendRange {
     get => Convert.ToInt32(GetAttributeValue("PitchBendRange"));
     private set => SetAttribute("PitchBendRange", value);
+  }
+
+  public XTarget XTarget {
+    get => (XTarget)Convert.ToInt32(GetAttributeValue("X"));
+    private set => SetAttribute("X", (int)value);
+  }
+
+  public YTarget YTarget {
+    get => (YTarget)Convert.ToInt32(GetAttributeValue("Y"));
+    private set => SetAttribute("Y", (int)value);
+  }
+
+  public ZTarget ZTarget {
+    get => (ZTarget)Convert.ToInt32(GetAttributeValue("Z"));
+    private set => SetAttribute("Z", (int)value);
   }
 
   public void Configure(IList<Macro> macrosToEmulate, MpeSettings mpeSettings) {
