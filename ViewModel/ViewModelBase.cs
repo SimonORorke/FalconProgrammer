@@ -58,7 +58,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   [Required]
   [CustomValidation(typeof(ViewModelBase),
     nameof(ValidateSettingsFolderPath))]
-  public string SettingsFolderPath {
+  public virtual string SettingsFolderPath {
     get => _settingsFolderPath;
     set => SetProperty(ref _settingsFolderPath, value, true);
   }
