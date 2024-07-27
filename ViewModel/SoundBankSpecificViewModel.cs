@@ -15,11 +15,11 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [ObservableProperty] private bool _fluidityMoveAttackMacroToEnd;
 
-  private string _organicPadsAttackSeconds = string.Empty;
-  private string _organicPadsMaxAttackSeconds = string.Empty;
-  private string _organicPadsMaxDecaySeconds = string.Empty;
-  private string _organicPadsMaxReleaseSeconds = string.Empty;
-  private string _organicPadsReleaseSeconds = string.Empty;
+  private float? _organicPadsAttackSeconds;
+  private float? _organicPadsMaxAttackSeconds;
+  private float? _organicPadsMaxDecaySeconds;
+  private float? _organicPadsMaxReleaseSeconds;
+  private float? _organicPadsReleaseSeconds;
 
   /// <summary>
   ///   Generates <see cref="SpectreStandardLayout" /> property.
@@ -39,7 +39,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     "move the Attack macro to the end of the Info page layout.";
 
   [Range(0, 10f)]
-  public string OrganicPadsAttackSeconds {
+  public float? OrganicPadsAttackSeconds {
     get => _organicPadsAttackSeconds;
     set => SetProperty(ref _organicPadsAttackSeconds, value, true);
   }
@@ -50,7 +50,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
 
   [Required]
   [Range(1, 10f)]
-  public string OrganicPadsMaxAttackSeconds {
+  public float? OrganicPadsMaxAttackSeconds {
     get => _organicPadsMaxAttackSeconds;
     set => SetProperty(ref _organicPadsMaxAttackSeconds, value, true);
   }
@@ -62,7 +62,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
 
   [Required]
   [Range(1, 30f)]
-  public string OrganicPadsMaxDecaySeconds {
+  public float? OrganicPadsMaxDecaySeconds {
     get => _organicPadsMaxDecaySeconds;
     set => SetProperty(ref _organicPadsMaxDecaySeconds, value, true);
   }
@@ -73,7 +73,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
 
   [Required]
   [Range(1, 20f)]
-  public string OrganicPadsMaxReleaseSeconds {
+  public float? OrganicPadsMaxReleaseSeconds {
     get => _organicPadsMaxReleaseSeconds;
     set => SetProperty(ref _organicPadsMaxReleaseSeconds, value, true);
   }
@@ -84,7 +84,7 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     "Max_imum Release seconds (1-20 decimal)";
 
   [Range(0, 20f)]
-  public string OrganicPadsReleaseSeconds {
+  public float? OrganicPadsReleaseSeconds {
     get => _organicPadsReleaseSeconds;
     set => SetProperty(ref _organicPadsReleaseSeconds, value, true);
   }
@@ -113,14 +113,14 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     EtherFieldsStandardLayout = specific.EtherFields.StandardLayout;
     FluidityMoveAttackMacroToEnd = specific.Fluidity.MoveAttackMacroToEnd;
     OrganicPadsAttackSeconds = specific.OrganicPads.AttackSeconds >= 0
-      ? specific.OrganicPads.AttackSeconds.ToString()
-      : string.Empty;
-    OrganicPadsMaxAttackSeconds = specific.OrganicPads.MaxAttackSeconds.ToString();
-    OrganicPadsMaxDecaySeconds = specific.OrganicPads.MaxDecaySeconds.ToString();
-    OrganicPadsMaxReleaseSeconds = specific.OrganicPads.MaxReleaseSeconds.ToString();
+      ? specific.OrganicPads.AttackSeconds
+      : null;
+    OrganicPadsMaxAttackSeconds = specific.OrganicPads.MaxAttackSeconds;
+    OrganicPadsMaxDecaySeconds = specific.OrganicPads.MaxDecaySeconds;
+    OrganicPadsMaxReleaseSeconds = specific.OrganicPads.MaxReleaseSeconds;
     OrganicPadsReleaseSeconds = specific.OrganicPads.ReleaseSeconds >= 0
-      ? specific.OrganicPads.ReleaseSeconds.ToString()
-      : string.Empty;
+      ? specific.OrganicPads.ReleaseSeconds
+      : null;
     SpectreStandardLayout = specific.Spectre.StandardLayout;
   }
 
@@ -131,17 +131,11 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
     var specific = Settings.SoundBankSpecific;
     specific.EtherFields.StandardLayout = EtherFieldsStandardLayout;
     specific.Fluidity.MoveAttackMacroToEnd = FluidityMoveAttackMacroToEnd;
-    specific.OrganicPads.AttackSeconds =
-      !string.IsNullOrWhiteSpace(OrganicPadsAttackSeconds)
-        ? float.Parse(OrganicPadsAttackSeconds)
-        : -1;
-    specific.OrganicPads.MaxAttackSeconds = float.Parse(OrganicPadsMaxAttackSeconds);
-    specific.OrganicPads.MaxDecaySeconds = float.Parse(OrganicPadsMaxDecaySeconds);
-    specific.OrganicPads.MaxReleaseSeconds = float.Parse(OrganicPadsMaxReleaseSeconds);
-    specific.OrganicPads.ReleaseSeconds =
-      !string.IsNullOrWhiteSpace(OrganicPadsReleaseSeconds)
-        ? float.Parse(OrganicPadsReleaseSeconds)
-        : -1;
+    specific.OrganicPads.AttackSeconds = OrganicPadsAttackSeconds ?? -1;
+    specific.OrganicPads.MaxAttackSeconds = OrganicPadsMaxAttackSeconds!.Value;
+    specific.OrganicPads.MaxDecaySeconds = OrganicPadsMaxDecaySeconds!.Value;
+    specific.OrganicPads.MaxReleaseSeconds = OrganicPadsMaxReleaseSeconds!.Value;
+    specific.OrganicPads.ReleaseSeconds = OrganicPadsReleaseSeconds ?? -1;
     specific.Spectre.StandardLayout = SpectreStandardLayout;
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }

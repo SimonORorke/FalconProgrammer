@@ -19,30 +19,25 @@ public class SoundBankSpecificViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task OrganicPads() {
     await ViewModel.Open();
-    string original = ViewModel.OrganicPadsAttackSeconds;
-    ViewModel.OrganicPadsAttackSeconds = "-1";
+    ViewModel.OrganicPadsAttackSeconds = -1;
     Assert.That(ViewModel.HasErrors, Is.True);
     MockDialogService.SimulatedYesNoAnswer = false;
     bool hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.False);
-    ViewModel.OrganicPadsAttackSeconds = string.Empty;
+    ViewModel.OrganicPadsAttackSeconds = null;
     Assert.That(ViewModel.HasErrors, Is.False);
     hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
     Assert.That(ViewModel.Settings.SoundBankSpecific.OrganicPads.AttackSeconds,
       Is.EqualTo(-1));
     await ViewModel.Open();
-    ViewModel.OrganicPadsReleaseSeconds = "99";
-    Assert.That(ViewModel.HasErrors, Is.True);
-    ViewModel.OrganicPadsReleaseSeconds = original;
-    Assert.That(ViewModel.HasErrors, Is.False);
-    ViewModel.OrganicPadsReleaseSeconds = "a";
+    ViewModel.OrganicPadsReleaseSeconds = 99;
     Assert.That(ViewModel.HasErrors, Is.True);
     MockDialogService.SimulatedYesNoAnswer = true;
     hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
     await ViewModel.Open();
-    ViewModel.OrganicPadsReleaseSeconds = "3";
+    ViewModel.OrganicPadsReleaseSeconds = 3;
     hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
     Assert.That(ViewModel.Settings.SoundBankSpecific.OrganicPads.ReleaseSeconds,
