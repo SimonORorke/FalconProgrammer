@@ -19,7 +19,7 @@
                      Height="30"
                      MinWidth="10"
                      Margin="0, 0, 10, 0"
-                     Width="65" /> <!-- Wide enough to include data validation icon. -->
+                     Width="65" /> <!-- Wide enough to include error icon at right. -->
             <TextBlock Text="{Binding ModWheelReplacementAdvice}" />
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
