@@ -33,7 +33,7 @@ public class MpeSettings {
     private set => XTarget = value.ToString();
   }
 
-  public GainMap GainMapValue {
+  [XmlIgnore] public GainMap GainMapValue {
     get => Global.GetEnumValue<GainMap>(GainMap);
     set => GainMap = value.ToString();
   }
