@@ -37,7 +37,8 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   public MpeViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  public ImmutableList<string> GainMapDisplayNames { get; } = ["20dB", "Z^2", "Linear"];
+  public ImmutableList<string> GainMapDisplayNames { get; } = 
+    ["20 dB", "Z Squared", "Linear"];
 
   [ExcludeFromCodeCoverage]
   public static string GainMapAdvice => "For Z target Gain.";

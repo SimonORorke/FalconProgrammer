@@ -51,6 +51,7 @@
             <ComboBox x:Name="GainMapComboBox"
                       ItemsSource="{Binding GainMapDisplayNames}"
                       SelectedItem="{Binding GainMapDisplayName}"
+                      Width="123"
                       Margin="10, 10, 0, 0" />
             <TextBlock Text="{Binding GainMapAdvice}"
                        Margin="10,10,0,0" />

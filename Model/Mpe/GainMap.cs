@@ -9,7 +9,7 @@ public enum GainMap {
   /// <summary>
   ///   Z^2
   /// </summary>
-  ZAnd2 = 2,
+  ZSquared = 2,
 
   Linear = 3
 }
