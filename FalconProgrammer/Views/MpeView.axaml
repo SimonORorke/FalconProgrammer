@@ -7,8 +7,13 @@
              x:Class="FalconProgrammer.Views.MpeView"
              x:DataType="vm:MpeViewModel">
     <StackPanel>
+        <TextBlock DockPanel.Dock="Top"
+                   Text="{Binding TargetsAdvice}"
+                   TextWrapping="Wrap"
+                   Margin="10,10,10,10" />
         <StackPanel Orientation="Horizontal">
             <Label Target="YTargetComboBox"
+                   Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
                     Text="_Y Target" />
@@ -16,10 +21,14 @@
             <ComboBox x:Name="YTargetComboBox"
                       ItemsSource="{Binding YTargets}"
                       SelectedItem="{Binding YTarget}"
+                      Width="245"
                       Margin="10, 10, 0, 0" />
+            <TextBlock Text="{Binding YAdvice}"
+                       Margin="10,10,0,0" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="ZTargetComboBox"
+                   Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
                     Text="_Z Target" />
@@ -27,10 +36,14 @@
             <ComboBox x:Name="ZTargetComboBox"
                       ItemsSource="{Binding ZTargets}"
                       SelectedItem="{Binding ZTarget}"
+                      Width="245"
                       Margin="10, 10, 0, 0" />
+            <TextBlock Text="{Binding ZAdvice}"
+                       Margin="10,10,0,0" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="GainMapComboBox"
+                   Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
                     Text="_Gain Map" />
@@ -39,6 +52,8 @@
                       ItemsSource="{Binding GainMapDisplayNames}"
                       SelectedItem="{Binding GainMapDisplayName}"
                       Margin="10, 10, 0, 0" />
+            <TextBlock Text="{Binding GainMapAdvice}"
+                       Margin="10,10,0,0" />
         </StackPanel>
         <CheckBox IsChecked="{Binding InitialiseZToMacroValue}"
                   Margin="10,10,0,0">
@@ -47,6 +62,7 @@
         </CheckBox>
         <StackPanel Orientation="Horizontal">
             <Label Target="XTargetComboBox"
+                   Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
                     Text="_X Target" />
@@ -54,13 +70,16 @@
             <ComboBox x:Name="XTargetComboBox"
                       ItemsSource="{Binding XTargets}"
                       SelectedItem="{Binding XTarget}"
+                      Width="245"
                       Margin="10, 10, 0, 0" />
+            <TextBlock Text="{Binding XAdvice}"
+                       Margin="10,10,0,0" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="PitchBendRangeTextBox"
                    Margin="10, 10, 0, 0">
                 <AccessText
-                    Text="_Pitch Bend Range (semitones)" />
+                    Text="_Pitch Bend Range" />
             </Label>
             <TextBox x:Name="PitchBendRangeTextBox"
                      Text="{Binding PitchBendRange}"
@@ -69,6 +88,8 @@
                      MinWidth="10"
                      Margin="10,10,0,0"
                      Width="55" /> <!-- Wide enough to include error icon at right. -->
+            <TextBlock Text="{Binding PitchBendRangeAdvice}"
+                       Margin="10,10,0,0" />
         </StackPanel>
     </StackPanel>
 </UserControl>

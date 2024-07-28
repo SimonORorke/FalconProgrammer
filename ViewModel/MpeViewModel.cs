@@ -40,6 +40,9 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   public ImmutableList<string> GainMapDisplayNames { get; } = ["20dB", "Z^2", "Linear"];
 
   [ExcludeFromCodeCoverage]
+  public static string GainMapAdvice => "For Z target Gain.";
+
+  [ExcludeFromCodeCoverage]
   public override string PageTitle =>
     "Multidimensional/MIDI Polyphonic Expression (MPE) options for the SupportMpe task";
 
@@ -49,6 +52,9 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
     get => _pitchBendRange;
     set => SetProperty(ref _pitchBendRange, value, true);
   }
+
+  [ExcludeFromCodeCoverage]
+  public static string PitchBendRangeAdvice => "For X target Pitch: 0-48 semitones.";
 
   [ExcludeFromCodeCoverage] public override string TabTitle => "MPE";
 
@@ -64,7 +70,25 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   [ExcludeFromCodeCoverage]
   public static string InitialiseZToMacroValueCaption =>
     "_Initialise Z's value to continuous macro 2's value, " +
-    "if Z Target is an emulation of the macro and the macro exists.";
+    "if Z's target is an emulation of the macro and the macro exists.";
+
+  [ExcludeFromCodeCoverage]
+  public static string TargetsAdvice =>
+    "For X/Y/Z targets ContinuousMacro[n]Unipolar/Bipolar: " + 
+    "if continuous macro [n] exists, emulate the macro starting at " +
+    "value 0 for ~Unipolar, 64 for ~Bipolar.";
+
+  [ExcludeFromCodeCoverage]
+  public static string XAdvice =>
+    "ContinuousMacro3Bipolar: if continuous macro 3 does not exist, Pitch.";
+
+  [ExcludeFromCodeCoverage]
+  public static string YAdvice =>
+    "ContinuousMacro1~: if continuous macro 1 does not exist, PolyphonicAftertouch.";
+
+  [ExcludeFromCodeCoverage]
+  public static string ZAdvice =>
+    "ContinuousMacro2~: if continuous macro 2 does not exist, Gain.";
 
   internal override async Task Open() {
     await base.Open();
