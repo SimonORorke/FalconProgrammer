@@ -6,6 +6,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.MpeView"
              x:DataType="vm:MpeViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="ComboBox.dimension">
+            <Setter Property="Width" Value="250" />
+        </Style>
+    </UserControl.Styles>
+    
     <StackPanel>
         <TextBlock DockPanel.Dock="Top"
                    Text="{Binding TargetsAdvice}"
@@ -21,7 +28,7 @@
             <ComboBox x:Name="YTargetComboBox"
                       ItemsSource="{Binding YTargets}"
                       SelectedItem="{Binding YTarget}"
-                      Width="245"
+                      Classes="dimension"
                       Margin="10, 10, 0, 0" />
             <TextBlock Text="{Binding YAdvice}"
                        Margin="10,10,0,0" />
@@ -36,7 +43,7 @@
             <ComboBox x:Name="ZTargetComboBox"
                       ItemsSource="{Binding ZTargets}"
                       SelectedItem="{Binding ZTarget}"
-                      Width="245"
+                      Classes="dimension"
                       Margin="10, 10, 0, 0" />
             <TextBlock Text="{Binding ZAdvice}"
                        Margin="10,10,0,0" />
@@ -71,7 +78,7 @@
             <ComboBox x:Name="XTargetComboBox"
                       ItemsSource="{Binding XTargets}"
                       SelectedItem="{Binding XTarget}"
-                      Width="245"
+                      Classes="dimension"
                       Margin="10, 10, 0, 0" />
             <TextBlock Text="{Binding XAdvice}"
                        Margin="10,10,0,0" />
