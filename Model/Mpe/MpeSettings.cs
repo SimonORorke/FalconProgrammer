@@ -4,7 +4,7 @@ namespace FalconProgrammer.Model.Mpe;
 
 public class MpeSettings {
   public MpeSettings() {
-    YTargetValue = Mpe.YTarget.ContinuousMacro1Bipolar;
+    YTargetValue = Mpe.YTarget.ContinuousMacro1Unipolar;
     ZTargetValue = Mpe.ZTarget.Gain;
     XTargetValue = Mpe.XTarget.Pitch;
     GainMapValue = Mpe.GainMap.TwentyDb;
