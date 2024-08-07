@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <UVI4>
     <Program Name="Program" Bypass="0" Gain="1.2589256" Pan="0" DisplayName="Mecha 1.4" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="12" NotePolyphony="0" ProgramPath="D:/Simon/OneDrive/Documents/Music/Software/UVI/FalconProgrammer.Data/MPE/Mecha 1.4.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
         <Properties BackgroundImagePath="$Falcon Factory.ufs/Artwork/ffs_bkg_1-4_wavetable.png" description="Preset credits: MoozE"/>
