@@ -1,0 +1,136 @@
+<UVI4>
+    <Program Name="Program" Bypass="0" Gain="1.2589256" Pan="0" DisplayName="Mecha 1.4" TransposeOctaves="0" TransposeSemiTones="0" OutputName="" Polyphony="12" NotePolyphony="0" ProgramPath="D:/Simon/OneDrive/Documents/Music/Software/UVI/FalconProgrammer.Data/MPE/Mecha 1.4.uvip" LoopProgram="0" Streaming="1" BypassInsertFX="0">
+        <Properties BackgroundImagePath="$Falcon Factory.ufs/Artwork/ffs_bkg_1-4_wavetable.png" description="Preset credits: MoozE"/>
+        <ControlSignalSources>
+            <ConstantModulation Name="Macro 2" Bypass="0" DisplayName="Chord" Bipolar="0" Style="1" Value="0">
+                <Properties customPosition="1" x="90" y="353"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 1" Bypass="0" DisplayName="Reverb Mix" Bipolar="0" Style="0" Value="0.30000001">
+                <Properties customPosition="1" x="540" y="353"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 3" Bypass="0" DisplayName="Ensemble" Bipolar="0" Style="1" Value="0">
+                <Properties customPosition="1" x="390" y="353"/>
+            </ConstantModulation>
+            <ConstantModulation Name="Macro 4" Bypass="0" DisplayName="Phasor" Bipolar="0" Style="0" Value="0">
+                <Properties customPosition="1" x="240" y="353"/>
+            </ConstantModulation>
+            <ScriptEventModulation Name="Script Event Modulation 1" Bypass="0" DisplayName="Script Event Modulation 1" EventId="1" Bipolar="0"/>
+        </ControlSignalSources>
+        <EventProcessors>
+            <ScriptProcessor Name="EventProcessor0" Bypass="0" Y="3" Z="2" YValue="0" ZValue="0" Y_ReleaseSmooth="0" Z_ReleaseSmooth="0" MainButton="1" AdvButton="0" X="2" PitchBendRange="48" InitialPressure="0" GlobalChannel="1" GainMap="1" Z_AutoRelease="1" API_version="22">
+                <Properties PresetPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Utilities/MPE.lua" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Utilities/MPE.lua"/>
+                <script><![CDATA[require '_MPE/_MPE']]></script>
+                <ScriptData/>
+            </ScriptProcessor>
+        </EventProcessors>
+        <Layers>
+            <Layer Name="Layer 0" Bypass="0" Gain="1" Pan="0" Mute="0" MidiMute="0" Solo="0" DisplayName="Layer 1" OutputName="" LowKey="0" HighKey="127" CustomPolyphony="0" PlayMode="0" PortamentoTime="0.029999999" PortamentoCurve="0" PortamentoMode="0" NumVoicesPerNote="1" VelocityCurve="0" BypassInsertFX="0">
+                <Properties Color="ff02b0ff"/>
+                <ControlSignalSources>
+                    <LFO Name="LFO 1" Bypass="0" SyncToHost="0" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="8.35429" Depth="1" Phase="0" WaveFormType="0" Retrigger="1" Bipolar="1" Smooth="0"/>
+                </ControlSignalSources>
+                <EventProcessors>
+                    <ScriptProcessor Name="EventProcessor2" Bypass="1" Shift_1="12" Velocity_1="1" Shift_2="15" Velocity_2="1" Shift_3="3" Velocity_3="1" Shift_4="7" Velocity_4="1" Shift_5="-12" Velocity_5="1" Shift_6="0" Velocity_6="1" API_version="16">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1"/>
+                        </Connections>
+                        <Properties OriginalProgramPath="$Falcon Factory.ufs/Presets/Polysynth/Mecha 1.4.uvip" PresetPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Harmonization/Chorder.lua" ScriptPath="$Resource/resource/FactoryPresets/EventProcessor/Script Processor/Harmonization/Chorder.lua"/>
+                        <script><![CDATA[require '_Chorder/Chorder']]></script>
+                        <ScriptData/>
+                    </ScriptProcessor>
+                </EventProcessors>
+                <Inserts>
+                    <Gain Name="InsertFX5" Bypass="1" Volume="0.50118732">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 2" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1"/>
+                        </Connections>
+                    </Gain>
+                    <Ensemble Name="InsertFX1" Bypass="1" Mode="1" Tone="10000" Mix="1">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 3" Destination="Bypass" Mapper="" ConnectionMode="1" Bypass="0" Inverted="1" Offset="0" SignalConnectionVersion="1"/>
+                        </Connections>
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/Ensemble 505/Mode II -Full.preset"/>
+                    </Ensemble>
+                    <Phasor Name="InsertFX2" Bypass="0" SyncToHost="1" Speed="0.125" MinFreq="268.55298" MaxFreq="1758.045" Feedback="0.3990401" Depth="0" Spread="0.5" Order="5" LFOSHape="0">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 1" Ratio="1" Source="$Program/Script Event Modulation 1" Destination="Depth" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 4" Destination="Depth" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                        </Connections>
+                    </Phasor>
+                    <BrickwallFilter Name="InsertFX6" Bypass="0" Freq="39.905247" Type="1" Slope="0" SoftBypass="0"/>
+                    <SparkVerb Name="InsertFX3" Bypass="0" ModDepth="4.4226332" ModRate="1" Diffusion="0.61799997" DiffusionStart="5" Width="1" RoomSize="29.78264" DecayTime="3.5537851" DecayLow="0.91826922" DecayHigh="0.30000001" FreqLow="250" FreqHigh="12000" Shape="0" Mix="0.30000001" Quality="4" Mode="1" HiCut="1" LowCut="0" Rolloff="15171.552" DiffusionOnOff="0" PreDelay="0" MixMode="0" SparkVerbVersion="1">
+                        <Connections>
+                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="$Program/Macro 1" Destination="Mix" Mapper="" ConnectionMode="1" Bypass="0" Inverted="0" Offset="0" SignalConnectionVersion="1"/>
+                        </Connections>
+                        <Properties PresetPath="$Resource/resource/FactoryPresets/FX/02 - Reverberation/04 - SparkVerb/01 - Hall/Large Hall 1.preset"/>
+                    </SparkVerb>
+                    <ParametricEQ Name="InsertFX4" Bypass="0" Freq1="15.36847" Q1="0.69999999" Gain1="0" Enable1="0" Freq2="29.520403" Q2="12" Gain2="-4.4891109" Enable2="0" Freq3="133.29813" Q3="2.0216" Gain3="-1.0554447" Enable3="1" Freq4="529.61115" Q4="0.69999999" Gain4="-2.8653469" Enable4="1" Freq5="10726.395" Q5="0.69999999" Gain5="6.0712891" Enable5="1" Freq6="1808.7512" Q6="0.69999999" Gain6="-0.69306946" Enable6="1" Freq7="10658.13" Q7="12" Gain7="-0.79999733" Enable7="1" Freq8="16000" Q8="0.69999999" Gain8="0" Enable8="1"/>
+                    <CompExp Name="InsertFX7" Bypass="0" AutoMakeUp="0" MakeUpGain="-2.1599998" CompThreshold="0" CompRatio="10" CompAttack="10" CompRelease="100" GateThreshold="-130" GateRatio="1" GateAttack="10" GateRelease="100" Mix="1"/>
+                    <ThreeBandLimiter Name="InsertFX10" Bypass="0" LowMidFreq="128.80717" MidHighFreq="7745.1528" Threshold0="-2.079998" Margin0="0" Release0="100" Mix0="1" Threshold1="0" Margin1="-0.9000001" Release1="100" Mix1="1" Threshold2="-4" Margin2="0" Release2="100" Mix2="1"/>
+                    <Maximizer Name="InsertFX0" Bypass="0" Threshold="0" Attack="0" Lookahead="2" Release="5.3456454" Ceiling="-0.1" Knee="0" ReleaseBlend="0.1" SlewRate="20"/>
+                </Inserts>
+                <BusRouters/>
+                <Keygroups>
+                    <Keygroup Name="Keygroup 0" Bypass="0" Gain="1" Pan="0" DisplayName="Keygroup 1" OutputName="" ExclusiveGroup="0" LowKey="0" HighKey="127" LowVelocity="1" HighVelocity="127" LowKeyFade="0" HighKeyFade="0" LowVelocityFade="0" HighVelocityFade="0" FadeCurve="2" TriggerMode="0" TriggerSync="0" TriggerRule="0" LatchTrigger="0" FXPostGain="0" BypassInsertFX="0">
+                        <Connections>
+                            <SignalConnection Name="AmpEnvMod" Ratio="1" Source="Amp. Env" Destination="Gain" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                        </Connections>
+                        <ControlSignalSources>
+                            <AnalogADSR Name="Amp. Env" Bypass="0" AttackTime="0.001" DecayTime="0.050000001" KeyToDecay="0" KeyToAttack="0" VelToDecay="0" Punch="0" VelToAttack="0" DynamicRange="0" SustainLevel="1" ReleaseTime="0.0099999998" TriggerMode="0" InvertVelocity="0" AttackDecayMode="0" DisplayName="Amp. Env"/>
+                            <LFO Name="LFO 1" Bypass="0" SyncToHost="1" DisplayName="LFO 1" DelayTime="0" RiseTime="0" Freq="0.5" Depth="0.25999999" Phase="0" WaveFormType="6" Retrigger="2" Bipolar="1" Smooth="0.39487371"/>
+                            <LFO Name="LFO 2" Bypass="0" SyncToHost="1" DisplayName="LFO 2" DelayTime="0" RiseTime="0" Freq="4" Depth="1" Phase="0.75199997" WaveFormType="0" Retrigger="2" Bipolar="0" Smooth="0"/>
+                        </ControlSignalSources>
+                        <Inserts>
+                            <BrickwallFilter Name="InsertFX0" Bypass="0" Freq="24.267776" Type="1" Slope="1" SoftBypass="0"/>
+                            <XpanderFilter Name="InsertFX1" Bypass="0" Freq="198.16637" Q="0.75999999" KeyTracking="0" Mode="1" DistortionType="0" Drive="0" Fat="1" Algorithm="0" Oversampling="1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.41379312" Source="$Keygroup/LFO 2" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@MIDI CC 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                        </Connections>
+                                    </SignalConnection>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="0.62068963" Source="@MIDI CC 1" Destination="Freq" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.7241379" Source="$Keygroup/LFO 2" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="-1" Source="@MIDI CC 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                        </Connections>
+                                    </SignalConnection>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="-1" Source="@MIDI CC 1" Destination="Q" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </XpanderFilter>
+                            <BrickwallFilter Name="InsertFX2" Bypass="0" Freq="28.643759" Type="1" Slope="1" SoftBypass="0"/>
+                        </Inserts>
+                        <BusRouters/>
+                        <Oscillators>
+                            <WaveTableOscillator Name="Oscillator" Bypass="0" WavetablePath="$Falcon Factory.ufs/Samples/Vladimir_Ressources/GOLDRO~1_.jpg" StartPhase="0" PhaseDistortionAmount="0" PhaseDistortionMode="4" Spread="0.296" DetuneMode="0" WaveIndex="0.68800002" WaveIndexSpread="0.248" StereoSpread="1" StereoSpreadMode="1" NumOscs="4" FadeMipMap="1" FadeWaveIndex="1" Stereo="1" PhaseSpread="0" EnableFM="0" FMDepth="0.1" FMRatio="0" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" AliasingTolerance="0" CoarseTune="-12" FineTune="0" Gain="0.35481343" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 1">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.5" Source="$Keygroup/LFO 1" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                        </Connections>
+                                    </SignalConnection>
+                                    <SignalConnection Name="SignalConnection 1" Ratio="4.999999" Source="@MIDI CC 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                </Connections>
+                            </WaveTableOscillator>
+                            <WaveTableOscillator Name="Oscillator 2" Bypass="0" WavetablePath="$Falcon Factory.ufs/Samples/Vladimir_Ressources/GOLDRO~1_.jpg" StartPhase="0" PhaseDistortionAmount="0" PhaseDistortionMode="4" Spread="0.296" DetuneMode="0" WaveIndex="0.68800002" WaveIndexSpread="0.248" StereoSpread="1" StereoSpreadMode="1" NumOscs="4" FadeMipMap="1" FadeWaveIndex="1" Stereo="1" PhaseSpread="0" EnableFM="0" FMDepth="0.1" FMRatio="0" FMRatioFine="0" FMRatioMode="1" FMFreq="0.1" FMFixedFreq="0" FMFreqMultiplier="3" AliasingTolerance="0" CoarseTune="0" FineTune="0" Gain="0.35481343" Pitch="0" NoteTracking="1" BaseNote="60" DisplayName="Oscillator 2">
+                                <Connections>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="-0.5" Source="$Keygroup/LFO 1" Destination="WaveIndex" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="PitchBendMod" Ratio="2" Source="@PitchBend" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                    <SignalConnection Name="SignalConnection 0" Ratio="0.48171562" Source="$Layer/LFO 1" Destination="Pitch" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0">
+                                        <Connections>
+                                            <SignalConnection Name="SignalConnection 0" Ratio="1" Source="@MIDI CC 1" Destination="Ratio" Mapper="" ConnectionMode="0" Bypass="0" Inverted="0"/>
+                                        </Connections>
+                                    </SignalConnection>
+                                </Connections>
+                                <Properties PresetPath=""/>
+                            </WaveTableOscillator>
+                        </Oscillators>
+                    </Keygroup>
+                </Keygroups>
+            </Layer>
+        </Layers>
+    </Program>
+    <NeededFS Source="D:/Libraries/UVI/Falcon Factory.ufs"/>
+</UVI4>
