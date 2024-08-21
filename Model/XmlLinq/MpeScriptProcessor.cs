@@ -131,6 +131,7 @@ internal class MpeScriptProcessor : ScriptProcessor {
           Ratio = modulationByMacro.Ratio,
           Source = $"$Program/{dimensionModulation.Name}",
           Destination = modulationByMacro.Destination,
+          ConnectionMode = 0, // Because an effect is being modulated
           Owner = connectionsParent
         };
         connectionsParent.AddModulation(modulationByDimension);
