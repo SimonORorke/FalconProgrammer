@@ -22,9 +22,9 @@ public class MpeViewModelTests : ViewModelTestsBase {
     MockSettingsReaderEmbedded.EmbeddedFileName = "DefaultSettingsWithMidi.xml";
     await ViewModel.Open();
     Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget),
-      Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+      Is.EqualTo(YTarget.ContinuousMacro1Unipolar));
     Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget),
-      Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+      Is.EqualTo(ZTarget.Gain));
     Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget),
       Is.EqualTo(XTarget.Pitch));
     Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("20 dB"));
