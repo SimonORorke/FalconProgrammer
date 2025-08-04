@@ -20,11 +20,14 @@ Thumbs.db
 *.log
 *.lib
 *.sbr
-*.manifest
 *.testlog
+.vs/
+# *.manifest - Needed for Avalonia!
+#Ignore .Net binary folders
 bin/
 obj/
-.vs/
+#Ignore C++ binary folder
+x64/
 #Ignore files build by Jetbrains Rider
 .idea/
 riderModule.iml
