@@ -3,25 +3,22 @@
 namespace FalconProgrammer.ViewModel;
 
 public class CcNoRangeItem : DataGridItemBase {
-  private int? _end;
-  private int? _start;
-
   public CcNoRangeItem(bool isAdditionItem) : base(isAdditionItem) { }
 
   [Required]
   [Range(1, 127)]
   [CustomValidation(typeof(CcNoRangeItem), nameof(ValidateStart))]
   public int? Start {
-    get => _start;
-    set => SetProperty(ref _start, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [Required]
   [Range(1, 127)]
   [CustomValidation(typeof(CcNoRangeItem), nameof(ValidateEnd))]
   public int? End {
-    get => _end;
-    set => SetProperty(ref _end, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   public static ValidationResult ValidateStart(int start, ValidationContext context) {

@@ -3,8 +3,6 @@
 namespace FalconProgrammer.ViewModel;
 
 public class BackgroundViewModel : SettingsWriterViewModelBase {
-  private BackgroundCollection? _backgrounds;
-
   public BackgroundViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
@@ -14,7 +12,7 @@ public class BackgroundViewModel : SettingsWriterViewModelBase {
     "So the GUI script processor, if any, needs to be removed, which can also be done " +
     "by the InitialiseLayout task. See the GUI Script Processor page.";
 
-  public BackgroundCollection Backgrounds => _backgrounds
+  public BackgroundCollection Backgrounds => field
     ??= new BackgroundCollection(DialogService, FileSystemService, DispatcherService);
 
   [ExcludeFromCodeCoverage]

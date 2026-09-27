@@ -6,8 +6,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ScriptProcessor : ModulationsOwner {
-  private XElement? _propertiesElement;
-  private XElement? _scriptElement;
   private ScriptId? _scriptId;
 
   /// <summary>
@@ -52,7 +50,7 @@ internal class ScriptProcessor : ModulationsOwner {
   /// </summary>
   private IList<Macro>? Macros { get; set; }
 
-  private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
+  private XElement PropertiesElement => field ??= GetPropertiesElement();
 
   /// <summary>
   ///   Gets the script specification, which comes with the CDATA wrapper in the file
@@ -62,7 +60,7 @@ internal class ScriptProcessor : ModulationsOwner {
   [PublicAPI]
   public string Script => ScriptElement.Value;
 
-  private XElement ScriptElement => _scriptElement ??= GetScriptElement();
+  private XElement ScriptElement => field ??= GetScriptElement();
   public ScriptId ScriptId => _scriptId ??= GetScriptId();
   public string ScriptPath => GetAttributeValue(PropertiesElement, nameof(ScriptPath));
   public SoundBankId SoundBankId => Global.GetEnumValue<SoundBankId>(SoundBankPascal);

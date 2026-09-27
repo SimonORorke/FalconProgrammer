@@ -4,8 +4,6 @@ using FalconProgrammer.Model.XmlLinq;
 namespace FalconProgrammer.Tests.Model;
 
 internal class TestFalconProgram : FalconProgram {
-  private TestProgramXml? _testProgramXml;
-
   public TestFalconProgram(
     string embeddedProgramFileName,
     string path, Category category, Batch batch)
@@ -21,7 +19,7 @@ internal class TestFalconProgram : FalconProgram {
 
   private TestProgramXml TestProgramXml {
     get {
-      return _testProgramXml ??= CreateTestProgramXml();
+      return field ??= CreateTestProgramXml();
 
       TestProgramXml CreateTestProgramXml() {
         var result = new TestProgramXml(Category) {

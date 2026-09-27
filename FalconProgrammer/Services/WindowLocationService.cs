@@ -15,8 +15,7 @@ namespace FalconProgrammer.Services;
 ///   care of in the view model.
 /// </remarks>
 public class WindowLocationService : IWindowLocationService {
-  private Window? _mainWindow;
-  private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
+  private Window MainWindow => field ??= ((App)Application.Current!).MainWindow;
   public int? Left { get; set; }
   public int? Top { get; set; }
   public int? Width { get; set; }

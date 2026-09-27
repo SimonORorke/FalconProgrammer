@@ -11,8 +11,6 @@ namespace FalconProgrammer.Model;
 ///   category name.
 /// </summary>
 internal class Category {
-  private IFileSystemService? _fileSystemService;
-
   public Category(string soundBankFolderPath, string name, Settings settings) {
     SoundBankFolderPath = soundBankFolderPath;
     Name = name;
@@ -22,7 +20,7 @@ internal class Category {
 
   [ExcludeFromCodeCoverage]
   protected virtual IFileSystemService FileSystemService =>
-    _fileSystemService ??= Model.FileSystemService.Default;
+    field ??= Model.FileSystemService.Default;
 
   internal string Path => System.IO.Path.Combine(
     Settings.ProgramsFolder.Path, SoundBankName, Name);

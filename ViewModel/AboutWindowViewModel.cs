@@ -6,16 +6,14 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public partial class AboutWindowViewModel {
-  private IApplicationInfo? _applicationInfo;
-
   public AboutWindowViewModel(IDialogService dialogService) {
     DialogService = dialogService;
   }
 
   internal IApplicationInfo ApplicationInfo {
-    get => _applicationInfo ??= new ApplicationInfo();
+    get => field ??= new ApplicationInfo();
     // The setter is for tests.
-    set => _applicationInfo = value;
+    set;
   }
 
   public string Copyright => ApplicationInfo.Copyright;

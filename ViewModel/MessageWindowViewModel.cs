@@ -6,8 +6,6 @@ namespace FalconProgrammer.ViewModel;
 ///   View model for a dialog window that shows large messages with scrollbars.
 /// </summary>
 public class MessageWindowViewModel {
-  private IApplicationInfo? _applicationInfo;
-
   /// <summary>
   ///   Initialises a new instance of the <see cref="MessageWindowViewModel" /> class.
   /// </summary>
@@ -22,8 +20,8 @@ public class MessageWindowViewModel {
   }
 
   internal IApplicationInfo ApplicationInfo {
-    get => _applicationInfo ??= new ApplicationInfo();
-    set => _applicationInfo = value;
+    get => field ??= new ApplicationInfo();
+    set;
   }
 
   public string Text { get; }

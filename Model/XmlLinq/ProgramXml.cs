@@ -8,10 +8,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ProgramXml : EntityBase {
-  private List<XElement>? _scriptProcessorElements;
-  private XElement? _templateMacroElement;
-  private XElement? _templateModulationElement;
-
   public ProgramXml(Category category) {
     Category = category;
   }
@@ -65,13 +61,13 @@ internal class ProgramXml : EntityBase {
   ///   Program-level ScriptProcessor elements.
   /// </summary>
   public List<XElement> ScriptProcessorElementsProgramLevel =>
-    _scriptProcessorElements ??= GetScriptProcessorElementsProgramLevel();
+    field ??= GetScriptProcessorElementsProgramLevel();
 
   public XElement TemplateMacroElement =>
-    _templateMacroElement ??= GetTemplateMacroElement();
+    field ??= GetTemplateMacroElement();
 
   public XElement TemplateModulationElement =>
-    _templateModulationElement ??= GetTemplateModulationElement();
+    field ??= GetTemplateModulationElement();
 
   public XElement AddScriptProcessorElementFromTemplate(string templateEmbeddedFileName) {
     var template = new ScriptProcessorTemplate(templateEmbeddedFileName);

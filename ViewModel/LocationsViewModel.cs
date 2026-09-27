@@ -5,9 +5,6 @@ namespace FalconProgrammer.ViewModel;
 
 public partial class LocationsViewModel : SettingsWriterViewModelBase {
   // 'partial' allows CommunityToolkit.Mvvm code generation.
-  private string _originalProgramsFolderPath = string.Empty;
-  private string _programsFolderPath = string.Empty;
-  private string _templateProgramsFolderPath = string.Empty;
 
   public LocationsViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
@@ -18,24 +15,24 @@ public partial class LocationsViewModel : SettingsWriterViewModelBase {
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateOriginalProgramsFolderPath))]
   public string OriginalProgramsFolderPath {
-    get => _originalProgramsFolderPath;
-    set => SetProperty(ref _originalProgramsFolderPath, value, true);
-  }
+    get;
+    set => SetProperty(ref field, value, true);
+  } = string.Empty;
 
   [Required]
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateProgramsFolderPath))]
   public string ProgramsFolderPath {
-    get => _programsFolderPath;
-    set => SetProperty(ref _programsFolderPath, value, true);
-  }
+    get;
+    set => SetProperty(ref field, value, true);
+  } = string.Empty;
 
   [CustomValidation(typeof(LocationsViewModel),
     nameof(ValidateTemplateProgramsFolderPath))]
   public string TemplateProgramsFolderPath {
-    get => _templateProgramsFolderPath;
-    set => SetProperty(ref _templateProgramsFolderPath, value, true);
-  }
+    get;
+    set => SetProperty(ref field, value, true);
+  } = string.Empty;
 
   public override string PageTitle => "Locations";
 

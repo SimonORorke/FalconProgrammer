@@ -3,7 +3,6 @@
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal abstract class EntityBase {
-  private XElement? _element;
   protected EntityBase() { }
 
   protected EntityBase(ProgramXml programXml, bool mustAddNewElement = false) {
@@ -38,8 +37,8 @@ internal abstract class EntityBase {
   }
 
   public XElement Element {
-    get => _element ??= MustAddNewElement ? CreateElementFromTemplate() : GetElement();
-    protected set => _element = value;
+    get => field ??= MustAddNewElement ? CreateElementFromTemplate() : GetElement();
+    protected set;
   }
 
   private bool MustAddNewElement { get; }

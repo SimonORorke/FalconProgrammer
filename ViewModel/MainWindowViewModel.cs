@@ -12,16 +12,11 @@ namespace FalconProgrammer.ViewModel;
 
 public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   IRecipient<GoToLocationsPageMessage> {
-  private ColourSchemeId _colourSchemeId;
-  private string _currentPageTitle = string.Empty;
-
   /// <summary>
   ///   Generates <see cref="SelectedTab" /> property
   ///   and partial OnSelectedTabChanged method.
   /// </summary>
   [ObservableProperty] private TabItemViewModel? _selectedTab;
-
-  private ImmutableList<TabItemViewModel>? _tabs;
 
   public MainWindowViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService, ICursorService cursorService,
@@ -69,16 +64,16 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   internal BatchViewModel BatchViewModel { get; [ExcludeFromCodeCoverage] set; }
 
   public ColourSchemeId ColourSchemeId {
-    get => _colourSchemeId;
-    private set => SetProperty(ref _colourSchemeId, value);
+    get;
+    private set => SetProperty(ref field, value);
   }
 
   private ViewModelBase? CurrentPageViewModel { get; set; }
 
   public string CurrentPageTitle {
-    get => _currentPageTitle;
-    private set => SetProperty(ref _currentPageTitle, value);
-  }
+    get;
+    private set => SetProperty(ref field, value);
+  } = string.Empty;
 
   /// <summary>
   ///   The setter is only for tests.
@@ -129,7 +124,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     [ExcludeFromCodeCoverage] set;
   }
 
-  public ImmutableList<TabItemViewModel> Tabs => _tabs ??= CreateTabs();
+  public ImmutableList<TabItemViewModel> Tabs => field ??= CreateTabs();
 
   public IWindowLocationService WindowLocationService { get; }
 

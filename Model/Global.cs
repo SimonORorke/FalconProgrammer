@@ -4,13 +4,12 @@ using System.Reflection;
 namespace FalconProgrammer.Model;
 
 public static class Global {
-  private static string? _applicationName;
-
   public static string ApplicationFolderPath => AppDomain.CurrentDomain.BaseDirectory;
 
   public static string ApplicationName {
-    get => _applicationName ??= new ApplicationInfo().Product;
-    set => _applicationName = value; // For tests
+    get => field ??= new ApplicationInfo().Product;
+    set;
+    // For tests
   }
 
   public static bool EmbeddedFileExists(string embeddedFileName) {

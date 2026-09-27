@@ -5,19 +5,14 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model;
 
 public class Batch {
-  private BatchScriptReader? _batchScriptReader;
-  private IFileSystemService? _fileSystemService;
-  private Settings? _settings;
-  private SettingsReader? _settingsReader;
-
   public Batch(IBatchLog log) {
     Log = log;
   }
 
   internal BatchScriptReader BatchScriptReader {
-    get => _batchScriptReader ??= new BatchScriptReader();
+    get => field ??= new BatchScriptReader();
     // For tests
-    set => _batchScriptReader = value;
+    set;
   }
 
   private CancellationToken RunCancellationToken { get; set; }
@@ -25,23 +20,23 @@ public class Batch {
   private List<string> EffectTypes { get; set; } = null!;
 
   internal IFileSystemService FileSystemService {
-    get => _fileSystemService ??= Model.FileSystemService.Default;
+    get => field ??= Model.FileSystemService.Default;
     // For tests
-    set => _fileSystemService = value;
+    set;
   }
 
   public IBatchLog Log { get; }
   private protected FalconProgram Program { get; private set; } = null!;
 
   internal Settings Settings {
-    get => _settings ??= SettingsReader.Read();
-    private set => _settings = value;
+    get => field ??= SettingsReader.Read();
+    private set;
   }
 
   internal SettingsReader SettingsReader {
-    get => _settingsReader ??= new SettingsReader();
+    get => field ??= new SettingsReader();
     // For tests
-    set => _settingsReader = value;
+    set;
   }
 
   protected string SoundBankFolderPath { get; private set; } = null!;

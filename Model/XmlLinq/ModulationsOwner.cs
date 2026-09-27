@@ -5,8 +5,6 @@ using FalconProgrammer.Model.Options;
 namespace FalconProgrammer.Model.XmlLinq;
 
 internal class ModulationsOwner : EntityBase {
-  private ImmutableList<Modulation>? _modulations;
-
   protected ModulationsOwner(XElement element, ProgramXml programXml, MidiForMacros midi)
     : base(programXml) {
     Element = element;
@@ -31,8 +29,8 @@ internal class ModulationsOwner : EntityBase {
   ///   in which case there can be two Modulations.
   /// </remarks>
   public ImmutableList<Modulation> Modulations {
-    get => _modulations ??= GetModulations();
-    protected set => _modulations = value;
+    get => field ??= GetModulations();
+    protected set;
   }
 
   public virtual void AddModulation(Modulation modulation) {

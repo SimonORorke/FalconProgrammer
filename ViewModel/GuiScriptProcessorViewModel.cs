@@ -3,8 +3,6 @@
 namespace FalconProgrammer.ViewModel;
 
 public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
-  private SoundBankCategoryCollection? _soundBankCategories;
-
   public GuiScriptProcessorViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
@@ -19,7 +17,7 @@ public class GuiScriptProcessorViewModel : SettingsWriterViewModelBase {
     "Sound banks and categories where the Info page's GUI must be " +
     "specified in a script processor";
 
-  public SoundBankCategoryCollection SoundBankCategories => _soundBankCategories
+  public SoundBankCategoryCollection SoundBankCategories => field
     ??= new SoundBankCategoryCollection(FileSystemService, DispatcherService);
 
   public override string TabTitle => "GUI Script Processor";

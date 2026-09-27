@@ -15,12 +15,6 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [ObservableProperty] private bool _fluidityMoveAttackMacroToEnd;
 
-  private float? _organicPadsAttackSeconds;
-  private float? _organicPadsMaxAttackSeconds;
-  private float? _organicPadsMaxDecaySeconds;
-  private float? _organicPadsMaxReleaseSeconds;
-  private float? _organicPadsReleaseSeconds;
-
   /// <summary>
   ///   Generates <see cref="SpectreStandardLayout" /> property.
   /// </summary>
@@ -40,8 +34,8 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
 
   [Range(0, 10f)]
   public float? OrganicPadsAttackSeconds {
-    get => _organicPadsAttackSeconds;
-    set => SetProperty(ref _organicPadsAttackSeconds, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]
@@ -51,8 +45,8 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   [Required]
   [Range(1, 10f)]
   public float? OrganicPadsMaxAttackSeconds {
-    get => _organicPadsMaxAttackSeconds;
-    set => SetProperty(ref _organicPadsMaxAttackSeconds, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]
@@ -63,8 +57,8 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   [Required]
   [Range(1, 30f)]
   public float? OrganicPadsMaxDecaySeconds {
-    get => _organicPadsMaxDecaySeconds;
-    set => SetProperty(ref _organicPadsMaxDecaySeconds, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]
@@ -74,8 +68,8 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
   [Required]
   [Range(1, 20f)]
   public float? OrganicPadsMaxReleaseSeconds {
-    get => _organicPadsMaxReleaseSeconds;
-    set => SetProperty(ref _organicPadsMaxReleaseSeconds, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]
@@ -85,8 +79,8 @@ public partial class SoundBankSpecificViewModel : SettingsWriterViewModelBase {
 
   [Range(0, 20f)]
   public float? OrganicPadsReleaseSeconds {
-    get => _organicPadsReleaseSeconds;
-    set => SetProperty(ref _organicPadsReleaseSeconds, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]

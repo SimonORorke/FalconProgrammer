@@ -3,8 +3,6 @@
 namespace FalconProgrammer.ViewModel;
 
 public class ReverbViewModel : SettingsWriterViewModelBase {
-  private DoNotZeroReverbCollection? _doNotZeroReverb;
-
   public ReverbViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
@@ -12,7 +10,7 @@ public class ReverbViewModel : SettingsWriterViewModelBase {
   public static string Advice =>
     "Some programs make no or very little sound if the Reverb macro is set to zero.";
 
-  public DoNotZeroReverbCollection DoNotZeroReverb => _doNotZeroReverb
+  public DoNotZeroReverbCollection DoNotZeroReverb => field
     ??= new DoNotZeroReverbCollection(DialogService, FileSystemService,
       DispatcherService);
 

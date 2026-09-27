@@ -8,12 +8,6 @@ using FalconProgrammer.Model.Options;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class ViewModelBase : ObservableRecipientWithValidation {
-  private IFileSystemService? _fileSystemService;
-  private ModelServices? _modelServices;
-  private SettingsFolderLocationReader? _settingsFolderLocationReader;
-  private string _settingsFolderPath = string.Empty;
-  private SettingsReader? _settingsReader;
-
   protected ViewModelBase(IDialogService dialogService,
     IDispatcherService dispatcherService) {
     DialogService = dialogService;
@@ -25,7 +19,7 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   protected IDispatcherService DispatcherService { get; }
 
   internal IFileSystemService FileSystemService =>
-    _fileSystemService ??= ModelServices.FileSystemService;
+    field ??= ModelServices.FileSystemService;
 
   /// <summary>
   ///   Gets or sets whether the page is being reopened to fix one or more errors, in
@@ -59,9 +53,9 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   [CustomValidation(typeof(ViewModelBase),
     nameof(ValidateSettingsFolderPath))]
   public string SettingsFolderPath {
-    get => _settingsFolderPath;
-    set => SetProperty(ref _settingsFolderPath, value, true);
-  }
+    get;
+    set => SetProperty(ref field, value, true);
+  } = string.Empty;
 
   /// <summary>
   ///   Title to be shown on the page's tab. Defaults to the same as
@@ -70,17 +64,18 @@ public abstract class ViewModelBase : ObservableRecipientWithValidation {
   public virtual string TabTitle => PageTitle;
 
   internal ModelServices ModelServices {
-    [ExcludeFromCodeCoverage] get => _modelServices ??= new ModelServices();
-    set => _modelServices = value; // For tests
+    [ExcludeFromCodeCoverage] get => field ??= new ModelServices();
+    set;
+    // For tests
   }
 
   internal Settings Settings { get; private protected set; } = null!;
 
   protected SettingsFolderLocationReader SettingsFolderLocationReader =>
-    _settingsFolderLocationReader ??= ModelServices.SettingsFolderLocationReader;
+    field ??= ModelServices.SettingsFolderLocationReader;
 
   private SettingsReader SettingsReader =>
-    _settingsReader ??= ModelServices.SettingsReader;
+    field ??= ModelServices.SettingsReader;
 
   internal void GoToLocationsPage() {
     // using CommunityToolkit.Mvvm.Messaging is needed to provide this Send extension

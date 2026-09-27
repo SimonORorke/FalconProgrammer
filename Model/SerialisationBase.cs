@@ -3,8 +3,6 @@
 namespace FalconProgrammer.Model;
 
 public abstract class SerialisationBase {
-  private IFileSystemService? _fileSystemService;
-  private ISerialiser? _serialiser;
   internal string AppDataFolderName { get; set; } = Global.ApplicationName;
 
   /// <summary>
@@ -13,8 +11,8 @@ public abstract class SerialisationBase {
   /// </summary>
   [XmlIgnore]
   public IFileSystemService FileSystemService {
-    get => _fileSystemService ??= Model.FileSystemService.Default;
-    set => _fileSystemService = value;
+    get => field ??= Model.FileSystemService.Default;
+    set;
   }
 
   /// <summary>
@@ -23,7 +21,7 @@ public abstract class SerialisationBase {
   /// </summary>
   [XmlIgnore]
   public ISerialiser Serialiser {
-    get => _serialiser ??= Model.Serialiser.Default;
-    set => _serialiser = value;
+    get => field ??= Model.Serialiser.Default;
+    set;
   }
 }

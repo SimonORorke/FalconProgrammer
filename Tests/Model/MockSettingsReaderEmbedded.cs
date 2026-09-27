@@ -8,11 +8,9 @@ namespace FalconProgrammer.Tests.Model;
 ///   For view model tests. Use <see cref="TestSettingsReaderEmbedded" /> for model tests.
 /// </summary>
 public class MockSettingsReaderEmbedded : TestSettingsReaderEmbedded {
-  private MockSettingsFolderLocationReader? _mockSettingsFolderLocationReader;
-
   internal MockSettingsFolderLocationReader MockSettingsFolderLocationReader {
-    get => _mockSettingsFolderLocationReader ??= new MockSettingsFolderLocationReader();
-    set => _mockSettingsFolderLocationReader = value;
+    get => field ??= new MockSettingsFolderLocationReader();
+    set;
   }
 
   protected override SettingsFolderLocationReader CreateSettingsFolderLocationReader() {

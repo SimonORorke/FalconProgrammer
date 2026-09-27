@@ -5,8 +5,6 @@ using FalconProgrammer.Model.XmlLinq;
 namespace FalconProgrammer.Model.Options;
 
 public class MidiForMacros {
-  private ImmutableList<int>? _continuousCcNos;
-  private ImmutableList<int>? _toggleCcNos;
   [XmlAttribute] public int ModWheelReplacementCcNo { get; set; }
 
   /// <summary>
@@ -31,14 +29,14 @@ public class MidiForMacros {
   public List<string> DoNotReplaceModWheelWithMacroSoundBanks { get; set; } = [];
 
   internal ImmutableList<int> ContinuousCcNos =>
-    _continuousCcNos ??= CreateCcNoList(ContinuousCcNoRanges);
+    field ??= CreateCcNoList(ContinuousCcNoRanges);
 
   internal int CurrentContinuousCcNo { get; set; }
   internal int CurrentToggleCcNo { get; set; }
   internal bool HasModWheelReplacementCcNo => ModWheelReplacementCcNo > 1;
 
   internal ImmutableList<int> ToggleCcNos =>
-    _toggleCcNos ??= CreateCcNoList(ToggleCcNoRanges);
+    field ??= CreateCcNoList(ToggleCcNoRanges);
 
   internal bool CanReplaceModWheelWithMacro(string soundBankName) {
     return !DoNotReplaceModWheelWithMacroSoundBanks.Contains(soundBankName);

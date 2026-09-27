@@ -14,11 +14,9 @@ namespace FalconProgrammer.Services;
 ///   A service that can show different types of dialog windows.
 /// </summary>
 public class DialogService : IDialogService {
-  private string? _applicationTitle;
-  private Window? _mainWindow;
-  private string ApplicationTitle => _applicationTitle ??= Application.Current!.Name!;
+  private string ApplicationTitle => field ??= Application.Current!.Name!;
   private Window? CurrentDialog { get; set; }
-  private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
+  private Window MainWindow => field ??= ((App)Application.Current!).MainWindow;
 
   public async Task<bool> AskYesNoQuestion(string text, string tabTitle = "") {
     // A wait cursor is shown when changing pages. A message box may be shown

@@ -13,11 +13,10 @@ namespace FalconProgrammer.Controls;
 ///   Base class for a <see cref="Button" /> that, when clicked, shows a flyout menu.
 /// </summary>
 public abstract class MenuButtonBase : Button {
-  private Dictionary<AvaloniaProperty, MenuItem>? _propertyMenuItems;
   protected abstract string AccessibleButtonText { get; }
 
   private Dictionary<AvaloniaProperty, MenuItem> PropertyMenuItems =>
-    _propertyMenuItems ??= CreatePropertyMenuItems();
+    field ??= CreatePropertyMenuItems();
 
   /// <summary>
   ///   Even though the class inherits from Button, we still have to specify that we

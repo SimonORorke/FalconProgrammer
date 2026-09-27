@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 namespace FalconProgrammer.Model;
 
 internal class FalconProgram {
-  private InfoPageLayout? _infoPageLayout;
   private SoundBankId? _soundBankId;
 
   public FalconProgram(string path, Category category, Batch batch) {
@@ -32,7 +31,7 @@ internal class FalconProgram {
   public bool HasBeenUpdated { get; private set; }
 
   private InfoPageLayout InfoPageLayout =>
-    _infoPageLayout ??= new InfoPageLayout(this);
+    field ??= new InfoPageLayout(this);
 
   public IBatchLog Log => Batch.Log;
   public List<Macro> Macros { get; private set; } = null!;

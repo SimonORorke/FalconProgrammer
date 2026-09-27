@@ -4,17 +4,15 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.Tests.Model;
 
 public class MockSettingsFolderLocation : ISettingsFolderLocation {
-  private string _path = string.Empty;
-
   public string Path {
-    get => _path;
+    get;
     set {
       if (value != string.Empty) {
         Debug.Assert(true);
       }
-      _path = value;
+      field = value;
     }
-  }
+  } = string.Empty;
 
   public void Write() { }
 }

@@ -6,9 +6,8 @@ namespace FalconProgrammer.Model;
 ///   A utility that can serialise an object to a file.
 /// </summary>
 internal class Serialiser : ISerialiser {
-  private static ISerialiser? _default;
   private Serialiser() { }
-  public static ISerialiser Default => _default ??= new Serialiser();
+  public static ISerialiser Default => field ??= new Serialiser();
 
   public void Serialise(object objectToSerialise, string outputPath) {
     var serializer = new XmlSerializer(objectToSerialise.GetType());

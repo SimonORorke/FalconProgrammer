@@ -4,8 +4,6 @@ using FalconProgrammer.Model;
 namespace FalconProgrammer.ViewModel;
 
 public abstract class SettingsWriterViewModelBase : ViewModelBase {
-  private ISettingsFolderLocation? _settingsFolderLocation;
-
   protected SettingsWriterViewModelBase(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
@@ -13,7 +11,7 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
   protected bool HaveSettingsBeenUpdated { get; set; }
 
   private ISettingsFolderLocation SettingsFolderLocation =>
-    _settingsFolderLocation ??= SettingsFolderLocationReader.Read();
+    field ??= SettingsFolderLocationReader.Read();
 
   protected async Task<bool> CanClosePageOnError(
     bool isClosingWindow, bool askOnChangingTabs) {

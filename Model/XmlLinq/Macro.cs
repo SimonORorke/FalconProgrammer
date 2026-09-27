@@ -10,8 +10,6 @@ namespace FalconProgrammer.Model.XmlLinq;
 ///   as shown the Info page.
 /// </summary>
 internal class Macro : ModulationsOwner {
-  private XElement? _propertiesElement;
-
   public Macro(ProgramXml programXml, MidiForMacros midi)
     : base(programXml, midi, true) { }
 
@@ -100,7 +98,7 @@ internal class Macro : ModulationsOwner {
     || DisplayName.Contains("Sparkverb") // There's at least one like this.
     || DisplayName.Contains("Verb");
 
-  private XElement PropertiesElement => _propertiesElement ??= GetPropertiesElement();
+  private XElement PropertiesElement => field ??= GetPropertiesElement();
 
   /// <summary>
   ///   0 indicates a continuous macro. 1 indicates a toggle macro.

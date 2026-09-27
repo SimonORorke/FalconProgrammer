@@ -6,8 +6,6 @@ namespace FalconProgrammer.ViewModel;
 
 public abstract class DataGridItemCollectionBase<T> : ObservableCollection<T>
   where T : DataGridItemBase {
-  private bool _isPopulating;
-
   protected DataGridItemCollectionBase(IDispatcherService dispatcherService) {
     DispatcherService = dispatcherService;
   }
@@ -22,9 +20,9 @@ public abstract class DataGridItemCollectionBase<T> : ObservableCollection<T>
   protected bool IsAddingAdditionItem => !IsPopulating;
 
   protected bool IsPopulating {
-    get => _isPopulating;
+    get;
     set {
-      _isPopulating = value;
+      field = value;
       if (!value) {
         AppendAdditionItem();
         HasBeenChanged = false;

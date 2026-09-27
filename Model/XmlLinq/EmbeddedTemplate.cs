@@ -6,14 +6,12 @@ namespace FalconProgrammer.Model.XmlLinq;
 ///   A Linq to XML object hierarchy read from an embedded file.
 /// </summary>
 internal class EmbeddedTemplate {
-  private XElement? _rootElement;
-
   public EmbeddedTemplate(string embeddedFileName) {
     EmbeddedFileName = embeddedFileName;
   }
 
   public string EmbeddedFileName { get; }
 
-  public XElement RootElement => _rootElement ??=
+  public XElement RootElement => field ??=
     XElement.Load(new StreamReader(Global.GetEmbeddedFileStream(EmbeddedFileName)));
 }

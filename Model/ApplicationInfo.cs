@@ -10,21 +10,17 @@ namespace FalconProgrammer.Model;
 [ExcludeFromCodeCoverage]
 public class ApplicationInfo : IApplicationInfo {
   // private string? _company;
-  private string? _copyright;
-  private Assembly? _entryAssembly;
-  private string? _product;
-  private string? _version;
 
   private Assembly EntryAssembly =>
-    _entryAssembly ??= Assembly.GetEntryAssembly()!;
+    field ??= Assembly.GetEntryAssembly()!;
 
   // public string Company => _company ??=
   //   GetCustomAttribute<AssemblyCompanyAttribute>().Company; 
 
-  public string Copyright => _copyright ??=
+  public string Copyright => field ??=
     GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
 
-  public string Product => _product ??=
+  public string Product => field ??=
     GetCustomAttribute<AssemblyProductAttribute>().Product;
 
   /// <summary>
@@ -42,7 +38,7 @@ public class ApplicationInfo : IApplicationInfo {
   ///   I've searched for a way to fix this and come up with nothing. Nobody else appears
   ///   even to have reported it as a problem.
   /// </summary>
-  public string Version => _version ??= GetVersion();
+  public string Version => field ??= GetVersion();
 
   private TAttribute GetCustomAttribute<TAttribute>()
     where TAttribute : Attribute {

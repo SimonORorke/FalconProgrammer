@@ -17,8 +17,6 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [ObservableProperty] private bool _initialiseZToMacroValue;
 
-  private int? _pitchBendRange;
-
   /// <summary>
   ///   Generates <see cref="XTarget" /> property.
   /// </summary>
@@ -50,8 +48,8 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   [Required]
   [Range(0, 48)]
   public int? PitchBendRange {
-    get => _pitchBendRange;
-    set => SetProperty(ref _pitchBendRange, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]

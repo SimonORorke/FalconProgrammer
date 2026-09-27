@@ -6,11 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 namespace FalconProgrammer.ViewModel;
 
 public abstract partial class DataGridItemBase : ObservableValidator {
-  private bool _canCut;
-  private bool _canPasteBefore;
-  private bool _canRemove;
-  private bool _isAdditionItem;
-
   protected DataGridItemBase(bool isAdditionItem) {
     IsAdditionItem = isAdditionItem;
   }
@@ -19,10 +14,10 @@ public abstract partial class DataGridItemBase : ObservableValidator {
   private bool IsAdding { get; set; }
 
   internal bool IsAdditionItem {
-    get => _isAdditionItem;
+    get;
     private set {
       CanCut = !value;
-      _isAdditionItem = value;
+      field = value;
     }
   }
 
@@ -38,16 +33,16 @@ public abstract partial class DataGridItemBase : ObservableValidator {
   ///   Gets or sets CanExecute for <see cref="CutCommand" />.
   /// </summary>
   public bool CanCut {
-    get => _canCut;
-    set => SetProperty(ref _canCut, value);
+    get;
+    set => SetProperty(ref field, value);
   }
 
   /// <summary>
   ///   Gets or sets CanExecute for <see cref="PasteBeforeCommand" />.
   /// </summary>
   public bool CanPasteBefore {
-    get => _canPasteBefore;
-    internal set => SetProperty(ref _canPasteBefore, value);
+    get;
+    internal set => SetProperty(ref field, value);
   }
 
   /// <summary>
@@ -55,8 +50,8 @@ public abstract partial class DataGridItemBase : ObservableValidator {
   /// </summary>
   public bool CanRemove {
     get {
-      SetProperty(ref _canRemove, !IsAdditionItem);
-      return _canRemove;
+      SetProperty(ref field, !IsAdditionItem);
+      return field;
     }
   }
 

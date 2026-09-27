@@ -4,8 +4,6 @@ using FalconProgrammer.Model.Options;
 namespace FalconProgrammer.Tests.Model;
 
 internal class TestCategory : Category {
-  private MockFileSystemService? _mockFileSystemService;
-
   public TestCategory(string soundBankName, string name, Settings settings,
     string? templateProgramPath = null) :
     base(System.IO.Path.Combine(settings.ProgramsFolder.Path, soundBankName), name,
@@ -20,8 +18,8 @@ internal class TestCategory : Category {
   internal string EmbeddedTemplateFileName { get; set; } = "NoGuiScriptProcessor.xml";
 
   internal MockFileSystemService MockFileSystemService {
-    get => _mockFileSystemService ??= new MockFileSystemService();
-    set => _mockFileSystemService = value;
+    get => field ??= new MockFileSystemService();
+    set;
   }
 
   protected override IFileSystemService FileSystemService => MockFileSystemService;

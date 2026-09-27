@@ -10,11 +10,6 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
   /// </summary>
   [ObservableProperty] private bool _appendCcNoToMacroDisplayNames;
 
-  private CcNoRangeCollection? _continuousCcNoRanges;
-  private DoNotReplaceModWheelCollection? _doNotReplaceModWheelSoundBanks;
-  private int? _modWheelReplacementCcNo;
-  private CcNoRangeCollection? _toggleCcNoRanges;
-
   public MidiForMacrosViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
@@ -31,12 +26,12 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     "MIDI CC 38 does not work when assigned to a control on a " +
     "script-based Info page. (See manual.)";
 
-  public CcNoRangeCollection ContinuousCcNoRanges => _continuousCcNoRanges
+  public CcNoRangeCollection ContinuousCcNoRanges => field
     ??= new CcNoRangeCollection("Continuous",
       DialogService, DispatcherService);
 
   public DoNotReplaceModWheelCollection DoNotReplaceModWheelSoundBanks =>
-    _doNotReplaceModWheelSoundBanks ??= new DoNotReplaceModWheelCollection(
+    field ??= new DoNotReplaceModWheelCollection(
       FileSystemService, DispatcherService);
 
   [ExcludeFromCodeCoverage]
@@ -45,8 +40,8 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   [Range(0, 127)]
   public int? ModWheelReplacementCcNo {
-    get => _modWheelReplacementCcNo;
-    set => SetProperty(ref _modWheelReplacementCcNo, value, true);
+    get;
+    set => SetProperty(ref field, value, true);
   }
 
   [ExcludeFromCodeCoverage]
@@ -55,7 +50,7 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
 
   public override string TabTitle => "MIDI for Macros";
 
-  public CcNoRangeCollection ToggleCcNoRanges => _toggleCcNoRanges
+  public CcNoRangeCollection ToggleCcNoRanges => field
     ??= new CcNoRangeCollection("Toggle",
       DialogService, DispatcherService);
 

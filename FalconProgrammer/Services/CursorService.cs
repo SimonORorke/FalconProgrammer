@@ -6,8 +6,7 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Services;
 
 public class CursorService : ICursorService {
-  private Window? _mainWindow;
-  private Window MainWindow => _mainWindow ??= ((App)Application.Current!).MainWindow;
+  private Window MainWindow => field ??= ((App)Application.Current!).MainWindow;
 
   public void ShowDefaultCursor() {
     MainWindow.Cursor = Cursor.Default;
