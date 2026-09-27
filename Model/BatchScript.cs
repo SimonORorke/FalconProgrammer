@@ -52,7 +52,9 @@ public class BatchScript : SerialisationBase {
     var list = new List<ConfigTask>(SequencedConfigTasks);
     var unsequenced = (
       from constant in Enum.GetValues<ConfigTask>()
-      where !SequencedConfigTasks.Contains(constant)
+      // Do not offer SupportMpe, as it's not ready for release and may never be.
+      where constant != ConfigTask.SupportMpe
+      && !SequencedConfigTasks.Contains(constant)
             // Queries are currently for developers only, to be added by manually editing
             // a script file.
             && !constant.ToString().StartsWith("Query")
@@ -75,20 +77,25 @@ public class BatchScript : SerialisationBase {
       ConfigTask.MoveZeroedMacrosToEnd,
       ConfigTask.ReplaceModWheelWithMacro,
       ConfigTask.ReuseCc1,
-      ConfigTask.SupportMpe,
+      // Do not offer SupportMpe, as it's not ready for release and may never be.
+      // ConfigTask.SupportMpe,
       ConfigTask.PrependPathLineToDescription
     ];
   }
 
   public List<ConfigTask> SequenceTasks() {
-    var configTasks = Enum.GetValues<ConfigTask>()
-      .ToDictionary(configTask => configTask.ToString());
+    var configTasks = (
+      from configTask in Enum.GetValues<ConfigTask>()
+      // Do not offer SupportMpe, as it's not ready for release and may never be.
+      where configTask != ConfigTask.SupportMpe
+      select configTask).ToDictionary(configTask => configTask.ToString());;
+    // var configTasks = Enum.GetValues<ConfigTask>()
+    //   .ToDictionary(configTask => configTask.ToString());
     var unsequenced = (
       from task in Tasks
       select configTasks[task]).ToList();
     var result = new List<ConfigTask>();
-    foreach (var sequencedConfigTask in SequencedConfigTasks.Where(sequencedConfigTask =>
-               unsequenced.Contains(sequencedConfigTask))) {
+    foreach (var sequencedConfigTask in SequencedConfigTasks.Where(unsequenced.Contains)) {
       result.Add(sequencedConfigTask);
       unsequenced.Remove(sequencedConfigTask);
     }
