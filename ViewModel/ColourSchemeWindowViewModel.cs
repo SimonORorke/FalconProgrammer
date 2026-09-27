@@ -21,7 +21,7 @@ public partial class ColourSchemeWindowViewModel : ViewModelBase {
   internal ColourSchemeId ColourSchemeId { get; private set; }
 
   public ImmutableList<string> ColourSchemes { get; } =
-    Enum.GetNames<ColourSchemeId>().ToImmutableList();
+    [.. Enum.GetNames<ColourSchemeId>()];
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle =>

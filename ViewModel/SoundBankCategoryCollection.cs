@@ -37,7 +37,7 @@ public class
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
-    SoundBanks = soundBanks.ToImmutableList();
+    SoundBanks = [.. soundBanks];
     Clear();
     foreach (var category in Settings.MustUseGuiScriptProcessorCategories) {
       string categoryToDisplay = string.IsNullOrWhiteSpace(category.Category)

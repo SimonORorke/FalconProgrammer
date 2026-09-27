@@ -53,7 +53,7 @@ public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundIte
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
-    SoundBanks = soundBanks.ToImmutableList();
+    SoundBanks = [.. soundBanks];
     Clear();
     foreach (var background in Settings.Backgrounds) {
       AddItem(background.SoundBank, background.Path);

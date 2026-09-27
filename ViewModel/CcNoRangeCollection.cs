@@ -21,10 +21,11 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
   /// <summary>
   ///   Gets the range items excluding the addition item.
   /// </summary>
-  private IReadOnlyCollection<CcNoRangeItem> Ranges => (
-    from range in this
+  private IReadOnlyCollection<CcNoRangeItem> Ranges => [
+    .. from range in this
     where !range.IsAdditionItem
-    select range).ToList();
+    select range
+  ];
 
   [ExcludeFromCodeCoverage]
   public string AccessibleTitle =>

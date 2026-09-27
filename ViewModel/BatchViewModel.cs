@@ -136,10 +136,11 @@ public partial class BatchViewModel : SettingsWriterViewModelBase {
     result.Scope.SoundBank = Scope.SoundBank;
     result.Scope.Category = Scope.Category;
     result.Scope.Program = Scope.Program;
-    result.Tasks = (
-      from task in Tasks
+    result.Tasks = [
+      .. from task in Tasks
       where !task.IsAdditionItem
-      select task.Name).ToList();
+      select task.Name
+    ];
     return result;
   }
 

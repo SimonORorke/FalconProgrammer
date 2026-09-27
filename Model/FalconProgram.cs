@@ -333,9 +333,10 @@ internal class FalconProgram {
 
   private List<ScriptProcessor> CreateScriptProcessorsFromElements(
     IEnumerable<XElement> scriptProcessorElements) {
-    return (
-      from scriptProcessorElement in scriptProcessorElements
-      select CreateScriptProcessorFromElement(scriptProcessorElement)).ToList();
+    return [
+      .. from scriptProcessorElement in scriptProcessorElements
+      select CreateScriptProcessorFromElement(scriptProcessorElement)
+    ];
   }
 
   private Macro? FindContinuousMacro(string displayName) {
@@ -402,17 +403,19 @@ internal class FalconProgram {
   }
 
   private List<Macro> GetContinuousMacros() {
-    return (
-      from macro in Macros
+    return [
+      .. from macro in Macros
       where macro.IsContinuous
-      select macro).ToList();
+      select macro
+    ];
   }
 
   private List<Macro> GetContinuousMacrosSortedByLocation() {
-    return (
-      from macro in GetMacrosSortedByLocation()
+    return [
+      .. from macro in GetMacrosSortedByLocation()
       where macro.IsContinuous
-      select macro).ToList();
+      select macro
+    ];
   }
 
   internal List<Macro> GetMacrosSortedByLocation() {
@@ -445,7 +448,7 @@ internal class FalconProgram {
         sortedSet.Add(macro);
       }
     }
-    return sortedSet.ToList();
+    return [.. sortedSet];
   }
 
   private bool HasUniqueLocation(Macro macro) {
@@ -807,7 +810,7 @@ internal class FalconProgram {
     effects.AddRange(
       from effectElement in effectElements
       select new Effect(effectElement, ProgramXml, Settings.MidiForMacros));
-    Effects = effects.ToImmutableList();
+    Effects = [.. effects];
   }
 
   /// <summary>

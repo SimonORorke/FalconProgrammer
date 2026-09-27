@@ -44,7 +44,7 @@ internal class ProgramXml : EntityBase {
   ///   it would have to be updated in multiple places.
   /// </summary>
   public IEnumerable<XElement> MacroElements =>
-    ControlSignalSourcesElement.Elements("ConstantModulation").ToList();
+    [.. ControlSignalSourcesElement.Elements("ConstantModulation")];
 
   /// <summary>
   ///   The XML file's root element, for use when reading and writing the file
@@ -121,18 +121,19 @@ internal class ProgramXml : EntityBase {
 
   public List<XElement> GetConnectionsParentElements() {
     var connectionsElements = Element.Descendants("Connections");
-    return (
-      from connectionsElement in connectionsElements
-      select connectionsElement.Parent).ToList();
+    return [
+      .. from connectionsElement in connectionsElements
+      select connectionsElement.Parent
+    ];
   }
 
   [PublicAPI]
   public List<Dahdsr> GetDahdsrs(MidiForMacros midi) {
     var dahdsrElements = Element.Descendants("DAHDSR");
-    return (
-        from dahdsrElement in dahdsrElements
-        select new Dahdsr(dahdsrElement, this, midi))
-      .ToList();
+    return [
+      .. from dahdsrElement in dahdsrElements
+      select new Dahdsr(dahdsrElement, this, midi)
+    ];
   }
 
   public string GetDescription() {
@@ -163,9 +164,10 @@ internal class ProgramXml : EntityBase {
       throw new InvalidOperationException(
         $"Cannot find Layers element in '{InputProgramPath}'.");
     var layerElements = layersElement.Elements("Layer");
-    return (
-      from layerElement in layerElements
-      select new Layer(layerElement, this, midi)).ToImmutableList();
+    return [
+      .. from layerElement in layerElements
+      select new Layer(layerElement, this, midi)
+    ];
   }
 
   /// <summary>
@@ -174,15 +176,16 @@ internal class ProgramXml : EntityBase {
   /// </summary>
   public List<XElement> GetModulationElementsWithCcNo(int ccNo) {
     string source = $"@MIDI CC {ccNo}";
-    return (
-      from modulationElement in Element.Descendants("SignalConnection")
+    return [
+      .. from modulationElement in Element.Descendants("SignalConnection")
       where GetAttributeValue(
         modulationElement, nameof(Modulation.Source)) == source
-      select modulationElement).ToList();
+      select modulationElement
+    ];
   }
 
   public List<XElement> GetScriptProcessorElementsAllLevels() {
-    return Element.Descendants(nameof(ScriptProcessor)).ToList();
+    return [.. Element.Descendants(nameof(ScriptProcessor))];
   }
 
   private List<XElement> GetScriptProcessorElementsProgramLevel() {
@@ -195,7 +198,7 @@ internal class ProgramXml : EntityBase {
     var eventProcessorsElement =
       Element.Elements("EventProcessors").FirstOrDefault();
     return eventProcessorsElement != null
-      ? eventProcessorsElement.Elements(nameof(ScriptProcessor)).ToList()
+      ? [.. eventProcessorsElement.Elements(nameof(ScriptProcessor))]
       : [];
   }
 
@@ -288,7 +291,7 @@ internal class ProgramXml : EntityBase {
   }
 
   public bool RemoveArpeggiatorElements() {
-    return RemoveElements(Element.Descendants("Arpeggiator").ToList());
+    return RemoveElements([.. Element.Descendants("Arpeggiator")]);
   }
 
   private static bool RemoveElements(IList<XElement> elements) {

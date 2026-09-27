@@ -203,10 +203,11 @@ internal class Macro : ModulationsOwner {
   ///   This is currently only used by <see cref="FalconProgram.ReuseCc1" />.
   /// </summary>
   public ImmutableList<Modulation> GetForMacroModulations() {
-    return (
-      from modulation in Modulations
+    return [
+      .. from modulation in Modulations
       where modulation.ModulatesMacro
-      select modulation).ToImmutableList();
+      select modulation
+    ];
   }
 
   private XElement GetPropertiesElement() {

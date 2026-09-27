@@ -63,7 +63,7 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
-    SoundBanks = soundBanks.ToImmutableList();
+    SoundBanks = [.. soundBanks];
     Clear();
     foreach (var programPath in Settings.DoNotZeroReverb) {
       AddItem(programPath.SoundBank, programPath.Category, programPath.Program);

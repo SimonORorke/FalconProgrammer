@@ -179,7 +179,7 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       new TabItemViewModel(SoundBankSpecificViewModel),
       new TabItemViewModel(MpeViewModel)
     };
-    return list.ToImmutableList();
+    return [.. list];
   }
 
   partial void OnSelectedTabChanged(TabItemViewModel? value) {

@@ -49,7 +49,7 @@ public class MidiForMacros {
         list.Add(ccNo);
       }
     }
-    return list.ToImmutableList();
+    return [.. list];
   }
 
   private static int GetCcNoAfter(int prevCcNo, ImmutableList<int> ccNos) {

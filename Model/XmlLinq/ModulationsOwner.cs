@@ -74,7 +74,7 @@ internal class ModulationsOwner : EntityBase {
         modulationElement => new Modulation(
           this, modulationElement, ProgramXml, Midi)));
     }
-    return list.ToImmutableList();
+    return [.. list];
   }
 
   public void RemoveModulation(Modulation modulation) {

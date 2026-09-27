@@ -46,7 +46,7 @@ public class MockFolderService : IFolderService {
   public ImmutableList<string> GetSubfolderNames(string path) {
     if (SimulatedSubfolderNames.TryGetValue(
           path, out var subfolderNames)) {
-      return subfolderNames.ToImmutableList();
+      return [.. subfolderNames];
     }
     throw new DirectoryNotFoundException($"'{path}' does not exist.");
   }

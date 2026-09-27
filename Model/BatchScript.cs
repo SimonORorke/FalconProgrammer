@@ -62,7 +62,7 @@ public class BatchScript : SerialisationBase {
     // Currently there should not be any non-query unsequenced tasks, because
     // PrependPathLineToDescription needs to be run last.
     CheckUnsequencedConfigTasks(unsequenced);
-    return list.ToImmutableList();
+    return [.. list];
   }
 
   private static ImmutableList<ConfigTask> SequenceConfigTasks() {

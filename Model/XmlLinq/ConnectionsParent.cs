@@ -32,7 +32,7 @@ internal class ConnectionsParent : ModulationsOwner {
         modulations.Remove(modulations[i]);
       }
     }
-    Modulations = modulations.ToImmutableList();
+    Modulations = [.. modulations];
     var connectionsElement = Element.Element("Connections");
     if (connectionsElement != null && !connectionsElement.Nodes().Any()) {
       connectionsElement.Remove();

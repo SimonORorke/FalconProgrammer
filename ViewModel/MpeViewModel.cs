@@ -58,13 +58,13 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   [ExcludeFromCodeCoverage] public override string TabTitle => "MPE";
 
   public ImmutableList<string> XTargets { get; } =
-    Enum.GetNames<XTarget>().ToImmutableList();
+    [.. Enum.GetNames<XTarget>()];
 
   public ImmutableList<string> YTargets { get; } =
-    Enum.GetNames<YTarget>().ToImmutableList();
+    [.. Enum.GetNames<YTarget>()];
 
   public ImmutableList<string> ZTargets { get; } =
-    Enum.GetNames<ZTarget>().ToImmutableList();
+    [.. Enum.GetNames<ZTarget>()];
 
   [ExcludeFromCodeCoverage]
   public static string InitialiseZToMacroValueCaption =>

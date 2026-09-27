@@ -35,7 +35,7 @@ public abstract class SoundBankCollection :
   internal override void Populate(Settings settings, IEnumerable<string> soundBanks) {
     IsPopulating = true;
     Settings = settings;
-    SoundBanks = soundBanks.ToImmutableList();
+    SoundBanks = [.. soundBanks];
     Clear();
     foreach (string soundBank in SettingsSoundBanks) {
       AddItem(soundBank);

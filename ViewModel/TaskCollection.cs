@@ -22,9 +22,10 @@ public class TaskCollection : DataGridItemCollectionBase<TaskItem> {
   }
 
   private static ImmutableList<string> CreateTasks() {
-    return (
-      from configTask in BatchScript.OrderedConfigTasks
-      select configTask.ToString()).ToImmutableList();
+    return [
+      .. from configTask in BatchScript.OrderedConfigTasks
+      select configTask.ToString()
+    ];
   }
 
   protected override void CutItem(DataGridItemBase itemToCut) {

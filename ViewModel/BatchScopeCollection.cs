@@ -38,7 +38,7 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
     Settings = settings;
     var soundBankList = soundBanks.ToList();
     soundBankList.Insert(0, SoundBankItem.AllCaption);
-    SoundBanks = soundBankList.ToImmutableList();
+    SoundBanks = [.. soundBankList];
     IsPopulating = true;
     Update(Settings.Batch.Scope);
     IsPopulating = false;
