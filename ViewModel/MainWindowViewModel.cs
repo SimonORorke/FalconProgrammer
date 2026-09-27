@@ -176,8 +176,9 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
       new TabItemViewModel(MidiForMacrosViewModel),
       new TabItemViewModel(BackgroundViewModel),
       new TabItemViewModel(ReverbViewModel),
-      new TabItemViewModel(SoundBankSpecificViewModel),
-      new TabItemViewModel(MpeViewModel)
+      new TabItemViewModel(SoundBankSpecificViewModel)
+      // Disable MPE support, as it's not ready for release and may never be.
+      // new TabItemViewModel(MpeViewModel)
     };
     return [.. list];
   }
