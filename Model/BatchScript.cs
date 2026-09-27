@@ -99,7 +99,7 @@ public class BatchScript : SerialisationBase {
 
   public void Validate() {
     // Throw an ApplicationException if any Task does not match a ConfigTask. 
-    var configTaskNames = Enum.GetNames(typeof(ConfigTask)).ToList();
+    var configTaskNames = Enum.GetNames<ConfigTask>().ToList();
     foreach (string task in Tasks.Where(task => !configTaskNames.Contains(task))) {
       throw new ApplicationException($"'{task}' is not a valid task name.");
     }

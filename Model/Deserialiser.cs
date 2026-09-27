@@ -17,7 +17,7 @@ public class Deserialiser<T> : SerialisationBase where T : SerialisationBase {
     }
     // If the XML file does not exist or contains an XML error,
     // return a new object with just the utility properties populated.
-    result ??= (T)Activator.CreateInstance(typeof(T))!;
+    result ??= Activator.CreateInstance<T>()!;
     PopulateUtilityProperties(result);
     return result;
   }
