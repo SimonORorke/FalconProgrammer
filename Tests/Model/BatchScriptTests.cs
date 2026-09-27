@@ -20,9 +20,10 @@ public class BatchScriptTests {
 
   [Test]
   public void DuplicateTask() {
-    Assert.DoesNotThrow(() => BatchScript.Validate());
+    Assert.DoesNotThrow((Action)(() => BatchScript.Validate()));
     BatchScript.Tasks[1] = BatchScript.Tasks[0];
-    var exception = Assert.Catch<ApplicationException>(() => BatchScript.Validate());
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => BatchScript.Validate()));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Is.EqualTo("Duplicate task: QueryAdsrMacros"));
   }
@@ -30,8 +31,8 @@ public class BatchScriptTests {
   [Test]
   public void FileNotFound() {
     TestBatchScriptReaderEmbedded.MockFileSystemService.File.SimulatedExists = false;
-    var exception = Assert.Catch<ApplicationException>(() =>
-      TestBatchScriptReaderEmbedded.Read(BatchScriptPath));
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => TestBatchScriptReaderEmbedded.Read(BatchScriptPath)));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Is.EqualTo(
       $"Batch script file '{BatchScriptPath}' cannot be found."));
@@ -39,10 +40,11 @@ public class BatchScriptTests {
 
   [Test]
   public void InvalidTask() {
-    Assert.DoesNotThrow(() => BatchScript.Validate());
+    Assert.DoesNotThrow((Action)(() => BatchScript.Validate()));
     const string newTask = "Blah";
     BatchScript.Tasks.Add(newTask);
-    var exception = Assert.Catch<ApplicationException>(() => BatchScript.Validate());
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => BatchScript.Validate()));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception!.Message, Is.EqualTo("'Blah' is not a valid task name."));
   }

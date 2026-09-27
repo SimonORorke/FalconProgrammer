@@ -157,7 +157,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     const string soundBank = "Falcon Factory";
     string soundBankPath = Path.Combine(Settings.ProgramsFolder.Path, soundBank);
     MockFileSystemService.Folder.SimulatedSubfolderNames.Remove(soundBankPath);
-    Assert.DoesNotThrowAsync(() => ViewModel.Open());
+    Assert.DoesNotThrowAsync((Func<Task>)(() => ViewModel.Open()));
     Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo(soundBank));
     Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo(
       SoundBankCategory.SoundBankErrorMessage));

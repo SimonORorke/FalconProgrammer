@@ -19,15 +19,6 @@ public class App : Application {
   }
 
   public override void OnFrameworkInitializationCompleted() {
-    // Remove Avalonia's data annotation validation plugin. (Despite this iteration,
-    // there is only one.) Otherwise, errors can be raised twice, due to the same
-    // facility in Community Toolkit MVVM. See 'Data Validation' in Avalonia's
-    // documentation.
-    var dataValidationPluginsToRemove =
-      BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-    foreach (var plugin in dataValidationPluginsToRemove) {
-      BindingPlugins.DataValidators.Remove(plugin);
-    }
     // Register all the services needed for the application to run
     var collection = new ServiceCollection();
     collection.AddSingleton<IDialogService, DialogService>();

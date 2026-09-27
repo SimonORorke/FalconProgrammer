@@ -28,6 +28,11 @@ public class BatchTests {
   private CancellationTokenSource RunCancellationTokenSource { get; } =
     new CancellationTokenSource();
 
+  [OneTimeTearDown]
+  public void OneTimeTearDown() {
+    RunCancellationTokenSource.Dispose();
+  }
+
   [Test]
   public void CannotReplaceModWheelWithMacroForCategory() {
     const string soundBankName = "Falcon Factory";
@@ -97,7 +102,7 @@ public class BatchTests {
   public void OriginalProgramsFolderNotFound() {
     Batch.MockFileSystemService.Folder.SimulatedExists = false;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.GetOriginalProgramsFolderPath());
+      (Action)(() => Batch.GetOriginalProgramsFolderPath()));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "Cannot find original programs folder '"));
@@ -107,7 +112,7 @@ public class BatchTests {
   public void OriginalProgramsFolderNotSpecified() {
     Batch.Settings.OriginalProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.GetOriginalProgramsFolderPath());
+      (Action)(() => Batch.GetOriginalProgramsFolderPath()));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "The original programs folder is not specified in settings file "));
@@ -117,7 +122,7 @@ public class BatchTests {
   public void ProgramsFolderNotFound() {
     Batch.MockFileSystemService.Folder.SimulatedExists = false;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.RunTask(ConfigTask.QueryCountMacros, null));
+      (Action)(() => Batch.RunTask(ConfigTask.QueryCountMacros, null)));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "Cannot find programs folder '"));
@@ -127,7 +132,7 @@ public class BatchTests {
   public void ProgramsFolderNotSpecified() {
     Batch.Settings.ProgramsFolder.Path = string.Empty;
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.RunTask(ConfigTask.AssignMacroCcs, null));
+      (Action)(() => Batch.RunTask(ConfigTask.AssignMacroCcs, null)));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "The programs folder is not specified in settings file "));
@@ -206,8 +211,8 @@ public class BatchTests {
     Batch.MockFileSystemService.Folder.ExistingPaths.Add(
       Batch.Settings.ProgramsFolder.Path);
     var exception = Assert.Throws<ApplicationException>(
-      () => Batch.RunTask(
-        ConfigTask.ReuseCc1, "Falcon Factory"));
+      (Action)(() => Batch.RunTask(
+        ConfigTask.ReuseCc1, "Falcon Factory")));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith("Cannot find sound bank folder '"));
   }

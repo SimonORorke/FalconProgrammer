@@ -30,7 +30,7 @@
         <TextBox Grid.Row="3" Grid.Column="3"
                  x:Name="ProgramsFolderTextBox"
                  Text="{Binding ProgramsFolderPath}"
-                 Watermark="Full path of folder containing Falcon programs to be modified" />
+                 PlaceholderText="Full path of folder containing Falcon programs to be modified" />
         <Button Grid.Row="3" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForProgramsFolderCommand}" />
         <Label Grid.Row="5" Grid.Column="1"
@@ -40,7 +40,7 @@
         <TextBox Grid.Row="5" Grid.Column="3"
                  x:Name="OriginalProgramsFolderTextBox"
                  Text="{Binding OriginalProgramsFolderPath}"
-                 Watermark="Full path of folder containing unmodified Falcon programs" />
+                 PlaceholderText="Full path of folder containing unmodified Falcon programs" />
         <Button Grid.Row="5" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForOriginalProgramsFolderCommand}" />
         <Label Grid.Row="7" Grid.Column="1"
@@ -50,7 +50,7 @@
         <TextBox Grid.Row="7" Grid.Column="3"
                  x:Name="TemplateProgramsFolderTextBox"
                  Text="{Binding TemplateProgramsFolderPath}"
-                 Watermark="You may not need this." />
+                 PlaceholderText="You may not need this." />
         <Button Grid.Row="7" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForTemplateProgramsFolderCommand}" />
     </Grid>

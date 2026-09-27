@@ -10,7 +10,7 @@ public class DeserialiserTests {
   public void XmlErrorInStream() {
     var deserialiser = new Deserialiser<SettingsFolderLocation>();
     using var invalidXmlStream = GenerateStreamFromString("This is not valid XML.");
-    Assert.Throws<XmlException>(() => deserialiser.Deserialise(invalidXmlStream));
+    Assert.Throws<XmlException>((Action)(() => deserialiser.Deserialise(invalidXmlStream)));
   }
 
   private static MemoryStream GenerateStreamFromString(string value) {

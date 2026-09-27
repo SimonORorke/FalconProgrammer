@@ -37,8 +37,9 @@ public class FalconProgramTests {
         SoundBank = soundBankName,
         Category = categoryName
       });
-    var exception = Assert.Catch<ApplicationException>(() =>
-      Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => Batch.RunTask(
+        ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName)));
     Assert.That(exception.Message, Does.Contain(
       "Assigning MIDI CCs to macros for a program with a GUI script processor " +
       $"is not supported for sound bank {soundBankName} category {categoryName}."));
@@ -53,8 +54,9 @@ public class FalconProgramTests {
       new SoundBankCategorySetting {
         SoundBank = soundBankName
       });
-    var exception = Assert.Catch<ApplicationException>(() =>
-      Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => Batch.RunTask(
+        ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName)));
     Assert.That(exception.Message, Does.StartWith(
       "Assigning MIDI CCs to macros for a program with a GUI script processor " +
       $"is not supported for sound bank {soundBankName}."));
@@ -66,8 +68,9 @@ public class FalconProgramTests {
     const string soundBankName = "Falcon Factory";
     const string categoryName = "Brutal Bass 2.1";
     const string programName = "Magnetic 1";
-    var exception = Assert.Catch<ApplicationException>(() =>
-      Batch.RunTask(ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName));
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => Batch.RunTask(
+        ConfigTask.AssignMacroCcs, soundBankName, categoryName, programName)));
     Assert.That(exception.Message, Does.StartWith(
       "MIDI CC numbers cannot be assigned to macros "));
   }
@@ -201,9 +204,9 @@ public class FalconProgramTests {
     string programPath = Path.Combine(Batch.Settings.ProgramsFolder.Path,
       soundBankName, categoryName, $"{programName}.uvip");
     Batch.MockFileSystemService.File.ExistingPaths.Add(programPath);
-    var exception = Assert.Catch<ApplicationException>(() =>
-      Batch.RunTask(ConfigTask.RestoreOriginal,
-        soundBankName, categoryName, programName));
+    var exception = Assert.Catch<ApplicationException>(
+      (Action)(() => Batch.RunTask(
+        ConfigTask.RestoreOriginal, soundBankName, categoryName, programName)));
     Assert.That(exception.Message, Does.StartWith("Cannot find original file"));
   }
 
