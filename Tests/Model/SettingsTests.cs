@@ -193,8 +193,8 @@ public class SettingsTests {
       SettingsTestHelper.DeleteAnyData();
       if (settings != null) {
         Assert.Throws<DirectoryNotFoundException>(
-          (Action)(() => settings.FileSystemService.Folder.GetSubfolderNames(
-            SettingsTestHelper.TestSettingsFolderPath)));
+          () => settings.FileSystemService.Folder.GetSubfolderNames(
+            SettingsTestHelper.TestSettingsFolderPath));
       }
     }
   }

@@ -17,7 +17,7 @@ public class ProgramItemTests : ViewModelTestsBase {
       settings, MockFileSystemService, false, false) {
       SoundBank = soundBank
     };
-    Assert.DoesNotThrow((Action)(() => item.Category = category));
+    Assert.DoesNotThrow(() => item.Category = category);
   }
 
   [Test]
@@ -27,7 +27,7 @@ public class ProgramItemTests : ViewModelTestsBase {
     const string soundBank = "Falcon Factory";
     var item = new ProgramItem(
       settings, MockFileSystemService, false, false);
-    Assert.DoesNotThrow((Action)(() => item.SoundBank = soundBank));
+    Assert.DoesNotThrow(() => item.SoundBank = soundBank);
     Assert.That(item.Categories, Is.Empty);
   }
 }

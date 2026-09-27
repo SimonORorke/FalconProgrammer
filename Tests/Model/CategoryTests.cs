@@ -25,7 +25,7 @@ public class CategoryTests {
           }
         }
       };
-    Assert.Throws<ApplicationException>((Action)(() => category.Initialise()));
+    Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
   [Test]
@@ -87,7 +87,7 @@ public class CategoryTests {
         EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     var exception = Assert.Catch<ApplicationException>(
-      (Action)(() => category.GetPathsOfProgramFilesToEdit()));
+      () => category.GetPathsOfProgramFilesToEdit());
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain(
       "There are no program files to edit in folder"));
@@ -105,7 +105,7 @@ public class CategoryTests {
         }
       };
     var exception = Assert.Catch<ApplicationException>(
-      (Action)(() => category.GetProgramPath("Blah")));
+      () => category.GetProgramPath("Blah"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain("Cannot find program file"));
   }
@@ -117,7 +117,7 @@ public class CategoryTests {
         EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
     Assert.DoesNotThrow(
-      (Action)(() => category.GetProgramPath("Blah")));
+      () => category.GetProgramPath("Blah"));
   }
 
   [Test]
@@ -155,7 +155,7 @@ public class CategoryTests {
           }
         }
       };
-    Assert.Throws<ApplicationException>((Action)(() => category.Initialise()));
+    Assert.Throws<ApplicationException>(() => category.Initialise());
   }
 
   [Test]
@@ -169,7 +169,7 @@ public class CategoryTests {
     category.MockFileSystemService.Folder.ExistingPaths.Remove(
       Settings.TemplateProgramsFolder.Path);
     var exception = Assert.Catch<ApplicationException>(
-      (Action)(() => category.Initialise()));
+      () => category.Initialise());
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "Cannot find template programs folder"));
@@ -191,8 +191,8 @@ public class CategoryTests {
         $"{programName}.xml", "Will be ignored.uvip", category, batch);
       program.Read();
       Assert.That(program.GuiScriptProcessor, Is.Not.Null);
-      Assert.DoesNotThrow((Action)(() =>
-        category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch)));
+      Assert.DoesNotThrow(() =>
+        category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
     }
   }
 
@@ -209,8 +209,8 @@ public class CategoryTests {
       "KEY Clockworks.xml", "Will also be ignored.uvip", category, batch);
     program.Read();
     Assert.That(program.GuiScriptProcessor, Is.Not.Null);
-    Assert.DoesNotThrow((Action)(() =>
-      category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch)));
+    Assert.DoesNotThrow(() =>
+      category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
   }
 
   // [Test]
@@ -242,8 +242,8 @@ public class CategoryTests {
       "KEY Clockworks.xml", "Will also be ignored.uvip", category, batch);
     program.Read();
     Assert.That(program.GuiScriptProcessor, Is.Not.Null);
-    var exception = Assert.Catch((Action)(() =>
-      category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch)));
+    var exception = Assert.Catch(() =>
+      category.GetTemplateScriptProcessor(program.GuiScriptProcessor, batch));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain(
       "Cannot find the GUI ScriptProcessor in template program file '"));
