@@ -63,6 +63,7 @@ public partial class MainWindow : Window {
 
   protected override void OnLoaded(RoutedEventArgs e) {
     ViewModel = (MainWindowViewModel)DataContext!;
+    ViewModel.SelectedTab ??= ViewModel.Tabs[0];
     ColourScheme.Select(ViewModel.ColourSchemeId);
     ViewModel.WindowLocationService.Restore();
     var firstTabItem = TabControl.FindDescendantOfType<TabItem>();

@@ -21,6 +21,10 @@ public class MainMenuButton : MenuButtonBase {
     AvaloniaProperty.Register<ItemEditButton, ICommand?>(
       nameof(SelectColourSchemeCommand));
 
+  public static readonly StyledProperty<ICommand?> CheckForUpdatesCommandProperty =
+    AvaloniaProperty.Register<ItemEditButton, ICommand?>(
+      nameof(CheckForUpdatesCommand));
+
   public static readonly StyledProperty<ICommand?> ManualCommandProperty =
     AvaloniaProperty.Register<ItemEditButton, ICommand?>(nameof(ManualCommand));
 
@@ -41,6 +45,14 @@ public class MainMenuButton : MenuButtonBase {
   private MenuItem SelectColourSchemeMenuItem { get; } =
     CreateMenuItem("_Color Scheme...");
 
+  public ICommand? CheckForUpdatesCommand {
+    get => GetValue(CheckForUpdatesCommandProperty);
+    set => SetValue(CheckForUpdatesCommandProperty, value);
+  }
+
+  private MenuItem CheckForUpdatesMenuItem { get; } =
+    CreateMenuItem("Check for _Updates...");
+
   public ICommand? ManualCommand {
     get => GetValue(ManualCommandProperty);
     set => SetValue(ManualCommandProperty, value);
@@ -52,13 +64,17 @@ public class MainMenuButton : MenuButtonBase {
     return new Dictionary<AvaloniaProperty, MenuItem> {
       { AboutCommandProperty, AboutMenuItem },
       { ManualCommandProperty, ManualMenuItem },
-      { SelectColourSchemeCommandProperty, SelectColourSchemeMenuItem }
+      { SelectColourSchemeCommandProperty, SelectColourSchemeMenuItem },
+      { CheckForUpdatesCommandProperty, CheckForUpdatesMenuItem }
     };
   }
 
   protected override ICommand GetMenuItemCommand(MenuItem menuItem) {
     if (menuItem == SelectColourSchemeMenuItem) {
       return SelectColourSchemeCommand!;
+    }
+    if (menuItem == CheckForUpdatesMenuItem) {
+      return CheckForUpdatesCommand!;
     }
     return menuItem == AboutMenuItem ? AboutCommand! : ManualCommand!;
   }

@@ -79,4 +79,21 @@ public interface IDialogService {
   ///   The view model to be assigned to the Message window.
   /// </param>
   Task ShowMessageWindow(MessageWindowViewModel viewModel);
+
+  /// <summary>
+  ///   Asynchronously shows an information message box.
+  /// </summary>
+  /// <param name="text">The message text to be shown.</param>
+  /// <param name="tabTitle">
+  ///   Optionally specifies a tab title to be appended to the message box title.
+  /// </param>
+  Task ShowInfoMessageBox(string text, string tabTitle = "");
+
+  /// <summary>
+  ///   Asynchronously shows the New Version window.
+  /// </summary>
+  /// <param name="viewModel">
+  ///   The view model to be assigned to the New Version window.
+  /// </param>
+  Task ShowNewVersionWindow(NewVersionWindowViewModel viewModel);
 }

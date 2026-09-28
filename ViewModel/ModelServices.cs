@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
+using FalconProgrammer.Model.ReleaseInfo;
 
 namespace FalconProgrammer.ViewModel;
 
@@ -21,6 +22,18 @@ public class ModelServices {
 
   public SettingsReader SettingsReader {
     [ExcludeFromCodeCoverage] get => field ??= new SettingsReader();
+    set;
+    // For tests
+  }
+
+  public IReleaseInfo ReleaseInfo {
+    [ExcludeFromCodeCoverage] get => field ??= new ReleaseInfo();
+    set;
+    // For tests
+  }
+
+  public IVersionChecker VersionChecker {
+    [ExcludeFromCodeCoverage] get => field ??= new VersionChecker(ReleaseInfo);
     set;
     // For tests
   }

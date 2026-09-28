@@ -224,6 +224,65 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   }
 
   [Test]
+  public async Task CheckForUpdates_NewVersionAvailable_ShowsNewVersionWindow() {
+    MockVersionChecker.SimulatedNewVersion = "1.3.0";
+    await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
+
+    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastNewVersionWindowViewModel, Is.Not.Null);
+    Assert.That(MockDialogService.LastNewVersionWindowViewModel!.LatestVersion, Is.EqualTo("1.3.0"));
+    Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(0));
+  }
+
+  [Test]
+  public async Task CheckForUpdates_AlreadyLatest_ShowsInfoMessageBox() {
+    MockVersionChecker.SimulatedNewVersion = null;
+    await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
+
+    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
+    Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastInfoMessage,
+      Is.EqualTo("You are already running the latest version."));
+  }
+
+  [Test]
+  public async Task CheckForUpdates_NewVersionWindowUpdatesSettings() {
+    MockVersionChecker.SimulatedNewVersion = "1.3.0";
+    ViewModel.SimulatedNewAutoCheckNewVersions = false;
+    ViewModel.SimulatedNewIgnoreVersion = "1.3.0";
+
+    await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
+
+    Assert.That(ViewModel.Settings.AutoCheckNewVersions, Is.False);
+    Assert.That(ViewModel.Settings.IgnoreVersion, Is.EqualTo("1.3.0"));
+  }
+
+  [Test]
+  public async Task AutoCheck_OnOpen_WhenAutoCheckEnabled_ShowsNewVersionWindow() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    Settings.AutoCheckNewVersions = true;
+    MockSettingsReaderEmbedded.SimulatedSettings = Settings;
+    MockVersionChecker.SimulatedNewVersion = "1.3.0";
+
+    await ViewModel.Open();
+
+    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(1));
+    Assert.That(MockDialogService.LastNewVersionWindowViewModel?.LatestVersion, Is.EqualTo("1.3.0"));
+  }
+
+  [Test]
+  public async Task AutoCheck_OnOpen_WhenAutoCheckDisabled_DoesNotShowNewVersionWindow() {
+    Settings = ReadMockSettings("BatchSettings.xml");
+    Settings.AutoCheckNewVersions = false;
+    MockSettingsReaderEmbedded.SimulatedSettings = Settings;
+    MockVersionChecker.SimulatedNewVersion = "1.3.0";
+
+    await ViewModel.Open();
+
+    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
+  }
+
+  [Test]
   public async Task UserConfirmsCloseWindowWhenError() {
     ViewModel.SelectedTab = LocationsTab; // Locations
     // Error condition: settings folder not found.

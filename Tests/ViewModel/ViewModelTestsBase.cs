@@ -19,10 +19,14 @@ public abstract class ViewModelTestsBase {
       MockSettingsFolderLocationReader = MockSettingsFolderLocationReader,
       EmbeddedFileName = "DefaultSettingsWithMidi.xml"
     };
+    MockReleaseInfo = new MockReleaseInfo();
+    MockVersionChecker = new MockVersionChecker();
     TestModelServices = new ModelServices {
       FileSystemService = MockFileSystemService,
       SettingsFolderLocationReader = MockSettingsFolderLocationReader,
-      SettingsReader = MockSettingsReaderEmbedded
+      SettingsReader = MockSettingsReaderEmbedded,
+      ReleaseInfo = MockReleaseInfo,
+      VersionChecker = MockVersionChecker
     };
   }
 
@@ -30,6 +34,8 @@ public abstract class ViewModelTestsBase {
   protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;
+  protected MockReleaseInfo MockReleaseInfo { get; private set; } = null!;
+  protected MockVersionChecker MockVersionChecker { get; private set; } = null!;
 
   protected MockSettingsFolderLocationReader MockSettingsFolderLocationReader {
     get;

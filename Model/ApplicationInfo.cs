@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace FalconProgrammer.Model;
@@ -52,8 +52,10 @@ public class ApplicationInfo : IApplicationInfo {
   /// </summary>
   private string GetVersion() {
     var versionObject = EntryAssembly.GetName().Version!;
-    return $"{versionObject.Major}" +
-           $".{versionObject.Minor.ToString()}" +
-           $".{versionObject.Build.ToString()}";
+    string version = $"{versionObject.Major}" +
+                     $".{versionObject.Minor.ToString()}" +
+                     $".{versionObject.Build.ToString()}";
+    // Console.WriteLine($"[FalconProgrammer] ApplicationInfo.GetVersion: EntryAssembly={EntryAssembly.FullName}, Version={version}");
+    return version;
   }
 }

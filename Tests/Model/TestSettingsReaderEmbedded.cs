@@ -30,6 +30,7 @@ public class TestSettingsReaderEmbedded : SettingsReader {
   [PublicAPI] internal MockFileSystemService MockFileSystemService { get; }
   internal MockSerialiser MockSerialiserForSettings { get; }
   private TestDeserialiser<Settings> TestDeserialiser { get; }
+  internal Settings? SimulatedSettings { get; set; }
 
   protected override SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
     return new TestSettingsFolderLocationReader {
@@ -39,6 +40,9 @@ public class TestSettingsReaderEmbedded : SettingsReader {
   }
 
   public override Settings Read(bool useDefaultIfNotFound = false) {
+    if (SimulatedSettings != null) {
+      return SimulatedSettings;
+    }
     var result = base.Read(useDefaultIfNotFound);
     result.AppDataFolderName = AppDataFolderName;
     result.FileSystemService = FileSystemService;

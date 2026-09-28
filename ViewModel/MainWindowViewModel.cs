@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
+using FalconProgrammer.Model.ReleaseInfo;
 using JetBrains.Annotations;
 
 namespace FalconProgrammer.ViewModel;
@@ -128,6 +129,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   public IWindowLocationService WindowLocationService { get; }
 
+  private IVersionChecker VersionChecker => field ??= ModelServices.VersionChecker;
+
   public void Receive(GoToLocationsPageMessage message) {
     DispatcherService.Dispatch(() => SelectedTab = LocationsTab);
   }
@@ -138,6 +141,15 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   [RelayCommand]
   private async Task About() {
     await DialogService.ShowAboutBox(CreateAboutViewModel());
+  }
+
+  /// <summary>
+  ///   Generates <see cref="CheckForUpdatesCommand" />.
+  /// </summary>
+  [RelayCommand]
+  private async Task CheckForUpdates() {
+    // Console.WriteLine("[FalconProgrammer] MainMenu: CheckForUpdates command triggered by user.");
+    await CheckForUpdatesAsync(false);
   }
 
   /// <summary>
@@ -166,6 +178,51 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
   protected virtual ColourSchemeWindowViewModel CreateColourSchemeWindowViewModel() {
     return new ColourSchemeWindowViewModel(
       ColourSchemeId, DialogService, DispatcherService);
+  }
+
+  protected virtual NewVersionWindowViewModel CreateNewVersionWindowViewModel(string newVersion) {
+    return new NewVersionWindowViewModel(
+      newVersion, Settings.AutoCheckNewVersions, Settings.IgnoreVersion);
+  }
+
+  private async Task CheckForUpdatesAsync(bool isAuto) {
+    // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: isAuto={isAuto}");
+    try {
+      // Console.WriteLine("[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: Reading settings...");
+      await ReadSettings();
+      // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: Settings.IgnoreVersion='{Settings?.IgnoreVersion}', Settings.AutoCheckNewVersions={Settings?.AutoCheckNewVersions}");
+      string? newVersion = await VersionChecker.CheckForNewVersionAsync(Settings!.IgnoreVersion);
+      // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: newVersion result = '{newVersion}'");
+      if (newVersion != null) {
+        // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: Calling ShowNewVersionWindowAsync('{newVersion}')");
+        await ShowNewVersionWindowAsync(newVersion);
+      } else if (!isAuto) {
+        // Console.WriteLine("[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: Showing 'You are already running the latest version.'");
+        await DialogService.ShowInfoMessageBox("You are already running the latest version.");
+      }
+    } catch {
+      // Console.WriteLine("[FalconProgrammer] MainWindowViewModel.CheckForUpdatesAsync: Exception caught.");
+      if (!isAuto) {
+        await DialogService.ShowInfoMessageBox("You are already running the latest version.");
+      }
+    }
+  }
+
+  private async Task ShowNewVersionWindowAsync(string newVersion) {
+    // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.ShowNewVersionWindowAsync: Starting for version '{newVersion}'");
+    var newVersionViewModel = CreateNewVersionWindowViewModel(newVersion);
+    await DialogService.ShowNewVersionWindow(newVersionViewModel);
+    // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.ShowNewVersionWindowAsync: Dialog closed. Result AutoCheck={newVersionViewModel.AutoCheckNewVersions}, IgnoreVersion='{newVersionViewModel.IgnoreVersion}'");
+    if (newVersionViewModel.AutoCheckNewVersions != Settings.AutoCheckNewVersions ||
+        newVersionViewModel.IgnoreVersion != Settings.IgnoreVersion) {
+      Settings.AutoCheckNewVersions = newVersionViewModel.AutoCheckNewVersions;
+      Settings.IgnoreVersion = newVersionViewModel.IgnoreVersion;
+      if (CurrentPageViewModel != null) {
+        CurrentPageViewModel.Settings.AutoCheckNewVersions = newVersionViewModel.AutoCheckNewVersions;
+        CurrentPageViewModel.Settings.IgnoreVersion = newVersionViewModel.IgnoreVersion;
+      }
+      HaveSettingsBeenUpdated = true;
+    }
   }
 
   private ImmutableList<TabItemViewModel> CreateTabs() {
@@ -231,7 +288,8 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
 
   internal override async Task Open() {
     await base.Open();
-    ColourSchemeId = Settings.ColourSchemeId;
+    // Console.WriteLine($"[FalconProgrammer] MainWindowViewModel.Open: Settings.AutoCheckNewVersions={Settings?.AutoCheckNewVersions}");
+    ColourSchemeId = Settings!.ColourSchemeId;
     if (Settings.WindowLocation != null) {
       WindowLocationService.Left = Settings.WindowLocation.Left;
       WindowLocationService.Top = Settings.WindowLocation.Top;
@@ -242,6 +300,11 @@ public partial class MainWindowViewModel : SettingsWriterViewModelBase,
     HaveSettingsBeenUpdated = false;
     foreach (var tab in Tabs) {
       tab.ViewModel.ModelServices = ModelServices;
+    }
+    if (Settings.AutoCheckNewVersions) {
+      // Console.WriteLine("[FalconProgrammer] MainWindowViewModel.Open: Dispatching automatic CheckForUpdatesAsync(true)");
+      // ReSharper disable once AsyncVoidLambda
+      DispatcherService.Dispatch(async () => await CheckForUpdatesAsync(true));
     }
   }
 

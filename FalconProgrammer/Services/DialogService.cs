@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -116,6 +117,31 @@ public class DialogService : IDialogService {
     } catch {
       messageWindow.Show();
     }
+  }
+
+  public async Task ShowInfoMessageBox(string text, string tabTitle = "") {
+    // Console.WriteLine($"[FalconProgrammer] DialogService.ShowInfoMessageBox: text='{text}', tabTitle='{tabTitle}'");
+    MainWindow.Cursor = Cursor.Default;
+    var messageBox = MessageBoxManager.GetMessageBoxStandard(
+      GetMessageBoxTitle(tabTitle), text, ButtonEnum.Ok, Icon.Info);
+    await messageBox.ShowAsync();
+  }
+
+  public async Task ShowNewVersionWindow(NewVersionWindowViewModel viewModel) {
+    // Console.WriteLine($"[FalconProgrammer] DialogService.ShowNewVersionWindow: Starting for version '{viewModel.LatestVersion}', MainWindow.IsVisible={MainWindow.IsVisible}, MainWindow.IsLoaded={MainWindow.IsLoaded}");
+    var dialog = new NewVersionWindow {
+      DataContext = viewModel
+    };
+    CurrentDialog = dialog;
+    // Console.WriteLine("[FalconProgrammer] DialogService.ShowNewVersionWindow: Calling dialog.ShowDialog(MainWindow)...");
+    try {
+      await dialog.ShowDialog(MainWindow);
+      // Console.WriteLine("[FalconProgrammer] DialogService.ShowNewVersionWindow: dialog.ShowDialog completed.");
+    } catch {
+      // Console.WriteLine("[FalconProgrammer] DialogService.ShowNewVersionWindow: ShowDialog failed. Falling back to dialog.Show().");
+      dialog.Show();
+    }
+    CurrentDialog = null;
   }
 
   private string GetMessageBoxTitle(string tabTitle) {

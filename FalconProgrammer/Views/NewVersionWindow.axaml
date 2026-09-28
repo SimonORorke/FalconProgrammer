@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:FalconProgrammer.ViewModel"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="240"
+        x:Class="FalconProgrammer.Views.NewVersionWindow"
+        x:DataType="vm:NewVersionWindowViewModel"
+        Title="New Version"
+        Icon="/Assets/falcon_svg_repo_com.png"
+        CanResize="False"
+        Width="500"
+        Height="240"
+        WindowStartupLocation="CenterOwner">
+    <Window.Styles>
+        <Style Selector="AccessText">
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="80" />
+        </Style>
+    </Window.Styles>
+    <Grid RowDefinitions="*, 10, Auto, 15">
+        <StackPanel Grid.Row="0" Margin="25, 20, 25, 0">
+            <TextBlock Text="{Binding Message}"
+                       FontSize="18"
+                       TextWrapping="Wrap"
+                       Margin="0, 0, 0, 15" />
+            <Button Command="{Binding OpenReleasesPageCommand}"
+                    Width="180"
+                    Margin="0, 0, 0, 15">
+                <Button.Content>
+                    <AccessText Text="{Binding OpenReleasesPageCaption}" />
+                </Button.Content>
+            </Button>
+            <CheckBox IsChecked="{Binding AutoCheckNewVersions}"
+                      Margin="0, 0, 0, 5">
+                <AccessText Text="{Binding AutoCheckNewVersionsCaption}" />
+            </CheckBox>
+            <CheckBox IsChecked="{Binding IgnoreThisVersion}">
+                <AccessText Text="{Binding IgnoreThisVersionCaption}" />
+            </CheckBox>
+        </StackPanel>
+        <Grid Grid.Row="2" ColumnDefinitions="*, Auto, *">
+            <Button Grid.Column="1"
+                    x:Name="CloseButton" Content="Close" IsCancel="True" IsDefault="True"
+                    HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+</Window>

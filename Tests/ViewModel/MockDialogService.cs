@@ -14,7 +14,11 @@ public class MockDialogService : IDialogService {
   [PublicAPI] internal int ShowAboutBoxCount { get; set; }
   [PublicAPI] internal int ShowColourSchemeDialogCount { get; set; }
   [PublicAPI] internal int ShowErrorMessageBoxCount { get; set; }
+  [PublicAPI] internal int ShowInfoMessageBoxCount { get; set; }
+  [PublicAPI] internal string LastInfoMessage { get; set; } = string.Empty;
   [PublicAPI] internal int ShowMessageWindowCount { get; set; }
+  [PublicAPI] internal int ShowNewVersionWindowCount { get; set; }
+  [PublicAPI] internal NewVersionWindowViewModel? LastNewVersionWindowViewModel { get; set; }
   internal string SimulatedPath { get; set; } = string.Empty;
   internal bool SimulatedYesNoAnswer { get; set; }
 
@@ -73,5 +77,17 @@ public class MockDialogService : IDialogService {
     ShowMessageWindowCount++;
     LastMessageWindowMessage = viewModel.Text;
     LastMessageWindowTitle = viewModel.Title;
+  }
+
+  public async Task ShowInfoMessageBox(string text, string tabTitle = "") {
+    await Task.Delay(0);
+    ShowInfoMessageBoxCount++;
+    LastInfoMessage = text;
+  }
+
+  public async Task ShowNewVersionWindow(NewVersionWindowViewModel viewModel) {
+    await Task.Delay(0);
+    ShowNewVersionWindowCount++;
+    LastNewVersionWindowViewModel = viewModel;
   }
 }

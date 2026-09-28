@@ -235,4 +235,22 @@ public class SettingsTests {
     Assert.That(mockSerializer.LastObjectSerialised, Is.SameAs(settings));
     Assert.That(mockSerializer.LastOutputPath, Is.EqualTo(newSettingsPath));
   }
+
+  [Test]
+  public void AutoCheckNewVersionsAndIgnoreVersion() {
+    var settings = new Settings();
+    Assert.That(settings.AutoCheckNewVersions, Is.True);
+    Assert.That(settings.IgnoreVersion, Is.EqualTo(string.Empty));
+
+    settings.AutoCheckNewVersions = false;
+    settings.IgnoreVersion = "1.3.0";
+
+    var mockSerializer = new MockSerialiser();
+    settings.Serialiser = mockSerializer;
+    settings.Write(@"K:\Markup");
+
+    var writtenSettings = (Settings)mockSerializer.LastObjectSerialised;
+    Assert.That(writtenSettings.AutoCheckNewVersions, Is.False);
+    Assert.That(writtenSettings.IgnoreVersion, Is.EqualTo("1.3.0"));
+  }
 }

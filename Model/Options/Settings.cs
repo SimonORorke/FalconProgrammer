@@ -14,6 +14,8 @@ public class Settings : SerialisationBase {
   [XmlElement] public Folder TemplateProgramsFolder { get; set; } = new Folder();
   [XmlElement] public string ColourScheme { get; set; } = string.Empty;
   [XmlElement] public WindowLocationSettings? WindowLocation { get; set; }
+  [XmlElement] public bool AutoCheckNewVersions { get; set; } = true;
+  [XmlElement] public string IgnoreVersion { get; set; } = string.Empty;
 
   [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings();
 
