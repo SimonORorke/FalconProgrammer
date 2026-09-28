@@ -8,6 +8,8 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <PublishTrimmed>true</PublishTrimmed>
         <LangVersion>14</LangVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>x64</Platforms>
     </PropertyGroup>
 
     <Choose>
