@@ -1,4 +1,3 @@
-using FalconProgrammer.Model;
 using FalconProgrammer.Model.ReleaseInfo;
 using GitHubReleaseJsonContext = FalconProgrammer.Model.ReleaseInfo.GitHubReleaseJsonContext;
 
@@ -16,18 +15,18 @@ public class ReleaseInfoTests {
   [Test]
   public void ExtractLatestVersionForPlatform_WindowsExe() {
     var releases = new List<GitHubReleaseDto> {
-      new() {
+      new GitHubReleaseDto {
         TagName = "v1.3.0",
-        Assets = new List<GitHubAssetDto> {
-          new() { Name = "FalconProgrammer-1.3.0-macos.dmg" },
-          new() { Name = "FalconProgrammer-1.3.0-windows-x64.exe" }
-        }
+        Assets = [
+          new GitHubAssetDto { Name = "FalconProgrammer-1.3.0-macos.dmg" },
+          new GitHubAssetDto { Name = "FalconProgrammer-1.3.0-windows-x64.exe" }
+        ]
       },
-      new() {
+      new GitHubReleaseDto {
         TagName = "v1.2.0",
-        Assets = new List<GitHubAssetDto> {
-          new() { Name = "FalconProgrammer-1.2.0-windows-x64.exe" }
-        }
+        Assets = [
+          new GitHubAssetDto { Name = "FalconProgrammer-1.2.0-windows-x64.exe" }
+        ]
       }
     };
 
@@ -38,11 +37,11 @@ public class ReleaseInfoTests {
   [Test]
   public void ExtractLatestVersionForPlatform_MacOsDmg() {
     var releases = new List<GitHubReleaseDto> {
-      new() {
+      new GitHubReleaseDto {
         TagName = "v1.4.1",
-        Assets = new List<GitHubAssetDto> {
-          new() { Name = "FalconProgrammer-1.4.1-macos.dmg" }
-        }
+        Assets = [
+          new GitHubAssetDto { Name = "FalconProgrammer-1.4.1-macos.dmg" }
+        ]
       }
     };
 
@@ -53,11 +52,11 @@ public class ReleaseInfoTests {
   [Test]
   public void ExtractLatestVersionForPlatform_NoMatchingAsset() {
     var releases = new List<GitHubReleaseDto> {
-      new() {
+      new GitHubReleaseDto {
         TagName = "v1.5.0",
-        Assets = new List<GitHubAssetDto> {
-          new() { Name = "FalconProgrammer-1.5.0-linux.tar.gz" }
-        }
+        Assets = [
+          new GitHubAssetDto { Name = "FalconProgrammer-1.5.0-linux.tar.gz" }
+        ]
       }
     };
 
@@ -68,11 +67,11 @@ public class ReleaseInfoTests {
   [Test]
   public void ExtractLatestVersionForPlatform_WithoutVPrefix() {
     var releases = new List<GitHubReleaseDto> {
-      new() {
+      new GitHubReleaseDto {
         TagName = "2.0.0",
-        Assets = new List<GitHubAssetDto> {
-          new() { Name = "FalconProgrammer-2.0.0.exe" }
-        }
+        Assets = [
+          new GitHubAssetDto { Name = "FalconProgrammer-2.0.0.exe" }
+        ]
       }
     };
 

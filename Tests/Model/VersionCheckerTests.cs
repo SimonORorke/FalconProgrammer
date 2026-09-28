@@ -1,4 +1,3 @@
-using FalconProgrammer.Model;
 using FalconProgrammer.Model.ReleaseInfo;
 
 namespace FalconProgrammer.Tests.Model;
@@ -102,7 +101,7 @@ public class MockReleaseInfo : IReleaseInfo {
 
 public class MockVersionChecker : IVersionChecker {
   public string? SimulatedNewVersion { get; set; }
-  public int CheckForNewVersionCount { get; set; }
+  private int CheckForNewVersionCount { get; set; }
   public string? LastIgnoreVersion { get; set; }
 
   public Task<string?> CheckForNewVersionAsync(string? ignoreVersion = null) {
