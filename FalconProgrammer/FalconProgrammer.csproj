@@ -9,7 +9,7 @@
         <PublishTrimmed>true</PublishTrimmed>
         <LangVersion>14</LangVersion>
         <Configurations>Debug;Release</Configurations>
-        <Platforms>x64</Platforms>
+        <Platforms>x64;AnyCPU</Platforms>
     </PropertyGroup>
 
     <Choose>
