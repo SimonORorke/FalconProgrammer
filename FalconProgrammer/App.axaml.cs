@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using FalconProgrammer.Helpers;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 using FalconProgrammer.Views;

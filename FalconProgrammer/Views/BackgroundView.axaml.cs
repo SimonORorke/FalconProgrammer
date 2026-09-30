@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using FalconProgrammer.Helpers;
 using FalconProgrammer.Services;
 using FalconProgrammer.ViewModel;
 

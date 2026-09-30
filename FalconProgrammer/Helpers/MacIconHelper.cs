@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Avalonia.Platform;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.Helpers;
 
 /// <summary>
 /// Facilitates setting the application icon in macOS Dock and Application Switcher.

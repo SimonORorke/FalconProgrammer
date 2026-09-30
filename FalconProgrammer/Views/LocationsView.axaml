@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.LocationsView"
              x:DataType="vm:LocationsViewModel">
@@ -18,13 +19,15 @@
         <TextBlock Grid.Row="1" Grid.Column="3"
                    Text="{Binding SettingsFolderPath}" />
         <Button Grid.Row="1" Grid.Column="5"
+                HotKey="Alt+B"
                 Command="{Binding BrowseForSettingsFolderCommand}">
             <Button.Content>
                 <AccessText Text="_Browse..." />
             </Button.Content>
         </Button>
         <Label Grid.Row="3" Grid.Column="1"
-               Target="ProgramsFolderTextBox">
+               Target="ProgramsFolderTextBox"
+               helpers:FocusHelper.HotKey="Alt+P">
             <AccessText Text="_Programs Folder" />
         </Label>
         <TextBox Grid.Row="3" Grid.Column="3"
@@ -34,7 +37,8 @@
         <Button Grid.Row="3" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForProgramsFolderCommand}" />
         <Label Grid.Row="5" Grid.Column="1"
-               Target="OriginalProgramsFolderTextBox">
+               Target="OriginalProgramsFolderTextBox"
+               helpers:FocusHelper.HotKey="Alt+O">
             <AccessText Text="_Original Programs Folder" />
         </Label>
         <TextBox Grid.Row="5" Grid.Column="3"
@@ -44,7 +48,8 @@
         <Button Grid.Row="5" Grid.Column="5" Content="Browse..."
                 Command="{Binding BrowseForOriginalProgramsFolderCommand}" />
         <Label Grid.Row="7" Grid.Column="1"
-               Target="TemplateProgramsFolderTextBox">
+               Target="TemplateProgramsFolderTextBox"
+               helpers:FocusHelper.HotKey="Alt+T">
             <AccessText Text="_Template Programs Folder" />
         </Label>
         <TextBox Grid.Row="7" Grid.Column="3"

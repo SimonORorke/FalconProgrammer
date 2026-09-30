@@ -1,7 +1,7 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml.Templates;
 
-namespace FalconProgrammer;
+namespace FalconProgrammer.Helpers;
 
 public static class DataGridHelper {
   /// <summary>

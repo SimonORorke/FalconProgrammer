@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
 
+using FalconProgrammer.Helpers;
+
 namespace FalconProgrammer.Views;
 
 public partial class DoNotReplaceModWheelView : UserControl {
