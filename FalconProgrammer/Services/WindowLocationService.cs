@@ -30,7 +30,7 @@ public class WindowLocationService : IWindowLocationService {
     // If the settings have not previously been saved, they should all be null;
     // once saved, none should.
     if (this is not {
-          Left: not null, Top: not null, Width: not null, Height: not null,
+          Left: not null, Top: not null, Width: not null and > 0, Height: not null and > 0,
           WindowState: not null
         }) {
       // There are no settings to restore.
@@ -72,8 +72,8 @@ public class WindowLocationService : IWindowLocationService {
       case Avalonia.Controls.WindowState.Normal:
         Left = MainWindow.Position.X;
         Top = MainWindow.Position.Y;
-        Width = (int)MainWindow.Width;
-        Height = (int)MainWindow.Height;
+        Width = (int)MainWindow.Bounds.Width;
+        Height = (int)MainWindow.Bounds.Height;
         break;
     }
     // When the window is maximised, its position properties (X and Y) are for the top
