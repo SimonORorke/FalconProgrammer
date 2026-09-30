@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -16,6 +17,9 @@ public class App : Application {
   public override void Initialize() {
     AvaloniaXamlLoader.Load(this);
     Name = MainWindowViewModel.ApplicationName;
+    if (OperatingSystem.IsMacOS()) {
+      MacIconHelper.SetApplicationIcon();
+    }
   }
 
   public override void OnFrameworkInitializationCompleted() {
