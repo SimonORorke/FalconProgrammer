@@ -72,6 +72,9 @@ public class WindowLocationService : IWindowLocationService {
       case Avalonia.Controls.WindowState.Normal:
         Left = MainWindow.Position.X;
         Top = MainWindow.Position.Y;
+        // Saving Bounds.Width and Bounds.Height instead of Width and Height fixes a
+        // macOS problem where zeroes would be saved if the size had not been changed
+        // from the default size, causing the window to be invisible when reopened.
         Width = (int)MainWindow.Bounds.Width;
         Height = (int)MainWindow.Bounds.Height;
         break;
