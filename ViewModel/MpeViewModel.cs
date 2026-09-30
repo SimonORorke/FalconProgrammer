@@ -91,30 +91,33 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
 
   internal override async Task Open() {
     await base.Open();
-    YTarget = Settings.Mpe.YTarget;
-    ZTarget = Settings.Mpe.ZTarget;
-    XTarget = Settings.Mpe.XTarget;
-    GainMapDisplayName = GetGainMapDisplayName();
-    InitialiseZToMacroValue = Settings.Mpe.InitialiseZToMacroValue;
-    PitchBendRange = Settings.Mpe.PitchBendRange;
+    // Disable MPE support, as it's not ready for release and may never be.
+    // YTarget = Settings.Mpe.YTarget;
+    // ZTarget = Settings.Mpe.ZTarget;
+    // XTarget = Settings.Mpe.XTarget;
+    // GainMapDisplayName = GetGainMapDisplayName();
+    // InitialiseZToMacroValue = Settings.Mpe.InitialiseZToMacroValue;
+    // PitchBendRange = Settings.Mpe.PitchBendRange;
   }
 
   internal override async Task<bool> QueryClose(bool isClosingWindow = false) {
-    Settings.Mpe.YTarget = YTarget;
-    Settings.Mpe.ZTarget = ZTarget;
-    Settings.Mpe.XTarget = XTarget;
-    Settings.Mpe.GainMapValue = GetGainMapValue();
-    Settings.Mpe.InitialiseZToMacroValue = InitialiseZToMacroValue;
-    if (!GetErrors(nameof(PitchBendRange)).Any()) {
-      Settings.Mpe.PitchBendRange = PitchBendRange!.Value;
-    }
+    // Disable MPE support, as it's not ready for release and may never be.
+    // Settings.Mpe.YTarget = YTarget;
+    // Settings.Mpe.ZTarget = ZTarget;
+    // Settings.Mpe.XTarget = XTarget;
+    // Settings.Mpe.GainMapValue = GetGainMapValue();
+    // Settings.Mpe.InitialiseZToMacroValue = InitialiseZToMacroValue;
+    // if (!GetErrors(nameof(PitchBendRange)).Any()) {
+    //   Settings.Mpe.PitchBendRange = PitchBendRange!.Value;
+    // }
     return await base.QueryClose(isClosingWindow); // Saves settings if changed.
   }
 
-  private string GetGainMapDisplayName() {
-    int index = (int)Settings.Mpe.GainMapValue - 1;
-    return GainMapDisplayNames[index];
-  }
+  // Disable MPE support, as it's not ready for release and may never be.
+  // private string GetGainMapDisplayName() {
+  //   int index = (int)Settings.Mpe.GainMapValue - 1;
+  //   return GainMapDisplayNames[index];
+  // }
 
   private GainMap GetGainMapValue() {
     int index = GainMapDisplayNames.IndexOf(GainMapDisplayName);

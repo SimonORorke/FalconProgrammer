@@ -5,6 +5,7 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 [TestFixture]
+[Ignore("Disable MPE support, as it's not ready for release and may never be.")]
 public class MpeViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
@@ -32,13 +33,15 @@ public class MpeViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.PitchBendRange, Is.EqualTo(48));
     const ZTarget newZTarget = ZTarget.ContinuousMacro2Bipolar;
     const string newGainMapDisplayName = "Z Squared";
-    const GainMap newGainMap = GainMap.ZSquared;
+    // Disable MPE support, as it's not ready for release and may never be.
+    // const GainMap newGainMap = GainMap.ZSquared;
     ViewModel.ZTarget = newZTarget.ToString();
     ViewModel.GainMapDisplayName = newGainMapDisplayName;
     bool hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
-    Assert.That(ViewModel.Settings.Mpe.ZTargetValue, Is.EqualTo(newZTarget));
-    Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
+    // Disable MPE support, as it's not ready for release and may never be.
+    // Assert.That(ViewModel.Settings.Mpe.ZTargetValue, Is.EqualTo(newZTarget));
+    // Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
   }
 
   [Test]
@@ -65,7 +68,8 @@ public class MpeViewModelTests : ViewModelTestsBase {
     const ZTarget newZTarget = ZTarget.Gain;
     const XTarget newXTarget = XTarget.Pitch;
     const string newGainMapDisplayName = "20 dB";
-    const GainMap newGainMap = GainMap.TwentyDb;
+    // Disable MPE support, as it's not ready for release and may never be.
+    // const GainMap newGainMap = GainMap.TwentyDb;
     const int newPitchBendRange = 12;
     ViewModel.YTarget = newYTarget.ToString();
     ViewModel.InitialiseZToMacroValue = false;
@@ -75,11 +79,12 @@ public class MpeViewModelTests : ViewModelTestsBase {
     ViewModel.PitchBendRange = newPitchBendRange;
     bool hasClosed = await ViewModel.QueryClose();
     Assert.That(hasClosed, Is.True);
-    Assert.That(ViewModel.Settings.Mpe.YTargetValue, Is.EqualTo(newYTarget));
-    Assert.That(ViewModel.Settings.Mpe.ZTargetValue, Is.EqualTo(newZTarget));
-    Assert.That(ViewModel.Settings.Mpe.XTargetValue, Is.EqualTo(newXTarget));
-    Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
-    Assert.That(ViewModel.Settings.Mpe.InitialiseZToMacroValue, Is.False);
-    Assert.That(ViewModel.Settings.Mpe.PitchBendRange, Is.EqualTo(newPitchBendRange));
+    // Disable MPE support, as it's not ready for release and may never be.
+    // Assert.That(ViewModel.Settings.Mpe.YTargetValue, Is.EqualTo(newYTarget));
+    // Assert.That(ViewModel.Settings.Mpe.ZTargetValue, Is.EqualTo(newZTarget));
+    // Assert.That(ViewModel.Settings.Mpe.XTargetValue, Is.EqualTo(newXTarget));
+    // Assert.That(ViewModel.Settings.Mpe.GainMap, Is.EqualTo(newGainMap.ToString()));
+    // Assert.That(ViewModel.Settings.Mpe.InitialiseZToMacroValue, Is.False);
+    // Assert.That(ViewModel.Settings.Mpe.PitchBendRange, Is.EqualTo(newPitchBendRange));
   }
 }

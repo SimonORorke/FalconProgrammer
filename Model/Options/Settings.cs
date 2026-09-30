@@ -17,7 +17,8 @@ public class Settings : SerialisationBase {
   [XmlElement] public bool AutoCheckNewVersions { get; set; } = true;
   [XmlElement] public string IgnoreVersion { get; set; } = string.Empty;
 
-  [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings();
+  // Disable MPE support, as it's not ready for release and may never be.
+  // [XmlElement("MPE")] public MpeSettings Mpe { get; set; } = new MpeSettings();
 
   [XmlArray("MustUseGuiScriptProcessor")]
   [XmlArrayItem("SoundBankCategory")]

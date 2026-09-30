@@ -1307,10 +1307,11 @@ internal class FalconProgram {
         $"an MPE script processor.");
       return;
     }
-    var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
-    mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation(), Settings.Mpe);
-    ScriptProcessors.Add(mpeScriptProcessor);
-    NotifyUpdate($"{PathShort}: Added MPE support.");
+    // Disable MPE support, as it's not ready for release and may never be.
+    // var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
+    // mpeScriptProcessor.Configure(GetContinuousMacrosSortedByLocation(), Settings.Mpe);
+    // ScriptProcessors.Add(mpeScriptProcessor);
+    // NotifyUpdate($"{PathShort}: Added MPE support.");
   }
 
   private bool TryGetNonAdsrReleaseMacro(out Macro? releaseMacro) {

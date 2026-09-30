@@ -208,6 +208,7 @@ public class FalconProgramTests {
   }
 
   [Test]
+  [Ignore("Disable MPE support, as it's not ready for release and may never be.")]
   public void SupportMpe1ContinuousMacro() {
     const string soundBankName = "Falcon Factory rev2";
     const string categoryName = "Polysynth";
@@ -223,6 +224,7 @@ public class FalconProgramTests {
   }
 
   [Test]
+  [Ignore("Disable MPE support, as it's not ready for release and may never be.")]
   public void SupportMpe2ContinuousMacros() {
     const string soundBankName = "Falcon Factory rev2";
     const string categoryName = "Polysynth";
@@ -237,6 +239,7 @@ public class FalconProgramTests {
   }
 
   [Test]
+  [Ignore("Disable MPE support, as it's not ready for release and may never be.")]
   public void SupportMpe3ContinuousMacros() {
     const string soundBankName = "Falcon Factory rev2";
     const string categoryName = "Polysynth";
@@ -276,6 +279,7 @@ public class FalconProgramTests {
   }
 
   [Test]
+  [Ignore("Disable MPE support, as it's not ready for release and may never be.")]
   public void SupportMpeGuiScriptProcessorExists() {
     const string soundBankName = "Falcon Factory rev2";
     const string categoryName = "MPE";
@@ -287,6 +291,7 @@ public class FalconProgramTests {
   }
 
   [Test]
+  [Ignore("Disable MPE support, as it's not ready for release and may never be.")]
   public void SupportMpeNoContinuousMacros() {
     const string soundBankName = "Falcon Factory";
     const string categoryName = "Keys";
@@ -301,6 +306,7 @@ public class FalconProgramTests {
   }
 
   [Test]
+  [Ignore("Disable MPE support, as it's not ready for release and may never be.")]
   public void SupportMpeScriptProcessorAlreadyExists() {
     const string soundBankName = "Falcon Factory rev2";
     const string categoryName = "MPE";
