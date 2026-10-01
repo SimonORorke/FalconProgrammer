@@ -97,6 +97,12 @@ public static class HotKeyHelper {
     if (topLevel == null) {
       return;
     }
+    topLevel.AddHandler(InputElement.KeyDownEvent, OnTopLevelKeyDown, RoutingStrategies.Tunnel);
+    Registrations.AddOrUpdate(element, new RegistrationInfo {
+      TopLevel = topLevel,
+      KeyDownHandler = OnTopLevelKeyDown
+    });
+    return;
 
     void OnTopLevelKeyDown(object? sender, KeyEventArgs e) {
       if (!element.IsEffectivelyVisible || TopLevel.GetTopLevel(element) == null) {
@@ -115,12 +121,6 @@ public static class HotKeyHelper {
         e.Handled = true;
       }
     }
-
-    topLevel.AddHandler(InputElement.KeyDownEvent, OnTopLevelKeyDown, RoutingStrategies.Tunnel);
-    Registrations.AddOrUpdate(element, new RegistrationInfo {
-      TopLevel = topLevel,
-      KeyDownHandler = OnTopLevelKeyDown
-    });
   }
 
   private static void UnregisterKeyGesture(Control element) {

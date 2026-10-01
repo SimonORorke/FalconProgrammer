@@ -77,7 +77,7 @@ public abstract class MenuButtonBase : Button {
     if (menuItem.HotKey != null && menuItem.HotKey.Matches(e)) {
       return true;
     }
-
+    // Works whether or not the Alt key is pressed.
     if (menuItem.Header is AccessText accessText && !string.IsNullOrEmpty(accessText.Text)) {
       int index = accessText.Text.IndexOf('_');
       if (index >= 0 && index < accessText.Text.Length - 1) {
