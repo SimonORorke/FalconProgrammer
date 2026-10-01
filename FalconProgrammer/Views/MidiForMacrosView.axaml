@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.MidiForMacrosView"
              x:DataType="vm:MidiForMacrosViewModel">
@@ -10,6 +11,7 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
                     Height="35" Margin="10, 10, 0, 0">
             <Label Target="ReplacementTextBox"
+                   helpers:HotKeyHelper.HotKey="Alt+W"
                    Margin="0, 0, 5, 0">
                 <AccessText Text="Modulation _Wheel Replacement CC No." />
             </Label>
@@ -24,7 +26,8 @@
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
                     Height="35" Margin="10, 10, 0, 0">
-            <CheckBox IsChecked="{Binding AppendCcNoToMacroDisplayNames}">
+            <CheckBox IsChecked="{Binding AppendCcNoToMacroDisplayNames}"
+                      HotKey="Alt+A">
                 <AccessText Text="{Binding AppendCcNoCaption}"
                             FontSize="16" />
             </CheckBox>

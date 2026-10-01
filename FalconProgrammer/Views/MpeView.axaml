@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.MpeView"
              x:DataType="vm:MpeViewModel">
@@ -20,6 +21,7 @@
                    Margin="10,10,10,10" />
         <StackPanel Orientation="Horizontal">
             <Label Target="YTargetComboBox"
+                   helpers:HotKeyHelper.HotKey="Alt+Y"
                    Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
@@ -35,6 +37,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="ZTargetComboBox"
+                   helpers:HotKeyHelper.HotKey="Alt+Z"
                    Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
@@ -50,6 +53,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="GainMapComboBox"
+                   helpers:HotKeyHelper.HotKey="Alt+G"
                    Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
@@ -64,12 +68,14 @@
                        Margin="10,10,0,0" />
         </StackPanel>
         <CheckBox IsChecked="{Binding InitialiseZToMacroValue}"
+                  HotKey="Alt+I"
                   Margin="10,10,0,0">
             <AccessText Text="{Binding InitialiseZToMacroValueCaption}"
                         TextWrapping="Wrap" />
         </CheckBox>
         <StackPanel Orientation="Horizontal">
             <Label Target="XTargetComboBox"
+                   helpers:HotKeyHelper.HotKey="Alt+X"
                    Width="80"
                    Margin="10, 10, 0, 0">
                 <AccessText
@@ -85,6 +91,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Target="PitchBendRangeTextBox"
+                   helpers:HotKeyHelper.HotKey="Alt+P"
                    Margin="10, 10, 0, 0">
                 <AccessText
                     Text="_Pitch Bend Range" />

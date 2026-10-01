@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.SoundBankSpecificView"
              x:DataType="vm:SoundBankSpecificViewModel">
@@ -18,15 +19,18 @@
 
     <StackPanel>
         <CheckBox IsChecked="{Binding EtherFieldsStandardLayout}"
+                  HotKey="Alt+E"
                   Margin="10,10,0,0">
             <AccessText
                 Text="{Binding EtherFieldsStandardLayoutCaption}" />
         </CheckBox>
         <CheckBox IsChecked="{Binding FluidityMoveAttackMacroToEnd}"
+                  HotKey="Alt+F"
                   Margin="10,10,0,0">
             <AccessText Text="{Binding FluidityMoveAttackMacroToEndCaption}" />
         </CheckBox>
         <CheckBox IsChecked="{Binding SpectreStandardLayout}"
+                  HotKey="Alt+S"
                   Margin="10,10,0,0">
             <AccessText
                 Text="{Binding SpectreStandardLayoutCaption}" />
@@ -40,6 +44,7 @@
                            Margin="10,10,0,0" />
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsAttackSecondsTextBox"
+                           helpers:HotKeyHelper.HotKey="Alt+A"
                            Margin="10, 10, 0, 0">
                         <AccessText
                             Text="{Binding OrganicPadsAttackSecondsCaption}" />
@@ -50,6 +55,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsReleaseSecondsTextBox"
+                           helpers:HotKeyHelper.HotKey="Alt+R"
                            Margin="10, 10, 0, 0">
                         <AccessText
                             Text="{Binding OrganicPadsReleaseSecondsCaption}" />
@@ -60,6 +66,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsMaxAttackSecondsTextBox"
+                           helpers:HotKeyHelper.HotKey="Alt+X"
                            Margin="10, 10, 0, 0">
                         <AccessText
                             Text="{Binding OrganicPadsMaxAttackSecondsCaption}" />
@@ -70,6 +77,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsMaxDecaySecondsTextBox"
+                           helpers:HotKeyHelper.HotKey="Alt+D"
                            Margin="10, 10, 0, 0">
                         <AccessText
                             Text="{Binding OrganicPadsMaxDecaySecondsCaption}" />
@@ -80,6 +88,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Target="OrganicPadsMaxReleaseSecondsTextBox"
+                           helpers:HotKeyHelper.HotKey="Alt+I"
                            Margin="10, 10, 0, 0">
                         <AccessText
                             Text="{Binding OrganicPadsMaxReleaseSecondsCaption}" />

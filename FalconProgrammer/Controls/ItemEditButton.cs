@@ -38,21 +38,21 @@ public class ItemEditButton : MenuButtonBase {
     set => SetValue(CutCommandProperty, value);
   }
 
-  private MenuItem CutMenuItem { get; } = CreateMenuItem("C_ut");
+  private MenuItem CutMenuItem { get; } = CreateMenuItem("C_ut", "Alt+U");
 
   public ICommand? PasteBeforeCommand {
     get => GetValue(PasteBeforeCommandProperty);
     set => SetValue(PasteBeforeCommandProperty, value);
   }
 
-  private MenuItem PasteBeforeMenuItem { get; } = CreateMenuItem("_Paste Before");
+  private MenuItem PasteBeforeMenuItem { get; } = CreateMenuItem("_Paste Before", "Alt+P");
 
   public ICommand? RemoveCommand {
     get => GetValue(RemoveCommandProperty);
     set => SetValue(RemoveCommandProperty, value);
   }
 
-  private MenuItem RemoveMenuItem { get; } = CreateMenuItem("_Remove");
+  private MenuItem RemoveMenuItem { get; } = CreateMenuItem("_Remove", "Alt+R");
 
   protected override Dictionary<AvaloniaProperty, MenuItem> CreatePropertyMenuItems() {
     return new Dictionary<AvaloniaProperty, MenuItem> {

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ct="using:FalconProgrammer.Controls"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.GuiScriptProcessorView"
              x:DataType="vm:GuiScriptProcessorViewModel">
@@ -17,7 +18,8 @@
                    TextWrapping="Wrap"
                    Margin="10,10,10,10" />
         <Label DockPanel.Dock="Top"
-               Target="DataGrid">
+               Target="DataGrid"
+               helpers:HotKeyHelper.HotKey="Alt+S">
             <AccessText Text="_Sound Bank Categories"
                         Classes="dataGridLabel" />
         </Label>

@@ -20,6 +20,7 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Command="{Binding RunScriptCommand}"
                     x:Name="RunScriptButton"
+                    HotKey="Alt+R"
                     Classes="top"
                     Margin="10,0,0,0">
                 <Button.Content>
@@ -27,12 +28,14 @@
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveScriptCommand}"
+                    HotKey="Alt+S"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="_Save Script..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding EditScriptFileCommand}"
+                    HotKey="Alt+E"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="_Edit Script File" Classes="top" />
@@ -40,6 +43,7 @@
             </Button>
             <Button Command="{Binding LoadScriptCommand}"
                     x:Name="LoadScriptButton"
+                    HotKey="Alt+L"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="_Load Script..." Classes="top" />
@@ -47,6 +51,7 @@
             </Button>
             <Button Command="{Binding CopyLogCommand}"
                     x:Name="CopyLogButton"
+                    HotKey="Alt+P"
                     Classes="top"
                     Width="170">
                 <Button.Content>
@@ -55,6 +60,7 @@
             </Button>
             <Button Command="{Binding CancelRunCommand}"
                     x:Name="CancelRunButton"
+                    HotKey="Alt+C"
                     Classes="top"
                     IsEnabled="False">
                 <Button.Content>

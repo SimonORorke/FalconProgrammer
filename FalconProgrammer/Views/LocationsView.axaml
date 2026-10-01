@@ -27,7 +27,7 @@
         </Button>
         <Label Grid.Row="3" Grid.Column="1"
                Target="ProgramsFolderTextBox"
-               helpers:FocusHelper.HotKey="Alt+P">
+               helpers:HotKeyHelper.HotKey="Alt+P">
             <AccessText Text="_Programs Folder" />
         </Label>
         <TextBox Grid.Row="3" Grid.Column="3"
@@ -38,7 +38,7 @@
                 Command="{Binding BrowseForProgramsFolderCommand}" />
         <Label Grid.Row="5" Grid.Column="1"
                Target="OriginalProgramsFolderTextBox"
-               helpers:FocusHelper.HotKey="Alt+O">
+               helpers:HotKeyHelper.HotKey="Alt+O">
             <AccessText Text="_Original Programs Folder" />
         </Label>
         <TextBox Grid.Row="5" Grid.Column="3"
@@ -49,7 +49,7 @@
                 Command="{Binding BrowseForOriginalProgramsFolderCommand}" />
         <Label Grid.Row="7" Grid.Column="1"
                Target="TemplateProgramsFolderTextBox"
-               helpers:FocusHelper.HotKey="Alt+T">
+               helpers:HotKeyHelper.HotKey="Alt+T">
             <AccessText Text="_Template Programs Folder" />
         </Label>
         <TextBox Grid.Row="7" Grid.Column="3"

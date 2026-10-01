@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ct="clr-namespace:FalconProgrammer.Controls"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.TasksView"
              x:DataType="vm:TaskCollection">
@@ -14,6 +15,7 @@
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto">
         <Label Grid.Column="0" Grid.Row="0"
                Target="DataGrid"
+               helpers:HotKeyHelper.HotKey="Alt+T"
                Margin="0, 10, 0, 0">
             <AccessText Text="Configuration _Tasks"
                         Classes="dataGridLabel" />

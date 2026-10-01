@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ct="using:FalconProgrammer.Controls"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              xmlns:local="clr-namespace:FalconProgrammer"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BackgroundView"
@@ -29,7 +30,8 @@
                    TextWrapping="Wrap"
                    Margin="10,10,10,10" />
         <Label DockPanel.Dock="Top"
-               Target="DataGrid">
+               Target="DataGrid"
+               helpers:HotKeyHelper.HotKey="Alt+S">
             <AccessText Text="_Sound Banks"
                         Classes="dataGridLabel" />
         </Label>

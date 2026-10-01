@@ -31,6 +31,10 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
   public string AccessibleTitle =>
     $"_{RangeType} CC Number Ranges";
 
+  [ExcludeFromCodeCoverage]
+  public string HotKey =>
+    $"Alt+{RangeType[0]}";
+
   private string RangeType { get; }
   private List<IntegerRange> SettingsRanges { get; set; } = null!;
 

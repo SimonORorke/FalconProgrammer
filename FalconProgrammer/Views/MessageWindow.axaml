@@ -32,6 +32,7 @@
                     HorizontalAlignment="Center" />
             <Button Grid.Column="3"
                     x:Name="CopyButton"
+                    HotKey="Alt+C"
                     HorizontalAlignment="Center">
                 <Button.Content>
                     <AccessText Text="_Copy to Clipboard" />

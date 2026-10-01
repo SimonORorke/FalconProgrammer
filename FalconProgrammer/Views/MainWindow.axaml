@@ -14,6 +14,7 @@
             <Image DockPanel.Dock="Left" Source="/Assets/falcon_svg_repo_com.png" />
             <ct:MainMenuButton
                 DockPanel.Dock="Right"
+                HotKey="Alt+M"
                 AboutCommand="{Binding AboutCommand}"
                 ManualCommand="{Binding ManualCommand}"
                 SelectColourSchemeCommand="{Binding SelectColourSchemeCommand}"

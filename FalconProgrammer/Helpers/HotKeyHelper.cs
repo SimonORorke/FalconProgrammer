@@ -26,21 +26,30 @@ namespace FalconProgrammer.Helpers;
 ///   <para>
 ///     Label does not provide a HotKey property. So, for Label, this class provides an
 ///     attached HotKey property to focus the Label's targeted control. Example:
-///     helpers:FocusHelper.HotKey="Alt+P".
+///     helpers:HotKeyHelper.HotKey="Alt+P".
 ///   </para>
 ///   <para>
 ///     For either approach, AccessText is still required to underline the hotkey
 ///     character.
 ///   </para>
 /// </remarks>
-public static class FocusHelper {
-  public static readonly AttachedProperty<KeyGesture?> HotKeyProperty =
-    AvaloniaProperty.RegisterAttached<Control, KeyGesture?>(
+public static class HotKeyHelper {
+  public static readonly AttachedProperty<object?> HotKeyProperty =
+    AvaloniaProperty.RegisterAttached<Control, object?>(
       "HotKey",
-      typeof(FocusHelper));
+      typeof(HotKeyHelper));
 
-  public static KeyGesture? GetHotKey(Control element) => element.GetValue(HotKeyProperty);
-  public static void SetHotKey(Control element, KeyGesture? value) => element.SetValue(HotKeyProperty, value);
+  public static object? GetHotKey(Control element) => element.GetValue(HotKeyProperty);
+  public static void SetHotKey(Control element, object? value) => element.SetValue(HotKeyProperty, value);
+
+  private static KeyGesture? GetKeyGesture(Control element) {
+    var value = GetHotKey(element);
+    return value switch {
+      KeyGesture gesture => gesture,
+      string s when !string.IsNullOrWhiteSpace(s) => KeyGesture.Parse(s),
+      _ => null
+    };
+  }
 
   private sealed class RegistrationInfo {
     public TopLevel? TopLevel { get; init; }
@@ -49,33 +58,33 @@ public static class FocusHelper {
 
   private static readonly ConditionalWeakTable<Control, RegistrationInfo> Registrations = new();
 
-  static FocusHelper() {
+  static HotKeyHelper() {
     HotKeyProperty.Changed.AddClassHandler<Control>(OnHotKeyChanged);
   }
 
   private static void OnHotKeyChanged(Control element, AvaloniaPropertyChangedEventArgs args) {
     if (args.OldValue is not null) {
-      element.Loaded -= OnElementLoaded;
-      element.Unloaded -= OnElementUnloaded;
+      element.AttachedToVisualTree -= OnElementAttachedToVisualTree;
+      element.DetachedFromVisualTree -= OnElementDetachedFromVisualTree;
       UnregisterKeyGesture(element);
     }
 
     if (args.NewValue is not null) {
-      element.Loaded += OnElementLoaded;
-      element.Unloaded += OnElementUnloaded;
-      if (element.IsLoaded) {
+      element.AttachedToVisualTree += OnElementAttachedToVisualTree;
+      element.DetachedFromVisualTree += OnElementDetachedFromVisualTree;
+      if (TopLevel.GetTopLevel(element) is not null) {
         RegisterKeyGesture(element);
       }
     }
   }
 
-  private static void OnElementLoaded(object? sender, RoutedEventArgs e) {
+  private static void OnElementAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
     if (sender is Control control) {
       RegisterKeyGesture(control);
     }
   }
 
-  private static void OnElementUnloaded(object? sender, RoutedEventArgs e) {
+  private static void OnElementDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
     if (sender is Control control) {
       UnregisterKeyGesture(control);
     }
@@ -90,10 +99,16 @@ public static class FocusHelper {
     }
 
     void OnTopLevelKeyDown(object? sender, KeyEventArgs e) {
-      var gesture = GetHotKey(element);
+      if (!element.IsEffectivelyVisible || TopLevel.GetTopLevel(element) == null) {
+        return;
+      }
+
+      var gesture = GetKeyGesture(element);
       if (gesture != null && gesture.Matches(e)) {
         if (element is Label label && label.Target != null) {
           label.Target.Focus();
+        } else if (element is Button button && button.Command != null && button.Command.CanExecute(button.CommandParameter)) {
+          button.Command.Execute(button.CommandParameter);
         } else {
           element.Focus();
         }
@@ -101,7 +116,7 @@ public static class FocusHelper {
       }
     }
 
-    topLevel.KeyDown += OnTopLevelKeyDown;
+    topLevel.AddHandler(InputElement.KeyDownEvent, OnTopLevelKeyDown, RoutingStrategies.Tunnel);
     Registrations.AddOrUpdate(element, new RegistrationInfo {
       TopLevel = topLevel,
       KeyDownHandler = OnTopLevelKeyDown
@@ -111,7 +126,7 @@ public static class FocusHelper {
   private static void UnregisterKeyGesture(Control element) {
     if (Registrations.TryGetValue(element, out var info)) {
       if (info.TopLevel != null && info.KeyDownHandler != null) {
-        info.TopLevel.KeyDown -= info.KeyDownHandler;
+        info.TopLevel.RemoveHandler(InputElement.KeyDownEvent, info.KeyDownHandler);
       }
       Registrations.Remove(element);
     }

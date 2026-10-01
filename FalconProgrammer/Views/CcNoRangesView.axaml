@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ct="clr-namespace:FalconProgrammer.Controls"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.CcNoRangesView"
              x:DataType="vm:CcNoRangeCollection">
@@ -26,7 +27,8 @@
     works. So does putting the DataGrid in a filler (*) row of a Grid.  -->
     <DockPanel>
         <Label DockPanel.Dock="Top"
-               Target="DataGrid">
+               Target="DataGrid"
+               helpers:HotKeyHelper.HotKey="{Binding HotKey}">
             <AccessText Text="{Binding AccessibleTitle}"
                         Classes="dataGridLabel"
                         FontSize="16" />

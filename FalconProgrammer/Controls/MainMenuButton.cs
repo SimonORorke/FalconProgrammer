@@ -35,7 +35,7 @@ public class MainMenuButton : MenuButtonBase {
     set => SetValue(AboutCommandProperty, value);
   }
 
-  private MenuItem AboutMenuItem { get; } = CreateMenuItem("_About");
+  private MenuItem AboutMenuItem { get; } = CreateMenuItem("_About", "Alt+A");
 
   public ICommand? SelectColourSchemeCommand {
     get => GetValue(SelectColourSchemeCommandProperty);
@@ -43,7 +43,7 @@ public class MainMenuButton : MenuButtonBase {
   }
 
   private MenuItem SelectColourSchemeMenuItem { get; } =
-    CreateMenuItem("_Color Scheme...");
+    CreateMenuItem("_Color Scheme...", "Alt+C");
 
   public ICommand? CheckForUpdatesCommand {
     get => GetValue(CheckForUpdatesCommandProperty);
@@ -51,14 +51,14 @@ public class MainMenuButton : MenuButtonBase {
   }
 
   private MenuItem CheckForUpdatesMenuItem { get; } =
-    CreateMenuItem("Check for _Updates...");
+    CreateMenuItem("Check for _Updates...", "Alt+U");
 
   public ICommand? ManualCommand {
     get => GetValue(ManualCommandProperty);
     set => SetValue(ManualCommandProperty, value);
   }
 
-  private MenuItem ManualMenuItem { get; } = CreateMenuItem("_Manual");
+  private MenuItem ManualMenuItem { get; } = CreateMenuItem("_Manual", "Alt+M");
 
   protected override Dictionary<AvaloniaProperty, MenuItem> CreatePropertyMenuItems() {
     return new Dictionary<AvaloniaProperty, MenuItem> {
