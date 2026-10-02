@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ct="using:FalconProgrammer.Controls"
         xmlns:vm="using:FalconProgrammer.ViewModel"
+        xmlns:helpers="using:FalconProgrammer.Helpers"
         mc:Ignorable="d" d:DesignWidth="1130" d:DesignHeight="450"
         x:Class="FalconProgrammer.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -14,7 +15,7 @@
             <Image DockPanel.Dock="Left" Source="/Assets/falcon_svg_repo_com.png" />
             <ct:MainMenuButton
                 DockPanel.Dock="Right"
-                HotKey="Alt+M"
+                helpers:HotKeyHelper.HotKey="Alt+M"
                 AboutCommand="{Binding AboutCommand}"
                 ManualCommand="{Binding ManualCommand}"
                 SelectColourSchemeCommand="{Binding SelectColourSchemeCommand}"

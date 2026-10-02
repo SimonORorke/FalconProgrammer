@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FalconProgrammer.ViewModel"
+             xmlns:helpers="using:FalconProgrammer.Helpers"
              mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="450"
              x:Class="FalconProgrammer.Views.BatchView"
              x:DataType="vm:BatchViewModel">
@@ -20,7 +21,7 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Button Command="{Binding RunScriptCommand}"
                     x:Name="RunScriptButton"
-                    HotKey="Alt+R"
+                    helpers:HotKeyHelper.HotKey="Alt+R"
                     Classes="top"
                     Margin="10,0,0,0">
                 <Button.Content>
@@ -28,14 +29,14 @@
                 </Button.Content>
             </Button>
             <Button Command="{Binding SaveScriptCommand}"
-                    HotKey="Alt+S"
+                    helpers:HotKeyHelper.HotKey="Alt+S"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="_Save Script..." Classes="top" />
                 </Button.Content>
             </Button>
             <Button Command="{Binding EditScriptFileCommand}"
-                    HotKey="Alt+E"
+                    helpers:HotKeyHelper.HotKey="Alt+E"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="_Edit Script File" Classes="top" />
@@ -43,7 +44,7 @@
             </Button>
             <Button Command="{Binding LoadScriptCommand}"
                     x:Name="LoadScriptButton"
-                    HotKey="Alt+L"
+                    helpers:HotKeyHelper.HotKey="Alt+L"
                     Classes="top">
                 <Button.Content>
                     <AccessText Text="_Load Script..." Classes="top" />
@@ -51,7 +52,7 @@
             </Button>
             <Button Command="{Binding CopyLogCommand}"
                     x:Name="CopyLogButton"
-                    HotKey="Alt+P"
+                    helpers:HotKeyHelper.HotKey="Alt+P"
                     Classes="top"
                     Width="170">
                 <Button.Content>
@@ -60,7 +61,7 @@
             </Button>
             <Button Command="{Binding CancelRunCommand}"
                     x:Name="CancelRunButton"
-                    HotKey="Alt+C"
+                    helpers:HotKeyHelper.HotKey="Alt+C"
                     Classes="top"
                     IsEnabled="False">
                 <Button.Content>

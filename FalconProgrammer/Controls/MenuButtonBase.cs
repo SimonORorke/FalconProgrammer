@@ -73,13 +73,19 @@ public abstract class MenuButtonBase : Button {
     if (menuItem.HotKey != null && menuItem.HotKey.Matches(e)) {
       return true;
     }
-    // Works whether or not the Alt key is pressed.
+    // Works whether or not the Alt/Cmd key is pressed.
     if (menuItem.Header is AccessText accessText &&
         !string.IsNullOrEmpty(accessText.Text)) {
       int index = accessText.Text.IndexOf('_');
       if (index >= 0 && index < accessText.Text.Length - 1) {
         char accessChar = char.ToUpperInvariant(accessText.Text[index + 1]);
+#if OS_WINDOWS
         if (e.KeyModifiers is KeyModifiers.None or KeyModifiers.Alt) {
+#elif OS_MAC
+        if (e.KeyModifiers is KeyModifiers.None or KeyModifiers.Meta) {
+#else
+        if (e.KeyModifiers is KeyModifiers.None or KeyModifiers.Alt) {
+#endif
           if (string.Equals(e.Key.ToString(), accessChar.ToString(),
                 StringComparison.OrdinalIgnoreCase)) {
             return true;
@@ -97,6 +103,9 @@ public abstract class MenuButtonBase : Button {
       }
     };
     if (hotKey != null) {
+#if OS_MAC
+      hotKey = hotKey.Replace("Alt+", "Cmd+");
+#endif
       menuItem.HotKey = KeyGesture.Parse(hotKey);
     }
     return menuItem;

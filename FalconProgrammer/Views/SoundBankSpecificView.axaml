@@ -19,18 +19,18 @@
 
     <StackPanel>
         <CheckBox IsChecked="{Binding EtherFieldsStandardLayout}"
-                  HotKey="Alt+E"
+                  helpers:HotKeyHelper.HotKey="Alt+E"
                   Margin="10,10,0,0">
             <AccessText
                 Text="{Binding EtherFieldsStandardLayoutCaption}" />
         </CheckBox>
         <CheckBox IsChecked="{Binding FluidityMoveAttackMacroToEnd}"
-                  HotKey="Alt+F"
+                  helpers:HotKeyHelper.HotKey="Alt+F"
                   Margin="10,10,0,0">
             <AccessText Text="{Binding FluidityMoveAttackMacroToEndCaption}" />
         </CheckBox>
         <CheckBox IsChecked="{Binding SpectreStandardLayout}"
-                  HotKey="Alt+S"
+                  helpers:HotKeyHelper.HotKey="Alt+S"
                   Margin="10,10,0,0">
             <AccessText
                 Text="{Binding SpectreStandardLayoutCaption}" />

@@ -68,7 +68,7 @@
                        Margin="10,10,0,0" />
         </StackPanel>
         <CheckBox IsChecked="{Binding InitialiseZToMacroValue}"
-                  HotKey="Alt+I"
+                  helpers:HotKeyHelper.HotKey="Alt+I"
                   Margin="10,10,0,0">
             <AccessText Text="{Binding InitialiseZToMacroValueCaption}"
                         TextWrapping="Wrap" />

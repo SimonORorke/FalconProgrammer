@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
@@ -12,25 +13,15 @@ namespace FalconProgrammer.Helpers;
 ///   keyboard shortcuts (hotkeys).
 /// </summary>
 /// <remarks>
-///   In Windows, AccessText provides this functionality. Alt + the character underlined
+///   On Windows, AccessText provides this functionality. Alt + the character underlined
 ///   by AccessText will focus the control or, in the case of a Label, its targeted
-///   control. In macOS, AccessText underlines the character, but it does not implement
-///   the Option + underlined character hotkey. To implement hotkeys in a way that works
-///   in both macOS and Windows, the required approach depends on the type of control
-///   being focused/activated.
+///   control. On macOS, AccessText underlines the character, but it does not implement
+///   the Option + underlined letter hotkey. To implement hotkeys in a way that works
+///   on both macOS and Windows, this class provides an attached HotKey property.
+///   Example: helpers:HotKeyHelper.HotKey="Alt+P".
 ///   <para>
-///     For a hotkey to activate a Button, CheckBox or MenuItem, add a HotKey property.
-///     Example: HotKey="Alt+B". On macOS, the Option key will be equivalent to the
-///     Alt key.
-///   </para>
-///   <para>
-///     Label does not provide a HotKey property. So, for Label, this class provides an
-///     attached HotKey property to focus the Label's targeted control. Example:
-///     helpers:HotKeyHelper.HotKey="Alt+P".
-///   </para>
-///   <para>
-///     For either approach, AccessText is still required to underline the hotkey
-///     character.
+///     On macOS, the Cmd key will be the equivalent of the Alt key, as Option+letter is
+///     seldom used for keyboard shortcuts.
 ///   </para>
 /// </remarks>
 public static class HotKeyHelper {
@@ -51,16 +42,29 @@ public static class HotKeyHelper {
   }
 
   public static void SetHotKey(Control element, object? value) {
+#if OS_WINDOWS
     element.SetValue(HotKeyProperty, value);
+#elif OS_MAC
+    element.SetValue(HotKeyProperty, value?.ToString()?.Replace("Alt+", "Cmd+"));
+#else
+    element.SetValue(HotKeyProperty, value);
+#endif
   }
 
   private static KeyGesture? GetKeyGesture(Control element) {
     object? value = GetHotKey(element);
-    return value switch {
-      KeyGesture gesture => gesture,
-      string s when !string.IsNullOrWhiteSpace(s) => KeyGesture.Parse(s),
+    string? gestureStr = value switch {
+      KeyGesture gesture => gesture.ToString(),
+      string s when !string.IsNullOrWhiteSpace(s) => s,
       _ => null
     };
+    if (gestureStr == null) {
+      return null;
+    }
+#if OS_MAC
+    gestureStr = gestureStr.Replace("Alt+", "Cmd+");
+#endif
+    return KeyGesture.Parse(gestureStr);
   }
 
   private static void OnHotKeyChanged(Control element,
@@ -113,10 +117,27 @@ public static class HotKeyHelper {
       }
       var gesture = GetKeyGesture(element);
       if (gesture != null && gesture.Matches(e)) {
-        if (element is Label label && label.Target != null) {
+        if (element is Label { Target: not null } label) {
           label.Target.Focus();
         }
-        else if (element is Button button && button.Command != null &&
+        else if (element is ToggleButton toggleButton) {
+          // Make the hotkey toggle CheckBoxes.
+          if (toggleButton.IsThreeState) {
+            toggleButton.IsChecked = toggleButton.IsChecked switch {
+              false => true,
+              true => null,
+              null => false
+            };
+          }
+          else {
+            toggleButton.IsChecked = !toggleButton.IsChecked;
+          }
+          if (toggleButton.Command != null &&
+              toggleButton.Command.CanExecute(toggleButton.CommandParameter)) {
+            toggleButton.Command.Execute(toggleButton.CommandParameter);
+          }
+        }
+        else if (element is Button { Command: not null } button &&
                  button.Command.CanExecute(button.CommandParameter)) {
           button.Command.Execute(button.CommandParameter);
         }
@@ -130,7 +151,7 @@ public static class HotKeyHelper {
 
   private static void UnregisterKeyGesture(Control element) {
     if (Registrations.TryGetValue(element, out var info)) {
-      if (info.TopLevel != null && info.KeyDownHandler != null) {
+      if (info is { TopLevel: not null, KeyDownHandler: not null }) {
         info.TopLevel.RemoveHandler(InputElement.KeyDownEvent, info.KeyDownHandler);
       }
       Registrations.Remove(element);
