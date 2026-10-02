@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+    <!-- The unrealistic top folder has been chosen 
+    for tests that are expected to access a mock file system. 
+    A test will throw an exception if it attempts to write to the real file system, 
+    provided it is run on a computer that does not have that top folder. -->
+    <ProgramsFolder Path="/J/FalconProgrammer/Programs"/>
+    <OriginalProgramsFolder Path="/J/FalconProgrammer/Original Programs"/>
+    <TemplateProgramsFolder Path="/J/FalconProgrammer/Template Programs"/>
+    <MustUseGuiScriptProcessor>
+        <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Organic Keys" Category=""/>
+        <SoundBankCategory SoundBank="Pulsar" Category=""/>
+        <SoundBankCategory SoundBank="Voklm" Category=""/>
+    </MustUseGuiScriptProcessor>
+    <Backgrounds>
+        <Background SoundBank="Eternal Funk" Path="/J/FalconProgrammer/Background Images/Yellowish Mid-Green.png"/>
+        <Background SoundBank="Fluidity" Path="/J/FalconProgrammer/Background Images/Midnight Blue.png"/>
+    </Backgrounds>
+</Settings>

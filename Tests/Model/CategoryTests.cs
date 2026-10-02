@@ -8,7 +8,11 @@ public class CategoryTests {
   [SetUp]
   public void Setup() {
     var reader = new TestSettingsReaderEmbedded {
+#if OS_WINDOWS
       EmbeddedFileName = "BatchSettings.xml"
+#elif OS_MAC
+      EmbeddedFileName = "BatchSettingsMac.xml"
+#endif
     };
     Settings = reader.Read();
   }

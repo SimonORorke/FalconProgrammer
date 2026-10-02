@@ -32,6 +32,7 @@ internal class TestCategory : Category {
 
   internal void ConfigureMockFileSystemService(
     string templateSubfolderPath, string templateProgramFileName) {
+    templateSubfolderPath = templateSubfolderPath.Replace('\\', System.IO.Path.DirectorySeparatorChar);
     string templateFolderPath = System.IO.Path.Combine(
       Settings.TemplateProgramsFolder.Path,
       templateSubfolderPath);

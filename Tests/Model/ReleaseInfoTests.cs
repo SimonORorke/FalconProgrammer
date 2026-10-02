@@ -116,7 +116,7 @@ public class ReleaseInfoTests {
       GitHubReleaseJsonContext.Default.ListGitHubReleaseDto);
     Assert.That(releases, Is.Not.Null);
     using (Assert.EnterMultipleScope()) {
-      Assert.That(releases!.Count, Is.EqualTo(1));
+      Assert.That(releases!, Has.Count.EqualTo(1));
       Assert.That(releases[0].TagName, Is.EqualTo("v1.5.0"));
       Assert.That(releases[0].Assets?.Count, Is.EqualTo(1));
       Assert.That(releases[0].Assets![0].Name,
@@ -125,6 +125,9 @@ public class ReleaseInfoTests {
   }
 
   [Test]
+#if OS_MAC  
+  [Ignore("macOS release not available yet")]
+#endif
   public async Task GetLatestVersionForPlatformAsync_LiveGitHub() {
     var releaseInfo = new ReleaseInfo();
     string? latestVersion = await releaseInfo.GetLatestVersionForPlatformAsync();

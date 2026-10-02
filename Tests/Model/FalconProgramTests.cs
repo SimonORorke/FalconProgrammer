@@ -20,7 +20,11 @@ public class FalconProgramTests {
   public void Setup() {
     Batch = new TestBatch {
       TestSettingsReaderEmbedded = {
-        EmbeddedFileName = "BatchSettings.xml"
+#if OS_WINDOWS
+      EmbeddedFileName = "BatchSettings.xml"
+#elif OS_MAC
+        EmbeddedFileName = "BatchSettingsMac.xml"
+#endif
       }
     };
   }
@@ -122,8 +126,13 @@ public class FalconProgramTests {
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("ReleaseTime=\"0.3\""));
     using (Assert.EnterMultipleScope()) {
       Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
+#if OS_WINDOWS
       Assert.That(Batch.TestProgram.LastWrittenFilePath, Is.EqualTo(
         @"J:\FalconProgrammer\Scripts\DahdsrController\DahdsrController.lua"));
+#elif OS_MAC
+      Assert.That(Batch.TestProgram.LastWrittenFilePath, Is.EqualTo(
+        @"/J/FalconProgrammer/Scripts/DahdsrController/DahdsrController.lua"));
+#endif
       Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
         "MaxAttackSeconds = 1"));
     }

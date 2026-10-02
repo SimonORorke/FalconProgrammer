@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+    <!-- The unrealistic top folder has been chosen 
+    for tests that are expected to access a mock file system. 
+    A test will throw an exception if it attempts to write to the real file system, 
+    provided it is run on a computer that does not have that top folder. -->
+    <ProgramsFolder Path="/J/FalconProgrammer/Programs"/>
+    <OriginalProgramsFolder Path="/J/FalconProgrammer/Original Programs"/>
+    <TemplateProgramsFolder Path="/J/FalconProgrammer/Template Programs"/>
+    <ColourScheme>Forest</ColourScheme>
+    <WindowLocation Left="248" Top="159" Width="1137" Height="626" WindowState="2"/>
+    <MPE YTarget="ContinuousMacro1Bipolar" ZTarget="ContinuousMacro2Unipolar"
+         XTarget="ContinuousMacro3Bipolar" GainMap="Linear"
+         InitialiseZToMacroValue="true" PitchBendRange="24"/>
+    <MustUseGuiScriptProcessor>
+        <SoundBankCategory SoundBank="Falcon Factory" Category="Organic Texture 2.8"/>
+        <SoundBankCategory SoundBank="Organic Keys" Category=""/>
+        <SoundBankCategory SoundBank="Pulsar" Category=""/>
+    </MustUseGuiScriptProcessor>
+    <MidiForMacros ModWheelReplacementCcNo="34">
+        <ContinuousCcNoRanges>
+            <ContinuousCcNoRange>
+                <Start>31</Start>
+                <End>34</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>11</Start>
+                <End>11</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>36</Start>
+                <End>37</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>28</Start>
+                <End>28</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>41</Start>
+                <End>48</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>51</Start>
+                <End>58</End>
+            </ContinuousCcNoRange>
+            <ContinuousCcNoRange>
+                <Start>61</Start>
+                <End>61</End>
+            </ContinuousCcNoRange>
+        </ContinuousCcNoRanges>
+        <ToggleCcNoRanges>
+            <ToggleCcNoRange>
+                <Start>112</Start>
+                <End>112</End>
+            </ToggleCcNoRange>
+        </ToggleCcNoRanges>
+        <DoNotReplaceModWheelWithMacroSoundBanks>
+            <SoundBankName>Ether Fields</SoundBankName>
+        </DoNotReplaceModWheelWithMacroSoundBanks>
+    </MidiForMacros>
+    <Backgrounds>
+        <Background SoundBank="Eternal Funk" Path="/J/FalconProgrammer/Images/Yellowish Mid-Green.png"/>
+        <Background SoundBank="Fluidity" Path="/J/FalconProgrammer/Images/Midnight Blue.png"/>
+        <Background SoundBank="Hypnotic Drive" Path="/J/FalconProgrammer/Images/Dark Goldenrod.png"/>
+        <Background SoundBank="Inner Dimensions" Path="/J/FalconProgrammer/Images/Dark Red.png"/>
+        <Background SoundBank="Modular Noise" Path="/J/FalconProgrammer/Images/Dark Forest.png"/>
+        <Background SoundBank="Organic Pads" Path="/J/FalconProgrammer/Images/Bluish Teal.png"/>
+        <Background SoundBank="Savage" Path="/J/FalconProgrammer/Images/Heath.png"/>
+        <Background SoundBank="Titanium" Path="/J/FalconProgrammer/Images/Dull Purple.png"/>
+    </Backgrounds>
+    <DoNotZeroReverb>
+        <ProgramPath SoundBank="Falcon Factory" Category="Bass-Sub" Program="Coastal Halftones 1.4"/>
+        <ProgramPath SoundBank="Falcon Factory" Category="Bass-Sub" Program="Metropolis 1.4"/>
+        <ProgramPath SoundBank="Falcon Factory" Category="Leads" Program="Ali3n 1.4"/>
+        <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Arrival 1.4"/>
+        <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Novachord Noir 1.4"/>
+        <ProgramPath SoundBank="Falcon Factory" Category="Pads" Program="Pad Motion 1.5"/>
+        <ProgramPath SoundBank="Falcon Factory" Category="Synth Brass" Program="Gotham Brass 1.4"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Bass" Program="Coastal Halftones"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Bass" Program="Metropolis"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Brass" Program="Gotham Brass"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Lead" Program="Ali3n"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Arrival"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Novachord Noir"/>
+        <ProgramPath SoundBank="Falcon Factory rev2" Category="Pad" Program="Pad Motion"/>
+        <ProgramPath SoundBank="Inner Dimensions" Category="Pad" Program="GrainVoices 2"/>
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Lunar Nashi"/>
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Pad Chord Ram"/>
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Voc Sidechain"/>
+        <ProgramPath SoundBank="Savage" Category="Pads-Drones" Program="Wonder Land"/>
+        <ProgramPath SoundBank="Spectre" Category="Leads" Program="LD Showteker"/>
+    </DoNotZeroReverb>
+    <SoundBankSpecific>
+        <EtherFields StandardLayout="true"/>
+        <Fluidity MoveAttackMacroToEnd="true"/>
+        <OrganicPads AttackSeconds="0.02" ReleaseSeconds="0.3"
+                     MaxAttackSeconds="1" MaxDecaySeconds="15" MaxReleaseSeconds="2"/>
+        <Spectre StandardLayout="true"/>
+    </SoundBankSpecific>
+    <Batch>
+        <Scope>
+            <SoundBank>All</SoundBank>
+            <Category>All</Category>
+            <Program>All</Program>
+        </Scope>
+        <Tasks>
+            <Task>InitialiseLayout</Task>
+            <Task>AssignMacroCcs</Task>
+        </Tasks>
+    </Batch>
+</Settings>

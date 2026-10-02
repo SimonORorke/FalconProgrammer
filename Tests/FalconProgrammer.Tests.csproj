@@ -31,6 +31,14 @@
         <Company>Simon O'Rorke</Company>
     </PropertyGroup>
 
+    <!-- Constants for operating system preproccesor directives -->
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <DefineConstants>OS_WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <DefineConstants>OS_MAC</DefineConstants>
+    </PropertyGroup>
+    
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1"/>
         <PackageReference Include="NUnit" Version="4.6.1"/>
@@ -120,6 +128,12 @@
         <EmbeddedResource Include="Model\Xml\Programs\Falcon Factory rev2\MPE\Wave Guide.xml"/>
         <None Remove="Model\Xml\OriginalPrograms\Modular Noise\Chords\Buffers (F).xml"/>
         <EmbeddedResource Include="Model\Xml\OriginalPrograms\Modular Noise\Chords\Buffers (F).xml"/>
+        <None Remove="Model\Xml\Settings\BatchSettingsMac.xml" />
+        <EmbeddedResource Include="Model\Xml\Settings\BatchSettingsMac.xml" />
+        <None Remove="Model\Xml\SettingsFolderLocations\SettingsFolderLocationMac.xml" />
+        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationMac.xml" />
+        <None Remove="Model\Xml\SettingsFolderLocations\SettingsFolderLocationKMac.xml" />
+        <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationKMac.xml" />
     </ItemGroup>
 
     <ItemGroup>

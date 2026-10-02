@@ -35,7 +35,11 @@ public class TestSettingsReaderEmbedded : SettingsReader {
   protected override SettingsFolderLocationReader CreateSettingsFolderLocationReader() {
     return new TestSettingsFolderLocationReader {
       FileSystemService = MockFileSystemService,
+#if OS_WINDOWS
       EmbeddedFileName = "SettingsFolderLocation.xml"
+#elif OS_MAC
+      EmbeddedFileName = "SettingsFolderLocationMac.xml"
+#endif
     };
   }
 

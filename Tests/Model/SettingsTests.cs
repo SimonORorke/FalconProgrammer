@@ -235,13 +235,20 @@ public class SettingsTests {
 
   [Test]
   public void WriteToNewSettingsFolder() {
+#if OS_WINDOWS
+    const string oldSettingsPath = @"K:\Libraries\Settings.xml";
+    const string newSettingsFolderPath = @"K:\Markup";
+    const string newSettingsPath = @"K:\Markup\Settings.xml";
+#elif OS_MAC
+    const string oldSettingsPath = @"~/Libraries/Settings.xml";
+    const string newSettingsFolderPath = @"~/Markup";
+    const string newSettingsPath = @"~/Markup/Settings.xml";
+#endif
     var mockSerializer = new MockSerialiser();
     var settings = new Settings {
       Serialiser = mockSerializer,
-      SettingsPath = @"K:\Libraries\Settings.xml"
+      SettingsPath = oldSettingsPath
     };
-    const string newSettingsFolderPath = @"K:\Markup";
-    const string newSettingsPath = @"K:\Markup\Settings.xml";
     settings.Write(newSettingsFolderPath);
     using (Assert.EnterMultipleScope()) {
       Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
