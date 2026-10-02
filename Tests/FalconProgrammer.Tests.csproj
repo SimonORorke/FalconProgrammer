@@ -35,7 +35,7 @@
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
         <DefineConstants>OS_WINDOWS</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('MacOS'))">
         <DefineConstants>OS_MAC</DefineConstants>
     </PropertyGroup>
     
@@ -134,6 +134,8 @@
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationMac.xml" />
         <None Remove="Model\Xml\SettingsFolderLocations\SettingsFolderLocationKMac.xml" />
         <EmbeddedResource Include="Model\Xml\SettingsFolderLocations\SettingsFolderLocationKMac.xml" />
+        <None Remove="Model\Xml\Settings\LocationsSettingsMac.xml" />
+        <EmbeddedResource Include="Model\Xml\Settings\LocationsSettingsMac.xml" />
     </ItemGroup>
 
     <ItemGroup>

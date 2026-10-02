@@ -13,7 +13,11 @@ public abstract class ViewModelTestsBase {
     MockFileSystemService = new MockFileSystemService();
     MockMessageRecipient = new MockMessageRecipient();
     MockSettingsFolderLocationReader = new MockSettingsFolderLocationReader {
+#if OS_WINDOWS
       EmbeddedFileName = "SettingsFolderLocation.xml"
+#elif OS_MAC
+      EmbeddedFileName = "SettingsFolderLocationMac.xml"
+#endif
     };
     MockSettingsReaderEmbedded = new MockSettingsReaderEmbedded {
       MockSettingsFolderLocationReader = MockSettingsFolderLocationReader,
@@ -34,7 +38,7 @@ public abstract class ViewModelTestsBase {
   protected MockDispatcherService MockDispatcherService { get; private set; } = null!;
   protected MockFileSystemService MockFileSystemService { get; private set; } = null!;
   protected MockMessageRecipient MockMessageRecipient { get; private set; } = null!;
-  protected MockReleaseInfo MockReleaseInfo { get; private set; } = null!;
+  private MockReleaseInfo MockReleaseInfo { get; set; } = null!;
   protected MockVersionChecker MockVersionChecker { get; private set; } = null!;
 
   protected MockSettingsFolderLocationReader MockSettingsFolderLocationReader {

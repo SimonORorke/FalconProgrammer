@@ -59,7 +59,7 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     ViewModel.ConfigureMockFileSystemService(Settings);
     await ViewModel.Open(); // Reads settings to populate the page.
     using (Assert.EnterMultipleScope()) {
-      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.Zero);
       Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
     }
     using (Assert.EnterMultipleScope()) {

@@ -259,7 +259,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     using (Assert.EnterMultipleScope()) {
       Assert.That(MockDialogService.LastNewVersionWindowViewModel!.LatestVersion,
         Is.EqualTo("1.3.0"));
-      Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(0));
+      Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.Zero);
     }
   }
 
@@ -268,7 +268,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockVersionChecker.SimulatedNewVersion = null;
     await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
     using (Assert.EnterMultipleScope()) {
-      Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
+      Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.Zero);
       Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(1));
       Assert.That(MockDialogService.LastInfoMessage,
         Is.EqualTo("You are already running the latest version."));
@@ -308,7 +308,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockSettingsReaderEmbedded.SimulatedSettings = Settings;
     MockVersionChecker.SimulatedNewVersion = "1.3.0";
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
+    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.Zero);
   }
 
   [Test]

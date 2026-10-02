@@ -201,7 +201,7 @@ public class BatchViewModelTests : ViewModelTestsBase {
   public async Task ValidSettingsOnOpen() {
     ViewModel.ConfigureValidMockFileSystemService(Settings);
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
+    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.Zero);
   }
 
   private async Task ConfigureScript() {

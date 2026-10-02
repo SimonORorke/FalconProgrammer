@@ -11,7 +11,11 @@ public class SettingsFolderLocationReaderTests {
     };
     var reader = new TestSettingsFolderLocationReader {
       FileSystemService = mockFileSystemService,
+#if OS_WINDOWS
       EmbeddedFileName = "SettingsFolderLocation.xml"
+#elif OS_MAC
+      EmbeddedFileName = "SettingsFolderLocationMac.xml"
+#endif
     };
     Assert.DoesNotThrow(() => reader.Read());
   }

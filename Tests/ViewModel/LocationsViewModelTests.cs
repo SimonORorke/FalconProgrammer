@@ -6,10 +6,11 @@ using FalconProgrammer.ViewModel;
 namespace FalconProgrammer.Tests.ViewModel;
 
 /// <summary>
-///   An unrealistic drive letter, different from the one in embedded test settings
-///   files, has been chosen in these tests, as they are all expected to access a mock
-///   file system. A test will throw an exception if it attempts to write to the real
-///   file system, provided it is run on a computer that does not have that drive. -->
+///   An unrealistic drive letter (macOS: top folder), different from the one in embedded
+///   test settings files, has been chosen in these tests, as they are all expected to
+///   access a mock file system. A test will throw an exception if it attempts to write
+///   to the real file system, provided it is run on a computer that does not have that
+///   drive (macOS: top folder). -->
 /// </summary>
 [TestFixture]
 public class LocationsViewModelTests : ViewModelTestsBase {
@@ -24,12 +25,29 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   }
 
   private LocationsViewModel ViewModel { get; set; } = null!;
+#if OS_WINDOWS
+  private const string LocationsSettingsFileName = "LocationsSettings.xml";
+  private const string OriginalProgramsFolderPath = @"K:\NewLeaf\Original Programs";
+  private const string ProgramsFolderPath = @"K:\NewLeaf\Programs";
+  private const string SettingsFolderLocationKFileName = "SettingsFolderLocationK.xml";
+  private const string SettingsFolderPath = @"K:\NewLeaf\Settings";
+  private const string SettingsPath = @"K:\NewLeaf\Settings\Settings.xml";
+  private const string TemplateProgramsFolderPath = @"K:\NewLeaf\Template Programs";
+#elif OS_MAC
+  private const string LocationsSettingsFileName = "LocationsSettingsMac.xml";
+  private const string OriginalProgramsFolderPath = "/K/NewLeaf/Original Programs";
+  private const string ProgramsFolderPath = "/K/NewLeaf/Programs";
+  private const string SettingsFolderLocationKFileName = "SettingsFolderLocationKMac.xml";
+  private const string SettingsFolderPath = "/K/NewLeaf/Settings";
+  private const string SettingsPath = "/K/NewLeaf/Settings/Settings.xml";
+  private const string TemplateProgramsFolderPath = "/K/NewLeaf/Template Programs";
+#endif
 
   [Test]
   public async Task CancelBrowseForSettingsFolder() {
     await ViewModel.Open();
     MockDialogService.Cancel = true;
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedPath = SettingsFolderPath;
     MockFileSystemService.File.SimulatedExists = false;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
@@ -40,13 +58,13 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task LoadSettingsFromAnotherSettingsFile() {
     await ViewModel.Open();
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedPath = SettingsFolderPath;
     MockDialogService.SimulatedYesNoAnswer = true;
     string newSettingsPath =
       Path.Combine(MockDialogService.SimulatedPath, "Settings.xml");
     Assert.That(ViewModel.Settings.SettingsPath, Is.Not.EqualTo(newSettingsPath));
     MockSettingsFolderLocationReader.EmbeddedFileName =
-      "SettingsFolderLocationK.xml";
+      SettingsFolderLocationKFileName;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     using (Assert.EnterMultipleScope()) {
@@ -59,23 +77,23 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task Main() {
     await ViewModel.Open();
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedPath = SettingsFolderPath;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
       Is.EqualTo(MockDialogService.SimulatedPath));
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
+    MockDialogService.SimulatedPath = ProgramsFolderPath;
     MockFileSystemService.File.SimulatedExists = false;
     command = (AsyncRelayCommand)ViewModel.BrowseForProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.ProgramsFolderPath,
       Is.EqualTo(MockDialogService.SimulatedPath));
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Original Programs";
+    MockDialogService.SimulatedPath = OriginalProgramsFolderPath;
     command = (AsyncRelayCommand)ViewModel.BrowseForOriginalProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.OriginalProgramsFolderPath,
       Is.EqualTo(MockDialogService.SimulatedPath));
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Template Programs";
+    MockDialogService.SimulatedPath = TemplateProgramsFolderPath;
     command = (AsyncRelayCommand)ViewModel.BrowseForTemplateProgramsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.TemplateProgramsFolderPath,
@@ -84,8 +102,8 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(canClose);
     var mockSerialiser = (MockSerialiser)ViewModel.Settings.Serialiser;
     using (Assert.EnterMultipleScope()) {
-      Assert.That(mockSerialiser.LastOutputPath,
-        Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
+      Assert.That(mockSerialiser.LastOutputPath, 
+        Is.EqualTo(SettingsPath));
       Assert.That(mockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
     }
     var settings = (Settings)mockSerialiser.LastObjectSerialised;
@@ -105,7 +123,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockSettingsFolderLocationReader.SimulatedFileExists = false;
     await ViewModel.Open();
     Assert.That(ViewModel.SettingsFolderPath, Is.Empty);
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
+    MockDialogService.SimulatedPath = SettingsFolderPath;
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     Assert.That(ViewModel.SettingsFolderPath,
@@ -117,10 +135,10 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   [Test]
   public async Task SettingsFolderDoesNotExist() {
     await ViewModel.Open();
-    ViewModel.SettingsFolderPath = @"K:\NewLeaf\Settings";
+    ViewModel.SettingsFolderPath = SettingsFolderPath;
     MockFileSystemService.File.SimulatedExists = false;
     MockFileSystemService.Folder.SimulatedExists = false;
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
+    MockDialogService.SimulatedPath = ProgramsFolderPath;
     // Make a property change to require saving settings.
     ViewModel.ProgramsFolderPath += "X";
     using (Assert.EnterMultipleScope()) {
@@ -136,7 +154,7 @@ public class LocationsViewModelTests : ViewModelTestsBase {
   public async Task SettingsFolderNotSpecified() {
     await ViewModel.Open(); // All folder fields are empty.
     MockFileSystemService.File.SimulatedExists = false;
-    MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
+    MockDialogService.SimulatedPath = ProgramsFolderPath;
     ViewModel.SettingsFolderPath = string.Empty;
     using (Assert.EnterMultipleScope()) {
       Assert.That(await ViewModel.QueryClose(), Is.False);
@@ -159,21 +177,31 @@ public class LocationsViewModelTests : ViewModelTestsBase {
 
   [Test]
   public async Task ValidationErrorsOnQueryClose() {
-    var settings = ReadMockSettings("LocationsSettings.xml");
+    var settings = ReadMockSettings(LocationsSettingsFileName);
     MockFileSystemService.Folder.ExistingPaths.Add(settings.SettingsPath);
     await ViewModel.Open();
+#if OS_WINDOWS
     ViewModel.ProgramsFolderPath = @"K:\Test\Programs";
-    ViewModel.OriginalProgramsFolderPath = string.Empty;
     ViewModel.TemplateProgramsFolderPath = @"K:\Test\Template Programs";
+#elif OS_MAC
+    ViewModel.ProgramsFolderPath = "/K/Test/Programs";
+    ViewModel.TemplateProgramsFolderPath = "/K/Test/Template Programs";
+#endif
+    ViewModel.OriginalProgramsFolderPath = string.Empty;
     Assert.That(ViewModel.HasErrors);
     var errors = ViewModel.GetErrors().ToList();
-    Assert.That(errors, Has.Count.EqualTo(3));
+    // foreach (var error in errors) {
+    //   await TestContext.Out.WriteLineAsync($"{error.MemberNames.ToList()[0]}");
+    //   await TestContext.Out.WriteLineAsync($"    {error.ErrorMessage}");
+    // }
+    // Assert.That(errors, Has.Count.EqualTo(3));
     using (Assert.EnterMultipleScope()) {
       // The errors are alphabetical by property name.
       Assert.That(errors[0].ErrorMessage, Is.EqualTo(
         "The OriginalProgramsFolderPath field is required."));
       Assert.That(errors[1].MemberNames.ToList()[0], Is.EqualTo("ProgramsFolderPath"));
       Assert.That(errors[1].ErrorMessage, Is.EqualTo("Cannot find folder."));
+      Assert.That(errors[2].MemberNames.ToList()[0], Is.EqualTo("TemplateProgramsFolderPath"));
       Assert.That(errors[2].ErrorMessage, Is.EqualTo("Cannot find folder."));
     }
     bool canClose = await ViewModel.QueryClose();

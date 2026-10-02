@@ -8,7 +8,11 @@ public class ReverbViewModelTests : ViewModelTestsBase {
   [SetUp]
   public override void Setup() {
     base.Setup();
+#if OS_WINDOWS
     Settings = ReadMockSettings("BatchSettings.xml");
+#elif OS_MAC
+    Settings = ReadMockSettings("BatchSettingsMac.xml");
+#endif
     ViewModel = new ReverbViewModel(
       MockDialogService, MockDispatcherService) {
       ModelServices = TestModelServices
@@ -31,7 +35,7 @@ public class ReverbViewModelTests : ViewModelTestsBase {
     ViewModel.DoNotZeroReverb[^1] = invalidProgramItem; // Addition item
     MockDialogService.SimulatedYesNoAnswer = false;
     bool canClose = await ViewModel.QueryClose();
-    Assert.That(canClose, Is.EqualTo(false));
+    Assert.That(canClose, Is.False);
   }
 
   [Test]
@@ -54,16 +58,20 @@ public class ReverbViewModelTests : ViewModelTestsBase {
     ViewModel.DoNotZeroReverb[0] = newProgramItem;
     bool canClose = await ViewModel.QueryClose(); // Updates and saves settings
     using (Assert.EnterMultipleScope()) {
-      Assert.That(canClose, Is.EqualTo(true));
+      Assert.That(canClose, Is.True);
       Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
-        Is.EqualTo(Path.Combine(newProgramItem.SoundBank,
-          newProgramItem.Category, newProgramItem.Program)));
+        Is.EqualTo(@"Pulsar\Plucks\C"));
     }
     return;
 
     string GetPathShort(ProgramPath programPath) {
+#if OS_WINDOWS
       return Path.Combine(programPath.SoundBank,
         programPath.Category, programPath.Program);
+#elif OS_MAC
+      return Path.Combine(programPath.SoundBank,
+        programPath.Category, programPath.Program).Replace('/', '\\');
+#endif
     }
   }
 

@@ -243,7 +243,7 @@ public class FalconProgramTests {
       Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
       Assert.That(mpeScriptProcessor.YTarget,
         Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
-      Assert.That(mpeScriptProcessor.InitialZValue, Is.EqualTo(0));
+      Assert.That(mpeScriptProcessor.InitialZValue, Is.Zero);
     }
   }
 
