@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
@@ -55,9 +54,8 @@ public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundIte
     Settings = settings;
     SoundBanks = [.. soundBanks];
     Clear();
-    foreach (var background in Settings.Backgrounds) {
+    foreach (var background in Settings.Backgrounds)
       AddItem(background.SoundBank, background.Path);
-    }
     IsPopulating = false;
   }
 
@@ -67,14 +65,13 @@ public class BackgroundCollection : ProgramHierarchyCollectionBase<BackgroundIte
 
   internal override void UpdateSettings() {
     Settings.Backgrounds.Clear();
-    foreach (var backgroundItem in this) {
+    foreach (var backgroundItem in this)
       if (!backgroundItem.IsAdditionItem && backgroundItem.SoundBank != string.Empty) {
         Settings.Backgrounds.Add(new BackgroundSetting {
           SoundBank = backgroundItem.SoundBank,
           Path = backgroundItem.Path
         });
       }
-    }
     Settings.Write();
   }
 }

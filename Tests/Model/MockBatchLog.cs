@@ -13,9 +13,7 @@ public class MockBatchLog : IBatchLog {
 
   public override string ToString() {
     using var writer = new StringWriter();
-    foreach (string line in Lines) {
-      writer.WriteLine(line);
-    }
+    foreach (string line in Lines) writer.WriteLine(line);
     return writer.ToString();
   }
 }

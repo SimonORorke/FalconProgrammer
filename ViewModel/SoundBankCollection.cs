@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
@@ -37,9 +36,7 @@ public abstract class SoundBankCollection :
     Settings = settings;
     SoundBanks = [.. soundBanks];
     Clear();
-    foreach (string soundBank in SettingsSoundBanks) {
-      AddItem(soundBank);
-    }
+    foreach (string soundBank in SettingsSoundBanks) AddItem(soundBank);
     IsPopulating = false;
   }
 
@@ -49,11 +46,10 @@ public abstract class SoundBankCollection :
 
   internal override void UpdateSettings() {
     SettingsSoundBanks.Clear();
-    foreach (var soundBankItem in this) {
+    foreach (var soundBankItem in this)
       if (!soundBankItem.IsAdditionItem && soundBankItem.SoundBank != string.Empty) {
         SettingsSoundBanks.Add(soundBankItem.SoundBank);
       }
-    }
     Settings.Write();
   }
 }

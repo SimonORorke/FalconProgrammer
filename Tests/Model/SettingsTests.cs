@@ -32,9 +32,11 @@ public class SettingsTests {
       EmbeddedFileName = "BatchSettings.xml"
     };
     settings = settingsReader.Read();
-    Assert.That(settings.TryGetSoundBankBackgroundImagePath(
-      soundBank, out string path), Is.True);
-    Assert.That(path, Does.EndWith("Yellowish Mid-Green.png"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.TryGetSoundBankBackgroundImagePath(
+        soundBank, out string path), Is.True);
+      Assert.That(path, Does.EndWith("Yellowish Mid-Green.png"));
+    }
   }
 
   [Test]
@@ -43,10 +45,12 @@ public class SettingsTests {
       EmbeddedFileName = "LocationsSettings.xml"
     };
     var settings = settingsReader.Read();
-    Assert.That(settings.Batch.Scope.SoundBank, Is.Empty);
-    Assert.That(settings.Batch.Scope.Category, Is.Empty);
-    Assert.That(settings.Batch.Scope.Program, Is.Empty);
-    Assert.That(settings.Batch.Tasks, Is.Empty);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.Batch.Scope.SoundBank, Is.Empty);
+      Assert.That(settings.Batch.Scope.Category, Is.Empty);
+      Assert.That(settings.Batch.Scope.Program, Is.Empty);
+      Assert.That(settings.Batch.Tasks, Is.Empty);
+    }
     const string soundBank = "Pulsar";
     const string category = "Plucks";
     const string program = "Music Box";
@@ -58,10 +62,12 @@ public class SettingsTests {
     settings.Write();
     var writtenSettings =
       (Settings)settingsReader.MockSerialiserForSettings.LastObjectSerialised;
-    Assert.That(writtenSettings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
-    Assert.That(writtenSettings.Batch.Scope.Category, Is.EqualTo(category));
-    Assert.That(writtenSettings.Batch.Scope.Program, Is.EqualTo(program));
-    Assert.That(writtenSettings.Batch.Tasks, Has.Count.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(writtenSettings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
+      Assert.That(writtenSettings.Batch.Scope.Category, Is.EqualTo(category));
+      Assert.That(writtenSettings.Batch.Scope.Program, Is.EqualTo(program));
+      Assert.That(writtenSettings.Batch.Tasks, Has.Count.EqualTo(1));
+    }
     Assert.That(writtenSettings.Batch.Tasks[0], Is.EqualTo(task));
   }
 
@@ -101,14 +107,16 @@ public class SettingsTests {
     var mockSerialiser = settingsReader.MockSerialiserForSettings;
     var writtenSettings = (Settings)mockSerialiser.LastObjectSerialised;
     Assert.That(writtenSettings.DoNotZeroReverb, Has.Count.EqualTo(1));
-    Assert.That(
-      writtenSettings.DoNotZeroReverb[0].SoundBank, Is.EqualTo(soundBank));
-    Assert.That(
-      writtenSettings.DoNotZeroReverb[0].Category, Is.EqualTo(category));
-    Assert.That(
-      writtenSettings.DoNotZeroReverb[0].Program, Is.EqualTo(program));
-    Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverb>"));
-    Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.False);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(
+        writtenSettings.DoNotZeroReverb[0].SoundBank, Is.EqualTo(soundBank));
+      Assert.That(
+        writtenSettings.DoNotZeroReverb[0].Category, Is.EqualTo(category));
+      Assert.That(
+        writtenSettings.DoNotZeroReverb[0].Program, Is.EqualTo(program));
+      Assert.That(mockSerialiser.LastOutputText, Does.Contain("<DoNotZeroReverb>"));
+      Assert.That(settings.CanChangeReverbToZero(soundBank, category, program), Is.False);
+    }
   }
 
   [Test]
@@ -152,26 +160,28 @@ public class SettingsTests {
       Assert.That(!File.Exists(settings.SettingsPath));
       SettingsTestHelper.WriteSettings(settings);
       settings = SettingsTestHelper.ReadSettings();
-      // Debug.WriteLine(
-      //   $"TestSettingsFolderPath = '{SettingsTestHelper.TestSettingsFolderPath}'");
-      Assert.That(File.Exists(settings.SettingsPath));
-      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(
-        SettingsTestHelper.ProgramsFolderPath));
-      Assert.That(settings.OriginalProgramsFolder.Path, Is.EqualTo(
-        SettingsTestHelper.OriginalProgramsFolderPath));
-      Assert.That(settings.TemplateProgramsFolder.Path, Is.EqualTo(
-        SettingsTestHelper.TemplateProgramsFolderPath));
-      Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
-      Assert.That(!settings.MustUseGuiScriptProcessor(
-        "Falcon Factory", "Bass-Sub"));
-      Assert.That(settings.MustUseGuiScriptProcessor(
-        "Falcon Factory", "Organic Texture 2.8"));
-      Assert.That(settings.MustUseGuiScriptProcessor(
-        "Organic Keys", "Acoustic Mood"));
-      Assert.That(!settings.MustUseGuiScriptProcessor(
-        "Organic Pads", "Nature"));
-      Assert.That(settings.MidiForMacros.ModWheelReplacementCcNo, Is.EqualTo(34));
-      Assert.That(settings.MidiForMacros.ContinuousCcNoRanges, Has.Count.EqualTo(7));
+      using (Assert.EnterMultipleScope()) {
+        // Debug.WriteLine(
+        //   $"TestSettingsFolderPath = '{SettingsTestHelper.TestSettingsFolderPath}'");
+        Assert.That(File.Exists(settings.SettingsPath));
+        Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(
+          SettingsTestHelper.ProgramsFolderPath));
+        Assert.That(settings.OriginalProgramsFolder.Path, Is.EqualTo(
+          SettingsTestHelper.OriginalProgramsFolderPath));
+        Assert.That(settings.TemplateProgramsFolder.Path, Is.EqualTo(
+          SettingsTestHelper.TemplateProgramsFolderPath));
+        Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(4));
+        Assert.That(!settings.MustUseGuiScriptProcessor(
+          "Falcon Factory", "Bass-Sub"));
+        Assert.That(settings.MustUseGuiScriptProcessor(
+          "Falcon Factory", "Organic Texture 2.8"));
+        Assert.That(settings.MustUseGuiScriptProcessor(
+          "Organic Keys", "Acoustic Mood"));
+        Assert.That(!settings.MustUseGuiScriptProcessor(
+          "Organic Pads", "Nature"));
+        Assert.That(settings.MidiForMacros.ModWheelReplacementCcNo, Is.EqualTo(34));
+        Assert.That(settings.MidiForMacros.ContinuousCcNoRanges, Has.Count.EqualTo(7));
+      }
       Assert.That(settings.MidiForMacros.ContinuousCcNoRanges[0].Start, Is.EqualTo(31));
       Assert.That(settings.MidiForMacros.ContinuousCcNoRanges[0].End, Is.EqualTo(34));
       Assert.That(settings.MidiForMacros.ToggleCcNoRanges, Has.Count.EqualTo(1));
@@ -192,8 +202,8 @@ public class SettingsTests {
     } finally {
       SettingsTestHelper.DeleteAnyData();
       if (settings != null) {
-        Assert.Throws<DirectoryNotFoundException>(
-          () => settings.FileSystemService.Folder.GetSubfolderNames(
+        Assert.Throws<DirectoryNotFoundException>(() =>
+          settings.FileSystemService.Folder.GetSubfolderNames(
             SettingsTestHelper.TestSettingsFolderPath));
       }
     }
@@ -212,11 +222,15 @@ public class SettingsTests {
       Serialiser = new MockSerialiser()
     };
     var settings = settingsReader.Read();
-    Assert.That(settings.ProgramsFolder.Path, Is.Empty);
-    Assert.That(settings.MustUseGuiScriptProcessorCategories, Is.Empty);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.ProgramsFolder.Path, Is.Empty);
+      Assert.That(settings.MustUseGuiScriptProcessorCategories, Is.Empty);
+    }
     settings = settingsReader.Read(true);
-    Assert.That(settings.ProgramsFolder.Path, Is.Empty);
-    Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(3));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.ProgramsFolder.Path, Is.Empty);
+      Assert.That(settings.MustUseGuiScriptProcessorCategories, Has.Count.EqualTo(3));
+    }
   }
 
   [Test]
@@ -229,28 +243,31 @@ public class SettingsTests {
     const string newSettingsFolderPath = @"K:\Markup";
     const string newSettingsPath = @"K:\Markup\Settings.xml";
     settings.Write(newSettingsFolderPath);
-    Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
-    Assert.That(mockSerializer.SerializeCount, Is.EqualTo(1));
-    Assert.That(mockSerializer.LastType, Is.EqualTo(typeof(Settings)));
-    Assert.That(mockSerializer.LastObjectSerialised, Is.SameAs(settings));
-    Assert.That(mockSerializer.LastOutputPath, Is.EqualTo(newSettingsPath));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.SettingsPath, Is.EqualTo(newSettingsPath));
+      Assert.That(mockSerializer.SerializeCount, Is.EqualTo(1));
+      Assert.That(mockSerializer.LastType, Is.EqualTo(typeof(Settings)));
+      Assert.That(mockSerializer.LastObjectSerialised, Is.SameAs(settings));
+      Assert.That(mockSerializer.LastOutputPath, Is.EqualTo(newSettingsPath));
+    }
   }
 
   [Test]
   public void AutoCheckNewVersionsAndIgnoreVersion() {
     var settings = new Settings();
-    Assert.That(settings.AutoCheckNewVersions, Is.True);
-    Assert.That(settings.IgnoreVersion, Is.EqualTo(string.Empty));
-
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.AutoCheckNewVersions, Is.True);
+      Assert.That(settings.IgnoreVersion, Is.EqualTo(string.Empty));
+    }
     settings.AutoCheckNewVersions = false;
     settings.IgnoreVersion = "1.3.0";
-
     var mockSerializer = new MockSerialiser();
     settings.Serialiser = mockSerializer;
     settings.Write(@"K:\Markup");
-
     var writtenSettings = (Settings)mockSerializer.LastObjectSerialised;
-    Assert.That(writtenSettings.AutoCheckNewVersions, Is.False);
-    Assert.That(writtenSettings.IgnoreVersion, Is.EqualTo("1.3.0"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(writtenSettings.AutoCheckNewVersions, Is.False);
+      Assert.That(writtenSettings.IgnoreVersion, Is.EqualTo("1.3.0"));
+    }
   }
 }

@@ -31,19 +31,23 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
     // Add an incomplete program item.
     const string soundBank = "Ether Fields";
     Collection[^1].SoundBank = soundBank; // Addition item
-    // No longer addition item
-    Assert.That(Collection.HasBeenChanged, Is.True);
-    Assert.That(Collection[^2].IsAdditionItem, Is.False);
-    Assert.That(Collection[^2].SoundBank, Is.EqualTo(soundBank));
-    Assert.That(Collection[^2].CutCommand.CanExecute(null), Is.True);
-    Assert.That(Collection[^2].PasteBeforeCommand.CanExecute(null), Is.True);
-    Assert.That(Collection[^2].RemoveCommand.CanExecute(null), Is.True);
+    using (Assert.EnterMultipleScope()) {
+      // No longer addition item
+      Assert.That(Collection.HasBeenChanged, Is.True);
+      Assert.That(Collection[^2].IsAdditionItem, Is.False);
+      Assert.That(Collection[^2].SoundBank, Is.EqualTo(soundBank));
+      Assert.That(Collection[^2].CutCommand.CanExecute(null), Is.True);
+      Assert.That(Collection[^2].PasteBeforeCommand.CanExecute(null), Is.True);
+      Assert.That(Collection[^2].RemoveCommand.CanExecute(null), Is.True);
+    }
     MockDialogService.SimulatedYesNoAnswer = true;
     var closingValidationResult = await Collection.Validate(true);
-    Assert.That(closingValidationResult.Success, Is.False);
-    Assert.That(closingValidationResult.CanClosePage, Is.True);
-    Assert.That(MockDialogService.LastYesNoQuestion, Does.StartWith(
-      "Sound Bank, Category and Program must all be specified. "));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(closingValidationResult.Success, Is.False);
+      Assert.That(closingValidationResult.CanClosePage, Is.True);
+      Assert.That(MockDialogService.LastYesNoQuestion, Does.StartWith(
+        "Sound Bank, Category and Program must all be specified. "));
+    }
   }
 
   [Test]
@@ -55,9 +59,11 @@ public class DoNotZeroReverbCollectionTests : ViewModelTestsBase {
     // Populate
     Collection.Populate(Settings, SoundBanks);
     int initialCollectionCount = Collection.Count;
-    Assert.That(initialCollectionCount,
-      Is.EqualTo(initialSettingsDoNotZeroReverbCount + 1));
-    Assert.That(Collection[0].SoundBanks, Has.Count.EqualTo(SoundBanks.Count()));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(initialCollectionCount,
+        Is.EqualTo(initialSettingsDoNotZeroReverbCount + 1));
+      Assert.That(Collection[0].SoundBanks, Has.Count.EqualTo(SoundBanks.Count()));
+    }
     // Cut
     Collection[^2].CutCommand.Execute(null); // Last before addition item
     Assert.That(Collection, Has.Count.EqualTo(initialCollectionCount - 1));

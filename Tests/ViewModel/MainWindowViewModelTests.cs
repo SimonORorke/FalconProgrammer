@@ -55,20 +55,22 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     var settings = ReadMockSettings("BatchSettings.xml");
     TestBatchViewModel.ConfigureValidMockFileSystemService(settings);
     ViewModel.SelectedTab = BatchScriptTab;
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
-    Assert.That(ViewModel.WindowLocationService.Left,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
-    Assert.That(ViewModel.WindowLocationService.Top,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
-    Assert.That(ViewModel.WindowLocationService.Width,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Width));
-    Assert.That(ViewModel.WindowLocationService.Height,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
-    Assert.That(ViewModel.WindowLocationService.WindowState,
-      Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
-    // Check that changes to page view model property and main window view model
-    // properties are all saved to settings when the window is closed.
-    Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+      Assert.That(ViewModel.WindowLocationService.Left,
+        Is.EqualTo(ViewModel.Settings.WindowLocation.Left));
+      Assert.That(ViewModel.WindowLocationService.Top,
+        Is.EqualTo(ViewModel.Settings.WindowLocation.Top));
+      Assert.That(ViewModel.WindowLocationService.Width,
+        Is.EqualTo(ViewModel.Settings.WindowLocation.Width));
+      Assert.That(ViewModel.WindowLocationService.Height,
+        Is.EqualTo(ViewModel.Settings.WindowLocation.Height));
+      Assert.That(ViewModel.WindowLocationService.WindowState,
+        Is.EqualTo(ViewModel.Settings.WindowLocation.WindowState));
+      // Check that changes to page view model property and main window view model
+      // properties are all saved to settings when the window is closed.
+      Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(ColourSchemeId.Forest));
+    }
     Assert.That(ViewModel.WindowLocationService.Left, Is.EqualTo(248));
     Assert.That(ViewModel.BatchViewModel.Scope.SoundBank, Is.EqualTo("All"));
     const ColourSchemeId colourSchemeId = ColourSchemeId.Lavender;
@@ -80,9 +82,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     await ViewModel.SelectColourSchemeCommand.ExecuteAsync(null);
     Assert.That(ViewModel.ColourSchemeId, Is.EqualTo(colourSchemeId));
     await ViewModel.QueryCloseWindow();
-    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
-    Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
-    Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(colourSchemeId));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
+      Assert.That(ViewModel.Settings.Batch.Scope.SoundBank, Is.EqualTo(soundBank));
+      Assert.That(ViewModel.Settings.ColourSchemeId, Is.EqualTo(colourSchemeId));
+    }
   }
 
   [Test]
@@ -108,11 +112,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.LocationsViewModel.SettingsFolderPath = string.Empty;
     // Try going to another page.
     ViewModel.SelectedTab = GuiScriptProcessorTab; // Test GUI Script Processor view model
-    // An error message box should have been shown and the Locations page should still be
-    // shown.
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
-    Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
+    using (Assert.EnterMultipleScope()) {
+      // An error message box should have been shown and the Locations page should still be
+      // shown.
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(ViewModel.SelectedTab.ViewModel,
+        Is.SameAs(ViewModel.LocationsViewModel));
+      Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
+    }
   }
 
   [Test]
@@ -121,16 +128,18 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockSettingsFolderLocationReader.SimulatedFileExists = false;
     // Show Batch Script tab initially.
     ViewModel.SelectedTab = BatchScriptTab;
-    // As the location of the settings file is not known,
-    // the window location, set by the view, will have to be saved when the application
-    // closes.
-    // And an error message box should be shown, then the Locations page.
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Left, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Top, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Width, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.Height, Is.Null);
-    Assert.That(ViewModel.WindowLocationService.WindowState, Is.Null);
+    using (Assert.EnterMultipleScope()) {
+      // As the location of the settings file is not known,
+      // the window location, set by the view, will have to be saved when the application
+      // closes.
+      // And an error message box should be shown, then the Locations page.
+      Assert.That(ViewModel.Settings.WindowLocation, Is.Null);
+      Assert.That(ViewModel.WindowLocationService.Left, Is.Null);
+      Assert.That(ViewModel.WindowLocationService.Top, Is.Null);
+      Assert.That(ViewModel.WindowLocationService.Width, Is.Null);
+      Assert.That(ViewModel.WindowLocationService.Height, Is.Null);
+      Assert.That(ViewModel.WindowLocationService.WindowState, Is.Null);
+    }
     const int left = 10;
     const int top = 20;
     const int width = 600;
@@ -142,23 +151,30 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     ViewModel.WindowLocationService.Width = width;
     ViewModel.WindowLocationService.Height = height;
     ViewModel.WindowLocationService.WindowState = windowState;
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
-      "Folder locations must be specified in the settings."));
-    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+        "Folder locations must be specified in the settings."));
+      Assert.That(ViewModel.SelectedTab.ViewModel,
+        Is.SameAs(ViewModel.LocationsViewModel));
+    }
     // Simulate selecting a Settings folder.
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Settings";
     var command =
       (AsyncRelayCommand)ViewModel.LocationsViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
     bool canClose = await ViewModel.QueryCloseWindow();
-    Assert.That(canClose);
-    Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
-    Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
-    Assert.That(ViewModel.Settings.WindowLocation.Top, Is.EqualTo(top));
-    Assert.That(ViewModel.Settings.WindowLocation.Width, Is.EqualTo(width));
-    Assert.That(ViewModel.Settings.WindowLocation.Height, Is.EqualTo(height));
-    Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(canClose);
+      Assert.That(ViewModel.Settings.WindowLocation, Is.Not.Null);
+    }
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.Settings.WindowLocation.Left, Is.EqualTo(left));
+      Assert.That(ViewModel.Settings.WindowLocation.Top, Is.EqualTo(top));
+      Assert.That(ViewModel.Settings.WindowLocation.Width, Is.EqualTo(width));
+      Assert.That(ViewModel.Settings.WindowLocation.Height, Is.EqualTo(height));
+      Assert.That(ViewModel.Settings.WindowLocation.WindowState, Is.EqualTo(windowState));
+    }
   }
 
   [Test]
@@ -169,24 +185,29 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // page immediately being replaced with the Locations page.
     ViewModel.SelectedTab =
       GuiScriptProcessorTab; // Test GUI Script Processor view model 
-    Assert.That(ViewModel.SelectedTab.ViewModel, Is.SameAs(ViewModel.LocationsViewModel));
-    Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.SelectedTab.ViewModel,
+        Is.SameAs(ViewModel.LocationsViewModel));
+      Assert.That(ViewModel.SelectedTab, Is.SameAs(LocationsTab));
+    }
   }
 
   [Test]
   public async Task Main() {
     // Show Batch Script tab initially.
     ViewModel.SelectedTab = BatchScriptTab;
-    Assert.That(BatchScriptTab.Header,
-      Is.EqualTo(ViewModel.BatchViewModel.TabTitle));
-    Assert.That(LocationsTab.Header,
-      Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
-    Assert.That(GuiScriptProcessorTab.Header,
-      Is.EqualTo(ViewModel.GuiScriptProcessorViewModel.TabTitle));
-    Assert.That(MidiForMacrosTab.Header,
-      Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
-    Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(2));
-    Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(BatchScriptTab.Header,
+        Is.EqualTo(ViewModel.BatchViewModel.TabTitle));
+      Assert.That(LocationsTab.Header,
+        Is.EqualTo(ViewModel.LocationsViewModel.TabTitle));
+      Assert.That(GuiScriptProcessorTab.Header,
+        Is.EqualTo(ViewModel.GuiScriptProcessorViewModel.TabTitle));
+      Assert.That(MidiForMacrosTab.Header,
+        Is.EqualTo(ViewModel.MidiForMacrosViewModel.TabTitle));
+      Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(2));
+      Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
+    }
     Settings = ReadMockSettings("BatchSettings.xml");
     TestGuiScriptProcessorViewModel.ConfigureMockFileSystemService(Settings);
     var selectedPageViewModel = TestGuiScriptProcessorViewModel;
@@ -194,10 +215,14 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockCursorService.ShowWaitCursorCount = 0;
     ViewModel.SelectedTab =
       GuiScriptProcessorTab; // Test GUI Script Processor view model 
-    Assert.That(ViewModel.SelectedTab.Header, Is.EqualTo(selectedPageViewModel.TabTitle));
-    Assert.That(ViewModel.CurrentPageTitle, Is.EqualTo(selectedPageViewModel.PageTitle));
-    Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(1));
-    Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.SelectedTab.Header,
+        Is.EqualTo(selectedPageViewModel.TabTitle));
+      Assert.That(ViewModel.CurrentPageTitle,
+        Is.EqualTo(selectedPageViewModel.PageTitle));
+      Assert.That(MockCursorService.ShowDefaultCursorCount, Is.EqualTo(1));
+      Assert.That(MockCursorService.ShowWaitCursorCount, Is.EqualTo(1));
+    }
     await ViewModel.QueryCloseWindow();
     Assert.That(selectedPageViewModel.ClosedCount, Is.EqualTo(1));
   }
@@ -227,22 +252,27 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
   public async Task CheckForUpdates_NewVersionAvailable_ShowsNewVersionWindow() {
     MockVersionChecker.SimulatedNewVersion = "1.3.0";
     await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
-
-    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastNewVersionWindowViewModel, Is.Not.Null);
-    Assert.That(MockDialogService.LastNewVersionWindowViewModel!.LatestVersion, Is.EqualTo("1.3.0"));
-    Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(0));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastNewVersionWindowViewModel, Is.Not.Null);
+    }
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.LastNewVersionWindowViewModel!.LatestVersion,
+        Is.EqualTo("1.3.0"));
+      Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(0));
+    }
   }
 
   [Test]
   public async Task CheckForUpdates_AlreadyLatest_ShowsInfoMessageBox() {
     MockVersionChecker.SimulatedNewVersion = null;
     await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
-
-    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
-    Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastInfoMessage,
-      Is.EqualTo("You are already running the latest version."));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
+      Assert.That(MockDialogService.ShowInfoMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastInfoMessage,
+        Is.EqualTo("You are already running the latest version."));
+    }
   }
 
   [Test]
@@ -250,11 +280,11 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     MockVersionChecker.SimulatedNewVersion = "1.3.0";
     ViewModel.SimulatedNewAutoCheckNewVersions = false;
     ViewModel.SimulatedNewIgnoreVersion = "1.3.0";
-
     await ViewModel.CheckForUpdatesCommand.ExecuteAsync(null);
-
-    Assert.That(ViewModel.Settings.AutoCheckNewVersions, Is.False);
-    Assert.That(ViewModel.Settings.IgnoreVersion, Is.EqualTo("1.3.0"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.Settings.AutoCheckNewVersions, Is.False);
+      Assert.That(ViewModel.Settings.IgnoreVersion, Is.EqualTo("1.3.0"));
+    }
   }
 
   [Test]
@@ -263,11 +293,12 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Settings.AutoCheckNewVersions = true;
     MockSettingsReaderEmbedded.SimulatedSettings = Settings;
     MockVersionChecker.SimulatedNewVersion = "1.3.0";
-
     await ViewModel.Open();
-
-    Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastNewVersionWindowViewModel?.LatestVersion, Is.EqualTo("1.3.0"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastNewVersionWindowViewModel?.LatestVersion,
+        Is.EqualTo("1.3.0"));
+    }
   }
 
   [Test]
@@ -276,9 +307,7 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     Settings.AutoCheckNewVersions = false;
     MockSettingsReaderEmbedded.SimulatedSettings = Settings;
     MockVersionChecker.SimulatedNewVersion = "1.3.0";
-
     await ViewModel.Open();
-
     Assert.That(MockDialogService.ShowNewVersionWindowCount, Is.EqualTo(0));
   }
 
@@ -293,13 +322,15 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // Make a property change to require saving settings.
     ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
     bool canClose = await ViewModel.QueryCloseWindow();
-    // Question message box shown.
-    // In this test, there are two mock message box questions, the first from
-    // LocationViewModel, the second from MainWindowViewModel. In the application, only
-    // the first message box question is shown, as the user had to respond to it, to
-    // either confirm or cancel the window closure.
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.GreaterThanOrEqualTo(1));
-    Assert.That(canClose, Is.True);
+    using (Assert.EnterMultipleScope()) {
+      // Question message box shown.
+      // In this test, there are two mock message box questions, the first from
+      // LocationViewModel, the second from MainWindowViewModel. In the application, only
+      // the first message box question is shown, as the user had to respond to it, to
+      // either confirm or cancel the window closure.
+      Assert.That(MockDialogService.AskYesNoQuestionCount, Is.GreaterThanOrEqualTo(1));
+      Assert.That(canClose, Is.True);
+    }
   }
 
   [Test]
@@ -313,8 +344,10 @@ public class MainWindowViewModelTests : ViewModelTestsBase {
     // Make a property change to require saving settings.
     ViewModel.LocationsViewModel.ProgramsFolderPath += "X";
     bool canClose = await ViewModel.QueryCloseWindow();
-    // Question message box shown.
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
-    Assert.That(canClose, Is.False);
+    using (Assert.EnterMultipleScope()) {
+      // Question message box shown.
+      Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+      Assert.That(canClose, Is.False);
+    }
   }
 }

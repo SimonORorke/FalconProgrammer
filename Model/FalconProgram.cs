@@ -130,14 +130,16 @@ internal class FalconProgram {
       // The CCs are specified in Modulations owned by the Macros
       // (ConstantModulations) that they modulate
       AssignMacroCcsOwnedByMacros();
-    } else if (SoundBankId == SoundBankId.FactoryRev2) {
+    }
+    else if (SoundBankId == SoundBankId.FactoryRev2) {
       throw new ApplicationException(
         "Assigning MIDI CCs to macros for a program with a GUI script " +
         "processor is not supported for sound bank " +
         $"{SoundBankName}. You need to go to the " +
         "GUI Script Processor page and remove the sound bank from " +
         "the list.");
-    } else {
+    }
+    else {
       var templateScriptProcessor = Category.GetTemplateScriptProcessor(
         GuiScriptProcessor, Batch);
       // The CCs are specified in Modulations owned by the GUI ScriptProcessor
@@ -188,7 +190,8 @@ internal class FalconProgram {
           CcNo = ccNo
         };
         macro.AddModulation(modulation);
-      } else {
+      }
+      else {
         // The macro already has a Modulation mapping to a non-mod wheel CC number.
         // We need to conserve the Modulation tag, which might contain a custom
         // Ratio, and, with the exception below, just replace the CC number.
@@ -310,11 +313,9 @@ internal class FalconProgram {
     var result = (
       from macroElement in ProgramXml.MacroElements
       select new Macro(macroElement, ProgramXml, Settings.MidiForMacros)).ToList();
-    foreach (var macro in result) {
-      foreach (var modulation in macro.Modulations) {
-        modulation.Owner = macro;
-      }
-    }
+    foreach (var macro in result)
+    foreach (var modulation in macro.Modulations)
+      modulation.Owner = macro;
     return result;
   }
 
@@ -424,7 +425,7 @@ internal class FalconProgram {
         ? new TopToBottomLeftToRightComparer()
         : new LeftToRightTopToBottomComparer());
     // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-    foreach (var macro in Macros) {
+    foreach (var macro in Macros)
       // This validation is not reliable. In "Falcon Factory\Bells\Glowing 1.2", the macros with
       // ConstantModulation.Properties showValue="0" are shown on the Info page. 
       //macro.Validate();
@@ -447,7 +448,6 @@ internal class FalconProgram {
       if (HasUniqueLocation(macro)) {
         sortedSet.Add(macro);
       }
-    }
     return [.. sortedSet];
   }
 
@@ -761,9 +761,7 @@ internal class FalconProgram {
       }
     }
     if (macrosToMove.Count > 0) {
-      foreach (var macro in macrosToMove) {
-        InfoPageLayout.MoveMacroToEnd(macro);
-      }
+      foreach (var macro in macrosToMove) InfoPageLayout.MoveMacroToEnd(macro);
       InfoPageLayout.RefreshMacroOrder();
       InfoPageLayout.MoveMacrosToStandardLayout();
       UpdateMacroCcs();
@@ -791,7 +789,8 @@ internal class FalconProgram {
         effects.Add((Effect)connectionsParent);
         // Indicate that the Effect has now been added to Effects.
         effectElements.Remove(connectionsParentElement);
-      } else {
+      }
+      else {
         connectionsParent = new ConnectionsParent(connectionsParentElement, ProgramXml,
           Settings.MidiForMacros);
       }
@@ -876,23 +875,20 @@ internal class FalconProgram {
       writer.WriteAsync(
         $"{PathShort}: {dahdsr.DisplayName} has " +
         $"{dahdsr.Modulations.Count} modulations: ");
-      foreach (var modulation in dahdsr.Modulations) {
+      foreach (var modulation in dahdsr.Modulations)
         writer.WriteAsync($"{modulation.Destination} ");
-      }
       Log.WriteLine(writer.ToString());
     }
   }
 
   public IEnumerable<string> QueryDelayTypes() {
     var result = new List<string>();
-    foreach (var macro in Macros.Where(macro => macro.ModulatesDelay)) {
-      foreach (var connectionsParent in macro.ModulatedConnectionsParents.Where(
-                 connectionsParent =>
-                   connectionsParent is Effect effect &&
-                   !result.Contains(effect.EffectType))) {
-        result.Add(((Effect)connectionsParent).EffectType);
-      }
-    }
+    foreach (var macro in Macros.Where(macro => macro.ModulatesDelay))
+    foreach (var connectionsParent in
+             macro.ModulatedConnectionsParents.Where(connectionsParent =>
+               connectionsParent is Effect effect &&
+               !result.Contains(effect.EffectType)))
+      result.Add(((Effect)connectionsParent).EffectType);
     return result;
   }
 
@@ -908,14 +904,12 @@ internal class FalconProgram {
 
   public IEnumerable<string> QueryReverbTypes() {
     var result = new List<string>();
-    foreach (var macro in Macros.Where(macro => macro.ModulatesReverb)) {
-      foreach (var connectionsParent in macro.ModulatedConnectionsParents.Where(
-                 connectionsParent =>
-                   connectionsParent is Effect effect &&
-                   !result.Contains(effect.EffectType))) {
-        result.Add(((Effect)connectionsParent).EffectType);
-      }
-    }
+    foreach (var macro in Macros.Where(macro => macro.ModulatesReverb))
+    foreach (var connectionsParent in
+             macro.ModulatedConnectionsParents.Where(connectionsParent =>
+               connectionsParent is Effect effect &&
+               !result.Contains(effect.EffectType)))
+      result.Add(((Effect)connectionsParent).EffectType);
     return result;
   }
 
@@ -943,12 +937,10 @@ internal class FalconProgram {
       select ScriptProcessor.Create(
         SoundBankId, scriptProcessorElement, ProgramXml,
         Settings.MidiForMacros, Category.MustUseGuiScriptProcessor)).ToImmutableList();
-    foreach (var scriptProcessor in ScriptProcessors) {
-      foreach (var modulation in scriptProcessor.Modulations) {
-        // Needed for modulation.ModulatesMacro in FindGuiScriptProcessor 
-        modulation.Owner = scriptProcessor;
-      }
-    }
+    foreach (var scriptProcessor in ScriptProcessors)
+    foreach (var modulation in scriptProcessor.Modulations)
+      // Needed for modulation.ModulatesMacro in FindGuiScriptProcessor 
+      modulation.Owner = scriptProcessor;
     GuiScriptProcessor = Category.FindGuiScriptProcessor(ScriptProcessors);
     PopulateConnectionsParentsAndEffects();
   }
@@ -963,14 +955,13 @@ internal class FalconProgram {
     // Remove any Arpeggiators on any levels.
     bool hasRemovedArpeggiators = ProgramXml.RemoveArpeggiatorElements();
     if (hasRemovedArpeggiators) {
-      foreach (var macro in Macros) {
+      foreach (var macro in Macros)
         for (int i = macro.ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
           var connectionsParent = macro.ModulatedConnectionsParents[i];
           if (connectionsParent.Name == "Arpeggiator") {
             macro.ModulatedConnectionsParents.RemoveAt(i);
           }
         }
-      }
       NotifyUpdate($"{PathShort}: Removed Arpeggiator(s).");
     }
     // Remove any program-level sequencing ScriptProcessors.
@@ -978,9 +969,8 @@ internal class FalconProgram {
       RemoveSequencingScriptProcessors(ScriptProcessors);
     bool hasRemovedScriptProcessors = false;
     if (removedScriptProcessorsProgramLevel.Count > 0) {
-      foreach (var sequencingScriptProcessor in removedScriptProcessorsProgramLevel) {
+      foreach (var sequencingScriptProcessor in removedScriptProcessorsProgramLevel)
         ScriptProcessors.Remove(sequencingScriptProcessor);
-      }
       hasRemovedScriptProcessors = true;
       NotifyUpdate(
         $"{PathShort}: Removed program-level sequencing script processor(s).");
@@ -997,7 +987,7 @@ internal class FalconProgram {
       }
     }
     if (hasRemovedScriptProcessors) {
-      foreach (var macro in Macros) {
+      foreach (var macro in Macros)
         for (int i = macro.ModulatedConnectionsParents.Count - 1; i >= 0; i--) {
           var connectionsParent = macro.ModulatedConnectionsParents[i];
           if (connectionsParent.Name == nameof(ScriptProcessor)) {
@@ -1008,7 +998,6 @@ internal class FalconProgram {
             }
           }
         }
-      }
     }
     // Remove any macros that, because arpeggiators or sequencing script processors they
     // modulated have been removed, no longer modulate anything.
@@ -1029,9 +1018,8 @@ internal class FalconProgram {
         from scriptProcessor in scriptProcessors
         where scriptProcessor.ScriptPath.Contains(sequencingFolder)
         select scriptProcessor).ToList();
-      foreach (var sequencingScriptProcessor in result) {
+      foreach (var sequencingScriptProcessor in result)
         sequencingScriptProcessor.Remove();
-      }
       return result;
     }
   }
@@ -1085,9 +1073,8 @@ internal class FalconProgram {
       // Example: Titanium\Pads\Children's Choir.
       var forMacroModulations =
         macro.GetForMacroModulations();
-      foreach (var forMacroModulation in forMacroModulations) {
+      foreach (var forMacroModulation in forMacroModulations)
         macro.RemoveModulation(forMacroModulation);
-      }
     }
     NotifyUpdate($"{PathShort}: Removed Info Page CCs ScriptProcessor.");
     InfoPageLayout.MoveMacrosToStandardLayout();
@@ -1305,7 +1292,6 @@ internal class FalconProgram {
       Log.WriteLine(
         $"{PathShort}: Cannot add MPE support because the program already has " +
         $"an MPE script processor.");
-      return;
     }
     // Disable MPE support, as it's not ready for release and may never be.
     // var mpeScriptProcessor = new MpeScriptProcessor(ProgramXml, Settings.MidiForMacros);
@@ -1319,7 +1305,8 @@ internal class FalconProgram {
     if (adsrMacros.Count < 4
         && adsrMacros.TryGetValue("Release", out var macro)) {
       releaseMacro = macro;
-    } else {
+    }
+    else {
       releaseMacro = null;
     }
     return releaseMacro != null;
@@ -1348,7 +1335,8 @@ internal class FalconProgram {
       Log.WriteLine(
         $"{PathShort}: Not changing {macro.DisplayNameWithoutCc} to zero because " +
         "it is modulated by the wheel.");
-    } else {
+    }
+    else {
       macro.ChangeValueToZero();
       NotifyUpdate($"{PathShort}: Changed {macro.DisplayNameWithoutCc} to zero.");
     }
@@ -1392,8 +1380,6 @@ internal class FalconProgram {
       Log.WriteLine($"Changing reverb to zero is disabled for '{PathShort}'.");
       return;
     }
-    foreach (var reverbMacro in reverbMacros) {
-      ZeroMacro(reverbMacro);
-    }
+    foreach (var reverbMacro in reverbMacros) ZeroMacro(reverbMacro);
   }
 }

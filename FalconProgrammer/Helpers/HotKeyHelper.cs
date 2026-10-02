@@ -39,11 +39,23 @@ public static class HotKeyHelper {
       "HotKey",
       typeof(HotKeyHelper));
 
-  public static object? GetHotKey(Control element) => element.GetValue(HotKeyProperty);
-  public static void SetHotKey(Control element, object? value) => element.SetValue(HotKeyProperty, value);
+  private static readonly ConditionalWeakTable<Control, RegistrationInfo> Registrations =
+    new ConditionalWeakTable<Control, RegistrationInfo>();
+
+  static HotKeyHelper() {
+    HotKeyProperty.Changed.AddClassHandler<Control>(OnHotKeyChanged);
+  }
+
+  public static object? GetHotKey(Control element) {
+    return element.GetValue(HotKeyProperty);
+  }
+
+  public static void SetHotKey(Control element, object? value) {
+    element.SetValue(HotKeyProperty, value);
+  }
 
   private static KeyGesture? GetKeyGesture(Control element) {
-    var value = GetHotKey(element);
+    object? value = GetHotKey(element);
     return value switch {
       KeyGesture gesture => gesture,
       string s when !string.IsNullOrWhiteSpace(s) => KeyGesture.Parse(s),
@@ -51,24 +63,13 @@ public static class HotKeyHelper {
     };
   }
 
-  private sealed class RegistrationInfo {
-    public TopLevel? TopLevel { get; init; }
-    public EventHandler<KeyEventArgs>? KeyDownHandler { get; init; }
-  }
-
-  private static readonly ConditionalWeakTable<Control, RegistrationInfo> Registrations = new();
-
-  static HotKeyHelper() {
-    HotKeyProperty.Changed.AddClassHandler<Control>(OnHotKeyChanged);
-  }
-
-  private static void OnHotKeyChanged(Control element, AvaloniaPropertyChangedEventArgs args) {
+  private static void OnHotKeyChanged(Control element,
+    AvaloniaPropertyChangedEventArgs args) {
     if (args.OldValue is not null) {
       element.AttachedToVisualTree -= OnElementAttachedToVisualTree;
       element.DetachedFromVisualTree -= OnElementDetachedFromVisualTree;
       UnregisterKeyGesture(element);
     }
-
     if (args.NewValue is not null) {
       element.AttachedToVisualTree += OnElementAttachedToVisualTree;
       element.DetachedFromVisualTree += OnElementDetachedFromVisualTree;
@@ -78,13 +79,15 @@ public static class HotKeyHelper {
     }
   }
 
-  private static void OnElementAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
+  private static void OnElementAttachedToVisualTree(object? sender,
+    VisualTreeAttachmentEventArgs e) {
     if (sender is Control control) {
       RegisterKeyGesture(control);
     }
   }
 
-  private static void OnElementDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
+  private static void OnElementDetachedFromVisualTree(object? sender,
+    VisualTreeAttachmentEventArgs e) {
     if (sender is Control control) {
       UnregisterKeyGesture(control);
     }
@@ -92,12 +95,12 @@ public static class HotKeyHelper {
 
   private static void RegisterKeyGesture(Control element) {
     UnregisterKeyGesture(element);
-
     var topLevel = TopLevel.GetTopLevel(element);
     if (topLevel == null) {
       return;
     }
-    topLevel.AddHandler(InputElement.KeyDownEvent, OnTopLevelKeyDown, RoutingStrategies.Tunnel);
+    topLevel.AddHandler(InputElement.KeyDownEvent, OnTopLevelKeyDown,
+      RoutingStrategies.Tunnel);
     Registrations.AddOrUpdate(element, new RegistrationInfo {
       TopLevel = topLevel,
       KeyDownHandler = OnTopLevelKeyDown
@@ -108,14 +111,16 @@ public static class HotKeyHelper {
       if (!element.IsEffectivelyVisible || TopLevel.GetTopLevel(element) == null) {
         return;
       }
-
       var gesture = GetKeyGesture(element);
       if (gesture != null && gesture.Matches(e)) {
         if (element is Label label && label.Target != null) {
           label.Target.Focus();
-        } else if (element is Button button && button.Command != null && button.Command.CanExecute(button.CommandParameter)) {
+        }
+        else if (element is Button button && button.Command != null &&
+                 button.Command.CanExecute(button.CommandParameter)) {
           button.Command.Execute(button.CommandParameter);
-        } else {
+        }
+        else {
           element.Focus();
         }
         e.Handled = true;
@@ -130,5 +135,10 @@ public static class HotKeyHelper {
       }
       Registrations.Remove(element);
     }
+  }
+
+  private sealed class RegistrationInfo {
+    public TopLevel? TopLevel { get; init; }
+    public EventHandler<KeyEventArgs>? KeyDownHandler { get; init; }
   }
 }

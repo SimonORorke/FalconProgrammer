@@ -38,10 +38,12 @@ public class CategoryTests {
       @"Falcon Factory\Organic Texture 2.8",
       "BAS Biggy.uvip");
     category.Initialise();
-    Assert.That(category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
-    Assert.That(category.TemplateCategoryName, Is.EqualTo("Organic Texture 2.8"));
-    Assert.That(category.TemplateProgramName, Is.EqualTo("BAS Biggy"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(category.MustUseGuiScriptProcessor);
+      Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
+      Assert.That(category.TemplateCategoryName, Is.EqualTo("Organic Texture 2.8"));
+      Assert.That(category.TemplateProgramName, Is.EqualTo("BAS Biggy"));
+    }
   }
 
   [Test]
@@ -51,10 +53,12 @@ public class CategoryTests {
     category.ConfigureMockFileSystemService(
       @"Falcon Factory\Keys", "DX Mania.uvip");
     category.Initialise();
-    Assert.That(!category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
-    Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
-    Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(!category.MustUseGuiScriptProcessor);
+      Assert.That(category.TemplateSoundBankName, Is.EqualTo("Falcon Factory"));
+      Assert.That(category.TemplateCategoryName, Is.EqualTo("Keys"));
+      Assert.That(category.TemplateProgramName, Is.EqualTo("DX Mania"));
+    }
   }
 
   [Test]
@@ -68,16 +72,18 @@ public class CategoryTests {
     category.MockFileSystemService.Folder.SimulatedFilePaths.Add(
       category.Path, ["Cream Synth.uvip", "Fluid Sweeper.uvip"]);
     category.Initialise();
-    Assert.That(!category.MustUseGuiScriptProcessor);
-    Assert.That(category.Name, Is.EqualTo("Electronic"));
-    Assert.That(category.SoundBankName, Is.EqualTo("Fluidity"));
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Fluidity"));
-    Assert.That(category.TemplateCategoryName, Is.EqualTo("Strings"));
-    Assert.That(category.TemplateProgramName, Is.EqualTo("Guitar Stream"));
-    Assert.That(category.TemplateProgramPath, Is.EqualTo(Path.Combine(
-      Settings.TemplateProgramsFolder.Path, "Fluidity", "Strings",
-      "Guitar Stream.uvip")));
-    Assert.That(category.GetPathsOfProgramFilesToEdit().Any());
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(!category.MustUseGuiScriptProcessor);
+      Assert.That(category.Name, Is.EqualTo("Electronic"));
+      Assert.That(category.SoundBankName, Is.EqualTo("Fluidity"));
+      Assert.That(category.TemplateSoundBankName, Is.EqualTo("Fluidity"));
+      Assert.That(category.TemplateCategoryName, Is.EqualTo("Strings"));
+      Assert.That(category.TemplateProgramName, Is.EqualTo("Guitar Stream"));
+      Assert.That(category.TemplateProgramPath, Is.EqualTo(Path.Combine(
+        Settings.TemplateProgramsFolder.Path, "Fluidity", "Strings",
+        "Guitar Stream.uvip")));
+      Assert.That(category.GetPathsOfProgramFilesToEdit().Any());
+    }
   }
 
   [Test]
@@ -86,8 +92,8 @@ public class CategoryTests {
       new TestCategory("Fluidity", "Electronic", Settings) {
         EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
-    var exception = Assert.Catch<ApplicationException>(
-      () => category.GetPathsOfProgramFilesToEdit());
+    var exception =
+      Assert.Catch<ApplicationException>(() => category.GetPathsOfProgramFilesToEdit());
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain(
       "There are no program files to edit in folder"));
@@ -104,8 +110,8 @@ public class CategoryTests {
           }
         }
       };
-    var exception = Assert.Catch<ApplicationException>(
-      () => category.GetProgramPath("Blah"));
+    var exception =
+      Assert.Catch<ApplicationException>(() => category.GetProgramPath("Blah"));
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.Contain("Cannot find program file"));
   }
@@ -116,8 +122,7 @@ public class CategoryTests {
       new TestCategory("Fluidity", "Electronic", Settings) {
         EmbeddedTemplateFileName = "GuiScriptProcessor.xml"
       };
-    Assert.DoesNotThrow(
-      () => category.GetProgramPath("Blah"));
+    Assert.DoesNotThrow(() => category.GetProgramPath("Blah"));
   }
 
   [Test]
@@ -139,10 +144,12 @@ public class CategoryTests {
     category.ConfigureMockFileSystemService(
       @"Pulsar\Bass", "Warped.uvip");
     category.Initialise();
-    Assert.That(category.MustUseGuiScriptProcessor);
-    Assert.That(category.TemplateSoundBankName, Is.EqualTo("Pulsar"));
-    Assert.That(category.TemplateCategoryName, Is.EqualTo("Bass"));
-    Assert.That(category.TemplateProgramName, Is.EqualTo("Warped"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(category.MustUseGuiScriptProcessor);
+      Assert.That(category.TemplateSoundBankName, Is.EqualTo("Pulsar"));
+      Assert.That(category.TemplateCategoryName, Is.EqualTo("Bass"));
+      Assert.That(category.TemplateProgramName, Is.EqualTo("Warped"));
+    }
   }
 
   [Test]
@@ -168,8 +175,7 @@ public class CategoryTests {
       @"Fluidity\Strings", "Guitar Stream.uvip");
     category.MockFileSystemService.Folder.ExistingPaths.Remove(
       Settings.TemplateProgramsFolder.Path);
-    var exception = Assert.Catch<ApplicationException>(
-      () => category.Initialise());
+    var exception = Assert.Catch<ApplicationException>(() => category.Initialise());
     Assert.That(exception, Is.Not.Null);
     Assert.That(exception.Message, Does.StartWith(
       "Cannot find template programs folder"));

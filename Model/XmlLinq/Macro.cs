@@ -147,7 +147,8 @@ internal class Macro : ModulationsOwner {
       if (newCcNo != forMacroModulation.CcNo) {
         forMacroModulation.CcNo = newCcNo;
       }
-    } else {
+    }
+    else {
       // ReSharper disable once CommentTypo
       // Example: Reverb Mix macro of Falcon Factory\Polysynth\Velocity Pluck 
       AddModulation(new Modulation(ProgramXml) {
@@ -164,17 +165,15 @@ internal class Macro : ModulationsOwner {
     string newSource = $"$Program/{Name}";
     var modWheelModulationElements =
       ProgramXml.GetModulationElementsWithCcNo(1);
-    foreach (var modulationElement in modWheelModulationElements) {
+    foreach (var modulationElement in modWheelModulationElements)
       SetAttribute(
         modulationElement, nameof(Modulation.Source), newSource);
-    }
   }
 
   public void ChangeValueToZero() {
     Value = 0;
-    foreach (var effect in ModulatedConnectionsParents) {
+    foreach (var effect in ModulatedConnectionsParents)
       effect.ChangeModulatedParametersToZero();
-    }
   }
 
   protected override XElement CreateElementFromTemplate() {

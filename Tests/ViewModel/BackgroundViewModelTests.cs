@@ -25,9 +25,11 @@ public class BackgroundViewModelTests : ViewModelTestsBase {
     await ViewModel.Open(); // Reads settings to populate the page.
     // Check that the initial settings are as expected
     int initialSettingsBackgroundCount = ViewModel.Settings.Backgrounds.Count;
-    Assert.That(initialSettingsBackgroundCount, Is.EqualTo(2));
-    Assert.That(ViewModel.Settings.Backgrounds[0].Path,
-      Is.EqualTo(@"J:\FalconProgrammer\Background Images\Yellowish Mid-Green.png"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(initialSettingsBackgroundCount, Is.EqualTo(2));
+      Assert.That(ViewModel.Settings.Backgrounds[0].Path,
+        Is.EqualTo(@"J:\FalconProgrammer\Background Images\Yellowish Mid-Green.png"));
+    }
     const string newPath =
       @"J:\FalconProgrammer\Background Images\Dark Forest.png";
     ViewModel.Backgrounds[0].Path = newPath;
@@ -39,9 +41,11 @@ public class BackgroundViewModelTests : ViewModelTestsBase {
   public async Task ProgramsFolderNotFound() {
     MockFileSystemService.Folder.SimulatedExists = false;
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
-      "Background images cannot be updated: cannot find programs folder "));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+        "Background images cannot be updated: cannot find programs folder "));
+      Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    }
   }
 }

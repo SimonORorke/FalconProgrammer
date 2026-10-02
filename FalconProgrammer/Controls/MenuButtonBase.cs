@@ -16,12 +16,11 @@ namespace FalconProgrammer.Controls;
 ///   Base class for a <see cref="Button" /> that, when clicked, shows a flyout menu.
 /// </summary>
 public abstract class MenuButtonBase : Button {
+  private TopLevel? _popupTopLevel;
   protected abstract string AccessibleButtonText { get; }
 
   private Dictionary<AvaloniaProperty, MenuItem> PropertyMenuItems =>
     field ??= CreatePropertyMenuItems();
-
-  private TopLevel? _popupTopLevel;
 
   /// <summary>
   ///   Even though the class inherits from Button, we still have to specify that we
@@ -31,9 +30,7 @@ public abstract class MenuButtonBase : Button {
 
   private MenuFlyout CreateFlyout() {
     var result = new MenuFlyout();
-    foreach (var menuItem in PropertyMenuItems.Values) {
-      result.Items.Add(menuItem);
-    }
+    foreach (var menuItem in PropertyMenuItems.Values) result.Items.Add(menuItem);
     result.Opened += OnFlyoutOpened;
     result.Closed += OnFlyoutClosed;
     return result;
@@ -43,13 +40,13 @@ public abstract class MenuButtonBase : Button {
     var firstItem = PropertyMenuItems.Values.FirstOrDefault();
     if (firstItem != null && TopLevel.GetTopLevel(firstItem) is { } topLevel) {
       _popupTopLevel = topLevel;
-      _popupTopLevel.AddHandler(InputElement.KeyDownEvent, OnPopupKeyDown, RoutingStrategies.Tunnel);
+      _popupTopLevel.AddHandler(KeyDownEvent, OnPopupKeyDown, RoutingStrategies.Tunnel);
     }
   }
 
   private void OnFlyoutClosed(object? sender, EventArgs e) {
     if (_popupTopLevel != null) {
-      _popupTopLevel.RemoveHandler(InputElement.KeyDownEvent, OnPopupKeyDown);
+      _popupTopLevel.RemoveHandler(KeyDownEvent, OnPopupKeyDown);
       _popupTopLevel = null;
     }
   }
@@ -59,10 +56,9 @@ public abstract class MenuButtonBase : Button {
       if (!menuItem.IsEnabled) {
         continue;
       }
-
       if (IsMenuItemMatch(menuItem, e)) {
         var command = menuItem.Command;
-        var param = menuItem.CommandParameter;
+        object? param = menuItem.CommandParameter;
         if (command != null && command.CanExecute(param)) {
           Flyout?.Hide();
           command.Execute(param);
@@ -78,18 +74,19 @@ public abstract class MenuButtonBase : Button {
       return true;
     }
     // Works whether or not the Alt key is pressed.
-    if (menuItem.Header is AccessText accessText && !string.IsNullOrEmpty(accessText.Text)) {
+    if (menuItem.Header is AccessText accessText &&
+        !string.IsNullOrEmpty(accessText.Text)) {
       int index = accessText.Text.IndexOf('_');
       if (index >= 0 && index < accessText.Text.Length - 1) {
         char accessChar = char.ToUpperInvariant(accessText.Text[index + 1]);
         if (e.KeyModifiers is KeyModifiers.None or KeyModifiers.Alt) {
-          if (string.Equals(e.Key.ToString(), accessChar.ToString(), StringComparison.OrdinalIgnoreCase)) {
+          if (string.Equals(e.Key.ToString(), accessChar.ToString(),
+                StringComparison.OrdinalIgnoreCase)) {
             return true;
           }
         }
       }
     }
-
     return false;
   }
 

@@ -35,11 +35,10 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
   public MpeViewModel(IDialogService dialogService,
     IDispatcherService dispatcherService) : base(dialogService, dispatcherService) { }
 
-  public ImmutableList<string> GainMapDisplayNames { get; } = 
+  public ImmutableList<string> GainMapDisplayNames { get; } =
     ["20 dB", "Z Squared", "Linear"];
 
-  [ExcludeFromCodeCoverage]
-  public static string GainMapAdvice => "For Z target Gain.";
+  [ExcludeFromCodeCoverage] public static string GainMapAdvice => "For Z target Gain.";
 
   [ExcludeFromCodeCoverage]
   public override string PageTitle =>
@@ -73,7 +72,7 @@ public partial class MpeViewModel : SettingsWriterViewModelBase {
 
   [ExcludeFromCodeCoverage]
   public static string TargetsAdvice =>
-    "For X/Y/Z targets ContinuousMacro[n]Unipolar/Bipolar: " + 
+    "For X/Y/Z targets ContinuousMacro[n]Unipolar/Bipolar: " +
     "if continuous macro [n] exists, emulate the macro starting at " +
     "value 0 for ~Unipolar, 64 for ~Bipolar.";
 

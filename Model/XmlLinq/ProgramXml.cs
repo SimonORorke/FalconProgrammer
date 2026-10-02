@@ -21,7 +21,8 @@ internal class ProgramXml : EntityBase {
         propertiesElement.Attribute(nameof(BackgroundImagePath));
       if (backgroundImagePathAttribute != null) {
         backgroundImagePathAttribute.Value = value ?? string.Empty;
-      } else {
+      }
+      else {
         // Example: Fluidity
         backgroundImagePathAttribute =
           new XAttribute(nameof(BackgroundImagePath), value ?? string.Empty);
@@ -89,19 +90,17 @@ internal class ProgramXml : EntityBase {
               modulationElement, nameof(Modulation.Source)) ==
             oldModulationSource
       select modulationElement;
-    foreach (var modulationElement in modulationElements) {
+    foreach (var modulationElement in modulationElements)
       SetAttribute(
         modulationElement, nameof(Modulation.Source),
         newModulationSource);
-    }
   }
 
   public void CopyMacroElementsFromTemplate(string templateEmbeddedFileName) {
     var originalMacroElements = MacroElements.ToList();
-    for (int i = originalMacroElements.Count - 1; i >= 0; i--) {
+    for (int i = originalMacroElements.Count - 1; i >= 0; i--)
       // Just a MIDI CC 1 for Organic Pads
       originalMacroElements[i].Remove();
-    }
     var template = new EmbeddedTemplate(templateEmbeddedFileName);
     var templateMacroElements =
       template.RootElement.Elements("ConstantModulation");
@@ -148,9 +147,8 @@ internal class ProgramXml : EntityBase {
   public List<XElement> GetEffectElements() {
     var insertsElements = Element.Descendants("Inserts");
     var result = new List<XElement>();
-    foreach (var insertsElement in insertsElements) {
+    foreach (var insertsElement in insertsElements)
       result.AddRange(insertsElement.Elements());
-    }
     return result;
   }
 
@@ -310,9 +308,7 @@ internal class ProgramXml : EntityBase {
 
   public void ReplaceMacroElements(IEnumerable<Macro> macros) {
     ControlSignalSourcesElement.RemoveNodes();
-    foreach (var macro in macros) {
-      ControlSignalSourcesElement.Add(macro.Element);
-    }
+    foreach (var macro in macros) ControlSignalSourcesElement.Add(macro.Element);
   }
 
   public void SaveToFile(string outputProgramPath) {

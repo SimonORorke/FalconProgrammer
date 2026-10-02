@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
 
@@ -50,7 +49,8 @@ public class BatchScopeCollection : ProgramHierarchyCollectionBase<ProgramItem> 
         SoundBanks = SoundBanks
       });
       this[0].Update(scope.SoundBank, scope.Category, scope.Program);
-    } else if (scope.SoundBank != string.Empty) {
+    }
+    else if (scope.SoundBank != string.Empty) {
       this[0].Update(scope.SoundBank, scope.Category, scope.Program);
     }
   }

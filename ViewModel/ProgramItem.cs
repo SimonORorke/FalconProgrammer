@@ -39,9 +39,7 @@ public partial class ProgramItem : SoundBankCategory {
         from programPath in FileSystemService.Folder.GetFilePaths(
           categoryFolderPath, "*.uvip")
         select Path.GetFileNameWithoutExtension(programPath);
-      foreach (string programName in programNames) {
-        Programs.Add(programName);
-      }
+      foreach (string programName in programNames) Programs.Add(programName);
     } catch (DirectoryNotFoundException exception) {
       // A sound bank folder in Settings.MustUseGuiScriptProcessorCategories
       // does not exist or contains no category subfolders.

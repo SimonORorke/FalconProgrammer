@@ -23,19 +23,25 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     // Check that data is as expected.
     var rangesInSettings =
       ViewModel.Settings.MidiForMacros.ContinuousCcNoRanges;
-    Assert.That(rangesInSettings[0].Start, Is.EqualTo(31));
-    Assert.That(rangesInSettings[0].End, Is.EqualTo(34));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(rangesInSettings[0].Start, Is.EqualTo(31));
+      Assert.That(rangesInSettings[0].End, Is.EqualTo(34));
+    }
     // Simulate user opting to return to the page to fix errors.
     MockDialogService.SimulatedYesNoAnswer = false;
     await DisallowOverlappingCcNoRange(
       32, 35, ViewModel.ContinuousCcNoRanges);
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastYesNoAnswer, Is.False);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastYesNoAnswer, Is.False);
+    }
     await ViewModel.Open();
-    // Check that the invalid data in the row previously added (now the last for before
-    // the addition item) is still shown.
-    Assert.That(ViewModel.ContinuousCcNoRanges[^2].Start, Is.EqualTo(32));
-    Assert.That(ViewModel.ContinuousCcNoRanges[^2].End, Is.EqualTo(35));
+    using (Assert.EnterMultipleScope()) {
+      // Check that the invalid data in the row previously added (now the last for before
+      // the addition item) is still shown.
+      Assert.That(ViewModel.ContinuousCcNoRanges[^2].Start, Is.EqualTo(32));
+      Assert.That(ViewModel.ContinuousCcNoRanges[^2].End, Is.EqualTo(35));
+    }
   }
 
   [Test]
@@ -44,8 +50,10 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     // Check that data is as expected.
     var rangesInSettings =
       ViewModel.Settings.MidiForMacros.ToggleCcNoRanges;
-    Assert.That(rangesInSettings[0].Start, Is.EqualTo(112));
-    Assert.That(rangesInSettings[0].End, Is.EqualTo(112));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(rangesInSettings[0].Start, Is.EqualTo(112));
+      Assert.That(rangesInSettings[0].End, Is.EqualTo(112));
+    }
     await DisallowOverlappingCcNoRange(
       112, 113, ViewModel.ToggleCcNoRanges);
   }
@@ -54,10 +62,12 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
   public async Task ProgramsNotSpecified() {
     Settings = ReadMockSettings("DefaultSettingsWithMidi.xml");
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
-      "Sound banks cannot be updated: the programs folder has not been specified."));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
+        "Sound banks cannot be updated: the programs folder has not been specified."));
+      Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    }
   }
 
   [Test]
@@ -67,9 +77,11 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     Assert.That(ViewModel.AppendCcNoToMacroDisplayNames, Is.True);
     ViewModel.AppendCcNoToMacroDisplayNames = false;
-    Assert.That(await ViewModel.QueryClose(), Is.True);
-    Assert.That(ViewModel.Settings.MidiForMacros.AppendCcNoToMacroDisplayNames,
-      Is.False);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(await ViewModel.QueryClose(), Is.True);
+      Assert.That(ViewModel.Settings.MidiForMacros.AppendCcNoToMacroDisplayNames,
+        Is.False);
+    }
   }
 
   [Test]
@@ -89,9 +101,11 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     await ViewModel.Open();
     const int newCcNo = 18;
     ViewModel.ModWheelReplacementCcNo = newCcNo;
-    Assert.That(await ViewModel.QueryClose(), Is.True);
-    Assert.That(ViewModel.Settings.MidiForMacros.ModWheelReplacementCcNo,
-      Is.EqualTo(newCcNo));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(await ViewModel.QueryClose(), Is.True);
+      Assert.That(ViewModel.Settings.MidiForMacros.ModWheelReplacementCcNo,
+        Is.EqualTo(newCcNo));
+    }
   }
 
   [Test]
@@ -115,8 +129,10 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     Assert.That(errors, Has.Count.EqualTo(1));
     var memberNames = errors[0].MemberNames.ToList();
     Assert.That(memberNames, Has.Count.EqualTo(1));
-    Assert.That(memberNames[0], Is.EqualTo(nameof(ViewModel.ModWheelReplacementCcNo)));
-    Assert.That(ViewModel.ModWheelReplacementCcNo, Is.EqualTo(invalidCcNo));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(memberNames[0], Is.EqualTo(nameof(ViewModel.ModWheelReplacementCcNo)));
+      Assert.That(ViewModel.ModWheelReplacementCcNo, Is.EqualTo(invalidCcNo));
+    }
   }
 
   private async Task DisallowOverlappingCcNoRange(
@@ -136,9 +152,11 @@ public class MidiForMacrosViewModelTests : ViewModelTestsBase {
     // Add a new range.
     var newRange = TestHelper.CreateCcNoRangeAdditionItem(21, 24);
     ranges.Add(newRange);
-    // Update settings.
-    Assert.That(await ViewModel.QueryClose());
-    Assert.That(rangesInSettings[^1].Start == newRange.Start
-                && rangesInSettings[^1].End == newRange.End);
+    using (Assert.EnterMultipleScope()) {
+      // Update settings.
+      Assert.That(await ViewModel.QueryClose());
+      Assert.That(rangesInSettings[^1].Start == newRange.Start
+                  && rangesInSettings[^1].End == newRange.End);
+    }
   }
 }

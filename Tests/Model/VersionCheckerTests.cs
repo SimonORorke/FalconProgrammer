@@ -25,7 +25,6 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = "1.3.0" };
     var mockAppInfo = new MockApplicationInfo { Version = "1.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
     string? result = await versionChecker.CheckForNewVersionAsync();
     Assert.That(result, Is.EqualTo("1.3.0"));
   }
@@ -35,7 +34,6 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = "1.2.0.0" };
     var mockAppInfo = new MockApplicationInfo { Version = "1.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
     string? result = await versionChecker.CheckForNewVersionAsync();
     Assert.That(result, Is.Null);
   }
@@ -45,7 +43,6 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = "1.1.0" };
     var mockAppInfo = new MockApplicationInfo { Version = "1.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
     string? result = await versionChecker.CheckForNewVersionAsync();
     Assert.That(result, Is.Null);
   }
@@ -55,8 +52,7 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = "1.3.0" };
     var mockAppInfo = new MockApplicationInfo { Version = "1.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
-    string? result = await versionChecker.CheckForNewVersionAsync(ignoreVersion: "1.3.0");
+    string? result = await versionChecker.CheckForNewVersionAsync("1.3.0");
     Assert.That(result, Is.Null);
   }
 
@@ -65,8 +61,7 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = "1.4.0" };
     var mockAppInfo = new MockApplicationInfo { Version = "1.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
-    string? result = await versionChecker.CheckForNewVersionAsync(ignoreVersion: "1.3.0");
+    string? result = await versionChecker.CheckForNewVersionAsync("1.3.0");
     Assert.That(result, Is.EqualTo("1.4.0"));
   }
 
@@ -75,8 +70,7 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = "1.1.0" };
     var mockAppInfo = new MockApplicationInfo { Version = "0.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
-    string? result = await versionChecker.CheckForNewVersionAsync(ignoreVersion: "1.0.1");
+    string? result = await versionChecker.CheckForNewVersionAsync("1.0.1");
     Assert.That(result, Is.EqualTo("1.1.0"));
   }
 
@@ -85,7 +79,6 @@ public class VersionCheckerTests {
     var mockReleaseInfo = new MockReleaseInfo { SimulatedLatestVersion = null };
     var mockAppInfo = new MockApplicationInfo { Version = "1.2.0.0" };
     var versionChecker = new VersionChecker(mockReleaseInfo, mockAppInfo);
-
     string? result = await versionChecker.CheckForNewVersionAsync();
     Assert.That(result, Is.Null);
   }

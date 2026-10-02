@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
@@ -54,7 +53,7 @@ public class
 
   internal override void UpdateSettings() {
     Settings.MustUseGuiScriptProcessorCategories.Clear();
-    foreach (var soundBankCategory in this) {
+    foreach (var soundBankCategory in this)
       if (!soundBankCategory.IsAdditionItem) {
         Settings.MustUseGuiScriptProcessorCategories.Add(
           new SoundBankCategorySetting {
@@ -64,7 +63,6 @@ public class
               : soundBankCategory.Category
           });
       }
-    }
     Settings.Write();
   }
 }

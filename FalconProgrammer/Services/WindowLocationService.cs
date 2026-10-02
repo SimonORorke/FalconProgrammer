@@ -30,7 +30,8 @@ public class WindowLocationService : IWindowLocationService {
     // If the settings have not previously been saved, they should all be null;
     // once saved, none should.
     if (this is not {
-          Left: not null, Top: not null, Width: not null and > 0, Height: not null and > 0,
+          Left: not null, Top: not null, Width: not null and > 0,
+          Height: not null and > 0,
           WindowState: not null
         }) {
       // There are no settings to restore.

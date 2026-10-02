@@ -5,7 +5,8 @@ using System.Text.Json.Serialization;
 namespace FalconProgrammer.Model.ReleaseInfo;
 
 public class ReleaseInfo : IReleaseInfo {
-  private const string ReleasesUrl = "https://github.com/SimonORorke/FalconProgrammer/releases";
+  private const string ReleasesUrl =
+    "https://github.com/SimonORorke/FalconProgrammer/releases";
 
   private HttpClient HttpClient => field ??= CreateDefaultHttpClient();
 
@@ -32,7 +33,6 @@ public class ReleaseInfo : IReleaseInfo {
     get {
       const string githubPrefix = "https://github.com/";
       const string releasesSuffix = "/releases";
-
       if (ReleasesUrl.StartsWith(githubPrefix, StringComparison.OrdinalIgnoreCase) &&
           ReleasesUrl.EndsWith(releasesSuffix, StringComparison.OrdinalIgnoreCase)) {
         string repoPath = ReleasesUrl[githubPrefix.Length..^releasesSuffix.Length];
@@ -49,7 +49,6 @@ public class ReleaseInfo : IReleaseInfo {
       // Console.WriteLine("[FalconProgrammer] ReleaseInfo.GetLatestVersionForPlatformAsync: platformExt is null or empty, returning null.");
       return null;
     }
-
     try {
       using var request = new HttpRequestMessage(HttpMethod.Get, ApiUrl);
       using var response = await HttpClient.SendAsync(request);
@@ -59,7 +58,6 @@ public class ReleaseInfo : IReleaseInfo {
         // Console.WriteLine($"[FalconProgrammer] ReleaseInfo.GetLatestVersionForPlatformAsync: Error response: {errorBody}");
         return null;
       }
-
       await using var stream = await response.Content.ReadAsStreamAsync();
       var releases = await JsonSerializer.DeserializeAsync(
         stream,
@@ -79,21 +77,19 @@ public class ReleaseInfo : IReleaseInfo {
     if (releases == null) {
       return null;
     }
-
-    foreach (var release in releases) {
+    foreach (var release in releases)
       // var assetNames = release.Assets?.Select(a => a.Name).ToList() ?? new List<string>();
       // Console.WriteLine($"[FalconProgrammer] Release tag '{release.TagName}', assets: [{string.Join(", ", assetNames)}]");
       if (release.Assets != null &&
           release.Assets.Any(a => !string.IsNullOrEmpty(a.Name) &&
-                                  a.Name.EndsWith(platformExtension, StringComparison.OrdinalIgnoreCase))) {
+                                  a.Name.EndsWith(platformExtension,
+                                    StringComparison.OrdinalIgnoreCase))) {
         if (!string.IsNullOrWhiteSpace(release.TagName)) {
           string ver = release.TagName.Trim().TrimStart('v', 'V');
           // Console.WriteLine($"[FalconProgrammer] Matching release found: TagName='{release.TagName}' -> Version='{ver}'");
           return ver;
         }
       }
-    }
-
     return null;
   }
 
@@ -108,21 +104,17 @@ public class ReleaseInfo : IReleaseInfo {
 }
 
 public class GitHubReleaseDto {
-  [JsonPropertyName("tag_name")]
-  public string TagName { get; set; } = string.Empty;
+  [JsonPropertyName("tag_name")] public string TagName { get; set; } = string.Empty;
 
-  [JsonPropertyName("assets")]
-  public List<GitHubAssetDto>? Assets { get; set; }
+  [JsonPropertyName("assets")] public List<GitHubAssetDto>? Assets { get; set; }
 }
 
 public class GitHubAssetDto {
-  [JsonPropertyName("name")]
-  public string Name { get; set; } = string.Empty;
+  [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
 }
 
 [JsonSourceGenerationOptions(WriteIndented = false)]
 [JsonSerializable(typeof(List<GitHubReleaseDto>))]
 [JsonSerializable(typeof(GitHubReleaseDto))]
 [JsonSerializable(typeof(GitHubAssetDto))]
-internal partial class GitHubReleaseJsonContext : JsonSerializerContext {
-}
+internal partial class GitHubReleaseJsonContext : JsonSerializerContext { }

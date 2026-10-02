@@ -160,9 +160,7 @@ public partial class BatchViewModel : SettingsWriterViewModelBase {
 
   private string GetLogText() {
     var writer = new StringWriter();
-    foreach (string line in Log) {
-      writer.WriteLine(line);
-    }
+    foreach (string line in Log) writer.WriteLine(line);
     return writer.ToString();
   }
 
@@ -292,11 +290,10 @@ public partial class BatchViewModel : SettingsWriterViewModelBase {
   }
 
   private void UpdateLogAndProgress() {
-    while (!LogLineQueue.IsEmpty) {
+    while (!LogLineQueue.IsEmpty)
       if (LogLineQueue.TryDequeue(out string? line)) {
         Log.Add(line);
       }
-    }
     Status = $"Run started at {RunStartTime:HH:mm:ss}. Running {Batch.Task}, " +
              $"task {Batch.TaskNo} of {Batch.TaskCount}.";
     OnLogUpdated();

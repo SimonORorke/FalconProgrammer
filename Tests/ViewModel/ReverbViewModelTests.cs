@@ -41,9 +41,11 @@ public class ReverbViewModelTests : ViewModelTestsBase {
     await ViewModel.Open(); // Reads settings to populate the page.
     // Check that the initial settings are as expected
     int initialSettingsReverbCount = ViewModel.Settings.DoNotZeroReverb.Count;
-    Assert.That(initialSettingsReverbCount, Is.EqualTo(20));
-    Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
-      Is.EqualTo(@"Falcon Factory\Bass-Sub\Coastal Halftones 1.4"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(initialSettingsReverbCount, Is.EqualTo(20));
+      Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
+        Is.EqualTo(@"Falcon Factory\Bass-Sub\Coastal Halftones 1.4"));
+    }
     var newProgramItem =
       new ProgramItem(ViewModel.Settings, ViewModel.FileSystemService,
         false, true) {
@@ -51,10 +53,12 @@ public class ReverbViewModelTests : ViewModelTestsBase {
       };
     ViewModel.DoNotZeroReverb[0] = newProgramItem;
     bool canClose = await ViewModel.QueryClose(); // Updates and saves settings
-    Assert.That(canClose, Is.EqualTo(true));
-    Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
-      Is.EqualTo(Path.Combine(newProgramItem.SoundBank,
-        newProgramItem.Category, newProgramItem.Program)));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(canClose, Is.EqualTo(true));
+      Assert.That(GetPathShort(ViewModel.Settings.DoNotZeroReverb[0]),
+        Is.EqualTo(Path.Combine(newProgramItem.SoundBank,
+          newProgramItem.Category, newProgramItem.Program)));
+    }
     return;
 
     string GetPathShort(ProgramPath programPath) {
@@ -67,9 +71,11 @@ public class ReverbViewModelTests : ViewModelTestsBase {
   public async Task ProgramsFolderNotFound() {
     MockFileSystemService.Folder.SimulatedExists = false;
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
-      "Reverb cannot be updated: cannot find programs folder "));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+        "Reverb cannot be updated: cannot find programs folder "));
+      Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    }
   }
 }

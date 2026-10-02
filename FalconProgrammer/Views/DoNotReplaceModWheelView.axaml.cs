@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-
 using FalconProgrammer.Helpers;
 
 namespace FalconProgrammer.Views;

@@ -39,8 +39,8 @@ public static class Global {
     string[] resourceNames = assembly.GetManifestResourceNames();
     string result;
     try {
-      result = resourceNames.Single(
-        resourcePath => resourcePath.EndsWith($".{embeddedResourceFileName}"));
+      result = resourceNames.Single(resourcePath =>
+        resourcePath.EndsWith($".{embeddedResourceFileName}"));
     } catch (InvalidOperationException exception) {
       // If not found, the exception message is 'Sequence contains no matching element'.
       throw new InvalidOperationException(

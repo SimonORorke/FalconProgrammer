@@ -77,23 +77,21 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
       return string.Empty;
     }
     var errorMessageWriter = new StringWriter();
-    foreach (var range in Ranges) {
+    foreach (var range in Ranges)
       if (range.HasErrors) {
         errorMessageWriter.WriteLine(
           $"{RangeType} CC No range {range.Start} to {range.End} " +
           "has a validation error.");
       }
-    }
     string errorMessage = errorMessageWriter.ToString().TrimEnd('\r', '\n');
     if (errorMessage == string.Empty) {
       // No ranges have internal consistency errors. So check for range overlaps.
-      foreach (var range in Ranges) {
+      foreach (var range in Ranges)
         try {
           CheckRangeForOverlap(range);
         } catch (ApplicationException exception) {
           errorMessage = exception.Message;
         }
-      }
     }
     return errorMessage;
   }
@@ -102,9 +100,8 @@ public class CcNoRangeCollection : DataGridItemCollectionBase<CcNoRangeItem> {
     IsPopulating = true;
     SettingsRanges = settingsRanges;
     Clear();
-    foreach (var settingsRange in SettingsRanges) {
+    foreach (var settingsRange in SettingsRanges)
       AddItem(settingsRange.Start, settingsRange.End);
-    }
     IsPopulating = false;
   }
 

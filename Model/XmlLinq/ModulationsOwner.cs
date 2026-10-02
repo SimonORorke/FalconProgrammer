@@ -59,7 +59,8 @@ internal class ModulationsOwner : EntityBase {
       var propertiesElement = Element.Element("Properties");
       if (propertiesElement != null) {
         propertiesElement.AddBeforeSelf(result);
-      } else {
+      }
+      else {
         Element.Add(result);
       }
     }
@@ -70,8 +71,8 @@ internal class ModulationsOwner : EntityBase {
     var list = new List<Modulation>();
     var connectionsElement = Element.Element("Connections");
     if (connectionsElement != null) {
-      list.AddRange(connectionsElement.Elements("SignalConnection").Select(
-        modulationElement => new Modulation(
+      list.AddRange(connectionsElement.Elements("SignalConnection")
+        .Select(modulationElement => new Modulation(
           this, modulationElement, ProgramXml, Midi)));
     }
     return [.. list];

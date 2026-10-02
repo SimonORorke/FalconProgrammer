@@ -107,7 +107,8 @@ internal class InfoPageLayout {
       macro.Y = y;
       if (macrosOnCurrentRow < macrosPerRow) {
         x += gapBetweenMacros + MacroWidth;
-      } else {
+      }
+      else {
         macrosOnCurrentRow = 0;
         x = gapBetweenMacros;
         y += rowHeight;
@@ -160,7 +161,8 @@ internal class InfoPageLayout {
           : AtEnd(), // Example: Eternal Funk\Synths\Bell Shaka 
         _ => Fourth()
       };
-    } else { // Insert Wheel macro before ADSR macros
+    }
+    else { // Insert Wheel macro before ADSR macros
       // Examples: many Eternal Funk programs; Ether Fields\Hybrid\Cine Guitar Pad.
       insertionIndex = visibleContinuousMacros.IndexOf(adsrMacros["Attack"]);
     }

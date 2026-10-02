@@ -91,9 +91,8 @@ internal class MpeScriptProcessor : ScriptProcessor {
           CreateDimensionModulation(MpeEventId.X, XTarget.ToString()));
         break;
     }
-    for (int i = 0; i < dimensionModulations.Count; i++) {
+    for (int i = 0; i < dimensionModulations.Count; i++)
       EmulateMacroWithDimension(macrosToEmulate[i], dimensionModulations[i]);
-    }
   }
 
   private ScriptEventModulation CreateDimensionModulation(

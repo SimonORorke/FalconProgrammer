@@ -42,47 +42,56 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     await ViewModel.QueryClose(); // Updates and saves settings
     settingsCategories = ViewModel.Settings.MustUseGuiScriptProcessorCategories;
     Assert.That(settingsCategories, Has.Count.EqualTo(initialSettingsCategoriesCount));
-    Assert.That(settingsCategories[0].SoundBank,
-      Is.EqualTo(initialLastSettingsCategory.SoundBank));
-    Assert.That(settingsCategories[0].Category,
-      Is.EqualTo(initialLastSettingsCategory.Category));
-    Assert.That(settingsCategories[1].SoundBank,
-      Is.EqualTo(initialFirstSettingsCategory.SoundBank));
-    Assert.That(settingsCategories[1].Category,
-      Is.EqualTo(initialFirstSettingsCategory.Category));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settingsCategories[0].SoundBank,
+        Is.EqualTo(initialLastSettingsCategory.SoundBank));
+      Assert.That(settingsCategories[0].Category,
+        Is.EqualTo(initialLastSettingsCategory.Category));
+      Assert.That(settingsCategories[1].SoundBank,
+        Is.EqualTo(initialFirstSettingsCategory.SoundBank));
+      Assert.That(settingsCategories[1].Category,
+        Is.EqualTo(initialFirstSettingsCategory.Category));
+    }
   }
 
   [Test]
   public async Task Main() {
     ViewModel.ConfigureMockFileSystemService(Settings);
     await ViewModel.Open(); // Reads settings to populate the page.
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
-    Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
-    Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo("Falcon Factory"));
-    Assert.That(ViewModel.SoundBankCategories[0].Category,
-      Is.EqualTo("Organic Texture 2.8"));
-    Assert.That(ViewModel.SoundBankCategories[0].SoundBanks, Has.Count.EqualTo(8));
-    Assert.That(ViewModel.SoundBankCategories[0].Categories, Has.Count.EqualTo(7));
-    Assert.That(ViewModel.SoundBankCategories[0].Categories[0], Is.EqualTo("All"));
-    Assert.That(ViewModel.SoundBankCategories[0].Categories[1], Is.EqualTo("Bass-Sub"));
-    Assert.That(ViewModel.SoundBankCategories[0].CanRemove, Is.True);
-    Assert.That(ViewModel.SoundBankCategories[0].RemoveCommand.CanExecute(
-      null), Is.True);
-    Assert.That(ViewModel.SoundBankCategories[0].IsAdditionItem, Is.False);
-    Assert.That(ViewModel.SoundBankCategories[0].IsForAllCategories, Is.False);
-    Assert.That(ViewModel.SoundBankCategories[1].SoundBank, Is.EqualTo("Organic Keys"));
-    Assert.That(ViewModel.SoundBankCategories[1].Category, Is.EqualTo("All"));
-    Assert.That(ViewModel.SoundBankCategories[1].IsForAllCategories, Is.True);
-    Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
-    // Addition item
-    Assert.That(ViewModel.SoundBankCategories[4].SoundBank, Is.Empty);
-    Assert.That(ViewModel.SoundBankCategories[4].SoundBanks, Has.Count.EqualTo(8));
-    Assert.That(ViewModel.SoundBankCategories[4].Categories, Has.Count.EqualTo(0));
-    Assert.That(ViewModel.SoundBankCategories[4].Category, Is.Empty);
-    Assert.That(ViewModel.SoundBankCategories[4].CanRemove, Is.False);
-    Assert.That(ViewModel.SoundBankCategories[4].RemoveCommand.CanExecute(
-      null), Is.False);
-    Assert.That(ViewModel.SoundBankCategories[4].IsAdditionItem, Is.True);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(0));
+      Assert.That(ViewModel.SoundBankCategories, Has.Count.EqualTo(5));
+    }
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.SoundBankCategories[0].SoundBank,
+        Is.EqualTo("Falcon Factory"));
+      Assert.That(ViewModel.SoundBankCategories[0].Category,
+        Is.EqualTo("Organic Texture 2.8"));
+      Assert.That(ViewModel.SoundBankCategories[0].SoundBanks, Has.Count.EqualTo(8));
+      Assert.That(ViewModel.SoundBankCategories[0].Categories, Has.Count.EqualTo(7));
+    }
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.SoundBankCategories[0].Categories[0], Is.EqualTo("All"));
+      Assert.That(ViewModel.SoundBankCategories[0].Categories[1], Is.EqualTo("Bass-Sub"));
+      Assert.That(ViewModel.SoundBankCategories[0].CanRemove, Is.True);
+      Assert.That(ViewModel.SoundBankCategories[0].RemoveCommand.CanExecute(
+        null), Is.True);
+      Assert.That(ViewModel.SoundBankCategories[0].IsAdditionItem, Is.False);
+      Assert.That(ViewModel.SoundBankCategories[0].IsForAllCategories, Is.False);
+      Assert.That(ViewModel.SoundBankCategories[1].SoundBank, Is.EqualTo("Organic Keys"));
+      Assert.That(ViewModel.SoundBankCategories[1].Category, Is.EqualTo("All"));
+      Assert.That(ViewModel.SoundBankCategories[1].IsForAllCategories, Is.True);
+      Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
+      // Addition item
+      Assert.That(ViewModel.SoundBankCategories[4].SoundBank, Is.Empty);
+      Assert.That(ViewModel.SoundBankCategories[4].SoundBanks, Has.Count.EqualTo(8));
+      Assert.That(ViewModel.SoundBankCategories[4].Categories, Has.Count.EqualTo(0));
+      Assert.That(ViewModel.SoundBankCategories[4].Category, Is.Empty);
+      Assert.That(ViewModel.SoundBankCategories[4].CanRemove, Is.False);
+      Assert.That(ViewModel.SoundBankCategories[4].RemoveCommand.CanExecute(
+        null), Is.False);
+      Assert.That(ViewModel.SoundBankCategories[4].IsAdditionItem, Is.True);
+    }
     Assert.That(ViewModel.SoundBankCategories.HasBeenChanged, Is.False);
     // Add item
     ViewModel.SoundBankCategories[4].SoundBank = "Spectre";
@@ -124,30 +133,36 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     MockFileSystemService.Folder.SimulatedSubfolderNames.Add(Settings.ProgramsFolder.Path,
       []);
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.EndWith(
-      "' contains no sound bank subfolders."));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Does.EndWith(
+        "' contains no sound bank subfolders."));
+      Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    }
   }
 
   [Test]
   public async Task ProgramsFolderNotFound() {
     MockFileSystemService.Folder.SimulatedExists = false;
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
-      "Script processors cannot be updated: cannot find programs folder "));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+        "Script processors cannot be updated: cannot find programs folder "));
+      Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    }
   }
 
   [Test]
   public async Task ProgramsNotSpecified() {
     Settings = ReadMockSettings("DefaultSettingsWithMidi.xml");
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
-      "Script processors cannot be updated: the programs folder has not been specified."));
-    Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
+        "Script processors cannot be updated: the programs folder has not been specified."));
+      Assert.That(MockMessageRecipient.GoToLocationsPageCount, Is.EqualTo(1));
+    }
   }
 
   [Test]
@@ -158,8 +173,10 @@ public class GuiScriptProcessorViewModelTests : ViewModelTestsBase {
     string soundBankPath = Path.Combine(Settings.ProgramsFolder.Path, soundBank);
     MockFileSystemService.Folder.SimulatedSubfolderNames.Remove(soundBankPath);
     Assert.DoesNotThrowAsync(() => ViewModel.Open());
-    Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo(soundBank));
-    Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo(
-      SoundBankCategory.SoundBankErrorMessage));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ViewModel.SoundBankCategories[0].SoundBank, Is.EqualTo(soundBank));
+      Assert.That(ViewModel.SoundBankCategories[0].Category, Is.EqualTo(
+        SoundBankCategory.SoundBankErrorMessage));
+    }
   }
 }

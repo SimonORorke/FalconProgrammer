@@ -93,8 +93,10 @@ public class FalconProgramTests {
       Batch.RunTask(
         ConfigTask.InitialiseLayout, soundBankName, categoryName, programName);
       string expectedPath = $"\"./../../../Images/{expectedImageFileName}\"";
-      Assert.That(Batch.TestProgram.SavedXml, Does.Contain(expectedPath));
-      Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
+      using (Assert.EnterMultipleScope()) {
+        Assert.That(Batch.TestProgram.SavedXml, Does.Contain(expectedPath));
+        Assert.That(Batch.MockBatchLog.Text, Does.Contain("Set BackgroundImagePath"));
+      }
     }
   }
 
@@ -118,11 +120,13 @@ public class FalconProgramTests {
       "Organic Pads", "Mystical", "Tibetan Horns");
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("AttackTime=\"0.02\""));
     Assert.That(Batch.TestProgram.SavedXml, Does.Contain("ReleaseTime=\"0.3\""));
-    Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
-    Assert.That(Batch.TestProgram.LastWrittenFilePath, Is.EqualTo(
-      @"J:\FalconProgrammer\Scripts\DahdsrController\DahdsrController.lua"));
-    Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
-      "MaxAttackSeconds = 1"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(Batch.TestProgram.SavedXml, Does.Contain("<script><![CDATA["));
+      Assert.That(Batch.TestProgram.LastWrittenFilePath, Is.EqualTo(
+        @"J:\FalconProgrammer\Scripts\DahdsrController\DahdsrController.lua"));
+      Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
+        "MaxAttackSeconds = 1"));
+    }
     Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
       "MaxDecaySeconds = 15"));
     Assert.That(Batch.TestProgram.LastWrittenFileContents, Does.Contain(
@@ -145,31 +149,39 @@ public class FalconProgramTests {
       Batch.EmbeddedProgramFileName = embeddedProgramFileName;
       Batch.RunTask(ConfigTask.PrependPathLineToDescription,
         soundBankName, "Bass", "Imagination");
-      Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
-        @$"PATH: {soundBankName}\Bass\Imagination"));
-      Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
-        @$"PrependPathLineToDescription - {soundBankName}\Bass\Imagination: " +
-        "Prepended path line to description."));
+      using (Assert.EnterMultipleScope()) {
+        Assert.That(Batch.TestProgram.SavedXml, Does.Contain(
+          @$"PATH: {soundBankName}\Bass\Imagination"));
+        Assert.That(Batch.MockBatchLog.Lines[0], Is.EqualTo(
+          @$"PrependPathLineToDescription - {soundBankName}\Bass\Imagination: " +
+          "Prepended path line to description."));
+      }
     }
   }
 
   [Test]
   public void RemoveArpeggiatorsAndSequencing() {
     Run("Falcon Factory rev2", "Bass", "Big Sleep");
-    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith("Removed Arpeggiator(s)."));
-    Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
-      "Removed macro Sequence (Macro 17)."));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith("Removed Arpeggiator(s)."));
+      Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
+        "Removed macro Sequence (Macro 17)."));
+    }
     Run("Modular Noise", "Bass", "Voltage");
-    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith("Removed Arpeggiator(s)."));
-    Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
-      "Removed program-level sequencing script processor(s)."));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith("Removed Arpeggiator(s)."));
+      Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
+        "Removed program-level sequencing script processor(s)."));
+    }
     Run("Modular Noise", "Chords", "Buffers (F)");
-    Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
-      "Removed program-level sequencing script processor(s)."));
-    Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
-      "Removed below-program-level sequencing script processor(s)."));
-    Assert.That(Batch.MockBatchLog.Lines[2], Does.EndWith(
-      "Removed macro Rate (Macro 3)."));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(Batch.MockBatchLog.Lines[0], Does.EndWith(
+        "Removed program-level sequencing script processor(s)."));
+      Assert.That(Batch.MockBatchLog.Lines[1], Does.EndWith(
+        "Removed below-program-level sequencing script processor(s)."));
+      Assert.That(Batch.MockBatchLog.Lines[2], Does.EndWith(
+        "Removed macro Rate (Macro 3)."));
+    }
     return;
 
     void Run(string soundBankName, string categoryName, string programName) {
@@ -216,11 +228,14 @@ public class FalconProgramTests {
     Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
     bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
-    Assert.That(found, Is.True);
-    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
-    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
-    Assert.That(mpeScriptProcessor.InitialZValue, Is.EqualTo(0));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(found, Is.True);
+      Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
+      Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
+      Assert.That(mpeScriptProcessor.YTarget,
+        Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+      Assert.That(mpeScriptProcessor.InitialZValue, Is.EqualTo(0));
+    }
   }
 
   [Test]
@@ -232,10 +247,14 @@ public class FalconProgramTests {
     Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
     bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
-    Assert.That(found, Is.True);
-    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
-    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(found, Is.True);
+      Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
+      Assert.That(mpeScriptProcessor.ZTarget,
+        Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+      Assert.That(mpeScriptProcessor.YTarget,
+        Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+    }
   }
 
   [Test]
@@ -247,18 +266,23 @@ public class FalconProgramTests {
     Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
     bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
-    Assert.That(found, Is.True);
-    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
-    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
-    Assert.That(mpeScriptProcessor.GainMap, Is.EqualTo(GainMap.Linear));
-    Assert.That(mpeScriptProcessor.InitialZValue,
-      Is.EqualTo(Batch.TestProgram.Macros[1].Value));
-    Assert.That(mpeScriptProcessor.PitchBendRange, Is.EqualTo(24));
-    Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents,
-      Has.Count.EqualTo(1));
-    Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents,
-      Has.Count.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(found, Is.True);
+      Assert.That(mpeScriptProcessor!.XTarget,
+        Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
+      Assert.That(mpeScriptProcessor.ZTarget,
+        Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+      Assert.That(mpeScriptProcessor.YTarget,
+        Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+      Assert.That(mpeScriptProcessor.GainMap, Is.EqualTo(GainMap.Linear));
+      Assert.That(mpeScriptProcessor.InitialZValue,
+        Is.EqualTo(Batch.TestProgram.Macros[1].Value));
+      Assert.That(mpeScriptProcessor.PitchBendRange, Is.EqualTo(24));
+      Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents,
+        Has.Count.EqualTo(1));
+      Assert.That(Batch.TestProgram.Macros[1].ModulatedConnectionsParents,
+        Has.Count.EqualTo(1));
+    }
     Assert.That(Batch.TestProgram.Macros[0].ModulatedConnectionsParents,
       Is.EqualTo(Batch.TestProgram.Macros[1].ModulatedConnectionsParents));
     Assert.That(Batch.TestProgram.Macros[2].ModulatedConnectionsParents,
@@ -299,10 +323,12 @@ public class FalconProgramTests {
     Batch.RunTask(ConfigTask.SupportMpe, soundBankName, categoryName, programName);
     Assert.That(Batch.MockBatchLog.Text, Does.Contain("Added MPE support."));
     bool found = Batch.TestProgram.TryGetMpeScriptProcessor(out var mpeScriptProcessor);
-    Assert.That(found, Is.True);
-    Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
-    Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
-    Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.PolyphonicAftertouch));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(found, Is.True);
+      Assert.That(mpeScriptProcessor!.XTarget, Is.EqualTo(XTarget.Pitch));
+      Assert.That(mpeScriptProcessor.ZTarget, Is.EqualTo(ZTarget.Gain));
+      Assert.That(mpeScriptProcessor.YTarget, Is.EqualTo(YTarget.PolyphonicAftertouch));
+    }
   }
 
   [Test]

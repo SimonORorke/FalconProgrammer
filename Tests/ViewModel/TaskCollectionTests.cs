@@ -14,8 +14,10 @@ public class TaskCollectionTests : ViewModelTestsBase {
     // Populate
     collection.Populate(settings);
     int initialCollectionCount = collection.Count;
-    Assert.That(initialCollectionCount, Is.EqualTo(initialSettingsTaskCount + 1));
-    Assert.That(collection[0].Tasks, Has.Count.GreaterThan(0));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(initialCollectionCount, Is.EqualTo(initialSettingsTaskCount + 1));
+      Assert.That(collection[0].Tasks, Has.Count.GreaterThan(0));
+    }
     // Cut
     collection[^2].CutCommand.Execute(null); // Last before addition item
     Assert.That(collection, Has.Count.EqualTo(initialCollectionCount - 1));

@@ -18,7 +18,10 @@ public class MockDialogService : IDialogService {
   [PublicAPI] internal string LastInfoMessage { get; set; } = string.Empty;
   [PublicAPI] internal int ShowMessageWindowCount { get; set; }
   [PublicAPI] internal int ShowNewVersionWindowCount { get; set; }
-  [PublicAPI] internal NewVersionWindowViewModel? LastNewVersionWindowViewModel { get; set; }
+
+  [PublicAPI]
+  internal NewVersionWindowViewModel? LastNewVersionWindowViewModel { get; set; }
+
   internal string SimulatedPath { get; set; } = string.Empty;
   internal bool SimulatedYesNoAnswer { get; set; }
 

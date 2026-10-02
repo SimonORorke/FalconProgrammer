@@ -1,8 +1,8 @@
 namespace FalconProgrammer.Model.ReleaseInfo;
 
 public class VersionChecker : IVersionChecker {
-  private readonly IReleaseInfo _releaseInfo;
   private readonly IApplicationInfo _applicationInfo;
+  private readonly IReleaseInfo _releaseInfo;
 
   public VersionChecker(
     IReleaseInfo? releaseInfo = null, IApplicationInfo? applicationInfo = null) {
@@ -15,20 +15,16 @@ public class VersionChecker : IVersionChecker {
     // Console.WriteLine($"[FalconProgrammer] VersionChecker.CheckForNewVersionAsync: CurrentVersion='{currentVersionString}', IgnoreVersion='{ignoreVersion}'");
     string? latestVersionString = await _releaseInfo.GetLatestVersionForPlatformAsync();
     // Console.WriteLine($"[FalconProgrammer] VersionChecker.CheckForNewVersionAsync: LatestVersion='{latestVersionString}'");
-
     if (string.IsNullOrWhiteSpace(latestVersionString)) {
       // Console.WriteLine("[FalconProgrammer] VersionChecker.CheckForNewVersionAsync: latestVersionString is null or whitespace -> returning null.");
       return null;
     }
-
     int cmpCurrent = CompareVersions(latestVersionString, currentVersionString);
     // Console.WriteLine($"[FalconProgrammer] VersionChecker: CompareVersions('{latestVersionString}', '{currentVersionString}') = {cmpCurrent}");
-
     if (cmpCurrent <= 0) {
       // Console.WriteLine("[FalconProgrammer] VersionChecker: Current version is greater than or equal to latest version -> returning null.");
       return null; // Current version is the latest.
     }
-
     if (!string.IsNullOrWhiteSpace(ignoreVersion)) {
       int cmpIgnore = CompareVersions(latestVersionString, ignoreVersion);
       // Console.WriteLine($"[FalconProgrammer] VersionChecker: CompareVersions('{latestVersionString}', '{ignoreVersion}') = {cmpIgnore}");
@@ -50,7 +46,6 @@ public class VersionChecker : IVersionChecker {
     int[] partsA = ParseVersionComponents(versionA);
     int[] partsB = ParseVersionComponents(versionB);
     int maxLen = Math.Max(partsA.Length, partsB.Length);
-
     for (int i = 0; i < maxLen; i++) {
       int a = i < partsA.Length ? partsA[i] : 0;
       int b = i < partsB.Length ? partsB[i] : 0;
@@ -59,7 +54,6 @@ public class VersionChecker : IVersionChecker {
         return cmp;
       }
     }
-
     return 0;
   }
 
@@ -67,7 +61,6 @@ public class VersionChecker : IVersionChecker {
     if (string.IsNullOrWhiteSpace(version)) {
       return [];
     }
-
     string trimmed = version.Trim().TrimStart('v', 'V');
     int dashIndex = trimmed.IndexOf('-');
     if (dashIndex >= 0) {
@@ -77,13 +70,13 @@ public class VersionChecker : IVersionChecker {
     if (plusIndex >= 0) {
       trimmed = trimmed[..plusIndex];
     }
-
     string[] segments = trimmed.Split('.');
     var result = new List<int>();
-    foreach (string segment in segments) {
+    foreach (string segment in segments)
       if (int.TryParse(segment, out int val)) {
         result.Add(val);
-      } else {
+      }
+      else {
         int num = 0;
         int j = 0;
         while (j < segment.Length && char.IsDigit(segment[j])) {
@@ -92,8 +85,6 @@ public class VersionChecker : IVersionChecker {
         }
         result.Add(num);
       }
-    }
-
     return [.. result];
   }
 }

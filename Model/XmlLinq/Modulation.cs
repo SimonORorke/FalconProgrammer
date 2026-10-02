@@ -171,7 +171,8 @@ internal class Modulation : EntityBase {
   private void SubstituteCcNoForPlaceholder() {
     if (Source.StartsWith("@MIDI CC C")) {
       Source = GetSourceWithCcNo('C', Midi!.ContinuousCcNos);
-    } else if (Source.StartsWith("@MIDI CC T")) {
+    }
+    else if (Source.StartsWith("@MIDI CC T")) {
       Source = GetSourceWithCcNo('T', Midi!.ToggleCcNos);
     }
     return;
@@ -185,7 +186,8 @@ internal class Modulation : EntityBase {
         int ccNo;
         if (index < ccNos.Count) {
           ccNo = ccNos[index];
-        } else {
+        }
+        else {
           int shortfall = index - ccNos.Count + 1;
           int maxSpecifiedCcNo = ccNos[^1];
           ccNo = maxSpecifiedCcNo + shortfall;

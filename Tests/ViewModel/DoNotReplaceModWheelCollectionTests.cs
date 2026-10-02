@@ -28,8 +28,10 @@ public class DoNotReplaceModWheelCollectionTests : ViewModelTestsBase {
     // Populate
     Collection.Populate(Settings, SoundBanks);
     int initialCollectionCount = Collection.Count;
-    Assert.That(initialCollectionCount, Is.EqualTo(initialSettingsSoundBankCount + 1));
-    Assert.That(Collection[0].SoundBanks, Has.Count.EqualTo(4));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(initialCollectionCount, Is.EqualTo(initialSettingsSoundBankCount + 1));
+      Assert.That(Collection[0].SoundBanks, Has.Count.EqualTo(4));
+    }
     // Cut
     Collection[^2].CutCommand.Execute(null); // Last before addition item
     Assert.That(Collection, Has.Count.EqualTo(initialCollectionCount - 1));

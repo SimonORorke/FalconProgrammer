@@ -21,7 +21,8 @@ public partial class NewVersionWindowViewModel : ObservableObject {
     _autoCheckNewVersions = autoCheckNewVersions;
     _ignoreVersion = ignoreVersion ?? string.Empty;
     _ignoreThisVersion = !string.IsNullOrWhiteSpace(_ignoreVersion) &&
-                         VersionChecker.CompareVersions(latestVersion, _ignoreVersion) <= 0;
+                         VersionChecker.CompareVersions(latestVersion, _ignoreVersion) <=
+                         0;
     ApplicationInfo = applicationInfo ?? new ApplicationInfo();
   }
 
@@ -60,7 +61,8 @@ public partial class NewVersionWindowViewModel : ObservableObject {
   }
 
   [ExcludeFromCodeCoverage]
-  public static string ReleasesUrl => "https://github.com/SimonORorke/FalconProgrammer/releases";
+  public static string ReleasesUrl =>
+    "https://github.com/SimonORorke/FalconProgrammer/releases";
 
   [ExcludeFromCodeCoverage]
   [RelayCommand]

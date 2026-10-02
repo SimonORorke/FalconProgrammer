@@ -22,15 +22,17 @@ public class MpeViewModelTests : ViewModelTestsBase {
   public async Task Defaults() {
     MockSettingsReaderEmbedded.EmbeddedFileName = "DefaultSettingsWithMidi.xml";
     await ViewModel.Open();
-    Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget),
-      Is.EqualTo(YTarget.ContinuousMacro1Unipolar));
-    Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget),
-      Is.EqualTo(ZTarget.Gain));
-    Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget),
-      Is.EqualTo(XTarget.Pitch));
-    Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("20 dB"));
-    Assert.That(ViewModel.InitialiseZToMacroValue, Is.False);
-    Assert.That(ViewModel.PitchBendRange, Is.EqualTo(48));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget),
+        Is.EqualTo(YTarget.ContinuousMacro1Unipolar));
+      Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget),
+        Is.EqualTo(ZTarget.Gain));
+      Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget),
+        Is.EqualTo(XTarget.Pitch));
+      Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("20 dB"));
+      Assert.That(ViewModel.InitialiseZToMacroValue, Is.False);
+      Assert.That(ViewModel.PitchBendRange, Is.EqualTo(48));
+    }
     const ZTarget newZTarget = ZTarget.ContinuousMacro2Bipolar;
     const string newGainMapDisplayName = "Z Squared";
     // Disable MPE support, as it's not ready for release and may never be.
@@ -48,22 +50,24 @@ public class MpeViewModelTests : ViewModelTestsBase {
   public async Task Main() {
     MockSettingsReaderEmbedded.EmbeddedFileName = "BatchSettings.xml";
     await ViewModel.Open();
-    Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTargets[0]),
-      Is.EqualTo(YTarget.None));
-    Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTargets[0]),
-      Is.EqualTo(ZTarget.None));
-    Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTargets[0]),
-      Is.EqualTo(XTarget.None));
-    Assert.That(ViewModel.GainMapDisplayNames[2], Is.EqualTo("Linear"));
-    Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget),
-      Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
-    Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget),
-      Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
-    Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget),
-      Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
-    Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("Linear"));
-    Assert.That(ViewModel.InitialiseZToMacroValue, Is.True);
-    Assert.That(ViewModel.PitchBendRange, Is.EqualTo(24));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTargets[0]),
+        Is.EqualTo(YTarget.None));
+      Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTargets[0]),
+        Is.EqualTo(ZTarget.None));
+      Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTargets[0]),
+        Is.EqualTo(XTarget.None));
+      Assert.That(ViewModel.GainMapDisplayNames[2], Is.EqualTo("Linear"));
+      Assert.That(Global.GetEnumValue<YTarget>(ViewModel.YTarget),
+        Is.EqualTo(YTarget.ContinuousMacro1Bipolar));
+      Assert.That(Global.GetEnumValue<ZTarget>(ViewModel.ZTarget),
+        Is.EqualTo(ZTarget.ContinuousMacro2Unipolar));
+      Assert.That(Global.GetEnumValue<XTarget>(ViewModel.XTarget),
+        Is.EqualTo(XTarget.ContinuousMacro3Bipolar));
+      Assert.That(ViewModel.GainMapDisplayName, Is.EqualTo("Linear"));
+      Assert.That(ViewModel.InitialiseZToMacroValue, Is.True);
+      Assert.That(ViewModel.PitchBendRange, Is.EqualTo(24));
+    }
     const YTarget newYTarget = YTarget.PolyphonicAftertouch;
     const ZTarget newZTarget = ZTarget.Gain;
     const XTarget newXTarget = XTarget.Pitch;

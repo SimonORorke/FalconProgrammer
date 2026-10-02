@@ -25,13 +25,15 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     // Populate
     ranges.Populate(settingsRanges);
     int initialRangesCount = ranges.Count;
-    Assert.That(initialRangesCount, Is.EqualTo(initialSettingsRangesCount + 1));
-    Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
-    Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.False);
-    Assert.That(ranges[0].RemoveCommand.CanExecute(null), Is.True);
-    Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
-    Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.False);
-    Assert.That(ranges[^1].RemoveCommand.CanExecute(null), Is.False);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(initialRangesCount, Is.EqualTo(initialSettingsRangesCount + 1));
+      Assert.That(ranges[0].CutCommand.CanExecute(null), Is.True);
+      Assert.That(ranges[0].PasteBeforeCommand.CanExecute(null), Is.False);
+      Assert.That(ranges[0].RemoveCommand.CanExecute(null), Is.True);
+      Assert.That(ranges[^1].CutCommand.CanExecute(null), Is.False); // Addition item
+      Assert.That(ranges[^1].PasteBeforeCommand.CanExecute(null), Is.False);
+      Assert.That(ranges[^1].RemoveCommand.CanExecute(null), Is.False);
+    }
     // Cut
     ranges[6].CutCommand.Execute(null); // Last before addition item
     Assert.That(ranges, Has.Count.EqualTo(initialRangesCount - 1));
@@ -51,8 +53,10 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     // Update settings
     await ranges.UpdateSettings(false);
     Assert.That(settingsRanges, Has.Count.EqualTo(initialSettingsRangesCount));
-    Assert.That(settingsRanges[0], Is.EqualTo(initialLastSettingsRange));
-    Assert.That(settingsRanges[1], Is.EqualTo(initialFirstSettingsRange));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settingsRanges[0], Is.EqualTo(initialLastSettingsRange));
+      Assert.That(settingsRanges[1], Is.EqualTo(initialFirstSettingsRange));
+    }
   }
 
   [Test]
@@ -62,8 +66,10 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
     var lastRange = ranges[^2]; // Last before addition item
     lastRange.Start = lastRange.End + 1;
     var updateResult = await ranges.UpdateSettings(false);
-    Assert.That(!updateResult.Success);
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(!updateResult.Success);
+      Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    }
   }
 
   [Test]
@@ -75,8 +81,10 @@ public class CcNoRangeCollectionTests : ViewModelTestsBase {
       lastRange.Start, lastRange.End + 1);
     ranges.Add(overlappingRange);
     var updateResult = await ranges.UpdateSettings(false);
-    Assert.That(!updateResult.Success);
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(!updateResult.Success);
+      Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+    }
   }
 
   [Test]

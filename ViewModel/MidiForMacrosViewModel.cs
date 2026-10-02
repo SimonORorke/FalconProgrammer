@@ -58,7 +58,8 @@ public partial class MidiForMacrosViewModel : SettingsWriterViewModelBase {
     ref bool haveRangesChanged, ref bool canClosePage) {
     if (updateResult.Success) {
       haveRangesChanged = true;
-    } else if (!updateResult.CanClosePage) {
+    }
+    else if (!updateResult.CanClosePage) {
       IsFixingError = true;
       canClosePage = false;
     }

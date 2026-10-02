@@ -54,17 +54,14 @@ public class TaskCollection : DataGridItemCollectionBase<TaskItem> {
 
   private void Update(IEnumerable<string> tasks) {
     Clear();
-    foreach (string task in tasks) {
-      AddItem(task);
-    }
+    foreach (string task in tasks) AddItem(task);
   }
 
   internal void UpdateSettings() {
     Settings.Batch.Tasks.Clear();
-    foreach (var taskItem in this) {
+    foreach (var taskItem in this)
       if (!taskItem.IsAdditionItem) {
         Settings.Batch.Tasks.Add(taskItem.Name);
       }
-    }
   }
 }

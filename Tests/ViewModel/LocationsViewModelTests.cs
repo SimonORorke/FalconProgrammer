@@ -49,9 +49,11 @@ public class LocationsViewModelTests : ViewModelTestsBase {
       "SettingsFolderLocationK.xml";
     var command = (AsyncRelayCommand)ViewModel.BrowseForSettingsFolderCommand;
     await command.ExecuteAsync(null);
-    Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastYesNoAnswer, Is.True);
-    Assert.That(ViewModel.Settings.SettingsPath, Is.EqualTo(newSettingsPath));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.AskYesNoQuestionCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastYesNoAnswer, Is.True);
+      Assert.That(ViewModel.Settings.SettingsPath, Is.EqualTo(newSettingsPath));
+    }
   }
 
   [Test]
@@ -81,17 +83,21 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     bool canClose = await ViewModel.QueryClose();
     Assert.That(canClose);
     var mockSerialiser = (MockSerialiser)ViewModel.Settings.Serialiser;
-    Assert.That(mockSerialiser.LastOutputPath,
-      Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
-    Assert.That(mockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(mockSerialiser.LastOutputPath,
+        Is.EqualTo(@"K:\NewLeaf\Settings\Settings.xml"));
+      Assert.That(mockSerialiser.LastType, Is.EqualTo(typeof(Settings)));
+    }
     var settings = (Settings)mockSerialiser.LastObjectSerialised;
-    Assert.That(settings.SettingsPath,
-      Is.EqualTo(Path.Combine(ViewModel.SettingsFolderPath, "Settings.xml")));
-    Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(ViewModel.ProgramsFolderPath));
-    Assert.That(settings.OriginalProgramsFolder.Path,
-      Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
-    Assert.That(settings.TemplateProgramsFolder.Path,
-      Is.EqualTo(ViewModel.TemplateProgramsFolderPath));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(settings.SettingsPath,
+        Is.EqualTo(Path.Combine(ViewModel.SettingsFolderPath, "Settings.xml")));
+      Assert.That(settings.ProgramsFolder.Path, Is.EqualTo(ViewModel.ProgramsFolderPath));
+      Assert.That(settings.OriginalProgramsFolder.Path,
+        Is.EqualTo(ViewModel.OriginalProgramsFolderPath));
+      Assert.That(settings.TemplateProgramsFolder.Path,
+        Is.EqualTo(ViewModel.TemplateProgramsFolderPath));
+    }
   }
 
   [Test]
@@ -117,11 +123,13 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     // Make a property change to require saving settings.
     ViewModel.ProgramsFolderPath += "X";
-    Assert.That(await ViewModel.QueryClose(), Is.False);
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
-      "Settings cannot be saved: cannot find settings folder " +
-      $"'{ViewModel.SettingsFolderPath}'."));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(await ViewModel.QueryClose(), Is.False);
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
+        "Settings cannot be saved: cannot find settings folder " +
+        $"'{ViewModel.SettingsFolderPath}'."));
+    }
   }
 
   [Test]
@@ -130,19 +138,23 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     MockFileSystemService.File.SimulatedExists = false;
     MockDialogService.SimulatedPath = @"K:\NewLeaf\Programs";
     ViewModel.SettingsFolderPath = string.Empty;
-    Assert.That(await ViewModel.QueryClose(), Is.False);
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
-      "Settings cannot be saved: a settings folder has not been specified."));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(await ViewModel.QueryClose(), Is.False);
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Is.EqualTo(
+        "Settings cannot be saved: a settings folder has not been specified."));
+    }
   }
 
   [Test]
   public async Task SettingsXmlError() {
     MockSettingsReaderEmbedded.EmbeddedFileName = "InvalidXmlSettings.xml";
     await ViewModel.Open();
-    Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
-    Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
-      "Invalid XML was found in embedded file '"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(MockDialogService.ShowErrorMessageBoxCount, Is.EqualTo(1));
+      Assert.That(MockDialogService.LastErrorMessage, Does.StartWith(
+        "Invalid XML was found in embedded file '"));
+    }
   }
 
   [Test]
@@ -156,12 +168,14 @@ public class LocationsViewModelTests : ViewModelTestsBase {
     Assert.That(ViewModel.HasErrors);
     var errors = ViewModel.GetErrors().ToList();
     Assert.That(errors, Has.Count.EqualTo(3));
-    // The errors are alphabetical by property name.
-    Assert.That(errors[0].ErrorMessage, Is.EqualTo(
-      "The OriginalProgramsFolderPath field is required."));
-    Assert.That(errors[1].MemberNames.ToList()[0], Is.EqualTo("ProgramsFolderPath"));
-    Assert.That(errors[1].ErrorMessage, Is.EqualTo("Cannot find folder."));
-    Assert.That(errors[2].ErrorMessage, Is.EqualTo("Cannot find folder."));
+    using (Assert.EnterMultipleScope()) {
+      // The errors are alphabetical by property name.
+      Assert.That(errors[0].ErrorMessage, Is.EqualTo(
+        "The OriginalProgramsFolderPath field is required."));
+      Assert.That(errors[1].MemberNames.ToList()[0], Is.EqualTo("ProgramsFolderPath"));
+      Assert.That(errors[1].ErrorMessage, Is.EqualTo("Cannot find folder."));
+      Assert.That(errors[2].ErrorMessage, Is.EqualTo("Cannot find folder."));
+    }
     bool canClose = await ViewModel.QueryClose();
     Assert.That(!canClose);
   }

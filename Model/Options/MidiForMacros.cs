@@ -44,11 +44,9 @@ public class MidiForMacros {
 
   private static ImmutableList<int> CreateCcNoList(List<IntegerRange> ranges) {
     var list = new List<int>();
-    foreach (var range in ranges) {
-      for (int ccNo = range.Start; ccNo <= range.End; ccNo++) {
+    foreach (var range in ranges)
+      for (int ccNo = range.Start; ccNo <= range.End; ccNo++)
         list.Add(ccNo);
-      }
-    }
     return [.. list];
   }
 

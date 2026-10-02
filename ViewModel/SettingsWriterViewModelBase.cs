@@ -88,7 +88,8 @@ public abstract class SettingsWriterViewModelBase : ViewModelBase {
         // settings folder location file.
         Settings.SettingsPath != string.Empty) {
       Settings.Write();
-    } else {
+    }
+    else {
       UpdateSettingsFolderLocation();
       Settings.Write(SettingsFolderPath);
     }

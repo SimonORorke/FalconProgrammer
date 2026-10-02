@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using FalconProgrammer.Model;
+﻿using FalconProgrammer.Model;
 using FalconProgrammer.Model.Options;
 
 namespace FalconProgrammer.ViewModel;
@@ -65,15 +64,14 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
     Settings = settings;
     SoundBanks = [.. soundBanks];
     Clear();
-    foreach (var programPath in Settings.DoNotZeroReverb) {
+    foreach (var programPath in Settings.DoNotZeroReverb)
       AddItem(programPath.SoundBank, programPath.Category, programPath.Program);
-    }
     IsPopulating = false;
   }
 
   internal override void UpdateSettings() {
     Settings.DoNotZeroReverb.Clear();
-    foreach (var programItem in this) {
+    foreach (var programItem in this)
       if (!programItem.IsAdditionItem
           && programItem.SoundBank != string.Empty
           && programItem.Category != string.Empty
@@ -84,13 +82,12 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
           Program = programItem.Program
         });
       }
-    }
     Settings.Write();
   }
 
   internal async Task<ClosingValidationResult> Validate(bool isClosingWindow) {
     string errorMessage = string.Empty;
-    foreach (var programItem in this) {
+    foreach (var programItem in this)
       if (!programItem.IsAdditionItem
           && (programItem.SoundBank == string.Empty
               || programItem.Category == string.Empty
@@ -101,7 +98,6 @@ public class DoNotZeroReverbCollection : ProgramHierarchyCollectionBase<ProgramI
           $"Sound Bank '{programItem.SoundBank}', Category '{programItem.Category}" +
           $"', Program '{programItem.Program}'";
       }
-    }
     if (errorMessage == string.Empty) {
       return new ClosingValidationResult(true, true);
     }

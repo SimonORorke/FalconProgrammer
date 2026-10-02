@@ -108,17 +108,17 @@ internal class ScriptProcessor : ModulationsOwner {
         // the toggle macros.
         // Example of where it does not work: Falcon Factory rev2\Bass\Big Sleep.
         // But it seems to be more successful than having the macros in location order.
-        for (int i = 0; i < macros.Count; i++) {
+        for (int i = 0; i < macros.Count; i++)
           AddModulationBasedOnMacro(templateModulations[i], macros[i]);
-        }
-      } else {
+      }
+      else {
         throw new ApplicationException(
           "There are more macros than template modulations.");
       }
-    } else {
-      foreach (var templateModulation in templateModulations) {
+    }
+    else {
+      foreach (var templateModulation in templateModulations)
         AddModulation(templateModulation);
-      }
     }
   }
 

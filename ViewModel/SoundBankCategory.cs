@@ -58,9 +58,8 @@ public partial class SoundBankCategory : SoundBankItem {
       string soundBankFolderPath = Path.Combine(Settings.ProgramsFolder.Path, SoundBank);
       var categoryFolderNames =
         FileSystemService.Folder.GetSubfolderNames(soundBankFolderPath);
-      foreach (string categoryFolderName in categoryFolderNames) {
+      foreach (string categoryFolderName in categoryFolderNames)
         Categories.Add(categoryFolderName);
-      }
     } catch (DirectoryNotFoundException exception) {
       // A sound bank folder in Settings.MustUseGuiScriptProcessorCategories
       // does not exist or contains no category subfolders.

@@ -27,9 +27,11 @@ public class SoundBankSpecificViewModelTests : ViewModelTestsBase {
     ViewModel.OrganicPadsAttackSeconds = null;
     Assert.That(ViewModel.HasErrors, Is.False);
     hasClosed = await ViewModel.QueryClose();
-    Assert.That(hasClosed, Is.True);
-    Assert.That(ViewModel.Settings.SoundBankSpecific.OrganicPads.AttackSeconds,
-      Is.EqualTo(-1));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(hasClosed, Is.True);
+      Assert.That(ViewModel.Settings.SoundBankSpecific.OrganicPads.AttackSeconds,
+        Is.EqualTo(-1));
+    }
     await ViewModel.Open();
     ViewModel.OrganicPadsReleaseSeconds = 99;
     Assert.That(ViewModel.HasErrors, Is.True);
@@ -38,8 +40,10 @@ public class SoundBankSpecificViewModelTests : ViewModelTestsBase {
     Assert.That(hasClosed, Is.False);
     ViewModel.OrganicPadsReleaseSeconds = 3;
     hasClosed = await ViewModel.QueryClose();
-    Assert.That(hasClosed, Is.True);
-    Assert.That(ViewModel.Settings.SoundBankSpecific.OrganicPads.ReleaseSeconds,
-      Is.EqualTo(3));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(hasClosed, Is.True);
+      Assert.That(ViewModel.Settings.SoundBankSpecific.OrganicPads.ReleaseSeconds,
+        Is.EqualTo(3));
+    }
   }
 }

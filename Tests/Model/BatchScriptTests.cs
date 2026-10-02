@@ -63,11 +63,13 @@ public class BatchScriptTests {
   public void Write() {
     Assert.That(BatchScript.Path, Is.EqualTo(BatchScriptPath));
     BatchScript.Write();
-    Assert.That(
-      TestBatchScriptReaderEmbedded.MockSerialiserForBatchScript.LastObjectSerialised,
-      Is.EqualTo(BatchScript));
-    Assert.That(
-      TestBatchScriptReaderEmbedded.MockSerialiserForBatchScript.LastOutputPath,
-      Is.EqualTo(BatchScriptPath));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(
+        TestBatchScriptReaderEmbedded.MockSerialiserForBatchScript.LastObjectSerialised,
+        Is.EqualTo(BatchScript));
+      Assert.That(
+        TestBatchScriptReaderEmbedded.MockSerialiserForBatchScript.LastOutputPath,
+        Is.EqualTo(BatchScriptPath));
+    }
   }
 }

@@ -1,5 +1,7 @@
+using System.Text.Json;
 using FalconProgrammer.Model.ReleaseInfo;
-using GitHubReleaseJsonContext = FalconProgrammer.Model.ReleaseInfo.GitHubReleaseJsonContext;
+using GitHubReleaseJsonContext =
+  FalconProgrammer.Model.ReleaseInfo.GitHubReleaseJsonContext;
 
 namespace FalconProgrammer.Tests.Model;
 
@@ -29,7 +31,6 @@ public class ReleaseInfoTests {
         ]
       }
     };
-
     string? version = ReleaseInfo.ExtractLatestVersionForPlatform(releases, ".exe");
     Assert.That(version, Is.EqualTo("1.3.0"));
   }
@@ -44,7 +45,6 @@ public class ReleaseInfoTests {
         ]
       }
     };
-
     string? version = ReleaseInfo.ExtractLatestVersionForPlatform(releases, ".dmg");
     Assert.That(version, Is.EqualTo("1.4.1"));
   }
@@ -59,7 +59,6 @@ public class ReleaseInfoTests {
         ]
       }
     };
-
     string? version = ReleaseInfo.ExtractLatestVersionForPlatform(releases, ".exe");
     Assert.That(version, Is.Null);
   }
@@ -74,17 +73,18 @@ public class ReleaseInfoTests {
         ]
       }
     };
-
     string? version = ReleaseInfo.ExtractLatestVersionForPlatform(releases, ".exe");
     Assert.That(version, Is.EqualTo("2.0.0"));
   }
 
   [Test]
   public void ExtractLatestVersionForPlatform_NullOrEmpty() {
-    Assert.That(ReleaseInfo.ExtractLatestVersionForPlatform(null, ".exe"), Is.Null);
-    Assert.That(
-      ReleaseInfo.ExtractLatestVersionForPlatform(new List<GitHubReleaseDto>(), ".exe"),
-      Is.Null);
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(ReleaseInfo.ExtractLatestVersionForPlatform(null, ".exe"), Is.Null);
+      Assert.That(
+        ReleaseInfo.ExtractLatestVersionForPlatform(new List<GitHubReleaseDto>(), ".exe"),
+        Is.Null);
+    }
   }
 
   [Test]
@@ -93,7 +93,8 @@ public class ReleaseInfoTests {
     string? ext = ReleaseInfo.PlatformAssetExtension;
     if (OperatingSystem.IsWindows() && Environment.Is64BitOperatingSystem) {
       Assert.That(ext, Is.EqualTo(".exe"));
-    } else if (OperatingSystem.IsMacOS()) {
+    }
+    else if (OperatingSystem.IsMacOS()) {
       Assert.That(ext, Is.EqualTo(".dmg"));
     }
   }
@@ -101,25 +102,26 @@ public class ReleaseInfoTests {
   [Test]
   public void SourceGeneratedJsonDeserialization_Works() {
     const string json = """
-      [
-        {
-          "tag_name": "v1.5.0",
-          "assets": [
-            { "name": "FalconProgrammer-1.5.0-windows-x64.exe" }
-          ]
-        }
-      ]
-      """;
-
-    var releases = System.Text.Json.JsonSerializer.Deserialize(
+                        [
+                          {
+                            "tag_name": "v1.5.0",
+                            "assets": [
+                              { "name": "FalconProgrammer-1.5.0-windows-x64.exe" }
+                            ]
+                          }
+                        ]
+                        """;
+    var releases = JsonSerializer.Deserialize(
       json,
       GitHubReleaseJsonContext.Default.ListGitHubReleaseDto);
-
     Assert.That(releases, Is.Not.Null);
-    Assert.That(releases!.Count, Is.EqualTo(1));
-    Assert.That(releases[0].TagName, Is.EqualTo("v1.5.0"));
-    Assert.That(releases[0].Assets?.Count, Is.EqualTo(1));
-    Assert.That(releases[0].Assets![0].Name, Is.EqualTo("FalconProgrammer-1.5.0-windows-x64.exe"));
+    using (Assert.EnterMultipleScope()) {
+      Assert.That(releases!.Count, Is.EqualTo(1));
+      Assert.That(releases[0].TagName, Is.EqualTo("v1.5.0"));
+      Assert.That(releases[0].Assets?.Count, Is.EqualTo(1));
+      Assert.That(releases[0].Assets![0].Name,
+        Is.EqualTo("FalconProgrammer-1.5.0-windows-x64.exe"));
+    }
   }
 
   [Test]
@@ -127,7 +129,6 @@ public class ReleaseInfoTests {
     var releaseInfo = new ReleaseInfo();
     string? latestVersion = await releaseInfo.GetLatestVersionForPlatformAsync();
     Assert.That(latestVersion, Is.Not.Null);
-
     var mockAppInfo = new MockApplicationInfo { Version = "0.2.0" };
     var versionChecker = new VersionChecker(releaseInfo, mockAppInfo);
     string? newVer = await versionChecker.CheckForNewVersionAsync();

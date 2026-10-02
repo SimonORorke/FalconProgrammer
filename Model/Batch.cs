@@ -174,13 +174,16 @@ public class Batch {
           string programPath = Category.GetProgramPath(programName);
           Program = CreateFalconProgram(programPath);
           ConfigureProgram();
-        } else {
+        }
+        else {
           ConfigureProgramsInCategory();
         }
-      } else {
+      }
+      else {
         ConfigureProgramsInSoundBank();
       }
-    } else { // All sound banks
+    }
+    else { // All sound banks
       string programsFolderPath = GetProgramsFolderPath();
       foreach (
         string soundBankName1 in FileSystemService.Folder.GetSubfolderNames(
@@ -323,9 +326,8 @@ public class Batch {
       var configTasks = batchScript.SequenceTasks();
       TaskCount = configTasks.Count;
       TaskNo = 0;
-      foreach (var configTask in configTasks) {
+      foreach (var configTask in configTasks)
         RunTask(configTask, soundBankName, categoryName, programName);
-      }
       Log.Prefix = string.Empty;
       Log.WriteLine("The batch run has finished.");
     } catch (Exception exception) {
@@ -333,7 +335,8 @@ public class Batch {
       Log.WriteLine("==========================================");
       if (exception is OperationCanceledException) {
         Log.WriteLine("The batch run has been cancelled.");
-      } else {
+      }
+      else {
         try {
           Log.WriteLine(
             $"While running configuration task {Task.ToString()} for program " +
@@ -396,14 +399,11 @@ public class Batch {
 
   private void UpdateEffectTypes(IEnumerable<string> effectTypes) {
     foreach (string effectType in effectTypes.Where(effectType =>
-               !EffectTypes.Contains(effectType))) {
+               !EffectTypes.Contains(effectType)))
       EffectTypes.Add(effectType);
-    }
   }
 
   private void WriteEffectTypesQueryResult() {
-    foreach (string effectType in EffectTypes) {
-      Log.WriteLine(effectType);
-    }
+    foreach (string effectType in EffectTypes) Log.WriteLine(effectType);
   }
 }

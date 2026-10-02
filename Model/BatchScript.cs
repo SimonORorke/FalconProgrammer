@@ -54,7 +54,7 @@ public class BatchScript : SerialisationBase {
       from constant in Enum.GetValues<ConfigTask>()
       // Disable MPE support, as it's not ready for release and may never be.
       where constant != ConfigTask.SupportMpe
-      && !SequencedConfigTasks.Contains(constant)
+            && !SequencedConfigTasks.Contains(constant)
             // Queries are currently for developers only, to be added by manually editing
             // a script file.
             && !constant.ToString().StartsWith("Query")
@@ -88,12 +88,14 @@ public class BatchScript : SerialisationBase {
       from configTask in Enum.GetValues<ConfigTask>()
       // Disable MPE support, as it's not ready for release and may never be.
       where configTask != ConfigTask.SupportMpe
-      select configTask).ToDictionary(configTask => configTask.ToString());;
+      select configTask).ToDictionary(configTask => configTask.ToString());
+    ;
     var unsequenced = (
       from task in Tasks
       select configTasks[task]).ToList();
     var result = new List<ConfigTask>();
-    foreach (var sequencedConfigTask in SequencedConfigTasks.Where(unsequenced.Contains)) {
+    foreach (var sequencedConfigTask in
+             SequencedConfigTasks.Where(unsequenced.Contains)) {
       result.Add(sequencedConfigTask);
       unsequenced.Remove(sequencedConfigTask);
     }
@@ -105,9 +107,8 @@ public class BatchScript : SerialisationBase {
   public void Validate() {
     // Throw an ApplicationException if any Task does not match a ConfigTask. 
     var configTaskNames = Enum.GetNames<ConfigTask>().ToList();
-    foreach (string task in Tasks.Where(task => !configTaskNames.Contains(task))) {
+    foreach (string task in Tasks.Where(task => !configTaskNames.Contains(task)))
       throw new ApplicationException($"'{task}' is not a valid task name.");
-    }
     // Check for duplicates
     foreach (
       string task in from batchTask in Tasks
@@ -116,9 +117,8 @@ public class BatchScript : SerialisationBase {
         where task2 == batchTask
         select task2).Count()
       where count > 1
-      select batchTask) {
+      select batchTask)
       throw new ApplicationException($"Duplicate task: {task}");
-    }
   }
 
   public void Write() {

@@ -45,7 +45,8 @@ public class ItemEditButton : MenuButtonBase {
     set => SetValue(PasteBeforeCommandProperty, value);
   }
 
-  private MenuItem PasteBeforeMenuItem { get; } = CreateMenuItem("_Paste Before", "Alt+P");
+  private MenuItem PasteBeforeMenuItem { get; } =
+    CreateMenuItem("_Paste Before", "Alt+P");
 
   public ICommand? RemoveCommand {
     get => GetValue(RemoveCommandProperty);

@@ -29,7 +29,8 @@ public partial class MessageWindow : Window {
     if (MessageTextBox.SelectedText.Length == 0) {
       await Clipboard!.SetTextAsync(MessageTextBox.Text);
       StatusTextBlock.Text = "Text copied to clipboard";
-    } else {
+    }
+    else {
       await Clipboard!.SetTextAsync(MessageTextBox.SelectedText);
       StatusTextBlock.Text = "Selected text copied to clipboard";
     }

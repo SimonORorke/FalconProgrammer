@@ -26,7 +26,8 @@ public class TestMainWindowViewModel : MainWindowViewModel {
     return result;
   }
 
-  protected override NewVersionWindowViewModel CreateNewVersionWindowViewModel(string newVersion) {
+  protected override NewVersionWindowViewModel CreateNewVersionWindowViewModel(
+    string newVersion) {
     var result = base.CreateNewVersionWindowViewModel(newVersion);
     result.ApplicationInfo = new MockApplicationInfo();
     if (SimulatedNewAutoCheckNewVersions.HasValue) {

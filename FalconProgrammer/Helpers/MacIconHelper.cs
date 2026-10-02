@@ -6,7 +6,7 @@ using Avalonia.Platform;
 namespace FalconProgrammer.Helpers;
 
 /// <summary>
-/// Facilitates setting the application icon in macOS Dock and Application Switcher.
+///   Facilitates setting the application icon in macOS Dock and Application Switcher.
 /// </summary>
 internal static class MacIconHelper {
   private const string ObjCRuntime = "/usr/lib/libobjc.A.dylib";
@@ -21,7 +21,8 @@ internal static class MacIconHelper {
   private static extern nint objc_msgSend_IntPtr(nint receiver, nint selector);
 
   [DllImport(ObjCRuntime, EntryPoint = "objc_msgSend")]
-  private static extern nint objc_msgSend_IntPtr_IntPtr(nint receiver, nint selector, nint arg1);
+  private static extern nint objc_msgSend_IntPtr_IntPtr(nint receiver, nint selector,
+    nint arg1);
 
   [DllImport(ObjCRuntime, EntryPoint = "objc_msgSend")]
   private static extern nint objc_msgSend_IntPtr_IntPtr_nuint(
@@ -31,44 +32,37 @@ internal static class MacIconHelper {
   private static extern void NSApplicationLoad();
 
   /// <summary>
-  /// Sets the application icon in the macOS Dock and Application Switcher using the .icns asset.
+  ///   Sets the application icon in the macOS Dock and Application Switcher using the .icns asset.
   /// </summary>
   public static void SetApplicationIcon() {
     if (!OperatingSystem.IsMacOS()) {
       return;
     }
-
     try {
-      var uri = new Uri("avares://FalconProgrammer/Assets/falcon_svg_repo_com_512_512.icns");
+      var uri =
+        new Uri("avares://FalconProgrammer/Assets/falcon_svg_repo_com_512_512.icns");
       if (!AssetLoader.Exists(uri)) {
         return;
       }
-
       using var stream = AssetLoader.Open(uri);
       using var memoryStream = new MemoryStream();
       stream.CopyTo(memoryStream);
       byte[] iconData = memoryStream.ToArray();
-
       if (iconData.Length == 0) {
         return;
       }
-
       NSApplicationLoad();
-
       nint nsApplicationClass = objc_getClass("NSApplication");
       if (nsApplicationClass == 0) {
         return;
       }
-
       nint sharedApplicationSel = sel_registerName("sharedApplication");
       nint nsApp = objc_msgSend_IntPtr(nsApplicationClass, sharedApplicationSel);
       if (nsApp == 0) {
         return;
       }
-
       nint nsDataClass = objc_getClass("NSData");
       nint dataWithBytesSel = sel_registerName("dataWithBytes:length:");
-
       var handle = GCHandle.Alloc(iconData, GCHandleType.Pinned);
       try {
         nint pBytes = handle.AddrOfPinnedObject();
@@ -77,20 +71,17 @@ internal static class MacIconHelper {
         if (nsData == 0) {
           return;
         }
-
         nint nsImageClass = objc_getClass("NSImage");
         nint allocSel = sel_registerName("alloc");
         nint initWithDataSel = sel_registerName("initWithData:");
-
         nint allocatedImage = objc_msgSend_IntPtr(nsImageClass, allocSel);
-        nint nsImage = objc_msgSend_IntPtr_IntPtr(allocatedImage, initWithDataSel, nsData);
+        nint nsImage =
+          objc_msgSend_IntPtr_IntPtr(allocatedImage, initWithDataSel, nsData);
         if (nsImage == 0) {
           return;
         }
-
         nint setApplicationIconImageSel = sel_registerName("setApplicationIconImage:");
         objc_msgSend_IntPtr_IntPtr(nsApp, setApplicationIconImageSel, nsImage);
-
         nint releaseSel = sel_registerName("release");
         objc_msgSend_IntPtr(nsImage, releaseSel);
       } finally {
