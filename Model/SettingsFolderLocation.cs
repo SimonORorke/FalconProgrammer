@@ -4,7 +4,13 @@ namespace FalconProgrammer.Model;
 
 [XmlRoot(nameof(SettingsFolderLocation))]
 public class SettingsFolderLocation : SerialisationBase, ISettingsFolderLocation {
-  [XmlAttribute] public string Path { get; set; } = string.Empty;
+  [XmlAttribute]
+  public string Path {
+    get;
+    set => field = string.IsNullOrWhiteSpace(value)
+      ? string.Empty
+      : System.IO.Path.TrimEndingDirectorySeparator(value.Trim());
+  } = string.Empty;
 
   public void Write() {
     string appDataFolderPath = GetAppDataFolderPath(AppDataFolderName);

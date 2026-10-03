@@ -37,7 +37,9 @@ public class DialogService : IDialogService {
           AllowMultiple = false
         }
       );
-    return folders.Count == 1 ? folders[0].Path.LocalPath : null;
+    return folders.Count == 1
+      ? System.IO.Path.TrimEndingDirectorySeparator(folders[0].Path.LocalPath)
+      : null;
   }
 
   public async Task<string?> OpenFile(

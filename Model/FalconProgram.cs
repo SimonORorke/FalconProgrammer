@@ -460,14 +460,9 @@ internal class FalconProgram {
   }
 
   private void InitialiseDahdsrControllerScripts() {
-    string superFolderPath = System.IO.Path.GetDirectoryName(
-      Settings.ProgramsFolder.Path)!;
+    string superFolderPath = Directory.GetParent(
+      Settings.ProgramsFolder.Path)!.FullName;
     string scriptsFolderPath = System.IO.Path.Combine(superFolderPath, "Scripts");
-    Console.WriteLine("FalconProgram.InitialiseDahdsrControllerScripts:");
-    Console.WriteLine("    Settings.ProgramsFolder.Path = " +
-                      $"{Settings.ProgramsFolder.Path}");
-    Console.WriteLine($"    superFolderPath = {superFolderPath}");
-    Console.WriteLine($"    scriptsFolderPath = {scriptsFolderPath}");
     string stubScriptPath = System.IO.Path.Combine(
       scriptsFolderPath, "DAHDSR Controller.lua");
     string scriptSubFolderPath = System.IO.Path.Combine(
