@@ -511,7 +511,7 @@ internal class FalconProgram {
       writer.WriteLine();
       writer.Write(
         $"2) Disable GUI script processor removal for the {SoundBankName} sound bank " +
-        "by adding the sound bank to the list on the the GUI Script Processor page.");
+        "by adding the sound bank to the list on the GUI Script Processor page.");
       return writer.ToString();
     }
   }
