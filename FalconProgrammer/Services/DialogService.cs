@@ -38,6 +38,8 @@ public class DialogService : IDialogService {
         }
       );
     return folders.Count == 1
+      // On macOS, the folder picker dialog returns a path with a trailing slash.
+      // Remove the trailing slash if present.
       ? System.IO.Path.TrimEndingDirectorySeparator(folders[0].Path.LocalPath)
       : null;
   }

@@ -48,8 +48,9 @@ chmod +x "$APP_BUNDLE_PATH/Contents/MacOS/FalconProgrammer"
 # Copy the squircle icon asset to Resources
 cp "$PROJECT_ROOT/FalconProgrammer/Assets/falcon_svg_repo_com_512_512.icns" "$APP_BUNDLE_PATH/Contents/Resources/falcon_svg_repo_com_512_512.icns"
 
-# Extract version from csproj
+# Extract version from csproj (ignore 4th part if zero, e.g. 1.2.0.0 -> 1.2.0)
 VERSION=$(grep -o '<Version>[^<]*</Version>' FalconProgrammer/FalconProgrammer.csproj | head -n 1 | sed -e 's/<[^>]*>//g')
+VERSION=$(echo "$VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)\.0$/\1/')
 
 cat << PLIST > "$APP_BUNDLE_PATH/Contents/Info.plist"
 <?xml version="1.0" encoding="UTF-8"?>

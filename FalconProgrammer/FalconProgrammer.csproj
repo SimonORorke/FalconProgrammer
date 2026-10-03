@@ -6,7 +6,9 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <PublishTrimmed>true</PublishTrimmed>
+        <!-- PublishTrimmed is commented out because framework-dependent deployments do not benefit from IL trimming,
+        and trimming places unnecessary restrictions on dynamic reflection/serialization. -->
+        <!-- <PublishTrimmed>true</PublishTrimmed> -->
         <LangVersion>14</LangVersion>
         <Configurations>Debug;Release</Configurations>
         <Platforms>x64;AnyCPU</Platforms>
