@@ -2,9 +2,9 @@
 
 Falcon Programmer is an open source batch configuration application for the [UVI Falcon](https://www.uvi.net/falcon.html/) software synthesizer. Multiple types of configuration change can be implemented in thousands of Falcon programs with a single batch run, taking seconds to minutes.
 
-There is currently an installer only for Windows. However, the source code should run on macOS; and a macOS installer will be provided as soon as a collaborator can be found to create one.
+There are installers for Windows (64-bit) and macOS (Universal: Apple Silicon + Intel).
 
-### The following configuration tasks are available:
+## The following configuration tasks are available:
 
  ·    Restore the program to an original version, ready for the configuration changes to be made.
 
@@ -30,13 +30,29 @@ Bypass (disable) all known delay effects and then, provided the program uses the
 
 Of these configuration tasks, assigning MIDI CC numbers to macros will be of use to many Falcon players. And restoring the program to an original version is just a safety feature to facilitate subsequent transformation. The remainder are merely what the developer has found useful as a Falcon player. Many more configuration tasks are surely possible. Users of the application are welcome to suggest some!
 
-### Further information
+## macOS First-Time Launch Instructions
+
+In the DMG, drag **Falcon Programmer** into /Applications. Then take one of the following approaches.
+
+### Approach A
+
+1. Open the app. When a security prompt headed **''“Falcon Programmer” Not Opened'**  appears, click **Done**. *Do not click Move to Bin*.
+2. Go to **System Settings** → **Privacy & Security**, scroll down to **Security**, and click **Open Anyway**.
+3. On the confirmation prompt, click **Open Anyway**. *(This is only required on the very first launch).*
+
+### Approach B
+
+Run this in a terminal:
+
+```bash
+xattr -cr "/Applications/Falcon Programmer Bridge.app"
+```
+
+Once executed, the application will open directly upon double-clicking.
+
+## Further information
 
 For comprehensive documentation, please refer to [the manual](Documentation/Falcon%20Programmer%20Manual.pdf).
-
-### Collaborators welcome
-
-I especially need a collaborator to give the application some basic testing on a Mac create and create the macOS installer.  *For this particular role*, you don't necessarily need experience of the C# programming language. But you will need to compile the program, run the unit tests and follow some macOS-specific instructions to create the installer.  I only have Windows computers and experience, but I will help where I can.  For details, please refer to the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 Simon O'Rorke
 
