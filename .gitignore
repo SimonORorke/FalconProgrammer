@@ -23,8 +23,6 @@ Thumbs.db
 *.testlog
 .vs/
 # *.manifest - Needed for Avalonia!
-#Ignore the Windows installer. At > 100 MB, it's now too big for GitHub!
-*.exe
 #Ignore .Net binary folders
 bin/
 obj/
