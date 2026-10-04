@@ -6,11 +6,14 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <!-- PublishTrimmed is commented out because framework-dependent deployments do not benefit from IL trimming,
-        and trimming places unnecessary restrictions on dynamic reflection/serialization. -->
+        <!-- PublishTrimmed is commented out because framework-dependent deployments 
+        do not benefit from IL trimming, and trimming places unnecessary restrictions 
+        on dynamic reflection/serialization. -->
         <!-- <PublishTrimmed>true</PublishTrimmed> -->
         <LangVersion>14</LangVersion>
         <Configurations>Debug;Release</Configurations>
+        <!-- x64 for Windows. AnyCPU for macOS, to allow builds for both Apple Silicon
+        and Intel. -->
         <Platforms>x64;AnyCPU</Platforms>
         <!-- Don't split the tag into three lines.
         It causes a file not found error! -->
