@@ -86,8 +86,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\..\FalconProgrammer\bin\Release\net10.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\FalconProgrammer\bin\Release\net10.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.pdb,runtimes\linux*,runtimes\osx*,runtimes\win-x86*,runtimes\win-arm64*"
+Source: "..\..\FalconProgrammer\bin\x64\Release\net10.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\FalconProgrammer\bin\x64\Release\net10.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.pdb,runtimes\linux*,runtimes\osx*,runtimes\win-x86*,runtimes\win-arm64*"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
