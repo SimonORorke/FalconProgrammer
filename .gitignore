@@ -28,6 +28,8 @@ bin/
 obj/
 #Ignore C++ binary folder
 x64/
+# Ignore intermediate files created by macOS DMG build
+target/
 #Ignore files build by Jetbrains Rider
 .idea/
 riderModule.iml
