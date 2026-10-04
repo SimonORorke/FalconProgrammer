@@ -2,10 +2,49 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Falcon Programmer"
-#define MyAppVersion "1.1"
 #define MyAppPublisher "Simon O'Rorke"
 #define MyAppURL "https://github.com/SimonORorke/FalconProgrammer"
 #define MyAppExeName "FalconProgrammer.exe"
+
+; Parse version from FalconProgrammer.csproj (<Version>x.y.z.w</Version>)
+#define FileHandle
+#define FileLine
+#define RawVersion ""
+#define OpenTag "<Version>"
+#define CloseTag "</Version>"
+#define StartPos
+#define EndPos
+#define CsprojPath SourcePath + "\..\..\FalconProgrammer\FalconProgrammer.csproj"
+
+#for {FileHandle = FileOpen(CsprojPath); FileHandle && !FileEof(FileHandle); ""} \
+  FileLine = FileRead(FileHandle), \
+  (Pos("<!--", FileLine) == 0 && Pos(OpenTag, FileLine) > 0 && Pos(CloseTag, FileLine) > Pos(OpenTag, FileLine)) ? ( \
+    StartPos = Pos(OpenTag, FileLine) + Len(OpenTag), \
+    EndPos = Pos(CloseTag, FileLine), \
+    RawVersion = Trim(Copy(FileLine, StartPos, EndPos - StartPos)), \
+    FileClose(FileHandle), \
+    FileHandle = 0 \
+  ) : 0
+
+#if FileHandle
+  #expr FileClose(FileHandle)
+#endif
+
+#if RawVersion == ""
+  #error Could not find <Version> in FalconProgrammer.csproj
+#endif
+
+; Omit the 4th part if zero (e.g. 1.2.0.0 -> 1.2.0)
+#define Dot1 Pos(".", RawVersion)
+#define Dot2 (Dot1 && Pos(".", Copy(RawVersion, Dot1 + 1, Len(RawVersion)))) ? Pos(".", Copy(RawVersion, Dot1 + 1, Len(RawVersion))) + Dot1 : 0
+#define Dot3 (Dot2 && Pos(".", Copy(RawVersion, Dot2 + 1, Len(RawVersion)))) ? Pos(".", Copy(RawVersion, Dot2 + 1, Len(RawVersion))) + Dot2 : 0
+#define Dot4 (Dot3 && Pos(".", Copy(RawVersion, Dot3 + 1, Len(RawVersion)))) ? Pos(".", Copy(RawVersion, Dot3 + 1, Len(RawVersion))) + Dot3 : 0
+
+#if Dot3 && !Dot4 && Copy(RawVersion, Dot3 + 1, Len(RawVersion)) == "0"
+  #define MyAppVersion Copy(RawVersion, 1, Dot3 - 1)
+#else
+  #define MyAppVersion RawVersion
+#endif
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -33,7 +72,7 @@ LicenseFile=..\..\LICENCE.txt
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=.\
-OutputBaseFilename=FalconProgrammer{#MyAppVersion}
+OutputBaseFilename=FalconProgrammer{#MyAppVersion}x64
 VersionInfoVersion={#MyAppVersion}
 SetupIconFile=..\..\FalconProgrammer\Assets\falcon_svg_repo_com_512_512.ico
 Compression=lzma
@@ -47,8 +86,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\Simon\OneDrive\Documents\Visual Studio Projects\FalconProgrammer\FalconProgrammer\bin\Release\net8.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Simon\OneDrive\Documents\Visual Studio Projects\FalconProgrammer\FalconProgrammer\bin\Release\net8.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\FalconProgrammer\bin\Release\net10.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\FalconProgrammer\bin\Release\net10.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
