@@ -36,7 +36,7 @@ In the DMG, drag **Falcon Programmer** into /Applications. Then take one of the 
 
 ### Approach A
 
-1. Open the app. When a security prompt headed **''“Falcon Programmer” Not Opened'**  appears, click **Done**. *Do not click Move to Bin*.
+1. Open the app. When a security prompt headed **'“Falcon Programmer” Not Opened'**  appears, click **Done**. *Do not click Move to Bin*.
 2. Go to **System Settings** → **Privacy & Security**, scroll down to **Security**, and click **Open Anyway**.
 3. On the confirmation prompt, click **Open Anyway**. *(This is only required on the very first launch).*
 
