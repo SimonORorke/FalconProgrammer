@@ -16,7 +16,10 @@
         and Intel. -->
         <Platforms>x64;AnyCPU</Platforms>
         <!-- Don't split the tag into three lines.
-        It causes a file not found error! -->
+        It causes a file not found error! 
+        There's no need to check the operating system, as macOS application icons
+        are associations in the operating with the application: the ApplicationIcon
+        property is no used. See MacIconHelper. -->
         <ApplicationIcon>Assets/falcon_svg_repo_com_512_512.ico</ApplicationIcon>
     </PropertyGroup>
 
